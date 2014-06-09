@@ -1,4 +1,17 @@
 Rails.application.routes.draw do
+  resources :whouses
+
+  resources :locations
+
+  resources :parts
+
+  resources :fortlifts
+
+  root :to => "deliveries#index"
+
+  resources :deliveries
+
+  devise_for :users
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
