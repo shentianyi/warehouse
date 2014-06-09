@@ -11,7 +11,7 @@ Rails.application.routes.draw do
 
   resources :fortlifts
 
-  root :to => "deliveries#index"
+  root :to => "welcome#index"
 
   resources :deliveries
 
