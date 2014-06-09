@@ -1136,3 +1136,435 @@ Started GET "/assets/welcome.js?body=1" for 127.0.0.1 at 2014-06-09 17:55:41 +08
 
 
 Started GET "/assets/application.js?body=1" for 127.0.0.1 at 2014-06-09 17:55:41 +0800
+
+
+Started GET "/" for 127.0.0.1 at 2014-06-09 18:06:43 +0800
+Processing by WelcomeController#index as HTML
+  Rendered welcome/index.html.erb within layouts/application (0.1ms)
+Completed 200 OK in 21ms (Views: 20.4ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/assets/deliveries.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:43 +0800
+
+
+Started GET "/assets/fortlifts.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:43 +0800
+
+
+Started GET "/assets/locations.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:43 +0800
+
+
+Started GET "/assets/packages.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:43 +0800
+
+
+Started GET "/assets/parts.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:43 +0800
+
+
+Started GET "/assets/positions.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:43 +0800
+
+
+Started GET "/assets/welcome.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:43 +0800
+
+
+Started GET "/assets/whouses.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:43 +0800
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:43 +0800
+
+
+Started GET "/assets/deliveries.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:44 +0800
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:44 +0800
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:44 +0800
+
+
+Started GET "/assets/fortlifts.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:44 +0800
+
+
+Started GET "/assets/scaffolds.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:44 +0800
+
+
+Started GET "/assets/turbolinks.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:44 +0800
+
+
+Started GET "/assets/locations.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:44 +0800
+
+
+Started GET "/assets/packages.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:44 +0800
+
+
+Started GET "/assets/parts.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:44 +0800
+
+
+Started GET "/assets/positions.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:44 +0800
+
+
+Started GET "/assets/welcome.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:44 +0800
+
+
+Started GET "/assets/whouses.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:44 +0800
+
+
+Started GET "/assets/application.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:44 +0800
+
+
+Started GET "/" for 127.0.0.1 at 2014-06-09 18:06:44 +0800
+Processing by WelcomeController#index as HTML
+  Rendered welcome/index.html.erb within layouts/application (0.1ms)
+Completed 200 OK in 12ms (Views: 11.9ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/assets/deliveries.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:44 +0800
+
+
+Started GET "/assets/fortlifts.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:44 +0800
+
+
+Started GET "/assets/locations.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:44 +0800
+
+
+Started GET "/assets/packages.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:44 +0800
+
+
+Started GET "/assets/parts.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:44 +0800
+
+
+Started GET "/assets/positions.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:45 +0800
+
+
+Started GET "/assets/welcome.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:45 +0800
+
+
+Started GET "/assets/scaffolds.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:45 +0800
+
+
+Started GET "/assets/whouses.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:45 +0800
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:45 +0800
+
+
+Started GET "/assets/fortlifts.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:45 +0800
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:45 +0800
+
+
+Started GET "/assets/turbolinks.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:45 +0800
+
+
+Started GET "/assets/deliveries.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:45 +0800
+
+
+Started GET "/assets/locations.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:45 +0800
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:45 +0800
+
+
+Started GET "/assets/positions.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:45 +0800
+
+
+Started GET "/assets/parts.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:45 +0800
+
+
+Started GET "/assets/packages.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:45 +0800
+
+
+Started GET "/assets/application.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:45 +0800
+
+
+Started GET "/assets/whouses.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:45 +0800
+
+
+Started GET "/assets/welcome.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:45 +0800
+
+
+Started GET "/" for 127.0.0.1 at 2014-06-09 18:06:45 +0800
+Processing by WelcomeController#index as HTML
+  Rendered welcome/index.html.erb within layouts/application (0.1ms)
+Completed 200 OK in 11ms (Views: 10.8ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/assets/deliveries.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:45 +0800
+
+
+Started GET "/assets/fortlifts.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:45 +0800
+
+
+Started GET "/assets/packages.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:45 +0800
+
+
+Started GET "/assets/parts.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:45 +0800
+
+
+Started GET "/assets/locations.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/welcome.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/scaffolds.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/whouses.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/turbolinks.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/deliveries.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/fortlifts.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/parts.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/positions.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/packages.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/locations.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/positions.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/welcome.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/whouses.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/application.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+Processing by WelcomeController#index as HTML
+  Rendered welcome/index.html.erb within layouts/application (0.1ms)
+Completed 200 OK in 13ms (Views: 12.2ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/assets/deliveries.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/fortlifts.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/locations.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/packages.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/parts.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/positions.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/scaffolds.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/welcome.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/whouses.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/turbolinks.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/deliveries.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/fortlifts.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/locations.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/packages.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/positions.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/parts.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/welcome.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/whouses.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/assets/application.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:46 +0800
+
+
+Started GET "/" for 127.0.0.1 at 2014-06-09 18:06:47 +0800
+Processing by WelcomeController#index as HTML
+  Rendered welcome/index.html.erb within layouts/application (0.1ms)
+Completed 200 OK in 13ms (Views: 12.9ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/assets/deliveries.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:47 +0800
+
+
+Started GET "/assets/fortlifts.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:47 +0800
+
+
+Started GET "/assets/locations.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:47 +0800
+
+
+Started GET "/assets/packages.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:47 +0800
+
+
+Started GET "/assets/parts.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:48 +0800
+
+
+Started GET "/assets/positions.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:48 +0800
+
+
+Started GET "/assets/scaffolds.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:48 +0800
+
+
+Started GET "/assets/welcome.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:48 +0800
+
+
+Started GET "/assets/whouses.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:48 +0800
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2014-06-09 18:06:48 +0800
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:48 +0800
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:48 +0800
+
+
+Started GET "/assets/turbolinks.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:48 +0800
+
+
+Started GET "/assets/deliveries.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:48 +0800
+
+
+Started GET "/assets/fortlifts.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:48 +0800
+
+
+Started GET "/assets/locations.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:48 +0800
+
+
+Started GET "/assets/packages.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:48 +0800
+
+
+Started GET "/assets/parts.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:48 +0800
+
+
+Started GET "/assets/positions.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:48 +0800
+
+
+Started GET "/assets/welcome.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:48 +0800
+
+
+Started GET "/assets/whouses.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:48 +0800
+
+
+Started GET "/assets/application.js?body=1" for 127.0.0.1 at 2014-06-09 18:06:48 +0800
+
+
+Started GET "/" for 127.0.0.1 at 2014-06-09 18:07:03 +0800
+Processing by WelcomeController#index as HTML
+  Rendered welcome/index.html.erb within layouts/application (0.1ms)
+Completed 200 OK in 26ms (Views: 25.3ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/assets/deliveries.css?body=1" for 127.0.0.1 at 2014-06-09 18:07:03 +0800
+
+
+Started GET "/assets/fortlifts.css?body=1" for 127.0.0.1 at 2014-06-09 18:07:03 +0800
+
+
+Started GET "/assets/locations.css?body=1" for 127.0.0.1 at 2014-06-09 18:07:03 +0800
+
+
+Started GET "/assets/packages.css?body=1" for 127.0.0.1 at 2014-06-09 18:07:03 +0800
+
+
+Started GET "/assets/parts.css?body=1" for 127.0.0.1 at 2014-06-09 18:07:03 +0800
+
+
+Started GET "/assets/positions.css?body=1" for 127.0.0.1 at 2014-06-09 18:07:03 +0800
+
+
+Started GET "/assets/scaffolds.css?body=1" for 127.0.0.1 at 2014-06-09 18:07:03 +0800
+
+
+Started GET "/assets/welcome.css?body=1" for 127.0.0.1 at 2014-06-09 18:07:03 +0800
+
+
+Started GET "/assets/whouses.css?body=1" for 127.0.0.1 at 2014-06-09 18:07:03 +0800
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2014-06-09 18:07:03 +0800
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2014-06-09 18:07:03 +0800
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2014-06-09 18:07:03 +0800
+
+
+Started GET "/assets/turbolinks.js?body=1" for 127.0.0.1 at 2014-06-09 18:07:03 +0800
+
+
+Started GET "/assets/deliveries.js?body=1" for 127.0.0.1 at 2014-06-09 18:07:03 +0800
+
+
+Started GET "/assets/fortlifts.js?body=1" for 127.0.0.1 at 2014-06-09 18:07:03 +0800
+
+
+Started GET "/assets/locations.js?body=1" for 127.0.0.1 at 2014-06-09 18:07:03 +0800
+
+
+Started GET "/assets/positions.js?body=1" for 127.0.0.1 at 2014-06-09 18:07:03 +0800
+
+
+Started GET "/assets/welcome.js?body=1" for 127.0.0.1 at 2014-06-09 18:07:03 +0800
+
+
+Started GET "/assets/whouses.js?body=1" for 127.0.0.1 at 2014-06-09 18:07:03 +0800
+
+
+Started GET "/assets/packages.js?body=1" for 127.0.0.1 at 2014-06-09 18:07:03 +0800
+
+
+Started GET "/assets/parts.js?body=1" for 127.0.0.1 at 2014-06-09 18:07:03 +0800
+
+
+Started GET "/assets/application.js?body=1" for 127.0.0.1 at 2014-06-09 18:07:03 +0800
