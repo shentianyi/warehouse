@@ -9,7 +9,6 @@
 
 # Ignore the default SQLite database.
 /db/*.sqlite3
-/db/*.sqlite3-journal
 
 # Ignore all logfiles and tempfiles.
 /.idea
@@ -18,6 +17,7 @@
 capybara-*.html
 .rspec
 /log
+/log/*.log
 /db/*.sqlite3
 /public/system
 /coverage/
