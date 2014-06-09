@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  resources :positions
+
+  resources :packages
+
   resources :whouses
 
   resources :locations

@@ -584,3 +584,138 @@ REFERENCES locations(id)
   [1m[35mSQL (0.5ms)[0m  INSERT INTO `schema_migrations` (`version`) VALUES ('20140609062701')
   [1m[36m (39.7ms)[0m  [1mCOMMIT[0m
   [1m[35mActiveRecord::SchemaMigration Load (0.3ms)[0m  SELECT `schema_migrations`.* FROM `schema_migrations`
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1mSELECT `schema_migrations`.* FROM `schema_migrations`[0m
+Migrating to CreatePackages (20140609065039)
+  [1m[35m (98.5ms)[0m  CREATE TABLE `packages` (`id` varchar(255) NOT NULL, `partnum` varchar(255), `quantity` int(11) DEFAULT 0, `state` int(11), `location_id` varchar(255), `is_delete` tinyint(1) DEFAULT 0, `is_diraty` tinyint(1) DEFAULT 1, `is_new` tinyint(1) DEFAULT 1, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB
+  [1m[36m (175.5ms)[0m  [1m        ALTER TABLE packages
+ADD CONSTRAINT fk_packages_locations
+FOREIGN KEY (location_id)
+REFERENCES locations(id)
+[0m
+  [1m[35m (149.7ms)[0m  CREATE  INDEX `index_packages_on_id`  ON `packages` (`id`) 
+  [1m[36m (374.3ms)[0m  [1mCREATE  INDEX `index_packages_on_location_id`  ON `packages` (`location_id`) [0m
+  [1m[35m (258.8ms)[0m  ALTER TABLE packages ADD PRIMARY KEY (id)
+  [1m[36m (0.5ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.7ms)[0m  INSERT INTO `schema_migrations` (`version`) VALUES ('20140609065039')
+  [1m[36m (30.1ms)[0m  [1mCOMMIT[0m
+  [1m[35mActiveRecord::SchemaMigration Load (0.3ms)[0m  SELECT `schema_migrations`.* FROM `schema_migrations`
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT `schema_migrations`.* FROM `schema_migrations`[0m
+Migrating to CreatePositions (20140609071003)
+  [1m[35m (160.0ms)[0m  CREATE TABLE `positions` (`id` varchar(255) NOT NULL, `whouse_id` varchar(255), `detail` varchar(255), `is_delete` tinyint(1) DEFAULT 0, `is_diraty` tinyint(1) DEFAULT 1, `is_new` tinyint(1) DEFAULT 1, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB
+  [1m[36m (285.2ms)[0m  [1m        ALTER TABLE positions
+ADD CONSTRAINT fk_positions_whouses
+FOREIGN KEY (whouse_id)
+REFERENCES whouses(id)
+[0m
+  [1m[35m (182.6ms)[0m  CREATE  INDEX `index_positions_on_id`  ON `positions` (`id`) 
+  [1m[36m (224.4ms)[0m  [1mCREATE  INDEX `index_positions_on_whouse_id`  ON `positions` (`whouse_id`) [0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT `schema_migrations`.* FROM `schema_migrations`[0m
+Migrating to CreatePositions (20140609071003)
+  [1m[35m (0.6ms)[0m  CREATE TABLE `positions` (`id` varchar(255) NOT NULL, `whouse_id` varchar(255), `detail` varchar(255), `is_delete` tinyint(1) DEFAULT 0, `is_diraty` tinyint(1) DEFAULT 1, `is_new` tinyint(1) DEFAULT 1, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB
+Mysql2::Error: Table 'positions' already exists: CREATE TABLE `positions` (`id` varchar(255) NOT NULL, `whouse_id` varchar(255), `detail` varchar(255), `is_delete` tinyint(1) DEFAULT 0, `is_diraty` tinyint(1) DEFAULT 1, `is_new` tinyint(1) DEFAULT 1, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1mSELECT `schema_migrations`.* FROM `schema_migrations`[0m
+Migrating to CreatePositions (20140609071003)
+  [1m[35m (90.4ms)[0m  CREATE TABLE `positions` (`id` varchar(255) NOT NULL, `whouse_id` varchar(255), `detail` varchar(255), `is_delete` tinyint(1) DEFAULT 0, `is_diraty` tinyint(1) DEFAULT 1, `is_new` tinyint(1) DEFAULT 1, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB
+  [1m[36m (192.1ms)[0m  [1m        ALTER TABLE positions
+ADD CONSTRAINT fk_positions_whouses
+FOREIGN KEY (whouse_id)
+REFERENCES whouses(id)
+[0m
+  [1m[35m (133.3ms)[0m  CREATE  INDEX `index_positions_on_id`  ON `positions` (`id`) 
+  [1m[36m (216.3ms)[0m  [1mCREATE  INDEX `index_positions_on_whouse_id`  ON `positions` (`whouse_id`) [0m
+  [1m[35m (225.9ms)[0m  ALTER TABLE positions ADD PRIMARY KEY (id)
+  [1m[36m (0.7ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `schema_migrations` (`version`) VALUES ('20140609071003')
+  [1m[36m (39.9ms)[0m  [1mCOMMIT[0m
+  [1m[35mActiveRecord::SchemaMigration Load (0.5ms)[0m  SELECT `schema_migrations`.* FROM `schema_migrations`
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1mSELECT `schema_migrations`.* FROM `schema_migrations`[0m
+Migrating to CreatePartPositions (20140609071957)
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT `schema_migrations`.* FROM `schema_migrations`[0m
+Migrating to CreatePartPositions (20140609071957)
+  [1m[35m (121.7ms)[0m  CREATE TABLE `part_positions` (`id` varchar(36) NOT NULL, `partnum` varchar(255), `position_id` varchar(255), `is_delete` tinyint(1) DEFAULT 0, `is_diraty` tinyint(1) DEFAULT 1, `is_new` tinyint(1) DEFAULT 1, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB
+  [1m[36m (284.2ms)[0m  [1m        ALTER TABLE part_positions
+ADD CONSTRAINT fk_part_positions_positions
+FOREIGN KEY (position_id)
+REFERENCES positions(id)
+[0m
+  [1m[35m (133.3ms)[0m  CREATE  INDEX `index_part_positions_on_id`  ON `part_positions` (`id`) 
+  [1m[36m (199.2ms)[0m  [1mCREATE  INDEX `index_part_positions_on_position_id`  ON `part_positions` (`position_id`) [0m
+  [1m[35m (131.9ms)[0m  CREATE  INDEX `index_part_positions_on_partnum`  ON `part_positions` (`partnum`) 
+  [1m[36m (234.2ms)[0m  [1mALTER TABLE part_positions ADD PRIMARY KEY (id)[0m
+  [1m[35m (0.5ms)[0m  BEGIN
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO `schema_migrations` (`version`) VALUES ('20140609071957')[0m
+  [1m[35m (45.2ms)[0m  COMMIT
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT `schema_migrations`.* FROM `schema_migrations`[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT `schema_migrations`.* FROM `schema_migrations`[0m
+Migrating to CreatePackagePositions (20140609073543)
+  [1m[35m (105.5ms)[0m  CREATE TABLE `package_positions` (`id` varchar(36) NOT NULL, `part_position_id` varchar(255), `package_id` varchar(255), `is_delete` tinyint(1) DEFAULT 0, `is_diraty` tinyint(1) DEFAULT 1, `is_new` tinyint(1) DEFAULT 1, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB
+  [1m[36m (1.0ms)[0m  [1m        ALTER TABLE package_positions
+ADD CONSTRAINT fk_package_positions_part_positions
+FOREIGN KEY (part_position_id)
+REFERENCES part_positions(id)
+
+ADD CONSTRAINT fk_package_positions_packages
+FOREIGN KEY (package_id)
+REFERENCES packages(id)
+[0m
+Mysql2::Error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ADD CONSTRAINT fk_package_positions_packages
+FOREIGN KEY (package_id)
+REFERENCES' at line 6:         ALTER TABLE package_positions
+ADD CONSTRAINT fk_package_positions_part_positions
+FOREIGN KEY (part_position_id)
+REFERENCES part_positions(id)
+
+ADD CONSTRAINT fk_package_positions_packages
+FOREIGN KEY (package_id)
+REFERENCES packages(id)
+
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT `schema_migrations`.* FROM `schema_migrations`[0m
+Migrating to CreatePackagePositions (20140609073543)
+  [1m[35m (0.8ms)[0m  CREATE TABLE `package_positions` (`id` varchar(36) NOT NULL, `part_position_id` varchar(255), `package_id` varchar(255), `is_delete` tinyint(1) DEFAULT 0, `is_diraty` tinyint(1) DEFAULT 1, `is_new` tinyint(1) DEFAULT 1, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB
+Mysql2::Error: Table 'package_positions' already exists: CREATE TABLE `package_positions` (`id` varchar(36) NOT NULL, `part_position_id` varchar(255), `package_id` varchar(255), `is_delete` tinyint(1) DEFAULT 0, `is_diraty` tinyint(1) DEFAULT 1, `is_new` tinyint(1) DEFAULT 1, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT `schema_migrations`.* FROM `schema_migrations`[0m
+Migrating to CreatePackagePositions (20140609073543)
+  [1m[35m (95.9ms)[0m  CREATE TABLE `package_positions` (`id` varchar(36) NOT NULL, `part_position_id` varchar(255), `package_id` varchar(255), `is_delete` tinyint(1) DEFAULT 0, `is_diraty` tinyint(1) DEFAULT 1, `is_new` tinyint(1) DEFAULT 1, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB
+  [1m[36m (242.6ms)[0m  [1m        ALTER TABLE package_positions
+ADD CONSTRAINT fk_package_positions_part_positions
+FOREIGN KEY (part_position_id)
+REFERENCES part_positions(id),
+
+ADD CONSTRAINT fk_package_positions_packages
+FOREIGN KEY (package_id)
+REFERENCES packages(id)
+[0m
+  [1m[35m (131.8ms)[0m  CREATE  INDEX `index_package_positions_on_id`  ON `package_positions` (`id`) 
+  [1m[36m (301.9ms)[0m  [1mCREATE  INDEX `index_package_positions_on_part_position_id`  ON `package_positions` (`part_position_id`) [0m
+  [1m[35m (358.1ms)[0m  CREATE  INDEX `index_package_positions_on_package_id`  ON `package_positions` (`package_id`) 
+  [1m[36m (0.9ms)[0m  [1mALTER TABEL package_positions ADD PRIMARY KEY (id)[0m
+Mysql2::Error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'TABEL package_positions ADD PRIMARY KEY (id)' at line 1: ALTER TABEL package_positions ADD PRIMARY KEY (id)
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT `schema_migrations`.* FROM `schema_migrations`[0m
+Migrating to CreatePackagePositions (20140609073543)
+  [1m[35m (95.6ms)[0m  CREATE TABLE `package_positions` (`id` varchar(36) NOT NULL, `part_position_id` varchar(255), `package_id` varchar(255), `is_delete` tinyint(1) DEFAULT 0, `is_diraty` tinyint(1) DEFAULT 1, `is_new` tinyint(1) DEFAULT 1, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB
+  [1m[36m (235.7ms)[0m  [1m        ALTER TABLE package_positions
+ADD CONSTRAINT fk_package_positions_part_positions
+FOREIGN KEY (part_position_id)
+REFERENCES part_positions(id),
+
+ADD CONSTRAINT fk_package_positions_packages
+FOREIGN KEY (package_id)
+REFERENCES packages(id)
+[0m
+  [1m[35m (123.8ms)[0m  CREATE  INDEX `index_package_positions_on_id`  ON `package_positions` (`id`) 
+  [1m[36m (190.5ms)[0m  [1mCREATE  INDEX `index_package_positions_on_part_position_id`  ON `package_positions` (`part_position_id`) [0m
+  [1m[35m (216.1ms)[0m  CREATE  INDEX `index_package_positions_on_package_id`  ON `package_positions` (`package_id`) 
+  [1m[36m (283.8ms)[0m  [1mALTER TABLE package_positions ADD PRIMARY KEY (id)[0m
+  [1m[35m (0.4ms)[0m  BEGIN
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO `schema_migrations` (`version`) VALUES ('20140609073543')[0m
+  [1m[35m (42.0ms)[0m  COMMIT
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1mSELECT `schema_migrations`.* FROM `schema_migrations`[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT `schema_migrations`.* FROM `schema_migrations`[0m
+Migrating to CreateStateLogs (20140609081845)
+  [1m[35m (97.2ms)[0m  CREATE TABLE `state_logs` (`id` varchar(36) NOT NULL, `stateable_id` varchar(255), `stateable_type` varchar(255), `is_delete` tinyint(1) DEFAULT 0, `is_diraty` tinyint(1) DEFAULT 1, `is_new` tinyint(1) DEFAULT 1, `state_before` int(11), `state_after` int(11), `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB
+  [1m[36m (133.7ms)[0m  [1mCREATE  INDEX `index_state_logs_on_id`  ON `state_logs` (`id`) [0m
+  [1m[35m (217.4ms)[0m  ALTER TABLE state_logs ADD PRIMARY KEY (id);
+  [1m[36m (1.0ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (1.5ms)[0m  INSERT INTO `schema_migrations` (`version`) VALUES ('20140609081845')
+  [1m[36m (43.8ms)[0m  [1mCOMMIT[0m
+  [1m[35mActiveRecord::SchemaMigration Load (0.3ms)[0m  SELECT `schema_migrations`.* FROM `schema_migrations`

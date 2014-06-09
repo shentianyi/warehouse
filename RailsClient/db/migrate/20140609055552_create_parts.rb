@@ -12,6 +12,7 @@ class CreateParts < ActiveRecord::Migration
       t.timestamps
     end
     add_index :parts, :id
+    add_index :parts, :partnum
     execute 'ALTER TABLE parts ADD PRIMARY KEY (id)'
   end
 end
