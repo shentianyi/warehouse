@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140610091106) do
+ActiveRecord::Schema.define(version: 20140610180353) do
 
   create_table "deliveries", force: true do |t|
     t.integer  "state"
@@ -152,6 +152,7 @@ ActiveRecord::Schema.define(version: 20140610091106) do
     t.datetime "updated_at"
     t.string   "location_id"
     t.string   "authentication_token"
+    t.string   "user_no"
   end
 
   add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree
@@ -159,6 +160,7 @@ ActiveRecord::Schema.define(version: 20140610091106) do
   add_index "users", ["id"], name: "index_users_on_id", using: :btree
   add_index "users", ["location_id"], name: "index_users_on_location_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  add_index "users", ["user_no"], name: "index_users_on_user_no", unique: true, using: :btree
 
   create_table "whouses", force: true do |t|
     t.string   "name"

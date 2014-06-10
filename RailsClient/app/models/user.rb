@@ -8,7 +8,8 @@ class User < ActiveRecord::Base
   belongs_to :location
 
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+         :recoverable, :rememberable, :trackable, :validatable,
+         :authentication_keys => [:user_no]
 
   def ensure_authentication_token!
     if authentication_token.blank?
