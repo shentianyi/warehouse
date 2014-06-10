@@ -8,6 +8,9 @@ class DeviseCreateUsers < ActiveRecord::Migration
       t.boolean :is_diraty, :default => true
       t.boolean :is_new, :default => true
       #
+      t.string :name
+      t.string :tel
+      #
       t.string :email,              null: false, default: ""
       t.string :encrypted_password, null: false, default: ""
 

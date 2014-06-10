@@ -103,6 +103,7 @@ ActiveRecord::Schema.define(version: 20140609081845) do
   end
 
   add_index "parts", ["id"], name: "index_parts_on_id", using: :btree
+  add_index "parts", ["partnum"], name: "index_parts_on_partnum", using: :btree
 
   create_table "positions", force: true do |t|
     t.string   "whouse_id"
@@ -135,6 +136,8 @@ ActiveRecord::Schema.define(version: 20140609081845) do
     t.boolean  "is_delete",              default: false
     t.boolean  "is_diraty",              default: true
     t.boolean  "is_new",                 default: true
+    t.string   "name"
+    t.string   "tel"
     t.string   "email",                  default: "",    null: false
     t.string   "encrypted_password",     default: "",    null: false
     t.string   "reset_password_token"
