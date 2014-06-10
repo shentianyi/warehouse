@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140609081845) do
+ActiveRecord::Schema.define(version: 20140610091106) do
 
   create_table "deliveries", force: true do |t|
     t.integer  "state"
@@ -53,7 +53,7 @@ ActiveRecord::Schema.define(version: 20140609081845) do
     t.string   "part_position_id"
     t.string   "package_id"
     t.boolean  "is_delete",        default: false
-    t.boolean  "is_diraty",        default: true
+    t.boolean  "is_dirty",         default: true
     t.boolean  "is_new",           default: true
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -69,7 +69,7 @@ ActiveRecord::Schema.define(version: 20140609081845) do
     t.integer  "state"
     t.string   "location_id"
     t.boolean  "is_delete",   default: false
-    t.boolean  "is_diraty",   default: true
+    t.boolean  "is_dirty",    default: true
     t.boolean  "is_new",      default: true
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -82,7 +82,7 @@ ActiveRecord::Schema.define(version: 20140609081845) do
     t.string   "partnum"
     t.string   "position_id"
     t.boolean  "is_delete",   default: false
-    t.boolean  "is_diraty",   default: true
+    t.boolean  "is_dirty",    default: true
     t.boolean  "is_new",      default: true
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -109,7 +109,7 @@ ActiveRecord::Schema.define(version: 20140609081845) do
     t.string   "whouse_id"
     t.string   "detail"
     t.boolean  "is_delete",  default: false
-    t.boolean  "is_diraty",  default: true
+    t.boolean  "is_dirty",   default: true
     t.boolean  "is_new",     default: true
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -122,7 +122,7 @@ ActiveRecord::Schema.define(version: 20140609081845) do
     t.string   "stateable_id"
     t.string   "stateable_type"
     t.boolean  "is_delete",      default: false
-    t.boolean  "is_diraty",      default: true
+    t.boolean  "is_dirty",       default: true
     t.boolean  "is_new",         default: true
     t.integer  "state_before"
     t.integer  "state_after"
@@ -151,8 +151,10 @@ ActiveRecord::Schema.define(version: 20140609081845) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "location_id"
+    t.string   "authentication_token"
   end
 
+  add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["id"], name: "index_users_on_id", using: :btree
   add_index "users", ["location_id"], name: "index_users_on_location_id", using: :btree
@@ -162,7 +164,7 @@ ActiveRecord::Schema.define(version: 20140609081845) do
     t.string   "name"
     t.string   "location_id"
     t.boolean  "is_delete",   default: false
-    t.boolean  "is_diraty",   default: true
+    t.boolean  "is_dirty",    default: true
     t.boolean  "is_new",      default: true
     t.datetime "created_at"
     t.datetime "updated_at"
