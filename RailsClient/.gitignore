@@ -13,9 +13,6 @@
 # Ignore all logfiles and tempfiles.
 /.idea
 /tmp
-*.rbc
-capybara-*.html
-.rspec
 /log
 /log/*.log
 /db/*.sqlite3
