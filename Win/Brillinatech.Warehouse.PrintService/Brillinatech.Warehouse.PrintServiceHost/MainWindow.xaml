@@ -1,0 +1,50 @@
+﻿<Window x:Class="Brillinatech.Warehouse.PrintServiceHost.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="上海彩卓" Height="550" Width="725" ResizeMode="NoResize">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="67*" />
+            <RowDefinition Height="444*" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0">
+            <Label Content="精益物料管理系统-打印服务"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="本机 IP："/>
+                    <Label Name="IPLab"/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="服务端口："/>
+                    <Label Content="9000"/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="服务状态："/>
+                    <Label Name="ServiceStateLab"/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel>
+                <GroupBox  Header="服务操作">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="启动" Name="StartServiceBtn"/>
+                        <Button Content="停止" Name="StopServiceBtn" Margin="10,0,10,0"/>
+                        <Button Content="重启" Name="RestartServiceBtn"/>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+            <StackPanel>
+                <GroupBox  Header="打印操作">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="设置打印机" Name="SetPrinterBtn"/>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
