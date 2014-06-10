@@ -134,7 +134,7 @@ ActiveRecord::Schema.define(version: 20140609081845) do
 
   create_table "users", force: true do |t|
     t.boolean  "is_delete",              default: false
-    t.boolean  "is_diraty",              default: true
+    t.boolean  "is_dirty",               default: true
     t.boolean  "is_new",                 default: true
     t.string   "name"
     t.string   "tel"
