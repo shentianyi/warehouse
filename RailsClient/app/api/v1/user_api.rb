@@ -1,8 +1,18 @@
 module V1
   class UserAPI<Base
     namespace 'users'
-    get do
-     request.env['warden'].user.to_json
+    guard_all!
+
+    # login
+    # params: email, passwd
+    post :login do
+
     end
+
+    # logout
+    delete :logout do
+
+    end
+
   end
 end

@@ -5,7 +5,7 @@ class DeviseCreateUsers < ActiveRecord::Migration
       t.string :id, :limit => 36, :primary => true, :null => false
       #
       t.boolean :is_delete, :default => false
-      t.boolean :is_diraty, :default => true
+      t.boolean :is_dirty, :default => true
       t.boolean :is_new, :default => true
       #
       t.string :name
