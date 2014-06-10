@@ -4224,3 +4224,146 @@ Processing by Devise::SessionsController#new as */*
   Rendered devise/shared/_links.erb (0.4ms)
   Rendered devise/sessions/new.html.erb within layouts/application (6.5ms)
 Completed 200 OK in 29ms (Views: 27.6ms | ActiveRecord: 0.0ms)
+  [1m[36m (74.6ms)[0m  [1mCREATE TABLE `schema_migrations` (`version` varchar(255) NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (165.4ms)[0m  CREATE UNIQUE INDEX `unique_schema_migrations`  ON `schema_migrations` (`version`) 
+  [1m[36mActiveRecord::SchemaMigration Load (0.5ms)[0m  [1mSELECT `schema_migrations`.* FROM `schema_migrations`[0m
+Migrating to DeviseCreateUsers (20140609031427)
+  [1m[35m (76.9ms)[0m  CREATE TABLE `users` (`id` varchar(36) NOT NULL, `is_delete` tinyint(1) DEFAULT 0, `is_diraty` tinyint(1) DEFAULT 1, `is_new` tinyint(1) DEFAULT 1, `name` varchar(255), `tel` varchar(255), `email` varchar(255) DEFAULT '' NOT NULL, `encrypted_password` varchar(255) DEFAULT '' NOT NULL, `reset_password_token` varchar(255), `reset_password_sent_at` datetime, `remember_created_at` datetime, `sign_in_count` int(11) DEFAULT 0 NOT NULL, `current_sign_in_at` datetime, `last_sign_in_at` datetime, `current_sign_in_ip` varchar(255), `last_sign_in_ip` varchar(255), `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB
+  [1m[36m (183.6ms)[0m  [1mCREATE UNIQUE INDEX `index_users_on_email`  ON `users` (`email`) [0m
+  [1m[35m (149.2ms)[0m  CREATE UNIQUE INDEX `index_users_on_reset_password_token`  ON `users` (`reset_password_token`) 
+  [1m[36m (157.7ms)[0m  [1mCREATE  INDEX `index_users_on_id`  ON `users` (`id`) [0m
+  [1m[35m (250.5ms)[0m  ALTER TABLE users ADD PRIMARY KEY(id)
+  [1m[36m (0.5ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (1.8ms)[0m  INSERT INTO `schema_migrations` (`version`) VALUES ('20140609031427')
+  [1m[36m (40.3ms)[0m  [1mCOMMIT[0m
+Migrating to CreateDeliveries (20140609041806)
+  [1m[35m (74.2ms)[0m  CREATE TABLE `deliveries` (`id` varchar(36) NOT NULL, `state` int(11), `user_id` varchar(255), `is_delete` tinyint(1) DEFAULT 0, `is_dirty` tinyint(1) DEFAULT 1, `is_new` tinyint(1) DEFAULT 1, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB
+  [1m[36m (184.3ms)[0m  [1m        ALTER TABLE deliveries
+ADD CONSTRAINT fk_deliveries_users
+FOREIGN KEY (user_id)
+REFERENCES users(id)
+[0m
+  [1m[35m (242.3ms)[0m  CREATE  INDEX `index_deliveries_on_user_id`  ON `deliveries` (`user_id`) 
+  [1m[36m (381.4ms)[0m  [1mCREATE  INDEX `index_deliveries_on_id`  ON `deliveries` (`id`) [0m
+  [1m[35m (226.2ms)[0m  ALTER TABLE deliveries ADD PRIMARY KEY (id);
+  [1m[36m (0.4ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.6ms)[0m  INSERT INTO `schema_migrations` (`version`) VALUES ('20140609041806')
+  [1m[36m (36.9ms)[0m  [1mCOMMIT[0m
+Migrating to CreateFortlifts (20140609053459)
+  [1m[35m (80.2ms)[0m  CREATE TABLE `fortlifts` (`id` varchar(36) NOT NULL, `delivery_id` varchar(255), `is_delete` tinyint(1) DEFAULT 0, `is_dirty` tinyint(1) DEFAULT 1, `is_new` tinyint(1) DEFAULT 1, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB
+  [1m[36m (184.3ms)[0m  [1m        ALTER TABLE fortlifts
+ADD CONSTRAINT fk_fortlifts_deliveries
+FOREIGN KEY (delivery_id)
+REFERENCES deliveries(id)
+[0m
+  [1m[35m (199.2ms)[0m  CREATE  INDEX `index_fortlifts_on_delivery_id`  ON `fortlifts` (`delivery_id`) 
+  [1m[36m (175.2ms)[0m  [1mCREATE  INDEX `index_fortlifts_on_id`  ON `fortlifts` (`id`) [0m
+  [1m[35m (233.8ms)[0m  ALTER TABLE fortlifts ADD PRIMARY KEY (id)
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.6ms)[0m  INSERT INTO `schema_migrations` (`version`) VALUES ('20140609053459')
+  [1m[36m (29.2ms)[0m  [1mCOMMIT[0m
+Migrating to CreateParts (20140609055552)
+  [1m[35m (72.5ms)[0m  CREATE TABLE `parts` (`id` varchar(36) NOT NULL, `partnum` varchar(255), `customernum` varchar(255), `is_delete` tinyint(1) DEFAULT 0, `is_dirty` tinyint(1) DEFAULT 1, `is_new` tinyint(1) DEFAULT 1, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB
+  [1m[36m (142.4ms)[0m  [1mCREATE  INDEX `index_parts_on_id`  ON `parts` (`id`) [0m
+  [1m[35m (123.4ms)[0m  CREATE  INDEX `index_parts_on_partnum`  ON `parts` (`partnum`) 
+  [1m[36m (217.5ms)[0m  [1mALTER TABLE parts ADD PRIMARY KEY (id)[0m
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO `schema_migrations` (`version`) VALUES ('20140609055552')[0m
+  [1m[35m (38.9ms)[0m  COMMIT
+Migrating to CreateLocations (20140609060702)
+  [1m[36m (81.0ms)[0m  [1mCREATE TABLE `locations` (`id` varchar(36) NOT NULL, `name` varchar(255), `is_delete` tinyint(1) DEFAULT 0, `is_dirty` tinyint(1) DEFAULT 1, `is_new` tinyint(1) DEFAULT 1, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [1m[35m (157.1ms)[0m  CREATE  INDEX `index_locations_on_id`  ON `locations` (`id`) 
+  [1m[36m (234.0ms)[0m  [1mALTER TABLE locations ADD PRIMARY KEY (id)[0m
+  [1m[35m (0.5ms)[0m  BEGIN
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO `schema_migrations` (`version`) VALUES ('20140609060702')[0m
+  [1m[35m (29.3ms)[0m  COMMIT
+Migrating to AddLocationIdToUsers (20140609061824)
+  [1m[36m (174.1ms)[0m  [1mALTER TABLE `users` ADD `location_id` varchar(255)[0m
+  [1m[35m (175.4ms)[0m        ALTER TABLE users
+ADD CONSTRAINT fk_users_locations
+FOREIGN KEY (location_id)
+REFERENCES locations(id)
+
+  [1m[36m (232.0ms)[0m  [1mCREATE  INDEX `index_users_on_location_id`  ON `users` (`location_id`) [0m
+  [1m[35m (0.4ms)[0m  BEGIN
+  [1m[36mSQL (0.6ms)[0m  [1mINSERT INTO `schema_migrations` (`version`) VALUES ('20140609061824')[0m
+  [1m[35m (37.4ms)[0m  COMMIT
+Migrating to CreateWhouses (20140609062701)
+  [1m[36m (74.8ms)[0m  [1mCREATE TABLE `whouses` (`id` varchar(36) NOT NULL, `name` varchar(255), `location_id` varchar(255), `is_delete` tinyint(1) DEFAULT 0, `is_diraty` tinyint(1) DEFAULT 1, `is_new` tinyint(1) DEFAULT 1, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [1m[35m (200.4ms)[0m          ALTER TABLE whouses
+ADD CONSTRAINT fk_whouses_locations
+FOREIGN KEY (location_id)
+REFERENCES locations(id)
+
+  [1m[36m (283.4ms)[0m  [1mCREATE  INDEX `index_whouses_on_location_id`  ON `whouses` (`location_id`) [0m
+  [1m[35m (123.9ms)[0m  CREATE  INDEX `index_whouses_on_id`  ON `whouses` (`id`) 
+  [1m[36m (225.6ms)[0m  [1mALTER TABLE whouses ADD PRIMARY KEY (id)[0m
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36mSQL (0.6ms)[0m  [1mINSERT INTO `schema_migrations` (`version`) VALUES ('20140609062701')[0m
+  [1m[35m (37.6ms)[0m  COMMIT
+Migrating to CreatePackages (20140609065039)
+  [1m[36m (82.2ms)[0m  [1mCREATE TABLE `packages` (`id` varchar(255) NOT NULL, `partnum` varchar(255), `quantity` int(11) DEFAULT 0, `state` int(11), `location_id` varchar(255), `is_delete` tinyint(1) DEFAULT 0, `is_diraty` tinyint(1) DEFAULT 1, `is_new` tinyint(1) DEFAULT 1, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [1m[35m (201.6ms)[0m          ALTER TABLE packages
+ADD CONSTRAINT fk_packages_locations
+FOREIGN KEY (location_id)
+REFERENCES locations(id)
+
+  [1m[36m (148.9ms)[0m  [1mCREATE  INDEX `index_packages_on_id`  ON `packages` (`id`) [0m
+  [1m[35m (192.9ms)[0m  CREATE  INDEX `index_packages_on_location_id`  ON `packages` (`location_id`) 
+  [1m[36m (224.5ms)[0m  [1mALTER TABLE packages ADD PRIMARY KEY (id)[0m
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36mSQL (0.7ms)[0m  [1mINSERT INTO `schema_migrations` (`version`) VALUES ('20140609065039')[0m
+  [1m[35m (75.7ms)[0m  COMMIT
+Migrating to CreatePositions (20140609071003)
+  [1m[36m (185.8ms)[0m  [1mCREATE TABLE `positions` (`id` varchar(255) NOT NULL, `whouse_id` varchar(255), `detail` varchar(255), `is_delete` tinyint(1) DEFAULT 0, `is_diraty` tinyint(1) DEFAULT 1, `is_new` tinyint(1) DEFAULT 1, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [1m[35m (200.5ms)[0m          ALTER TABLE positions
+ADD CONSTRAINT fk_positions_whouses
+FOREIGN KEY (whouse_id)
+REFERENCES whouses(id)
+
+  [1m[36m (141.8ms)[0m  [1mCREATE  INDEX `index_positions_on_id`  ON `positions` (`id`) [0m
+  [1m[35m (209.1ms)[0m  CREATE  INDEX `index_positions_on_whouse_id`  ON `positions` (`whouse_id`) 
+  [1m[36m (250.6ms)[0m  [1mALTER TABLE positions ADD PRIMARY KEY (id)[0m
+  [1m[35m (0.5ms)[0m  BEGIN
+  [1m[36mSQL (0.6ms)[0m  [1mINSERT INTO `schema_migrations` (`version`) VALUES ('20140609071003')[0m
+  [1m[35m (45.3ms)[0m  COMMIT
+Migrating to CreatePartPositions (20140609071957)
+  [1m[36m (88.8ms)[0m  [1mCREATE TABLE `part_positions` (`id` varchar(36) NOT NULL, `partnum` varchar(255), `position_id` varchar(255), `is_delete` tinyint(1) DEFAULT 0, `is_diraty` tinyint(1) DEFAULT 1, `is_new` tinyint(1) DEFAULT 1, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [1m[35m (217.8ms)[0m          ALTER TABLE part_positions
+ADD CONSTRAINT fk_part_positions_positions
+FOREIGN KEY (position_id)
+REFERENCES positions(id)
+
+  [1m[36m (156.7ms)[0m  [1mCREATE  INDEX `index_part_positions_on_id`  ON `part_positions` (`id`) [0m
+  [1m[35m (216.8ms)[0m  CREATE  INDEX `index_part_positions_on_position_id`  ON `part_positions` (`position_id`) 
+  [1m[36m (150.2ms)[0m  [1mCREATE  INDEX `index_part_positions_on_partnum`  ON `part_positions` (`partnum`) [0m
+  [1m[35m (284.1ms)[0m  ALTER TABLE part_positions ADD PRIMARY KEY (id)
+  [1m[36m (0.8ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.7ms)[0m  INSERT INTO `schema_migrations` (`version`) VALUES ('20140609071957')
+  [1m[36m (45.1ms)[0m  [1mCOMMIT[0m
+Migrating to CreatePackagePositions (20140609073543)
+  [1m[35m (90.9ms)[0m  CREATE TABLE `package_positions` (`id` varchar(36) NOT NULL, `part_position_id` varchar(255), `package_id` varchar(255), `is_delete` tinyint(1) DEFAULT 0, `is_diraty` tinyint(1) DEFAULT 1, `is_new` tinyint(1) DEFAULT 1, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB
+  [1m[36m (258.8ms)[0m  [1m        ALTER TABLE package_positions
+ADD CONSTRAINT fk_package_positions_part_positions
+FOREIGN KEY (part_position_id)
+REFERENCES part_positions(id),
+
+ADD CONSTRAINT fk_package_positions_packages
+FOREIGN KEY (package_id)
+REFERENCES packages(id)
+[0m
+  [1m[35m (141.4ms)[0m  CREATE  INDEX `index_package_positions_on_id`  ON `package_positions` (`id`) 
+  [1m[36m (215.9ms)[0m  [1mCREATE  INDEX `index_package_positions_on_part_position_id`  ON `package_positions` (`part_position_id`) [0m
+  [1m[35m (316.6ms)[0m  CREATE  INDEX `index_package_positions_on_package_id`  ON `package_positions` (`package_id`) 
+  [1m[36m (1183.1ms)[0m  [1mALTER TABLE package_positions ADD PRIMARY KEY (id)[0m
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO `schema_migrations` (`version`) VALUES ('20140609073543')[0m
+  [1m[35m (37.9ms)[0m  COMMIT
+Migrating to CreateStateLogs (20140609081845)
+  [1m[36m (249.3ms)[0m  [1mCREATE TABLE `state_logs` (`id` varchar(36) NOT NULL, `stateable_id` varchar(255), `stateable_type` varchar(255), `is_delete` tinyint(1) DEFAULT 0, `is_diraty` tinyint(1) DEFAULT 1, `is_new` tinyint(1) DEFAULT 1, `state_before` int(11), `state_after` int(11), `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [1m[35m (157.4ms)[0m  CREATE  INDEX `index_state_logs_on_id`  ON `state_logs` (`id`) 
+  [1m[36m (225.6ms)[0m  [1mALTER TABLE state_logs ADD PRIMARY KEY (id);[0m
+  [1m[35m (0.5ms)[0m  BEGIN
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO `schema_migrations` (`version`) VALUES ('20140609081845')[0m
+  [1m[35m (37.5ms)[0m  COMMIT
+  [1m[36mActiveRecord::SchemaMigration Load (0.7ms)[0m  [1mSELECT `schema_migrations`.* FROM `schema_migrations`[0m
