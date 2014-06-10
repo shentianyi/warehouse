@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  mount ApplicationAPI => '/api'
+
   resources :positions
 
   resources :packages
