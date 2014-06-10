@@ -1,8 +1,8 @@
 module Extensions
   module UUID
     extend ActiveSupport::Concern
-    include do
-      self.primiary_key='id'
+    included do
+      self.primary_key ='id'
       before_create :generate_uuid
 
       def generate_uuid
