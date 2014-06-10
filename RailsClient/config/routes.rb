@@ -11,7 +11,7 @@ Rails.application.routes.draw do
 
   resources :fortlifts
 
-  #resources :users
+  resources :users
 
   root :to => "welcome#index"
 
