@@ -3,14 +3,14 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   include Extensions::UUID
 
-  before_save :ensure_authentication_token
+  before_save :ensure_authentication_token!
 
   belongs_to :location
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  def ensure_authentication_token
+  def ensure_authentication_token!
     if authentication_token.blank?
       self.authentication_token = generate_authentication_token
     end
