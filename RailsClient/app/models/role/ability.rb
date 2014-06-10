@@ -28,12 +28,5 @@ class Ability
     #
     # See the wiki for details:
     # https://github.com/ryanb/cancan/wiki/Defining-Abilities
-    if user.admin?
-
-    elsif user.manager?
-
-    elsif user.epmloyee?
-
-    end
   end
 end
