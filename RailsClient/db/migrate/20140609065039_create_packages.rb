@@ -8,7 +8,7 @@ class CreatePackages < ActiveRecord::Migration
       t.string :location_id
       #
       t.boolean :is_delete, :default => false
-      t.boolean :is_diraty, :default => true
+      t.boolean :is_dirty, :default => true
       t.boolean :is_new, :default => true
       #
       t.timestamps

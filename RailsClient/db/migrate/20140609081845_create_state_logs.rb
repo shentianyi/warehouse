@@ -7,7 +7,7 @@ class CreateStateLogs < ActiveRecord::Migration
       t.string :stateable_type
       #
       t.boolean :is_delete, :default => false
-      t.boolean :is_diraty, :default => true
+      t.boolean :is_dirty, :default => true
       t.boolean :is_new, :default => true
       #
 
