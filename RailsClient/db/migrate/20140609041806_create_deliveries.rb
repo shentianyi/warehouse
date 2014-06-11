@@ -3,6 +3,7 @@ class CreateDeliveries < ActiveRecord::Migration
     create_table(:deliveries, :id => false) do |t|
       t.string :id, :limit => 36, :primary => true, :null => false
       t.integer :state
+      t.datetime :delivery_date
 
       #
       t.string :user_id
