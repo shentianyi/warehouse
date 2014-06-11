@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   before_save :ensure_authentication_token!
 
   belongs_to :location
+  validates_uniqueness_of :user_no
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,

@@ -3,7 +3,8 @@
 <table>
   <thead>
   <tr>
-    <th>ID</th>
+    <!--<th>ID</th>-->
+    <th>User No.</th>
     <th>Email</th>
     <th>Name</th>
     <th>TEL</th>
@@ -15,7 +16,8 @@
   <tbody>
   <% @users.each do |user| %>
       <tr>
-        <td><%= user.id %></td>
+        <!--<td><%= user.id %></td>-->
+        <td><%= user.user_no%></td>
         <td><%= user.email %></td>
         <td><%= user.name %></td>
         <td><%= user.tel %></td>
