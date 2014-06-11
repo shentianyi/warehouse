@@ -8,6 +8,13 @@ class ApplicationController < ActionController::Base
   before_filter :authenticate_user_from_token!
   before_filter :authenticate_user!
 
+  rescue_from CanCan::AccessDenied do |exception|
+    flash[:error] = exception.message
+    puts '--------------------'
+    puts flash[:error]
+    redirect_to root_url
+  end
+
   protected
 
   def configure_permitted_parameters
