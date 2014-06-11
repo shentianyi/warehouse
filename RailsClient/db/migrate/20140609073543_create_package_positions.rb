@@ -19,7 +19,7 @@ class CreatePackagePositions < ActiveRecord::Migration
         execute <<-SQL
         ALTER TABLE package_positions
 ADD CONSTRAINT fk_package_positions_positions
-FOREIGN KEY (part_position_id)
+FOREIGN KEY (position_id)
 REFERENCES positions(id),
 
 ADD CONSTRAINT fk_package_positions_packages

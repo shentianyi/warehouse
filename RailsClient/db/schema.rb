@@ -15,10 +15,11 @@ ActiveRecord::Schema.define(version: 20140611063003) do
 
   create_table "deliveries", force: true do |t|
     t.integer  "state"
+    t.datetime "delivery_date"
     t.string   "user_id"
-    t.boolean  "is_delete",  default: false
-    t.boolean  "is_dirty",   default: true
-    t.boolean  "is_new",     default: true
+    t.boolean  "is_delete",     default: false
+    t.boolean  "is_dirty",      default: true
+    t.boolean  "is_new",        default: true
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -28,6 +29,9 @@ ActiveRecord::Schema.define(version: 20140611063003) do
 
   create_table "fortlifts", force: true do |t|
     t.string   "delivery_id"
+    t.string   "remark"
+    t.string   "stocker"
+    t.string   "whouse"
     t.boolean  "is_delete",   default: false
     t.boolean  "is_dirty",    default: true
     t.boolean  "is_new",      default: true
@@ -52,18 +56,18 @@ ActiveRecord::Schema.define(version: 20140611063003) do
   add_index "locations", ["id"], name: "index_locations_on_id", using: :btree
 
   create_table "package_positions", force: true do |t|
-    t.string   "part_position_id"
+    t.string   "position_id"
     t.string   "package_id"
-    t.boolean  "is_delete",        default: false
-    t.boolean  "is_dirty",         default: true
-    t.boolean  "is_new",           default: true
+    t.boolean  "is_delete",   default: false
+    t.boolean  "is_dirty",    default: true
+    t.boolean  "is_new",      default: true
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "package_positions", ["id"], name: "index_package_positions_on_id", using: :btree
   add_index "package_positions", ["package_id"], name: "index_package_positions_on_package_id", using: :btree
-  add_index "package_positions", ["part_position_id"], name: "index_package_positions_on_part_position_id", using: :btree
+  add_index "package_positions", ["position_id"], name: "index_package_positions_on_position_id", using: :btree
 
   create_table "packages", force: true do |t|
     t.string   "partnum"
@@ -83,9 +87,12 @@ ActiveRecord::Schema.define(version: 20140611063003) do
   create_table "part_positions", force: true do |t|
     t.string   "partnum"
     t.string   "position_id"
-    t.boolean  "is_delete",   default: false
-    t.boolean  "is_dirty",    default: true
-    t.boolean  "is_new",      default: true
+    t.string   "position_detail"
+    t.string   "whouse_name"
+    t.string   "whouse_id"
+    t.boolean  "is_delete",       default: false
+    t.boolean  "is_dirty",        default: true
+    t.boolean  "is_new",          default: true
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -93,6 +100,7 @@ ActiveRecord::Schema.define(version: 20140611063003) do
   add_index "part_positions", ["id"], name: "index_part_positions_on_id", using: :btree
   add_index "part_positions", ["partnum"], name: "index_part_positions_on_partnum", using: :btree
   add_index "part_positions", ["position_id"], name: "index_part_positions_on_position_id", using: :btree
+  add_index "part_positions", ["whouse_id"], name: "index_part_positions_on_whouse_id", using: :btree
 
   create_table "parts", force: true do |t|
     t.string   "partnum"
