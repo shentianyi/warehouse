@@ -7,6 +7,8 @@ class User < ActiveRecord::Base
 
   belongs_to :location
 
+  validates_uniqueness_of :user_no
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :authentication_keys => [:user_no]
@@ -15,6 +17,22 @@ class User < ActiveRecord::Base
     if authentication_token.blank?
       self.authentication_token = generate_authentication_token
     end
+  end
+
+  def method_missing(method_name, *args, &block)
+    if Role::RoleMethods.include?(method_name)
+      Role.send(method_name,self.role_id)
+    else
+      super
+    end
+  end
+
+  def role
+    Role.display(self.role_id)
+  end
+
+  def email_required?
+    false
   end
 
   private
