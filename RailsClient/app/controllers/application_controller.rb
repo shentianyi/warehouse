@@ -8,11 +8,10 @@ class ApplicationController < ActionController::Base
   before_filter :authenticate_user_from_token!
   before_filter :authenticate_user!
 
+  load_and_authorize_resource
+
   rescue_from CanCan::AccessDenied do |exception|
-    flash[:error] = exception.message
-    puts '--------------------'
-    puts flash[:error]
-    redirect_to root_url
+    redirect_to root_url,:alert => exception.message
   end
 
   protected

@@ -6,7 +6,6 @@ class User < ActiveRecord::Base
   before_save :ensure_authentication_token!
 
   belongs_to :location
-  has_and_belongs_to_many :roles
 
   validates_uniqueness_of :user_no
 
@@ -20,8 +19,16 @@ class User < ActiveRecord::Base
     end
   end
 
-  def role?(role)
-    return !! self.roles.find_by_name(role.to_s.camelize)
+  def method_missing(method_name, *args, &block)
+    if Role::RoleMethods.include?(method_name)
+      Role.send(method_name,self.role_id)
+    else
+      super
+    end
+  end
+
+  def role
+    Role.display(self.role_id)
   end
 
   def email_required?

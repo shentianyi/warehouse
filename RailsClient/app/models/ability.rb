@@ -30,12 +30,12 @@ class Ability
     # https://github.com/ryanb/cancan/wiki/Defining-Abilities
     user ||= User.new
 
-    if user.role? :admin
+    if user.admin?
         can :manage, :all
-    elsif user.role? :manager
+    elsif user.manager?
         can :read, :all
     else
-        #cam :manage, :all
+        can :manage, :all
     end
   end
 end

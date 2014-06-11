@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140611025929) do
+ActiveRecord::Schema.define(version: 20140611063003) do
 
   create_table "deliveries", force: true do |t|
     t.integer  "state"
@@ -45,6 +45,8 @@ ActiveRecord::Schema.define(version: 20140611025929) do
     t.boolean  "is_new",     default: true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "address"
+    t.string   "tel"
   end
 
   add_index "locations", ["id"], name: "index_locations_on_id", using: :btree
@@ -118,22 +120,6 @@ ActiveRecord::Schema.define(version: 20140611025929) do
   add_index "positions", ["id"], name: "index_positions_on_id", using: :btree
   add_index "positions", ["whouse_id"], name: "index_positions_on_whouse_id", using: :btree
 
-  create_table "roles", force: true do |t|
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "roles", ["id"], name: "index_roles_on_id", using: :btree
-
-  create_table "roles_users", id: false, force: true do |t|
-    t.string "role_id"
-    t.string "user_id"
-  end
-
-  add_index "roles_users", ["role_id"], name: "fk_roles_users_roles", using: :btree
-  add_index "roles_users", ["user_id"], name: "fk_roles_users_users", using: :btree
-
   create_table "state_logs", force: true do |t|
     t.string   "stateable_id"
     t.string   "stateable_type"
@@ -169,6 +155,7 @@ ActiveRecord::Schema.define(version: 20140611025929) do
     t.string   "location_id"
     t.string   "authentication_token"
     t.string   "user_no",                default: "",    null: false
+    t.integer  "role_id",                default: 100,   null: false
   end
 
   add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree
