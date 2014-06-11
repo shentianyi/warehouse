@@ -1,8 +1,8 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <string>ID:</string>
-  <%= @user.id%>
+  <string>User No.:</string>
+  <%= @user.user_no%>
 </p>
 
 <p>
@@ -23,6 +23,16 @@
 <p>
   <string>IP:</string>
   <%= @user.current_sign_in_ip%>
+</p>
+
+<p>
+  <string>Location:</string>
+  <%= @user.location.name if @user.location%>
+</p>
+
+<p>
+  <string>Role:</string>
+  <%= @user.role%>
 </p>
 
 <%= link_to 'Edit', edit_user_path(@user) %> |
