@@ -17,6 +17,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def email_required?
+    false
+  end
+
   private
   def generate_authentication_token
     loop do
