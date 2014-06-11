@@ -72,6 +72,7 @@ ActiveRecord::Schema.define(version: 20140611063003) do
   create_table "packages", force: true do |t|
     t.string   "partnum"
     t.integer  "quantity",    default: 0
+    t.string   "fortlift_id"
     t.integer  "state"
     t.string   "location_id"
     t.boolean  "is_delete",   default: false
@@ -81,6 +82,7 @@ ActiveRecord::Schema.define(version: 20140611063003) do
     t.datetime "updated_at"
   end
 
+  add_index "packages", ["fortlift_id"], name: "index_packages_on_fortlift_id", using: :btree
   add_index "packages", ["id"], name: "index_packages_on_id", using: :btree
   add_index "packages", ["location_id"], name: "index_packages_on_location_id", using: :btree
 
