@@ -1,4 +1,5 @@
 class DeliveriesController < ApplicationController
+  load_and_authorize_resource
   before_action :set_delivery, only: [:show, :edit, :update, :destroy]
 
   # GET /deliveries
