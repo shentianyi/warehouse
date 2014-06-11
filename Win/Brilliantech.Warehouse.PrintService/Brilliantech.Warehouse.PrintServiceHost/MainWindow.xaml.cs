@@ -13,6 +13,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Net.Sockets;
 using System.Net;
+using System.ServiceModel.Web;
+using Brilliantech.Warehouse.PrintServiceLib;
 
 namespace Brilliantech.Warehouse.PrintServiceHost
 {
@@ -21,6 +23,8 @@ namespace Brilliantech.Warehouse.PrintServiceHost
     /// </summary>
     public partial class MainWindow : Window
     {
+        WebServiceHost host = null;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -29,12 +33,27 @@ namespace Brilliantech.Warehouse.PrintServiceHost
         private void init()
         {
             //IPLab.Content = getLoalIP();
+            startService();
+        }
+
+        private void startService() {
+            try
+            {
+                if (host == null)
+                {
+                    host = new WebServiceHost(typeof(PrintService));
+                }
+                host.Open(); 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         // get local ip
         private string getLoalIP()
         {
-
             return Dns.GetHostEntry(Dns.GetHostName()).AddressList.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork).ToString();
         }
 
