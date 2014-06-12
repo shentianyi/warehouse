@@ -1,6 +1,7 @@
 class CreateLocations < ActiveRecord::Migration
   def change
     create_table(:locations,:id=>false) do |t|
+      t.string :uuid, :limit => 36, :null => false
       t.string :id, :limit=>36, :primary=>true, :null=>false
       t.string :name
       #
@@ -10,6 +11,7 @@ class CreateLocations < ActiveRecord::Migration
       #
       t.timestamps
     end
+    add_index :locations, :uuid
     add_index :locations, :id
     execute 'ALTER TABLE locations ADD PRIMARY KEY (id)'
   end

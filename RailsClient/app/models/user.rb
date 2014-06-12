@@ -7,11 +7,11 @@ class User < ActiveRecord::Base
 
   belongs_to :location
 
-  validates_uniqueness_of :user_no
+  validates_uniqueness_of :id
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
-         :authentication_keys => [:user_no]
+         :authentication_keys => [:id]
 
   def ensure_authentication_token!
     if authentication_token.blank?

@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class FortliftTest < ActiveSupport::TestCase
+class ForkliftTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

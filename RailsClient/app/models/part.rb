@@ -1,5 +1,7 @@
 class Part < ActiveRecord::Base
   include Extensions::UUID
 
-  validates_uniqueness_of :partnum
+  belongs_to :creator, class_name: "User"
+
+  validates_uniqueness_of :id
 end

@@ -1,6 +1,7 @@
 class CreatePackagePositions < ActiveRecord::Migration
   def change
     create_table(:package_positions, :id=>false )do |t|
+      t.string :uuid, :limit => 36, :null => false
       t.string :id ,:limit => 36 ,:primary=>true,:null=>false
 
       t.string :position_id
@@ -36,6 +37,7 @@ DROP FOREIGN KEY fk_package_positions_packages
       end
     end
 
+    add_index :package_positions, :uuid
     add_index :package_positions, :id
     add_index :package_positions, :position_id
     add_index :package_positions, :package_id

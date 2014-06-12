@@ -1,6 +1,7 @@
 class CreatePositions < ActiveRecord::Migration
   def change
     create_table( :positions,:id => false)do |t|
+      t.string :uuid, :limit => 36, :null => false
       t.string :id, :limits=>36, :primary=>true, :null=>false
       t.string :whouse_id
       t.string :detail
@@ -31,6 +32,7 @@ DROP FOREIGN KEY fk_positions_whouses
         SQL
       end
     end
+    add_index :positions, :uuid
     add_index :positions, :id
     add_index :positions, :whouse_id
     execute 'ALTER TABLE positions ADD PRIMARY KEY (id)'
