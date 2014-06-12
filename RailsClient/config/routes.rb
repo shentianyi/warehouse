@@ -2,7 +2,12 @@ Rails.application.routes.draw do
   mount ApplicationAPI => '/api'
   root :to => "welcome#index"
 
-  devise_for :users, :controllers => {:registrations => "users/registrations",:sessions => "users/sessions"},path: "auth", path_names: {sign_in: 'login', sign_out: 'logout', password: 'secret', confirmation: 'verification', unlock: 'unblock', registration: 'register', sign_up: 'cmon_let_me_in'}
+  devise_for :users, :controllers => {:registrations => "users/registrations"},path: "auth", path_names: {sign_in: 'login', sign_out: 'logout', password: 'secret', confirmation: 'verification', unlock: 'unblock', registration: 'register', sign_up: 'cmon_let_me_in'}
+
+  devise_scope :user do
+    post '/api/sign_in' => 'users/sessions#create'
+    delete '/api/sign_out' => 'users/sessions#destroy'
+  end
 
   resources :deliveries
 
