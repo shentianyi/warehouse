@@ -2,6 +2,7 @@ class CreateFortlifts < ActiveRecord::Migration
   def change
     create_table(:fortlifts,:id=>false) do |t|
       t.string :id, :limit => 36, :primary=>true, :null=>false
+      t.integer :state, :null=>false, :default=> 1
       #
       t.string :delivery_id
       t.string :remark

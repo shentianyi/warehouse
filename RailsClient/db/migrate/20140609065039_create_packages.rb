@@ -6,7 +6,7 @@ class CreatePackages < ActiveRecord::Migration
       t.integer :quantity, :default=>0
       t.datetime :in_date
       t.string :fortlift_id
-      t.integer :state
+      t.integer :state, :null=>false, :default=> 1
       t.string :location_id
       #
       t.boolean :is_delete, :default => false
