@@ -1,5 +1,6 @@
 class Package < ActiveRecord::Base
   include Extensions::UUID
+  include Extensions::STATE
 
   belongs_to :fortlift
   has_one :package_position
