@@ -1,8 +1,8 @@
 class CreateParts < ActiveRecord::Migration
   def change
     create_table(:parts, :id=>false) do |t|
+      t.string :uuid, :limit => 36, :null => false
       t.string :id , :limit => 36, :primary=>true, :null=>false
-      t.string :partnum
       t.string :customernum
       #
       t.boolean :is_delete, :default =>false
@@ -11,8 +11,8 @@ class CreateParts < ActiveRecord::Migration
       #
       t.timestamps
     end
+    add_index :parts, :uuid
     add_index :parts, :id
-    add_index :parts, :partnum
     execute 'ALTER TABLE parts ADD PRIMARY KEY (id)'
   end
 end

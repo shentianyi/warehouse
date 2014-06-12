@@ -1,7 +1,8 @@
 module V1
   class UserAPI<Base
+    extend Devise::Controllers::SignInOut
     namespace 'users'
-    guard_all!
+    #guard_all!
 
     # login
     # params: email, passwd

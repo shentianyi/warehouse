@@ -1,6 +1,7 @@
 class CreateFortlifts < ActiveRecord::Migration
   def change
     create_table(:fortlifts,:id=>false) do |t|
+      t.string :uuid, :limit => 36, :null => false
       t.string :id, :limit => 36, :primary=>true, :null=>false
       t.integer :state, :null=>false, :default=> 1
       #
@@ -32,6 +33,8 @@ DROP FOREIGN KEY fk_fortlifts_deliveries
         SQL
       end
     end
+
+    add_index :fortlifts, :uuid
     add_index :fortlifts,:delivery_id
     add_index :fortlifts,:id
     execute 'ALTER TABLE fortlifts ADD PRIMARY KEY (id)'

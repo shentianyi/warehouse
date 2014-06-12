@@ -1,8 +1,9 @@
 class CreatePartPositions < ActiveRecord::Migration
   def change
     create_table(:part_positions, :id=>false )do |t|
+      t.string :uuid, :limit => 36, :null => false
       t.string :id, :limit=>36, :primary=>true, :null => false
-      t.string :partnum
+      t.string :part_id
       t.string :position_id
       t.string :position_detail
       t.string :whouse_name
@@ -26,7 +27,10 @@ FOREIGN KEY (position_id)
 REFERENCES positions(id),
 ADD CONSTRAINT fk_part_positions_whouses
 FOREIGN KEY (whouse_id)
-REFERENCES whouses(id)
+REFERENCES whouses(id),
+ADD CONSTRAINT fk_part_positions_parts
+FOREIGN KEY (part_id)
+REFERENCES parts(id)
         SQL
       end
 
@@ -34,15 +38,17 @@ REFERENCES whouses(id)
         execute <<-SQL
         ALTER TABLE part_positions
 DROP FOREIGN KEY fk_part_positions_positions,
-DROP FOREIGN KEY fk_part_positions_whouses
+DROP FOREIGN KEY fk_part_positions_whouses,
+DROP FOREIGN KEY fk_part_positions_parts
         SQL
       end
     end
 
+    add_index :part_positions, :uuid
     add_index :part_positions, :id
     add_index :part_positions, :position_id
     add_index :part_positions, :whouse_id
-    add_index :part_positions, :partnum
+    add_index :part_positions, :part_id
     execute 'ALTER TABLE part_positions ADD PRIMARY KEY (id)'
   end
 end

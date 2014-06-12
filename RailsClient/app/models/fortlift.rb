@@ -4,4 +4,6 @@ class Fortlift < ActiveRecord::Base
 
   belongs_to :delivery
   has_many :state_logs, as: :stateable
+  has_many :fortlift_itmes, :dependent => :destroy
+  has_many :packages, :through => :fortlift_items
 end

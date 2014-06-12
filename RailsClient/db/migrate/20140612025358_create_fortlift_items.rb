@@ -1,6 +1,7 @@
 class CreateFortliftItems < ActiveRecord::Migration
   def change
     create_table( :fortlift_items, :id=>false) do |t|
+      t.string :uuid, :limit => 36, :null => false
       t.string :id, :limit => 36, :primary=>true, :null=>false
       t.string :fortlift_id
       t.string :package_id
@@ -32,6 +33,7 @@ DROP FOREIGN KEY fk_fortlift_items_packages
     end
 
     add_index :fortlift_items, :id
+    add_index :fortlift_items, :uuid
     add_index :fortlift_items, :fortlift_id
     add_index :fortlift_items, :package_id
 
