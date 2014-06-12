@@ -14,7 +14,7 @@
 ActiveRecord::Schema.define(version: 20140611063003) do
 
   create_table "deliveries", force: true do |t|
-    t.integer  "state"
+    t.integer  "state",         default: 1,     null: false
     t.datetime "delivery_date"
     t.string   "user_id"
     t.boolean  "is_delete",     default: false
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(version: 20140611063003) do
   add_index "deliveries", ["user_id"], name: "index_deliveries_on_user_id", using: :btree
 
   create_table "fortlifts", force: true do |t|
+    t.integer  "state",       default: 1,     null: false
     t.string   "delivery_id"
     t.string   "remark"
     t.string   "stocker"
@@ -72,8 +73,9 @@ ActiveRecord::Schema.define(version: 20140611063003) do
   create_table "packages", force: true do |t|
     t.string   "partnum"
     t.integer  "quantity",    default: 0
+    t.datetime "in_date"
     t.string   "fortlift_id"
-    t.integer  "state"
+    t.integer  "state",       default: 1,     null: false
     t.string   "location_id"
     t.boolean  "is_delete",   default: false
     t.boolean  "is_dirty",    default: true
