@@ -16,6 +16,8 @@ module V1
     end
 
     # add forklift
+    # id: delivery id
+    # forklift: forklift ids
     post :add_forklift do
 
     end
@@ -26,7 +28,12 @@ module V1
 
     end
 
-    #delete delivery
+    # send delivery
+    post :send do
+
+    end
+
+    # delete delivery
     delete do
 
     end
