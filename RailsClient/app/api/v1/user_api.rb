@@ -15,6 +15,5 @@ module V1
     delete :logout do
 
     end
-
   end
 end
