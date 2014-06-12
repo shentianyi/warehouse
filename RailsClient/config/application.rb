@@ -8,10 +8,13 @@ Bundler.require(*Rails.groups)
 
 module Warehouse
   class Application < Rails::Application
-    config.paths['config/database']='config/charlot_database.yml' if ENV['USER']=='wangsong'
+    config.paths['config/database']='config/wangsong_database.yml' if ENV['USER']=='wangsong'
+    config.paths['config/database']='config/charlot_database.yml' if ENV['USER']=='charlot'
     # for the api
-    config.paths.add File.join('app', 'api'), glob: File.join('**', '*.rb')
-    config.autoload_paths += Dir[Rails.root.join('app', 'api', '*')]
+    %w{api service}.each do |namespace|
+      config.paths.add File.join('app', namespace), glob: File.join('**', '*.rb')
+      config.autoload_paths += Dir[Rails.root.join('app', namespace, '**')]
+    end
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers

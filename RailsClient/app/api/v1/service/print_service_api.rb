@@ -4,17 +4,9 @@ module V1
       namespace 'printer'
       guard_all!
 
-      get :print do
-        set=[]
-        for i in 0...10
-          data=[]
-          [:Body,:Head].each{|key|
-            data<<{Key: key, Value: 'Value'+i.to_s}
-          }
-          set<<data
-        end
-        puts set.to_json
-        set
+      get :data do
+        printer=::Service::Printer::Client.new(params[:code])
+        printer.gen_data
       end
     end
   end

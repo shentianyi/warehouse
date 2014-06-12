@@ -15,7 +15,7 @@ default: &default
   timeout: 5000
   socket: /var/run/mysqld/mysqld.sock
   username: root
-  password: 123456@
+  password:
   reconnect: false
   encoding: utf8
 
