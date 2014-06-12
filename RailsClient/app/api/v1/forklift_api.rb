@@ -5,7 +5,7 @@ module V1
 
     # get binded but not add to delivery forklifts
     get :binds do
-
+      {result: true, content: "you are right"}
     end
 
     # create forklift
