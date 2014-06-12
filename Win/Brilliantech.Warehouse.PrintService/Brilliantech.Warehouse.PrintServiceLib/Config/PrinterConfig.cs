@@ -53,5 +53,13 @@ namespace Brilliantech.Warehouse.PrintServiceHost.Config
             printerConfig.Set("Copy", printer.Copy, printer.Id);
             printerConfig.Save();
         }
+
+        public static Printer Find(string code)
+        {
+           return printers.Find(delegate(Printer printer)
+            {
+                return printer.Id == code;
+            });
+        }
     }
 }

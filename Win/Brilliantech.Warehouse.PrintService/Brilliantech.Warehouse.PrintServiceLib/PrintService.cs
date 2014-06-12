@@ -9,6 +9,7 @@ using RestSharp;
 using Brilliantech.Warehouse.PrintServiceLib.Config;
 using Brilliantech.Warehouse.PrintServiceLib.Model;
 using System.Net;
+using Brilliantech.Warehouse.PrintServiceHost.Config;
 
 namespace Brilliantech.Warehouse.PrintServiceLib
 {
@@ -23,8 +24,12 @@ namespace Brilliantech.Warehouse.PrintServiceLib
                 req.RequestFormat = DataFormat.Json;
                 req.AddParameter("code", code);
                 req.AddParameter("id", id);
-                var response = new ApiClient().Execute(req);
-                return string.Format("You entered: {0}-{1}", code, id);
+                Printer printer = PrinterConfig.Find(code);
+
+               var data = new ApiClient().Execute<Printer>(req);
+                
+
+                return string.Format("You entered: {0}-{1}-{2}-{3}", code, id,printer.Name,data.Name);
             }
             catch (Exception e) {
                 return null;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Brilliantech.ReportGenConnector;
 
 namespace Brilliantech.Warehouse.PrintServiceLib.Model
 {
@@ -13,5 +14,9 @@ namespace Brilliantech.Warehouse.PrintServiceLib.Model
         public string Name { get; set; }
         public int Type { get; set; }
         public int Copy { get; set; }
+
+        public void Print(RecordSet data) { 
+         
+        }
     }
 }
