@@ -1,8 +1,9 @@
 module V1
   class UserAPI<Base
-    namespace 'users'
-    guard_all!
+    namespace :users
+    #guard_all!
 
+    extend Devise::Controllers::SignInOut
     # login
     # params: email, passwd
     post :login do
@@ -14,6 +15,10 @@ module V1
     # logout
     delete :logout do
 
+    end
+
+    get do
+      {result:true,content:{user:User.first}}
     end
   end
 end
