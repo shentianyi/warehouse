@@ -3,6 +3,7 @@ class Package < ActiveRecord::Base
   include Extensions::STATE
 
   belongs_to :fortlift
+  has_one :fortlift_item, :dependent => :destroy
   has_one :package_position
   has_one :position, :through => :package_position
   has_many :state_logs, as: :stateable
@@ -11,6 +12,16 @@ class Package < ActiveRecord::Base
   # please do this
   #here is code for Leoni
   after_save :auto_shelved
+
+  #
+  def add_to_fortlift fortlift
+    self.create_fortlift(fortlift_id: fortlift.id)
+  end
+
+  #
+  def remve_from_fortlift
+    self.fortlift_item.destroy
+  end
 
   # set_position
   def set_position
