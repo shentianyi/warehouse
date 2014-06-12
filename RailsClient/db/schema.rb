@@ -11,22 +11,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140612025358) do
+ActiveRecord::Schema.define(version: 20140612103217) do
 
   create_table "deliveries", force: true do |t|
-    t.string   "uuid",          limit: 36,                 null: false
-    t.integer  "state",                    default: 1,     null: false
+    t.string   "uuid",           limit: 36,                 null: false
+    t.integer  "state",                     default: 1,     null: false
     t.datetime "delivery_date"
-    t.string   "user_id"
-    t.boolean  "is_delete",                default: false
-    t.boolean  "is_dirty",                 default: true
-    t.boolean  "is_new",                   default: true
+    t.string   "creator_id"
+    t.boolean  "is_delete",                 default: false
+    t.boolean  "is_dirty",                  default: true
+    t.boolean  "is_new",                    default: true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "source_id"
+    t.string   "destination_id"
   end
 
+  add_index "deliveries", ["creator_id"], name: "index_deliveries_on_creator_id", using: :btree
+  add_index "deliveries", ["destination_id"], name: "index_deliveries_on_destination_id", using: :btree
   add_index "deliveries", ["id"], name: "index_deliveries_on_id", using: :btree
-  add_index "deliveries", ["user_id"], name: "index_deliveries_on_user_id", using: :btree
+  add_index "deliveries", ["source_id"], name: "index_deliveries_on_source_id", using: :btree
   add_index "deliveries", ["uuid"], name: "index_deliveries_on_uuid", using: :btree
 
   create_table "forklift_items", force: true do |t|
@@ -34,10 +38,12 @@ ActiveRecord::Schema.define(version: 20140612025358) do
     t.string   "forklift_id"
     t.string   "package_id"
     t.string   "state",                  default: "0", null: false
+    t.string   "creator_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "forklift_items", ["creator_id"], name: "index_forklift_items_on_creator_id", using: :btree
   add_index "forklift_items", ["forklift_id"], name: "index_forklift_items_on_forklift_id", using: :btree
   add_index "forklift_items", ["id"], name: "index_forklift_items_on_id", using: :btree
   add_index "forklift_items", ["package_id"], name: "index_forklift_items_on_package_id", using: :btree
@@ -48,8 +54,9 @@ ActiveRecord::Schema.define(version: 20140612025358) do
     t.integer  "state",                  default: 1,     null: false
     t.string   "delivery_id"
     t.string   "remark"
-    t.string   "stocker"
-    t.string   "whouse"
+    t.string   "stocker_id"
+    t.string   "creator_id"
+    t.string   "whouse_id"
     t.boolean  "is_delete",              default: false
     t.boolean  "is_dirty",               default: true
     t.boolean  "is_new",                 default: true
@@ -57,8 +64,10 @@ ActiveRecord::Schema.define(version: 20140612025358) do
     t.datetime "updated_at"
   end
 
+  add_index "forklifts", ["creator_id"], name: "index_forklifts_on_creator_id", using: :btree
   add_index "forklifts", ["delivery_id"], name: "index_forklifts_on_delivery_id", using: :btree
   add_index "forklifts", ["id"], name: "index_forklifts_on_id", using: :btree
+  add_index "forklifts", ["stocker_id"], name: "index_forklifts_on_stocker_id", using: :btree
   add_index "forklifts", ["uuid"], name: "index_forklifts_on_uuid", using: :btree
 
   create_table "locations", force: true do |t|
@@ -99,6 +108,7 @@ ActiveRecord::Schema.define(version: 20140612025358) do
     t.datetime "in_date"
     t.integer  "state",       default: 1,     null: false
     t.string   "location_id"
+    t.string   "creator_id"
     t.boolean  "is_delete",   default: false
     t.boolean  "is_dirty",    default: true
     t.boolean  "is_new",      default: true
@@ -106,6 +116,7 @@ ActiveRecord::Schema.define(version: 20140612025358) do
     t.datetime "updated_at"
   end
 
+  add_index "packages", ["creator_id"], name: "index_packages_on_creator_id", using: :btree
   add_index "packages", ["id"], name: "index_packages_on_id", using: :btree
   add_index "packages", ["location_id"], name: "index_packages_on_location_id", using: :btree
   add_index "packages", ["part_id"], name: "index_packages_on_part_id", using: :btree
@@ -134,6 +145,7 @@ ActiveRecord::Schema.define(version: 20140612025358) do
   create_table "parts", force: true do |t|
     t.string   "uuid",        limit: 36,                 null: false
     t.string   "customernum"
+    t.string   "creator_id"
     t.boolean  "is_delete",              default: false
     t.boolean  "is_dirty",               default: true
     t.boolean  "is_new",                 default: true
@@ -141,6 +153,7 @@ ActiveRecord::Schema.define(version: 20140612025358) do
     t.datetime "updated_at"
   end
 
+  add_index "parts", ["creator_id"], name: "index_parts_on_creator_id", using: :btree
   add_index "parts", ["id"], name: "index_parts_on_id", using: :btree
   add_index "parts", ["uuid"], name: "index_parts_on_uuid", using: :btree
 

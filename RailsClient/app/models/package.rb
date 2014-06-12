@@ -7,6 +7,8 @@ class Package < ActiveRecord::Base
   has_one :position, :through => :package_position
   has_many :state_logs, as: :stateable
 
+  belongs_to :creator, class_name: "User"
+
   # when a package is added to the forklift
   # please do this
   #here is code for Leoni

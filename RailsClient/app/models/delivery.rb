@@ -4,4 +4,7 @@ class Delivery < ActiveRecord::Base
 
   belongs_to :users
   has_many :state_logs, as: :stateable
+  belongs_to :creator, class_name: "User"
+  belongs_to :source, class_name: "Location"
+  belongs_to :destination, class_name: "Location"
 end
