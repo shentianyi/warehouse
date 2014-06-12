@@ -4,7 +4,9 @@ class CreatePackages < ActiveRecord::Migration
       t.string :id,:limits=>36, :primary=>true, :null=>false
       t.string :partnum
       t.integer :quantity, :default=>0
-      t.integer :state
+      t.datetime :in_date
+      t.string :fortlift_id
+      t.integer :state, :null=>false, :default=> 1
       t.string :location_id
       #
       t.boolean :is_delete, :default => false
@@ -20,19 +22,24 @@ class CreatePackages < ActiveRecord::Migration
         ALTER TABLE packages
 ADD CONSTRAINT fk_packages_locations
 FOREIGN KEY (location_id)
-REFERENCES locations(id)
+REFERENCES locations(id),
+ADD CONSTRAINT fk_packages_fortlifts
+FOREIGN KEY (fortlift_id)
+REFERENCES fortlifts(id)
         SQL
       end
 
       dir.down do
         execute <<-SQL
         ALTER TABLE packages
-DROP FOREIGN KEY fk_packages_locations
+DROP FOREIGN KEY fk_packages_locations,
+DROP FOREIGN KEY fk_packages_fortlifts
         SQL
       end
     end
     add_index :packages, :id
     add_index :packages, :location_id
+    add_index :packages, :fortlift_id
     execute 'ALTER TABLE packages ADD PRIMARY KEY (id)'
   end
 end

@@ -1,6 +1,6 @@
 require 'rack/oauth2'
 
-module SyncAPIGuard
+module OauthAPIGuard
   extend ActiveSupport::Concern
 
   included do |base|

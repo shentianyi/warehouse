@@ -12,7 +12,12 @@
     <% end %>
     <p>
       <%= f.label :email%>
-      <%= f.text_field :email%>
+      <%= f.email_field :email%>
+    </p>
+
+    <p>
+      <%= f.label :user_no%>
+      <%= f.text_field :user_no%>
     </p>
     <p>
       <%= f.label :name%>
@@ -29,10 +34,6 @@
     <p>
       <%= f.label :password_confirmation%>
       <%= f.password_field :password_confirmation%>
-    </p>
-    <p>
-      <% locations = Location.all.map {|location|[location.name, location.id]}%>
-      <%= options_for_select(locations)%>
     </p>
 
     <div class="actions">

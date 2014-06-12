@@ -1,4 +1,5 @@
 class LocationsController < ApplicationController
+  load_and_authorize_resource
   before_action :set_location, only: [:show, :edit, :update, :destroy]
 
   # GET /locations
@@ -70,6 +71,6 @@ class LocationsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def location_params
       #params[:location]
-      params.require(:location).permit(:name)
+      params.require(:location).permit(:name,:address,:tel)
     end
 end

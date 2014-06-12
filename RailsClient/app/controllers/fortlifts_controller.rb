@@ -1,4 +1,5 @@
 class FortliftsController < ApplicationController
+  load_and_authorize_resource
   before_action :set_fortlift, only: [:show, :edit, :update, :destroy]
 
   # GET /fortlifts
