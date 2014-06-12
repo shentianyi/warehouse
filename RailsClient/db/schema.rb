@@ -11,10 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140611063003) do
+ActiveRecord::Schema.define(version: 20140612025358) do
 
   create_table "deliveries", force: true do |t|
-    t.integer  "state"
+    t.integer  "state",         default: 1,     null: false
     t.datetime "delivery_date"
     t.string   "user_id"
     t.boolean  "is_delete",     default: false
@@ -27,7 +27,20 @@ ActiveRecord::Schema.define(version: 20140611063003) do
   add_index "deliveries", ["id"], name: "index_deliveries_on_id", using: :btree
   add_index "deliveries", ["user_id"], name: "index_deliveries_on_user_id", using: :btree
 
+  create_table "fortlift_items", force: true do |t|
+    t.string   "fortlift_id"
+    t.string   "package_id"
+    t.string   "state",       default: "0", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "fortlift_items", ["fortlift_id"], name: "index_fortlift_items_on_fortlift_id", using: :btree
+  add_index "fortlift_items", ["id"], name: "index_fortlift_items_on_id", using: :btree
+  add_index "fortlift_items", ["package_id"], name: "index_fortlift_items_on_package_id", using: :btree
+
   create_table "fortlifts", force: true do |t|
+    t.integer  "state",       default: 1,     null: false
     t.string   "delivery_id"
     t.string   "remark"
     t.string   "stocker"
@@ -72,8 +85,9 @@ ActiveRecord::Schema.define(version: 20140611063003) do
   create_table "packages", force: true do |t|
     t.string   "partnum"
     t.integer  "quantity",    default: 0
+    t.datetime "in_date"
     t.string   "fortlift_id"
-    t.integer  "state"
+    t.integer  "state",       default: 1,     null: false
     t.string   "location_id"
     t.boolean  "is_delete",   default: false
     t.boolean  "is_dirty",    default: true
