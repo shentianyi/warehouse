@@ -1,75 +1,75 @@
-class FortliftsController < ApplicationController
+class ForkliftsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_fortlift, only: [:show, :edit, :update, :destroy]
+  before_action :set_forklift, only: [:show, :edit, :update, :destroy]
 
-  # GET /fortlifts
-  # GET /fortlifts.json
+  # GET /forklifts
+  # GET /forklifts.json
   def index
-    @fortlifts = Fortlift.all
+    @forklifts = Forklift.all
   end
 
-  # GET /fortlifts/1
-  # GET /fortlifts/1.json
+  # GET /forklifts/1
+  # GET /forklifts/1.json
   def show
   end
 
-  # GET /fortlifts/new
+  # GET /forklifts/new
   def new
-    @fortlift = Fortlift.new
+    @forklift = Forklift.new
   end
 
-  # GET /fortlifts/1/edit
+  # GET /forklifts/1/edit
   def edit
   end
 
-  # POST /fortlifts
-  # POST /fortlifts.json
+  # POST /forklifts
+  # POST /forklifts.json
   def create
-    @fortlift = Fortlift.new(fortlift_params)
+    @forklift = Forklift.new(forklift_params)
 
     respond_to do |format|
-      if @fortlift.save
-        format.html { redirect_to @fortlift, notice: 'Fortlift was successfully created.' }
-        format.json { render :show, status: :created, location: @fortlift }
+      if @forklift.save
+        format.html { redirect_to @forklift, notice: 'Forklift was successfully created.' }
+        format.json { render :show, status: :created, location: @forklift }
       else
         format.html { render :new }
-        format.json { render json: @fortlift.errors, status: :unprocessable_entity }
+        format.json { render json: @forklift.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # PATCH/PUT /fortlifts/1
-  # PATCH/PUT /fortlifts/1.json
+  # PATCH/PUT /forklifts/1
+  # PATCH/PUT /forklifts/1.json
   def update
     respond_to do |format|
-      if @fortlift.update(fortlift_params)
-        format.html { redirect_to @fortlift, notice: 'Fortlift was successfully updated.' }
-        format.json { render :show, status: :ok, location: @fortlift }
+      if @forklift.update(forklift_params)
+        format.html { redirect_to @forklift, notice: 'Forklift was successfully updated.' }
+        format.json { render :show, status: :ok, location: @forklift }
       else
         format.html { render :edit }
-        format.json { render json: @fortlift.errors, status: :unprocessable_entity }
+        format.json { render json: @forklift.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # DELETE /fortlifts/1
-  # DELETE /fortlifts/1.json
+  # DELETE /forklifts/1
+  # DELETE /forklifts/1.json
   def destroy
-    @fortlift.destroy
+    @forklift.destroy
     respond_to do |format|
-      format.html { redirect_to fortlifts_url, notice: 'Fortlift was successfully destroyed.' }
+      format.html { redirect_to forklifts_url, notice: 'Forklift was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_fortlift
-      @fortlift = Fortlift.find(params[:id])
+    def set_forklift
+      @forklift = Forklift.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
-    def fortlift_params
-      params[:fortlift]
+    def forklift_params
+      params[:forklift]
     end
 end

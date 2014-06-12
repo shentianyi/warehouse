@@ -1,2 +1,2 @@
-module FortliftsHelper
+module ForkliftsHelper
 end

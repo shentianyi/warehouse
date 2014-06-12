@@ -1,1 +1,1 @@
-json.extract! @fortlift, :id, :created_at, :updated_at
+json.extract! @forklift, :id, :created_at, :updated_at

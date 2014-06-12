@@ -1,14 +1,14 @@
 require 'test_helper'
 
-class FortliftsControllerTest < ActionController::TestCase
+class ForkliftsControllerTest < ActionController::TestCase
   setup do
-    @fortlift = fortlifts(:one)
+    @forklift = forklifts(:one)
   end
 
   test "should get index" do
     get :index
     assert_response :success
-    assert_not_nil assigns(:fortlifts)
+    assert_not_nil assigns(:forklifts)
   end
 
   test "should get new" do
@@ -16,34 +16,34 @@ class FortliftsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test "should create fortlift" do
-    assert_difference('Fortlift.count') do
-      post :create, fortlift: {  }
+  test "should create forklift" do
+    assert_difference('Forklift.count') do
+      post :create, forklift: {  }
     end
 
-    assert_redirected_to fortlift_path(assigns(:fortlift))
+    assert_redirected_to forklift_path(assigns(:forklift))
   end
 
-  test "should show fortlift" do
-    get :show, id: @fortlift
+  test "should show forklift" do
+    get :show, id: @forklift
     assert_response :success
   end
 
   test "should get edit" do
-    get :edit, id: @fortlift
+    get :edit, id: @forklift
     assert_response :success
   end
 
-  test "should update fortlift" do
-    patch :update, id: @fortlift, fortlift: {  }
-    assert_redirected_to fortlift_path(assigns(:fortlift))
+  test "should update forklift" do
+    patch :update, id: @forklift, forklift: {  }
+    assert_redirected_to forklift_path(assigns(:forklift))
   end
 
-  test "should destroy fortlift" do
-    assert_difference('Fortlift.count', -1) do
-      delete :destroy, id: @fortlift
+  test "should destroy forklift" do
+    assert_difference('Forklift.count', -1) do
+      delete :destroy, id: @forklift
     end
 
-    assert_redirected_to fortlifts_path
+    assert_redirected_to forklifts_path
   end
 end

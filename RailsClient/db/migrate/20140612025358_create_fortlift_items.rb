@@ -1,9 +1,9 @@
-class CreateFortliftItems < ActiveRecord::Migration
+class CreateForkliftItems < ActiveRecord::Migration
   def change
-    create_table( :fortlift_items, :id=>false) do |t|
+    create_table( :forklift_items, :id=>false) do |t|
       t.string :uuid, :limit => 36, :null => false
       t.string :id, :limit => 36, :primary=>true, :null=>false
-      t.string :fortlift_id
+      t.string :forklift_id
       t.string :package_id
       t.string :state, :null=> false, :default => 0
 
@@ -13,11 +13,11 @@ class CreateFortliftItems < ActiveRecord::Migration
     reversible do |dir|
       dir.up do
         execute <<-SQL
-        ALTER TABLE fortlift_items
-ADD CONSTRAINT fk_fortlift_items_fortlifts
-FOREIGN KEY (fortlift_id)
-REFERENCES fortlifts(id),
-ADD CONSTRAINT fk_fortlift_items_packages
+        ALTER TABLE forklift_items
+ADD CONSTRAINT fk_forklift_items_forklifts
+FOREIGN KEY (forklift_id)
+REFERENCES forklifts(id),
+ADD CONSTRAINT fk_forklift_items_packages
 FOREIGN KEY (package_id)
 REFERENCES packages(id)
         SQL
@@ -25,18 +25,18 @@ REFERENCES packages(id)
 
       dir.down do
         execute <<-SQL
-        ALTER TABLE fortlift_items
-DROP FOREIGN KEY fk_fortlift_items_fortlifts,
-DROP FOREIGN KEY fk_fortlift_items_packages
+        ALTER TABLE forklift_items
+DROP FOREIGN KEY fk_forklift_items_forklifts,
+DROP FOREIGN KEY fk_forklift_items_packages
         SQL
       end
     end
 
-    add_index :fortlift_items, :id
-    add_index :fortlift_items, :uuid
-    add_index :fortlift_items, :fortlift_id
-    add_index :fortlift_items, :package_id
+    add_index :forklift_items, :id
+    add_index :forklift_items, :uuid
+    add_index :forklift_items, :forklift_id
+    add_index :forklift_items, :package_id
 
-    execute 'ALTER TABLE fortlift_items ADD PRIMARY KEY(id)'
+    execute 'ALTER TABLE forklift_items ADD PRIMARY KEY(id)'
   end
 end

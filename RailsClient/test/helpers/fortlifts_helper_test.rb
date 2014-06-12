@@ -1,4 +1,4 @@
 require 'test_helper'
 
-class FortliftsHelperTest < ActionView::TestCase
+class ForkliftsHelperTest < ActionView::TestCase
 end

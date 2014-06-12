@@ -29,21 +29,21 @@ ActiveRecord::Schema.define(version: 20140612025358) do
   add_index "deliveries", ["user_id"], name: "index_deliveries_on_user_id", using: :btree
   add_index "deliveries", ["uuid"], name: "index_deliveries_on_uuid", using: :btree
 
-  create_table "fortlift_items", force: true do |t|
+  create_table "forklift_items", force: true do |t|
     t.string   "uuid",        limit: 36,               null: false
-    t.string   "fortlift_id"
+    t.string   "forklift_id"
     t.string   "package_id"
     t.string   "state",                  default: "0", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "fortlift_items", ["fortlift_id"], name: "index_fortlift_items_on_fortlift_id", using: :btree
-  add_index "fortlift_items", ["id"], name: "index_fortlift_items_on_id", using: :btree
-  add_index "fortlift_items", ["package_id"], name: "index_fortlift_items_on_package_id", using: :btree
-  add_index "fortlift_items", ["uuid"], name: "index_fortlift_items_on_uuid", using: :btree
+  add_index "forklift_items", ["forklift_id"], name: "index_forklift_items_on_forklift_id", using: :btree
+  add_index "forklift_items", ["id"], name: "index_forklift_items_on_id", using: :btree
+  add_index "forklift_items", ["package_id"], name: "index_forklift_items_on_package_id", using: :btree
+  add_index "forklift_items", ["uuid"], name: "index_forklift_items_on_uuid", using: :btree
 
-  create_table "fortlifts", force: true do |t|
+  create_table "forklifts", force: true do |t|
     t.string   "uuid",        limit: 36,                 null: false
     t.integer  "state",                  default: 1,     null: false
     t.string   "delivery_id"
@@ -57,9 +57,9 @@ ActiveRecord::Schema.define(version: 20140612025358) do
     t.datetime "updated_at"
   end
 
-  add_index "fortlifts", ["delivery_id"], name: "index_fortlifts_on_delivery_id", using: :btree
-  add_index "fortlifts", ["id"], name: "index_fortlifts_on_id", using: :btree
-  add_index "fortlifts", ["uuid"], name: "index_fortlifts_on_uuid", using: :btree
+  add_index "forklifts", ["delivery_id"], name: "index_forklifts_on_delivery_id", using: :btree
+  add_index "forklifts", ["id"], name: "index_forklifts_on_id", using: :btree
+  add_index "forklifts", ["uuid"], name: "index_forklifts_on_uuid", using: :btree
 
   create_table "locations", force: true do |t|
     t.string   "uuid",       limit: 36,                 null: false

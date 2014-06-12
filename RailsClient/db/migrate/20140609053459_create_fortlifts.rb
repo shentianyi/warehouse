@@ -1,6 +1,6 @@
-class CreateFortlifts < ActiveRecord::Migration
+class CreateForklifts < ActiveRecord::Migration
   def change
-    create_table(:fortlifts,:id=>false) do |t|
+    create_table(:forklifts,:id=>false) do |t|
       t.string :uuid, :limit => 36, :null => false
       t.string :id, :limit => 36, :primary=>true, :null=>false
       t.integer :state, :null=>false, :default=> 1
@@ -19,8 +19,8 @@ class CreateFortlifts < ActiveRecord::Migration
     reversible do |dir|
       dir.up do
         execute <<-SQL
-        ALTER TABLE fortlifts
-ADD CONSTRAINT fk_fortlifts_deliveries
+        ALTER TABLE forklifts
+ADD CONSTRAINT fk_forklifts_deliveries
 FOREIGN KEY (delivery_id)
 REFERENCES deliveries(id)
         SQL
@@ -28,15 +28,15 @@ REFERENCES deliveries(id)
 
       dir.down do
         execute <<-SQL
-        ALTER TAbLE fortlifts
-DROP FOREIGN KEY fk_fortlifts_deliveries
+        ALTER TAbLE forklifts
+DROP FOREIGN KEY fk_forklifts_deliveries
         SQL
       end
     end
 
-    add_index :fortlifts, :uuid
-    add_index :fortlifts,:delivery_id
-    add_index :fortlifts,:id
-    execute 'ALTER TABLE fortlifts ADD PRIMARY KEY (id)'
+    add_index :forklifts, :uuid
+    add_index :forklifts,:delivery_id
+    add_index :forklifts,:id
+    execute 'ALTER TABLE forklifts ADD PRIMARY KEY (id)'
   end
 end

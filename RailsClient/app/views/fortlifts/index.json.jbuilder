@@ -1,4 +1,4 @@
-json.array!(@fortlifts) do |fortlift|
-  json.extract! fortlift, :id
-  json.url fortlift_url(fortlift, format: :json)
+json.array!(@forklifts) do |forklift|
+  json.extract! forklift, :id
+  json.url forklift_url(forklift, format: :json)
 end

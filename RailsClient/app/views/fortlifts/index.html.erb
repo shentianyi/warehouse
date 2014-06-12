@@ -1,4 +1,4 @@
-<h1>Listing fortlifts</h1>
+<h1>Listing forklifts</h1>
 
 <table>
   <thead>
@@ -8,11 +8,11 @@
   </thead>
 
   <tbody>
-    <% @fortlifts.each do |fortlift| %>
+    <% @forklifts.each do |forklift| %>
       <tr>
-        <td><%= link_to 'Show', fortlift %></td>
-        <td><%= link_to 'Edit', edit_fortlift_path(fortlift) %></td>
-        <td><%= link_to 'Destroy', fortlift, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Show', forklift %></td>
+        <td><%= link_to 'Edit', edit_forklift_path(forklift) %></td>
+        <td><%= link_to 'Destroy', forklift, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
@@ -20,4 +20,4 @@
 
 <br>
 
-<%= link_to 'New Fortlift', new_fortlift_path %>
+<%= link_to 'New Forklift', new_forklift_path %>
