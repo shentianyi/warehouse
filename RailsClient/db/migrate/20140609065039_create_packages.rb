@@ -4,6 +4,7 @@ class CreatePackages < ActiveRecord::Migration
       t.string :id,:limits=>36, :primary=>true, :null=>false
       t.string :partnum
       t.integer :quantity, :default=>0
+      t.datetime :in_date
       t.string :fortlift_id
       t.integer :state
       t.string :location_id
