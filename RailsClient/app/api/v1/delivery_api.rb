@@ -52,7 +52,7 @@ module V1
     get :received do
       arg={
             state: DeliveryState::RECEIVED,
-           received_date: params[:received_date]
+            received_date: params[:received_date]
           }
       arg[:user_id]=params[:user_id] unless params[:user_id].blank?
 
