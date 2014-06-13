@@ -8,7 +8,7 @@ class CreateForklifts < ActiveRecord::Migration
       t.string :delivery_id
       t.string :remark
       t.string :stocker_id
-      t.string :creator_id
+      t.string :user_id
       #
       t.boolean :is_delete, :default => false
       t.boolean :is_dirty, :default => true
@@ -26,8 +26,8 @@ REFERENCES deliveries(id),
 ADD CONSTRAINT fk_forklifts_stockers
 FOREIGN KEY (stocker_id)
 REFERENCES users(id),
-ADD CONSTRAINT fk_forklifts_creators
-FOREIGN KEY (creator_id)
+ADD CONSTRAINT fk_forklifts_users
+FOREIGN KEY (user_id)
 REFERENCES users(id)
         SQL
       end
@@ -37,7 +37,7 @@ REFERENCES users(id)
         ALTER TAbLE forklifts
 DROP FOREIGN KEY fk_forklifts_deliveries,
 DROP FOREIGN KEY fk_forklifts_stockers,
-DROP FOREIGN KEY fk_forklifts_creators
+DROP FOREIGN KEY fk_forklifts_users
         SQL
       end
     end
@@ -46,7 +46,7 @@ DROP FOREIGN KEY fk_forklifts_creators
     add_index :forklifts,:delivery_id
     add_index :forklifts,:id
     add_index :forklifts,:stocker_id
-    add_index :forklifts,:creator_id
+    add_index :forklifts,:user_id
     execute 'ALTER TABLE forklifts ADD PRIMARY KEY (id)'
   end
 end

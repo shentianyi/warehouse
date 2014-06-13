@@ -5,7 +5,7 @@ class CreateDeliveries < ActiveRecord::Migration
       t.string :id, :limit => 36, :primary => true, :null => false
       t.integer :state, :null=>false, :default=> 1
       t.datetime :delivery_date
-      t.string :creator_id
+      t.string :user_id
       #
 
       t.boolean :is_delete, :default => false
@@ -19,8 +19,8 @@ class CreateDeliveries < ActiveRecord::Migration
       dir.up do
         execute <<-SQL
         ALTER TABLE deliveries
-ADD CONSTRAINT fk_deliveries_creators
-FOREIGN KEY (creator_id)
+ADD CONSTRAINT fk_deliveries_users
+FOREIGN KEY (user_id)
 REFERENCES users(id)
         SQL
       end
@@ -28,13 +28,13 @@ REFERENCES users(id)
       dir.down do
         execute <<-SQL
         ALTER TABLE deliveries
-DROP FOREIGN KEY fk_deliveries_creators
+DROP FOREIGN KEY fk_deliveries_users
         SQL
       end
     end
 
     add_index :deliveries, :uuid
-    add_index :deliveries, :creator_id
+    add_index :deliveries, :user_id
 
     add_index :deliveries, :id
 

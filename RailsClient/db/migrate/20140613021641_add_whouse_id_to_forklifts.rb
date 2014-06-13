@@ -1,6 +1,6 @@
 class AddWhouseIdToForklifts < ActiveRecord::Migration
   def change
-    add_column :forklifts, :whouses_id, :string
+    add_column :forklifts, :whouse_id, :string
 
     reversible do |dir|
       dir.up do

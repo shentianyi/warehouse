@@ -6,7 +6,7 @@ class CreateForkliftItems < ActiveRecord::Migration
       t.string :forklift_id
       t.string :package_id
       t.string :state, :null=> false, :default => 0
-      t.string :creator_id
+      t.string :user_id
 
       t.timestamps
     end
@@ -21,8 +21,8 @@ REFERENCES forklifts(id),
 ADD CONSTRAINT fk_forklift_items_packages
 FOREIGN KEY (package_id)
 REFERENCES packages(id),
-ADD CONSTRAINT fk_forklift_items_creators
-FOREIGN KEY (creator_id)
+ADD CONSTRAINT fk_forklift_items_users
+FOREIGN KEY (user_id)
 REFERENCES users(id)
         SQL
       end
@@ -32,7 +32,7 @@ REFERENCES users(id)
         ALTER TABLE forklift_items
 DROP FOREIGN KEY fk_forklift_items_forklifts,
 DROP FOREIGN KEY fk_forklift_items_packages,
-DROP FOREIGN KEY fk_forklift_items_creators
+DROP FOREIGN KEY fk_forklift_items_users
         SQL
       end
     end
@@ -41,7 +41,7 @@ DROP FOREIGN KEY fk_forklift_items_creators
     add_index :forklift_items, :uuid
     add_index :forklift_items, :forklift_id
     add_index :forklift_items, :package_id
-    add_index :forklift_items, :creator_id
+    add_index :forklift_items, :user_id
 
     execute 'ALTER TABLE forklift_items ADD PRIMARY KEY(id)'
   end

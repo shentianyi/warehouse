@@ -4,7 +4,7 @@ class CreateParts < ActiveRecord::Migration
       t.string :uuid, :limit => 36, :null => false
       t.string :id , :limit => 36, :primary=>true, :null=>false
       t.string :customernum
-      t.string :creator_id
+      t.string :user_id
       #
       t.boolean :is_delete, :default =>false
       t.boolean :is_dirty, :default => true
@@ -17,8 +17,8 @@ class CreateParts < ActiveRecord::Migration
       dir.up do
         execute <<-SQL
         ALTER TABLE parts
-ADD CONSTRAINT fk_parts_creators
-FOREIGN KEY (creator_id)
+ADD CONSTRAINT fk_parts_users
+FOREIGN KEY (user_id)
 REFERENCES users(id)
         SQL
       end
@@ -26,14 +26,14 @@ REFERENCES users(id)
       dir.down do
         execute <<-SQL
         ALTER TABLE parts
-DROP FOREIGN KEY creator_id
+DROP FOREIGN KEY user_id
         SQL
       end
     end
 
     add_index :parts, :uuid
     add_index :parts, :id
-    add_index :parts, :creator_id
+    add_index :parts, :user_id
 
     execute 'ALTER TABLE parts ADD PRIMARY KEY (id)'
   end

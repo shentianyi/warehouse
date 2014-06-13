@@ -7,20 +7,33 @@ class Package < ActiveRecord::Base
   has_one :position, :through => :package_position
   has_many :state_logs, as: :stateable
 
-  belongs_to :creator, class_name: "User"
+  belongs_to :user
 
   # when a package is added to the forklift
   # please do this
   #here is code for Leoni
   after_save :auto_shelved
 
+  # get avaliable packages for bind
+  def self.avaliable_packages
+    where('id not in (select package_id from forklift_items)')
+  end
+
+  # check package id
+  def self.valiade_id id
+    unless Package.find_by_id(id)
+      true
+    else
+      false
+    end
+  end
   #
   def add_to_forklift forklift
     self.create_forklift(forklift_id: forklift.id)
   end
 
   #
-  def remve_from_forklift
+  def remove_from_forklift
     self.forklift_item.destroy
   end
 

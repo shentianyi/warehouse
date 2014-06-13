@@ -4,5 +4,5 @@ class ForkliftItem < ActiveRecord::Base
 
   belongs_to :package
   belongs_to :forklift
-  belongs_to :creator, class_name: "User"
+  belongs_to :user
 end
