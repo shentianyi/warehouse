@@ -6,7 +6,11 @@ class Part < ActiveRecord::Base
   validates_uniqueness_of :id
 
   # validate part id existance
-  def self.validate_part_id
-
+  def self.validate_id id
+    unless find_by_id(id)
+      false
+    else
+      true
+    end
   end
 end

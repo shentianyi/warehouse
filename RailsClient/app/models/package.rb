@@ -20,21 +20,12 @@ class Package < ActiveRecord::Base
   end
 
   # check package id
-  def self.valiade_id id
-    unless Package.find_by_id(id)
+  def self.id_avaliable? id
+    unless find_by_id(id)
       true
     else
       false
     end
-  end
-  #
-  def add_to_forklift forklift
-    self.create_forklift(forklift_id: forklift.id)
-  end
-
-  #
-  def remove_from_forklift
-    self.forklift_item.destroy
   end
 
   # set_position
