@@ -1,6 +1,7 @@
 class CreateWhouses < ActiveRecord::Migration
   def change
     create_table(:whouses,:id=>false) do |t|
+      t.string :uuid, :limit => 36, :null => false
       t.string :id, :limit=>36, :primary=>true, :null=>false
       t.string :name
 
@@ -29,6 +30,7 @@ DROP FOREIGN KEY fk_whouses_locations
         SQL
       end
     end
+    add_index :whouses,:uuid
     add_index :whouses,:location_id
     add_index :whouses,:id
     execute 'ALTER TABLE whouses ADD PRIMARY KEY (id)'

@@ -1,4 +1,5 @@
 module CommonState
-  WAREHOUSE=0
+  SOURCE=0
   WAY=1
+  DESTINATION=2
 end

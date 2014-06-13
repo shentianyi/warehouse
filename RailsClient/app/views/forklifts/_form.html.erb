@@ -1,0 +1,17 @@
+<%= form_for(@forklift) do |f| %>
+  <% if @forklift.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@forklift.errors.count, "error") %> prohibited this forklift from being saved:</h2>
+
+      <ul>
+      <% @forklift.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

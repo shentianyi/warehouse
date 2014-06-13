@@ -1,11 +1,12 @@
-module V1 
+module V1
   module Service
     class PrintServiceAPI<ServiceBase
       namespace 'printer'
       guard_all!
-      
-      get :print do
-        {Name:'printer',Code:'P002'}
+
+      get :data do
+        printer=::Service::Printer::Client.new(params[:code])
+        printer.gen_data
       end
     end
   end

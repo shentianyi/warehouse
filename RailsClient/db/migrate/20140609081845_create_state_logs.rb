@@ -1,6 +1,7 @@
 class CreateStateLogs < ActiveRecord::Migration
   def change
     create_table(:state_logs,:id=>false) do |t|
+      t.string :uuid, :limit => 36, :null => false
       t.string :id, :limit=>36, :primary=>true, :null=>false
 
       t.string :stateable_id
@@ -16,7 +17,9 @@ class CreateStateLogs < ActiveRecord::Migration
       t.timestamps
     end
 
+    add_index :state_logs, :uuid
     add_index :state_logs, :id
+
     execute 'ALTER TABLE state_logs ADD PRIMARY KEY (id);'
   end
 end

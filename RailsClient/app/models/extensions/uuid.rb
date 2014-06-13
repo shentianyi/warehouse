@@ -9,7 +9,7 @@ module Extensions
 
       def generate_uuid
         self.id = SecureRandom.uuid if self.id.nil?
-        self.uuid= SecureRandom.uuid if self.respond_to?(:uuid) and self.send(:uuid)
+        self.uuid= SecureRandom.uuid if self.respond_to?(:uuid) and self.send(:uuid).nil?
       end
 
       def reset_dirty_flag

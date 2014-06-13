@@ -3,5 +3,9 @@ module V1
     include APIGuard
     version 'v1', :using => :path
     mount UserAPI
+    mount PackageAPI
+    mount PartAPI
+    mount ForkliftAPI
+    mount DeliveryAPI
   end
 end
