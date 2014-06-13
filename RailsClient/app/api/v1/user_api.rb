@@ -7,14 +7,23 @@ module V1
     # login
     # params: email, passwd
     post :login do
-      resource = warden.authenticate!(:scope => :user)
-      sign_in(:user,resource)
-      render :json=>"Message"
+=begin
+      user = User.find_for_database_authentication(id: params[:user][:id])
+      if user && user.valid_password?(params[:user][:password])
+        warden.set_user user
+        {result:true}
+      else
+        {result:false}
+      end
+=end
     end
 
     # logout
     delete :logout do
-
+=begin
+      warden.raw_session.inspect
+      warden.logout
+=end
     end
 
     get do

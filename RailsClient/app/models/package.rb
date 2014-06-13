@@ -8,6 +8,8 @@ class Package < ActiveRecord::Base
   has_many :state_logs, as: :stateable
 
   belongs_to :user
+  belongs_to :location
+  belongs_to :part
 
   # when a package is added to the forklift
   # please do this
