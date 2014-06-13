@@ -6,4 +6,5 @@ class ForkliftItem < ActiveRecord::Base
   belongs_to :package
   belongs_to :forklift
   belongs_to :user
+
 end
