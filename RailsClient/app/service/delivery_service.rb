@@ -1,18 +1,18 @@
 class DeliveryService
 
-  def delete id
+  def self.delete id
 
   end
 
-  def update args
+  def self.update args
 
   end
 
-  def add_forklift id,forklift_id
+  def self.add_forklift id,forklift_id
 
   end
 
-  def remove_forklifk id,forklift_id
+  def self.remove_forklifk id,forklift_id
 
   end
 

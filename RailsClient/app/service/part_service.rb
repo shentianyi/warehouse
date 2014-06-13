@@ -1,5 +1,5 @@
 class PartService
-  def validate_id
+  def self.validate_id
 
   end
 end
