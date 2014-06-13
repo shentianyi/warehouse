@@ -41,4 +41,16 @@ class Forklift < ActiveRecord::Base
       remove_package(p.id)
     end
   end
+
+  #add_to_delivery
+  def add_to_delivery delivery_id
+    self.delivery_id = delivery_id
+    self.save
+  end
+
+  #remove_from_delivery
+  def remove_from_delivery
+    self.delivery_id = nil
+    self.save
+  end
 end
