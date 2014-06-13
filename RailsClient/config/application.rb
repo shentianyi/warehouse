@@ -11,7 +11,7 @@ module Warehouse
     config.paths['config/database']='config/wangsong_database.yml' if ENV['USER']=='wangsong'
     config.paths['config/database']='config/charlot_database.yml' if ENV['USER']=='charlot'
     # for the api
-    %w{api service}.each do |namespace|
+    %w{model api service}.each do |namespace|
       config.paths.add File.join('app', namespace), glob: File.join('**', '*.rb')
       config.autoload_paths += Dir[Rails.root.join('app', namespace, '**')]
     end
