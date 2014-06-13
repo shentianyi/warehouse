@@ -15,26 +15,17 @@ class Package < ActiveRecord::Base
   after_save :auto_shelved
 
   # get avaliable packages for bind
-  def self.avaliable_packages
-    where('id not in (select package_id from forklift_items)')
+  def self.avaliable!
+    joins(:position).where('packages.id not in (select package_id from forklift_items)').select('packages.id,packages.quantity_str,packages.part_id,packages.user_id,positions.detail')
   end
 
   # check package id
-  def self.valiade_id id
-    unless Package.find_by_id(id)
+  def self.id_avaliable? id
+    unless find_by_id(id)
       true
     else
       false
     end
-  end
-  #
-  def add_to_forklift forklift
-    self.create_forklift(forklift_id: forklift.id)
-  end
-
-  #
-  def remove_from_forklift
-    self.forklift_item.destroy
   end
 
   # set_position
