@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140613034212) do
+ActiveRecord::Schema.define(version: 20140613072407) do
 
   create_table "deliveries", force: true do |t|
     t.string   "uuid",           limit: 36,                 null: false
@@ -105,19 +105,21 @@ ActiveRecord::Schema.define(version: 20140613034212) do
   add_index "package_positions", ["uuid"], name: "index_package_positions_on_uuid", using: :btree
 
   create_table "packages", force: true do |t|
-    t.string   "uuid",                         null: false
+    t.string   "uuid",                              null: false
     t.string   "part_id"
-    t.float    "quantity",     default: 0.0
+    t.float    "quantity",          default: 0.0
     t.datetime "in_date"
-    t.integer  "state",        default: 1,     null: false
+    t.integer  "state",             default: 1,     null: false
     t.string   "location_id"
     t.string   "user_id"
-    t.boolean  "is_delete",    default: false
-    t.boolean  "is_dirty",     default: true
-    t.boolean  "is_new",       default: true
+    t.boolean  "is_delete",         default: false
+    t.boolean  "is_dirty",          default: true
+    t.boolean  "is_new",            default: true
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "quantity_str"
+    t.datetime "check_in_time"
+    t.string   "check_in_time_str"
   end
 
   add_index "packages", ["id"], name: "index_packages_on_id", using: :btree
