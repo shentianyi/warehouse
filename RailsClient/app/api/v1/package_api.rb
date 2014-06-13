@@ -30,5 +30,10 @@ module V1
     delete do
 
     end
+
+    # check package
+    post :check do
+
+    end
   end
 end

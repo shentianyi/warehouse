@@ -42,5 +42,15 @@ module V1
     get :detail do
 
     end
+
+    # receive delivery
+    post :receive do
+
+    end
+
+    # received deliveries
+    get :received do
+
+    end
   end
 end
