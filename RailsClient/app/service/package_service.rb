@@ -32,8 +32,14 @@ class PackageService
     Package.where('packages.id not in (select package_id from forklift_items)').select('packages.id,packages.quantity_str,packages.part_id,packages.user_id,packages.check_in_time')
   end
 
-  def self.update args
-
+  def self.update id,args
+    puts args.to_json
+    p = Package.find_by_id(id)
+    if p
+      p.update_attributes(args)
+    else
+      false
+    end
   end
 
   def self.id_avaliable? id
