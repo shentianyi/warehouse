@@ -1,5 +1,5 @@
 class StateLog < ActiveRecord::Base
-  include Extension::UUID
+  include Extensions::UUID
 
   belongs_to :stateable, polymorphic: true
 end
