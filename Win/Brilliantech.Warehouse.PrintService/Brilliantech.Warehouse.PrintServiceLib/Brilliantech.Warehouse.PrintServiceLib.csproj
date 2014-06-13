@@ -58,6 +58,7 @@
     <Reference Include="TECIT.TFORMer, Version=6.0.3.0, Culture=neutral, PublicKeyToken=1b5f4306b234b83d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\ThirdPart\TECIT.TFORMer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -65,7 +66,7 @@
     <Compile Include="Config\PrinterConfig.cs" />
     <Compile Include="IPrintService.cs" />
     <Compile Include="Model\ApiClient.cs" />
-    <Compile Include="Model\Message.cs" />
+    <Compile Include="Model\Msg.cs" />
     <Compile Include="Model\Printer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PrintService.cs" />
@@ -79,6 +80,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Template\read.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Template\test.tff">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 using System.ServiceModel.Web;
+using Brilliantech.Warehouse.PrintServiceLib.Model;
 
 namespace Brilliantech.Warehouse.PrintServiceLib
 {
@@ -19,6 +20,6 @@ namespace Brilliantech.Warehouse.PrintServiceLib
         /// <param name="id">id for print</param>
         /// <returns></returns>
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, UriTemplate = "print/{code}/{id}")]
-        string Print(string code,string id); 
+        Msg<string> Print(string code, string id); 
     }  
 }
