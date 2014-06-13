@@ -46,3 +46,8 @@ gem 'cancan'
 # For API
 gem 'grape'
 gem 'rack-oauth2'
+
+# For test
+group :development, :test do
+  gem 'rspec-rails'
+end
