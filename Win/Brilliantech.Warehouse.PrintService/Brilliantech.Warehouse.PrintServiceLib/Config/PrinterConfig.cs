@@ -37,9 +37,7 @@ namespace Brilliantech.Warehouse.PrintServiceHost.Config
             {
                 throw e;
             }
-        }
-
-
+        } 
         public static List<Printer> Printers
         {
             get { return PrinterConfig.printers; }
