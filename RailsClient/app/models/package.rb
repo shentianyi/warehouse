@@ -14,22 +14,6 @@ class Package < ActiveRecord::Base
   #here is code for Leoni
   after_save :auto_shelved
 
-  # get avaliable packages for bind
-  def self.avaliable! forklift_id
-    if f = Forklift.find_by_id(forklift_id)
-      joins('INNER JOIN part_positions ON part_positions.part_id = packages.part_id').where('packages.id not in (select package_id from forklift_items) and part_positions.whouse_id = ?',f.whouse_id).select('packages.id,packages.quantity_str,packages.part_id,packages.user_id,part_positions.position_detail')
-    end
-  end
-
-  # check package id
-  def self.id_avaliable? id
-    unless find_by_id(id)
-      true
-    else
-      false
-    end
-  end
-
   #-------------
   # Instance Methods
   #-------------

@@ -10,14 +10,6 @@ class Forklift < ActiveRecord::Base
   belongs_to :stocker, class_name: "User"
 
   #-------------
-  # class methods
-  #-------------
-  #get all avaliable forklifts
-  def self.avaliable!
-    where('delivery_id is NULL')
-  end
-
-  #-------------
   # instance methods
   #------------
   #add a package
