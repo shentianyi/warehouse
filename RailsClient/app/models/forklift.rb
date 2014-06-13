@@ -9,19 +9,36 @@ class Forklift < ActiveRecord::Base
   belongs_to :user
   belongs_to :stocker, class_name: "User"
 
+  #-------------
   # class methods
+  #-------------
   #get all avaliable forklifts
   def self.avaliable!
     where('delivery_id is NULL')
   end
 
+  #-------------
   # instance methods
+  #------------
   #add a package
   def add_package package
     unless packages.nil?
       false
     end
+    package.add_to_forklift self.id
+  end
 
-    package.create_forklift_item(forklift_id: self.id)
+  #remove a package
+  def remove_package package
+    if package
+      package.remove_from_forklift
+    end
+  end
+
+  #remove all packages
+  def remove_all_packages
+    packages.all do |p|
+      remove_package(p.id)
+    end
   end
 end

@@ -17,6 +17,11 @@ module Extensions
           self.is_dirty=true
         end
       end
+
+      def destroy
+        self.is_delete=true
+        self.save
+      end
     end
   end
 end

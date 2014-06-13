@@ -62,8 +62,8 @@ ActiveRecord::Schema.define(version: 20140613034212) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "whouse_id"
-    t.integer  "sum_packages"
-    t.integer  "accepted_packages"
+    t.integer  "sum_packages",                 default: 0
+    t.integer  "accepted_packages",            default: 0
   end
 
   add_index "forklifts", ["delivery_id"], name: "index_forklifts_on_delivery_id", using: :btree
