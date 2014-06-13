@@ -5,7 +5,7 @@ module V1
 
     # get binded but not add to forklift packages
     get :binds do
-
+      PackageService.new.avaliable_to_bind(1)
     end
 
     # validate package id
