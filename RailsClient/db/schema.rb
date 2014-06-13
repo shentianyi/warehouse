@@ -104,7 +104,7 @@ ActiveRecord::Schema.define(version: 20140612103217) do
   create_table "packages", force: true do |t|
     t.string   "uuid",                        null: false
     t.string   "part_id"
-    t.integer  "quantity",    default: 0
+    t.float    "quantity",    default: 0.0
     t.datetime "in_date"
     t.integer  "state",       default: 1,     null: false
     t.string   "location_id"

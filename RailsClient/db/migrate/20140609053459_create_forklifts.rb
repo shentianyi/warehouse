@@ -9,7 +9,6 @@ class CreateForklifts < ActiveRecord::Migration
       t.string :remark
       t.string :stocker_id
       t.string :creator_id
-      t.string :whouse_id
       #
       t.boolean :is_delete, :default => false
       t.boolean :is_dirty, :default => true

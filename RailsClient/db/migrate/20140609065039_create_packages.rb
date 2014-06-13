@@ -5,7 +5,7 @@ class CreatePackages < ActiveRecord::Migration
       t.string :id,:limits=>36, :primary=>true, :null=>false
       t.string
       t.string :part_id
-      t.integer :quantity, :default=>0
+      t.float :quantity, :default=>0
       t.datetime :in_date
       t.integer :state, :null=>false, :default=> 1
       t.string :location_id
