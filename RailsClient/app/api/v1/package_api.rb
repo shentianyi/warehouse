@@ -3,6 +3,7 @@ module V1
     namespace :packages
     guard_all!
 
+    #strong parameters
     helpers do
       def packages_params
         ActionController::Parameters.new(params).require(:package).permit(:part_id,:quantity)
@@ -54,10 +55,6 @@ module V1
 
     # check package
     post :check do
-
-    end
-
-    def package_params
 
     end
   end

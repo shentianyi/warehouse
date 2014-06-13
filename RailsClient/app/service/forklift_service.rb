@@ -3,12 +3,16 @@ class ForkliftService
 
   end
 
-  def self.update args
+  def self.update id,args
 
   end
 
-  def self.valiable_to_bind
-    Forklift.where('delivery_id is NULL')
+  def self.create args,current_user=nil
+    
+  end
+
+  def self.avaliable_to_bind
+    Forklift.where('delivery_id is NULL').select('id,created_at,user_id,whouse_id')
   end
 
   def self.add_package id,package_id

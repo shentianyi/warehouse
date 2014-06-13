@@ -5,7 +5,12 @@ module V1
 
     # get binded but not add to delivery forklifts
     get :binds do
-      {result: true, content: "you are right"}
+      forklifts = ForkliftService.avaliable_to_bind
+      data = []
+      forklifts.all.each do |f|
+        data<<{id:f.id,created_at:f.created_at,user_id:f.user_id,whouse_id:f.whouse_id}
+      end
+      data
     end
 
     # create forklift
