@@ -30,6 +30,30 @@ class Package < ActiveRecord::Base
     end
   end
 
+  #-------------
+  # Instance Methods
+  #-------------
+
+  # add_to_forklift
+  def add_to_forklift forklift_id
+    if self.forklift_item.nil?
+      self.create_forklift_item(forklift_id: forklift_id)
+    else
+      self.forklift_item.forklift_id = forklift_id
+      self.forklift_item.is_delete = false
+      self.forklift_item.save
+    end
+    set_position
+  end
+
+  # remove_form_forklift
+  def remove_from_forklift
+    if self.forklift_item
+      self.forklift_item.destroy
+      remove_position
+    end
+  end
+
   # set_position
   def set_position
     if self.forklift_item.nil?
@@ -41,6 +65,7 @@ class Package < ActiveRecord::Base
         self.create_package_position(position_id: pp.position_id)
       else
         self.package_position.position_id = pp.position_id
+        self.package_position.is_delete = false
       end
       self.package_position.save
     end
