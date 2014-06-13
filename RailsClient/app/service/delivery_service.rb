@@ -16,4 +16,7 @@ class DeliveryService
 
   end
 
+  def self.search(args)
+    Delivery.where(args).all
+  end
 end

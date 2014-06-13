@@ -7,7 +7,7 @@ module APIGuard
 
   module HelperMethods
     def guard!
-      authenticate!
+      #authenticate!
     end
 
     def user_signed_in?
