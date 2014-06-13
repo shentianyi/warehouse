@@ -24,7 +24,7 @@ module APIGuard
 
     def authenticate!
       unless warden.authenticate?
-        return error!({result:true}, 401)
+        return error!({result:false}, 401)
       end
     end
   end
