@@ -33,7 +33,6 @@ class PackageService
   end
 
   def self.update id,args
-    puts args.to_json
     p = Package.find_by_id(id)
     if p
       p.update_attributes(args)

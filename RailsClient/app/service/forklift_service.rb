@@ -1,24 +1,22 @@
 class ForkliftService
   def self.delete id
-
+    f = Forklift.find_by_id id
+    if f
+      f.packages.all.each do |p|
+        p.remove_from_forklift
+      end
+      f.destroy
+    else
+      false
+    end
   end
 
   def self.update id,args
-
-  end
-
-  def self.create args,current_user=nil
-    forklift = {}
-    forklift[:whouse_id] = args[:whouse_id]
-    forklift[:stocker_id] = args[:user_id]
-    f = Forklift.new(forklift)
-    if current_user
-      f.user = current_user.id
-    end
-    if result = f.save
-      {result:result,content:{id:f.id,whouse_id:f.whouse_id,created_at:f.created_at,user_id:f.stocker_id}}
+    f = Forklift.find_by_id(id)
+    if f
+      f.update_attributes(args)
     else
-      {result:result,content:f.errors}
+      false
     end
   end
 
@@ -34,8 +32,8 @@ class ForkliftService
     end
   end
 
-  def self.remove_package id,package_id
-    f = Forklift.find_by_id id
+  def self.remove_package package_id
     p = Package.find_by_id package_id
+    p.remove_from_forklift
   end
 end

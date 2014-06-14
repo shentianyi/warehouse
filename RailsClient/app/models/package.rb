@@ -38,6 +38,7 @@ class Package < ActiveRecord::Base
       self.forklift_item.destroy
       remove_position
     end
+    true
   end
 
   # set_position
