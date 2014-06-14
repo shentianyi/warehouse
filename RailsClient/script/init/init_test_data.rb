@@ -1,3 +1,4 @@
+User.create(id:'user001',password:'1111',password_confirmation:'1111')
 Location.create(id:'L001',name:'Outter Warehouse',address:'Shanghai',tel:'2913123')
 Location.create(id:'L002',name:'Factory',address:'Suzhou',tel:'2123913123')
 Whouse.create(id:'WH001',name:'3MB',location_id:'L002')
