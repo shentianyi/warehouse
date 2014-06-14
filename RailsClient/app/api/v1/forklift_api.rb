@@ -15,7 +15,7 @@ module V1
 
     # create forklift
     post do
-
+      ForkliftService.create(params[:forklift],current_user)
     end
 
 

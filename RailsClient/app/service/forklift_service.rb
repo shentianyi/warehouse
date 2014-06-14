@@ -8,7 +8,18 @@ class ForkliftService
   end
 
   def self.create args,current_user=nil
-    
+    forklift = {}
+    forklift[:whouse_id] = args[:whouse_id]
+    forklift[:stocker_id] = args[:user_id]
+    f = Forklift.new(forklift)
+    if current_user
+      f.user = current_user.id
+    end
+    if result = f.save
+      {result:result,content:{id:f.id,whouse_id:f.whouse_id,created_at:f.created_at,user_id:f.stocker_id}}
+    else
+      {result:result,content:f.errors}
+    end
   end
 
   def self.avaliable_to_bind
