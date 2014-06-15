@@ -5,21 +5,64 @@ class PackageService
     if p.nil?
       false
     end
+    # if this already been added into forklift
+    unless p.forklift.nil?
+      p.remove_from_forklift
+    end
     p.destroy
   end
 
-  def self.create args,current_user=nil
-    package = {}
-    package[:id] = args[:id]
-    package[:part_id] = args[:part_id]
-    package[:quantity_str] = args[:quantity]
-    package[:check_in_time] =args[:check_in_time]
-    p = Package.new(package)
-    if current_user
-      p.user = current_user
-      p.location = current_user.location
+  # check package
+  # change
+  def self.check id
+    p = Package.find_by_id(id)
+    #
+    if p
+      p.state = PackageState::RECEIVED
+      p.forklift.accepted_packages = p.forklift.accepted_packages + 1
+      p.forklift_item.state = ForkliftItemState::RECEIVED
+      p.save
+    else
+      false
     end
-    p.save
+  end
+
+  def self.reject package_id
+    p = Package.find_by_id package_id
+    if p
+      if p.state == PackageState::RECEIVED
+        p.state == PackageState::REJECTED
+        p.forklift_item.state = ForkliftItemState::REJECTED
+        p.forklift.accepted_packages = p.forklift.accepted_packages - 1
+        p.save
+      else
+        false
+      end
+    else
+      false
+    end
+  end
+
+  def self.create args,current_user=nil
+    unless args.has_key?(:user_id)
+      args[:user_id] = current_user.id
+    end
+    args[:location_id] = current_user.location.id
+
+    #if exited
+    p = Package.find_by_id(package[:id])
+    if p
+      p.is_delete = false
+      p.update_attributes(package)
+    else
+      p = Package.new(package)
+    end
+    p.state = PackageState::ORIGINAL
+    if p.save
+      p
+    else
+      nil
+    end
   end
 
   def self.avaliable_to_bind forklift_id

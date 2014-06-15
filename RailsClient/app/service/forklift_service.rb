@@ -1,4 +1,9 @@
 class ForkliftService
+
+  def self.create
+
+  end
+
   def self.delete id
     f = Forklift.find_by_id id
     if f
@@ -34,6 +39,9 @@ class ForkliftService
 
   def self.remove_package package_id
     p = Package.find_by_id package_id
-    p.remove_from_forklift
+    if p
+      p.forklift.sum_packages = p.forklift.sum_packages - 1
+      p.remove_from_forklift
+    end
   end
 end

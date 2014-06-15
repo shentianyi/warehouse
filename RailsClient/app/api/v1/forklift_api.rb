@@ -6,7 +6,7 @@ module V1
     #strong parameters
     helpers do
       def forklift_params
-        ActionController::Parameters.new(params).require(:forklift).permit(:whouse_id,:user_id)
+        ActionController::Parameters.new(params).require(:forklift).permit(:whouse_id,:user_id,:remark,:stocker_id)
       end
     end
 
@@ -15,21 +15,20 @@ module V1
       forklifts = ForkliftService.avaliable_to_bind
       data = []
       forklifts.all.each do |f|
-        data<<{id:f.id,created_at:f.created_at,user_id:f.user_id,whouse_id:f.whouse_id}
+        data<<{id:f.id,created_at:f.created_at,user_id:f.user_id,stocker_id:f.stocker_id,whouse_id:f.whouse_id}
       end
       data
     end
 
     # create forklift
     post do
-      forklift = {}
-      forklift[:whouse_id] = params[:forklift][:whouse_id]
-      forklift[:stocker_id] =params[:forklift][:user_id]
-      f = Forklift.new(forklift)
-      f.user = current_user
+      f = Forklift.new(forklift_params)
+      if forklift_params.has_key?(:user_id)
+        f.user = current_user
+      end
       result = f.save
       if result
-        {result:result,content:{id:f.id,whouse_id:f.whouse_id,created_at:f.created_at,user_id:f.stocker_id}}
+        {result:result,content:{id:f.id,whouse_id:f.whouse_id,created_at:f.created_at,user_id:f.user_id,stocker_id:f.stocker_id}}
       else
         {result:result,content:f.errors.full_messages}
       end
@@ -43,7 +42,22 @@ module V1
 
     # add package
     post :add_package do
-
+      args = {
+          id:params[:package_id],
+          part_id:params[:part_id],
+          quantity_str:params[:quantity_str],
+          check_in_time:params[:check_in_time]
+      }
+      args[:user_id] = params[:user_id] if params[:user_id]
+      p = PackageService.create(args,current_user)
+      f = Forklift.find_by_id(params[:forklift_id])
+      if p && f
+        p.forklift = f
+        f.sum_packages = f.sum_packages + 1
+        f.save && p.save
+      else
+        {result:false,content:'生成Package失败'}
+      end
     end
 
     # remove package

@@ -5,8 +5,8 @@ module V1
 
     #strong parameters
     helpers do
-      def packages_params
-        ActionController::Parameters.new(params).require(:package).permit(:part_id,:quantity)
+      def package_params
+        ActionController::Parameters.new(params).require(:package).permit(:id,:part_id,:quantity_str,:check_in_time,:user_id)
       end
     end
 
@@ -26,6 +26,7 @@ module V1
       {result:result, content: ''}
     end
 
+    # validate quantity string
     post :validate_quantity do
       result = PackageService.validate_quantity(params[:quantity])
       {result:result, content: ''}
@@ -35,14 +36,18 @@ module V1
     # if find deleted then update(take care of foreign keys)
     # else create new
     post do
-      package = params[:package]
-      result = PackageService.create package,current_user
+      result = PackageService.create package_params,current_user
+      if result
+        {result:true,content:{id:p.id,part_id:p.part_id,quantity_str:p.quantity_str,user_id:p.user_id,check_in_time:p.check_in_time}}
+      else
+
+      end
       {result:result,content:''}
     end
 
     # update package
     patch do
-      result = PackageService.update(params[:id],packages_params)
+      result = PackageService.update(params[:id],package_params)
       {result:result,content:''}
     end
 
@@ -55,7 +60,8 @@ module V1
 
     # check package
     post :check do
-
+      result = PackageService.check(params[:id])
+      {result:result,content:''}
     end
   end
 end
