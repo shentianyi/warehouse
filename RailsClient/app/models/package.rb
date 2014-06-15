@@ -2,6 +2,7 @@ class Package < ActiveRecord::Base
   include Extensions::UUID
   include Extensions::STATE
 
+  belongs_to :forklift, :throuth => :forklift_item
   has_one :forklift_item, :dependent => :destroy
   has_one :package_position
   has_one :position, :through => :package_position

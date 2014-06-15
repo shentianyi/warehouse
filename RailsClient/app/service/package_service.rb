@@ -44,11 +44,11 @@ class PackageService
   end
 
   def self.create args,current_user=nil
-    package = {}
-    package[:id] = args[:id]
-    package[:part_id] = args[:part_id]
-    package[:quantity_str] = args[:quantity]
-    package[:check_in_time] =args[:check_in_time]
+    unless args.has_key?(:user_id)
+      args[:user_id] = current_user.id
+    end
+    args[:location_id] = current_user.location.id
+
     #if exited
     p = Package.find_by_id(package[:id])
     if p
@@ -58,11 +58,11 @@ class PackageService
       p = Package.new(package)
     end
     p.state = PackageState::ORIGINAL
-    if current_user
-      p.user = current_user
-      p.location = current_user.location
+    if p.save
+      p
+    else
+      nil
     end
-    p.save
   end
 
   def self.avaliable_to_bind forklift_id
