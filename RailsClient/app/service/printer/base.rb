@@ -1,6 +1,6 @@
 module Printer
   class Base
-    attr_accessor :data_set, :head, :body, :foot
+    attr_accessor :id,:data_set, :head, :body, :foot
 
   end
 end
