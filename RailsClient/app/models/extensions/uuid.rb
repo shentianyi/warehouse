@@ -4,6 +4,7 @@ module Extensions
     included do
       #set_primary_key 'id' rails 3
       #self.primary_key='id' # rails 4
+      default_scope {where(is_delete:false)}
       before_create :generate_uuid
       before_update :reset_dirty_flag
 
