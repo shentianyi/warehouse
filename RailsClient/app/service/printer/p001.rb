@@ -17,7 +17,7 @@ module Printer
       end
       packages=f.packages
       packages.each do |p|
-        body={package_id: p.id, part_id: p.part_id, quantity: p.quantity, w_date: p.in_date, receive_position: 'POSITION'}
+        body={package_id: p.id, part_id: p.part_id, quantity: p.sum_packages, w_date: p.in_date, receive_position: 'POSITION'}
         bodies=[]
         BODY.each do |k|
           bodies<<{Key: k, Value: body[k]}

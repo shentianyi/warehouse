@@ -3,7 +3,6 @@ class AddLocationToDeliveies < ActiveRecord::Migration
     add_column :deliveries, :source_id ,:string
     add_column :deliveries, :destination_id ,:string
 
-
     reversible do |dir|
       dir.up do
         execute <<-SQL

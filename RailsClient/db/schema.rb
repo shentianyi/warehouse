@@ -15,9 +15,10 @@ ActiveRecord::Schema.define(version: 20140613072407) do
 
   create_table "deliveries", force: true do |t|
     t.string   "uuid",           limit: 36,                 null: false
-    t.integer  "state",                     default: 1,     null: false
+    t.integer  "state",                     default: 0,     null: false
     t.datetime "delivery_date"
     t.datetime "received_date"
+    t.string   "receiver_id"
     t.string   "user_id"
     t.boolean  "is_delete",                 default: false
     t.boolean  "is_dirty",                  default: true
@@ -52,7 +53,7 @@ ActiveRecord::Schema.define(version: 20140613072407) do
 
   create_table "forklifts", force: true do |t|
     t.string   "uuid",              limit: 36,                 null: false
-    t.integer  "state",                        default: 1,     null: false
+    t.integer  "state",                        default: 0,     null: false
     t.string   "delivery_id"
     t.string   "remark"
     t.string   "stocker_id"
@@ -110,7 +111,7 @@ ActiveRecord::Schema.define(version: 20140613072407) do
     t.string   "part_id"
     t.float    "quantity",      default: 0.0
     t.datetime "in_date"
-    t.integer  "state",         default: 1,     null: false
+    t.integer  "state",         default: 0,     null: false
     t.string   "location_id"
     t.string   "user_id"
     t.boolean  "is_delete",     default: false

@@ -6,6 +6,7 @@ class CreateDeliveries < ActiveRecord::Migration
       t.integer :state, :null=>false, :default=> 0
       t.datetime :delivery_date
       t.datetime :received_date
+      t.string :receiver_id
       t.string :user_id
       #
 
