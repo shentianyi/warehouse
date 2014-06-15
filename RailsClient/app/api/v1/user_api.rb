@@ -1,32 +1,29 @@
 module V1
   class UserAPI<Base
     namespace :users
-    #guard_all!
 
-    extend Devise::Controllers::SignInOut
+    #extend Devise::Controllers::SignInOut
     # login
     # params: email, passwd
     post :login do
-=begin
       user = User.find_for_database_authentication(id: params[:user][:id])
       if user && user.valid_password?(params[:user][:password])
         warden.set_user user
-        {result:true}
+        {result: true, role: current_user.role_id }
       else
-        {result:false}
+        error!({result: false}, 401)
       end
-=end
     end
 
     # logout
     delete :logout do
-=begin
       warden.raw_session.inspect
       warden.logout
-=end
+      {result:true}
     end
 
     get do
+      guard!
       {result:true,content:{user:User.first}}
     end
   end
