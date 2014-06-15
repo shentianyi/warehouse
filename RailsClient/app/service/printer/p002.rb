@@ -1,5 +1,5 @@
 module Printer
-  class P001<Base
+  class P002<Base
     HEAD=[:id,:send_addr,:receive_addr, :delivery_date]
     BODY=[:forklift_id,:quantity,:whouse,:remark]
 
