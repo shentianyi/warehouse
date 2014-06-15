@@ -6,7 +6,7 @@ module V1
     #strong parameters
     helpers do
       def packages_params
-        ActionController::Parameters.new(params).require(:package).permit(:part_id,:quantity)
+        ActionController::Parameters.new(params).require(:package).permit(:id,:part_id,:quantity)
       end
     end
 

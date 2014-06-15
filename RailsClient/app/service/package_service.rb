@@ -8,6 +8,12 @@ class PackageService
     p.destroy
   end
 
+  # check package
+  def self.check id
+    p = Package.find_by_id(id)
+    
+  end
+
   def self.create args,current_user=nil
     package = {}
     package[:id] = args[:id]

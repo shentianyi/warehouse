@@ -110,7 +110,7 @@ module V1
       arg={
             state: DeliveryState::RECEIVED,
       }
-            received_date: params[:received_date]
+
       arg[:user_id]=params[:user_id] unless params[:user_id].blank?
 
       DeliveryService.search(arg)
