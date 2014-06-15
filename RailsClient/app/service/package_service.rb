@@ -5,13 +5,42 @@ class PackageService
     if p.nil?
       false
     end
+    # if this already been added into forklift
+    unless p.forklift.nil?
+      p.remove_from_forklift
+    end
     p.destroy
   end
 
   # check package
+  # change
   def self.check id
     p = Package.find_by_id(id)
-    
+    #
+    if p
+      p.state = PackageState::RECEIVED
+      p.forklift.accepted_packages = p.forklift.accepted_packages + 1
+      p.forklift_item.state = ForkliftItemState::RECEIVED
+      p.save
+    else
+      false
+    end
+  end
+
+  def self.reject package_id
+    p = Package.find_by_id package_id
+    if p
+      if p.state == PackageState::RECEIVED
+        p.state == PackageState::REJECTED
+        p.forklift_item.state = ForkliftItemState::REJECTED
+        p.forklift.accepted_packages = p.forklift.accepted_packages - 1
+        p.save
+      else
+        false
+      end
+    else
+      false
+    end
   end
 
   def self.create args,current_user=nil
@@ -20,7 +49,15 @@ class PackageService
     package[:part_id] = args[:part_id]
     package[:quantity_str] = args[:quantity]
     package[:check_in_time] =args[:check_in_time]
-    p = Package.new(package)
+    #if exited
+    p = Package.find_by_id(package[:id])
+    if p
+      p.is_delete = false
+      p.update_attributes(package)
+    else
+      p = Package.new(package)
+    end
+    p.state = PackageState::ORIGINAL
     if current_user
       p.user = current_user
       p.location = current_user.location

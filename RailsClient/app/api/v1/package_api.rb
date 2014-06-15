@@ -6,7 +6,7 @@ module V1
     #strong parameters
     helpers do
       def packages_params
-        ActionController::Parameters.new(params).require(:package).permit(:id,:part_id,:quantity)
+        ActionController::Parameters.new(params).require(:package).permit(:id,:part_id,:quantity,:check_in_time)
       end
     end
 
@@ -26,6 +26,7 @@ module V1
       {result:result, content: ''}
     end
 
+    # validate quantity string
     post :validate_quantity do
       result = PackageService.validate_quantity(params[:quantity])
       {result:result, content: ''}
@@ -55,7 +56,8 @@ module V1
 
     # check package
     post :check do
-
+      result = PackageService.check(params[:id])
+      {result:result,content:''}
     end
   end
 end

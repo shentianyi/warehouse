@@ -1,4 +1,9 @@
 class ForkliftService
+
+  def self.create
+
+  end
+
   def self.delete id
     f = Forklift.find_by_id id
     if f
