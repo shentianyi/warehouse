@@ -1,7 +1,15 @@
 class DeliveryService
 
   def self.delete id
-
+    d = Delivery.find_by_id(id)
+    if d
+      d.forklifts.each do |f|
+        f.remove_from_delivery
+        d.destroy
+      end
+    else
+      false
+    end
   end
 
   def self.update args

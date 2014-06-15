@@ -45,7 +45,14 @@ module V1
 
     # send delivery
     post :send do
-
+      d =Delivery.find_by_id(params[:id])
+      if d
+        d.state = DeliveryState::WAY
+        result = d.save
+      else
+        result = false
+      end
+      {result:result,content:''}
     end
 
     post do
@@ -67,25 +74,43 @@ module V1
 
     # delete delivery
     delete do
-
+      result = DeliveryService.delete(params[:id])
+      {result:result,content:''}
     end
 
     # get delivery detail
     get :detail do
+      d = Delivery.find_by_id(params[:id])
+      data = []
+      if d
+        d.forklifts.each do |f|
+          data << {id:f.id,created_at:f.created_at,user_id:f.user_id,whouse_id:f.whouse_id,sum_packages:f.sum_packages,accepted_packages:f.accepted_packages}
+        end
+        {result:true,content:{id:d.id,user_id:d.user_id,destination_id:d.destination_id,forklifts:data}}
+      else
+        {result:falsen,content:'运单未找到!'}
+      end
 
     end
 
     # receive delivery
     post :receive do
-
+      d = Delivery.find_by_id(params[:id])
+      if d
+        d.state = DeliveryState::RECEIVED
+        result = d.save
+      else
+        result = false
+      end
+      {result:result,content:''}
     end
 
     # received deliveries
     get :received do
       arg={
             state: DeliveryState::RECEIVED,
+      }
             received_date: params[:received_date]
-          }
       arg[:user_id]=params[:user_id] unless params[:user_id].blank?
 
       DeliveryService.search(arg)
