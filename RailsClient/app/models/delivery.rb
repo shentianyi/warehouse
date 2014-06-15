@@ -38,4 +38,8 @@ class Delivery < ActiveRecord::Base
       remove_forklift(f)
     end
   end
+
+  def generate_id
+    "D#{Time.to_milli}"
+  end
 end

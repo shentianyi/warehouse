@@ -20,4 +20,8 @@ class Forklift < ActiveRecord::Base
     self.delivery_id = nil
     self.save
   end
+
+  def generate_id
+    "F#{Time.to_milli}"
+  end
 end
