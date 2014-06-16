@@ -13,17 +13,12 @@ module V1
     # get deliveries
     # optional params: created_at, user_id, state...
     get :list do
-      args = {
-          id:'',
-          destination_id:'',
-          user_id:'',
-          delivery_date:''
-      }
-      params.each_key { |key,value|
-
-      }
-      deliveries = DeliveryService.search(params)
-      {result:true,content:deliveries}
+      deliveries = DeliveryService.search(params.permit(:id,:delivery_date,:user_id,:destination_id))
+      data = {}
+      deliveries.each do |d|
+        data << {id: d.id,delivery_date:d.delivery_date,received_date:d.received_date,state:d.state,state_display:DeliveryState.display(d.state),user_id:d.user_id,destination_id:d.destination_id,can_delete:DeliveryState.can_delete?(d.state)}
+      end
+      {result:true,content:data}
     end
 
     # check forklift

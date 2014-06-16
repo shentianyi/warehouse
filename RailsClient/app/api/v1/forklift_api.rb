@@ -58,18 +58,22 @@ module V1
           check_in_time:params[:check_in_time]
       }
       args[:user_id] = params[:user_id] if params[:user_id]
-      p = PackageService.create(args,current_user)
-      f = Forklift.find_by_id(params[:forklift_id])
-      if p && f
-        p.forklift = f
-        f.sum_packages = f.sum_packages + 1
-        if f.save && p.save
-          {result:1,content:{id:p.id,quantity_str:p.quantity_str,part_id:p.part_id,user_id:p.user_id,check_in_time:p.check_in_time}}
-        else
-          {result:0,content:'生成Package失败'}
-        end
+      if p = Package.find_by_id(args[:id])
+        {result:0,content:'包装箱已存在'}
       else
-        {result:0,content:'生成Package失败'}
+        p = PackageService.create(args,current_user)
+        f = Forklift.find_by_id(params[:forklift_id])
+        if p && f
+          p.forklift = f
+          f.sum_packages = f.sum_packages + 1
+          if f.save && p.save
+            {result:1,content:{id:p.id,quantity_str:p.quantity_str,part_id:p.part_id,user_id:p.user_id,check_in_time:p.check_in_time}}
+          else
+            {result:0,content:'生成包装箱失败'}
+          end
+        else
+          {result:0,content:'生成包装箱失败'}
+        end
       end
     end
 
