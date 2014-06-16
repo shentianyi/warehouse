@@ -73,18 +73,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Ini\api.ini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Ini\printers.ini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Template\read.ini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Template\test.tff">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="Ini\api.ini" />
+    <None Include="Ini\printers.ini" />
+    <None Include="Template\DeliveryList.tff" />
+    <None Include="Template\DeliveryReceivedList.tff" />
+    <None Include="Template\DeliveryUnReceivedList.tff" />
+    <None Include="Template\ForkliftList.tff" />
+    <None Include="Template\read.ini" />
+    <None Include="Template\test.tff" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Brilliantech.Framwork\Brilliantech.Framwork.csproj">
