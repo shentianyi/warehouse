@@ -33,11 +33,15 @@ namespace Brilliantech.Warehouse.PrintServiceLib
               //  var data = new ApiClient().Execute<RecordSet>(req);
                 var res = new ApiClient().Execute(req);
                 var data = parse<RecordSet>(res.Content);
-                if (data != null)
+                if (data != null && data.Count > 0)
                 {
                     printer.Print(data);
+                    msg.Content = "打印成功";
                 }
-                msg.Content = "打印成功";
+                else {
+                    msg.Result = false;
+                    msg.Content = "打印失败,无打印内容";
+                }
             }
             catch (Exception e) {
                 msg.Result = false;
