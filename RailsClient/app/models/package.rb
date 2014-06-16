@@ -25,15 +25,6 @@ class Package < ActiveRecord::Base
 
   # add_to_forklift
   def add_to_forklift forklift_id
-=begin
-    if self.forklift_item.nil?
-      self.create_forklift_item(forklift_id: forklift_id)
-    else
-      self.forklift_item.forklift_id = forklift_id
-      self.forklift_item.is_delete = false
-      self.forklift_item.save
-    end
-=end
     self.forklift_id = forklift_id
     set_position
   end

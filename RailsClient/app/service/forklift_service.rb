@@ -35,6 +35,8 @@ class ForkliftService
     f = Forklift.find_by_id id
     p = Package.find_by_id package_id
     if f && p
+      f.sum_packages = f.sum_packages + 1
+      f.save
       p.add_to_forklift f.id
     end
   end

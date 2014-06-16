@@ -22,15 +22,18 @@ module V1
 
     # create forklift
     post do
+      if Whouse.find_by_id(forklift_params[:whouse_id]).nil?
+        {result:0,content:'部门未找到'}
+        return
+      end
       f = Forklift.new(forklift_params)
       unless forklift_params.has_key?(:user_id)
         f.user = current_user
       end
-      result = f.save
-      if result
-        {result:result,content:{id:f.id,whouse_id:f.whouse_id,created_at:f.created_at,user_id:f.user_id,stocker_id:f.stocker_id}}
+      if f.save
+        {result:1,content:ForkliftPresenter.new(f).to_json}
       else
-        {result:result,content:f.errors.full_messages}
+        {result:0,content:f.errors.full_messages}
       end
     end
 
@@ -40,13 +43,16 @@ module V1
       p = Package.find_by_id(params[:package_id])
       if f && p && p.forklift.nil?
         p.forklift = f
-        {
-            result:p.save,
-            content:''
-        }
+        if p.save
+          return {
+              result:1,
+              content:''
+          }
+        end
       else
-        {result:0,content:''}
+
       end
+        {result:0,content:''}
     end
 
     # add package
@@ -57,11 +63,10 @@ module V1
           quantity_str:params[:quantity_str],
           check_in_time:params[:check_in_time]
       }
-      args[:user_id] = params[:user_id] if params[:user_id]
-      if p = Package.find_by_id(args[:id])
-        {result:0,content:'包装箱已存在'}
-      else
-        p = PackageService.create(args,current_user)
+      args[:user_id] = params[:user_id] if params.has_key?(:user_id)
+      res = PackageService.create(args,current_user)
+      if res == 1
+        p = res.content
         f = Forklift.find_by_id(params[:forklift_id])
         if p && f
           p.forklift = f
@@ -69,11 +74,16 @@ module V1
           if f.save && p.save
             {result:1,content:{id:p.id,quantity_str:p.quantity_str,part_id:p.part_id,user_id:p.user_id,check_in_time:p.check_in_time}}
           else
-            {result:0,content:'生成包装箱失败'}
+            {result:0,content:'添加包装箱失败'}
           end
         else
-          {result:0,content:'生成包装箱失败'}
+          {
+              result:0,
+              content:'托清单不存在!'
+          }
         end
+      else
+        {result:res.result,content:res.content}
       end
     end
 
@@ -93,15 +103,9 @@ module V1
     # get forklift detail
     get :detail do
       f = Forklift.find_by_id params[:id]
-      packages = []
       if f
-        f.packages.all.each do |p|
-          #******
-          #position not set
-          #******
-          packages << {id:p.id,quantity_str:p.quantity_str,part_id:p.part_id,position_nr:'p.position.detail',check_in_time:p.check_in_time}
-        end
-        {result:1,content:{id:f.id,whouse_id:f.whouse_id,user_id:f.stocker_id,packages:packages}}
+        fp = ForkliftPresenter.new(f)
+        {result:1,content:fp.to_json_with_packages}
       else
         {reuslt:0,content:'托清单未找到!'}
       end

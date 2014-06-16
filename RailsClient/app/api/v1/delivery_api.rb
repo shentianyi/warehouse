@@ -16,8 +16,8 @@ module V1
     get :list do
       deliveries = DeliveryService.search(params.permit(:id,:delivery_date,:user_id,:destination_id))
       data = []
-      deliveries.each do |d|
-        data << {id: d.id,delivery_date:d.delivery_date,received_date:d.received_date,state:d.state,state_display:DeliveryState.display(d.state),user_id:d.user_id,destination_id:d.destination_id,can_delete:DeliveryState.can_delete?(d.state)}
+      DeliveryPresenter.init_presenters(deliveries).each do |d|
+        data << d.to_json
       end
       {result:true,content:data}
     end
@@ -28,7 +28,7 @@ module V1
       #d = Delivery.find_by_id(params[:id])
       f = Forklift.find_by_id(params[:forklift_id])
       if f && f.delivery.nil?
-        {result:1,content:{id:f.id,created_at:f.created_at,stocker_id:f.stocker_id,whouse_id:f.whouse_id}}
+        {result:1,content:ForkliftPresenter.new(f).to_json}
       else
         {result:0,content:''}
       end
@@ -75,7 +75,7 @@ module V1
 
       result = d.save == true ? 1:0
       if result
-        {result:result,content:{id:d.id,delivery_date:d.delivery_date,user_id:d.user_id}}
+        {result:result,content:DeliveryPresenter.new(d).to_json}
       else
         {result:result,content:d.errors}
       end
@@ -93,10 +93,7 @@ module V1
       d = Delivery.find_by_id(params[:id])
       data = []
       if d
-        d.forklifts.each do |f|
-          data << {id:f.id,created_at:f.created_at,stocker_id:f.stocker_id,whouse_id:f.whouse_id,sum_packages:f.sum_packages,accepted_packages:f.accepted_packages,remark:f.remark}
-        end
-        {result:1,content:{id:d.id,user_id:d.user_id,destination_id:d.destination_id,remark:d.remark,forklifts:data}}
+        {result:1,content:DeliveryPresenter.new(d).to_json_with_forklifts(false)}
       else
         {result:0,content:'运单未找到!'}
       end
@@ -120,16 +117,8 @@ module V1
         d.receiver = current_user
         d.state = DeliveryState::RECEIVED
         result = d.save == true ? 1:0
-        forklifts = []
-        d.forklifts.each do |f|
-          packages = []
-          f.packages.each do |p|
-            packages << {id:p.id,quantity_str:p.quantity_str,part_id:p.part_id,user_id:p.user_id,check_in_time:p.check_in_time}
-          end
-          forklifts<<{id:f.id,created_at:f.created_at,stocker_id:f.stocker_id,whouse_id:f.whouse_id,sum_packages:f.sum_packages,accepted_packages:f.accepted_packages,remark:f.remark,packages:packages}
 
-        end
-        {result:1,content:{id:d.id,user_id:d.user_id,destination_id:d.destination_id,remark:d.remark,forklifts:forklifts}}
+        {result:1,content:DeliveryPresenter.new(d).to_json_with_forklifts(true)}
       else
         result = 0
         {result:result,content:''}
