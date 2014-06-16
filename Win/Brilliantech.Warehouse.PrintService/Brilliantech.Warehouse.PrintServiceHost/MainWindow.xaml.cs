@@ -15,6 +15,7 @@ using System.Net.Sockets;
 using System.Net;
 using System.ServiceModel.Web;
 using Brilliantech.Warehouse.PrintServiceLib;
+using Brilliantech.Framwork.Utils.LogUtil;
 
 namespace Brilliantech.Warehouse.PrintServiceHost
 {
@@ -44,11 +45,13 @@ namespace Brilliantech.Warehouse.PrintServiceHost
                 {
                     host = new WebServiceHost(typeof(PrintService));
                 }
-                host.Open(); 
+                host.Open();
+                LogUtil.Logger.Info("打印服务启动");
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                LogUtil.Logger.Error(ex.Message);
             }
         }
 

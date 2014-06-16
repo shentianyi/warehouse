@@ -13,6 +13,7 @@ using System.Windows.Shapes;
 using System.Drawing.Printing;
 using Brilliantech.Warehouse.PrintServiceHost.Config;
 using Brilliantech.Warehouse.PrintServiceLib.Model;
+using Brilliantech.Framwork.Utils.LogUtil;
 
 
 namespace Brilliantech.Warehouse.PrintServiceHost
@@ -43,7 +44,8 @@ namespace Brilliantech.Warehouse.PrintServiceHost
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
+                MessageBox.Show(e.Message); 
+                LogUtil.Logger.Error(e.Message);
             }
         }
 
@@ -93,6 +95,7 @@ namespace Brilliantech.Warehouse.PrintServiceHost
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                LogUtil.Logger.Error(ex.Message);
             }
         }
     }

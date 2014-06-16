@@ -52,13 +52,13 @@
         "Entry"
         {
         "MsmKey" = "8:_63E1CB7AF5729D8FFD6FF8C4A3335F78"
-        "OwnerKey" = "8:_E2ACAE2DC2C34C3AAF2A23F5881A3E32"
+        "OwnerKey" = "8:_E263C3BABA3B7FE04BFE8AC42A679FEA"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_63E1CB7AF5729D8FFD6FF8C4A3335F78"
-        "OwnerKey" = "8:_E263C3BABA3B7FE04BFE8AC42A679FEA"
+        "OwnerKey" = "8:_E2ACAE2DC2C34C3AAF2A23F5881A3E32"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -106,25 +106,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_E2ACAE2DC2C34C3AAF2A23F5881A3E32"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_E263C3BABA3B7FE04BFE8AC42A679FEA"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_238DD3A5DB7497C58C8F96A30C8EB6E5"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_BAAADEBD94F478047C53FD977895C110"
+        "OwnerKey" = "8:_C2C65694F20BE356413E4860C09DE752"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -136,7 +118,25 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_C2C65694F20BE356413E4860C09DE752"
+        "OwnerKey" = "8:_BAAADEBD94F478047C53FD977895C110"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_238DD3A5DB7497C58C8F96A30C8EB6E5"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_E263C3BABA3B7FE04BFE8AC42A679FEA"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_E2ACAE2DC2C34C3AAF2A23F5881A3E32"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -157,6 +157,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -173,6 +181,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -209,11 +225,6 @@
             "AssemblyAsmDisplayName" = "8:RestSharp, Version=104.4.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_238DD3A5DB7497C58C8F96A30C8EB6E5"
-                    {
-                    "Name" = "8:RestSharp.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:RestSharp.dll"
             "TargetName" = "8:"
@@ -240,11 +251,6 @@
             "AssemblyAsmDisplayName" = "8:Nini, Version=1.1.0.0, Culture=neutral, PublicKeyToken=691faec150a7fa7b, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_2917166E8ECBB2CB18A5E6EFE412D19A"
-                    {
-                    "Name" = "8:Nini.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:Nini.dll"
             "TargetName" = "8:"
@@ -291,11 +297,6 @@
             "AssemblyAsmDisplayName" = "8:TECIT.TFORMer, Version=6.0.3.0, Culture=neutral, PublicKeyToken=1b5f4306b234b83d, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_63E1CB7AF5729D8FFD6FF8C4A3335F78"
-                    {
-                    "Name" = "8:TECIT.TFORMer.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:TECIT.TFORMer.dll"
             "TargetName" = "8:"
@@ -322,11 +323,6 @@
             "AssemblyAsmDisplayName" = "8:Brilliantech.ReportGenConnector, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_BAAADEBD94F478047C53FD977895C110"
-                    {
-                    "Name" = "8:Brilliantech.ReportGenConnector.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:Brilliantech.ReportGenConnector.dll"
             "TargetName" = "8:"
@@ -353,11 +349,6 @@
             "AssemblyAsmDisplayName" = "8:Brilliantech.Framwork, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_C2C65694F20BE356413E4860C09DE752"
-                    {
-                    "Name" = "8:Brilliantech.Framwork.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:Brilliantech.Framwork.dll"
             "TargetName" = "8:"
@@ -384,11 +375,6 @@
             "AssemblyAsmDisplayName" = "8:Brilliantech.Warehouse.PrintServiceLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_E263C3BABA3B7FE04BFE8AC42A679FEA"
-                    {
-                    "Name" = "8:Brilliantech.Warehouse.PrintServiceLib.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:Brilliantech.Warehouse.PrintServiceLib.dll"
             "TargetName" = "8:"
@@ -582,35 +568,49 @@
                             "Transitive" = "11:FALSE"
                                 "Keys"
                                 {
-                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_81B79BC48F0E440F8661947F50930EE4"
+                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_395321C93DAD4913B9C914497A4AED34"
                                     {
-                                    "Name" = "8:CurrentVersion"
+                                    "Name" = "8:Windows"
                                     "Condition" = "8:"
                                     "AlwaysCreate" = "11:FALSE"
                                     "DeleteAtUninstall" = "11:FALSE"
                                     "Transitive" = "11:FALSE"
                                         "Keys"
                                         {
-                                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_0D8F81F7B87E41D9B0C87CF8437AE211"
+                                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_8C83B1CB4F6B4FE39ED8200B77D9B084"
                                             {
-                                            "Name" = "8:Run"
+                                            "Name" = "8:CurrentVersion"
                                             "Condition" = "8:"
                                             "AlwaysCreate" = "11:FALSE"
                                             "DeleteAtUninstall" = "11:FALSE"
                                             "Transitive" = "11:FALSE"
                                                 "Keys"
                                                 {
+                                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_0D8F81F7B87E41D9B0C87CF8437AE211"
+                                                    {
+                                                    "Name" = "8:Run"
+                                                    "Condition" = "8:"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "DeleteAtUninstall" = "11:FALSE"
+                                                    "Transitive" = "11:FALSE"
+                                                        "Keys"
+                                                        {
+                                                        }
+                                                        "Values"
+                                                        {
+                                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_D5816F654F144FC9BD03161A96412AAC"
+                                                            {
+                                                            "Name" = "8:BrilliantechWPS"
+                                                            "Condition" = "8:"
+                                                            "Transitive" = "11:FALSE"
+                                                            "ValueTypes" = "3:1"
+                                                            "Value" = "8:[TARGETDIR]Brilliantech.Warehouse.PrintServiceHost.exe"
+                                                            }
+                                                        }
+                                                    }
                                                 }
                                                 "Values"
                                                 {
-                                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_D5816F654F144FC9BD03161A96412AAC"
-                                                    {
-                                                    "Name" = "8:BrilliantechWPS"
-                                                    "Condition" = "8:"
-                                                    "Transitive" = "11:FALSE"
-                                                    "ValueTypes" = "3:1"
-                                                    "Value" = "8:[TARGETDIR]Brilliantech.Warehouse.PrintServiceHost.exe"
-                                                    }
                                                 }
                                             }
                                         }
@@ -665,7 +665,7 @@
             "Target" = "8:_E2ACAE2DC2C34C3AAF2A23F5881A3E32"
             "Folder" = "8:_1B224543B4694082A2DF4E6B6EB51085"
             "WorkingFolder" = "8:_D1B822CEEBBC4F03BE5FF4B898465679"
-            "Icon" = "8:"
+            "Icon" = "8:_3023C82BF0834300A45A87C042C209D7"
             "Feature" = "8:"
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_DD306ABE730D4F929E2C60F6AB62BC88"
