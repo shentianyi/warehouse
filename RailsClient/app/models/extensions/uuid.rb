@@ -4,10 +4,12 @@ module Extensions
     included do
       #set_primary_key 'id' rails 3
       #self.primary_key='id' # rails 4
+      default_scope {where(is_delete:false)}
       before_create :generate_uuid
       before_update :reset_dirty_flag
 
       def generate_uuid
+        self.id = self.send(:generate_id) if self.respond_to?(:generate_id)
         self.id = SecureRandom.uuid if self.id.nil?
         self.uuid= SecureRandom.uuid if self.respond_to?(:uuid) and self.send(:uuid).nil?
       end

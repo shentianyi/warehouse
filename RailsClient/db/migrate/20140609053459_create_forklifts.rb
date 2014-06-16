@@ -3,7 +3,7 @@ class CreateForklifts < ActiveRecord::Migration
     create_table(:forklifts,:id=>false) do |t|
       t.string :uuid, :limit => 36, :null => false
       t.string :id, :limit => 36, :primary=>true, :null=>false
-      t.integer :state, :null=>false, :default=> 1
+      t.integer :state, :null=>false, :default=> 0
       #
       t.string :delivery_id
       t.string :remark

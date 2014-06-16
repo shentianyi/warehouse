@@ -4,10 +4,12 @@ Rails.application.routes.draw do
 
   devise_for :users, :controllers => {:registrations => "users/registrations"},path: "auth", path_names: {sign_in: 'login', sign_out: 'logout', password: 'secret', confirmation: 'verification', unlock: 'unblock', registration: 'register', sign_up: 'cmon_let_me_in'}
 
-  devise_scope :user do
-    post '/api/sign_in' => 'users/sessions#create'
-    delete '/api/sign_out' => 'users/sessions#destroy'
-  end
+  #devise_scope :user do
+  #  #post '/api/sign_in' => 'users/sessions#create'
+  #  #delete '/api/sign_out' => 'users/sessions#destroy'
+  #  post '/api/sign_in' =>'api/v1/users/login/'
+  #  delete '/api/sign_out' =>'api/v1/users/logout/'
+  #end
 
   resources :deliveries
 

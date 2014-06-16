@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   include Extensions::UUID
-
+  has_many :deliveries
   before_save :ensure_authentication_token!
 
   belongs_to :location
@@ -21,7 +21,7 @@ class User < ActiveRecord::Base
 
   def method_missing(method_name, *args, &block)
     if Role::RoleMethods.include?(method_name)
-      Role.send(method_name,self.role_id)
+      Role.send(method_name, self.role_id)
     else
       super
     end

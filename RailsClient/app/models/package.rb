@@ -2,12 +2,15 @@ class Package < ActiveRecord::Base
   include Extensions::UUID
   include Extensions::STATE
 
+  #belongs_to :forklift, :throuth => :forklift_item
   has_one :forklift_item, :dependent => :destroy
   has_one :package_position
   has_one :position, :through => :package_position
   has_many :state_logs, as: :stateable
 
   belongs_to :user
+  belongs_to :location
+  belongs_to :part
 
   # when a package is added to the forklift
   # please do this
@@ -36,6 +39,7 @@ class Package < ActiveRecord::Base
       self.forklift_item.destroy
       remove_position
     end
+    true
   end
 
   # set_position
@@ -59,6 +63,14 @@ class Package < ActiveRecord::Base
   def remove_position
     if self.package_position
       self.package_position.destroy
+    end
+  end
+
+  def forklift
+    if self.forklift_item
+      self.forklift.forklift
+    else
+      nil
     end
   end
 

@@ -1,13 +1,12 @@
 module APIGuard
   extend ActiveSupport::Concern
-
   included do |base|
     helpers HelperMethods
   end
 
   module HelperMethods
     def guard!
-      #authenticate!
+      authenticate!
     end
 
     def user_signed_in?
@@ -24,7 +23,7 @@ module APIGuard
 
     def authenticate!
       unless warden.authenticate?
-        return error!({result:false}, 401)
+        return error!({result: false}, 401)
       end
     end
   end

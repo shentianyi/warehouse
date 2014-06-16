@@ -8,6 +8,12 @@ class CreateForkliftItems < ActiveRecord::Migration
       t.string :state, :null=> false, :default => 0
       t.string :user_id
 
+      #
+      t.boolean :is_delete, :default => false
+      t.boolean :is_dirty, :default => true
+      t.boolean :is_new, :default => true
+      #
+
       t.timestamps
     end
 
