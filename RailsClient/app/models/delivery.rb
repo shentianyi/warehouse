@@ -46,5 +46,6 @@ class Delivery < ActiveRecord::Base
 
   def rejected_packages
     packages.where(state: PackageState::DESTINATION)
+    .select('packages.*,forklifts.whouse_id')
   end
 end
