@@ -9,7 +9,7 @@ module V1
       user = User.find_for_database_authentication(id: params[:user][:id])
       if user && user.valid_password?(params[:user][:password])
         warden.set_user user
-        {result: true, role: current_user.role_id }
+        {result: true, content: current_user.role_id }
       else
         error!({result: false}, 401)
       end
