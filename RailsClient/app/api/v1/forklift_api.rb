@@ -6,7 +6,7 @@ module V1
     #strong parameters
     helpers do
       def forklift_params
-        ActionController::Parameters.new(params).require(:forklift).permit(:whouse_id,:user_id,:remark,:stocker_id)
+        ActionController::Parameters.new(params).require(:forklift).permit(:whouse_id,:user_id,:remark,:stocker_id,:id)
       end
     end
 
@@ -34,10 +34,19 @@ module V1
       end
     end
 
-
     # check package
     post :check_package do
-
+      f = Forklift.find_by_id(params[:forklift_id])
+      p = Package.find_by_id(params[:package_id])
+      if f && p && p.forklift.nil?
+        p.forklift = f
+        {
+            result:p.save,
+            content:''
+        }
+      else
+        {result:0,content:''}
+      end
     end
 
     # add package
@@ -54,9 +63,13 @@ module V1
       if p && f
         p.forklift = f
         f.sum_packages = f.sum_packages + 1
-        f.save && p.save
+        if f.save && p.save
+          {result:1,content:{id:p.id,quantity_str:p.quantity_str,part_id:p.part_id,user_id:p.user_id,check_in_time:p.check_in_time}}
+        else
+          {result:0,content:'生成Package失败'}
+        end
       else
-        {result:false,content:'生成Package失败'}
+        {result:0,content:'生成Package失败'}
       end
     end
 
@@ -79,18 +92,25 @@ module V1
       packages = []
       if f
         f.packages.all.each do |p|
-          data << {id:p.string,quantity:p.quantity_str,part_id:p.part_id,position_nr:p.position.detail}
+          #******
+          #position not set
+          #******
+          packages << {id:p.id,quantity_str:p.quantity_str,part_id:p.part_id,position_nr:'p.position.detail',check_in_time:p.check_in_time}
         end
-        {result:true,content:{id:f.id,whouse_id:f.whouse_id,user_id:f.stocker_id,packages:packages}}
+        {result:1,content:{id:f.id,whouse_id:f.whouse_id,user_id:f.stocker_id,packages:packages}}
       else
-        {reuslt:false,content:'托清单未找到!'}
+        {reuslt:0,content:'托清单未找到!'}
       end
     end
 
     # update forklift
-    patch do
-      result = ForkliftService.update(params[:id],forklift_params)
-      {result:result,content:''}
+    put do
+      result = ForkliftService.update(forklift_params)
+      if result
+        {result:1,content:''}
+      else
+        {result:0,content:''}
+      end
     end
   end
 end

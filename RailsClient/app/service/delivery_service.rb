@@ -16,14 +16,19 @@ class DeliveryService
 
   end
 
-  def self.add_forklift id,forklift_id
+  def self.add_forklifts id,forklift_ids
     d = Delivery.find_by_id id
-    f = Forklift.find_by_id forklift_id
 
-    if d && f && f.delivery.nil?
-      f.add_to_delivery(d.id)
+    if d
+      forklift_ids.each do |f_id|
+        f = Forklift.find_by_id(f_id)
+        if f
+          f.add_to_delivery(d.id)
+        end
+      end
+      1
     else
-      false
+      0
     end
   end
 

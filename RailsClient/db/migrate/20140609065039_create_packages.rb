@@ -10,6 +10,7 @@ class CreatePackages < ActiveRecord::Migration
       t.integer :state, :null=>false, :default=> 0
       t.string :location_id
       t.string :user_id
+      t.string :forklift_id
       #
       t.boolean :is_delete, :default => false
       t.boolean :is_dirty, :default => true
@@ -30,7 +31,10 @@ FOREIGN KEY (part_id)
 REFERENCES parts(id),
 ADD CONSTRAINT fk_packages_users
 FOREIGN KEY (user_id)
-REFERENCES users(id)
+REFERENCES users(id),
+ADD CONSTRAINT fk_packages_forklifts
+FOREIGN KEY (forklift_id)
+REFERENCES forklifts(id)
         SQL
       end
 
@@ -39,7 +43,8 @@ REFERENCES users(id)
         ALTER TABLE packages
 DROP FOREIGN KEY fk_packages_locations,
 DROP FOREIGN KEY fk_packages_parts,
-DROP FOREIGN KEY fk_packages_users
+DROP FOREIGN KEY fk_packages_users,
+DROP FOREIGN KEY fk_packages_forklifts
         SQL
       end
     end
@@ -49,6 +54,7 @@ DROP FOREIGN KEY fk_packages_users
     add_index :packages, :location_id
     add_index :packages, :part_id
     add_index :packages, :user_id
+    add_index :packages, :forklift_id
     execute 'ALTER TABLE packages ADD PRIMARY KEY (id)'
   end
 end

@@ -3,9 +3,10 @@ class Forklift < ActiveRecord::Base
   include Extensions::STATE
 
   belongs_to :delivery
+  belongs_to :whouse
   has_many :state_logs, as: :stateable
-  has_many :forklift_items, :dependent => :destroy
-  has_many :packages, :through => :forklift_items
+  #has_many :forklift_items, :dependent => :destroy
+  has_many :packages #, :through => :forklift_items
   belongs_to :user
   belongs_to :stocker, class_name: "User"
 
@@ -22,6 +23,6 @@ class Forklift < ActiveRecord::Base
   end
 
   def generate_id
-    "F#{Time.to_milli}"
+    "F#{Time.now.to_milli}"
   end
 end
