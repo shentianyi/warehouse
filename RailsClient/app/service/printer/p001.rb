@@ -3,10 +3,6 @@ module Printer
     HEAD=[:id, :whouse, :delivery_date, :user]
     BODY=[:package_id, :part_id, :quantity, :w_date, :receive_position]
 
-    def initialize(id=nil)
-      self.data_set =[]
-      self.id=id
-    end
 
     def generate_data
       f=Forklift.find(self.id)
@@ -17,7 +13,7 @@ module Printer
       end
       packages=f.packages
       packages.each do |p|
-        body={package_id: p.id, part_id: p.part_id, quantity: p.sum_packages, w_date: p.in_date, receive_position: 'POSITION'}
+        body={package_id: p.id, part_id: p.part_id, quantity: p.sum_packages, w_date: p.in_date, receive_position: p.position.detail}
         bodies=[]
         BODY.each do |k|
           bodies<<{Key: k, Value: body[k]}
