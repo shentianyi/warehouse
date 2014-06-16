@@ -110,7 +110,7 @@ module V1
       d = Delivery.find_by_id(params[:id])
       if d
         d.state = DeliveryState::RECEIVED
-        result = d.save
+        result = d.save == true ? 1:0
       else
         result = 0
       end
