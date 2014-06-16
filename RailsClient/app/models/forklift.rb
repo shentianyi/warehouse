@@ -7,6 +7,7 @@ class Forklift < ActiveRecord::Base
   has_many :state_logs, as: :stateable
   #has_many :forklift_items, :dependent => :destroy
   has_many :packages #, :through => :forklift_items
+  #delegate :delivery ,:to => :packages
   belongs_to :user
   belongs_to :stocker, class_name: "User"
 

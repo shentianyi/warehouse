@@ -43,4 +43,8 @@ class Delivery < ActiveRecord::Base
   def generate_id
     "D#{Time.now.to_milli}"
   end
+
+  def rejected_packages
+    packages.where(state: PackageState::DESTINATION)
+  end
 end
