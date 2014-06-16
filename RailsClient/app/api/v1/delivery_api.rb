@@ -1,3 +1,4 @@
+
 module V1
   class DeliveryAPI<Base
     namespace :deliveries
@@ -6,24 +7,19 @@ module V1
     #strong parameters
     helpers do
       def delivery_params
-        ActionController::Parameters.new(params).require(:delivery).permit(:id,:destination_id,:user_id,:delivery_date,:forklifts)
+        ActionController::Parameters.new(params).require(:delivery).permit(:id,:destination_id,:user_id,:delivery_date,:forklifts,:remark)
       end
     end
 
     # get deliveries
     # optional params: created_at, user_id, state...
     get :list do
-      args = {
-          id:'',
-          destination_id:'',
-          user_id:'',
-          delivery_date:''
-      }
-      params.each_key { |key,value|
-
-      }
-      deliveries = DeliveryService.search(params)
-      {result:true,content:deliveries}
+      deliveries = DeliveryService.search(params.permit(:id,:delivery_date,:user_id,:destination_id))
+      data = []
+      deliveries.each do |d|
+        data << {id: d.id,delivery_date:d.delivery_date,received_date:d.received_date,state:d.state,state_display:DeliveryState.display(d.state),user_id:d.user_id,destination_id:d.destination_id,can_delete:DeliveryState.can_delete?(d.state)}
+      end
+      {result:true,content:data}
     end
 
     # check forklift
@@ -32,7 +28,9 @@ module V1
       d = Delivery.find_by_id(params[:id])
       f = Forklift.find_by_id(params[:forklift_id])
       if d && f && f.delivery.nil?
-        {result:1,content:{id:f.id,created_at:f.created_at,stocker_id:f.stocker_id,whouse_id:f.whouse_id}}
+        f.delivery = d
+        result = f.save == true ? 1 : 0
+        {result:result,content:{id:f.id,created_at:f.created_at,stocker_id:f.stocker_id,whouse_id:f.whouse_id,delivery_id:f.delivery_id}}
       else
         {result:0,content:''}
       end
@@ -42,7 +40,7 @@ module V1
     # id: delivery id
     # forklift: forklift ids
     post :add_forklift do
-      result = DeliveryService.add_forklifts(params[:id],params[:forklift])
+      result = DeliveryService.add_forklifts(params[:id],params[:forklifts])
       {result:result,content:''}
     end
 
@@ -58,9 +56,9 @@ module V1
       d =Delivery.find_by_id(params[:id])
       if d
         d.state = DeliveryState::WAY
-        result = d.save
+        result = d.save == true ? 1:0
       else
-        result = false
+        result = 0
       end
       {result:result,content:''}
     end
@@ -100,9 +98,9 @@ module V1
         d.forklifts.each do |f|
           data << {id:f.id,created_at:f.created_at,user_id:f.user_id,whouse_id:f.whouse_id,sum_packages:f.sum_packages,accepted_packages:f.accepted_packages}
         end
-        {result:true,content:{id:d.id,user_id:d.user_id,destination_id:d.destination_id,forklifts:data}}
+        {result:1,content:{id:d.id,user_id:d.user_id,destination_id:d.destination_id,forklifts:data}}
       else
-        {result:falsen,content:'运单未找到!'}
+        {result:0,content:'运单未找到!'}
       end
 
     end
@@ -112,9 +110,9 @@ module V1
       d = Delivery.find_by_id(params[:id])
       if d
         d.state = DeliveryState::RECEIVED
-        result = d.save
+        result = d.save == true ? 1:0
       else
-        result = false
+        result = 0
       end
       {result:result,content:''}
     end

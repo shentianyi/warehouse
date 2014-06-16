@@ -12,7 +12,7 @@ class Package < ActiveRecord::Base
   belongs_to :location
   belongs_to :part
   belongs_to :forklift
-  delegate :delivery, to: :forklift
+  delegate :delivery, :to => :forklift
 
   # when a package is added to the forklift
   # please do this

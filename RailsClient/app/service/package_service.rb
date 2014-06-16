@@ -103,8 +103,4 @@ class PackageService
   def self.validate_quantity quantity
     1
   end
-
-  def self.rejected_packages delivery_id
-    Package.joins(:delivery)
-  end
 end

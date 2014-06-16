@@ -12,7 +12,7 @@ module Warehouse
     config.paths['config/database']='config/charlot_database.yml' if ENV['USER']=='charlot'
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
     # for the api
-    %w{model api service}.each do |namespace|
+    %w{models api service}.each do |namespace|
       config.paths.add File.join('app', namespace), glob: File.join('**', '*.rb')
       config.autoload_paths += Dir[Rails.root.join('app', namespace, '**')]
     end

@@ -9,4 +9,12 @@ class DeliveryState<BaseState
         super
     end
   end
+
+  def self.can_delete? state
+    if state == ORIGINAL
+      true
+    else
+      false
+    end
+  end
 end
