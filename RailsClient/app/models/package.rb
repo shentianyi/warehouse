@@ -2,7 +2,7 @@ class Package < ActiveRecord::Base
   include Extensions::UUID
   include Extensions::STATE
 
-  belongs_to :forklift, :throuth => :forklift_item
+  #belongs_to :forklift, :throuth => :forklift_item
   has_one :forklift_item, :dependent => :destroy
   has_one :package_position
   has_one :position, :through => :package_position
@@ -63,6 +63,14 @@ class Package < ActiveRecord::Base
   def remove_position
     if self.package_position
       self.package_position.destroy
+    end
+  end
+
+  def forklift
+    if self.forklift_item
+      self.forklift.forklift
+    else
+      nil
     end
   end
 

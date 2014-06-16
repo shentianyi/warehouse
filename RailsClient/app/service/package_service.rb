@@ -3,13 +3,17 @@ class PackageService
   def self.delete id
     p = Package.find_by_id id
     if p.nil?
-      false
+      0
     end
     # if this already been added into forklift
     unless p.forklift.nil?
       p.remove_from_forklift
     end
-    p.destroy
+    if p.destroy == true
+      1
+    else
+      0
+    end
   end
 
   # check package
@@ -21,7 +25,11 @@ class PackageService
       p.state = PackageState::RECEIVED
       p.forklift.accepted_packages = p.forklift.accepted_packages + 1
       p.forklift_item.state = ForkliftItemState::RECEIVED
-      p.save
+      if p.save==true
+        1
+      else
+        0
+      end
     else
       false
     end
@@ -50,14 +58,14 @@ class PackageService
     args[:location_id] = current_user.location.id
 
     #if exited
-    p = Package.find_by_id(package[:id])
+    p = Package.find_by_id(args[:id])
     if p
       p.is_delete = false
-      p.update_attributes(package)
+      p.update_attributes(args)
     else
-      p = Package.new(package)
+      p = Package.new(args)
     end
-    p.state = PackageState::ORIGINAL
+    p.state = 0
     if p.save
       p
     else
@@ -77,22 +85,22 @@ class PackageService
 
   def self.update id,args
     p = Package.find_by_id(id)
-    if p
-      p.update_attributes(args)
+    if p && p.update_attributes(args) == true
+      1
     else
-      false
+      0
     end
   end
 
   def self.id_avaliable? id
     unless Package.find_by_id id
-      true
+      1
     else
-      false
+      0
     end
   end
 
   def self.validate_quantity quantity
-    true
+    1
   end
 end

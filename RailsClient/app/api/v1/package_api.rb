@@ -15,7 +15,7 @@ module V1
       packages = PackageService.avaliable_to_bind
       data = []
       packages.all.each do |p|
-        data<<{id:p.id,quantity:p.quantity_str,part_id:p.part_id,user_id:p.user_id,check_in:p.check_in_time}
+        data<<{id:p.id,quantity_str:p.quantity_str,part_id:p.part_id,user_id:p.user_id,check_in_time:p.check_in_time}
       end
       data
     end
@@ -36,13 +36,13 @@ module V1
     # if find deleted then update(take care of foreign keys)
     # else create new
     post do
-      result = PackageService.create package_params,current_user
-      if result
-        {result:true,content:{id:p.id,part_id:p.part_id,quantity_str:p.quantity_str,user_id:p.user_id,check_in_time:p.check_in_time}}
+      p = PackageService.create package_params,current_user
+      if p
+        {result:1,content:{id:p.id,part_id:p.part_id,quantity_str:p.quantity_str,user_id:p.user_id,check_in_time:p.check_in_time}}
       else
 
       end
-      {result:result,content:''}
+      {result:0,content:''}
     end
 
     # update package

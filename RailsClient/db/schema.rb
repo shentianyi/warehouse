@@ -36,11 +36,14 @@ ActiveRecord::Schema.define(version: 20140613072407) do
   add_index "deliveries", ["uuid"], name: "index_deliveries_on_uuid", using: :btree
 
   create_table "forklift_items", force: true do |t|
-    t.string   "uuid",        limit: 36,               null: false
+    t.string   "uuid",        limit: 36,                 null: false
     t.string   "forklift_id"
     t.string   "package_id"
-    t.string   "state",                  default: "0", null: false
+    t.string   "state",                  default: "0",   null: false
     t.string   "user_id"
+    t.boolean  "is_delete",              default: false
+    t.boolean  "is_dirty",               default: true
+    t.boolean  "is_new",                 default: true
     t.datetime "created_at"
     t.datetime "updated_at"
   end
