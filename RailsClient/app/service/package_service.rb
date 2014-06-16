@@ -24,7 +24,7 @@ class PackageService
     if p
       p.state = PackageState::RECEIVED
       p.forklift.accepted_packages = p.forklift.accepted_packages + 1
-      p.forklift_item.state = ForkliftItemState::RECEIVED
+      #p.forklift_item.state = ForkliftItemState::RECEIVED
       if p.save==true
         1
       else
@@ -40,7 +40,7 @@ class PackageService
     if p
       if p.state == PackageState::RECEIVED
         p.state == PackageState::REJECTED
-        p.forklift_item.state = ForkliftItemState::REJECTED
+        #p.forklift_item.state = ForkliftItemState::REJECTED
         p.forklift.accepted_packages = p.forklift.accepted_packages - 1
         p.save
       else
@@ -75,16 +75,16 @@ class PackageService
 
   def self.avaliable_to_bind forklift_id
     if f = Forklift.find_by_id(forklift_id)
-      Package.joins('INNER JOIN part_positions ON part_positions.part_id = packages.part_id').where('packages.id not in (select package_id from forklift_items) and part_positions.whouse_id = ?',f.whouse_id).select('packages.id,packages.quantity_str,packages.part_id,packages.user_id,part_positions.position_detail')
+      Package.joins('INNER JOIN part_positions ON part_positions.part_id = packages.part_id').where('packages.forklift_id is NULL').select('packages.id,packages.quantity_str,packages.part_id,packages.user_id,part_positions.position_detail')
     end
   end
 
   def self.avaliable_to_bind
-    Package.where('packages.id not in (select package_id from forklift_items)').select('packages.id,packages.quantity_str,packages.part_id,packages.user_id,packages.check_in_time')
+    Package.where('packages.forklift_id is NULL').select('packages.id,packages.quantity_str,packages.part_id,packages.user_id,packages.check_in_time')
   end
 
-  def self.update id,args
-    p = Package.find_by_id(id)
+  def self.update args
+    p = Package.find_by_id(args[:id])
     if p && p.update_attributes(args) == true
       1
     else
@@ -102,5 +102,9 @@ class PackageService
 
   def self.validate_quantity quantity
     1
+  end
+
+  def self.rejected_packages delivery_id
+    Package.joins(:delivery)
   end
 end

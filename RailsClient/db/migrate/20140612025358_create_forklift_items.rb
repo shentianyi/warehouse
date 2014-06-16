@@ -1,5 +1,6 @@
 class CreateForkliftItems < ActiveRecord::Migration
   def change
+=begin
     create_table( :forklift_items, :id=>false) do |t|
       t.string :uuid, :limit => 36, :null => false
       t.string :id, :limit => 36, :primary=>true, :null=>false
@@ -50,5 +51,6 @@ DROP FOREIGN KEY fk_forklift_items_users
     add_index :forklift_items, :user_id
 
     execute 'ALTER TABLE forklift_items ADD PRIMARY KEY(id)'
+=end
   end
 end

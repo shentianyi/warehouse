@@ -5,6 +5,7 @@ class Delivery < ActiveRecord::Base
   belongs_to :users
   has_many :state_logs, as: :stateable
   has_many :forklifts
+  has_many :packages, :through => :forklifts
   accepts_nested_attributes_for :forklifts
   belongs_to :user
   belongs_to :source, class_name: "Location"
@@ -40,6 +41,6 @@ class Delivery < ActiveRecord::Base
   end
 
   def generate_id
-    "D#{Time.to_milli}"
+    "D#{Time.now.to_milli}"
   end
 end

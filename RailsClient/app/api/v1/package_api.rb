@@ -10,6 +10,10 @@ module V1
       end
     end
 
+    #
+    #******
+    #need to add conditions for search
+    #******
     # get binded but not add to forklift packages
     get :binds do
       packages = PackageService.avaliable_to_bind
@@ -40,14 +44,13 @@ module V1
       if p
         {result:1,content:{id:p.id,part_id:p.part_id,quantity_str:p.quantity_str,user_id:p.user_id,check_in_time:p.check_in_time}}
       else
-
+        {result:0,content:''}
       end
-      {result:0,content:''}
     end
 
     # update package
-    patch do
-      result = PackageService.update(params[:id],package_params)
+    put do
+      result = PackageService.update(package_params)
       {result:result,content:''}
     end
 

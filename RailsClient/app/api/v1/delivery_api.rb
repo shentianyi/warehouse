@@ -6,25 +6,35 @@ module V1
     #strong parameters
     helpers do
       def delivery_params
-        ActionController::Parameters.new(params).require(:delivery).permit(:destination_id,:user_id,:delivery_date,:forklifts)
+        ActionController::Parameters.new(params).require(:delivery).permit(:id,:destination_id,:user_id,:delivery_date,:forklifts)
       end
     end
 
     # get deliveries
     # optional params: created_at, user_id, state...
     get :list do
-      deliveries = DeliveryService.search(params)
+      args = {
+          id:'',
+          destination_id:'',
+          user_id:'',
+          delivery_date:''
+      }
+      params.each_key { |key,value|
 
+      }
+      deliveries = DeliveryService.search(params)
+      {result:true,content:deliveries}
     end
 
     # check forklift
     # forklift id
     post :check_forklift do
-      f = Forklift.find_by_id(params[:id])
-      if f.delivery.nil?
-        {result:true,content:{id:f.id,created_at:f.created_at,user_id:f.stocker_id,whouse_id:f.whouse_id}}
+      d = Delivery.find_by_id(params[:id])
+      f = Forklift.find_by_id(params[:forklift_id])
+      if d && f && f.delivery.nil?
+        {result:1,content:{id:f.id,created_at:f.created_at,stocker_id:f.stocker_id,whouse_id:f.whouse_id}}
       else
-        {result:false,content:''}
+        {result:0,content:''}
       end
     end
 
@@ -32,7 +42,7 @@ module V1
     # id: delivery id
     # forklift: forklift ids
     post :add_forklift do
-      result = DeliveryService.add_forklift(params[:id],params[:forklift_id])
+      result = DeliveryService.add_forklifts(params[:id],params[:forklift])
       {result:result,content:''}
     end
 
@@ -56,20 +66,24 @@ module V1
     end
 
     post do
-      d = Delivery.new(params.except(:forklifts))
+      d = Delivery.new(delivery_params.except(:forklifts))
       d.user = current_user
-      params[:delivery][:forklifts].each do |forklift_id|
-        f = Forklift.find_by_id(forklift_id)
-        if f
-          d.forklifts << f
+      if delivery_params.has_key?(:forklifts)
+        delivery_params[:forklifts].each do |forklift_id|
+          f = Forklift.find_by_id(forklift_id)
+          if f
+            d.forklifts << f
+          end
         end
       end
-      result = d.save
+
+      result = d.save == true ? 1:0
       if result
-        content = {id:d.id,delivery_date:d.delivery_date,user_id:d.user_id}
+        {result:result,content:{id:d.id,delivery_date:d.delivery_date,user_id:d.user_id}}
       else
+        {result:result,content:d.errors}
       end
-      {result:result,content:''}
+
     end
 
     # delete delivery

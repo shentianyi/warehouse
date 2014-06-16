@@ -35,25 +35,6 @@ ActiveRecord::Schema.define(version: 20140613072407) do
   add_index "deliveries", ["user_id"], name: "index_deliveries_on_user_id", using: :btree
   add_index "deliveries", ["uuid"], name: "index_deliveries_on_uuid", using: :btree
 
-  create_table "forklift_items", force: true do |t|
-    t.string   "uuid",        limit: 36,                 null: false
-    t.string   "forklift_id"
-    t.string   "package_id"
-    t.string   "state",                  default: "0",   null: false
-    t.string   "user_id"
-    t.boolean  "is_delete",              default: false
-    t.boolean  "is_dirty",               default: true
-    t.boolean  "is_new",                 default: true
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "forklift_items", ["forklift_id"], name: "index_forklift_items_on_forklift_id", using: :btree
-  add_index "forklift_items", ["id"], name: "index_forklift_items_on_id", using: :btree
-  add_index "forklift_items", ["package_id"], name: "index_forklift_items_on_package_id", using: :btree
-  add_index "forklift_items", ["user_id"], name: "index_forklift_items_on_user_id", using: :btree
-  add_index "forklift_items", ["uuid"], name: "index_forklift_items_on_uuid", using: :btree
-
   create_table "forklifts", force: true do |t|
     t.string   "uuid",              limit: 36,                 null: false
     t.integer  "state",                        default: 0,     null: false
@@ -117,6 +98,7 @@ ActiveRecord::Schema.define(version: 20140613072407) do
     t.integer  "state",         default: 0,     null: false
     t.string   "location_id"
     t.string   "user_id"
+    t.string   "forklift_id"
     t.boolean  "is_delete",     default: false
     t.boolean  "is_dirty",      default: true
     t.boolean  "is_new",        default: true
@@ -126,6 +108,7 @@ ActiveRecord::Schema.define(version: 20140613072407) do
     t.string   "check_in_time"
   end
 
+  add_index "packages", ["forklift_id"], name: "index_packages_on_forklift_id", using: :btree
   add_index "packages", ["id"], name: "index_packages_on_id", using: :btree
   add_index "packages", ["location_id"], name: "index_packages_on_location_id", using: :btree
   add_index "packages", ["part_id"], name: "index_packages_on_part_id", using: :btree

@@ -11,22 +11,24 @@ class ForkliftService
         p.remove_from_forklift
       end
       f.destroy
+      1
     else
-      false
+      0
     end
   end
 
-  def self.update id,args
-    f = Forklift.find_by_id(id)
+  def self.update args
+    f = Forklift.find_by_id(args[:id])
     if f
       f.update_attributes(args)
+      f
     else
-      false
+      nil
     end
   end
 
   def self.avaliable_to_bind
-    Forklift.where('delivery_id is NULL').select('id,created_at,user_id,whouse_id')
+    Forklift.where('delivery_id is NULL').select('id,created_at,stocker_id,whouse_id,user_id')
   end
 
   def self.add_package id,package_id
