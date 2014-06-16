@@ -9,6 +9,11 @@ module Extensions
           self.state_logs.create(state_before: self.state_was, state_after: self.state)
         end
       end
+
+      def set_state state
+        self.state = state
+        self.save
+      end
     end
   end
 end

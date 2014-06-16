@@ -23,7 +23,7 @@ module V1
     # create forklift
     post do
       f = Forklift.new(forklift_params)
-      if forklift_params.has_key?(:user_id)
+      unless forklift_params.has_key?(:user_id)
         f.user = current_user
       end
       result = f.save

@@ -52,25 +52,29 @@ class PackageService
   end
 
   def self.create args,current_user=nil
+    msg = Message.new
+    msg.result =0
+
+    #current_user
     unless args.has_key?(:user_id)
       args[:user_id] = current_user.id
     end
-    args[:location_id] = current_user.location.id
+    args[:location_id] = current_user.location.id if current_user.location
+    #
 
     #if exited
-    p = Package.find_by_id(args[:id])
+    p = Package.where(id:args[:id],is_delete:[0,1]).first
     if p
-      p.is_delete = false
-      p.update_attributes(args)
+      msg.content << '唯一号重复,请使用新的唯一号'
     else
       p = Package.new(args)
+      if msg.result = p.save
+        msg.content = p
+      else
+        msg.content << p.errors.full_messages
+      end
     end
-    p.state = 0
-    if p.save
-      p
-    else
-      nil
-    end
+    msg
   end
 
   def self.avaliable_to_bind forklift_id

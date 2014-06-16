@@ -72,6 +72,14 @@ class Package < ActiveRecord::Base
     end
   end
 
+  def get_position
+    if self.position
+      self.position.detail
+    else
+      nil
+    end
+  end
+
   private
   def auto_shelved
     #if partnum changed, reset package position

@@ -14,12 +14,13 @@ module V1
     #******
     #need to add conditions for search
     #******
-    # get binded but not add to forklift packages
+    # binded but not add to forklift packages
     get :binds do
       packages = PackageService.avaliable_to_bind
       data = []
-      packages.all.each do |p|
-        data<<{id:p.id,quantity_str:p.quantity_str,part_id:p.part_id,user_id:p.user_id,check_in_time:p.check_in_time}
+      presenters = PackagePresenter.init_presenters(packages)
+      presenters.each do |p|
+        data<<p.to_json
       end
       data
     end
@@ -40,9 +41,10 @@ module V1
     # if find deleted then update(take care of foreign keys)
     # else create new
     post do
+      # every package has a uniq id,id should not be exits
       p = PackageService.create package_params,current_user
       if p
-        {result:1,content:{id:p.id,part_id:p.part_id,quantity_str:p.quantity_str,user_id:p.user_id,check_in_time:p.check_in_time}}
+        {result:1,content:PackagePresenter.new(p.content).to_json}
       else
         {result:0,content:''}
       end

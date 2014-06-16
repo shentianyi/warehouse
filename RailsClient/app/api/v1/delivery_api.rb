@@ -25,12 +25,10 @@ module V1
     # check forklift
     # forklift id
     post :check_forklift do
-      d = Delivery.find_by_id(params[:id])
+      #d = Delivery.find_by_id(params[:id])
       f = Forklift.find_by_id(params[:forklift_id])
-      if d && f && f.delivery.nil?
-        f.delivery = d
-        result = f.save == true ? 1 : 0
-        {result:result,content:{id:f.id,created_at:f.created_at,stocker_id:f.stocker_id,whouse_id:f.whouse_id,delivery_id:f.delivery_id}}
+      if f && f.delivery.nil?
+        {result:1,content:{id:f.id,created_at:f.created_at,stocker_id:f.stocker_id,whouse_id:f.whouse_id}}
       else
         {result:0,content:''}
       end
@@ -64,10 +62,10 @@ module V1
     end
 
     post do
-      d = Delivery.new(delivery_params.except(:forklifts))
+      d = Delivery.new(delivery_params)
       d.user = current_user
-      if delivery_params.has_key?(:forklifts)
-        delivery_params[:forklifts].each do |forklift_id|
+      if params.has_key?(:forklifts)
+        params[:forklifts].each do |forklift_id|
           f = Forklift.find_by_id(forklift_id)
           if f
             d.forklifts << f
@@ -96,25 +94,47 @@ module V1
       data = []
       if d
         d.forklifts.each do |f|
-          data << {id:f.id,created_at:f.created_at,user_id:f.user_id,whouse_id:f.whouse_id,sum_packages:f.sum_packages,accepted_packages:f.accepted_packages}
+          data << {id:f.id,created_at:f.created_at,stocker_id:f.stocker_id,whouse_id:f.whouse_id,sum_packages:f.sum_packages,accepted_packages:f.accepted_packages,remark:f.remark}
         end
-        {result:1,content:{id:d.id,user_id:d.user_id,destination_id:d.destination_id,forklifts:data}}
+        {result:1,content:{id:d.id,user_id:d.user_id,destination_id:d.destination_id,remark:d.remark,forklifts:data}}
       else
         {result:0,content:'运单未找到!'}
       end
 
     end
 
+    put do
+      d = DeliveryService.update(delivery_params)
+      if d
+        {result:1,content:''}
+      else
+        {result:0,contnet:''}
+      end
+    end
+
     # receive delivery
     post :receive do
       d = Delivery.find_by_id(params[:id])
       if d
+        d.received_date = Time.now
+        d.receiver = current_user
         d.state = DeliveryState::RECEIVED
         result = d.save == true ? 1:0
+        forklifts = []
+        d.forklifts.each do |f|
+          packages = []
+          f.packages.each do |p|
+            packages << {id:p.id,quantity_str:p.quantity_str,part_id:p.part_id,user_id:p.user_id,check_in_time:p.check_in_time}
+          end
+          forklifts<<{id:f.id,created_at:f.created_at,stocker_id:f.stocker_id,whouse_id:f.whouse_id,sum_packages:f.sum_packages,accepted_packages:f.accepted_packages,remark:f.remark,packages:packages}
+
+        end
+        {result:1,content:{id:d.id,user_id:d.user_id,destination_id:d.destination_id,remark:d.remark,forklifts:forklifts}}
       else
         result = 0
+        {result:result,content:''}
       end
-      {result:result,content:''}
+
     end
 
     # received deliveries

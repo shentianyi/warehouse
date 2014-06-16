@@ -5,8 +5,8 @@ class DeliveryService
     if d
       d.forklifts.each do |f|
         f.remove_from_delivery
-        d.destroy
       end
+      d.destroy
       1
     else
       0
@@ -14,19 +14,27 @@ class DeliveryService
   end
 
   def self.update args
-
+    puts args
+    d = Delivery.find_by_id(args[:id])
+    if d
+      d.update_attributes(args)
+      d
+    else
+      nil
+    end
   end
 
   def self.add_forklifts id,forklift_ids
     d = Delivery.find_by_id id
-
     if d
-      forklift_ids.each do |f_id|
-        f = Forklift.find_by_id(f_id)
-        if f
-          f.add_to_delivery(d.id)
-          #f.delivery = d
-          #f.save
+      unless forklift_ids.nil?
+        forklift_ids.each do |f_id|
+          f = Forklift.find_by_id(f_id)
+          if f
+            f.add_to_delivery(d.id)
+            #f.delivery = d
+            #f.save
+          end
         end
       end
       1

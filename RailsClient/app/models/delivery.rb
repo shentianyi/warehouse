@@ -8,6 +8,7 @@ class Delivery < ActiveRecord::Base
   has_many :packages, :through => :forklifts
   accepts_nested_attributes_for :forklifts
   belongs_to :user
+  belongs_to :receiver, class_name: "User"
   belongs_to :source, class_name: "Location"
   belongs_to :destination, class_name: "Location"
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140616062912) do
+ActiveRecord::Schema.define(version: 20140616083045) do
 
   create_table "deliveries", force: true do |t|
     t.string   "uuid",           limit: 36,                 null: false
@@ -203,7 +203,6 @@ ActiveRecord::Schema.define(version: 20140616062912) do
     t.datetime "updated_at"
     t.string   "location_id"
     t.string   "authentication_token"
-    t.string   "user_no",                           default: "",    null: false
     t.integer  "role_id",                           default: 100,   null: false
   end
 
@@ -212,7 +211,6 @@ ActiveRecord::Schema.define(version: 20140616062912) do
   add_index "users", ["id"], name: "index_users_on_id", using: :btree
   add_index "users", ["location_id"], name: "index_users_on_location_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
-  add_index "users", ["user_no"], name: "index_users_on_user_no", unique: true, using: :btree
   add_index "users", ["uuid"], name: "index_users_on_uuid", using: :btree
 
   create_table "whouses", force: true do |t|
