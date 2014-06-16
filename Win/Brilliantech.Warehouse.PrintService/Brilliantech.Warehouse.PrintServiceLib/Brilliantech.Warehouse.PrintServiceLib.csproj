@@ -37,6 +37,9 @@
     <Reference Include="Brilliantech.ReportGenConnector">
       <HintPath>..\..\ThirdPart\Brilliantech.ReportGenConnector.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\ThirdPart\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\ThirdPart\Newtonsoft.Json.dll</HintPath>

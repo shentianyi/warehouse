@@ -13,6 +13,7 @@ using Brilliantech.Warehouse.PrintServiceHost.Config;
 using Brilliantech.ReportGenConnector;
 using System.IO;
 using System.Runtime.Serialization.Json;
+using Brilliantech.Framwork.Utils.LogUtil;
 
 namespace Brilliantech.Warehouse.PrintServiceLib
 {
@@ -46,8 +47,8 @@ namespace Brilliantech.Warehouse.PrintServiceLib
             catch (Exception e) {
                 msg.Result = false;
                 msg.Content = e.Message;
-            }
-
+                LogUtil.Logger.Error(e.Message);
+            } 
             return msg;
         }
 

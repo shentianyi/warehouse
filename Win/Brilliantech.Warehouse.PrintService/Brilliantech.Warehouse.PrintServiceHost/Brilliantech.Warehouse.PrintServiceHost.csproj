@@ -37,6 +37,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\ThirdPart\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -109,6 +112,9 @@
     <Content Include="Ini\printers.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="log4.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -134,6 +140,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Brilliantech.Framwork\Brilliantech.Framwork.csproj">
+      <Project>{9B5F850A-5136-4095-8955-6C4F7747C48A}</Project>
+      <Name>Brilliantech.Framwork</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Brilliantech.Warehouse.PrintServiceLib\Brilliantech.Warehouse.PrintServiceLib.csproj">
       <Project>{6BBF4174-5A04-4155-A68C-E1660F917B71}</Project>
       <Name>Brilliantech.Warehouse.PrintServiceLib</Name>
