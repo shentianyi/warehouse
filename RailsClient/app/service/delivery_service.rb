@@ -7,8 +7,9 @@ class DeliveryService
         f.remove_from_delivery
         d.destroy
       end
+      1
     else
-      false
+      0
     end
   end
 
@@ -24,6 +25,8 @@ class DeliveryService
         f = Forklift.find_by_id(f_id)
         if f
           f.add_to_delivery(d.id)
+          #f.delivery = d
+          #f.save
         end
       end
       1
@@ -36,14 +39,13 @@ class DeliveryService
     f = Forklift.find_by_id forklift_id
 
     if f && f.delivery
-      f.remove_from_delivery
+      result = f.remove_from_delivery == true ? 1:0
     else
-      false
+      0
     end
   end
 
   def self.search(args)
     deliveries = Delivery.where(args).all
-
   end
 end
