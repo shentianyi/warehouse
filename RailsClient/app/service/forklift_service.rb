@@ -28,7 +28,7 @@ class ForkliftService
   end
 
   def self.avaliable_to_bind
-    Forklift.where('delivery_id is NULL').select('id,created_at,stocker_id,whouse_id,user_id')
+    Forklift.where('delivery_id is NULL').all #.select('id,created_at,stocker_id,whouse_id,user_id')
   end
 
   def self.add_package id,package_id

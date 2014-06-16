@@ -84,7 +84,7 @@ class PackageService
   end
 
   def self.avaliable_to_bind
-    Package.where('packages.forklift_id is NULL').select('packages.id,packages.quantity_str,packages.part_id,packages.user_id,packages.check_in_time')
+    Package.where('packages.forklift_id is NULL').all #.select('packages.id,packages.quantity_str,packages.part_id,packages.user_id,packages.check_in_time')
   end
 
   def self.update args
