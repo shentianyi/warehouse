@@ -3,11 +3,6 @@ module Printer
     HEAD=[:id,:receive_addr,:user, :receive_date]
     BODY=[:forklift_id,:quantity,:receive_qty,:status,:whouse]
 
-    def initialize(id=nil)
-      self.data_set =[]
-      self.id=id
-    end
-
     def generate_data
       d=Delivery.find(self.id)
       head={id: d.id, receive_addr:d.destination.address,user:d.receiver_id,receive_date:d.received_date}
