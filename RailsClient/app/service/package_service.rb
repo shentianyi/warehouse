@@ -61,14 +61,18 @@ class PackageService
     end
     args[:location_id] = current_user.location.id if current_user.location
     #
-
+    if Part.find_by_id(args[:part_id]).nil?
+      msg.content = '零件不存在'
+      return msg
+    end
     #if exited
     p = Package.where(id:args[:id],is_delete:[0,1]).first
     if p
       msg.content << '唯一号重复,请使用新的唯一号'
     else
       p = Package.new(args)
-      if msg.result = p.save
+      if p.save
+        msg.result = 1
         msg.content = p
       else
         msg.content << p.errors.full_messages

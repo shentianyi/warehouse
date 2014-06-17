@@ -113,9 +113,9 @@ module V1
     post :receive do
       d = Delivery.find_by_id(params[:id])
       if d
-        d.received_date = Time.now
-        d.receiver = current_user
-        d.state = DeliveryState::RECEIVED
+        #d.received_date = Time.now
+        #d.receiver = current_user
+        d.state = DeliveryState::DESTINATION
         result = d.save == true ? 1:0
 
         {result:1,content:DeliveryPresenter.new(d).to_json_with_forklifts(true)}
@@ -135,6 +135,27 @@ module V1
       arg[:user_id]=params[:user_id] unless params[:user_id].blank?
 
       DeliveryService.search(arg)
+    end
+
+    # confirm_receive
+    post :confirm_receive do
+      d = Delivery.find_by_id(params[:id])
+      if d
+        d.receiver = current_user
+        d.received_date = Time.now
+        d.state = DeliveryState::RECEIVED
+        if d.save
+          {
+              result:1,content:''
+          }
+        else
+          {
+              result:0,content:'接收失败!'
+          }
+        end
+      else
+        {result:0,content:'运单未找到!'}
+      end
     end
   end
 end

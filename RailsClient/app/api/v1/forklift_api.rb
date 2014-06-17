@@ -65,7 +65,7 @@ module V1
       }
       args[:user_id] = params[:user_id] if params.has_key?(:user_id)
       res = PackageService.create(args,current_user)
-      if res == 1
+      if res.result == 1
         p = res.content
         f = Forklift.find_by_id(params[:forklift_id])
         if p && f
