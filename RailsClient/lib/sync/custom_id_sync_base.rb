@@ -1,16 +1,17 @@
 require_relative 'base_sync'
 module Sync
-
   class CustomIdSyncBase<BaseSync
     def self.pull_block
-      model.record_timestamps=false
-      model.skip_callback(:update, :before, :reset_dirty_flag)
+      super
       Proc.new do |items|
         items.each do |item|
-          puts item.updated_at
-          unless ori=model.find_by_id(item.id)
-            model.create(item)
+          unless ori=model.unscoped.find_by_id(item['id'])
+            ori=model.new(item)
+            ori.is_new=false
+            ori.is_dirty=false
+            ori.save
           else
+            item=model.new(item)
             if ori.is_delete
               attr={is_delete: true, is_dirty: false, is_new: false}.merge(ori.gen_sync_attr(item))
               ori.update(attr)

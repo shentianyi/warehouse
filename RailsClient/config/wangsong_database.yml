@@ -34,3 +34,7 @@ test:
 production:
   <<: *default
   database: whousedb
+
+server:
+  <<: *default
+  database: whouse_server_db

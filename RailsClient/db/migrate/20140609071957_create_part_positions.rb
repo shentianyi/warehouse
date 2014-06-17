@@ -4,8 +4,6 @@ class CreatePartPositions < ActiveRecord::Migration
       t.string :id, :limit=>36, :primary=>true, :null => false
       t.string :part_id
       t.string :position_id
-      t.string :position_detail
-      t.string :whouse_name
       t.string :whouse_id
 
       #

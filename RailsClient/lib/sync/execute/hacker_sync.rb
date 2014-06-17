@@ -1,6 +1,6 @@
 module Sync
   module Execute
-    class UserSync< CustomIdSyncBase
+    class HackerSync< CustomIdSyncBase
       PULL_URL= BASE_URL+'users'
       POST_URL= BASE_URL+'users'
     end

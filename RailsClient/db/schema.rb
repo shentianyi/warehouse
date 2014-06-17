@@ -174,6 +174,14 @@ ActiveRecord::Schema.define(version: 20140617095358) do
 
   add_index "state_logs", ["id"], name: "index_state_logs_on_id", using: :btree
 
+  create_table "sync_pools", force: true do |t|
+    t.string   "table_name"
+    t.boolean  "locked"
+    t.string   "client_ip"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "users", force: true do |t|
     t.string   "uuid",                   limit: 36,                 null: false
     t.boolean  "is_delete",                         default: false
