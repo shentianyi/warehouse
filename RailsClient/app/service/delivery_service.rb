@@ -52,7 +52,7 @@ class DeliveryService
 
   end
 
-  def self.confirm_received(delivery)
+  def self.confirm_received(delivery,current_user)
     if delivery.nil?
       return false
     end

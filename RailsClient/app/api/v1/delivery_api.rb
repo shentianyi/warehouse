@@ -163,7 +163,7 @@ module V1
     # received deliveries
     get :received do
       arg={
-            state: DeliveryState::DESTINATION,
+            state: DeliveryState::RECEIVED,
             received_date: params[:receive_date]
       }
       arg[:user_id]=params[:user_id] unless params[:user_id].blank?
@@ -180,7 +180,7 @@ module V1
         return {result:0,content:'运单不存在!'}
       end
 
-      if DeliveryService.confirm_received(d)
+      if DeliveryService.confirm_received(d,current_user)
         {result:1,content:''}
       else
         {result:0,content:'接收失败!'}
