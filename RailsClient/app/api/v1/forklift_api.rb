@@ -39,24 +39,43 @@ module V1
 
     # check package
     post :check_package do
-      f = Forklift.find_by_id(params[:forklift_id])
-      p = Package.find_by_id(params[:package_id])
-      if f && p && p.forklift.nil?
-        p.forklift = f
-        if p.save
-          return {
-              result:1,
-              content:''
-          }
-        end
-      else
-
+      if (f = ForkliftService.exits?(params[:forklift_id])).nil?
+        {result:0,content:'清单不存在!'}
+        return
       end
-        {result:0,content:''}
+      puts '----------------------'
+      if !ForkliftState.can_update?(f.state)
+        {result:0,content:'清单不能修改!'}
+        return
+      end
+      puts '----------------------'
+      if (p = PackageService.exits?(params[:package_id])).nil?
+        {result:0,content:'包装箱不存在!'}
+        return
+      end
+      puts '----------------------'
+
+
+      if ForkliftService.add_package(f,p)
+        {result:1,content:PackagePresenter.new(p).to_json}
+      else
+        {result:0,content:'添加失败!'}
+      end
     end
 
     # add package
     post :add_package do
+      if (f = ForkliftService.exits?(params[:forklift_id])).nil?
+        {result:0,content:'清单不存在!'}
+        return
+      end
+
+      if !ForkliftState.can_update?(f.state)
+        {result:0,content:'清单不能修改!'}
+        return
+      end
+
+      #create package
       args = {
           id:params[:package_id],
           part_id:params[:part_id],
@@ -64,15 +83,13 @@ module V1
           check_in_time:params[:check_in_time]
       }
       args[:user_id] = params[:user_id] if params.has_key?(:user_id)
+
       res = PackageService.create(args,current_user)
-      if res.result == 1
-        p = res.content
-        f = Forklift.find_by_id(params[:forklift_id])
-        if p && f
-          p.forklift = f
-          f.sum_packages = f.sum_packages + 1
-          if f.save && p.save
-            {result:1,content:{id:p.id,quantity_str:p.quantity_str,part_id:p.part_id,user_id:p.user_id,check_in_time:p.check_in_time}}
+      if res.result
+        p = res.object
+        if p
+          if ForkliftService.add_package(f,p)
+            {result:1,content:PackagePresenter.new(p).to_json}
           else
             {result:0,content:'添加包装箱失败'}
           end
@@ -90,13 +107,35 @@ module V1
     # remove package
     # id is forklift_item_id
     delete :remove_package do
-      result = ForkliftService.remove_package(params[:package_id])
-      {result:result,content:''}
+      if (p = PackageService.exits?(params[:package_id])).nil?
+        {result:0,content:'包装箱不存在!'}
+        return
+      end
+
+      if !PackageState.can_update?(p.state)
+        {result:0,content:'包装箱不能修改!'}
+        return
+      end
+
+      if ForkliftService.remove_package(p)
+        {result:1,content:''}
+      else
+        {result:0,content:''}
+      end
+
     end
 
     #delete forklift
     delete do
-      result = ForkliftService.delete(params[:id])
+      if (f = ForkliftService.exits?(params[:id])).nil?
+        {result:0,content:'清单不存在!'}
+        return
+      end
+      if !ForkliftState.can_update?(f.state)
+        {result:0,content:'清单不能修改!'}
+        return
+      end
+      result = ForkliftService.delete(f)
       {result:result,content:''}
     end
 
@@ -113,7 +152,17 @@ module V1
 
     # update forklift
     put do
-      result = ForkliftService.update(forklift_params)
+      if (f = ForkliftService.exits?(forklift_params[:id])).nil?
+        {result:0,content:'清单不存在!'}
+        return
+      end
+
+      if !ForkliftState.can_update?(f.state)
+        {result:0,content:'清单不能修改!'}
+        return
+      end
+
+      result = ForkliftService.update(f,forklift_params)
       if result
         {result:1,content:''}
       else

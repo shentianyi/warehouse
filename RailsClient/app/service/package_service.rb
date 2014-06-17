@@ -15,11 +15,14 @@ class PackageService
   # change,received
   def self.check package
     if package.nil?
-      return
+      return false
     end
-    package.state = PackageState::RECEIVED
-    package.forklift.accepted_packages = p.forklift.accepted_packages + 1
-    package.save
+
+    if package.forklift.nil?
+      return false
+    end
+
+    package.set_state(PackageState::RECEIVED)
   end
 
   def self.reject package
@@ -64,7 +67,7 @@ class PackageService
   end
 
   def self.avaliable_to_bind
-    Package.where('packages.forklift_id is NULL').all #.select('packages.id,packages.quantity_str,packages.part_id,packages.user_id,packages.check_in_time')
+    Package.where('packages.forklift_id is NULL').all.order(:created_at) #.select('packages.id,packages.quantity_str,packages.part_id,packages.user_id,packages.check_in_time')
   end
 
   def self.update package,args
@@ -83,8 +86,8 @@ class PackageService
     Package.unscoped.where(id:id,is_delete:[0,1]).first.nil?
   end
 
-  def self.package_exits?(id)
-    p = Package.find_by_id(id)
+  def self.exits?(id)
+    Package.find_by_id(id)
   end
 
   def self.part_exits?(id)

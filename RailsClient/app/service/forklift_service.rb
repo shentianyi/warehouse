@@ -1,51 +1,66 @@
 class ForkliftService
+  def self.delete forklift
+    if forklift.nil?
+      return false
+    end
 
-  def self.create
-
+    forklift.packages.all.each do |p|
+      p.remove_from_forklift
+    end
+    forklift.destroy
   end
 
-  def self.delete id
-    f = Forklift.find_by_id id
-    if f
-      f.packages.all.each do |p|
-        p.remove_from_forklift
+  def self.check forklift
+    if forklift.nil?
+      return false
+    end
+    if forklift.sum_packages == accepted_packages
+      forklift.set_state(ForkliftState::RECEIVED)
+    else
+      return true
+    end
+
+=begin
+    if forklift.set_state(ForkliftState::RECEIVED)
+      forklift.packages.each do |p|
+        p.set_state(PackageState::RECEIVED)
       end
-      f.destroy
-      1
     else
-      0
+      return false
     end
+=end
   end
 
-  def self.update args
-    f = Forklift.find_by_id(args[:id])
-    if f
-      f.update_attributes(args)
-      f
-    else
-      nil
+  def self.update forklift,args
+    if forklift.nil?
+      return  false
     end
+    forklift.update_attributes(args)
   end
 
   def self.avaliable_to_bind
-    Forklift.where('delivery_id is NULL').all #.select('id,created_at,stocker_id,whouse_id,user_id')
+    Forklift.where('delivery_id is NULL').all.order(:created_at)
   end
 
-  def self.add_package id,package_id
-    f = Forklift.find_by_id id
-    p = Package.find_by_id package_id
-    if f && p
-      f.sum_packages = f.sum_packages + 1
-      f.save
-      p.add_to_forklift f.id
+  def self.add_package forklift, package
+    if forklift.nil? || package.nil?
+      return false
     end
+
+    if package.forklift.nil?
+      return package.add_to_forklift forklift
+    end
+    true
   end
 
-  def self.remove_package package_id
-    p = Package.find_by_id package_id
-    if p
-      p.forklift.sum_packages = p.forklift.sum_packages - 1
-      p.remove_from_forklift
+  def self.remove_package package
+    if package.nil?
+      return false
     end
+    package.remove_from_forklift
+  end
+
+  def self.exits? id
+    Forklift.find_by_id(id)
   end
 end

@@ -56,4 +56,8 @@ class DeliveryService
   def self.search(args)
     deliveries = Delivery.where(args).all
   end
+
+  def exits? id
+    Delivery.find_by_id(id)
+  end
 end

@@ -24,9 +24,10 @@ class Package < ActiveRecord::Base
   #-------------
 
   # add_to_forklift
-  def add_to_forklift forklift_id
-    self.forklift_id = forklift_id
+  def add_to_forklift forklift
+    self.forklift = forklift
     set_position
+    self.save
   end
 
   # remove_form_forklift
@@ -39,6 +40,7 @@ class Package < ActiveRecord::Base
     true
   end
 
+  private
   # set_position
   def set_position
     if self.forklift.nil?

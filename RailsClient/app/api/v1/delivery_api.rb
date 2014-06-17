@@ -26,7 +26,7 @@ module V1
     # forklift id
     post :check_forklift do
       #d = Delivery.find_by_id(params[:id])
-      f = Forklift.find_by_id(params[:forklift_id])
+      f = ForkliftService.exits?(params[:forklift_id])
       if f && f.delivery.nil?
         {result:1,content:ForkliftPresenter.new(f).to_json}
       else
@@ -38,6 +38,10 @@ module V1
     # id: delivery id
     # forklift: forklift ids
     post :add_forklift do
+      if d = DeliveryService.exits?(params[:id])
+
+      end
+
       result = DeliveryService.add_forklifts(params[:id],params[:forklifts])
       {result:result,content:''}
     end

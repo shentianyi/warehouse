@@ -62,7 +62,7 @@ module V1
 
     # update package
     put do
-      if p = PackageService.package_exits?(package_params[:id])
+      if p = PackageService.exits?(package_params[:id])
         if PackageService.update(p,package_params)
           {result:1,content:'修改成功!'}
         else
@@ -76,7 +76,7 @@ module V1
     # delete package
     # update is_delete to true
     delete do
-      if p = PackageService.package_exits?(params[:id])
+      if p = PackageService.exits?(params[:id])
         if PackageService.delete(p)
           {result:1,content:'删除成功'}
         else
@@ -89,7 +89,7 @@ module V1
 
     # check package
     post :check do
-      if p = PackageService.package_exits?(params[:id])
+      if p = PackageService.exits?(params[:id])
         if PackageService.check(p)
           {result:1,content:'检查成功'}
         else
