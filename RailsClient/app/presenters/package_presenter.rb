@@ -1,8 +1,16 @@
 class PackagePresenter<Presenter
-  def_delegators :@package,:id,:part_id,:quantity,:quantity_str,:check_in_time,:user_id,:location_id,:state
+  def_delegators :@package,:id,:part_id,:quantity,:quantity_str,:check_in_time,:user_id,:location_id,:state,:package_position,:position
 
   def initialize(package)
     @package = package
+  end
+
+  def position_nr
+    if self.position
+      self.position.detail
+    else
+      ''
+    end
   end
 
   def to_json
@@ -14,7 +22,8 @@ class PackagePresenter<Presenter
         check_in_time:self.check_in_time,
         user_id:self.user_id,
         state:self.state,
-        state_display:PackageState.display(self.state)
+        state_display:PackageState.display(self.state),
+        position_nr:self.position_nr
     }
   end
 end

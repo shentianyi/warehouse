@@ -1,35 +1,24 @@
 class PackageService
 
   def self.delete id
-    p = Package.find_by_id id
-    if p.nil?
-      0
-    end
-    # if this already been added into forklift
-    unless p.forklift.nil?
+    p=Package.find_by_id id
+    if p
       p.remove_from_forklift
-    end
-    if p.destroy == true
-      1
+      p.destroy
     else
-      0
+      false
     end
   end
 
   # check package
-  # change
+  # change,received
   def self.check id
     p = Package.find_by_id(id)
     #
     if p
       p.state = PackageState::RECEIVED
       p.forklift.accepted_packages = p.forklift.accepted_packages + 1
-      #p.forklift_item.state = ForkliftItemState::RECEIVED
-      if p.save==true
-        1
-      else
-        0
-      end
+      p.save
     else
       false
     end
@@ -53,7 +42,7 @@ class PackageService
 
   def self.create args,current_user=nil
     msg = Message.new
-    msg.result =0
+    msg.result = false
 
     #current_user
     unless args.has_key?(:user_id)
@@ -61,19 +50,18 @@ class PackageService
     end
     args[:location_id] = current_user.location.id if current_user.location
     #
-    if Part.find_by_id(args[:part_id]).nil?
-      msg.content = '零件不存在'
+    if !part_exits?(args[:part_id])
+      msg.content = '零件号不存在'
       return msg
     end
     #if exited
-    p = Package.where(id:args[:id],is_delete:[0,1]).first
-    if p
+    if package_exits?(args[:id])
       msg.content << '唯一号重复,请使用新的唯一号'
     else
       p = Package.new(args)
       if p.save
-        msg.result = 1
-        msg.content = p
+        msg.result = true
+        msg.object = p
       else
         msg.content << p.errors.full_messages
       end
@@ -92,23 +80,21 @@ class PackageService
   end
 
   def self.update args
+    msg = Message.new
     p = Package.find_by_id(args[:id])
     if p && p.update_attributes(args) == true
-      1
+      msg.result = true
     else
-      0
+      msg.content = p.errors.full_messages
     end
+    msg
   end
 
-  def self.id_avaliable? id
-    unless Package.find_by_id id
-      1
-    else
-      0
-    end
+  def self.package_exits?(id)
+    !Package.unscoped.where(id:id,is_delete:[0,1]).first.nil?
   end
 
-  def self.validate_quantity quantity
-    1
+  def self.part_exits?(id)
+    !Part.find_by_id(id).nil?
   end
 end
