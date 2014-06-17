@@ -1,6 +1,6 @@
 module V1
   module Sync
-    class ShouseSyncAPI<SyncBase
+    class WhouseSyncAPI<SyncBase
       namespace 'whouses'
 
       get do
