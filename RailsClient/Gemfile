@@ -51,3 +51,8 @@ gem 'rack-oauth2'
 group :development, :test do
   gem 'rspec-rails'
 end
+
+# For sync
+gem 'whenever'
+gem 'rest_client'
+gem 'oauth'
