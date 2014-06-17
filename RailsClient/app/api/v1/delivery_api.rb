@@ -171,7 +171,7 @@ module V1
       DeliveryPresenter.init_presenters(DeliveryService.search(arg)).each do |dp|
         data<<dp.to_json
       end
-      data
+      {result:1,content:data}
     end
 
     # confirm_receive
