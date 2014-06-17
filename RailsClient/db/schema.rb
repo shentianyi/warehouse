@@ -117,10 +117,12 @@ ActiveRecord::Schema.define(version: 20140617095358) do
   create_table "part_positions", force: true do |t|
     t.string   "part_id"
     t.string   "position_id"
+    t.string   "position_detail"
+    t.string   "whouse_name"
     t.string   "whouse_id"
-    t.boolean  "is_delete",   default: false
-    t.boolean  "is_dirty",    default: true
-    t.boolean  "is_new",      default: true
+    t.boolean  "is_delete",       default: false
+    t.boolean  "is_dirty",        default: true
+    t.boolean  "is_new",          default: true
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -176,7 +178,7 @@ ActiveRecord::Schema.define(version: 20140617095358) do
 
   create_table "sync_pools", force: true do |t|
     t.string   "table_name"
-    t.boolean  "locked"
+    t.boolean  "locked",     default: true
     t.string   "client_ip"
     t.datetime "created_at"
     t.datetime "updated_at"

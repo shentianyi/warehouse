@@ -7,11 +7,13 @@ namespace :sync do
     #Sync::Execute::WhouseSync.sync
     #Sync::Execute::PartSync.sync
     #Sync::Execute::PositionSync.sync
-    #Sync::Execute::PackagePositionSync.sync
+    #Sync::Execute::PartPositionSync.sync
     #
     ## dynamic data
     #Sync::Execute::DeliverySync.sync
     #Sync::Execute::ForkliftSync.sync
+    #Sync::Execute::PackageSync.sync
+    #Sync::Execute::PackagePositionSync.sync
     #Sync::Execute::StateLogSync.sync
   end
 end
