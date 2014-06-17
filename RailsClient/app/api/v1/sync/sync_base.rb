@@ -4,7 +4,10 @@ module V1
       include OauthAPIGuard
       version 'v1', :using => :path
       namespace 'sync'
+
       mount UserSyncAPI
+      mount DeliverySyncAPI
+      mount ForkliftSyncAPI
     end
   end
 end

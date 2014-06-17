@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140616083045) do
+ActiveRecord::Schema.define(version: 20140617083323) do
 
   create_table "deliveries", force: true do |t|
     t.string   "uuid",           limit: 36,                 null: false
@@ -117,12 +117,10 @@ ActiveRecord::Schema.define(version: 20140616083045) do
   create_table "part_positions", force: true do |t|
     t.string   "part_id"
     t.string   "position_id"
-    t.string   "position_detail"
-    t.string   "whouse_name"
     t.string   "whouse_id"
-    t.boolean  "is_delete",       default: false
-    t.boolean  "is_dirty",        default: true
-    t.boolean  "is_new",          default: true
+    t.boolean  "is_delete",   default: false
+    t.boolean  "is_dirty",    default: true
+    t.boolean  "is_new",      default: true
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -175,6 +173,14 @@ ActiveRecord::Schema.define(version: 20140616083045) do
   end
 
   add_index "state_logs", ["id"], name: "index_state_logs_on_id", using: :btree
+
+  create_table "sync_pools", force: true do |t|
+    t.string   "table_name"
+    t.boolean  "locked"
+    t.string   "client_ip"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", force: true do |t|
     t.string   "uuid",                   limit: 36,                 null: false

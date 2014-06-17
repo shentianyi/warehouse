@@ -9,7 +9,7 @@ module Extensions
       before_update :reset_dirty_flag
 
       def generate_uuid
-        self.id = self.send(:generate_id) if self.respond_to?(:generate_id)
+        self.id = self.send(:generate_id) if self.id.nil? && self.respond_to?(:generate_id)
         self.id = SecureRandom.uuid if self.id.nil?
         self.uuid= SecureRandom.uuid if self.respond_to?(:uuid) and self.send(:uuid).nil?
       end
@@ -25,9 +25,25 @@ module Extensions
         self.save
       end
 
+      # for sync
+      def self.fk_condition(arg)
+        c={}
+        FK.each do |k|
+          c[k]=arg[k]
+        end
+      end
+
       def gen_sync_attr(item)
         attr={}
         self.attributes.except('uuid','is_delete', 'is_dirty', 'is_new').keys.each do |k|
+          attr[k.to_sym]=item.send(k.to_sym)
+        end
+        return attr
+      end
+
+      def gen_uniq_sync_attr(item)
+        attr={}
+        self.attributes.except('id','is_delete', 'is_dirty', 'is_new').keys.each do |k|
           attr[k.to_sym]=item.send(k.to_sym)
         end
         return attr

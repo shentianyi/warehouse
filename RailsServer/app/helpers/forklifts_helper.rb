@@ -1,0 +1,2 @@
+module ForkliftsHelper
+end
