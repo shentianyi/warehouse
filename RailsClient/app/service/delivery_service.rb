@@ -42,9 +42,14 @@ class DeliveryService
     forklift.remove_from_delivery
   end
 
-  def self.search(args)
-    received_date = Time.parse(args[:received_date])
-    Delivery.where(state:args[:state],received_date:(received_date.beginning_of_day..received_date.end_of_day)).all.order(:created_at)
+  def self.search(args,all=false)
+    if all
+      Delivery.where(args)
+    else
+      received_date = Time.parse(args[:received_date])
+      Delivery.where(state:args[:state],received_date:(received_date.beginning_of_day..received_date.end_of_day)).all.order(:created_at)
+    end
+
   end
 
   def self.confirm_received(delivery)

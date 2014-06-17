@@ -81,8 +81,9 @@ class ForkliftService
 
     if package.forklift.nil?
       return package.add_to_forklift forklift
+    else
+      false
     end
-    true
   end
 
   def self.remove_package package

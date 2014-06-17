@@ -21,8 +21,8 @@ u3.location = L1
 u3.role_id = 100
 u3.save
 
-Part.create(id:'pt001',user_id:'user001')
-Part.create(id:'pt002',user_id:'user001')
+Part.create(id:'PT001',user_id:'user001')
+Part.create(id:'PT002',user_id:'user001')
 
-PartPosition.create(part_id:'pt001',position_id:p1.id,position_detail:p1.detail,whouse_id:'wh001',whouse_name:'3MB')
-PartPosition.create(part_id:'pt002',position_id:p2.id,position_detail:p2.detail,whouse_id:'wh002',whouse_name:'3GM')
+PartPosition.create(part_id:'PT001',position_id:p1.id,position_detail:p1.detail,whouse_id:'wh001',whouse_name:'3MB')
+PartPosition.create(part_id:'PT002',position_id:p2.id,position_detail:p2.detail,whouse_id:'wh002',whouse_name:'3GM')

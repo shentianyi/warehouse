@@ -31,11 +31,14 @@ class Ability
     user ||= User.new
 
     if user.admin?
-        can :manage, :all
+      can :manage, :all
     elsif user.manager?
-        can :read, :all
+      can :read, :all
+      can :manage,User,:id=> user.id
     else
-        can :manage, :all
+      can :readl, :all
+      can :manage,[Delivery,Forklift,Package,PackagePosition]
+      can :manage,User,:id=> user.id
     end
   end
 end

@@ -98,6 +98,10 @@ class PackageService
       return false
     end
 
+    if !part_exits?(args[:part_id])
+      return false
+    end
+
     if !PackageState.can_update?(package.state)
       return false
     end
