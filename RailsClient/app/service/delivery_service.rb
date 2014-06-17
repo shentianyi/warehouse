@@ -83,6 +83,7 @@ class DeliveryService
     if delivery.nil?
       return false
     end
+    delivery.delivery_date = Time.now
     delivery.set_state(DeliveryState::WAY)
     delivery.forklifts.each do |f|
       ForkliftService.send(f)

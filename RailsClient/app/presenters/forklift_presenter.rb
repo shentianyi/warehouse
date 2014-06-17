@@ -1,5 +1,5 @@
 class ForkliftPresenter<Presenter
-  def_delegators :@forklift,:id,:whouse_id,:created_at,:user,:stocker,:state,:packages,:user_id,:stocker_id,:whouse
+  def_delegators :@forklift,:id,:whouse_id,:created_at,:user,:stocker,:state,:packages,:user_id,:stocker_id,:whouse,:sum_packages,:accepted_packages
 
   def initialize(forklift)
     @forklift=forklift
@@ -48,7 +48,9 @@ class ForkliftPresenter<Presenter
         created_at:self.create_time,
         user_id:self.creator,
         stocker_id:self.stockman,
-        whouse_id:self.whouse_name
+        whouse_id:self.whouse_name,
+        sum_packages:self.sum_packages,
+        accepted_packages:self.accepted_packages
     }
   end
 
@@ -59,6 +61,8 @@ class ForkliftPresenter<Presenter
         user_id:self.creator,
         stocker_id:self.stockman,
         whouse_id:self.whouse_name,
+        sum_packages:self.sum_packages,
+        accepted_packages:self.accepted_packages,
         packages:self.all_packages
     }
   end

@@ -28,6 +28,7 @@ module V1
     post :check_forklift do
       #d = Delivery.find_by_id(params[:id])
       f = ForkliftService.exits?(params[:forklift_id])
+      puts f.to_json
       if f && f.delivery.nil?
         {result:1,content:ForkliftPresenter.new(f).to_json}
       else
@@ -87,20 +88,15 @@ module V1
     post do
       d = Delivery.new(delivery_params)
       d.user = current_user
-      if params.has_key?(:forklifts)
-        params[:forklifts].each do |forklift_id|
-          f = Forklift.find_by_id(forklift_id)
-          if f
-            d.forklifts << f
-          end
-        end
-      end
+      result = d.save
 
-      result = d.save == true ? 1:0
+      if params.has_key?(:forklifts)
+        DeliveryService.add_forklifts(d,params[:forklifts])
+      end
       if result
-        {result:result,content:DeliveryPresenter.new(d).to_json}
+        {result:1,content:DeliveryPresenter.new(d).to_json}
       else
-        {result:result,content:d.errors}
+        {result:0,content:d.errors}
       end
 
     end
@@ -115,7 +111,7 @@ module V1
         return {result:0,content:'运单不能修改'}
       end
 
-      if  DeliveryService.delete(params[:id])
+      if  DeliveryService.delete(d)
         {result:1,content:''}
       else
         {result:0,content:''}
@@ -128,7 +124,9 @@ module V1
       if (d = DeliveryService.exit?(params[:id])).nil?
         return {result:0,content:'运单不存在!'}
       end
-      {result:1,content:DeliveryPresenter.new(d).to_json_with_forklifts(false)}
+      content = DeliveryPresenter.new(d).to_json_with_forklifts(false)
+      puts content
+      {result:1,content:content}
     end
 
     put do
