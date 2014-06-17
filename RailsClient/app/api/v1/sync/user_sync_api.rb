@@ -4,7 +4,6 @@ module V1
       namespace 'users'
       guard_all!
       get do
-        puts params[:last_time]
         User.where('updated_at>=?', params[:last_time]).all
       end
 
