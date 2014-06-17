@@ -2,7 +2,6 @@ module V1
   module Sync
     class ForkliftSyncAPI<SyncBase
       namespace 'forklifts'
-      guard_all!
       get do
         Forklift.unscoped.where('updated_at>=?', params[:last_time]).all
       end

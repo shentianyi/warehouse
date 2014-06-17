@@ -2,35 +2,36 @@ module V1
   module Sync
     class UserSyncAPI<SyncBase
       namespace 'users'
-      guard_all!
+
       get do
         Hacker.unscoped.where('updated_at>=?', params[:last_time]).all
       end
 
       post do
-        puts params
-
-        user=Hacker.new(JSON.parse(params[:user]))
-        #user.save
-        puts user
-        user.save!
-        user
+        users=JSON.parse(params[:hacker])
+        users.each do |user|
+          user=Hacker.new(user)
+          puts user
+          user.save
+        end
       end
 
       put '/:id' do
-        if user=Hacker.find_by_id(params[:id])
-          user.update(JSON.parse(params[:user]))
+        users=JSON.parse(params[:hacker])
+        users.each do |user|
+          if u=Hacker.unscoped.find_by_id(user['id'])
+            u.update(user.except('id'))
+          end
         end
-        user
       end
 
-      delete '/:id' do
-        puts params
-        puts params[:user]
-        if user=Hacker.find_by_id(params[:id])
-          user.update(is_delete: true)
+      post :delete do
+        users=JSON.parse(params[:hacker])
+        users.each do |id|
+          if user=Hacker.unscoped.find_by_id(id)
+            user.update(is_delete: true)
+          end
         end
-        user
       end
     end
   end

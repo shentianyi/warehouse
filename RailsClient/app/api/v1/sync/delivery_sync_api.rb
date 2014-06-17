@@ -2,7 +2,6 @@ module V1
   module Sync
     class DeliverySyncAPI<SyncBase
       namespace 'deliveries'
-      guard_all!
       get do
         Delivery.unscoped.where('updated_at>=?', params[:last_time]).all
       end

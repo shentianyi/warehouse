@@ -26,7 +26,6 @@ module V1
       end
 
       post :delete do
-        puts params
         users=JSON.parse(params[:hacker])
         users.each do |id|
           if user=Hacker.unscoped.find_by_id(id)
