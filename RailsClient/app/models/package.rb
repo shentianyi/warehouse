@@ -4,7 +4,7 @@ class Package < ActiveRecord::Base
 
   #belongs_to :forklift, :throuth => :forklift_item
   #has_one :forklift_item, :dependent => :destroy
-  has_one :package_position
+  has_one :package_position, :dependent => :destroy
   has_one :position, :through => :package_position
   has_many :state_logs, as: :stateable
 
@@ -45,7 +45,7 @@ class Package < ActiveRecord::Base
       return
     end
 
-    if pp = PartPosition.where("part_id = ? ADN whouse_name = ? ",self.part_id,self.forklift.whouse).first
+    if pp = PartPosition.where(part_id:self.part_id,whouse_id:self.forklift.whouse_id).first
       if self.package_position.nil?
         self.create_package_position(position_id: pp.position_id)
       else
