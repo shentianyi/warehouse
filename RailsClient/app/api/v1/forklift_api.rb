@@ -23,8 +23,7 @@ module V1
     # create forklift
     post do
       if Whouse.find_by_id(forklift_params[:whouse_id]).nil?
-        {result:0,content:'部门未找到'}
-        return
+        return {result:0,content:'部门未找到'}
       end
       f = Forklift.new(forklift_params)
       unless forklift_params.has_key?(:user_id)
@@ -40,22 +39,14 @@ module V1
     # check package
     post :check_package do
       if (f = ForkliftService.exits?(params[:forklift_id])).nil?
-        {result:0,content:'清单不存在!'}
-        return
+        return {result:0,content:'清单不存在!'}
       end
-      puts '----------------------'
       if !ForkliftState.can_update?(f.state)
-        {result:0,content:'清单不能修改!'}
-        return
+        return {result:0,content:'清单不能修改!'}
       end
-      puts '----------------------'
       if (p = PackageService.exits?(params[:package_id])).nil?
-        {result:0,content:'包装箱不存在!'}
-        return
+        return {result:0,content:'包装箱不存在!'}
       end
-      puts '----------------------'
-
-
       if ForkliftService.add_package(f,p)
         {result:1,content:PackagePresenter.new(p).to_json}
       else
@@ -66,13 +57,11 @@ module V1
     # add package
     post :add_package do
       if (f = ForkliftService.exits?(params[:forklift_id])).nil?
-        {result:0,content:'清单不存在!'}
-        return
+        return {result:0,content:'清单不存在!'}
       end
 
       if !ForkliftState.can_update?(f.state)
-        {result:0,content:'清单不能修改!'}
-        return
+        return {result:0,content:'清单不能修改!'}
       end
 
       #create package
@@ -108,13 +97,11 @@ module V1
     # id is forklift_item_id
     delete :remove_package do
       if (p = PackageService.exits?(params[:package_id])).nil?
-        {result:0,content:'包装箱不存在!'}
-        return
+        return{result:0,content:'包装箱不存在!'}
       end
 
       if !PackageState.can_update?(p.state)
-        {result:0,content:'包装箱不能修改!'}
-        return
+        return {result:0,content:'包装箱不能修改!'}
       end
 
       if ForkliftService.remove_package(p)
@@ -128,12 +115,10 @@ module V1
     #delete forklift
     delete do
       if (f = ForkliftService.exits?(params[:id])).nil?
-        {result:0,content:'清单不存在!'}
-        return
+        return {result:0,content:'清单不存在!'}
       end
-      if !ForkliftState.can_update?(f.state)
-        {result:0,content:'清单不能修改!'}
-        return
+      if !ForkliftState.can_delete?(f.state)
+        return {result:0,content:'清单不能修改!'}
       end
       result = ForkliftService.delete(f)
       {result:result,content:''}
@@ -153,13 +138,11 @@ module V1
     # update forklift
     put do
       if (f = ForkliftService.exits?(forklift_params[:id])).nil?
-        {result:0,content:'清单不存在!'}
-        return
+        return {result:0,content:'清单不存在!'}
       end
 
       if !ForkliftState.can_update?(f.state)
-        {result:0,content:'清单不能修改!'}
-        return
+        return {result:0,content:'清单不能修改!'}
       end
 
       result = ForkliftService.update(f,forklift_params)

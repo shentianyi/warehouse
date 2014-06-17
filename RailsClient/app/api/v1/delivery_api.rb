@@ -19,6 +19,7 @@ module V1
       DeliveryPresenter.init_presenters(deliveries).each do |d|
         data << d.to_json
       end
+      puts data
       {result:true,content:data}
     end
 
@@ -38,31 +39,49 @@ module V1
     # id: delivery id
     # forklift: forklift ids
     post :add_forklift do
-      if d = DeliveryService.exits?(params[:id])
-
+      if (d = DeliveryService.exit?(params[:id])).nil?
+        return {result:0,content:'运单不存在!'}
       end
 
-      result = DeliveryService.add_forklifts(params[:id],params[:forklifts])
-      {result:result,content:''}
+      if !DeliveryState.can_update?(d.state)
+        return {result:0,content:'运单不能修改'}
+      end
+
+      if DeliveryService.add_forklifts(d,params[:forklifts])
+        {result:1,content:''}
+      else
+        {result:0,content:''}
+      end
+
     end
 
     # remove package
     # id is forklift_id
     delete :remove_forklift do
-      result = DeliveryService.remove_forklifk(params[:forklift_id])
+      if (f = ForkliftService.exits?(params[:forklift_id])).nil?
+        return {result:0,content:'清单不存在!'}
+      end
+      if !ForkliftState.can_update?(f.state)
+        return {result:0,content:'清单不能修改!'}
+      end
+
+      result = DeliveryService.remove_forklifk(f)
       {result:result,content:''}
     end
 
     # send delivery
     post :send do
-      d =Delivery.find_by_id(params[:id])
-      if d
-        d.state = DeliveryState::WAY
-        result = d.save == true ? 1:0
-      else
-        result = 0
+      if (d = DeliveryService.exit?(params[:id])).nil?
+        return {result:0,content:'运单不存在!'}
       end
-      {result:result,content:''}
+      if !DeliveryState.can_update?(d.state)
+        return {result:0,content:'运单不能修改'}
+      end
+      if DeliveryService.send(d)
+        {result:1,content:''}
+      else
+        {result:0,content:''}
+      end
     end
 
     post do
@@ -88,25 +107,40 @@ module V1
 
     # delete delivery
     delete do
-      result = DeliveryService.delete(params[:id])
-      {result:result,content:''}
-    end
+      if (d = DeliveryService.exit?(params[:id])).nil?
+        return {result:0,content:'运单不存在!'}
+      end
 
-    # get delivery detail
-    get :detail do
-      d = Delivery.find_by_id(params[:id])
-      data = []
-      if d
-        {result:1,content:DeliveryPresenter.new(d).to_json_with_forklifts(false)}
+      if !DeliveryState.can_delete?(d.state)
+        return {result:0,content:'运单不能修改'}
+      end
+
+      if  DeliveryService.delete(params[:id])
+        {result:1,content:''}
       else
-        {result:0,content:'运单未找到!'}
+        {result:0,content:''}
       end
 
     end
 
+    # get delivery detail
+    get :detail do
+      if (d = DeliveryService.exit?(params[:id])).nil?
+        return {result:0,content:'运单不存在!'}
+      end
+      {result:1,content:DeliveryPresenter.new(d).to_json_with_forklifts(false)}
+    end
+
     put do
-      d = DeliveryService.update(delivery_params)
-      if d
+      if (d = DeliveryService.exit?(delivery_params[:id])).nil?
+        return {result:0,content:'运单不存在!'}
+      end
+
+      if !DeliveryState.can_delete?(d.state)
+        return {result:0,content:'运单不能修改'}
+      end
+
+      if DeliveryService.update(d,delivery_params)
         {result:1,content:''}
       else
         {result:0,contnet:''}
@@ -115,51 +149,43 @@ module V1
 
     # receive delivery
     post :receive do
-      d = Delivery.find_by_id(params[:id])
-      if d
-        #d.received_date = Time.now
-        #d.receiver = current_user
-        d.state = DeliveryState::DESTINATION
-        result = d.save == true ? 1:0
-
-        {result:1,content:DeliveryPresenter.new(d).to_json_with_forklifts(true)}
-      else
-        result = 0
-        {result:result,content:''}
+      if (d = DeliveryService.exit?(params[:id])).nil?
+        return {result:0,content:'运单不存在!'}
       end
 
+      if DeliveryService.receive(d)
+        {result:1,content:DeliveryPresenter.new(d).to_json_with_forklifts(true)}
+      else
+        {result:0,content:''}
+      end
     end
 
     # received deliveries
     get :received do
       arg={
-            state: DeliveryState::RECEIVED,
-            received_date: params[:received_date]
+            state: DeliveryState::DESTINATION,
+            received_date: params[:receive_date]
       }
       arg[:user_id]=params[:user_id] unless params[:user_id].blank?
-
-      DeliveryService.search(arg)
+      data = []
+      DeliveryPresenter.init_presenters(DeliveryService.search(arg)).each do |dp|
+        data<<dp.to_json
+      end
+      data
     end
 
     # confirm_receive
     post :confirm_receive do
-      d = Delivery.find_by_id(params[:id])
-      if d
-        d.receiver = current_user
-        d.received_date = Time.now
-        d.state = DeliveryState::RECEIVED
-        if d.save
-          {
-              result:1,content:''
-          }
-        else
-          {
-              result:0,content:'接收失败!'
-          }
-        end
-      else
-        {result:0,content:'运单未找到!'}
+      if (d = DeliveryService.exit?(params[:id])).nil?
+        return {result:0,content:'运单不存在!'}
       end
+
+      if DeliveryService.confirm_received(d)
+        {result:1,content:''}
+      else
+        {result:0,content:'接收失败!'}
+      end
+
     end
   end
 end

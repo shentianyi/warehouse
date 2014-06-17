@@ -2,13 +2,30 @@ class PackageService
 
   def self.delete package
     if package.nil?
-      return
+      return false
     end
 
     if PackageState.can_delete?(package.state)
       package.remove_from_forklift
       package.destroy
+    else
+      return false
     end
+
+  end
+
+  def self.receive(package)
+    if package.nil?
+      return false
+    end
+    package.set_state(PackageState::DESTINATION)
+  end
+
+  def self.send(package)
+    if package.nil?
+      return false
+    end
+    package.set_state(PackageState::WAY)
   end
 
   # check package
@@ -22,13 +39,19 @@ class PackageService
       return false
     end
 
-    package.set_state(PackageState::RECEIVED)
+    if package.set_state(PackageState::RECEIVED)
+      package.forklift.package_checked
+      true
+    else
+      false
+    end
   end
 
   def self.reject package
     if package.nil?
-      return
+      return false
     end
+    true
   end
 
   def self.create args,current_user=nil

@@ -10,6 +10,38 @@ class ForkliftService
     forklift.destroy
   end
 
+  def self.confirm_received(forklift)
+    if forklift.nil?
+      return false
+    end
+
+    forklift.set_state(ForkliftState::RECEIVED)
+  end
+
+  def self.receive(forklift)
+    if forklift.nil?
+      return false
+    end
+
+    forklift.set_state(ForkliftState::DESTINATION)
+    forklift.packages.each do |p|
+      PackageService.receive(p)
+    end
+    true
+  end
+
+  def self.send(forklift)
+    if forklift.nil?
+      return false
+    end
+
+    forklift.set_state(ForkliftState::WAY)
+    forklift.packages.each do |p|
+      PackageService.send(p)
+    end
+    true
+  end
+
   def self.check forklift
     if forklift.nil?
       return false
