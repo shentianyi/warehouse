@@ -49,4 +49,5 @@ class Delivery < ActiveRecord::Base
     packages.where(state: PackageState::DESTINATION)
     .select('packages.*,forklifts.whouse_id')
   end
+
 end

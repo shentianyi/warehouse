@@ -5,13 +5,13 @@ module Sync
     ACCESS_TOKEN='3dcba17f596969a676bfdd90b5425c703f983acf7306760e1057c95afe9f17b1d'
 
     def self.sync
-      puts '))))))'
+      puts '--------'
       if Config.enabled
         #begin
-        pull &pull_block
-        post &post_block
-        put  &put_block
-        delete &delete_block
+        #pull &pull_block
+        #post &post_block
+        #put &put_block
+        #delete &delete_block
         #rescue => e
         #  puts e.class
         #  puts e.to_s
@@ -67,6 +67,30 @@ module Sync
         end
       end
     end
+
+    # blocks
+
+    def self.post_block
+      Proc.new do |item, response|
+        model.record_timestamps=false
+        item.save
+      end
+    end
+
+    def self.put_block
+      Proc.new do |item, response|
+        model.record_timestamps=false
+        item.save
+      end
+    end
+
+    def self.delete_block
+      Proc.new do |item, response|
+        model.record_timestamps=false
+        item.save
+      end
+    end
+
 
     private
 

@@ -1,7 +1,6 @@
 class CreatePartPositions < ActiveRecord::Migration
   def change
     create_table(:part_positions, :id=>false )do |t|
-      t.string :uuid, :limit => 36, :null => false
       t.string :id, :limit=>36, :primary=>true, :null => false
       t.string :part_id
       t.string :position_id
@@ -44,7 +43,6 @@ DROP FOREIGN KEY fk_part_positions_parts
       end
     end
 
-    add_index :part_positions, :uuid
     add_index :part_positions, :id
     add_index :part_positions, :position_id
     add_index :part_positions, :whouse_id
