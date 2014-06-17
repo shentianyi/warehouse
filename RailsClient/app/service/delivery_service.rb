@@ -1,59 +1,91 @@
 class DeliveryService
 
-  def self.delete id
-    d = Delivery.find_by_id(id)
-    if d
-      d.forklifts.each do |f|
+  def self.delete delivery
+    if delivery
+      delivery.forklifts.each do |f|
         f.remove_from_delivery
       end
-      d.destroy
-      1
+      delivery.destroy
     else
-      0
+      false
     end
   end
 
-  def self.update args
-    puts args
-    d = Delivery.find_by_id(args[:id])
-    if d
-      d.update_attributes(args)
-      d
-    else
-      nil
+  def self.update delivery,args
+    if delivery.nil?
+      return false
     end
+    delivery.update_attributes(args)
   end
 
-  def self.add_forklifts id,forklift_ids
-    d = Delivery.find_by_id id
-    if d
-      unless forklift_ids.nil?
-        forklift_ids.each do |f_id|
-          f = Forklift.find_by_id(f_id)
-          if f
-            f.add_to_delivery(d.id)
-            #f.delivery = d
-            #f.save
-          end
+  def self.add_forklifts delivery,forklift_ids
+    if delivery.nil?
+      return false
+    end
+    unless forklift_ids.nil?
+      forklift_ids.each do |f_id|
+        f = Forklift.find_by_id(f_id)
+        if f
+          f.add_to_delivery(delivery.id)
         end
       end
-      1
-    else
-      0
     end
+    true
   end
 
-  def self.remove_forklifk forklift_id
-    f = Forklift.find_by_id forklift_id
+  def self.remove_forklifk forklift
 
-    if f && f.delivery
-      result = f.remove_from_delivery == true ? 1:0
-    else
-      0
+    if forklift.nil?
+      return false
     end
+
+    forklift.remove_from_delivery
   end
 
   def self.search(args)
-    deliveries = Delivery.where(args).all
+    received_date = Time.parse(args[:received_date])
+    Delivery.where(state:args[:state],received_date:(received_date.beginning_of_day..received_date.end_of_day)).all.order(:created_at)
+  end
+
+  def self.confirm_received(delivery)
+    if delivery.nil?
+      return false
+    end
+    if delivery.set_state(DeliveryState::RECEIVED)
+      delivery.forklifts.each do |f|
+        ForkliftService.confirm_received(f)
+      end
+      delivery.receiver = current_user
+      delivery.received_date = Time.now
+      delivery.save
+    else
+      false
+    end
+  end
+
+  def self.receive(delivery)
+    if delivery.nil?
+      return false
+    end
+   delivery.set_state(DeliveryState::DESTINATION)
+    delivery.forklifts.each do |f|
+      ForkliftService.receive(f)
+    end
+    true
+  end
+
+  def self.send(delivery)
+    if delivery.nil?
+      return false
+    end
+    delivery.set_state(DeliveryState::WAY)
+    delivery.forklifts.each do |f|
+      ForkliftService.send(f)
+    end
+    true
+  end
+
+  def self.exit? id
+    Delivery.find_by_id(id)
   end
 end

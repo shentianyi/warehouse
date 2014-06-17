@@ -1,59 +1,62 @@
 class PackageService
 
-  def self.delete id
-    p = Package.find_by_id id
-    if p.nil?
-      0
+  def self.delete package
+    if package.nil?
+      return false
     end
-    # if this already been added into forklift
-    unless p.forklift.nil?
-      p.remove_from_forklift
-    end
-    if p.destroy == true
-      1
+
+    if PackageState.can_delete?(package.state)
+      package.remove_from_forklift
+      package.destroy
     else
-      0
+      return false
     end
+
+  end
+
+  def self.receive(package)
+    if package.nil?
+      return false
+    end
+    package.set_state(PackageState::DESTINATION)
+  end
+
+  def self.send(package)
+    if package.nil?
+      return false
+    end
+    package.set_state(PackageState::WAY)
   end
 
   # check package
-  # change
-  def self.check id
-    p = Package.find_by_id(id)
-    #
-    if p
-      p.state = PackageState::RECEIVED
-      p.forklift.accepted_packages = p.forklift.accepted_packages + 1
-      #p.forklift_item.state = ForkliftItemState::RECEIVED
-      if p.save==true
-        1
-      else
-        0
-      end
+  # change,received
+  def self.check package
+    if package.nil?
+      return false
+    end
+
+    if package.forklift.nil?
+      return false
+    end
+
+    if package.set_state(PackageState::RECEIVED)
+      package.forklift.package_checked
+      true
     else
       false
     end
   end
 
-  def self.reject package_id
-    p = Package.find_by_id package_id
-    if p
-      if p.state == PackageState::RECEIVED
-        p.state == PackageState::REJECTED
-        #p.forklift_item.state = ForkliftItemState::REJECTED
-        p.forklift.accepted_packages = p.forklift.accepted_packages - 1
-        p.save
-      else
-        false
-      end
-    else
-      false
+  def self.reject package
+    if package.nil?
+      return false
     end
+    true
   end
 
   def self.create args,current_user=nil
     msg = Message.new
-    msg.result =0
+    msg.result = false
 
     #current_user
     unless args.has_key?(:user_id)
@@ -61,22 +64,21 @@ class PackageService
     end
     args[:location_id] = current_user.location.id if current_user.location
     #
-    if Part.find_by_id(args[:part_id]).nil?
-      msg.content = '零件不存在'
+    if !part_exits?(args[:part_id])
+      msg.content = '零件号不存在'
       return msg
     end
     #if exited
-    p = Package.where(id:args[:id],is_delete:[0,1]).first
-    if p
-      msg.content << '唯一号重复,请使用新的唯一号'
-    else
+    if package_id_avaliable?(args[:id])
       p = Package.new(args)
       if p.save
-        msg.result = 1
-        msg.content = p
+        msg.result = true
+        msg.object = p
       else
         msg.content << p.errors.full_messages
       end
+    else
+      msg.content << '唯一号重复,请使用新的唯一号'
     end
     msg
   end
@@ -88,27 +90,30 @@ class PackageService
   end
 
   def self.avaliable_to_bind
-    Package.where('packages.forklift_id is NULL').all #.select('packages.id,packages.quantity_str,packages.part_id,packages.user_id,packages.check_in_time')
+    Package.where('packages.forklift_id is NULL').all.order(:created_at) #.select('packages.id,packages.quantity_str,packages.part_id,packages.user_id,packages.check_in_time')
   end
 
-  def self.update args
-    p = Package.find_by_id(args[:id])
-    if p && p.update_attributes(args) == true
-      1
-    else
-      0
+  def self.update package,args
+    if package.nil?
+      return false
     end
-  end
 
-  def self.id_avaliable? id
-    unless Package.find_by_id id
-      1
-    else
-      0
+    if !PackageState.can_update?(package.state)
+      return false
     end
+
+    package.update_attributes(args)
   end
 
-  def self.validate_quantity quantity
-    1
+  def self.package_id_avaliable?(id)
+    Package.unscoped.where(id:id,is_delete:[0,1]).first.nil?
+  end
+
+  def self.exits?(id)
+    Package.find_by_id(id)
+  end
+
+  def self.part_exits?(id)
+    !Part.find_by_id(id).nil?
   end
 end

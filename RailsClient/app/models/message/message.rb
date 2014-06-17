@@ -3,6 +3,11 @@
 class Message
   attr_accessor :result,:object,:content
 
+  def initialize
+    self.result = false
+    self.content = ''
+  end
+
   def default
     {:result=>0}
   end

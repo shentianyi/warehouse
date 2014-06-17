@@ -1,5 +1,4 @@
-class DeliveryState<BaseState
-
+class ForkliftState<BaseState
 
   def self.display state
     super

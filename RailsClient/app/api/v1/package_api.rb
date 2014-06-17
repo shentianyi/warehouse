@@ -27,14 +27,23 @@ module V1
 
     # validate package id
     post :validate do
-      result = PackageService.id_avaliable?(params[:id])
-      {result:result, content: ''}
+      result = PackageService.package_id_avaliable?(params[:id])
+      puts result
+      if result
+        {result:1, content: '唯一号可用'}
+      else
+        {result:0, content: '唯一号不可用!'}
+      end
     end
 
     # validate quantity string
     post :validate_quantity do
-      result = PackageService.validate_quantity(params[:quantity])
-      {result:result, content: ''}
+      result = PackageService.part_exits?(params[:quantity])
+      if result
+        {result:1, content: '零件号存在'}
+      else
+        {result:0, content: '零件号不存在!'}
+      end
     end
 
     # create package
@@ -42,31 +51,53 @@ module V1
     # else create new
     post do
       # every package has a uniq id,id should not be exits
-      p = PackageService.create package_params,current_user
-      if p
-        {result:1,content:PackagePresenter.new(p.content).to_json}
+      m = PackageService.create package_params,current_user
+      if m.result
+        puts m.to_json
+        {result:1,content:PackagePresenter.new(m.object).to_json}
       else
-        {result:0,content:''}
+        {result:0,content:m.content}
       end
     end
 
     # update package
     put do
-      result = PackageService.update(package_params)
-      {result:result,content:''}
+      if p = PackageService.exits?(package_params[:id])
+        if PackageService.update(p,package_params)
+          {result:1,content:'修改成功!'}
+        else
+          {result:0,content:'修改失败!'}
+        end
+      else
+        {result:0,content:'包装箱不存在!'}
+      end
     end
 
     # delete package
     # update is_delete to true
     delete do
-      result = PackageService.delete params[:id]
-      {result:result,content:''}
+      if p = PackageService.exits?(params[:id])
+        if PackageService.delete(p)
+          {result:1,content:'删除成功'}
+        else
+          {result:0,content:'删除失败'}
+        end
+      else
+        {result:0,content:'包装箱不存在!'}
+      end
     end
 
     # check package
     post :check do
-      result = PackageService.check(params[:id])
-      {result:result,content:''}
+      if p = PackageService.exits?(params[:id])
+        if PackageService.check(p)
+          {result:1,content:'检查成功'}
+        else
+          {result:1,content:'检查成功'}
+        end
+      else
+        {result:0,content:'包装箱不存在!'}
+      end
     end
   end
 end

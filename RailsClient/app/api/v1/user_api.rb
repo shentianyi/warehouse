@@ -9,9 +9,9 @@ module V1
       user = User.find_for_database_authentication(id: params[:user][:id])
       if user && user.valid_password?(params[:user][:password])
         warden.set_user user
-        {result: true, content: current_user.role_id }
+        {result: 1, content: current_user.role_id }
       else
-        error!({result: false}, 401)
+        error!({result: 0}, 401)
       end
     end
 
@@ -19,12 +19,12 @@ module V1
     delete :logout do
       warden.raw_session.inspect
       warden.logout
-      {result:true}
+      {result:1}
     end
 
     get do
       guard!
-      {result:true,content:{user:User.first}}
+      {result:1,content:{user:User.first}}
     end
   end
 end
