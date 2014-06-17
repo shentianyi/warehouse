@@ -1,42 +1,30 @@
 class PackageService
 
-  def self.delete id
-    p=Package.find_by_id id
-    if p
-      p.remove_from_forklift
-      p.destroy
-    else
-      false
+  def self.delete package
+    if package.nil?
+      return
+    end
+
+    if PackageState.can_delete?(package.state)
+      package.remove_from_forklift
+      package.destroy
     end
   end
 
   # check package
   # change,received
-  def self.check id
-    p = Package.find_by_id(id)
-    #
-    if p
-      p.state = PackageState::RECEIVED
-      p.forklift.accepted_packages = p.forklift.accepted_packages + 1
-      p.save
-    else
-      false
+  def self.check package
+    if package.nil?
+      return
     end
+    package.state = PackageState::RECEIVED
+    package.forklift.accepted_packages = p.forklift.accepted_packages + 1
+    package.save
   end
 
-  def self.reject package_id
-    p = Package.find_by_id package_id
-    if p
-      if p.state == PackageState::RECEIVED
-        p.state == PackageState::REJECTED
-        #p.forklift_item.state = ForkliftItemState::REJECTED
-        p.forklift.accepted_packages = p.forklift.accepted_packages - 1
-        p.save
-      else
-        false
-      end
-    else
-      false
+  def self.reject package
+    if package.nil?
+      return
     end
   end
 
@@ -55,9 +43,7 @@ class PackageService
       return msg
     end
     #if exited
-    if package_exits?(args[:id])
-      msg.content << '唯一号重复,请使用新的唯一号'
-    else
+    if package_id_avaliable?(args[:id])
       p = Package.new(args)
       if p.save
         msg.result = true
@@ -65,6 +51,8 @@ class PackageService
       else
         msg.content << p.errors.full_messages
       end
+    else
+      msg.content << '唯一号重复,请使用新的唯一号'
     end
     msg
   end
@@ -79,19 +67,24 @@ class PackageService
     Package.where('packages.forklift_id is NULL').all #.select('packages.id,packages.quantity_str,packages.part_id,packages.user_id,packages.check_in_time')
   end
 
-  def self.update args
-    msg = Message.new
-    p = Package.find_by_id(args[:id])
-    if p && p.update_attributes(args) == true
-      msg.result = true
-    else
-      msg.content = p.errors.full_messages
+  def self.update package,args
+    if package.nil?
+      return false
     end
-    msg
+
+    if !PackageState.can_update?(package.state)
+      return false
+    end
+
+    package.update_attributes(args)
+  end
+
+  def self.package_id_avaliable?(id)
+    Package.unscoped.where(id:id,is_delete:[0,1]).first.nil?
   end
 
   def self.package_exits?(id)
-    !Package.unscoped.where(id:id,is_delete:[0,1]).first.nil?
+    p = Package.find_by_id(id)
   end
 
   def self.part_exits?(id)

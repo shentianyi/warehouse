@@ -34,4 +34,17 @@ class BaseState
       false
     end
   end
+
+  def self.can_change? old_state,new_state
+    case old_state
+      when ORIGINAL
+        [ORIGINAL,WAY,DESTINATION].include? new_state
+      when WAY
+        [WAY,ORIGINAL,DESTINATION].include? new_state
+      when DESTINATION
+        [DESTINATION,ORIGINAL,WAY,RECEIVED].include? new_state
+      else
+        false
+    end
+  end
 end

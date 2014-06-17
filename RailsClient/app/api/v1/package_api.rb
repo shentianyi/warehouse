@@ -27,11 +27,12 @@ module V1
 
     # validate package id
     post :validate do
-      result = PackageService.package_exits?(params[:id])
+      result = PackageService.package_id_avaliable?(params[:id])
+      puts result
       if result
-        {result:0, content: '唯一号不可用!'}
-      else
         {result:1, content: '唯一号可用'}
+      else
+        {result:0, content: '唯一号不可用!'}
       end
     end
 
@@ -61,44 +62,41 @@ module V1
 
     # update package
     put do
-      if !PackageService.package_exits?(package_params[:id])
-        {result:0,content:'包装箱不存在!'}
-        return
-      end
-      msg = PackageService.update(package_params)
-      if msg.result
-        {result:1,content:'修改成功!'}
+      if p = PackageService.package_exits?(package_params[:id])
+        if PackageService.update(p,package_params)
+          {result:1,content:'修改成功!'}
+        else
+          {result:0,content:'修改失败!'}
+        end
       else
-        {result:0,content:msg.content}
+        {result:0,content:'包装箱不存在!'}
       end
     end
 
     # delete package
     # update is_delete to true
     delete do
-      if !PackageService.package_exits?(params[:id])
+      if p = PackageService.package_exits?(params[:id])
+        if PackageService.delete(p)
+          {result:1,content:'删除成功'}
+        else
+          {result:0,content:'删除失败'}
+        end
+      else
         {result:0,content:'包装箱不存在!'}
-        return
       end
-
-     if PackageService.delete params[:id]
-       {result:1,content:'删除成功'}
-     else
-       {result:0,content:'删除失败'}
-     end
     end
 
     # check package
     post :check do
-      if !PackageService.package_exits?(params[:id])
-        {result:0,content:'包装箱不存在!'}
-        return
-      end
-
-      if PackageService.check(params[:id])
-        {result:1,content:'检查成功'}
+      if p = PackageService.package_exits?(params[:id])
+        if PackageService.check(p)
+          {result:1,content:'检查成功'}
+        else
+          {result:1,content:'检查成功'}
+        end
       else
-        {result:0,content:'检查失败!'}
+        {result:0,content:'包装箱不存在!'}
       end
     end
   end
