@@ -1,0 +1,676 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" name="Default" comment="" />
+    <ignored path="RailsClient.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <file path="/Gemfile" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402971411245" ignored="false" />
+    <file path="/charlot_database.yml" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402380526406" ignored="false" />
+    <file path="/application.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402644671450" ignored="false" />
+    <file path="/Dummy.txt" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402972144424" ignored="false" />
+    <file path="$PROJECT_DIR$/../../charlot.github.com/rails/_posts/2014-06-10-rails_load_mysql_database_yml.md" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402380858460" ignored="false" />
+    <file path="/2014-06-10-rails_load_mysql_database_yml.md" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402380858460" ignored="false" />
+    <file path="$PROJECT_DIR$/../../charlot.github.com/rails/_posts/2014-06-10-rails_load_customer_database_yml.md" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402381614673" ignored="false" />
+    <file path="/2014-06-10-rails_load_customer_database_yml.md" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402381599747" ignored="false" />
+    <file path="$PROJECT_DIR$/../../demo/warehouse/data_sync/sync_server/config/application.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402382169651" ignored="false" />
+    <file path="/sync_api_guard.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1403001358332" ignored="false" />
+    <file path="/sync_base.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402998080805" ignored="false" />
+    <file path="/user_sync_api.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402998274521" ignored="false" />
+    <file path="/application_api.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402383249244" ignored="false" />
+    <file path="/user_api.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402561989143" ignored="false" />
+    <file path="/base.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402565970547" ignored="false" />
+    <file path="$PROJECT_DIR$/../../demo/warehouse/data_sync/sync_server/config/initializers/reload_api.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402383433068" ignored="false" />
+    <file path="/reload_api.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402383504834" ignored="false" />
+    <file path="/devise.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402384814290" ignored="false" />
+    <file path="/api_guard.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402641544591" ignored="false" />
+    <file path="/package_api.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402642893076" ignored="false" />
+    <file path="/part_api.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402558658214" ignored="false" />
+    <file path="/forklift_api.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402569697980" ignored="false" />
+    <file path="/delivery_api.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402643816406" ignored="false" />
+    <file path="/spec_helper.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402637370119" ignored="false" />
+    <file path="/user_api_test.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402640819831" ignored="false" />
+    <file path="/a.dummy" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402641346588" ignored="false" />
+    <file path="/sessions_controller.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402642304008" ignored="false" />
+    <file path="/delivery_service.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402643533475" ignored="false" />
+    <file path="/20140609041806_create_deliveries.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402643485176" ignored="false" />
+    <file path="/delivery_state.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402644456621" ignored="false" />
+    <file path="/base_status.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402644186255" ignored="false" />
+    <file path="/p001.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402899413125" ignored="false" />
+    <file path="$PROJECT_DIR$/../../charlot.github.com/rails/_posts/2014-06-16-rails_active_record_model_config.md" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402900906121" ignored="false" />
+    <file path="/2014-06-16-rails_active_record_model_config.md" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402900889291" ignored="false" />
+    <file path="/p004.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402902044543" ignored="false" />
+    <file path="/delivery.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402974300335" ignored="false" />
+    <file path="/sync.yml" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402976728197" ignored="false" />
+    <file path="$PROJECT_DIR$/../../demo/warehouse/data_sync/sync_client/config/sync.yml" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402971159108" ignored="false" />
+    <file path="$PROJECT_DIR$/../../demo/warehouse/data_sync/sync_client/lib/sync/base_sync.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402971115976" ignored="false" />
+    <file path="/base_sync.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402997361894" ignored="false" />
+    <file path="/recreate.rake" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402971988603" ignored="false" />
+    <file path="/2014-06-17-invoke_rake_task.md" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402972426398" ignored="false" />
+    <file path="$PROJECT_DIR$/../../charlot.github.com/rails/_posts/2014-06-17-invoke_rake_task.md" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402972426398" ignored="false" />
+    <file path="/delivery_sync.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402982177259" ignored="false" />
+    <file path="/uuid.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402993055438" ignored="false" />
+    <file path="/custome_id_sync.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402976374824" ignored="false" />
+    <file path="/config.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402975509253" ignored="false" />
+    <file path="/uniq_id_sync_base.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402992458022" ignored="false" />
+    <file path="/user_sync.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402986585152" ignored="false" />
+    <file path="/execute.rake" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402993529067" ignored="false" />
+    <file path="/wangsong_database.yml" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402978315117" ignored="false" />
+    <file path="/database.yml" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402987586102" ignored="false" />
+    <file path="/schedule.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402977110581" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/config/schedule.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402977110581" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/lib/sync/base_sync.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402997364425" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/lib/sync/custom_id_sync_base.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402994879893" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/lib/sync/execute/delivery_sync.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402996904164" ignored="false" />
+    <file path="/user.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402978803433" ignored="false" />
+    <file path="/delivery_sync_api.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402983232529" ignored="false" />
+    <file path="/sync_method.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402979202749" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/lib/tasks/sync/execute.rake" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402994604424" ignored="false" />
+    <file path="/custom_id_sync_base.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402992427376" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/app/models/extensions/uuid.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402993056552" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/app/models/user_sync.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402986702879" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/config/database.yml" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402987586589" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/config/charlot_database.yml" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402987598815" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/config/wangsong_database.yml" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402987608423" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/config/secrets.yml" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402988291793" ignored="false" />
+    <file path="/secrets.yml" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402988283137" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/lib/sync/execute/hacker_sync.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402988791303" ignored="false" />
+    <file path="/hacker_sync.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402988791303" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/app/models/hacker.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402988841251" ignored="false" />
+    <file path="/forklift_sync.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402989471278" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/lib/sync/execute/forklift_sync.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402989471278" ignored="false" />
+    <file path="/forklift_sync_api.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402989531941" ignored="false" />
+    <file path="/location_sync.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402989801335" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/lib/sync/execute/location_sync.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402989807397" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/lib/sync/execute/whouse_sync.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402990280796" ignored="false" />
+    <file path="/whouse_sync.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402990280796" ignored="false" />
+    <file path="/part_sync.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402990989435" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/lib/sync/execute/part_sync.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402990991976" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/lib/sync/execute/position_sync.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402991050019" ignored="false" />
+    <file path="/position_sync.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402991046199" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/db/migrate/20140609071957_create_part_positions.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402991200933" ignored="false" />
+    <file path="/package_position.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402991975010" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/app/models/part_position.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402993044169" ignored="false" />
+    <file path="/part_position.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402992400314" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/lib/sync/uniq_id_sync_base.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402993857788" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/lib/sync/execute/part_postion_sync.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402992802396" ignored="false" />
+    <file path="/part_postion_sync.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402992798652" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/lib/sync/execute/package_postion_sync.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402992866545" ignored="false" />
+    <file path="/package_postion_sync.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402992866545" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/app/models/package_position.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402993256625" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/app/models/state_log.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402993280256" ignored="false" />
+    <file path="/state_log.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402993277439" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/lib/sync/execute/state_log_sync.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402993828157" ignored="false" />
+    <file path="/state_log_sync.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402993502969" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/app/api/v1/sync/delivery_sync_api.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402994169554" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/app/api/v1/sync/sync_base.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1403000637598" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/app/api/concerns/oauth_api_guard.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402995038047" ignored="false" />
+    <file path="/oauth_api_guard.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402995085903" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/app/api/v1/sync/user_sync_api.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402994731378" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/app/api/v1/sync/forklift_sync_api.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402995018330" ignored="false" />
+    <file path="/sync_guard.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402999028080" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/app/models/package.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402997596283" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/app/models/forklift.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1402997596283" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/app/api/concerns/sync_api_guard.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1403001360385" ignored="false" />
+    <file path="$PROJECT_DIR$/../RailsClient/db/migrate/20140617083323_create_sync_pools.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1403000436946" ignored="false" />
+    <file path="/20140617083323_create_sync_pools.rb" changelist="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" time="1403000433320" ignored="false" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="DaemonCodeAnalyzer">
+    <disable_hints />
+  </component>
+  <component name="DatabaseView">
+    <flatten value="false" />
+    <groupTables value="false" />
+    <sortChildren value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="RailsClient" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf />
+  </component>
+  <component name="FindManager">
+    <FindUsagesManager>
+      <setting name="OPEN_NEW_TAB" value="false" />
+    </FindUsagesManager>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="changedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/config/charlot_database.yml" />
+        <option value="$PROJECT_DIR$/config/sync.yml" />
+        <option value="$PROJECT_DIR$/config/wangsong_database.yml" />
+        <option value="$PROJECT_DIR$/app/models/user.rb" />
+        <option value="$PROJECT_DIR$/app/api/v1/sync/sync_method.rb" />
+        <option value="$PROJECT_DIR$/app/models/extensions/uuid.rb" />
+        <option value="$PROJECT_DIR$/app/models/user_sync.rb" />
+        <option value="$PROJECT_DIR$/app/models/hacker.rb" />
+        <option value="$PROJECT_DIR$/app/models/package_position.rb" />
+        <option value="$PROJECT_DIR$/app/api/concerns/oauth_api_guard.rb" />
+        <option value="$PROJECT_DIR$/app/api/v1/sync/forklift_sync_api.rb" />
+        <option value="$PROJECT_DIR$/app/api/v1/sync/delivery_sync_api.rb" />
+        <option value="$PROJECT_DIR$/app/api/concerns/sync_guard.rb" />
+        <option value="$PROJECT_DIR$/app/api/v1/sync/sync_base.rb" />
+        <option value="$PROJECT_DIR$/app/api/v1/sync/user_sync_api.rb" />
+        <option value="$PROJECT_DIR$/app/api/concerns/sync_api_guard.rb" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="1984" />
+    <option name="y" value="24" />
+    <option name="width" value="1855" />
+    <option name="height" value="1056" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectReloadState">
+    <option name="STATE" value="0" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1" splitterProportion="0.5">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+    </navigator>
+    <panes>
+      <pane id="RailsProjectView" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RailsClient" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="options.lastSelected" value="org.jetbrains.plugins.ruby.settings.RubyIdeSdkConfigurable" />
+    <property name="recentsLimit" value="5" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../RailsClient" />
+    <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/api/v1/sync" />
+      <recent name="$PROJECT_DIR$/app/models" />
+      <recent name="$PROJECT_DIR$/lib/sync" />
+      <recent name="$PROJECT_DIR$/lib" />
+      <recent name="$PROJECT_DIR$/lib/tasks" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/lib/sync/execute" />
+      <recent name="$PROJECT_DIR$/lib/sync" />
+      <recent name="$PROJECT_DIR$/lib/sync/base" />
+      <recent name="$PROJECT_DIR$/spec/api" />
+      <recent name="$PROJECT_DIR$/spec" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Rails.Development: RailsClient">
+    <configuration default="true" type="RakeRunConfigurationType" factoryName="Rake">
+      <module name="" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="RUBY_ARGS" VALUE="-e $stdout.sync=true;$stderr.sync=true;load($0=ARGV.shift)" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="WORK DIR" VALUE="" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="SHOULD_USE_SDK" VALUE="false" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="ALTERN_SDK_NAME" VALUE="" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="myPassParentEnvs" VALUE="true" />
+      <envs />
+      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />
+      <EXTENSION ID="JRubyRunConfigurationExtension" />
+      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov">
+        <COVERAGE_PATTERN ENABLED="true">
+          <PATTERN REGEXPS="/.rvm/" INCLUDED="false" />
+        </COVERAGE_PATTERN>
+      </EXTENSION>
+      <EXTENSION ID="org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="RAKE_TASK_NAME" VALUE="" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="RAKE_TASK_ARGS" VALUE="" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="RAKE_TASK_ATTACHED_TEST_FRAMEWORKS" VALUE="" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="RAKE_TASK_OPTION_TRACE" VALUE="false" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="RAKE_TASK_OPTION_DRYRUN" VALUE="false" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="RAKE_TASK_OPTION_PREREQS" VALUE="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="RailsRunConfigurationType" factoryName="Rails">
+      <predefined_log_file id="RUBY_RAILS_SERVER" enabled="true" />
+      <module name="" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="RUBY_ARGS" VALUE="-e $stdout.sync=true;$stderr.sync=true;load($0=ARGV.shift)" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="WORK DIR" VALUE="$PROJECT_DIR$" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="SHOULD_USE_SDK" VALUE="false" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="ALTERN_SDK_NAME" VALUE="" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="myPassParentEnvs" VALUE="true" />
+      <envs />
+      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />
+      <EXTENSION ID="JRubyRunConfigurationExtension" />
+      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov">
+        <COVERAGE_PATTERN ENABLED="true">
+          <PATTERN REGEXPS="/.rvm/" INCLUDED="false" />
+        </COVERAGE_PATTERN>
+      </EXTENSION>
+      <EXTENSION ID="org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="SCRIPT_ARGS" VALUE="" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="PORT" VALUE="3000" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="IP" VALUE="0.0.0.0" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="DUMMY_APP" VALUE="test/dummy" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="RAILS_SERVER_TYPE" VALUE="Default" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="ENVIRONMENT_TYPE" VALUE="development" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="LAUNCH_JS" VALUE="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="RSpecRunConfigurationType" factoryName="RSpec">
+      <predefined_log_file id="RUBY_RSPEC" enabled="true" />
+      <module name="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="RUBY_ARGS" VALUE="-e $stdout.sync=true;$stderr.sync=true;load($0=ARGV.shift)" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="WORK DIR" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SHOULD_USE_SDK" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="ALTERN_SDK_NAME" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="myPassParentEnvs" VALUE="true" />
+      <envs />
+      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />
+      <EXTENSION ID="JRubyRunConfigurationExtension" />
+      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov">
+        <COVERAGE_PATTERN ENABLED="true">
+          <PATTERN REGEXPS="/.rvm/" INCLUDED="false" />
+        </COVERAGE_PATTERN>
+      </EXTENSION>
+      <EXTENSION ID="org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="TESTS_FOLDER_PATH" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="TEST_SCRIPT_PATH" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SPEC_RUNNER_PATH" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="TEST_FILE_MASK" VALUE="**/*_spec.rb" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SPEC_EXAMPLE_NAME" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="TEST_TEST_TYPE" VALUE="TEST_SCRIPT" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SPEC_ARGS" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="RUNNER_VERSION" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="USE_CUSTOM_SPEC_RUNNER" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="DRB" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="FULL_BACKTRACE" VALUE="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="RubyRunConfigurationType" factoryName="Ruby">
+      <module name="" />
+      <RUBY_RUN_CONFIG NAME="RUBY_ARGS" VALUE="-e $stdout.sync=true;$stderr.sync=true;load($0=ARGV.shift)" />
+      <RUBY_RUN_CONFIG NAME="WORK DIR" VALUE="" />
+      <RUBY_RUN_CONFIG NAME="SHOULD_USE_SDK" VALUE="false" />
+      <RUBY_RUN_CONFIG NAME="ALTERN_SDK_NAME" VALUE="" />
+      <RUBY_RUN_CONFIG NAME="myPassParentEnvs" VALUE="true" />
+      <envs />
+      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />
+      <EXTENSION ID="JRubyRunConfigurationExtension" />
+      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov">
+        <COVERAGE_PATTERN ENABLED="true">
+          <PATTERN REGEXPS="/.rvm/" INCLUDED="false" />
+        </COVERAGE_PATTERN>
+      </EXTENSION>
+      <EXTENSION ID="org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension" />
+      <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="" />
+      <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="" />
+      <method />
+    </configuration>
+    <configuration default="true" type="TestUnitRunConfigurationType" factoryName="Test::Unit/Shoulda/Minitest">
+      <predefined_log_file id="RUBY_TESTUNIT" enabled="true" />
+      <module name="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="RUBY_ARGS" VALUE="-e $stdout.sync=true;$stderr.sync=true;load($0=ARGV.shift)" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="WORK DIR" VALUE="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="SHOULD_USE_SDK" VALUE="false" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="ALTERN_SDK_NAME" VALUE="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="myPassParentEnvs" VALUE="true" />
+      <envs />
+      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />
+      <EXTENSION ID="JRubyRunConfigurationExtension" />
+      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov">
+        <COVERAGE_PATTERN ENABLED="true">
+          <PATTERN REGEXPS="/.rvm/" INCLUDED="false" />
+        </COVERAGE_PATTERN>
+      </EXTENSION>
+      <EXTENSION ID="org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TESTS_FOLDER_PATH" VALUE="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TEST_SCRIPT_PATH" VALUE="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TEST_FILE_MASK" VALUE="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TEST_METHOD_NAME" VALUE="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TEST_TEST_TYPE" VALUE="TEST_SCRIPT" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="DRB" VALUE="false" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="RUNNER_OPTIONS" VALUE="" />
+      <method />
+    </configuration>
+    <configuration default="false" name="test" type="RakeRunConfigurationType" factoryName="Rake">
+      <module name="RailsClient" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="RUBY_ARGS" VALUE="-e $stdout.sync=true;$stderr.sync=true;load($0=ARGV.shift)" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="WORK DIR" VALUE="$PROJECT_DIR$" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="SHOULD_USE_SDK" VALUE="false" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="ALTERN_SDK_NAME" VALUE="" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="myPassParentEnvs" VALUE="true" />
+      <envs>
+        <env name="RAILS_ENV" value="test" />
+      </envs>
+      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />
+      <EXTENSION ID="JRubyRunConfigurationExtension" />
+      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov">
+        <COVERAGE_PATTERN ENABLED="true">
+          <PATTERN REGEXPS="/.rvm/" INCLUDED="false" />
+        </COVERAGE_PATTERN>
+      </EXTENSION>
+      <EXTENSION ID="org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="RAKE_TASK_NAME" VALUE="test" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="RAKE_TASK_ARGS" VALUE="" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="RAKE_TASK_ATTACHED_TEST_FRAMEWORKS" VALUE=":test_unit " />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="RAKE_TASK_OPTION_TRACE" VALUE="false" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="RAKE_TASK_OPTION_DRYRUN" VALUE="false" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="RAKE_TASK_OPTION_PREREQS" VALUE="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="spec" type="RakeRunConfigurationType" factoryName="Rake">
+      <module name="RailsClient" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="RUBY_ARGS" VALUE="-e $stdout.sync=true;$stderr.sync=true;load($0=ARGV.shift)" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="WORK DIR" VALUE="$PROJECT_DIR$" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="SHOULD_USE_SDK" VALUE="false" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="ALTERN_SDK_NAME" VALUE="" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="myPassParentEnvs" VALUE="true" />
+      <envs />
+      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />
+      <EXTENSION ID="JRubyRunConfigurationExtension" />
+      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov">
+        <COVERAGE_PATTERN ENABLED="true">
+          <PATTERN REGEXPS="/.rvm/" INCLUDED="false" />
+        </COVERAGE_PATTERN>
+      </EXTENSION>
+      <EXTENSION ID="org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="RAKE_TASK_NAME" VALUE="spec" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="RAKE_TASK_ARGS" VALUE="" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="RAKE_TASK_ATTACHED_TEST_FRAMEWORKS" VALUE=":rspec " />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="RAKE_TASK_OPTION_TRACE" VALUE="false" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="RAKE_TASK_OPTION_DRYRUN" VALUE="false" />
+      <RAKE_RUN_CONFIG_SETTINGS_ID NAME="RAKE_TASK_OPTION_PREREQS" VALUE="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Production: RailsClient" type="RailsRunConfigurationType" factoryName="Rails">
+      <predefined_log_file id="RUBY_RAILS_SERVER" enabled="true" />
+      <module name="RailsClient" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="RUBY_ARGS" VALUE="-e $stdout.sync=true;$stderr.sync=true;load($0=ARGV.shift)" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="WORK DIR" VALUE="$PROJECT_DIR$" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="SHOULD_USE_SDK" VALUE="false" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="ALTERN_SDK_NAME" VALUE="" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="myPassParentEnvs" VALUE="true" />
+      <envs />
+      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />
+      <EXTENSION ID="JRubyRunConfigurationExtension" />
+      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov">
+        <COVERAGE_PATTERN ENABLED="true">
+          <PATTERN REGEXPS="/.rvm/" INCLUDED="false" />
+        </COVERAGE_PATTERN>
+      </EXTENSION>
+      <EXTENSION ID="org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="SCRIPT_ARGS" VALUE="" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="PORT" VALUE="3000" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="IP" VALUE="0.0.0.0" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="DUMMY_APP" VALUE="test/dummy" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="RAILS_SERVER_TYPE" VALUE="Default" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="ENVIRONMENT_TYPE" VALUE="production" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="LAUNCH_JS" VALUE="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Development: RailsClient" type="RailsRunConfigurationType" factoryName="Rails">
+      <predefined_log_file id="RUBY_RAILS_SERVER" enabled="true" />
+      <module name="RailsClient" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="RUBY_ARGS" VALUE="-e $stdout.sync=true;$stderr.sync=true;load($0=ARGV.shift)" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="WORK DIR" VALUE="$PROJECT_DIR$" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="SHOULD_USE_SDK" VALUE="false" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="ALTERN_SDK_NAME" VALUE="" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="myPassParentEnvs" VALUE="true" />
+      <envs />
+      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />
+      <EXTENSION ID="JRubyRunConfigurationExtension" />
+      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov">
+        <COVERAGE_PATTERN ENABLED="true">
+          <PATTERN REGEXPS="/.rvm/" INCLUDED="false" />
+        </COVERAGE_PATTERN>
+      </EXTENSION>
+      <EXTENSION ID="org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="SCRIPT_ARGS" VALUE="" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="PORT" VALUE="3000" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="IP" VALUE="0.0.0.0" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="DUMMY_APP" VALUE="test/dummy" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="RAILS_SERVER_TYPE" VALUE="Default" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="ENVIRONMENT_TYPE" VALUE="development" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="LAUNCH_JS" VALUE="false" />
+      <method />
+    </configuration>
+    <list size="4">
+      <item index="0" class="java.lang.String" itemvalue="Rake.test" />
+      <item index="1" class="java.lang.String" itemvalue="Rake.spec" />
+      <item index="2" class="java.lang.String" itemvalue="Rails.Production: RailsClient" />
+      <item index="3" class="java.lang.String" itemvalue="Rails.Development: RailsClient" />
+    </list>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a7a0edbd-30be-44c9-bf9d-76e340bcba2a" name="Default" comment="" />
+      <created>1402380385483</created>
+      <updated>1402380385483</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="1984" y="24" width="1855" height="1056" extended-state="0" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3294509" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32648528" sideWeight="0.83874345" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16125655" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="true" />
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="true" />
+    <option name="myTodoPanelSettings">
+      <value>
+        <are-packages-shown value="false" />
+        <are-modules-shown value="false" />
+        <flatten-packages value="false" />
+        <is-autoscroll-to-source value="false" />
+      </value>
+    </option>
+    <option name="PERFORM_UPDATE_IN_BACKGROUND" value="true" />
+    <option name="PERFORM_COMMIT_IN_BACKGROUND" value="true" />
+    <option name="PERFORM_EDIT_IN_BACKGROUND" value="true" />
+    <option name="PERFORM_CHECKOUT_IN_BACKGROUND" value="true" />
+    <option name="PERFORM_ADD_REMOVE_IN_BACKGROUND" value="true" />
+    <option name="PERFORM_ROLLBACK_IN_BACKGROUND" value="false" />
+    <option name="CHECK_LOCALLY_CHANGED_CONFLICTS_IN_BACKGROUND" value="false" />
+    <option name="CHANGED_ON_SERVER_INTERVAL" value="60" />
+    <option name="SHOW_ONLY_CHANGED_IN_SELECTION_DIFF" value="true" />
+    <option name="CHECK_COMMIT_MESSAGE_SPELLING" value="true" />
+    <option name="DEFAULT_PATCH_EXTENSION" value="patch" />
+    <option name="SHORT_DIFF_HORIZONTALLY" value="true" />
+    <option name="SHORT_DIFF_EXTRA_LINES" value="2" />
+    <option name="SOFT_WRAPS_IN_SHORT_DIFF" value="true" />
+    <option name="INCLUDE_TEXT_INTO_PATCH" value="false" />
+    <option name="INCLUDE_TEXT_INTO_SHELF" value="false" />
+    <option name="SHOW_FILE_HISTORY_DETAILS" value="true" />
+    <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="true" />
+    <option name="SHOW_DIRTY_RECURSIVELY" value="false" />
+    <option name="LIMIT_HISTORY" value="true" />
+    <option name="MAXIMUM_HISTORY_ROWS" value="1000" />
+    <option name="UPDATE_FILTER_SCOPE_NAME" />
+    <option name="USE_COMMIT_MESSAGE_MARGIN" value="false" />
+    <option name="COMMIT_MESSAGE_MARGIN_SIZE" value="72" />
+    <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="false" />
+    <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
+    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
+    <option name="LAST_COMMIT_MESSAGE" />
+    <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
+    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="REFORMAT_BEFORE_FILE_COMMIT" value="false" />
+    <option name="FILE_HISTORY_DIALOG_COMMENTS_SPLITTER_PROPORTION" value="0.8" />
+    <option name="FILE_HISTORY_DIALOG_SPLITTER_PROPORTION" value="0.5" />
+    <option name="ACTIVE_VCS_NAME" />
+    <option name="UPDATE_GROUP_BY_PACKAGES" value="false" />
+    <option name="UPDATE_GROUP_BY_CHANGELIST" value="false" />
+    <option name="UPDATE_FILTER_BY_SCOPE" value="false" />
+    <option name="SHOW_FILE_HISTORY_AS_TREE" value="false" />
+    <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/app/api/v1/service/service_base.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/api/v1/service/print_service_api.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/api/application_api.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="6" selection-start="6" selection-end="6" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/api/concerns/api_guard.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="14" selection-start="289" selection-end="289" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/api/concerns/sync_api_guard.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="32" selection-start="359" selection-end="359" vertical-scroll-proportion="0.48881432">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/api/concerns/oauth_api_guard.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="34" selection-start="331" selection-end="331" vertical-scroll-proportion="-5.35">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/api/v1/base.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/api/v1/delivery_api.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/api/v1/forklift_api.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/api/v1/package_api.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/api/v1/part_api.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/api/v1/user_api.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/api/v1/sync/delivery_sync_api.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="12" selection-start="100" selection-end="100" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/api/v1/sync/forklift_sync_api.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="12" selection-start="99" selection-end="99" vertical-scroll-proportion="-1.5333333">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/api/v1/sync/user_sync_api.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="28" column="20" selection-start="619" selection-end="619" vertical-scroll-proportion="0.7950617">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
+
