@@ -14,7 +14,7 @@ module V1
     # get deliveries
     # optional params: created_at, user_id, state...
     get :list do
-      deliveries = DeliveryService.search(params.permit(:id,:delivery_date,:user_id,:destination_id))
+      deliveries = DeliveryService.search(params.permit(:id,:delivery_date,:user_id,:destination_id),true)
       data = []
       DeliveryPresenter.init_presenters(deliveries).each do |d|
         data << d.to_json
@@ -168,7 +168,7 @@ module V1
       }
       arg[:user_id]=params[:user_id] unless params[:user_id].blank?
       data = []
-      DeliveryPresenter.init_presenters(DeliveryService.search(arg)).each do |dp|
+      DeliveryPresenter.init_presenters(DeliveryService.search(arg,false)).each do |dp|
         data<<dp.to_json
       end
       {result:1,content:data}

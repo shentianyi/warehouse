@@ -2,6 +2,8 @@ class UsersController < ApplicationController
   load_and_authorize_resource
   before_action :set_user, only: [:show, :edit, :update, :destroy, :move]
 
+
+
   # GET /users
   # GET /users.json
   def index

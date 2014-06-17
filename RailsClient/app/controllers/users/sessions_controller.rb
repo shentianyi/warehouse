@@ -1,4 +1,6 @@
 class Users::SessionsController<Devise::SessionsController
+  layout "no_authorization"
+
   def new
 
   end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140617083323) do
+ActiveRecord::Schema.define(version: 20140617095358) do
 
   create_table "deliveries", force: true do |t|
     t.string   "uuid",           limit: 36,                 null: false

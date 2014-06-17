@@ -3,8 +3,11 @@ module V1
     namespace :parts
     guard_all!
     post :validate do
-      result = PartService.validate_id params[:id]
-      {result:result,content:''}
+     if PartService.validate_id params[:id]
+       {result:1,content:''}
+     else
+       {result:0,content:''}
+     end
     end
   end
 end
