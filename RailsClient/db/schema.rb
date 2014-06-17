@@ -76,12 +76,11 @@ ActiveRecord::Schema.define(version: 20140616083045) do
   add_index "locations", ["uuid"], name: "index_locations_on_uuid", using: :btree
 
   create_table "package_positions", force: true do |t|
-    t.string   "uuid",        limit: 36,                 null: false
     t.string   "position_id"
     t.string   "package_id"
-    t.boolean  "is_delete",              default: false
-    t.boolean  "is_dirty",               default: true
-    t.boolean  "is_new",                 default: true
+    t.boolean  "is_delete",   default: false
+    t.boolean  "is_dirty",    default: true
+    t.boolean  "is_new",      default: true
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -89,7 +88,6 @@ ActiveRecord::Schema.define(version: 20140616083045) do
   add_index "package_positions", ["id"], name: "index_package_positions_on_id", using: :btree
   add_index "package_positions", ["package_id"], name: "index_package_positions_on_package_id", using: :btree
   add_index "package_positions", ["position_id"], name: "index_package_positions_on_position_id", using: :btree
-  add_index "package_positions", ["uuid"], name: "index_package_positions_on_uuid", using: :btree
 
   create_table "packages", force: true do |t|
     t.string   "uuid",                          null: false
@@ -117,15 +115,14 @@ ActiveRecord::Schema.define(version: 20140616083045) do
   add_index "packages", ["uuid"], name: "index_packages_on_uuid", using: :btree
 
   create_table "part_positions", force: true do |t|
-    t.string   "uuid",            limit: 36,                 null: false
     t.string   "part_id"
     t.string   "position_id"
     t.string   "position_detail"
     t.string   "whouse_name"
     t.string   "whouse_id"
-    t.boolean  "is_delete",                  default: false
-    t.boolean  "is_dirty",                   default: true
-    t.boolean  "is_new",                     default: true
+    t.boolean  "is_delete",       default: false
+    t.boolean  "is_dirty",        default: true
+    t.boolean  "is_new",          default: true
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -133,7 +130,6 @@ ActiveRecord::Schema.define(version: 20140616083045) do
   add_index "part_positions", ["id"], name: "index_part_positions_on_id", using: :btree
   add_index "part_positions", ["part_id"], name: "index_part_positions_on_part_id", using: :btree
   add_index "part_positions", ["position_id"], name: "index_part_positions_on_position_id", using: :btree
-  add_index "part_positions", ["uuid"], name: "index_part_positions_on_uuid", using: :btree
   add_index "part_positions", ["whouse_id"], name: "index_part_positions_on_whouse_id", using: :btree
 
   create_table "parts", force: true do |t|
@@ -167,12 +163,11 @@ ActiveRecord::Schema.define(version: 20140616083045) do
   add_index "positions", ["whouse_id"], name: "index_positions_on_whouse_id", using: :btree
 
   create_table "state_logs", force: true do |t|
-    t.string   "uuid",           limit: 36,                 null: false
     t.string   "stateable_id"
     t.string   "stateable_type"
-    t.boolean  "is_delete",                 default: false
-    t.boolean  "is_dirty",                  default: true
-    t.boolean  "is_new",                    default: true
+    t.boolean  "is_delete",      default: false
+    t.boolean  "is_dirty",       default: true
+    t.boolean  "is_new",         default: true
     t.integer  "state_before"
     t.integer  "state_after"
     t.datetime "created_at"
@@ -180,7 +175,6 @@ ActiveRecord::Schema.define(version: 20140616083045) do
   end
 
   add_index "state_logs", ["id"], name: "index_state_logs_on_id", using: :btree
-  add_index "state_logs", ["uuid"], name: "index_state_logs_on_uuid", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "uuid",                   limit: 36,                 null: false

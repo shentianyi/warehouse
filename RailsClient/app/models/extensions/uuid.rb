@@ -4,7 +4,7 @@ module Extensions
     included do
       #set_primary_key 'id' rails 3
       #self.primary_key='id' # rails 4
-      default_scope {where(is_delete:false)}
+      default_scope { where(is_delete: false) }
       before_create :generate_uuid
       before_update :reset_dirty_flag
 
@@ -23,6 +23,14 @@ module Extensions
       def destroy
         self.is_delete=true
         self.save
+      end
+
+      def gen_sync_attr(item)
+        attr={}
+        self.attributes.except('uuid','is_delete', 'is_dirty', 'is_new').keys.each do |k|
+          attr[k.to_sym]=item.send(k.to_sym)
+        end
+        return attr
       end
     end
   end
