@@ -108,7 +108,7 @@ module V1
       end
 
       if !DeliveryState.can_delete?(d.state)
-        return {result:0,content:'运单不能修改'}
+        return {result:0,content:'运单不能删除'}
       end
 
       if  DeliveryService.delete(d)

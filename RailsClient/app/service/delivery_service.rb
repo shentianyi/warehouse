@@ -22,11 +22,13 @@ class DeliveryService
     if delivery.nil?
       return false
     end
-    unless forklift_ids.nil?
-      forklift_ids.each do |f_id|
-        f = Forklift.find_by_id(f_id)
-        if f
-          f.add_to_delivery(delivery.id)
+    ActiveRecord::Base.transaction do
+      unless forklift_ids.nil?
+        forklift_ids.each do |f_id|
+          f = Forklift.find_by_id(f_id)
+          if f
+            f.add_to_delivery(delivery.id)
+          end
         end
       end
     end
@@ -56,15 +58,17 @@ class DeliveryService
     if delivery.nil?
       return false
     end
-    if delivery.set_state(DeliveryState::RECEIVED)
-      delivery.forklifts.each do |f|
-        ForkliftService.confirm_received(f)
+    ActiveRecord::Base.transaction do
+      if delivery.set_state(DeliveryState::RECEIVED)
+        delivery.forklifts.each do |f|
+          ForkliftService.confirm_received(f)
+        end
+        delivery.receiver = current_user
+        delivery.received_date = Time.now
+        delivery.save
+      else
+        false
       end
-      delivery.receiver = current_user
-      delivery.received_date = Time.now
-      delivery.save
-    else
-      false
     end
   end
 
@@ -72,9 +76,11 @@ class DeliveryService
     if delivery.nil?
       return false
     end
-   delivery.set_state(DeliveryState::DESTINATION)
-    delivery.forklifts.each do |f|
-      ForkliftService.receive(f)
+    ActiveRecord::Base.transaction do
+      delivery.set_state(DeliveryState::DESTINATION)
+      delivery.forklifts.each do |f|
+        ForkliftService.receive(f)
+      end
     end
     true
   end
@@ -83,10 +89,12 @@ class DeliveryService
     if delivery.nil?
       return false
     end
-    delivery.delivery_date = Time.now
-    delivery.set_state(DeliveryState::WAY)
-    delivery.forklifts.each do |f|
-      ForkliftService.send(f)
+    ActiveRecord::Base.transaction do
+      delivery.delivery_date = Time.now
+      delivery.set_state(DeliveryState::WAY)
+      delivery.forklifts.each do |f|
+        ForkliftService.send(f)
+      end
     end
     true
   end
