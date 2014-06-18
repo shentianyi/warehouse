@@ -40,7 +40,7 @@ class Package < ActiveRecord::Base
     true
   end
 
-  private
+  #private
   # set_position
   def set_position
     if self.forklift.nil?
