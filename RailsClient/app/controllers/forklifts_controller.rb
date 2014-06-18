@@ -41,6 +41,10 @@ class ForkliftsController < ApplicationController
   # PATCH/PUT /forklifts/1
   # PATCH/PUT /forklifts/1.json
   def update
+    if forklift_params.has_key?(:state)
+      ForkliftService.set_state(@forklift,forklift_params[:state])
+    end
+
     respond_to do |format|
       if @forklift.update(forklift_params)
         format.html { redirect_to @forklift, notice: 'Forklift was successfully updated.' }

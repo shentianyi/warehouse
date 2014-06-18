@@ -29,4 +29,10 @@ class Role
 	def self.id_sym id
 		id.to_s.to_sym
 	end
+
+	def self.role_menu
+		#@@roles.each_with_key |key,value|
+
+		#end
+	end
 end

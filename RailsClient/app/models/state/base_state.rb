@@ -43,6 +43,8 @@ class BaseState
         [WAY,ORIGINAL,DESTINATION].include? new_state
       when DESTINATION
         [DESTINATION,ORIGINAL,WAY,RECEIVED].include? new_state
+      when RECEIVED
+        [RECEIVED,DESTINATION].include? new_state
       else
         false
     end
