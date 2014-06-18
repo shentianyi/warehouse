@@ -70,6 +70,7 @@ class DeliveriesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def delivery_params
-      params[:delivery]
+      #params[:delivery]
+      params.require(:delivery).permit(:state,:remark)
     end
 end

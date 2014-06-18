@@ -1,4 +1,26 @@
 <p id="notice"><%= notice %></p>
 
+<P>
+  <string>ID:</string>
+  <%= @part.id%>
+</P>
+
+<P>
+  <string>Customer:</string>
+  <%= @part.customernum%>
+</P>
+
+<p>
+  <string>Positions:</string>
+  <ul>
+    <%@part.part_positions.each do |pp| %>
+    <li>
+      <string><%= pp.position.whouse.name%></string>
+      <string><%= pp.position.detail %></string>
+    </li>
+    <%end%>
+  </ul>
+</p>
+
 <%= link_to 'Edit', edit_part_path(@part) %> |
 <%= link_to 'Back', parts_path %>
