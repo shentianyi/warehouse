@@ -2,6 +2,10 @@ module V1
   module Sync
     class LocationSyncAPI<SyncBase
       namespace 'locations'
+      #rescue_from :all do |e|
+      #  LocationSyncAPI.error_unlock_sync_pool('locations')
+      #  Rack::Response.new([e.message], 500).finish
+      #end
 
       get do
         Location.unscoped.where('updated_at>=?', params[:last_time]).all

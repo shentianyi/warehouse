@@ -3,6 +3,11 @@ module V1
     class WhouseSyncAPI<SyncBase
       namespace 'whouses'
 
+      #rescue_from :all do |e|
+      #  WhouseSyncAPI.error_unlock_sync_pool('whouses')
+      #  Rack::Response.new([e.message], 500).finish
+      #end
+
       get do
         Whouse.unscoped.where('updated_at>=?', params[:last_time]).all
       end

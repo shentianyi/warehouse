@@ -2,6 +2,10 @@ module V1
   module Sync
     class ForkliftSyncAPI<SyncBase
       namespace 'forklifts'
+      #rescue_from :all do |e|
+      #  ForkliftSyncAPI.error_unlock_sync_pool('forklifts')
+      #  Rack::Response.new([e.message], 500).finish
+      #end
 
       get do
         Forklift.unscoped.where('updated_at>=?', params[:last_time]).all

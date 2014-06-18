@@ -2,7 +2,10 @@ module V1
   module Sync
     class PositionSyncAPI<SyncBase
       namespace 'positions'
-
+      #rescue_from :all do |e|
+      #  PositionSyncAPI.error_unlock_sync_pool('positions')
+      #  Rack::Response.new([e.message], 500).finish
+      #end
       get do
         Position.unscoped.where('updated_at>=?', params[:last_time]).all
       end
