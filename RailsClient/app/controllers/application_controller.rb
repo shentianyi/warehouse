@@ -8,6 +8,16 @@ class ApplicationController < ActionController::Base
   before_filter :authenticate_user_from_token!
   before_filter :authenticate_user!
 
+  #============
+  # fix cancan "ActiveModel::ForbiddenAttributesError" with Rails 4
+  # see https://github.com/ryanb/cancan/issues/835
+  #============
+  before_filter do
+    resource = controller_name.singularize.to_sym
+    method = "#{resource}_params"
+    params[resource] &&= send(method) if respond_to?(method, true)
+  end
+
   layout :layout_by_resource
 
   protected

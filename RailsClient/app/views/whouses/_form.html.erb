@@ -11,6 +11,20 @@
     </div>
   <% end %>
 
+    <p>
+      <%= f.label :id%>
+      <%= f.text_field :id%>
+    </p>
+
+    <p>
+      <%= f.label :name%>
+      <%= f.text_field :name%>
+    </p>
+
+    <p>
+      <%=  f.select(:location_id,Location.all.collect{|l| [l.name,l.id]},{include_blank: false})%>
+    </p>
+
   <div class="actions">
     <%= f.submit %>
   </div>

@@ -1,5 +1,6 @@
 class Whouse < ActiveRecord::Base
   include Extensions::UUID
 
-  belongs_to :location, :dependent => :destroy
+  belongs_to :location
+  has_many :positions, :dependent => :destroy
 end

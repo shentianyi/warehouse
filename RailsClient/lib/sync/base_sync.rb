@@ -6,15 +6,15 @@ module Sync
 
     def self.sync
       if Config.enabled
-        #begin
+        begin
         pull &pull_block
         post &post_block
         put &put_block
         delete &delete_block
-        #rescue => e
-        #  puts e.class
-        #  #puts e.to_s
-        #end
+        rescue => e
+          puts e.class
+          puts e.to_s
+        end
       end
     end
 
@@ -22,8 +22,7 @@ module Sync
     def self.pull
       current=Time.now
       site=init_site(URI::encode(self::PULL_URL+'?last_time='+Sync::Config.last_time.to_s))
-      #Config.last_time=(current- Config.advance_second.seconds)
-
+      Config.last_time=(current- Config.advance_second.seconds)
       response=site.get
       if response.code==200
         yield(JSON.parse(response)) if block_given?
@@ -82,7 +81,7 @@ module Sync
       Proc.new do |items, response|
         model.record_timestamps=false
         items.each do |item|
-          #item.save
+          item.save
         end
       end
     end
@@ -91,7 +90,7 @@ module Sync
       Proc.new do |items, response|
         model.record_timestamps=false
         items.each do |item|
-          #item.save
+          item.save
         end
       end
     end
@@ -100,7 +99,7 @@ module Sync
       Proc.new do |items, response|
         model.record_timestamps=false
         items.each do |item|
-          #item.save
+          item.save
         end
       end
     end

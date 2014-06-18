@@ -1,7 +1,7 @@
 class PartPosition < ActiveRecord::Base
   include Extensions::UUID
-  belongs_to :position, :dependent => :destroy
-  belongs_to :part, :dependent => :destroy
+  belongs_to :position
+  belongs_to :part
 
   FK=%w(position_id part_id)
 

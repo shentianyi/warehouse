@@ -1,0 +1,17 @@
+<style>
+    #main-menu {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    #main-menu li{
+        display: inline;
+    }
+</style>
+
+<ul id="main-menu">
+  <li><a href="/">Home</a></li>
+  <li><a href="<%= users_path%>">Users</a></li>
+  <li><a href="<%= destroy_user_session_path%>">Log out</a></li>
+</ul>

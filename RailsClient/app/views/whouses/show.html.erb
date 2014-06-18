@@ -1,4 +1,19 @@
 <p id="notice"><%= notice %></p>
 
+<p>
+  <string>ID:</string>
+  <%= @whouse.id%>
+</p>
+<p>
+  <string>Name:</string>
+  <%= @whouse.id%>
+</p>
+
+<p>
+  <string>Location:</string>
+  <%= @whouse.location.name if @whouse.location%>
+</p>
+
+
 <%= link_to 'Edit', edit_whouse_path(@whouse) %> |
 <%= link_to 'Back', whouses_path %>

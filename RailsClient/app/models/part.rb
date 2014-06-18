@@ -2,6 +2,7 @@ class Part < ActiveRecord::Base
   include Extensions::UUID
 
   belongs_to :user
+  has_many :part_positions, :dependent => :destroy
 
   validates_uniqueness_of :id
 
