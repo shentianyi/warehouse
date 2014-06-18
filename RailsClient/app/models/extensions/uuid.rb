@@ -31,6 +31,7 @@ module Extensions
         self::FK.each do |k|
           c[k]=arg[k]
         end
+        return c
       end
 
       def gen_sync_attr(item)
