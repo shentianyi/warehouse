@@ -5,11 +5,13 @@ class PackageService
       return false
     end
 
-    if PackageState.can_delete?(package.state)
-      package.remove_from_forklift
-      package.destroy
-    else
-      return false
+    ActiveRecord::Base.transaction do
+      if PackageState.can_delete?(package.state)
+        package.remove_from_forklift
+        package.destroy
+      else
+        return false
+      end
     end
 
   end
