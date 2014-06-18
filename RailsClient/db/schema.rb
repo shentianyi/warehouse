@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140618083942) do
+ActiveRecord::Schema.define(version: 20140618095707) do
 
   create_table "deliveries", force: true do |t|
     t.string   "uuid",           limit: 36,                 null: false
@@ -61,16 +61,17 @@ ActiveRecord::Schema.define(version: 20140618083942) do
   add_index "forklifts", ["whouse_id"], name: "index_forklifts_on_whouse_id", using: :btree
 
   create_table "locations", force: true do |t|
-    t.string   "uuid",       limit: 36,                 null: false
+    t.string   "uuid",          limit: 36,                 null: false
     t.string   "name"
-    t.boolean  "is_delete",             default: false
-    t.boolean  "is_dirty",              default: true
-    t.boolean  "is_new",                default: true
+    t.boolean  "is_delete",                default: false
+    t.boolean  "is_dirty",                 default: true
+    t.boolean  "is_new",                   default: true
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "address"
     t.string   "tel"
-    t.boolean  "is_base",               default: false
+    t.boolean  "is_base",                  default: false
+    t.integer  "location_type",            default: 1
   end
 
   add_index "locations", ["id"], name: "index_locations_on_id", using: :btree
