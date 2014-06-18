@@ -48,9 +48,12 @@ module Sync
       site=init_site(self::POST_URL+'/0')
       items=get_puts.collect { |item|
         item.is_dirty=false
+        item
+      }
+      items_hash=items.collect { |item|
         clean_put(item.attributes)
       }
-      response=site.put({main_key => items.to_json})
+      response=site.put({main_key => items_hash.to_json})
       if response.code==200
         yield(items, JSON.parse(response)) if block_given?
       end
@@ -74,7 +77,7 @@ module Sync
       model.record_timestamps=false
       model.skip_callback(:update, :before, :reset_dirty_flag)
       model.skip_callback(:save, :after, :log_state)
-      model.skip_callback(:update,:after,:set_update_flag)
+      model.skip_callback(:update, :after, :set_update_flag)
     end
 
     def self.post_block
