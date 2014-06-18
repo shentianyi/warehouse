@@ -30,6 +30,10 @@
       <%= f.label :tel%>
       <%= f.text_field :tel%>
     </p>
+
+    <p>
+      <%= f.select(:location_type,LocationType.menu,{include_blank: false})%>
+    </p>
   <div class="actions">
     <%= f.submit %>
   </div>
