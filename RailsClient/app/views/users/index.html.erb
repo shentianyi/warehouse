@@ -4,6 +4,7 @@
   <thead>
   <tr>
     <!--<th>ID</th>-->
+    <th>No</th>
     <th>ID</th>
     <th>Email</th>
     <th>Name</th>
@@ -15,8 +16,9 @@
   </thead>
 
   <tbody>
-  <% @users.each do |user| %>
+  <% @users.each_with_index do |user,index| %>
       <tr>
+        <td><%= index %>
         <td><%= user.id %>
         <td><%= user.email %></td>
         <td><%= user.name %></td>

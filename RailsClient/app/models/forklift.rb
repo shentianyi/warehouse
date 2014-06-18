@@ -23,6 +23,11 @@ class Forklift < ActiveRecord::Base
     self.save
   end
 
+  def package_unchecked
+    self.accepted_packages = self.accepted_packages - 1
+    self.save
+  end
+
   #remove_from_delivery
   def remove_from_delivery
     self.delivery = nil
