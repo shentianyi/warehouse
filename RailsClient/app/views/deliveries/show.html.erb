@@ -1,4 +1,63 @@
 <p id="notice"><%= notice %></p>
 
+<p>
+  <string>ID:</string>
+  <%= @delivery.id%>
+</p>
+
+<p>
+  <string>State:</string>
+  <%= DeliveryState.display(@delivery.state)%>
+</p>
+
+<p>
+  <string>Delivery Date:</string>
+  <%= @delivery.delivery_date%>
+</p>
+
+<p>
+  <string>Received Date:</string>
+  <%= @delivery.received_date%>
+</p>
+
+<p>
+  <string>Receiver:</string>
+  <%= @delivery.receiver.name if @delivery.receiver%>
+</p>
+
+<p>
+  <string>Creator:</string>
+  <%= @delivery.user.name%>
+</p>
+
+<p>
+  <string>Created At:</string>
+  <%= @delivery.created_at%>
+</p>
+
+<p>
+  <string>Source:</string>
+  <%= @delivery.source.name if @delivery.source%>
+</p>
+
+<p>
+  <string>Destination:</string>
+  <%= @delivery.destination.name if @delivery.destination%>
+</p>
+
+<p>
+  <string>Remark:</string>
+  <%= @delivery.remark%>
+</p>
+
+<p>
+  <string>Forklifts:</string>
+  <ul>
+    <% @delivery.forklifts.each do |f| %>
+    <%= link_to f.id,f%>
+    <% end%>
+  </ul>
+</p>
+
 <%= link_to 'Edit', edit_delivery_path(@delivery) %> |
 <%= link_to 'Back', deliveries_path %>
