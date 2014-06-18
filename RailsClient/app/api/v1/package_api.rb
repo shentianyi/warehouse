@@ -62,7 +62,6 @@ module V1
     # update package
     put do
       if p = PackageService.exits?(package_params[:id])
-
         if PackageService.update(p,package_params)
           {result:1,content:'修改成功!'}
         else
