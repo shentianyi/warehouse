@@ -177,7 +177,7 @@ ActiveRecord::Schema.define(version: 20140618023742) do
 
   create_table "sync_pools", force: true do |t|
     t.string   "table_name"
-    t.boolean  "locked",     default: true
+    t.boolean  "locked"
     t.string   "client_ip"
     t.datetime "created_at"
     t.datetime "updated_at"

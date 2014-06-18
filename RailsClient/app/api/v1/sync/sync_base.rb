@@ -16,7 +16,9 @@ module V1
       mount PositionSyncAPI
       mount DeliverySyncAPI
       mount ForkliftSyncAPI
+      mount PackageSyncAPI
 
+      mount PackagePositionSyncAPI
     end
   end
 end

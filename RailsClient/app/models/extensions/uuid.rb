@@ -43,7 +43,7 @@ module Extensions
 
       def gen_uniq_sync_attr(item)
         attr={}
-        self.attributes.except('id','is_delete', 'is_dirty', 'is_new').keys.each do |k|
+        self.attributes.except('is_delete', 'is_dirty', 'is_new').keys.each do |k|
           attr[k.to_sym]=item.send(k.to_sym)
         end
         return attr

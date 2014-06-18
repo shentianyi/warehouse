@@ -2,31 +2,36 @@ module V1
   module Sync
     class ForkliftSyncAPI<SyncBase
       namespace 'forklifts'
+
       get do
         Forklift.unscoped.where('updated_at>=?', params[:last_time]).all
       end
 
       post do
-        puts params
-        forklift=forklift.new(JSON.parse(params[:forklift]))
-        forklift.save
-        forklift
+        forklifts=JSON.parse(params[:forklift])
+        forklifts.each do |forklift|
+          forklift=Forklift.new(forklift)
+          puts forklift
+          forklift.save
+        end
       end
 
       put '/:id' do
-        if forklift=forklift.find_by_id(params[:id])
-          forklift.update(JSON.parse(params[:forklift]))
+        forklifts=JSON.parse(params[:forklift])
+        forklifts.each do |forklift|
+          if u=Forklift.unscoped.find_by_id(forklift['id'])
+            u.update(forklift.except('id'))
+          end
         end
-        forklift
       end
 
-      delete '/:id' do
-        puts params
-        puts params[:forklift]
-        if forklift=forklift.find_by_id(params[:id])
-          forklift.update(is_delete: true)
+      post :delete do
+        forklifts=JSON.parse(params[:forklift])
+        forklifts.each do |id|
+          if forklift=Forklift.unscoped.find_by_id(id)
+            forklift.update(is_delete: true)
+          end
         end
-        forklift
       end
     end
   end
