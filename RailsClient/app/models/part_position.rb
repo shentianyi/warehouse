@@ -3,7 +3,7 @@ class PartPosition < ActiveRecord::Base
   belongs_to :position, :dependent => :destroy
   belongs_to :part, :dependent => :destroy
 
-  FK=[:position_id, :part_id]
+  FK=%w(position_id part_id)
 
   before_update :set_update_flag
   private

@@ -2,7 +2,10 @@ module V1
   module Sync
     class PartSyncAPI<SyncBase
       namespace 'parts'
-
+      #rescue_from :all do |e|
+      #  PartSyncAPI.error_unlock_sync_pool('parts')
+      #  Rack::Response.new([e.message], 500).finish
+      #end
       get do
         Part.unscoped.where('updated_at>=?', params[:last_time]).all
       end

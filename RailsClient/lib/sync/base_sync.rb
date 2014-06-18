@@ -75,7 +75,7 @@ module Sync
       model.record_timestamps=false
       model.skip_callback(:update, :before, :reset_dirty_flag)
       model.skip_callback(:save, :after, :log_state)
-      model.skpi_callback(:update,:after,:set_update_flag)
+      model.skip_callback(:update,:after,:set_update_flag)
     end
 
     def self.post_block
@@ -124,9 +124,8 @@ module Sync
       item.except('uuid', 'created_at')
     end
 
-
     def self.main_key
-      model_name.downcase
+      model_name.underscore
     end
 
     def self.model

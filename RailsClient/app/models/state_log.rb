@@ -3,5 +3,5 @@ class StateLog < ActiveRecord::Base
 
   belongs_to :stateable, polymorphic: true
 
-  FK=[:stateable_id, :stateable_type]
+  FK=%w(id)
 end

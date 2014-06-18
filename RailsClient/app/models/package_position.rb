@@ -3,7 +3,7 @@ class PackagePosition < ActiveRecord::Base
   belongs_to :package, :dependent => :destroy
   belongs_to :position, :dependent => :destroy
 
-  FK=[:position_id, :package_id]
+  FK=%w(position_id package_id)
 
   before_update :set_update_flag
   private

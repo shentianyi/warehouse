@@ -2,6 +2,10 @@ module V1
   module Sync
     class PackagePositionSyncAPI<SyncBase
       namespace 'package_positions'
+      #rescue_from :all do |e|
+      #  PackagePositionSyncAPI.error_unlock_sync_pool('package_positions')
+      #  Rack::Response.new([e.message], 500).finish
+      #end
 
       get do
         PackagePosition.unscoped.where('updated_at>=?', params[:last_time]).all

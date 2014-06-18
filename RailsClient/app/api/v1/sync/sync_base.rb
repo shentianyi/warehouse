@@ -9,6 +9,8 @@ module V1
       guard_all!
       lock_sync_pool
       unlock_sync_pool
+
+
       mount LocationSyncAPI
       mount UserSyncAPI
       mount WhouseSyncAPI
@@ -18,7 +20,9 @@ module V1
       mount ForkliftSyncAPI
       mount PackageSyncAPI
 
+      mount PartPositionSyncAPI
       mount PackagePositionSyncAPI
+      mount StateLogSyncAPI
     end
   end
 end

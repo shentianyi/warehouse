@@ -6,10 +6,10 @@ module Sync
       Proc.new do |items|
         items.each do |item|
           unless ori=model.unscoped.where(model.fk_condition(item)).first
-            model.new(item)
-            model.is_new=false
-            model.is_dirty=false
-            model.save
+            ori=model.new(item)
+            ori.is_new=false
+            ori.is_dirty=false
+            ori.save
           else
             item=model.new(item)
             if ori.is_delete

@@ -13,22 +13,35 @@ module SyncAPIGuard
   module ClassMethods
     def lock_sync_pool
       before do
-        tb= get_table_name
-        if table=SyncPool.find_by_table_name(tb)
-          if table.locked
-            return error!('Recourse Locked', 423)
+        if $OPEN_SYN_LOCK
+          tb= get_table_name
+          if table=SyncPool.find_by_table_name(tb)
+            if table.locked
+              return error!('Recourse Locked', 423)
+            else
+              table.update(locked: true)
+            end
           else
-            table.update(locked: true)
+            SyncPool.create(table_name: tb)
           end
-        else
-          SyncPool.create(table_name: tb)
         end
       end
     end
 
     def unlock_sync_pool
       after do
-        tb= get_table_name
+        if $OPEN_SYN_LOCK
+          tb= get_table_name
+          if table=SyncPool.find_by_table_name(tb)
+            table.update(locked: false)
+          end
+        end
+      end
+    end
+
+    def error_unlock_sync_pool(tb)
+      puts 'error unlock'
+      if $OPEN_SYN_LOCK
         if table=SyncPool.find_by_table_name(tb)
           table.update(locked: false)
         end
