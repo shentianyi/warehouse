@@ -42,7 +42,7 @@ class DeliveriesController < ApplicationController
   # PATCH/PUT /deliveries/1.json
   def update
     if delivery_params.has_key?(:state)
-      DeliveryService.set_state(@delivery,delivery_params[:state])
+      DeliveryService.set_state(@delivery, delivery_params[:state])
     end
 
     respond_to do |format|
@@ -66,15 +66,34 @@ class DeliveriesController < ApplicationController
     end
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_delivery
-      @delivery = Delivery.find(params[:id])
+  def export
+    json={}
+    # delivery,forklift,package,package_position
+    d=Delivery.find(params[:id])
+    json[:delivery]=d
+
+    d.forklifts.each do |f|
+      f.packages.each do |p|
+        p.package_position
+      end
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def delivery_params
-      #params[:delivery]
-      params.require(:delivery).permit(:state,:remark)
-    end
+    send_data d.to_json, :filename => 'd.json'
+  end
+
+  def import
+
+  end
+
+  private
+  # Use callbacks to share common setup or constraints between actions.
+  def set_delivery
+    @delivery = Delivery.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def delivery_params
+    #params[:delivery]
+    params.require(:delivery).permit(:state, :remark)
+  end
 end

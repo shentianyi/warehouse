@@ -33,6 +33,7 @@
         <td colspan="3"><%= delivery.remark%></td>
         <td><%= link_to 'Show', delivery %></td>
         <td><%= link_to 'Edit', edit_delivery_path(delivery) %></td>
+        <td><%= link_to 'Export', export_delivery_path(delivery)%></td>
       </tr>
     <% end %>
   </tbody>
