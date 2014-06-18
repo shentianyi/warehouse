@@ -71,14 +71,19 @@ class DeliveriesController < ApplicationController
     # delivery,forklift,package,package_position
     d=Delivery.find(params[:id])
     json[:delivery]=d
-
-    d.forklifts.each do |f|
-      f.packages.each do |p|
-        p.package_position
-      end
-    end
-
-    send_data d.to_json, :filename => 'd.json'
+    json[:forklifts]=d.forklifts
+    json[:packages]=[]
+    json[:forklifts].each { |f|
+      json[:packages] += f.packages }
+    json[:package_positions]= []
+    json[:packages].each { |p|
+      json[:package_positions]<< p.package_position }
+    json[:state_logs]=d.state_logs
+    json[:forklifts].each { |f|
+      json[:state_logs]+=f.state_logs }
+    json[:packages].each { |p|
+      json[:state_logs]+=p.state_logs }
+    send_data json.to_json, :filename => "#{d.id}.json"
   end
 
   def import
