@@ -25,6 +25,7 @@ class LocationsController < ApplicationController
   # POST /locations
   # POST /locations.json
   def create
+    #@location = Location.new(params.require(:location).permit(:id,:name,:address,:tel))
     @location = Location.new(location_params)
 
     respond_to do |format|
@@ -42,6 +43,9 @@ class LocationsController < ApplicationController
   # PATCH/PUT /locations/1.json
   def update
     respond_to do |format|
+      puts '##########################'
+      puts location_params
+      puts '##########################'
       if @location.update(location_params)
         format.html { redirect_to @location, notice: 'Location was successfully updated.' }
         format.json { render :show, status: :ok, location: @location }
@@ -55,10 +59,17 @@ class LocationsController < ApplicationController
   # DELETE /locations/1
   # DELETE /locations/1.json
   def destroy
-    @location.destroy
-    respond_to do |format|
-      format.html { redirect_to locations_url, notice: 'Location was successfully destroyed.' }
-      format.json { head :no_content }
+    if @location.is_base
+      respond_to do |format|
+        format.html { redirect_to locations_url, notice: 'Base Location can\'t be deleted.' }
+        format.json { head :no_content }
+      end
+    else
+      @location.destroy
+      respond_to do |format|
+        format.html { redirect_to locations_url, notice: 'Location was successfully destroyed.' }
+        format.json { head :no_content }
+      end
     end
   end
 

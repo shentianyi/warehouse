@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140617083323) do
+ActiveRecord::Schema.define(version: 20140618023742) do
 
   create_table "deliveries", force: true do |t|
     t.string   "uuid",           limit: 36,                 null: false
@@ -70,6 +70,7 @@ ActiveRecord::Schema.define(version: 20140617083323) do
     t.datetime "updated_at"
     t.string   "address"
     t.string   "tel"
+    t.boolean  "is_base",               default: false
   end
 
   add_index "locations", ["id"], name: "index_locations_on_id", using: :btree

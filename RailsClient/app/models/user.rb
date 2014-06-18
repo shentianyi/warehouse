@@ -35,6 +35,14 @@ class User < ActiveRecord::Base
     false
   end
 
+  def employee?
+    if self.admin? || self.manager?
+      false
+    else
+      true
+    end
+  end
+
   private
   def generate_authentication_token
     loop do
