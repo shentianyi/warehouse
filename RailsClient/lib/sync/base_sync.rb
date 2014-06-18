@@ -6,11 +6,13 @@ module Sync
 
     def self.sync
       if Config.enabled
+        current=Time.now
         #begin
         pull &pull_block
         post &post_block
         put &put_block
         delete &delete_block
+        Config.last_time=(current- Config.advance_second.seconds)
         #rescue => e
         #  puts e.class
         #  puts e.to_s
@@ -18,14 +20,14 @@ module Sync
       end
     end
 
+
+
     # sync pull
     def self.pull
-      current=Time.now
       site=init_site(URI::encode(self::PULL_URL+'?last_time='+Sync::Config.last_time.to_s))
-      Config.last_time=(current- Config.advance_second.seconds)
+
       response=site.get
       if response.code==200
-        puts response
         yield(JSON.parse(response)) if block_given?
       end
     end
