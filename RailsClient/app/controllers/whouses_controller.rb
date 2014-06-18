@@ -1,6 +1,6 @@
 class WhousesController < ApplicationController
   load_and_authorize_resource
-  before_action :set_whouse, only: [:show, :edit, :update, :destroy]
+  before_action :set_whouse, only: [:show, :edit, :update, :destroy, :positions]
 
   # GET /whouses
   # GET /whouses.json
@@ -50,6 +50,11 @@ class WhousesController < ApplicationController
         format.json { render json: @whouse.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  # GET /whouses/1/whouses
+  def positions
+    @positions = @whouse.positions
   end
 
   # DELETE /whouses/1

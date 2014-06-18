@@ -10,6 +10,20 @@
       </ul>
     </div>
   <% end %>
+    <p>
+      <%= f.label :id%>
+      <%= f.text_field :id%>
+    </p>
+
+    <p>
+      <%= f.label :detail%>
+      <%= f.text_field :detail%>
+    </p>
+
+    <p>
+      <%=  f.select(:whouse_id,Whouse.all.collect{|l| [l.name,l.id]},{include_blank: false})%>
+    </p>
+
 
   <div class="actions">
     <%= f.submit %>

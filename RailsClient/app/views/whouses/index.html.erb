@@ -15,6 +15,7 @@
         <td colspan="3"><%= whouse.id %> </td>
         <td colspan="3"><%= whouse.name %></td>
         <td colspan="3"><%= whouse.location.name if whouse.location %></td>
+        <td><%= link_to 'Positions', positions_whouse_path(whouse) %></td>
         <td><%= link_to 'Show', whouse %></td>
         <td><%= link_to 'Edit', edit_whouse_path(whouse) %></td>
         <td><%= link_to 'Destroy', whouse, method: :delete, data: { confirm: 'Are you sure?' } %></td>

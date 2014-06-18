@@ -19,14 +19,13 @@ Rails.application.routes.draw do
 
   resources :packages
 
-  resources :whouses
+  resources :whouses do
+    member do
+      get 'positions'
+    end
+  end
 
   resources :locations do
-=begin
-    resources :users
-    resources :whouses
-=end
-
     member do
       get 'users'
       get 'whouses'

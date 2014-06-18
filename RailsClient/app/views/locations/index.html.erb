@@ -13,10 +13,11 @@
       <tr>
         <td colspan="3"><%= location.id %></td>
         <td colspan="3"><%= location.name %></td>
+        <td><%= link_to 'Users',users_location_path(location) %></td>
+        <td><%= link_to 'Ware houses',whouses_location_path(location) %></td>
         <td><%= link_to 'Show', location %></td>
         <td><%= link_to 'Edit', edit_location_path(location) %></td>
         <td><%= link_to 'Destroy', location, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-        <td><%= link_to %></td>
       </tr>
     <% end %>
   </tbody>

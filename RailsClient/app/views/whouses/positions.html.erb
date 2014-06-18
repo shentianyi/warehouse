@@ -1,0 +1,6 @@
+<ul>
+  <% @positions.each do |p|%>
+      <%= link_to p.id, p%>
+  <% end%>
+</ul>
+<%= link_to 'Back', whouses_path %>

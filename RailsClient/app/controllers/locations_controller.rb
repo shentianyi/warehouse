@@ -39,12 +39,12 @@ class LocationsController < ApplicationController
     end
   end
 
-  # GET /locations/users
+  # GET /locations/1/users
   def users
-    @users = @locations.users
+    @users = @location.users
   end
 
-  # GET /locations/whouses
+  # GET /locations/1/whouses
   def whouses
     @whouses = @location.whouses
   end

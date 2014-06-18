@@ -1,5 +1,6 @@
 <ul>
   <% @users.each do |u|%>
-
+  <%= link_to u.id, u%>
   <% end%>
 </ul>
+<%= link_to 'Back', locations_path %>

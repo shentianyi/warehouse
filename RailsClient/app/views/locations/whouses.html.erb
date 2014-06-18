@@ -1,0 +1,6 @@
+<ul>
+  <% @whouses.each do |w|%>
+      <%= link_to w.name, w%>
+  <% end%>
+</ul>
+<%= link_to 'Back', locations_path %>

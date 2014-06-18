@@ -47,7 +47,7 @@ class Package < ActiveRecord::Base
       return
     end
 
-    if pp = PartPosition.where(part_id:self.part_id,whouse_id:self.forklift.whouse_id).first
+    if pp = PartPosition.joins(:position).where({part_positions:{part_id:self.part_id},positions:{whouse_id:self.forklift.whouse_id}}).first
       if self.package_position.nil?
         self.create_package_position(position_id: pp.position_id)
       else

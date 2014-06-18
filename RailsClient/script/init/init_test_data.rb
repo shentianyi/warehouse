@@ -26,7 +26,7 @@ u3.save
 Part.create(id:'PT001',user_id:'user001')
 Part.create(id:'PT002',user_id:'user001')
 
-PartPosition.create(part_id:'PT001',position_id:p1.id,whouse_id:'wh001')
-PartPosition.create(part_id:'PT002',position_id:p2.id,whouse_id:'wh001')
-PartPosition.create(part_id:'PT001',position_id:p3.id,whouse_id:'wh002')
-PartPosition.create(part_id:'PT002',position_id:p4.id,whouse_id:'wh002')
+PartPosition.create(part_id:'PT001',position_id:p1.id)
+PartPosition.create(part_id:'PT002',position_id:p2.id)
+PartPosition.create(part_id:'PT001',position_id:p3.id)
+PartPosition.create(part_id:'PT002',position_id:p4.id)
