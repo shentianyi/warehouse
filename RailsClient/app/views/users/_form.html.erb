@@ -15,19 +15,13 @@
       <%= f.text_field :id%>
     </p>
 
-    <p>
-      <%= f.label :email%>
-      <%= f.email_field :email%>
-    </p>
+
 
     <p>
       <%= f.label :name%>
       <%= f.text_field :name%>
     </p>
-    <p>
-      <%= f.label :tel%>
-      <%= f.text_field :tel%>
-    </p>
+
     <p>
       <%= f.label :password%>
       <%= f.password_field :password%>
@@ -39,6 +33,20 @@
 
     <p>
       <%=  f.select(:role_id,Role.menu,{include_blank: false})%>
+    </p>
+
+    <p>
+      <%=  f.select(:location_id,Location.all.collect{|l| [l.name,l.id]},{include_blank: false})%>
+    </p>
+
+    <p>
+      <%= f.label :email%>
+      <%= f.email_field :email%>
+    </p>
+
+    <p>
+      <%= f.label :tel%>
+      <%= f.text_field :tel%>
     </p>
 
     <div class="actions">

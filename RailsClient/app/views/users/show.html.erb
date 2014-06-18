@@ -6,18 +6,8 @@
 </p>
 
 <p>
-  <string>Email:</string>
-  <%= @user.email%>
-</p>
-
-<p>
   <string>Name:</string>
   <%= @user.name%>
-</p>
-
-<p>
-  <string>Tel:</string>
-  <%= @user.tel%>
 </p>
 
 <p>
@@ -33,6 +23,15 @@
 <p>
   <string>Role:</string>
   <%= @user.role%>
+</p>
+
+<p>
+  <string>Email:</string>
+  <%= @user.email%>
+</p>
+<p>
+  <string>Tel:</string>
+  <%= @user.tel%>
 </p>
 
 <%= link_to 'Edit', edit_user_path(@user) %> |
