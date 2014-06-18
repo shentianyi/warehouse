@@ -12,7 +12,6 @@ module V1
       end
 
       post do
-        puts params
         part_positions=JSON.parse(params[:part_position])
         part_positions.each do |part_position|
           part_position=PartPosition.new(part_position)
