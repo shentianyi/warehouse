@@ -8,8 +8,8 @@ Bundler.require(*Rails.groups)
 
 module Warehouse
   class Application < Rails::Application
-    config.paths['config/database']='config/wangsong_database.yml' if ENV['USER']=='wangsong'
-    config.paths['config/database']='config/charlot_database.yml' if ENV['USER']=='charlot'
+    #config.paths['config/database']='config/wangsong_database.yml' if ENV['USER']=='wangsong'
+    #config.paths['config/database']='config/charlot_database.yml' if ENV['USER']=='charlot'
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
     # for the api
     %w{models api service presenters}.each do |namespace|

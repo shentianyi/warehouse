@@ -30,7 +30,7 @@ module V1
 
       post :delete do
         state_logs=JSON.parse(params[:state_log])
-        state_logs.each do |id|
+        state_logs.each do |state_log|
           if state_log=StateLog.unscoped.where(StateLog.fk_condition(state_log)).first
             state_log.update(is_delete: true)
           end
