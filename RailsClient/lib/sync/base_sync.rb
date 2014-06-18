@@ -25,7 +25,6 @@ module Sync
     # sync pull
     def self.pull
       site=init_site(URI::encode(self::PULL_URL+'?last_time='+Sync::Config.last_time.to_s))
-
       response=site.get
       if response.code==200
         yield(JSON.parse(response)) if block_given?

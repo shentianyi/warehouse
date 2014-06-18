@@ -7,7 +7,7 @@ module V1
       #  Rack::Response.new([e.message], 500).finish
       #end
       get do
-        Part.unscoped.where('updated_at>=?', params[:last_time]).all
+        Part.unscoped.where('updated_at>=?', Time.parse(params[:last_time])).all
       end
 
       post do
