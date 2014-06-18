@@ -37,9 +37,10 @@ module V1
       post :delete do
         package_positions=JSON.parse(params[:package_position])
         puts '____________'
+        puts '--------delete'
         puts package_positions
-
-        package_positions.each do |id|
+        puts '--------delete'
+        package_positions.each do |package_position|
           if package_position=PackagePosition.unscoped.where(PackagePosition.fk_condition(package_position)).first
             package_position.update(is_delete: true)
           end

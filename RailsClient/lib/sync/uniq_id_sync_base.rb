@@ -1,6 +1,19 @@
 require_relative 'base_sync'
 module Sync
   class UniqIdSyncBase<BaseSync
+    # sync delete
+    def self.delete
+      items=get_deletes.collect { |item|
+        item.is_dirty=false
+        item
+      }
+      site= init_site(self::POST_URL+'/delete')
+      response=site.post({main_key => items.to_json})
+      if response.code==201
+        yield(items, JSON.parse(response)) if block_given?
+      end
+    end
+
     def self.pull_block
       super
       Proc.new do |items|
