@@ -1,13 +1,8 @@
 class PackagePosition < ActiveRecord::Base
   include Extensions::UUID
-  belongs_to :package, :dependent => :destroy
-  belongs_to :position, :dependent => :destroy
-<<<<<<< HEAD
-
+  belongs_to :package
+  belongs_to :position
   FK=%w(position_id package_id)
-=======
-  FK=[:position_id, :package_id]
->>>>>>> e2a34df5724415b5f02b8803884874f2c07907d2
 
   before_update :set_update_flag
   private

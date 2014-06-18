@@ -6,15 +6,15 @@ module Sync
 
     def self.sync
       if Config.enabled
-        begin
+        #begin
         pull &pull_block
         post &post_block
         put &put_block
         delete &delete_block
-        rescue => e
-          puts e.class
-          puts e.to_s
-        end
+        #rescue => e
+        #  puts e.class
+        #  puts e.to_s
+        #end
       end
     end
 

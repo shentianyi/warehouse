@@ -22,8 +22,15 @@ Rails.application.routes.draw do
   resources :whouses
 
   resources :locations do
+=begin
     resources :users
     resources :whouses
+=end
+
+    member do
+      get 'users'
+      get 'whouses'
+    end
   end
 
   resources :parts
