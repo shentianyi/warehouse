@@ -93,7 +93,7 @@ module V1
         if PackageService.check(p)
           {result:1,content:'检查成功'}
         else
-          {result:1,content:'检查成功'}
+          {result:0,content:'检查失敗'}
         end
       else
         {result:0,content:'包装箱不存在!'}
@@ -104,9 +104,9 @@ module V1
     post :uncheck do
       if p = PackageService.exits?(params[:id])
         if PackageService.uncheck(p)
-          {result:1,content:'检查成功'}
+          {result:1,content:'取消检查成功'}
         else
-          {result:1,content:'检查成功'}
+          {result:0,content:'取消检查失敗'}
         end
       else
         {result:0,content:'包装箱不存在!'}

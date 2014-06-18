@@ -41,7 +41,7 @@ class PackageService
       return false
     end
 
-    if PackageState.set_state(package,PackageState::RECEIVED)
+    if set_state(package,PackageState::RECEIVED)
       package.forklift.package_checked
       true
     else
@@ -58,7 +58,7 @@ class PackageService
       return false
     end
 
-    if PackageState.set_state(package,PackageState::DESTINATION)
+    if set_state(package,PackageState::DESTINATION)
       package.forklift.package_unchecked
       true
     else
