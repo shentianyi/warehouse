@@ -1,6 +1,6 @@
 class LocationsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_location, only: [:show, :edit, :update, :destroy]
+  before_action :set_location, only: [:show, :edit, :update, :destroy, :users, :whouses]
 
   # GET /locations
   # GET /locations.json
@@ -37,6 +37,16 @@ class LocationsController < ApplicationController
         format.json { render json: @location.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  # GET /locations/users
+  def users
+    @users = @locations.users
+  end
+
+  # GET /locations/whouses
+  def whouses
+    @whouses = @location.whouses
   end
 
   # PATCH/PUT /locations/1

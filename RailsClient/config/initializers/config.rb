@@ -1,1 +1,2 @@
+$SYNC_HOST = 'http://192.168.1.109:3000'
 $OPEN_SYN_LOCK= false
