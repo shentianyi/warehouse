@@ -21,7 +21,10 @@ Rails.application.routes.draw do
 
   resources :whouses
 
-  resources :locations
+  resources :locations do
+    resources :users
+    resources :whouses
+  end
 
   resources :parts
 
