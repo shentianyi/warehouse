@@ -6,13 +6,12 @@ module Sync
 
     def self.sync
       if Config.enabled
-        current=Time.now
+
         #begin
         pull &pull_block
         post &post_block
         put &put_block
         delete &delete_block
-        Config.last_time=(current- Config.advance_second.seconds)
         #rescue => e
         #  puts e.class
         #  puts e.to_s

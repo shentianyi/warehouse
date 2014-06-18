@@ -118,7 +118,6 @@ ActiveRecord::Schema.define(version: 20140618023742) do
   create_table "part_positions", force: true do |t|
     t.string   "part_id"
     t.string   "position_id"
-    t.string   "whouse_id"
     t.boolean  "is_delete",   default: false
     t.boolean  "is_dirty",    default: true
     t.boolean  "is_new",      default: true
@@ -129,7 +128,6 @@ ActiveRecord::Schema.define(version: 20140618023742) do
   add_index "part_positions", ["id"], name: "index_part_positions_on_id", using: :btree
   add_index "part_positions", ["part_id"], name: "index_part_positions_on_part_id", using: :btree
   add_index "part_positions", ["position_id"], name: "index_part_positions_on_position_id", using: :btree
-  add_index "part_positions", ["whouse_id"], name: "index_part_positions_on_whouse_id", using: :btree
 
   create_table "parts", force: true do |t|
     t.string   "uuid",        limit: 36,                 null: false
