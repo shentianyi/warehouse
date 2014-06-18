@@ -78,7 +78,7 @@ module V1
       if !DeliveryState.can_update?(d.state)
         return {result:0,content:'运单不能修改'}
       end
-      if DeliveryService.send(d)
+      if DeliveryService.send(d,current_user)
         {result:1,content:''}
       else
         {result:0,content:''}

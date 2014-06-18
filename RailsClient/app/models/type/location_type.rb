@@ -1,5 +1,3 @@
 class LocationType
-  BASE=0
-  NORMAL=1
-  DESTINATION=2
+  BASE = 0
 end

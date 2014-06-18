@@ -87,7 +87,7 @@ class DeliveryService
     true
   end
 
-  def self.send(delivery)
+  def self.send(delivery,current_user)
     if delivery.nil?
       return false
     end
