@@ -25,6 +25,7 @@ module Sync
       Config.last_time=(current- Config.advance_second.seconds)
       response=site.get
       if response.code==200
+        puts response
         yield(JSON.parse(response)) if block_given?
       end
     end
