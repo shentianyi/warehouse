@@ -31,7 +31,7 @@ module V1
 
       post :delete do
         part_positions=JSON.parse(params[:part_position])
-        part_positions.each do |id|
+        part_positions.each do |part_position|
           if part_position=PartPosition.unscoped.where(PartPosition.fk_condition(part_position)).first
             part_position.update(is_delete: true)
           end
