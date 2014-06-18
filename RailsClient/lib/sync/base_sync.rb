@@ -1,7 +1,7 @@
 require_relative 'config.rb'
 module Sync
   class BaseSync
-    BASE_URL= 'http://localhost:3000/api/v1/sync/'
+    BASE_URL= "#{$SYNC_HOST}/api/v1/sync/"
     ACCESS_TOKEN='3dcba17f596969a676bfdd90b5425c703f983acf7306760e1057c95afe9f17b1d'
 
     def self.sync
