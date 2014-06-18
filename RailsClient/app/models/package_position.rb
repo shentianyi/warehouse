@@ -16,7 +16,7 @@ class PackagePosition < ActiveRecord::Base
       PackagePosition.create(package_id: new_package_id, position_id: new_position_id)
       self.package_id=self.package_id_was
       self.position_id =self.position_id_was
-      self.delete=true
+      self.is_delete=true
     end
   end
 end

@@ -14,7 +14,7 @@ class PartPosition < ActiveRecord::Base
       PartPosition.create(part_id: new_part_id, position_id: new_position_id)
       self.part_id=self.part_id_was
       self.position_id =self.position_id_was
-      self.delete=true
+      self.is_delete=true
     end
   end
 end
