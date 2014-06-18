@@ -8,7 +8,6 @@ module V1
       namespace 'sync'
       guard_all!
       lock_sync_pool
-      unlock_sync_pool
 
 
       mount LocationSyncAPI

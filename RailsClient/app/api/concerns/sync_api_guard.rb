@@ -13,8 +13,11 @@ module SyncAPIGuard
   module ClassMethods
     def lock_sync_pool
       before do
+        tb= get_table_name
+        model= tb.singularize.classify.constantize
+        Sync::Config.skip_callbacks(model)
         if $OPEN_SYN_LOCK
-          tb= get_table_name
+
           if table=SyncPool.find_by_table_name(tb)
             if table.locked
               return error!('Recourse Locked', 423)
@@ -26,9 +29,7 @@ module SyncAPIGuard
           end
         end
       end
-    end
 
-    def unlock_sync_pool
       after do
         if $OPEN_SYN_LOCK
           tb= get_table_name

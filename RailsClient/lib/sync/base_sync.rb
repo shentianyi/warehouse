@@ -6,7 +6,6 @@ module Sync
 
     def self.sync
       if Config.enabled
-
         #begin
         pull &pull_block
         post &post_block
@@ -18,7 +17,6 @@ module Sync
         #end
       end
     end
-
 
 
     # sync pull
@@ -75,10 +73,8 @@ module Sync
 
     # blocks
     def self.pull_block
-      model.record_timestamps=false
-      model.skip_callback(:update, :before, :reset_dirty_flag)
-      model.skip_callback(:save, :after, :log_state)
-      model.skip_callback(:update, :after, :set_update_flag)
+      m=model
+      Config.skip_callbacks(m)
     end
 
     def self.post_block

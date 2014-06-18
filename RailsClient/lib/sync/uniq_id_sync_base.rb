@@ -5,6 +5,7 @@ module Sync
       super
       Proc.new do |items|
         items.each do |item|
+          puts item
           unless ori=model.unscoped.where(model.fk_condition(item)).first
             ori=model.new(item)
             ori.is_new=false
