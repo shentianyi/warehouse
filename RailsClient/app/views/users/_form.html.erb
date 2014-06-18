@@ -38,7 +38,7 @@
     </p>
 
     <p>
-      <%%>
+      <%=  f.select(:role_id,Role.menu,{include_blank: false})%>
     </p>
 
     <div class="actions">
