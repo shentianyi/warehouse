@@ -26,6 +26,9 @@ class PartsController < ApplicationController
   # POST /parts.json
   def create
     @part = Part.new(part_params)
+    if !part_params.has_key?(:user_id)
+      @part.user = current_user
+    end
 
     respond_to do |format|
       if @part.save
@@ -70,6 +73,7 @@ class PartsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def part_params
-      params[:part]
+      #params[:part]
+      params.require(:part).permit(:id,:customernum,:user_id)
     end
 end

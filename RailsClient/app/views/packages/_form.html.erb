@@ -11,6 +11,10 @@
     </div>
   <% end %>
 
+    <p>
+      <%=  f.select(:state,PackageState.state,{include_blank: false})%>
+    </p>
+
   <div class="actions">
     <%= f.submit %>
   </div>

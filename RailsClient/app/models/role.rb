@@ -29,4 +29,12 @@ class Role
 	def self.id_sym id
 		id.to_s.to_sym
 	end
+
+	def self.menu
+		roles = []
+		@@roles.each {|key,value|
+			roles <<[value[:display],key.to_s]
+		}
+		roles
+	end
 end

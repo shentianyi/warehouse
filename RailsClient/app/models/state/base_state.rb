@@ -43,8 +43,19 @@ class BaseState
         [WAY,ORIGINAL,DESTINATION].include? new_state
       when DESTINATION
         [DESTINATION,ORIGINAL,WAY,RECEIVED].include? new_state
+      when RECEIVED
+        [RECEIVED,DESTINATION].include? new_state
       else
         false
     end
+  end
+
+  def self.state
+    data = []
+    self.constants.each do |c|
+      v = self.const_get(c.to_s)
+      data << [self.display(v),v]
+    end
+    data
   end
 end

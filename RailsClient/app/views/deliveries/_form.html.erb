@@ -11,6 +11,15 @@
     </div>
   <% end %>
 
+    <p>
+      <%=  f.select(:state,DeliveryState.state,{include_blank: false})%>
+    </p>
+
+    <p>
+      <%= f.label :remark%>
+      <%= f.text_field :remark%>
+    </p>
+
   <div class="actions">
     <%= f.submit %>
   </div>

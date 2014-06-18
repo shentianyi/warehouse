@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140618023742) do
+ActiveRecord::Schema.define(version: 20140618083942) do
 
   create_table "deliveries", force: true do |t|
     t.string   "uuid",           limit: 36,                 null: false
@@ -203,6 +203,7 @@ ActiveRecord::Schema.define(version: 20140618023742) do
     t.string   "location_id"
     t.string   "authentication_token"
     t.integer  "role_id",                           default: 100,   null: false
+    t.boolean  "is_sys",                            default: false
   end
 
   add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree

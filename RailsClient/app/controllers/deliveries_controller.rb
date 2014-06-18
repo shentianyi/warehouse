@@ -41,6 +41,10 @@ class DeliveriesController < ApplicationController
   # PATCH/PUT /deliveries/1
   # PATCH/PUT /deliveries/1.json
   def update
+    if delivery_params.has_key?(:state)
+      DeliveryService.set_state(@delivery,delivery_params[:state])
+    end
+
     respond_to do |format|
       if @delivery.update(delivery_params)
         format.html { redirect_to @delivery, notice: 'Delivery was successfully updated.' }
@@ -70,6 +74,7 @@ class DeliveriesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def delivery_params
-      params[:delivery]
+      #params[:delivery]
+      params.require(:delivery).permit(:state,:remark)
     end
 end

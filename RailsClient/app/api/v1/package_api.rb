@@ -99,5 +99,18 @@ module V1
         {result:0,content:'包装箱不存在!'}
       end
     end
+
+    # uncheck package
+    post :uncheck do
+      if p = PackageService.exits?(params[:id])
+        if PackageService.uncheck(p)
+          {result:1,content:'检查成功'}
+        else
+          {result:1,content:'检查成功'}
+        end
+      else
+        {result:0,content:'包装箱不存在!'}
+      end
+    end
   end
 end

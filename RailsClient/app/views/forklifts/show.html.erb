@@ -1,4 +1,60 @@
 <p id="notice"><%= notice %></p>
 
+<p>
+  <string>ID:</string>
+  <%= @forklift.id%>
+</p>
+
+<p>
+  <string>State:</string>
+  <%= ForkliftState.display(@forklift.state)%>
+</p>
+
+<p>
+  <string>Delivery:</string>
+  <%= @forklift.delivery_id%>
+</p>
+
+<p>
+  <string>Stocker:</string>
+  <%= @forklift.stocker.id if @forklift.stocker%>
+</p>
+
+<p>
+  <string>Creator:</string>
+  <%= @forklift.user.id if @forklift.user%>
+</p>
+
+<p>
+  <string>Ware House:</string>
+  <%= @forklift.whouse.name%>
+</p>
+
+<p>
+  <string>Sum Packages:</string>
+  <%= @forklift.sum_packages%>
+</p>
+
+<p>
+  <string>Accepted Packages:</string>
+  <%= @forklift.accepted_packages%>
+</p>
+
+<p>
+  <string>remark:</string>
+  <%= @forklift.remark%>
+</p>
+
+<p>
+  <string>Packages:</string>
+  <ul>
+    <%@forklift.packages.each do |p|%>
+    <li>
+      <%=link_to p.id,p %>
+    </li>
+    <%end%>
+  </ul>
+</p>
+
 <%= link_to 'Edit', edit_forklift_path(@forklift) %> |
 <%= link_to 'Back', forklifts_path %>

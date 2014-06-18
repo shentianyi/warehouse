@@ -3,21 +3,39 @@
 <table>
   <thead>
     <tr>
-      <th colspan="3"></th>
+      <th colspan="3">No</th>
+      <th colspan="3">ID</th>
+      <th colspan="3">State</th>
+      <th colspan="3">Delivery Date</th>
+      <th colspan="3">Received Date</th>
+      <th colspan="3">Receiver</th>
+      <th colspan="3">Creator</th>
+      <th colspan="3">Created At</th>
+      <th colspan="3">Source</th>
+      <th colspan="3">Destination</th>
+      <th colspan="3">Remark</th>
     </tr>
   </thead>
 
   <tbody>
-    <% @deliveries.each do |delivery| %>
+    <% @deliveries.each_with_index do |delivery,index| %>
       <tr>
+        <td colspan="3"><%= index %></td>
+        <td colspan="3"><%= delivery.id%></td>
+        <td colspan="3"><%= DeliveryState.display(delivery.state)%></td>
+        <td colspan="3"><%= delivery.delivery_date%></td>
+        <td colspan="3"><%= delivery.received_date%></td>
+        <td colspan="3"><%= delivery.receiver.name if delivery.receiver %></td>
+        <td colspan="3"><%= delivery.user.name%></td>
+        <td colspan="3"><%= delivery.created_at%></td>
+        <td colspan="3"><%= delivery.source.name if delivery.source%></td>
+        <td colspan="3"><%= delivery.destination.name if delivery.destination%></td>
+        <td colspan="3"><%= delivery.remark%></td>
         <td><%= link_to 'Show', delivery %></td>
         <td><%= link_to 'Edit', edit_delivery_path(delivery) %></td>
-        <td><%= link_to 'Destroy', delivery, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
 <br>
-
-<%= link_to 'New Delivery', new_delivery_path %>

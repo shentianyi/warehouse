@@ -41,8 +41,25 @@ class PackageService
       return false
     end
 
-    if package.set_state(PackageState::RECEIVED)
+    if PackageState.set_state(package,PackageState::RECEIVED)
       package.forklift.package_checked
+      true
+    else
+      false
+    end
+  end
+
+  def self.uncheck package
+    if package.nil?
+      return false
+    end
+
+    if package.forklift.nil?
+      return false
+    end
+
+    if PackageState.set_state(package,PackageState::DESTINATION)
+      package.forklift.package_unchecked
       true
     else
       false
@@ -54,6 +71,13 @@ class PackageService
       return false
     end
     true
+  end
+
+  def self.set_state(package,state)
+    if package.nil?
+      return false
+    end
+    package.set_state(state)
   end
 
   def self.create args,current_user=nil

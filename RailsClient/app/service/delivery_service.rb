@@ -101,6 +101,19 @@ class DeliveryService
     true
   end
 
+  def self.set_state(delivery,state)
+    if delivery.nil?
+      return false
+    end
+    ActiveRecord::Base.transaction do
+      if delivery.set_state(state)
+        delivery.forklifts.each do |f|
+          ForkliftService.set_state(f,state)
+        end
+      end
+    end
+  end
+
   def self.exit? id
     Delivery.find_by_id(id)
   end

@@ -86,6 +86,19 @@ class ForkliftService
     end
   end
 
+  def self.set_state(forklift,state)
+    if forklift.nil?
+      return false
+    end
+    ActiveRecord::Base.transaction do
+      if forklift.set_state(state)
+        forklift.packages.each do |p|
+          PackageService.set_state(p,state)
+        end
+      end
+    end
+  end
+
   def self.remove_package package
     if package.nil?
       return false

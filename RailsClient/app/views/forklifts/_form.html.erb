@@ -10,7 +10,14 @@
       </ul>
     </div>
   <% end %>
+    <p>
+      <%=  f.select(:state,ForkliftState.state,{include_blank: false})%>
+    </p>
 
+    <p>
+      <%= f.label :remark%>
+      <%= f.text_field :remark%>
+    </p>
   <div class="actions">
     <%= f.submit %>
   </div>
