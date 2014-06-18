@@ -75,6 +75,7 @@ module Sync
       model.record_timestamps=false
       model.skip_callback(:update, :before, :reset_dirty_flag)
       model.skip_callback(:save, :after, :log_state)
+      model.skpi_callback(:update,:after,:set_update_flag)
     end
 
     def self.post_block
@@ -142,42 +143,3 @@ module Sync
 
   end
 end
-
-
-#
-## sync post
-#def self.post
-#  site=init_site(self::POST_URL)
-#  get_posts.each do |item|
-#    item.is_new=false
-#    item.is_dirty=false
-#    response= site.post({main_key => item.attributes.to_json})
-#    if response.code==201
-#      yield(item, JSON.parse(response)) if block_given?
-#    end
-#  end
-#end
-#
-## sync update
-#def self.put
-#  get_puts.each do |item|
-#    item.is_dirty=false
-#    site=init_site(self::POST_URL+'/'+item.id)
-#    response=site.put({main_key => clean_put(item.attributes).to_json})
-#    if response.code==200 && response!='null'
-#      yield(item, JSON.parse(response)) if block_given?
-#    end
-#  end
-#end
-#
-## sync delete
-#def self.delete
-#  get_deletes.each do |item|
-#    item.is_dirty=false
-#    site= init_site(self::POST_URL+'/'+item.id)
-#    response=site.delete
-#    if response.code==200 && response!='null'
-#      yield(item, JSON.parse(response)) if block_given?
-#    end
-#  end
-#end
