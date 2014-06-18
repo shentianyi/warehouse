@@ -13,7 +13,7 @@
   <tbody>
     <% @positions.each_with_index do |position,index| %>
       <tr>
-        <td><%= index %>
+        <td colspan="3"><%= index %>
         <td colspan="3"><%= position.id%></td>
         <td colspan="3"><%= position.detail%></td>
         <td colspan="3"><%= position.whouse.name %></td>

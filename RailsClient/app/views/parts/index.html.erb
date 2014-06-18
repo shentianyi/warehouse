@@ -12,7 +12,7 @@
   <tbody>
     <% @parts.each_with_index do |part,index| %>
       <tr>
-        <td><%= index %>
+        <td colspan="3"><%= index %>
         <td colspan="3"><%= part.id%></td>
         <td colspan="3"><%= part.customernum %></td>
         <td><%= link_to 'Show', part %></td>

@@ -19,14 +19,14 @@
   <tbody>
     <% @packages.each_with_index do |package,index| %>
       <tr>
-        <td><%= index %>
+        <td colspan="3"><%= index %>
         <td colspan="3"><%= package.id %></td>
         <td colspan="3"><%= package.part_id%></td>
         <td colspan="3"><%= package.quantity_str %></td>
         <td colspan="3"><%= PackageState.display(package.state) %></td>
         <td colspan="3"><%= package.location_id %></td>
         <td colspan="3"><%= package.user_id %></td>
-        <td colspan="3"><%= package.forklift_id %></td>
+        <td colspan="3"><%= link_to package.forklift_id, package.forklift %></td>
         <td colspan="3"><%= package.check_in_time %></td>
         <td colspan="3"><%= package.position.whouse.name + ' ' +package.position.detail if package.position %></td>
         <td><%= link_to 'Edit', edit_package_path(package) %></td>

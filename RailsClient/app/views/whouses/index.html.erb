@@ -13,7 +13,7 @@
   <tbody>
     <% @whouses.each_with_index do |whouse,index| %>
       <tr>
-        <td><%= index %>
+        <td colspan="3"><%= index %>
         <td colspan="3"><%= whouse.id %> </td>
         <td colspan="3"><%= whouse.name %></td>
         <td colspan="3"><%= whouse.location.name if whouse.location %></td>

@@ -19,7 +19,7 @@
   <tbody>
     <% @forklifts.each_with_index do |forklift,index| %>
       <tr>
-        <td><%= index %>
+        <td colspan="3"><%= index %>
         <td colspan="3"><%= forklift.id%></td>
         <td colspan="3"><%= ForkliftState.display(forklift.state)%></td>
         <td colspan="3"><%= forklift.delivery_id %></td>

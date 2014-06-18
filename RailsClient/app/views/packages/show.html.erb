@@ -1,4 +1,50 @@
 <p id="notice"><%= notice %></p>
 
+<p>
+  <string>ID:</string>
+  <%= @package.id%>
+</p>
+
+<p>
+  <string>Part:</string>
+  <%= @package.part_id%>
+</p>
+
+<p>
+  <string>Quantity:</string>
+  <%= @package.quantity_str%>
+</p>
+
+<p>
+  <string>State:</string>
+  <%= PackageState.display(@package.state)%>
+</p>
+
+<p>
+  <string>Location:</string>
+  <%= @package.location_id %>
+</p>
+
+<p>
+  <string>Creator:</string>
+  <%= @package.user_id%>
+</p>
+
+<p>
+  <string>Forklift:</string>
+  <%= link_to @package.forklift_id, @package.forklift%>
+</p>
+
+<p>
+  <string>Check In Time:</string>
+  <%= @package.check_in_time%>
+</p>
+
+<p>
+  <string>Position:</string>
+  <%= @package.position.whouse.name + ' ' +@package.position.detail if @package.position%>
+</p>
+
+
 <%= link_to 'Edit', edit_package_path(@package) %> |
 <%= link_to 'Back', packages_path %>
