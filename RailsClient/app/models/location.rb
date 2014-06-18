@@ -3,4 +3,12 @@ class Location < ActiveRecord::Base
 
   has_many :users
   has_many :whouses, :dependent => :destroy
+
+  def self.default_destination
+    if d = Location.where(location_type:LocationType::DESTINATION).first
+      d
+    else
+      Location.where(location_type:LocationType::BASE).first
+    end
+  end
 end
