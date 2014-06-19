@@ -95,7 +95,6 @@ ActiveRecord::Schema.define(version: 20140618095707) do
     t.string   "uuid",                          null: false
     t.string   "part_id"
     t.float    "quantity",      default: 0.0
-    t.datetime "in_date"
     t.integer  "state",         default: 0,     null: false
     t.string   "location_id"
     t.string   "user_id"
