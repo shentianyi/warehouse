@@ -4,7 +4,7 @@ class Part < ActiveRecord::Base
   belongs_to :user
   has_many :part_positions, :dependent => :destroy
 
-  validates_uniqueness_of :id
+
 
   # validate part id existance
   def self.validate_id id
