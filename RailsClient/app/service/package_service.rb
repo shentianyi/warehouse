@@ -130,7 +130,7 @@ class PackageService
     end
 
     if args[:quantity_str] && PackageService.valid_package_quantity?(args[:quantity_str])
-      args[:quantiry] = PackageService.quantity_filter(args[:quantity_filter])
+      args[:quantity] = PackageService.quantity_filter(args[:quantity_filter])
     else
       return false
     end
