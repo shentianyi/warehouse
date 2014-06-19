@@ -2,11 +2,12 @@ module Import
   module PartCsv
     def self.included(base)
       base.extend ClassMethods
-
+      base.init_csv_rows
     end
   end
 
   module ClassMethods
+    @@csv_rows=nil
     def uniq_key
       %w(id)
     end
@@ -20,6 +21,13 @@ module Import
         line<<item.id
         line<<item.unit_pack
       }
+    end
+    def init_csv_rows
+      @@csv_rows=[]
+    end
+
+    def csv_rows
+      @@csv_rows
     end
   end
 end
