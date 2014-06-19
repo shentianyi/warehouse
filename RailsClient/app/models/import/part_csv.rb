@@ -29,7 +29,7 @@ module Import
       @@csv_cols=[]
       @@csv_cols<< Csv::CsvCol.new(field: 'id', header: 'PartNr')
       @@csv_cols<< Csv::CsvCol.new(field: 'unit_pack', header: 'UnitPack')
-      @@csv_cols<< Csv::CsvCol.new(filed: $UPMARKER, header: $UPMARKER)
+      @@csv_cols<< Csv::CsvCol.new(field: $UPMARKER, header: $UPMARKER)
     end
 
     def csv_cols

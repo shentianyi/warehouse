@@ -32,7 +32,7 @@ Rails.application.routes.draw do
   [:locations, :whouses, :parts, :positions, :part_positions, :users].each do |model|
     resources model do
       collection do
-        post :updata
+        post :do_import
         get :import
         get :download
         get :search
