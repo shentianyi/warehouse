@@ -62,6 +62,7 @@ module Sync
     def self.delete
       items=get_deletes.collect { |item|
         item.is_dirty=false
+        item.is_new=false
         item
       }
       site= init_site(self::POST_URL+'/delete')
