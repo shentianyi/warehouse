@@ -79,7 +79,7 @@ class DeliveryService
       return false
     end
     ActiveRecord::Base.transaction do
-      if delivery.set_state(DeliveryState::DESTINATION)
+      if !delivery.set_state(DeliveryState::DESTINATION)
         return false
       end
       delivery.forklifts.each do |f|
