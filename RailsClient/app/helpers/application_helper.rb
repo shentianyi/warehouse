@@ -28,21 +28,16 @@ module ApplicationHelper
     render :index
   end
 
-  def download query=nil, mm=nil
-    file_name=@model+".csv"
+  def download
+    query=nil
+    file_name= @model+'_'+Time.now.strftime('%Y%m%d%H%M%S')+'.csv'
     path=File.join($DOWNLOADPATH, file_name)
-    File.open(path, 'wb') do |f|
-      m=mm.nil? ? model : mm
-      f.puts m.csv_headers.join($CSVSP)
-      items=query.nil? ? m.all : m.where(query)
-      items.each do |item|
-        line=[]
-        proc=m.down_block
-        proc.call(line, item)
-        f.puts line.join($CSVSP)
-      end
+    @msg= model.export_csv(path, query)
+    if @msg.result
+      send_file path, :type => 'application/csv', :filename => file_name
+    else
+      render :index
     end
-    send_file path, :type => 'application/csv', :filename => file_name
   end
 
   def template
@@ -50,6 +45,4 @@ module ApplicationHelper
     path=File.join($TEMPLATEPATH, file_name)
     send_file path, :type => 'application/csv', :filename => file_name
   end
-
-
 end

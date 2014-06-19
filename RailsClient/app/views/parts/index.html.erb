@@ -1,4 +1,9 @@
 <h1>Listing parts</h1>
+<% if @msg && !@msg.result %>
+    <div class="error">
+      <%= @msg.content %>
+    </div>
+<% end %>
 <table>
   <thead>
   <tr>
