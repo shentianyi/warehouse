@@ -37,7 +37,7 @@ module ApplicationHelper
       items=query.nil? ? m.all : m.where(query)
       items.each do |item|
         line=[]
-        proc=BlockHelper.send "get_#{@model}_down_block"
+        proc=m.down_block
         proc.call(line, item)
         f.puts line.join($CSVSP)
       end
