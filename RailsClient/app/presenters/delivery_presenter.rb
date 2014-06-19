@@ -1,8 +1,10 @@
 class DeliveryPresenter<Presenter
-  def_delegators :@delivery,:id,:user_id,:destination_id,:source_id,:remark,:forklifts,:delivery_date,:received_date,:receiver_id,:receiver,:state
+  Delegators=[:id,:user_id,:destination_id,:source_id,:remark,:forklifts,:delivery_date,:received_date,:receiver_id,:receiver,:state]
+  def_delegators :@delivery,*Delegators
 
   def initialize delivery
     @delivery = delivery
+    self.delegators = Delegators
   end
 
   def all_forklifts with_packages

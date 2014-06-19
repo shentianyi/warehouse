@@ -13,3 +13,8 @@ $UPDATAPATH=path_config[:updata_file_path]
 $DOWNLOADPATH=path_config[:download_file_path]
 $TEMPLATEPATH=path_config[:template_file_path]
 $DELIVERYPATH=path_config[:import_delivery_file_path]
+
+#用於匹配唯一嗎和零件數量的正則表達式
+$REG_PACKAGE_ID = /^WI\d*$/
+$FILTER_PACKAGE_QUANTITY =/\d+(?:\.\d+)?/
+$REG_PACKAGE_QUANTITY = /^Q? ?\d*\.?\d*$/
