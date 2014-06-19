@@ -87,7 +87,23 @@ class DeliveriesController < ApplicationController
   end
 
   def import
-
+    if request.post?
+      msg=Message.new
+      begin
+        if params[:files].size==1
+          file=params[:files][0]
+          data=FileData.new(data: file, oriName: file.original_filename, path: $DELIVERYPATH, pathName: "#{Time.now.strftime('%Y%m%d%H%M%S')}-#{file.original_filename}")
+          data.saveFile
+          msg=DeliveryService.import_by_file(data.full_path)
+          msg.content= msg.result ? '运单导入成功' : '运单已存在，不可重复导入'
+        else
+          msg.content='未选择文件或只能上传一个文件'
+        end
+      rescue => e
+        msg.content = e.message
+      end
+      render json: msg
+    end
   end
 
   private

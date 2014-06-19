@@ -11,14 +11,14 @@ class DeliveryService
     end
   end
 
-  def self.update delivery,args
+  def self.update delivery, args
     if delivery.nil?
       return false
     end
     delivery.update_attributes(args)
   end
 
-  def self.add_forklifts delivery,forklift_ids
+  def self.add_forklifts delivery, forklift_ids
     if delivery.nil?
       return false
     end
@@ -44,19 +44,19 @@ class DeliveryService
     forklift.remove_from_delivery
   end
 
-  def self.search(args,all=false)
+  def self.search(args, all=false)
     if all
       Delivery.where(args)
     elsif args[:received_date].empty?
       []
     else
       received_date = Time.parse(args[:received_date])
-      Delivery.where(state:args[:state],received_date:(received_date.beginning_of_day..received_date.end_of_day)).all.order(:created_at)
+      Delivery.where(state: args[:state], received_date: (received_date.beginning_of_day..received_date.end_of_day)).all.order(:created_at)
 
     end
   end
 
-  def self.confirm_received(delivery,current_user)
+  def self.confirm_received(delivery, current_user)
     if delivery.nil?
       return false
     end
@@ -87,7 +87,7 @@ class DeliveryService
     true
   end
 
-  def self.send(delivery,current_user)
+  def self.send(delivery, current_user)
     if delivery.nil?
       return false
     end
@@ -103,14 +103,14 @@ class DeliveryService
     true
   end
 
-  def self.set_state(delivery,state)
+  def self.set_state(delivery, state)
     if delivery.nil?
       return false
     end
     ActiveRecord::Base.transaction do
       if delivery.set_state(state)
         delivery.forklifts.each do |f|
-          ForkliftService.set_state(f,state)
+          ForkliftService.set_state(f, state)
         end
       end
     end
@@ -118,5 +118,20 @@ class DeliveryService
 
   def self.exit? id
     Delivery.find_by_id(id)
+  end
+
+  def self.import_by_file path
+    msg=Message.new
+    ActiveRecord::Base.transaction do
+      Sync::Config.skip_muti_callbacks([Delivery, Forklift, Package, PackagePosition, StateLog])
+      data=JSON.parse(IO.read(path))
+      msg.result =true unless Delivery.find_by_id(data['delivery']['id'])
+      Delivery.create(data['delivery'])
+      Forklift.create(data['forklifts'])
+      Package.create(data['packages'])
+      PackagePosition.create(data['package_positions'])
+      StateLog.create(data['state_logs'])
+    end
+    return msg
   end
 end

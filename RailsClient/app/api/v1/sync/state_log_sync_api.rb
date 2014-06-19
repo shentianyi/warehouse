@@ -14,7 +14,6 @@ module V1
         state_logs=JSON.parse(params[:state_log])
         state_logs.each do |state_log|
           state_log=StateLog.new(state_log)
-          puts state_log
           state_log.save
         end
       end
@@ -22,16 +21,16 @@ module V1
       put '/:id' do
         state_logs=JSON.parse(params[:state_log])
         state_logs.each do |state_log|
-          if u=StateLog.unscoped.where(StateLog.fk_condition(state_log)).first
-            u.update(state_log.except(StateLog::FK,'id'))
+          if u=StateLog.unscoped.find_by_id(state_log['id'])
+            u.update(state_log.except('id'))
           end
         end
       end
 
       post :delete do
         state_logs=JSON.parse(params[:state_log])
-        state_logs.each do |state_log|
-          if state_log=StateLog.unscoped.where(StateLog.fk_condition(state_log)).first
+        state_logs.each do |id|
+          if state_log=StateLog.find_by_id(id)
             state_log.update(is_delete: true)
           end
         end

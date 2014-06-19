@@ -4,22 +4,14 @@ Rails.application.routes.draw do
 
   devise_for :users, :controllers => {:registrations => "users/registrations"}, path: "auth", path_names: {sign_in: 'login', sign_out: 'logout', password: 'secret', confirmation: 'verification', unlock: 'unblock', registration: 'register', sign_up: 'cmon_let_me_in'}
 
-  #devise_scope :user do
-  #  #post '/api/sign_in' => 'users/sessions#create'
-  #  #delete '/api/sign_out' => 'users/sessions#destroy'
-  #  post '/api/sign_in' =>'api/v1/users/login/'
-  #  delete '/api/sign_out' =>'api/v1/users/logout/'
-  #end
-
   resources :deliveries do
+    collection do
+      match :import, to: :import, via: [:get, :post]
+    end
     member do
       get :export
     end
   end
-
-  resources :users
-
-  resources :positions
 
   resources :packages
 
@@ -35,10 +27,19 @@ Rails.application.routes.draw do
       get 'whouses'
     end
   end
-
-  resources :parts
-
   resources :forklifts
+
+  [:locations, :whouses, :parts, :positions, :part_positions, :users].each do |model|
+    resources model do
+      collection do
+        post :updata
+        get :import
+        get :download
+        get :search
+        get :template
+      end
+    end
+  end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

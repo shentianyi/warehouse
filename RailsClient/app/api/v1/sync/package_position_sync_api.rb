@@ -13,33 +13,26 @@ module V1
 
       post do
         package_positions=JSON.parse(params[:package_position])
-        puts '____________'
-        puts '______________--posts'
         puts package_positions
         package_positions.each do |package_position|
-          package_position=PackagePosition.new(package_position)
-          puts package_position
-          package_position.save
+          unless PackagePosition.unscoped.where(PackagePosition.fk_condition(package_position)).first
+            package_position=PackagePosition.new(package_position)
+            package_position.save
+          end
         end
       end
 
       put '/:id' do
         package_positions=JSON.parse(params[:package_position])
-        puts '____________'
-        puts package_positions
         package_positions.each do |package_position|
           if u=PackagePosition.unscoped.where(PackagePosition.fk_condition(package_position)).first
-            u.update(package_position.except(PackagePosition::FK,'id'))
+            u.update(package_position.except(PackagePosition::FK, 'id'))
           end
         end
       end
 
       post :delete do
         package_positions=JSON.parse(params[:package_position])
-        puts '____________'
-        puts '--------delete'
-        puts package_positions
-        puts '--------delete'
         package_positions.each do |package_position|
           if package_position=PackagePosition.unscoped.where(PackagePosition.fk_condition(package_position)).first
             package_position.update(is_delete: true)

@@ -14,7 +14,6 @@ module V1
         deliveries=JSON.parse(params[:delivery])
         deliveries.each do |delivery|
           delivery=Delivery.new(delivery)
-          puts delivery
           delivery.save
         end
       end

@@ -1,9 +1,8 @@
 class Part < ActiveRecord::Base
   include Extensions::UUID
-
+  include Import::PartCsv
   belongs_to :user
   has_many :part_positions, :dependent => :destroy
-
 
 
   # validate part id existance

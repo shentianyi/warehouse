@@ -10,7 +10,7 @@
 <h3>上传/更新数据</h3>
 <div>
      上传数据文件：
-     <input id="item-data-uploader" type="file" name="files[]" data-url="../<%= @model.pluralize%>/updata" >
+     <input id="item-data-uploader" type="file" name="files[]" data-url="/<%= @model.pluralize%>/updata" >
      <div class="abstractblock" id="item-data-uploader-preview" style="display:none;"></div>
 </div>
 <div>下载模板：<%= link_to '下载数据模板', send("template_#{@model.pluralize}_path") %></div>

@@ -14,9 +14,11 @@ module V1
       post do
         part_positions=JSON.parse(params[:part_position])
         part_positions.each do |part_position|
-          part_position=PartPosition.new(part_position)
-          puts part_position
-          part_position.save
+          unless PartPosition.unscoped.where(PartPosition.fk_condition(part_position)).first
+            part_position=PartPosition.new(part_position)
+            puts part_position
+            part_position.save
+          end
         end
       end
 

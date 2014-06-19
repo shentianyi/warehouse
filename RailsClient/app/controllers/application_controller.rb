@@ -3,6 +3,9 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   #protect_from_forgery with: :exception
   protect_from_forgery
+  include ApplicationHelper
+  include FileHelper
+  before_filter :set_model
 
   before_filter :configure_permitted_parameters, if: :devise_controller?
   before_filter :authenticate_user_from_token!
@@ -31,7 +34,7 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to root_url,:alert => exception.message
+    redirect_to root_url, :alert => exception.message
   end
 
   protected
@@ -50,4 +53,13 @@ class ApplicationController < ActionController::Base
       sign_in user, store: false
     end
   end
+
+  def set_model
+    @model=self.class.name.gsub(/Controller/, '').tableize.singularize.downcase
+  end
+
+  def model
+    self.class.name.gsub(/Controller/, '').classify.constantize
+  end
+
 end

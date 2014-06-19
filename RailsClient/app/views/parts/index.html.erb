@@ -1,28 +1,30 @@
 <h1>Listing parts</h1>
-<input type="button" value="導入零件庫位信息"/>
+<input type="button" value="导入零件库位"/>
 <table>
   <thead>
-    <tr>
-      <th colspan="3">No</th>
-      <th colspan="3">ID</th>
-      <th colspan="3">Customer Number</th>
-    </tr>
+  <tr>
+    <th colspan="3">No</th>
+    <th colspan="3">ID</th>
+    <th colspan="3">Unit Pack</th>
+  </tr>
   </thead>
 
   <tbody>
-    <% @parts.each_with_index do |part,index| %>
+  <% @parts.each_with_index do |part, index| %>
       <tr>
         <td colspan="3"><%= index %>
-        <td colspan="3"><%= part.id%></td>
-        <td colspan="3"><%= part.customernum %></td>
+        <td colspan="3"><%= part.id %></td>
+        <td colspan="3"><%= part.unit_pack %></td>
         <td><%= link_to 'Show', part %></td>
         <td><%= link_to 'Edit', edit_part_path(part) %></td>
-        <td><%= link_to 'Destroy', part, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Destroy', part, method: :delete, data: {confirm: 'Are you sure?'} %></td>
       </tr>
-    <% end %>
+  <% end %>
   </tbody>
 </table>
 
 <br>
 
-<%= link_to 'New Part', new_part_path %>
+<%= link_to "新建零件", send("new_#{@model}_path") %>
+<%= link_to "上传/更新零件", send("import_#{@model.pluralize}_path") %>
+<%= link_to "下载", send("download_#{@model.pluralize}_path") %>

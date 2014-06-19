@@ -29,6 +29,12 @@ module Sync
       @@config['sync']
     end
 
+    def self.skip_muti_callbacks models
+      models.each do |model|
+        skip_callbacks(model)
+      end
+    end
+
     def self.skip_callbacks model
       model.record_timestamps=false
       model.skip_callback(:update, :before, :reset_dirty_flag)

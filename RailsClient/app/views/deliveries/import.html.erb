@@ -1,0 +1,16 @@
+<script type="text/javascript">
+    $(function () {
+        data_upload("#item-data-uploader", 'json');
+    });
+</script>
+<p id="notice">
+  <%= notice %>
+</p>
+<h3>导入运单</h3>
+<div>
+  选择数据文件
+  <input id="item-data-uploader" type="file" name="files[]" data-url="/deliveries/import">
+  <div class="abstractblock" id="item-data-uploader-preview" style="display:none;"></div>
+</div>
+<%= link_to 'Back', deliveries_path %>
+<%= render partial: 'shared/handling_msg_box', :locals => {:handlemsg => '处理中...'} %>

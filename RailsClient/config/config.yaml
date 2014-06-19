@@ -1,0 +1,10 @@
+format:
+ :csv_splitor: ';'
+ :update_marker: 'DOUPDATE'
+ :file_max_size: 20971520
+ 
+path:
+ :updata_file_path: 'uploadfiles/data'
+ :download_file_path: 'uploadfiles/download'
+ :template_file_path: 'uploadfiles/template'
+ :import_delivery_file_path: 'uploadfiles/delivery'

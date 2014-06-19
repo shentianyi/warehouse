@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140618095707) do
+ActiveRecord::Schema.define(version: 20140619064359) do
 
   create_table "deliveries", force: true do |t|
     t.string   "uuid",           limit: 36,                 null: false
@@ -138,6 +138,7 @@ ActiveRecord::Schema.define(version: 20140618095707) do
     t.boolean  "is_new",                 default: true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.float    "unit_pack"
   end
 
   add_index "parts", ["id"], name: "index_parts_on_id", using: :btree

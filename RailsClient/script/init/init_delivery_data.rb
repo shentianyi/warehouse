@@ -1,17 +1,17 @@
 ActiveRecord::Base.transaction do
   user=User.first
 # create deliveries
-  3.times do |i|
+  1.times do |i|
     did="DLIVERY#{Time.now.to_milli}-#{i}"
     # create forklifts
     forklifts=[]
-    5.times do |j|
+    3.times do |j|
       fid="FORKLIFT#{Time.now.to_milli}-#{j}"
       forklift=Forklift.new(whouse_id: Whouse.first.id, user_id: user.id, id: fid)
       forklift.save
       #create packages
       packages=[]
-      5.times do |k|
+      2.times do |k|
         Part.all.each do |part|
           pid="PACK#{Time.now.to_milli}-#{k}"
           PackageService.create({id: pid, part_id: part.id, quantity_str: 'Q110', check_in_time: 'D24.9.9', user_id: user.id}, user)
