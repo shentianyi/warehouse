@@ -125,7 +125,13 @@ class PackageService
       return false
     end
 
-    if !PartService.validate_id?(args[:part_id])
+    if !PartService.validate_id(args[:part_id])
+      return false
+    end
+
+    if args[:quantity_str] && PackageService.valid_package_quantity?(args[:quantity_str])
+      args[:quantiry] = PackageService.quantity_filter(args[:quantity_filter])
+    else
       return false
     end
 
