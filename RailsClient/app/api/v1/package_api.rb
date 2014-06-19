@@ -27,7 +27,7 @@ module V1
 
     # validate package id
     post :validate do
-      result = PackageService.package_id_avaliable?(params[:id])
+      result = PackageService.valid_id?(params[:id])
       if result
         {result:1, content: '唯一号可用'}
       else
@@ -37,7 +37,7 @@ module V1
 
     # validate quantity string
     post :validate_quantity do
-      result = PackageService.valid_package_quantity?(params[:id])
+      result = PackageService.valid_quantity?(params[:id])
       if result
         {result:1, content: '包裝箱數量格式正確'}
       else

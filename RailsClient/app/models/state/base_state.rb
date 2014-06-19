@@ -50,6 +50,21 @@ class BaseState
     end
   end
 
+  def self.before_state? old_state,new_state
+    case old_state
+      when ORIGINAL
+        false
+      when WAY
+        [ORIGINAL].include? new_state
+      when DESTINATION
+        [ORIGINAL,WAY].include? new_state
+      when RECEIVED
+        [WAY,DESTINATION].include? new_state
+      else
+        false
+    end
+  end
+
   def self.state
     data = []
     self.constants.each do |c|

@@ -1,5 +1,9 @@
 class DeliveryService
 
+  #=============
+  #delete @delivery
+  #delete a delivery
+  #=============
   def self.delete delivery
     if delivery
       delivery.forklifts.each do |f|
@@ -11,6 +15,10 @@ class DeliveryService
     end
   end
 
+  #=============
+  #update @args
+  #update a delivery
+  #=============
   def self.update delivery, args
     if delivery.nil?
       return false
@@ -35,6 +43,10 @@ class DeliveryService
     true
   end
 
+  #=============
+  #remove_forklifk @forklift
+  #remove a forklift from delivery
+  #=============
   def self.remove_forklifk forklift
 
     if forklift.nil?
@@ -44,6 +56,10 @@ class DeliveryService
     forklift.remove_from_delivery
   end
 
+  #=============
+  #serarch args,all=false
+  #search delivery if all is true,return all packages' detail information
+  #=============
   def self.search(args, all=false)
     if all
       Delivery.where(args)
@@ -56,6 +72,10 @@ class DeliveryService
     end
   end
 
+  #=============
+  #confirm_received @delivery,@current_user
+  #set the delivery state to RECEIVED
+  #=============
   def self.confirm_received(delivery, current_user)
     if delivery.nil?
       return false
@@ -74,11 +94,17 @@ class DeliveryService
     end
   end
 
+  #=============
+  #receive @delivery
+  #set state to DESTINATION
+  #=============
   def self.receive(delivery)
     if delivery.nil?
       return false
     end
-
+    if !DeliveryState.before_state?(DeliveryState::DESTINATION,delivery.state)
+      return false
+    end
     ActiveRecord::Base.transaction do
       if !delivery.set_state(DeliveryState::DESTINATION)
         return false
@@ -90,6 +116,10 @@ class DeliveryService
     true
   end
 
+  #=============
+  #semd @delivery
+  #set state to WAY
+  #=============
   def self.send(delivery, current_user)
     if delivery.nil?
       return false
@@ -111,6 +141,10 @@ class DeliveryService
     true
   end
 
+  #=============
+  #set_state @delivery,@state
+  #set delivery to a specific state
+  #=============
   def self.set_state(delivery, state)
     if delivery.nil?
       return false
@@ -124,10 +158,16 @@ class DeliveryService
     end
   end
 
+  #=============
+  #exit? @id
+  #=============
   def self.exit? id
     Delivery.find_by_id(id)
   end
 
+  #=============
+  #import_by_file
+  #=============
   def self.import_by_file path
     msg=Message.new
     ActiveRecord::Base.transaction do
