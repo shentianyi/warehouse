@@ -37,11 +37,11 @@ module V1
 
     # validate quantity string
     post :validate_quantity do
-      result = PackageService.part_exits?(params[:quantity])
+      result = PackageService.valid_package_quantity?(params[:quantity])
       if result
-        {result:1, content: '零件号存在'}
+        {result:1, content: '包裝箱數量格式正確'}
       else
-        {result:0, content: '零件号不存在!'}
+        {result:0, content: '包裝箱數量格式錯誤!'}
       end
     end
 
@@ -52,7 +52,6 @@ module V1
       # every package has a uniq id,id should not be exits
       m = PackageService.create package_params,current_user
       if m.result
-        puts m.to_json
         {result:1,content:PackagePresenter.new(m.object).to_json}
       else
         {result:0,content:m.content}

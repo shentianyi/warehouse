@@ -95,7 +95,8 @@ class PackageService
       return msg
     end
     #if exited
-    if package_id_avaliable?(args[:id])
+    if package_id_avaliable?(args[:id]) && valid_package_quantity?(args[:quantity_str])
+      args[:quantity] = quantity_filter(args[:quantity_str]).to_f
       p = Package.new(args)
       if p.save
         msg.result = true
@@ -136,14 +137,28 @@ class PackageService
   end
 
   def self.package_id_avaliable?(id)
-    Package.unscoped.where(id:id,is_delete:[0,1]).first.nil?
+    if id =~ $REG_PACKAGE_ID
+      Package.unscoped.where(id:id,is_delete:[0,1]).first.nil?
+    else
+      nil
+    end
   end
 
   def self.exits?(id)
     Package.find_by_id(id)
   end
 
-  def self.part_exits?(id)
-    !Part.find_by_id(id).nil?
+  def self.valid_package_quantity?(id)
+    if id =~ $REG_PACKAGE_QUANTITY
+      true
+    else
+      false
+    end
+  end
+
+  def self.quantity_filter(id)
+    if valid_package_quantity?(id)
+      id[$FILTER_PACKAGE_QUANTITY_FILTER]
+    end
   end
 end
