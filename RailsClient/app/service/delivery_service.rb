@@ -26,7 +26,7 @@ class DeliveryService
       unless forklift_ids.nil?
         forklift_ids.each do |f_id|
           f = Forklift.find_by_id(f_id)
-          if f
+          if f && f.packages.count > 0
             f.add_to_delivery(delivery.id)
           end
         end
@@ -91,6 +91,11 @@ class DeliveryService
     if delivery.nil?
       return false
     end
+
+    if delivery.forklifts.count == 0
+      return false
+    end
+
     ActiveRecord::Base.transaction do
       delivery.source = current_user.location
       delivery.destination = Location.default_destination
