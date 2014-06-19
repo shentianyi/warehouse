@@ -19,20 +19,14 @@ class Presenter
   def self.init_json_presenters params
     params.map{|param| self.new(param)}
   end
+=begin
 
-  def test
-    a = []
-    self.delegators.each do |d|
-      a << self[d.to_s.to_sym]
+  def to_json
+    json={}
+    self.delegators.each do |dele|
+      json[dele]=self.send(dele)
     end
-    a
+    return json
   end
-
-  def init
-    self.delegators.each do |m|
-      define_method(m) {
-
-      }
-    end
-  end
+=end
 end

@@ -58,13 +58,13 @@ class ForkliftPresenter<Presenter
 
   def to_json_with_packages
     {
-        id: self.id,
-        created_at:self.create_time,
-        user_id:self.creator,
-        stocker_id:self.stockman,
-        whouse_id:self.whouse_name,
-        sum_packages:self.sum_packages,
-        accepted_packages:self.accepted_packages,
+        id: self.id.to_s,
+        created_at:self.create_time.to_s,
+        user_id:self.creator.to_s,
+        stocker_id:self.stockman.to_s,
+        whouse_id:self.whouse_name.to_s,
+        sum_packages:self.sum_packages.to_s,
+        accepted_packages:self.accepted_packages.to_s,
         packages:self.all_packages
     }
   end
