@@ -3,7 +3,7 @@ class Message<CZ::BaseClass
   attr_accessor :result, :object, :content
 
   def default
-    {:result => false}
+    {result: false}
   end
 
   def set_false msg=nil

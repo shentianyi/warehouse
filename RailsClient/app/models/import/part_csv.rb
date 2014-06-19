@@ -2,18 +2,20 @@ module Import
   module PartCsv
     def self.included(base)
       base.extend ClassMethods
-      base.init_csv_rows
+      base.extend CsvBase
+      base.init_csv_cols
     end
   end
 
   module ClassMethods
-    @@csv_rows=nil
+    @@csv_cols=nil
+
     def uniq_key
       %w(id)
     end
 
     def csv_headers
-      ['PartNr', 'UnitPack', $UPMARKER]
+      @@csv_cols.collect { |col| col.header }
     end
 
     def down_block
@@ -22,12 +24,16 @@ module Import
         line<<item.unit_pack
       }
     end
-    def init_csv_rows
-      @@csv_rows=[]
+
+    def init_csv_cols
+      @@csv_cols=[]
+      @@csv_cols<< Csv::CsvCol.new(field: 'id', header: 'PartNr')
+      @@csv_cols<< Csv::CsvCol.new(field: 'unit_pack', header: 'UnitPack')
+      @@csv_cols<< Csv::CsvCol.new(filed: $UPMARKER, header: $UPMARKER)
     end
 
-    def csv_rows
-      @@csv_rows
+    def csv_cols
+      @@csv_cols
     end
   end
 end
