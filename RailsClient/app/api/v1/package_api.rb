@@ -37,7 +37,7 @@ module V1
 
     # validate quantity string
     post :validate_quantity do
-      result = PackageService.valid_package_quantity?(params[:quantity])
+      result = PackageService.valid_package_quantity?(params[:id])
       if result
         {result:1, content: '包裝箱數量格式正確'}
       else

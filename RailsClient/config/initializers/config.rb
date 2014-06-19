@@ -3,5 +3,5 @@ $OPEN_SYN_LOCK= false
 
 #用於匹配唯一嗎和零件數量的正則表達式
 $REG_PACKAGE_ID = /^WI\d*$/
-$FILTER_PACKAGE_QUANTITY_FILTER = /\d*\.?\d*/
-$REG_PACKAGE_QUANTITY = /^Q ?\d*\.?\d*/
+$FILTER_PACKAGE_QUANTITY =/\d+(?:\.\d+)?/
+$REG_PACKAGE_QUANTITY = /^Q? ?\d*\.?\d*$/

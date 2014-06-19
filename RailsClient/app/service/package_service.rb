@@ -90,7 +90,7 @@ class PackageService
     end
     args[:location_id] = current_user.location.id if current_user.location
     #
-    if !part_exits?(args[:part_id])
+    if !PartService.validate_id(args[:part_id])
       msg.content = '零件号不存在'
       return msg
     end
@@ -125,7 +125,7 @@ class PackageService
       return false
     end
 
-    if !part_exits?(args[:part_id])
+    if !PartService.validate_id?(args[:part_id])
       return false
     end
 
@@ -157,8 +157,9 @@ class PackageService
   end
 
   def self.quantity_filter(id)
+    puts $REG_PACKAGE_QUANTITY.to_s
     if valid_package_quantity?(id)
-      id[$FILTER_PACKAGE_QUANTITY_FILTER]
+      id[$FILTER_PACKAGE_QUANTITY]
     end
   end
 end
