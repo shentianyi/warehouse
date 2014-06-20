@@ -14,7 +14,11 @@ module OauthAPIGuard
 # Helper Methods for Grape Endpoint
   module HelperMethods
     def guard!
-      guard_by_token
+      if request.env['HTTP_AUTHORIZATION'].split(' ')[0]=='Bearer'
+        guard_by_token
+      else
+
+      end
     end
 
     private
@@ -22,6 +26,12 @@ module OauthAPIGuard
       token_string = get_token_string
       #raise BasicAuthError unless  ApiToken.find_by_token(token_string)
       raise BasicAuthError unless  '3dcba17f596969a676bfdd90b5425c703f983acf7306760e1057c95afe9f17b1d'==token_string
+    end
+
+    def guard_by_basic
+      auth_header=env['HTTP_AUTHORIZATION'].split(' ')
+      user, passwd=Base64.decode64(auth_header[1]).split(':')
+      raise BasicAuthError unless user==$API_AUTH_USER[:user] && passwd==$API_AUTH_USER[:passwd]
     end
 
     def get_token_string
