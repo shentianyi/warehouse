@@ -65,6 +65,55 @@ class PartsController < ApplicationController
     end
   end
 
+  # GET /parts/import_positions
+  # GET /parts/import_positions.json
+  def import_position
+
+  end
+
+  # POST /parts/do_import_positions
+  # POST /parts/do_import_positions.json
+  def do_import_position
+
+  end
+
+  # GET /parts/template_position
+  # GET /parts/template_position.json
+  def template_position
+    file_name="part_position_csv_upload_template.csv"
+    path=File.join($TEMPLATEPATH, file_name)
+    send_file path, :type => 'application/csv', :filename => file_name
+  end
+
+  # GET /parts/download_positions
+  # GET /parts/download_positions.json
+  def download_positions
+    file_name= 'part_positions_'+Time.now.strftime('%Y%m%d%H%M%S')+'.csv'
+    path=File.join($DOWNLOADPATH, file_name)
+    msg = Message.new
+    msg.result = false
+    begin
+      File.open(path, 'wb') do |f|
+        f.puts PartPosition.csv_headers.join($CSVSP)
+        items=PartPosition.all
+        items.each do |item|
+          line=[]
+          proc=PartPosition.down_block
+          proc.call(line, item)
+          f.puts line.join($CSVSP)
+        end
+      end
+      msg.result=true
+    rescue => e
+      msg.content =e.message
+    end
+    if msg.result
+      send_file path, :type => 'application/csv', :filename => file_name
+    else
+      render :index
+    end
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_part
