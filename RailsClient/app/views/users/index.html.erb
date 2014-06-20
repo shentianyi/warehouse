@@ -1,5 +1,5 @@
 <h1>Listing users</h1>
-<input type="button" value="導入零件庫位信息"/>
+<h2><%= link_to 'Import',import_users_path%></h2>
 <table>
   <thead>
   <tr>
@@ -30,4 +30,6 @@
 
 <br>
 
-<%= link_to 'New User', new_user_path %>
+<%= link_to "新建用户", send("new_#{@model}_path") %>
+<%= link_to "上传/更新用户", send("import_#{@model.pluralize}_path") %>
+<%= link_to "下载", send("download_#{@model.pluralize}_path") %>
