@@ -4,6 +4,14 @@
       <%= @msg.content %>
     </div>
 <% end %>
+
+
+<%= link_to "新建零件", send("new_#{@model}_path") %>
+<%= link_to "上传/更新零件", send("import_#{@model.pluralize}_path") %>
+<%= link_to "下载", send("download_#{@model.pluralize}_path") %>
+<%= link_to "上传/更新零件位置", parts_import_positions_path %>
+<%= link_to "下载零件位置", parts_download_positions_path %>
+<br>
 <table>
   <thead>
   <tr>
@@ -27,10 +35,3 @@
   </tbody>
 </table>
 
-<br>
-
-<%= link_to "新建零件", send("new_#{@model}_path") %>
-<%= link_to "上传/更新零件", send("import_#{@model.pluralize}_path") %>
-<%= link_to "下载", send("download_#{@model.pluralize}_path") %>
-<%= link_to "上传/更新零件位置", parts_import_positions_path %>
-<%= link_to "下载零件位置", parts_download_positions_path %>

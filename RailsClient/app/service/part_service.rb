@@ -4,7 +4,7 @@ class PartService
   end
 
   def self.import_part_position csv
-    headers = [{field:'part_id',header: 'Part Nr'},{field:'position_id',header: 'Position Nr'},{field:$UPMARKER,header: $UPMARKER}]
+    headers = [{field:'part_id',header: 'Part Nr'} ,{field:'position',header: 'Position'},{field:$UPMARKER,header: $UPMARKER}]
 
     msg=Message.new
     begin
@@ -21,8 +21,13 @@ class PartService
           raise(ArgumentError, "行:#{line_no} #{col[:field]} 值不可为空") if row[col[:header]].blank?
           data[col[:field]]=row[col[:header]]
         end
+        if p =  Position.find_by_detail(data['position'])
+          data.delete('position')
+          data['position_id'] = p.id
+        else
+          raise(ArgumentError, "行:#{line_no} Position 不存在对应的库位")
+        end
         # clean data
-        puts
         update_marker=(data.delete($UPMARKER).to_i==1)
 
         #1 means delete
