@@ -32,7 +32,7 @@
     </p>
 
     <p>
-      <%= f.select(:location_type,LocationType.menu,{include_blank: false})%>
+      <%= f.select(:destination_id,Location.where.not(id: @location.id).collect{|l| [l.name,l.id]},{include_blank: false})%>
     </p>
   <div class="actions">
     <%= f.submit %>
