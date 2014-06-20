@@ -5,14 +5,14 @@ module Printer
 
     def generate_data
       d=Delivery.find(self.id)
-      head={id: d.id, receive_addr:'Default',user:d.receiver_id,receive_date:d.received_date.strftime('%Y.%m.%d')}
+      head={id: d.id, receive_addr:d.destination.name,user:d.receiver_id,receive_date:d.received_date.strftime('%Y.%m.%d')}
       heads=[]
       HEAD.each do |k|
         heads<<{Key: k, Value: head[k]}
       end
       forklifts=d.forklifts
       forklifts.each do |f|
-        body={forklift_id:f.id,quantity:f.sum_packages,receive_qty:f.accepted_packages,status:f.state,whouse:f.whouse_id}
+        body={forklift_id:f.id,quantity:f.sum_packages,receive_qty:f.accepted_packages,status:ForkliftState.display(f.state),whouse:f.whouse_id}
         bodies=[]
         BODY.each do |k|
           bodies<<{Key: k, Value: body[k]}

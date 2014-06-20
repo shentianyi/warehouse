@@ -81,7 +81,7 @@ module V1
       if DeliveryService.send(d,current_user)
         {result:1,content:''}
       else
-        {result:0,content:''}
+        {result:0,content:'发送失败!'}
       end
     end
 
