@@ -73,8 +73,23 @@ class PartsController < ApplicationController
 
   # POST /parts/do_import_positions
   # POST /parts/do_import_positions.json
-  def do_import_position
-
+  def do_import_positions
+    msg=Message.new
+    begin
+      if params[:files].size==1
+        file=params[:files][0]
+        data=FileData.new(data: file, oriName: file.original_filename, path: $UPDATAPATH, pathName: "#{Time.now.strftime('%Y%m%d%H%M%S')}-#{file.original_filename}")
+        data.saveFile
+        csv=Csv::CsvConfig.new(encoding: Csv::CsvConfig.csv_write_encode(request.user_agent), col_sep: $CSVSP, file_path: data.full_path)
+        msg=PartService.import_part_position csv
+      else
+        msg.content='未选择文件或只能上传一个文件'
+      end
+    rescue => e
+      puts e.backtrace
+      msg.content = e.message
+    end
+    render json: msg
   end
 
   # GET /parts/template_position
