@@ -1,2 +1,0 @@
-module PartPositionsHelper
-end

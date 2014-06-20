@@ -27,4 +27,6 @@
 
 <br>
 
-<%= link_to 'New Position', new_position_path %>
+<<%= link_to "新建库位", send("new_#{@model}_path") %>
+<%= link_to "上传/更新库位", send("import_#{@model.pluralize}_path") %>
+<%= link_to "下载", send("download_#{@model.pluralize}_path") %>

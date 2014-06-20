@@ -1,5 +1,5 @@
 module Import
-  module UserCsv
+  module PositionCsv
     def self.included(base)
       base.extend ClassMethods
       base.extend CsvBase
@@ -21,20 +21,18 @@ module Import
     def down_block
       Proc.new { |line, item|
         line<<item.id
-        line<<item.name
-        line<<item.role_id
-        line<<item.tel
-        line<<item.location_id
+        line<<item.detail
+        line<<item.whouse_id
       }
     end
 
     def init_csv_cols
       @@csv_cols=[]
-      @@csv_cols<< Csv::CsvCol.new(field: 'id', header: 'User Nr')
-      @@csv_cols<< Csv::CsvCol.new(field: 'name', header: 'Name')
-      @@csv_cols<< Csv::CsvCol.new(field: 'role_id', header: 'Role')
-      @@csv_cols<< Csv::CsvCol.new(field: 'tel', header: 'Phone Nr', null:true)
-      @@csv_cols<< Csv::CsvCol.new(field: 'location_id', header: 'Location', is_foreign: true, foreign: Location, null:true)
+      @@csv_cols<< Csv::CsvCol.new(field: 'id', header: 'Position Nr')
+      @@csv_cols<< Csv::CsvCol.new(field: 'detail', header: 'Position')
+      @@csv_cols<< Csv::CsvCol.new(field: 'whouse_id', header: 'Ware House',if_foreign: true,foreign: Whouse)
+
+
       @@csv_cols<< Csv::CsvCol.new(field: $UPMARKER, header: $UPMARKER)
     end
 

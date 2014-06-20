@@ -11,7 +11,7 @@ module Import
     @@csv_cols=nil
 
     def uniq_key
-      %w(id)
+      #%w(id)
     end
 
     def csv_headers
@@ -22,16 +22,19 @@ module Import
       Proc.new { |line, item|
         line<<item.part_id
         line<<item.position_id
+        line<<item.position.detail
+        line<<item.position.whouse.name
       }
     end
 
     def init_csv_cols
       @@csv_cols=[]
-      @@csv_cols<< Csv::CsvCol.new(field: 'id', header: 'User Nr')
-      @@csv_cols<< Csv::CsvCol.new(field: 'name', header: 'Name')
-      @@csv_cols<< Csv::CsvCol.new(field: 'role_id', header: 'Role')
-      @@csv_cols<< Csv::CsvCol.new(field: 'tel', header: 'Phone Nr')
-      @@csv_cols<< Csv::CsvCol.new(field: 'location_id', header: 'Location')
+      @@csv_cols<< Csv::CsvCol.new(field: 'part_id', header: 'Position Nr')
+      @@csv_cols<< Csv::CsvCol.new(field: 'position_id', header: 'Position Nr')
+      @@csv_cols<< Csv::CsvCol.new(field: 'position', header: 'Position')
+      @@csv_cols<< Csv::CsvCol.new(field: 'whouse', header: 'Ware House')
+
+
       @@csv_cols<< Csv::CsvCol.new(field: $UPMARKER, header: $UPMARKER)
     end
 

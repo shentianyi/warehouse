@@ -154,7 +154,7 @@ module V1
       if DeliveryService.receive(d)
         {result:1,content:DeliveryPresenter.new(d).to_json_with_forklifts(true)}
       else
-        {result:0,content:''}
+        {result:0,content:'运单已接收!'}
       end
     end
 
