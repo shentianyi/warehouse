@@ -1,0 +1,18 @@
+<script type="text/javascript">
+    $(function() {
+        data_upload("#item-data-uploader");
+    });
+</script>
+<h1>&nbsp;</h1>
+<p id="notice">
+  <%= notice %>
+</p>
+<h3>上传/更新数据</h3>
+<div>
+  上传数据文件：
+  <input id="item-data-uploader" type="file" name="files[]" data-url="/parts/do_import_positions" >
+  <div class="abstractblock" id="item-data-uploader-preview" style="display:none;"></div>
+</div>
+<div>下载模板：<%= link_to '下载数据模板', parts_template_position_path %></div>
+<%= link_to '返回', send("parts_path") %>
+<%= render :partial => "shared/handling_msg_box", :locals => { :handlemsg => "处理中..." } %>

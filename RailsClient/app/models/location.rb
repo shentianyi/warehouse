@@ -3,6 +3,7 @@ class Location < ActiveRecord::Base
 
   has_many :users
   has_many :whouses, :dependent => :destroy
+  belongs_to :destination, class_name: 'Location'
 
   def self.default_destination
     if d = Location.where(location_type:LocationType::DESTINATION).first

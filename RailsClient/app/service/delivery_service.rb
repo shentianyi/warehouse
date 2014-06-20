@@ -131,7 +131,7 @@ class DeliveryService
 
     ActiveRecord::Base.transaction do
       delivery.source = current_user.location
-      delivery.destination = Location.default_destination
+      delivery.destination = current_user.location.destination
       delivery.delivery_date = Time.now
       delivery.set_state(DeliveryState::WAY)
       delivery.forklifts.each do |f|

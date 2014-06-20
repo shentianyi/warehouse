@@ -21,3 +21,7 @@ $PARTPOSITIONSPATH=path_config[:import_part_positions_file_path]
 $REG_PACKAGE_ID = /^WI\d*$/
 $FILTER_PACKAGE_QUANTITY =/\d+(?:\.\d+)?/
 $REG_PACKAGE_QUANTITY = /^Q? ?\d*\.?\d*$/
+
+# api default auth user and password
+auth=config['api']['auth']
+$API_AUTH_USER={user: auth['user'], passwd: auth['passwd']}

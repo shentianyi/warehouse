@@ -29,6 +29,11 @@ Rails.application.routes.draw do
   end
   resources :forklifts
 
+  get 'parts/import_positions', to: 'parts#import_positions'
+  get 'parts/template_position', to: 'parts#template_position'
+  get 'parts/download_positions', to: 'parts#download_positions'
+  post 'parts/do_import_positions', to: 'parts#do_import_positions'
+
   [:locations, :whouses, :parts, :positions, :part_positions, :users].each do |model|
     resources model do
       collection do
@@ -40,6 +45,9 @@ Rails.application.routes.draw do
       end
     end
   end
+
+
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

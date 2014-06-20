@@ -11,3 +11,8 @@ path:
  :import_users_file_path: 'uploadfiles/users'
  :import_parts_file_path: 'uploadfiles/parts'
  :import_part_positions_file_path: 'uploadfiles/part_positions'
+
+api:
+ auth:
+  user: 'UPDATE'
+  passwd: 'S12@#4DSA'

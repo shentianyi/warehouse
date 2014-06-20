@@ -81,7 +81,7 @@ module V1
       if DeliveryService.send(d,current_user)
         {result:1,content:''}
       else
-        {result:0,content:''}
+        {result:0,content:'发送失败!'}
       end
     end
 
@@ -154,7 +154,7 @@ module V1
       if DeliveryService.receive(d)
         {result:1,content:DeliveryPresenter.new(d).to_json_with_forklifts(true)}
       else
-        {result:0,content:''}
+        {result:0,content:'运单已接收!'}
       end
     end
 

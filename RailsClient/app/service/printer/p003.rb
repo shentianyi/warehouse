@@ -12,7 +12,7 @@ module Printer
       end
       forklifts=d.forklifts
       forklifts.each do |f|
-        body={forklift_id:f.id,quantity:f.sum_packages,receive_qty:f.accepted_packages,status:f.state,whouse:f.whouse_id}
+        body={forklift_id:f.id,quantity:f.sum_packages,receive_qty:f.accepted_packages,status:ForkliftState.display(f.state),whouse:f.whouse_id}
         bodies=[]
         BODY.each do |k|
           bodies<<{Key: k, Value: body[k]}
