@@ -37,15 +37,14 @@ namespace Brilliantech.Warehouse.PrintServiceLib
                 if (data != null && data.Count > 0)
                 {
                     printer.Print(data);
+                    msg.SetTrue();
                     msg.Content = "打印成功";
                 }
                 else {
-                    msg.Result = false;
                     msg.Content = "打印失败,无打印内容";
                 }
             }
             catch (Exception e) {
-                msg.Result = false;
                 msg.Content = e.Message;
                 LogUtil.Logger.Error(e.Message);
             } 
