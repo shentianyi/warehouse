@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 module V1
   class DeliveryAPI<Base
@@ -19,7 +20,7 @@ module V1
       DeliveryPresenter.init_presenters(deliveries).each do |d|
         data << d.to_json
       end
-      puts data
+      #puts data
       {result:true,content:data}
     end
 
@@ -28,11 +29,11 @@ module V1
     post :check_forklift do
       #d = Delivery.find_by_id(params[:id])
       f = ForkliftService.exits?(params[:forklift_id])
-      puts f.to_json
+      #puts f.to_json
       if f && f.delivery.nil?
         {result:1,content:ForkliftPresenter.new(f).to_json}
       else
-        {result:0,content:''}
+        {result:0,content:'托清单不存在或已被加入其他运单中!'}
       end
     end
 
@@ -49,7 +50,7 @@ module V1
       end
 
       if DeliveryService.add_forklifts(d,params[:forklifts])
-        {result:1,content:''}
+        {result:1,content:'添加清单成功'}
       else
         {result:0,content:''}
       end
@@ -67,7 +68,11 @@ module V1
       end
 
       result = DeliveryService.remove_forklifk(f)
-      {result:result,content:''}
+      if result
+        {result:1,content:'删除清单成功'}
+      else
+        {result:0,content:'清楚清单失败'}
+      end
     end
 
     # send delivery
@@ -79,7 +84,7 @@ module V1
         return {result:0,content:'运单不能修改'}
       end
       if DeliveryService.send(d,current_user)
-        {result:1,content:''}
+        {result:1,content:'发送成功'}
       else
         {result:0,content:'发送失败!'}
       end
@@ -112,9 +117,9 @@ module V1
       end
 
       if  DeliveryService.delete(d)
-        {result:1,content:''}
+        {result:1,content:'删除成功'}
       else
-        {result:0,content:''}
+        {result:0,content:'删除失败'}
       end
 
     end
@@ -139,9 +144,9 @@ module V1
       end
 
       if DeliveryService.update(d,delivery_params)
-        {result:1,content:''}
+        {result:1,content:'修改成功'}
       else
-        {result:0,contnet:''}
+        {result:0,contnet:'修改失败'}
       end
     end
 
@@ -179,7 +184,7 @@ module V1
       end
 
       if DeliveryService.confirm_received(d,current_user)
-        {result:1,content:''}
+        {result:1,content:'接收成功！'}
       else
         {result:0,content:'接收失败!'}
       end
