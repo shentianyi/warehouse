@@ -8,6 +8,7 @@ class UsersController < ApplicationController
   # GET /users.json
   def index
     @users = User.all
+    @users = @users.paginate(:page=>params[:page])
   end
 
   # POST /users

@@ -6,6 +6,7 @@ class DeliveriesController < ApplicationController
   # GET /deliveries.json
   def index
     @deliveries = Delivery.all
+    @deliveries = @deliveries.paginate(:page=>params[:page])
   end
 
   # GET /deliveries/1

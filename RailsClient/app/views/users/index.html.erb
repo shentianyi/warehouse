@@ -27,7 +27,7 @@
   <% end %>
   </tbody>
 </table>
-
+<%= will_paginate @users, :page_links => false %>
 <br>
 
 <%= link_to "新建用户", send("new_#{@model}_path") %>

@@ -26,7 +26,7 @@
     <% end %>
   </tbody>
 </table>
-
+<%= will_paginate @locations, :page_links => false %>
 <br>
 
 <%= link_to 'New Location', new_location_path %>

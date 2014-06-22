@@ -25,7 +25,7 @@
     <% end %>
   </tbody>
 </table>
-
+<%= will_paginate @whouses, :page_links => false %>
 <br>
 
 <%= link_to 'New Whouse', new_whouse_path %>
