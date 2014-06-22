@@ -1,4 +1,8 @@
 class ForkliftService
+
+  #=============
+  #delete @forklift
+  #=============
   def self.delete forklift
     if forklift.nil?
       return false
@@ -10,6 +14,20 @@ class ForkliftService
     forklift.destroy
   end
 
+  #=============
+  # update @forklift,@args
+  #=============
+  def self.update forklift,args
+    if forklift.nil?
+      return  false
+    end
+    forklift.update_attributes(args)
+  end
+
+  #=============
+  # confirm_received @forklift
+  # set state to RECEIVED
+  #=============
   def self.confirm_received(forklift)
     if forklift.nil?
       return false
@@ -18,6 +36,10 @@ class ForkliftService
     forklift.set_state(ForkliftState::RECEIVED)
   end
 
+  #=============
+  # receive @forklift
+  # set state to DESTINATION
+  #=============
   def self.receive(forklift)
     if forklift.nil?
       return false
@@ -30,6 +52,10 @@ class ForkliftService
     true
   end
 
+  #=============
+  # send @forklfit
+  # set state to WAY
+  #=============
   def self.send(forklift)
     if forklift.nil?
       return false
@@ -42,6 +68,10 @@ class ForkliftService
     true
   end
 
+  #=============
+  # check @forklift
+  # set state to RECEIVED
+  #=============
   def self.check forklift
     if forklift.nil?
       return false
@@ -51,29 +81,19 @@ class ForkliftService
     else
       return true
     end
-
-=begin
-    if forklift.set_state(ForkliftState::RECEIVED)
-      forklift.packages.each do |p|
-        p.set_state(PackageState::RECEIVED)
-      end
-    else
-      return false
-    end
-=end
   end
 
-  def self.update forklift,args
-    if forklift.nil?
-      return  false
-    end
-    forklift.update_attributes(args)
-  end
-
+  #=============
+  #avaliable_to_bind
+  #=============
   def self.avaliable_to_bind
     Forklift.where('delivery_id is NULL').all.order(:created_at)
   end
 
+  #=============
+  #add_package @forklift,@package
+  #add forklift to package
+  #=============
   def self.add_package forklift, package
     if forklift.nil? || package.nil?
       return false
@@ -86,6 +106,10 @@ class ForkliftService
     end
   end
 
+  #=============
+  #set_state @forklift,@state
+  #set forklift to a specific state
+  #=============
   def self.set_state(forklift,state)
     if forklift.nil?
       return false
@@ -99,6 +123,10 @@ class ForkliftService
     end
   end
 
+  #=============
+  #remove_package
+  #remove a package from a specific forklift
+  #=============
   def self.remove_package package
     if package.nil?
       return false
@@ -106,6 +134,10 @@ class ForkliftService
     package.remove_from_forklift
   end
 
+  #=============
+  #exits? @id
+  #determine if a forklift exits
+  #=============
   def self.exits? id
     Forklift.find_by_id(id)
   end
