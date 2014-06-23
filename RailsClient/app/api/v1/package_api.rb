@@ -20,7 +20,7 @@ module V1
       data = []
       presenters = PackagePresenter.init_presenters(packages)
       presenters.each do |p|
-        data<<p.to_json
+        data<<p.to_json_without_position
       end
       data
     end

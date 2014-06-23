@@ -24,5 +24,6 @@ class NetService
           return false
       end
     end
+    true
   end
 end

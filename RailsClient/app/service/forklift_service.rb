@@ -21,6 +21,9 @@ class ForkliftService
     if forklift.nil?
       return  false
     end
+    if args[:whouse_id]
+
+    end
     forklift.update_attributes(args)
   end
 
@@ -32,8 +35,11 @@ class ForkliftService
     if forklift.nil?
       return false
     end
-
-    forklift.set_state(ForkliftState::RECEIVED)
+    if forklift.sum_packages > forklift.accepted_packages
+      forklift.set_state(ForkliftState::PART_RECEIVED)
+    else
+      forklift.set_state(ForkliftState::RECEIVED)
+    end
   end
 
   #=============

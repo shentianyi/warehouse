@@ -205,7 +205,7 @@ class PackageService
   #=============
   def self.valid_id?(id)
     if id =~ $REG_PACKAGE_ID
-      Package.unscoped.where(id:id,is_delete:[0,1]).first.nil?
+      Package.unscoped.where(id:id).first.nil?
     else
       nil
     end
