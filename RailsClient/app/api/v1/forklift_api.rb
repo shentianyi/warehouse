@@ -147,9 +147,15 @@ module V1
 
       result = ForkliftService.update(f,forklift_params)
       if result
-        {result:1,content:''}
+        if forklift_params[:whouse_id]
+          packages = PackagePresenter.init_presenters(f.packages).collect {|p| p.to_json}
+          {result:1,content:{packages:packages}}
+        else
+          {result:1,content:'更新清单成功'}
+        end
+
       else
-        {result:0,content:''}
+        {result:0,content:'更新清单失败'}
       end
     end
   end

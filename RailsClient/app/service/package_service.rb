@@ -11,14 +11,16 @@ class PackageService
     unless args.has_key?(:user_id)
       args[:user_id] = current_user.id
     end
-    args[:location_id] = current_user.location.id if current_user.location
+    args[:location_id] = current_user.location_id if current_user.location_id
+
     #
     if !PartService.validate_id(args[:part_id])
       msg.content = '零件号不存在'
       return msg
     end
+
     #if exited
-    if valid_id?(args[:id]) && valid_quantity?(args[:quantity_str])
+    if valid_quantity?(args[:quantity_str])
       args[:quantity] = filt_quantity(args[:quantity_str]).to_f
       p = Package.new(args)
       if p.save
@@ -28,7 +30,8 @@ class PackageService
         msg.content << p.errors.full_messages
       end
     else
-      msg.content << '唯一号重复,请使用新的唯一号'
+      msg.content = '零件数量格式错误!'
+      return msg
     end
     msg
   end
@@ -59,6 +62,10 @@ class PackageService
       return false
     end
 
+    if !PackageState.can_update?(package.state)
+      return false
+    end
+
     if !PartService.validate_id(args[:part_id])
       return false
     end
@@ -69,8 +76,8 @@ class PackageService
       return false
     end
 
-    if !PackageState.can_update?(package.state)
-      return false
+    if package.forklift_id && args[:part_id] != package.part_id
+      package.package_position.update_attributes(:part_id => args[:part_id])
     end
 
     package.update_attributes(args)
@@ -129,9 +136,11 @@ class PackageService
       return false
     end
 
+=begin
     if package.forklift_id.nil?
       return false
     end
+=end
 
     if !PackageState.before_state?(PackageState::RECEIVED,package.state)
       return false
@@ -154,9 +163,11 @@ class PackageService
       return false
     end
 
+=begin
     if package.forklift_id.nil?
       return false
     end
+=end
 
     if set_state(package,PackageState::DESTINATION)
       package.forklift.package_unchecked

@@ -22,7 +22,26 @@ class ForkliftService
       return  false
     end
 
-    forklift.update_attributes(args)
+    update_position = false
+    if args[:whouse_id] && args[:whouse_id] != forklift.whouse_id
+      update_position = true
+    end
+
+
+    if forklift.update_attributes(args)
+      if update_position
+        forklift.packages.each do |p|
+          if pp = PartPosition.joins(:position).where({part_positions:{part_id:p.part_id},positions:{whouse_id: args[:whouse_id]}}).first
+            puts p.package_position.to_json
+            p.package_position.position_id = pp.position_id
+            p.package_position.save
+          end
+        end
+      end
+      true
+    else
+      false
+    end
   end
 
   #=============
@@ -103,7 +122,7 @@ class ForkliftService
       return false
     end
 
-    if package.forklift.nil?
+    if package.forklift_id.nil?
       return package.add_to_forklift forklift
     else
       false

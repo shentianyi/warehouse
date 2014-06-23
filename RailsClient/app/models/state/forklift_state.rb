@@ -11,6 +11,8 @@ class ForkliftState<BaseState
 
   def self.can_change? old_state,new_state
     case old_state
+      when DESTINATION
+        [DESTINATION,ORIGINAL,WAY,RECEIVED,PART_RECEIVED].include? new_state
       when PART_RECEIVED
         [DESTINATION].include? new_state
       else
