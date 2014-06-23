@@ -26,5 +26,9 @@ module V1
       guard!
       {result:1,content:{user:User.first}}
     end
+
+    get :ping do
+      'ping'
+    end
   end
 end

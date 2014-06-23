@@ -84,7 +84,12 @@ module V1
         return {result:0,content:'运单不能修改'}
       end
       if DeliveryService.send(d,current_user)
-        {result:1,content:'发送成功'}
+        if NetService.ping()
+          {result:1,content:'发送成功'}
+        else
+          {result:0,content:'发送成功，但是网络不通畅，无法同步，请导出运单！'}
+        end
+
       else
         {result:0,content:'发送失败!'}
       end
