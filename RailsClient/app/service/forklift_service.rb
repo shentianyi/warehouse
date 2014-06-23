@@ -103,7 +103,7 @@ class ForkliftService
       return false
     end
 
-    if package.forklift.nil?
+    if package.forklift_id.nil?
       return package.add_to_forklift forklift
     else
       false

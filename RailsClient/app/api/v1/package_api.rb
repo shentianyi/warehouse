@@ -14,6 +14,7 @@ module V1
     #need to add conditions for search
     #******
     # binded but not add to forklift packages
+    # no need to show position
     get :binds do
       packages = PackageService.avaliable_to_bind
       data = []
@@ -48,7 +49,7 @@ module V1
     # if find deleted then update(take care of foreign keys)
     # else create new
     post do
-      # every package has a uniq id,id should not be exits
+      # every package has a uniq id,id should not exited
       m = PackageService.create package_params,current_user
       if m.result
         {result:1,content:PackagePresenter.new(m.object).to_json_simple}
@@ -61,7 +62,7 @@ module V1
     put do
       if p = PackageService.exits?(package_params[:id])
         if PackageService.update(p,package_params)
-          {result:1,content:'修改成功!'}
+          {result:1,content:PackagePresenter.new(p).to_json}
         else
           {result:0,content:'修改失败!'}
         end

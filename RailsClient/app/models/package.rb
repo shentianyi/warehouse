@@ -43,7 +43,7 @@ class Package < ActiveRecord::Base
   #private
   # set_position
   def set_position
-    if self.forklift.nil?
+    if self.forklift_id.nil?
       return
     end
 
