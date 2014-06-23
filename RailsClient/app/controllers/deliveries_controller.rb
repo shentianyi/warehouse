@@ -1,12 +1,14 @@
 class DeliveriesController < ApplicationController
   load_and_authorize_resource
   before_action :set_delivery, only: [:show, :edit, :update, :destroy]
-
+  skip_before_filter :delivery_params
+  before_action :get_states, only: [:index, :search]
+  #before_action :set_search_variable, only: [:search]
   # GET /deliveries
   # GET /deliveries.json
   def index
     @deliveries = Delivery.all
-    @deliveries = @deliveries.paginate(:page=>params[:page])
+    @deliveries = @deliveries.paginate(:page => params[:page])
   end
 
   # GET /deliveries/1
@@ -107,6 +109,7 @@ class DeliveriesController < ApplicationController
     end
   end
 
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_delivery
@@ -115,7 +118,22 @@ class DeliveriesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def delivery_params
-    #params[:delivery]
-    params.require(:delivery).permit(:state, :remark)
+    params.require(:delivery)
+  end
+
+  def get_states
+    @states=DeliveryState.state.insert(0, %w())
+  end
+
+  def set_search_variable
+    p= params[:delivery]
+    @id=p[:id]
+    @user_id=p[:user_id]
+    @receiver_id=p[:receiver_id]
+    @state=p[:state]
+    @delivery_date_start=p[:delivery_date][:start]
+    @delivery_date_end=p[:delivery_date][:end]
+    @received_date_start=p[:received_date][:start]
+    @received_date_end=p[:received_date][:end]
   end
 end

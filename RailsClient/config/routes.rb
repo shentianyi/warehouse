@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   resources :deliveries do
     collection do
       match :import, to: :import, via: [:get, :post]
+      get :search
     end
     member do
       get :export
@@ -22,19 +23,18 @@ Rails.application.routes.draw do
   get 'parts/download_positions', to: 'parts#download_positions'
   post 'parts/do_import_positions', to: 'parts#do_import_positions'
 
-  [:locations, :whouses, :parts, :positions, :part_positions, :users].each do |model|
+  [:locations, :whouses, :parts, :positions, :part_positions, :users, :deliveries].each do |model|
     resources model do
       collection do
         post :do_import
         get :import
         get :download
-        get :search
         get :template
       end
     end
   end
 
-  resources :labels  do
+  resources :labels do
     collection do
       post :upload_file
       get :get_config

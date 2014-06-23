@@ -34,7 +34,7 @@ module Import
       @@csv_cols<< Csv::CsvCol.new(field: 'name', header: 'Name')
       @@csv_cols<< Csv::CsvCol.new(field: 'role_id', header: 'Role')
       @@csv_cols<< Csv::CsvCol.new(field: 'tel', header: 'Phone Nr', null:true)
-      @@csv_cols<< Csv::CsvCol.new(field: 'location_id', header: 'Location', is_foreign: true, foreign: Location, null:true)
+      @@csv_cols<< Csv::CsvCol.new(field: 'location_id', header: 'Location', is_foreign: true, foreign: 'Location', null:true)
       @@csv_cols<< Csv::CsvCol.new(field: $UPMARKER, header: $UPMARKER)
     end
 
