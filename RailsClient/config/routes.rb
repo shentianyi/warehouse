@@ -15,18 +15,6 @@ Rails.application.routes.draw do
 
   resources :packages
 
-  resources :whouses do
-    member do
-      get 'positions'
-    end
-  end
-
-  resources :locations do
-    member do
-      get 'users'
-      get 'whouses'
-    end
-  end
   resources :forklifts
 
   get 'parts/import_positions', to: 'parts#import_positions'
@@ -55,7 +43,18 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :locations do
+    member do
+      get 'users'
+      get 'whouses'
+    end
+  end
 
+  resources :whouses do
+    member do
+      get 'positions'
+    end
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

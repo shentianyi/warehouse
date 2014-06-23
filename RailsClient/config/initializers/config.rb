@@ -1,5 +1,6 @@
-$SYNC_HOST = 'http://192.168.1.109:3000'
+$SYNC_HOST = 'http://www.cz-tek.com:9000'
 $OPEN_SYN_LOCK= false
+$NEED_PING= false
 
 config=YAML.load(File.open("#{Rails.root}/config/config.yaml"))
 # load format

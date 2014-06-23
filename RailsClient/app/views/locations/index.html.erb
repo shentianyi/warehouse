@@ -1,5 +1,9 @@
 <h1>Listing locations</h1>
 
+<%= link_to "新建位置", send("new_#{@model}_path") %>
+<%= link_to "上传/更新位置", send("import_#{@model.pluralize}_path") %>
+<%= link_to "下载", send("download_#{@model.pluralize}_path") %>
+
 <table>
   <thead>
     <tr>
@@ -29,4 +33,3 @@
 <%= will_paginate @locations, :page_links => false %>
 <br>
 
-<%= link_to 'New Location', new_location_path %>

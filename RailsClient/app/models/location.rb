@@ -1,5 +1,6 @@
 class Location < ActiveRecord::Base
   include Extensions::UUID
+  include Import::LocationCsv
 
   has_many :users
   has_many :whouses, :dependent => :destroy
