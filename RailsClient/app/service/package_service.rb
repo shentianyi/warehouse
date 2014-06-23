@@ -4,7 +4,7 @@ class PackageService
   #create @args,@current_user=nil
   #=============
   def self.create args,current_user=nil
-    msg = Message.new(content=[])
+    msg = Message.new(content:[])
     msg.result = false
 
     #current_user
