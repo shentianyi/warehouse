@@ -21,9 +21,7 @@ class ForkliftService
     if forklift.nil?
       return  false
     end
-    if args[:whouse_id]
 
-    end
     forklift.update_attributes(args)
   end
 

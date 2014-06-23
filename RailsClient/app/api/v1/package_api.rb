@@ -10,7 +10,6 @@ module V1
       end
     end
 
-    #
     #******
     #need to add conditions for search
     #******
@@ -20,7 +19,7 @@ module V1
       data = []
       presenters = PackagePresenter.init_presenters(packages)
       presenters.each do |p|
-        data<<p.to_json_without_position
+        data<<p.to_json_simple
       end
       data
     end
@@ -52,7 +51,7 @@ module V1
       # every package has a uniq id,id should not be exits
       m = PackageService.create package_params,current_user
       if m.result
-        {result:1,content:PackagePresenter.new(m.object).to_json}
+        {result:1,content:PackagePresenter.new(m.object).to_json_simple}
       else
         {result:0,content:m.content}
       end

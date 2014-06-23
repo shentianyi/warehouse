@@ -29,7 +29,7 @@ class PackagePresenter<Presenter
     }
   end
 
-  def to_json_without_position
+  def to_json_simple
     {
         id: self.id,
         quantity_str: self.quantity_str,
@@ -38,7 +38,7 @@ class PackagePresenter<Presenter
         check_in_time:self.check_in_time,
         user_id:self.user_id,
         state:self.state,
-        state_display:PackageState.display(self.state),
+        state_display:'',
         position_nr:''
     }
   end

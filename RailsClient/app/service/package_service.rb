@@ -129,7 +129,7 @@ class PackageService
       return false
     end
 
-    if package.forklift.nil?
+    if package.forklift_id.nil?
       return false
     end
 
@@ -154,7 +154,7 @@ class PackageService
       return false
     end
 
-    if package.forklift.nil?
+    if package.forklift_id.nil?
       return false
     end
 
