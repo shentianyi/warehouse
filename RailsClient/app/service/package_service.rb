@@ -14,12 +14,11 @@ class PackageService
     args[:location_id] = current_user.location_id if current_user.location_id
 
     #
-=begin
     if !PartService.validate_id(args[:part_id])
       msg.content = '零件号不存在'
       return msg
     end
-=end
+
     #if exited
     if valid_quantity?(args[:quantity_str])
       args[:quantity] = filt_quantity(args[:quantity_str]).to_f
@@ -31,7 +30,8 @@ class PackageService
         msg.content << p.errors.full_messages
       end
     else
-      msg.content << '唯一号重复,请使用新的唯一号'
+      msg.content = '零件数量格式错误!'
+      return msg
     end
     msg
   end

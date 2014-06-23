@@ -3,10 +3,10 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   include Extensions::UUID
   include Import::UserCsv
-  has_many :deliveries
-  before_save :ensure_authentication_token!
 
   belongs_to :location
+  has_many :deliveries
+  before_save :ensure_authentication_token!
 
   validates_uniqueness_of :id
 

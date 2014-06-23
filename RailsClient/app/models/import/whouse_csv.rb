@@ -30,7 +30,7 @@ module Import
       @@csv_cols=[]
       @@csv_cols<< Csv::CsvCol.new(field: 'id', header: 'WarehouseNr')
       @@csv_cols<< Csv::CsvCol.new(field: 'name', header: 'Name')
-      @@csv_cols<< Csv::CsvCol.new(field: 'location_id', header: 'Location',is_foreign:true,foreign:Location)
+      @@csv_cols<< Csv::CsvCol.new(field: 'location_id', header: 'Location',is_foreign:true,foreign:'Location')
       @@csv_cols<< Csv::CsvCol.new(field: $UPMARKER, header: $UPMARKER)
     end
 
