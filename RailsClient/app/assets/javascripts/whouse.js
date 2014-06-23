@@ -8,12 +8,16 @@ function hide_handle_dialog() {
     document.getElementById('dialog-overlay').style.display = 'none';
 }
 
-function data_upload(idStr, format) {
+function data_upload(idStr, format, callback) {
     var vali = true;
     var lock = false;
     var reg = /(\.|\/)(josn|csv|tff)$/i;
-    if (format) {
-        reg = new RegExp('(\.|\/)(' + format + ')$', 'i');
+    if (format!=null) {
+        if (format != false) {
+            reg = new RegExp('(\.|\/)(' + format + ')$', 'i');
+        } else {
+            reg = null;
+        }
     }
 
     $(idStr).fileupload({
@@ -25,13 +29,15 @@ function data_upload(idStr, format) {
             $(idStr + '-preview').html('');
             $.each(data.files, function (index, file) {
                 var msg = "上传中 ... ...";
-                if (!reg.test(file.name)) {
-                    msg = '格式错误';
-                    alert(msg);
-                    vali = false;
-                    return;
+                if (reg) {
+                    if (!reg.test(file.name)) {
+                        msg = '格式错误';
+                        alert(msg);
+                        vali = false;
+                        return;
+                    }
+                    show_handle_dialog();
                 }
-                show_handle_dialog();
                 $(idStr + '-preview').show().append("<span>文件：" + file.name + "</span><br/><span info>处理中....</span>");
             });
         },
@@ -48,8 +54,12 @@ function data_upload(idStr, format) {
             xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));
         },
         success: function (data) {
-            hide_handle_dialog();
-            $(idStr + '-preview > span[info]').html("处理：" + data.content);
+            if (callback) {
+                callback(data);
+            } else {
+                hide_handle_dialog();
+                $(idStr + '-preview > span[info]').html("处理：" + data.content);
+            }
         },
         done: function (e, data) {
         }

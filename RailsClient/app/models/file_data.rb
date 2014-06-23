@@ -7,6 +7,9 @@ class FileData<CZ::BaseClass
   end
 
   def saveFile
+      if @path && !Dir.exists?(@path)
+        Dir.mkdir(@path)
+      end
       @extention=File.extname(@oriName).downcase
       @pathName=@uuidName+@extention if @pathName.nil?
       @full_path=File.join(@path, @pathName)

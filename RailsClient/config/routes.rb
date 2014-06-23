@@ -34,6 +34,15 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :labels  do
+    collection do
+      post :upload_file
+      get :get_config
+      get :get_config_hash
+      get :get_config_version
+    end
+  end
+
   resources :locations do
     member do
       get 'users'
