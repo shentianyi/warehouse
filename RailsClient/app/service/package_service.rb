@@ -185,8 +185,9 @@ def self.check id
     return msg
   end
 
-  package.set_state(PackageState::RECEIVED)
-  ForkliftService.package_checked(package.forklift_id)
+  if package.set_state(PackageState::RECEIVED)
+    ForkliftService.package_checked(package.forklift_id)
+  end
   msg.result = true
   msg.content = '包装箱接收成功'
   return msg
@@ -211,8 +212,9 @@ def self.uncheck id
     return msg
   end
 
-  package.set_state(PackageState::DESTINATION)
-  ForkliftService.package_unchecked(package.forklift_id)
+  if package.set_state(PackageState::DESTINATION)
+    ForkliftService.package_unchecked(package.forklift_id)
+  end
   msg.result = true
   msg.content = '包装箱取消接收成功'
   return msg
