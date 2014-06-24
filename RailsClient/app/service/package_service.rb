@@ -213,7 +213,7 @@ class PackageService
   #check @package
   #check a package and set state to DESTINATION
   #=============
-  def self.uncheck package
+  def self.uncheck id
     msg = Message.new
     msg.result = false
 
