@@ -4,7 +4,66 @@ class PackageService
   #create @args,@current_user=nil
   #=============
   def self.create args,current_user=nil
+    msg = Message.new(content:[])
+    msg.result = false
 
+    #current_user
+    unless args.has_key?(:user_id)
+      args[:user_id] = current_user.id
+      args[:location_id] = current_user.location_id if current_user.location_id
+    end
+
+    #part_id
+    unless part_exit?(args[:part_id])
+      #err_code 10001
+      msg.content = '零件号不存在'
+      return msg
+    end
+
+    #if exited
+    unless quantity_string_valid?(args[:quantity_str])
+      msg.content = '零件格式错误'
+      return msgmsg = Message.new(content:[])
+      msg.result = false
+
+      #current_user
+      unless args.has_key?(:user_id)
+        args[:user_id] = current_user.id
+      end
+      args[:location_id] = current_user.location_id if current_user.location_id
+
+      #
+      if !PartService.validate_id(args[:part_id])
+        msg.content = '零件号不存在'
+        return msg
+      end
+
+      #if exited
+      if valid_quantity?(args[:quantity_str])
+        args[:quantity] = filt_quantity(args[:quantity_str]).to_f
+        p = Package.new(args)
+        if p.save
+          msg.result = true
+          msg.object = p
+        else
+          msg.content << p.errors.full_messages
+        end
+      else
+        msg.content = '零件数量格式错误!'
+        return msg
+      end
+      msg
+    end
+
+    #create
+    args[:quantity] = filt_quantity(args[:quantity_str]).to_f
+    p = Package.new(args)
+    if p.save
+      msg.result = true
+      msg.object = p
+    else
+      msg.content << p.errors.full_messages
+    end
     return msg
   end
 

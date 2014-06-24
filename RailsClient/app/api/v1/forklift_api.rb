@@ -54,11 +54,11 @@ module V1
 
     # add package
     post :add_package do
-      if (f = ForkliftService.exits?(params[:forklift_id])).nil?
+      unless f = ForkliftService.exits?(params[:forklift_id])
         return {result:0,content:'清单不存在!'}
       end
 
-      if !ForkliftState.can_update?(f.state)
+      unless ForkliftState.can_update?(f.state)
         return {result:0,content:'清单不能修改!'}
       end
 
