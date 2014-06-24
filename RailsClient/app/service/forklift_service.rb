@@ -132,10 +132,6 @@ class ForkliftService
   #add forklift to package
   #=============
   def self.add_package forklift, package
-    if forklift.nil? || package.nil?
-      return false
-    end
-
     if package.forklift_id.nil?
       return package.add_to_forklift forklift
     else

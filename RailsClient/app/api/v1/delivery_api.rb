@@ -15,7 +15,8 @@ module V1
     # get deliveries
     # optional params: created_at, user_id, state...
     get :list do
-      deliveries = DeliveryService.search(params.permit(:id,:delivery_date,:user_id,:destination_id),true)
+      delivery_date = Time.parse(params[:delivery_date])
+      deliveries = Delivery.where(created_at: (delivery_date.beginning_of_day..delivery_date.end_of_day)).all.order(:created_at).order(created_at: :desc)
       data = []
       DeliveryPresenter.init_presenters(deliveries).each do |d|
         data << d.to_json
