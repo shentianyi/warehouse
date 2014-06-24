@@ -80,7 +80,7 @@ class PackageService
 
     if package.forklift_id && args[:part_id] != package.part_id
       if package.package_position
-        package.package_position.update_attributes(:part_id => args[:part_id])
+        package.set_position
       end
     end
 
