@@ -46,7 +46,7 @@ class PackageService
           msg.result = true
           msg.object = p
         else
-          msg.content << p.errors.full_messages
+          msg.content = p.errors.full_messages
         end
       else
         msg.content = '零件数量格式错误!'
