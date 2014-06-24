@@ -22,7 +22,7 @@ class PackageService
 
     #if exited
     unless quantity_string_valid?(args[:quantity_str])
-      msg.content = '零件格式错误'
+      msg.content = '零件数量格式错误'
       return msg
     end
 
