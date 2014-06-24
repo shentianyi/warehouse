@@ -177,7 +177,7 @@ class PackageService
     if package.nil?
       return false
     end
-    if !PackageState.before_state?(PackageState::WAY,package.state)
+    unless PackageState.can_set_to?(package.state,PackageState::WAY)
       return false
     end
     package.set_state(PackageState::WAY)
@@ -233,17 +233,6 @@ class PackageService
     msg.result = true
     msg.content = '包装箱取消接收成功'
     return msg
-  end
-
-  #=============
-  #set_state @package,@state
-  #set the package to the specific state
-  #=============
-  def self.set_state(package,state)
-    if package.nil?
-      return false
-    end
-    package.set_state(state)
   end
 
   #=============

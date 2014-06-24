@@ -57,7 +57,7 @@ module V1
 
     end
 
-    # remove package
+    # remove forklift
     # id is forklift_id
     delete :remove_forklift do
       if (f = ForkliftService.exits?(params[:forklift_id])).nil?
