@@ -4,7 +4,7 @@ class ForkliftService
     msg = Message.new
     msg.result = false
     unless whouse_exits? args[:whouse_id]
-      msg.content = '部门不存在'
+      msg.content = ForkliftMessage::WarehouseNotExit
       return msg
     end
 

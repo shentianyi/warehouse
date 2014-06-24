@@ -33,9 +33,9 @@ module V1
     post :validate do
       result = PackageService.valid_id?(params[:id])
       if result
-        {result:1, content: '唯一号可用'}
+        {result:1, content: ''}
       else
-        {result:0, content: '唯一号不可用!'}
+        {result:0, content: PackageMessage::IdNotValid}
       end
     end
 
@@ -43,9 +43,9 @@ module V1
     post :validate_quantity do
       result = PackageService.quantity_string_valid?(params[:id])
       if result
-        {result:1, content: '包裝箱數量格式正確'}
+        {result:1, content:''}
       else
-        {result:0, content: '包裝箱數量格式錯誤!'}
+        {result:0, content: PackageMessage::QuantityStringError}
       end
     end
 
@@ -77,7 +77,7 @@ module V1
     delete do
       msg = PackageService.delete(params[:id])
       if msg.result
-        {result:1,content:'删除成功！'}
+        {result:1,content:PackageMessage::DeleteSuccess}
       else
         {result:0,content:msg.content}
       end
