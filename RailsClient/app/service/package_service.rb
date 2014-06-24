@@ -4,87 +4,80 @@ class PackageService
   #create @args,@current_user=nil
   #=============
   def self.create args,current_user=nil
-    msg = Message.new(content:[])
-    msg.result = false
 
-    #current_user
-    unless args.has_key?(:user_id)
-      args[:user_id] = current_user.id
-    end
-    args[:location_id] = current_user.location_id if current_user.location_id
-
-    #
-    if !PartService.validate_id(args[:part_id])
-      msg.content = '零件号不存在'
-      return msg
-    end
-
-    #if exited
-    if valid_quantity?(args[:quantity_str])
-      args[:quantity] = filt_quantity(args[:quantity_str]).to_f
-      p = Package.new(args)
-      if p.save
-        msg.result = true
-        msg.object = p
-      else
-        msg.content << p.errors.full_messages
-      end
-    else
-      msg.content = '零件数量格式错误!'
-      return msg
-    end
-    msg
+    return msg
   end
 
   #=============
   #delete @package
   #=============
-  def self.delete package
+  def self.delete id
+    msg = Message.new(content:[])
+    msg.result = false
+    package = exits? id
     if package.nil?
-      return false
+      msg.content = '包装箱不存在'
+      return msg
+    end
+
+    unless PackageState.can_delete?(package.state)
+      msg.content = '包装箱不能删除'
+      return msg
     end
 
     ActiveRecord::Base.transaction do
-      if PackageState.can_delete?(package.state)
-        package.remove_from_forklift
-        package.destroy
-      else
-        return false
-      end
+      package.remove_from_forklift
+      package.destroy
+      msg.result = true
+      return msg
     end
   end
 
   #=============
   #update @package
   #=============
-  def self.update package,args
-    puts package
-    puts args
+  def self.update args
+    msg = Message.new
+    msg.result = false
+    package = PackageService.exits?(args[:id])
     if package.nil?
-      return false
+      msg.content = '包装箱不存在'
+      return msg
     end
 
-    if !PackageState.can_update?(package.state)
-      return false
+    unless PackageState.can_update?(package.state)
+      msg.content = '当前包装箱不能修改'
+      return msg
     end
 
-    if !PartService.validate_id(args[:part_id])
-      return false
+    unless part_exit?(args[:part_id])
+      msg.content = '零件不存在'
+      return msg
     end
 
-    if args[:quantity_str] && PackageService.valid_quantity?(args[:quantity_str])
+    if args[:quantity_str] && quantity_string_valid?(args[:quantity_str])
       args[:quantity] = PackageService.filt_quantity(args[:quantity_str])
     else
-      return false
+      msg.content = '零件数量格式错误'
+      return msg
     end
 
-    if package.forklift_id && args[:part_id] != package.part_id
-      if package.package_position
+    need_set_position = false
+    if args[:part_id] && package.part_id != args[:part_id]
+      need_set_position = true
+    end
+
+    #if part_id changed,reset position
+    ActiveRecord::Base.transaction do
+      msg.result = package.update_attributes(args)
+      if need_set_position
         package.set_position
       end
+      if msg.result
+        msg.object = package
+      end
     end
-
-    package.update_attributes(args)
+    return msg
   end
 
   #=============
@@ -135,27 +128,26 @@ class PackageService
   #check @package
   #check a package and set state to RECEIVED
   #=============
-  def self.check package
+  def self.check id
+    msg = Message.new
+    msg.result = false
+
+    package = exits? id
     if package.nil?
-      return false
+      msg.content = '包装箱不存在'
+      return msg
     end
 
-=begin
-    if package.forklift_id.nil?
-      return false
-    end
-=end
-
-    if !PackageState.before_state?(PackageState::RECEIVED,package.state)
-      return false
+    unless PackageState.can_set_to?(package.state,PackageState::RECEIVED)
+      msg.content = '包装箱不能被接收，已经接受或者未发送'
+      return msg
     end
 
-    if set_state(package,PackageState::RECEIVED)
-      package.forklift.package_checked
-      true
-    else
-      false
-    end
+    package.set_state(PackageState::RECEIVED)
+    ForkliftService.package_checked(package.forklift_id)
+    msg.result = true
+    msg.content = '包装箱接收成功'
+    return msg
   end
 
   #=============
@@ -163,22 +155,25 @@ class PackageService
   #check a package and set state to DESTINATION
   #=============
   def self.uncheck package
+    msg = Message.new
+    msg.result = false
+
+    package = exits? id
     if package.nil?
-      return false
+      msg.content = '包装箱不存在'
+      return msg
     end
 
-=begin
-    if package.forklift_id.nil?
-      return false
+    unless PackageState.can_set_to?(package.state,PackageState::DESTINATION)
+      msg.content = '包装箱不能取消接收'
+      return msg
     end
-=end
 
-    if set_state(package,PackageState::DESTINATION)
-      package.forklift.package_unchecked
-      true
-    else
-      false
-    end
+    package.set_state(PackageState::DESTINATION)
+    ForkliftService.package_unchecked(package.forklift_id)
+    msg.result = true
+    msg.content = '包装箱取消接收成功'
+    return msg
   end
 
   #=============
@@ -190,28 +185,6 @@ class PackageService
       return false
     end
     package.set_state(state)
-  end
-
-  #=============
-  #avaliable_to_bind @forklift_id
-  #return packages avaliable for binding to a specific forklift
-  #=============
-  def self.avaliable_to_bind forklift_id
-    if f = Forklift.find_by_id(forklift_id)
-      Package.joins('INNER JOIN part_positions ON part_positions.part_id = packages.part_id').where('packages.forklift_id is NULL').select('packages.id,packages.quantity_str,packages.part_id,packages.user_id,part_positions.position_detail')
-    end
-  end
-
-  #=============
-  #avaliable_to_bind
-  #return packages that not been added into any forklift
-  #=============
-  def self.avaliable_to_bind
-    args = {
-        forklift_id: nil
-    }
-    search(args)
-    #Package.where('packages.forklift_id is NULL').all.order(:created_at) #.select('packages.id,packages.quantity_str,packages.part_id,packages.user_id,packages.check_in_time')
   end
 
   #=============
@@ -227,24 +200,22 @@ class PackageService
   end
 
   #=============
-  #valid_quantity? @quantity
-  #validate package quantity's format
-  #=============
-  def self.valid_quantity?(quantity)
-    if quantity =~ $REG_PACKAGE_QUANTITY
-      true
-    else
-      false
-    end
-  end
-
-  #=============
   #filt_quantity? @quantity_str
   #filt quantity_str
   #=============
   def self.filt_quantity(quantity_str)
-    if valid_quantity?(quantity_str)
-      quantity_str[$FILTER_PACKAGE_QUANTITY]
+    quantity_str[$FILTER_PACKAGE_QUANTITY]
+  end
+
+  def self.part_exit?(part_id)
+    !Part.find_by_id(part_id).nil?
+  end
+
+  def self.quantity_string_valid?(quantity_string)
+    if quantity_string =~ $REG_PACKAGE_QUANTITY
+      true
+    else
+      false
     end
   end
 end

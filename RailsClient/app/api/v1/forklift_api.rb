@@ -12,7 +12,10 @@ module V1
 
     # get binded but not add to delivery forklifts
     get :binds do
-      forklifts = ForkliftService.avaliable_to_bind
+      args={
+          delivery_id: nil
+      }
+      forklifts = ForkliftService.search(args)
       data = []
       ForkliftPresenter.init_presenters(forklifts).each do |fp|
         data<<fp.to_json
@@ -22,31 +25,26 @@ module V1
 
     # create forklift
     post do
-      if Whouse.find_by_id(forklift_params[:whouse_id]).nil?
-        return {result:0,content:'部门未找到'}
-      end
-      f = Forklift.new(forklift_params)
-      unless forklift_params.has_key?(:user_id)
-        f.user = current_user
-      end
-      if f.save
-        {result:1,content:ForkliftPresenter.new(f).to_json}
+      msg = ForkliftService.create(forklift_params,current_user)
+      if msg.result
+        {result:1,content:ForkliftPresenter.new(msg.object).to_json}
       else
-        {result:0,content:f.errors.full_messages}
+        {result:0,content:msg.content}
       end
     end
 
     # check package
     post :check_package do
-      if (f = ForkliftService.exits?(params[:forklift_id])).nil?
+      unless f = ForkliftService.exits?(params[:forklift_id])
         return {result:0,content:'清单不存在!'}
       end
-      if !ForkliftState.can_update?(f.state)
+      unless ForkliftState.can_update?(f.state)
         return {result:0,content:'清单不能修改!'}
       end
-      if (p = PackageService.exits?(params[:package_id])).nil?
+      unless p = PackageService.exits?(params[:package_id])
         return {result:0,content:'包装箱不存在!'}
       end
+
       if ForkliftService.add_package(f,p)
         {result:1,content:PackagePresenter.new(p).to_json}
       else

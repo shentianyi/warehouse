@@ -1,5 +1,28 @@
 class ForkliftService
 
+  def self.create args,current_usr=nil
+    msg = Message.new
+    msg.result = false
+    unless whouse_exits? args[:whouse_id]
+      msg.content = '部门不存在'
+      return msg
+    end
+
+    if current_usr
+      args[:user_id] = current_usr.id
+    end
+
+    forklift = Forklift.new(args)
+
+    if forklift.save
+      msg.result = true
+      msg.object = forklift
+    else
+      msg.content = forklift.errors.full_messages
+    end
+    return msg
+  end
+
   #=============
   #delete @forklift
   #=============
@@ -107,13 +130,6 @@ class ForkliftService
   end
 
   #=============
-  #avaliable_to_bind
-  #=============
-  def self.avaliable_to_bind
-    Forklift.where('delivery_id is NULL').all.order(:created_at)
-  end
-
-  #=============
   #add_package @forklift,@package
   #add forklift to package
   #=============
@@ -163,5 +179,27 @@ class ForkliftService
   #=============
   def self.exits? id
     Forklift.find_by_id(id)
+  end
+
+  def self.package_checked(id)
+    if id
+      if f = Forklift.find_by_id(id)
+        f.accepted_packages = f.accepted_packages + 1
+        f.save
+      end
+    end
+  end
+
+  def self.package_unchecked(id)
+    if id
+      if f = Forklift.find_by_id(id)
+        f.accepted_packages = f.accepted_packages - 1
+        f.save
+      end
+    end
+  end
+
+  def self.search(args)
+    Forklift.where(args).order(created_at: :desc)
   end
 end

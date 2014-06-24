@@ -16,7 +16,11 @@ module V1
     # binded but not add to forklift packages
     # no need to show position
     get :binds do
-      packages = PackageService.avaliable_to_bind
+      args = {
+          forklift_id: nil
+      }
+
+      packages = PackageService.search(args)
       data = []
       presenters = PackagePresenter.init_presenters(packages)
       presenters.each do |p|
@@ -37,7 +41,7 @@ module V1
 
     # validate quantity string
     post :validate_quantity do
-      result = PackageService.valid_quantity?(params[:id])
+      result = PackageService.quantity_string_valid?(params[:id])
       if result
         {result:1, content: '包裝箱數量格式正確'}
       else
@@ -60,54 +64,42 @@ module V1
 
     # update package
     put do
-      if p = PackageService.exits?(package_params[:id])
-        if PackageService.update(p,package_params)
-          {result:1,content:PackagePresenter.new(p).to_json}
-        else
-          {result:0,content:'修改失败!'}
-        end
+      msg = PackageService.update(package_params)
+      if msg.result
+        {result:1,content:PackagePresenter.new(msg.object).to_json}
       else
-        {result:0,content:'包装箱不存在!'}
+        {result:0,content:msg.content}
       end
     end
 
     # delete package
     # update is_delete to true
     delete do
-      if p = PackageService.exits?(params[:id])
-        if PackageService.delete(p)
-          {result:1,content:'删除成功'}
-        else
-          {result:0,content:'删除失败'}
-        end
+      msg = PackageService.delete(params[:id])
+      if msg.result
+        {result:1,content:'删除成功！'}
       else
-        {result:0,content:'包装箱不存在!'}
+        {result:0,content:msg.content}
       end
     end
 
     # check package
     post :check do
-      if p = PackageService.exits?(params[:id])
-        if PackageService.check(p)
-          {result:1,content:'检查成功'}
-        else
-          {result:0,content:'检查失敗'}
-        end
+      msg = PackageService.check(params[:id])
+      if msg.result
+        {result:1,content:msg.content}
       else
-        {result:0,content:'包装箱不存在!'}
+        {result:0,content:msg.content}
       end
     end
 
     # uncheck package
     post :uncheck do
-      if p = PackageService.exits?(params[:id])
-        if PackageService.uncheck(p)
-          {result:1,content:'取消检查成功'}
-        else
-          {result:0,content:'取消检查失敗'}
-        end
+      msg = PackageService.uncheck(params[:id])
+      if msg.result
+        {result:1,content:msg.content}
       else
-        {result:0,content:'包装箱不存在!'}
+        {result:0,content:msg.content}
       end
     end
   end
