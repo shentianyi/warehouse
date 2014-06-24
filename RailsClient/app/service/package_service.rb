@@ -58,6 +58,8 @@ class PackageService
   #update @package
   #=============
   def self.update package,args
+    puts package
+    puts args
     if package.nil?
       return false
     end
@@ -77,7 +79,9 @@ class PackageService
     end
 
     if package.forklift_id && args[:part_id] != package.part_id
-      package.package_position.update_attributes(:part_id => args[:part_id])
+      if package.package_position
+        package.package_position.update_attributes(:part_id => args[:part_id])
+      end
     end
 
     package.update_attributes(args)
