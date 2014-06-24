@@ -74,17 +74,10 @@ module V1
       res = PackageService.create(args,current_user)
       if res.result
         p = res.object
-        if p
-          if ForkliftService.add_package(f,p)
-            {result:1,content:PackagePresenter.new(p).to_json}
-          else
-            {result:0,content:'添加包装箱失败'}
-          end
+        if ForkliftService.add_package(f,p)
+          {result:1,content:PackagePresenter.new(p).to_json}
         else
-          {
-              result:0,
-              content:'托清单不存在!'
-          }
+          {result:0,content:'添加包装箱失败'}
         end
       else
         {result:res.result,content:res.content}
@@ -102,7 +95,7 @@ module V1
         return {result:0,content:'包装箱不能修改!'}
       end
 
-      if ForkliftService.remove_package(p)
+      if p.remove_from_forklift
         {result:1,content:''}
       else
         {result:0,content:''}
@@ -112,14 +105,14 @@ module V1
 
     #delete forklift
     delete do
-      if (f = ForkliftService.exits?(params[:id])).nil?
+      unless f = ForkliftService.exits?(params[:id])
         return {result:0,content:'清单不存在!'}
       end
-      if !ForkliftState.can_delete?(f.state)
+      unless ForkliftState.can_delete?(f.state)
         return {result:0,content:'清单不能修改!'}
       end
-      result = ForkliftService.delete(f)
-      {result:result,content:''}
+      ForkliftService.delete(f)
+      {result:1,content:''}
     end
 
     # get forklift detail

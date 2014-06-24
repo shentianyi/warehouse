@@ -27,14 +27,12 @@ class ForkliftService
   #delete @forklift
   #=============
   def self.delete forklift
-    if forklift.nil?
-      return false
+    ActiveRecord::Base.transaction do
+      forklift.packages.all.each do |p|
+        p.remove_from_forklift
+      end
+      forklift.destroy
     end
-
-    forklift.packages.all.each do |p|
-      p.remove_from_forklift
-    end
-    forklift.destroy
   end
 
   #=============
@@ -55,7 +53,7 @@ class ForkliftService
       if update_position
         forklift.packages.each do |p|
           if pp = PartPosition.joins(:position).where({part_positions:{part_id:p.part_id},positions:{whouse_id: args[:whouse_id]}}).first
-            puts p.package_position.to_json
+            #puts p.package_position.to_json
             p.package_position.position_id = pp.position_id
             p.package_position.save
           end
@@ -160,17 +158,6 @@ class ForkliftService
         end
       end
     end
-  end
-
-  #=============
-  #remove_package
-  #remove a package from a specific forklift
-  #=============
-  def self.remove_package package
-    if package.nil?
-      return false
-    end
-    package.remove_from_forklift
   end
 
   #=============
