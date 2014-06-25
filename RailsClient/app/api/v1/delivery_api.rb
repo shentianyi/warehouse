@@ -34,7 +34,7 @@ module V1
       if f && f.delivery.nil?
         {result:1,content:ForkliftPresenter.new(f).to_json}
       else
-        {result:0,content:'托清单不存在或已被加入其他运单中!'}
+        {result:0,content:DeliveryMessage::CheckForkliftFailed}
       end
     end
 
@@ -43,15 +43,15 @@ module V1
     # forklift: forklift ids
     post :add_forklift do
       if (d = DeliveryService.exit?(params[:id])).nil?
-        return {result:0,content:'运单不存在!'}
+        return {result:0,content:DeliveryMessage::NotExit}
       end
 
       if !DeliveryState.can_update?(d.state)
-        return {result:0,content:'运单不能修改'}
+        return {result:0,content:DeliveryMessage::CannotUpdate}
       end
 
       if DeliveryService.add_forklifts(d,params[:forklifts])
-        {result:1,content:'添加清单成功'}
+        {result:1,content:DeliveryMessage::AddForkliftSuccess}
       else
         {result:0,content:''}
       end
@@ -62,37 +62,37 @@ module V1
     # id is forklift_id
     delete :remove_forklift do
       if (f = ForkliftService.exits?(params[:forklift_id])).nil?
-        return {result:0,content:'清单不存在!'}
+        return {result:0,content:ForkliftMessage::NotExit}
       end
       if !ForkliftState.can_update?(f.state)
-        return {result:0,content:'清单不能修改!'}
+        return {result:0,content:ForkliftMessage::CannotUpdate}
       end
 
       result = DeliveryService.remove_forklifk(f)
       if result
-        {result:1,content:'删除清单成功'}
+        {result:1,content:DeliveryMessage::DeleteForkliftSuccess}
       else
-        {result:0,content:'清楚清单失败'}
+        {result:0,content:DeliveryMessage::DeleteForkliftFailed}
       end
     end
 
     # send delivery
     post :send do
       if (d = DeliveryService.exit?(params[:id])).nil?
-        return {result:0,content:'运单不存在!'}
+        return {result:0,content:DeliveryMessage::NotExit}
       end
       if !DeliveryState.can_update?(d.state)
-        return {result:0,content:'运单不能修改'}
+        return {result:0,content:DeliveryMessage::CannotUpdate}
       end
       if DeliveryService.send(d,current_user)
         if NetService.ping()
-          {result:1,content:'发送成功'}
+          {result:1,content:DeliveryMessage::SendSuccess}
         else
-          {result:0,content:'发送成功，但是网络不通畅，无法同步，请导出运单！'}
+          {result:0,content:DeliveryMessage::SendSuccess+DeliveryMessage::NetworkNotGood}
         end
 
       else
-        {result:0,content:'发送失败!'}
+        {result:0,content:DeliveryMessage::SendFailed}
       end
     end
 
@@ -115,7 +115,7 @@ module V1
     # delete delivery
     delete do
       if (d = DeliveryService.exit?(params[:id])).nil?
-        return {result:0,content:'运单不存在!'}
+        return {result:0,content:DeliveryMessage::NotExit}
       end
 
       if !DeliveryState.can_delete?(d.state)

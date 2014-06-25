@@ -219,10 +219,10 @@ end
 #validate package id's format
 #=============
 def self.valid_id?(id)
-  if id =~ $REG_PACKAGE_ID
+  if id && id =~ $REG_PACKAGE_ID
     Package.unscoped.where(id: id).first.nil?
   else
-    nil
+    false
   end
 end
 
