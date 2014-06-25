@@ -7,6 +7,11 @@ class PackageService
     msg = Message.new(content: [])
     msg.result = false
 
+    unless valid_id? args[:id]
+      msg.content = PackageMessage::IdNotValid
+      return msg
+    end
+
     #current_user
     unless args.has_key?(:user_id)
       args[:user_id] = current_user.id
