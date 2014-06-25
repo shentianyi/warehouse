@@ -1,6 +1,6 @@
 class ForkliftService
 
-  def self.create args,current_usr=nil
+  def self.create args, current_usr=nil
     msg = Message.new
     msg.result = false
     unless whouse_exits? args[:whouse_id]
@@ -38,9 +38,9 @@ class ForkliftService
   #=============
   # update @forklift,@args
   #=============
-  def self.update forklift,args
+  def self.update forklift, args
     if forklift.nil?
-      return  false
+      return false
     end
 
     update_position = false
@@ -52,7 +52,7 @@ class ForkliftService
     if forklift.update_attributes(args)
       if update_position
         forklift.packages.each do |p|
-          if pp = PartPosition.joins(:position).where({part_positions:{part_id:p.part_id},positions:{whouse_id: args[:whouse_id]}}).first
+          if pp = PartPosition.joins(:position).where({part_positions: {part_id: p.part_id}, positions: {whouse_id: args[:whouse_id]}}).first
             #puts p.package_position.to_json
             p.package_position.position_id = pp.position_id
             p.package_position.save
@@ -143,14 +143,14 @@ class ForkliftService
   #set_state @forklift,@state
   #set forklift to a specific state
   #=============
-  def self.set_state(forklift,state)
+  def self.set_state(forklift, state)
     if forklift.nil?
       return false
     end
     ActiveRecord::Base.transaction do
       if forklift.set_state(state)
         forklift.packages.each do |p|
-          PackageService.set_state(p,state)
+          PackageService.set_state(p, state)
         end
       end
     end
@@ -165,20 +165,16 @@ class ForkliftService
   end
 
   def self.package_checked(id)
-    if id
-      if f = Forklift.find_by_id(id)
-        f.accepted_packages = f.accepted_packages + 1
-        f.save
-      end
+    if f = Forklift.find_by_id(id)
+      f.accepted_packages = f.accepted_packages + 1
+      f.save
     end
   end
 
   def self.package_unchecked(id)
-    if id
-      if f = Forklift.find_by_id(id)
-        f.accepted_packages = f.accepted_packages - 1
-        f.save
-      end
+    if f = Forklift.find_by_id(id)
+      f.accepted_packages = f.accepted_packages - 1
+      f.save
     end
   end
 
