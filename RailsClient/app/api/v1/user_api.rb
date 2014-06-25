@@ -7,11 +7,15 @@ module V1
     # params: email, passwd
     post :login do
       user = User.find_for_database_authentication(id: params[:user][:id])
-      if user && user.valid_password?(params[:user][:password])
-        warden.set_user user
-        {result: 1, content: current_user.role_id }
+      if user
+        if user.valid_password?(params[:user][:password])
+          warden.set_user user
+          {result: 1, content: current_user.role_id}
+        else
+          error!({result: 0, content: '密码错误'}, 401)
+        end
       else
-        error!({result: 0}, 401)
+        error!({result: 0, content: '员工号错误'}, 401)
       end
     end
 
@@ -19,12 +23,12 @@ module V1
     delete :logout do
       warden.raw_session.inspect
       warden.logout
-      {result:1}
+      {result: 1}
     end
 
     get do
       guard!
-      {result:1,content:{user:User.first}}
+      {result: 1, content: {user: User.first}}
     end
 
     get :ping do
