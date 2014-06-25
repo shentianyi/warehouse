@@ -1,5 +1,5 @@
-<h1>Listing deliveries</h1>
-<h2><%= link_to 'Import', import_deliveries_path %></h2>
+<h1>运单列表</h1>
+<h2><%= link_to '导入运单', import_deliveries_path %></h2>
 <div>
   <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
     <div>

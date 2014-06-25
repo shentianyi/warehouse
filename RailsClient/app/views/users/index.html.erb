@@ -1,14 +1,19 @@
-<h1>Listing users</h1>
-<h2><%= link_to 'Import',import_users_path%></h2>
-<table>
+<h1>用户列表</h1>
+
+<%= link_to "新建用户", send("new_#{@model}_path") %>
+<%= link_to "上传/更新用户", send("import_#{@model.pluralize}_path") %>
+<%= link_to "下载", send("download_#{@model.pluralize}_path") %>
+
+<table class="table table-bordered table-striped globle-table">
   <thead>
   <tr>
     <!--<th>ID</th>-->
-    <th>No</th>
-    <th>ID</th>
-    <th>IP</th>
-    <th>Location</th>
-    <th>Role</th>
+    <th>序号</th>
+    <th>员工号</th>
+    <th>上次登陆IP</th>
+    <th>所属位置</th>
+    <th>角色</th>
+    <th>操作</th>
   </tr>
   </thead>
 
@@ -30,6 +35,4 @@
 <%= will_paginate @users, :page_links => false %>
 <br>
 
-<%= link_to "新建用户", send("new_#{@model}_path") %>
-<%= link_to "上传/更新用户", send("import_#{@model.pluralize}_path") %>
-<%= link_to "下载", send("download_#{@model.pluralize}_path") %>
+
