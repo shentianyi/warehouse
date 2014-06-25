@@ -206,6 +206,11 @@ def self.uncheck id
     return msg
   end
 
+  if package.state != PackageState::RECEIVED
+    msg.content = PackageMessage::StateError
+    return msg
+  end
+
   unless PackageState.can_set_to?(package.state, PackageState::DESTINATION)
     msg.content = PackageMessage::CannotCancelCheck
     return msg

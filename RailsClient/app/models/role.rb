@@ -6,7 +6,7 @@ class Role
 		:'200' => {:name => 'manager', :display => 'Manager'},
 		:'300' => {:name => 'sender', :display => 'Sender'},
 		:'400' => {:name => 'receiver', :display => 'Receiver'},
-		:'500' => {:name => 'receiver', :display => 'Stocker'}
+		:'500' => {:name => 'stocker', :display => 'Stocker'}
 	}
 
 	class<<self

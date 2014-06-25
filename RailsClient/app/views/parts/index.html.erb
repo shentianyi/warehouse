@@ -1,4 +1,4 @@
-<h1>Listing parts</h1>
+<h1>零件列表</h1>
 <% if @msg && !@msg.result %>
     <div class="error">
       <%= @msg.content %>
@@ -12,21 +12,21 @@
 <%= link_to "上传/更新零件位置", parts_import_positions_path %>
 <%= link_to "下载零件位置", parts_download_positions_path %>
 <br>
-<table>
+<table class="table table-bordered table-striped globle-table">
   <thead>
   <tr>
-    <th colspan="3">No</th>
-    <th colspan="3">ID</th>
-    <th colspan="3">Unit Pack</th>
+    <th>序号</th>
+    <th>零件号</th>
+    <th>最小包装量</th>
   </tr>
   </thead>
 
   <tbody>
   <% @parts.each_with_index do |part, index| %>
       <tr>
-        <td colspan="3"><%= index %>
-        <td colspan="3"><%= part.id %></td>
-        <td colspan="3"><%= part.unit_pack %></td>
+        <td><%= index %>
+        <td><%= part.id %></td>
+        <td><%= part.unit_pack %></td>
         <td><%= link_to 'Show', part %></td>
         <td><%= link_to 'Edit', edit_part_path(part) %></td>
         <td><%= link_to 'Destroy', part, method: :delete, data: {confirm: 'Are you sure?'} %></td>

@@ -119,13 +119,13 @@ module V1
       end
 
       if !DeliveryState.can_delete?(d.state)
-        return {result:0,content:'运单不能删除'}
+        return {result:0,content:DeliveryMessage::CannotDelete}
       end
 
       if  DeliveryService.delete(d)
-        {result:1,content:'删除成功'}
+        {result:1,content:DeliveryMessage::DeleteSuccess}
       else
-        {result:0,content:'删除失败'}
+        {result:0,content:DeliveryMessage::DeleteFailed}
       end
 
     end
@@ -133,7 +133,7 @@ module V1
     # get delivery detail
     get :detail do
       if (d = DeliveryService.exit?(params[:id])).nil?
-        return {result:0,content:'运单不存在!'}
+        return {result:0,content:DeliveryMessage::NotExit}
       end
       content = DeliveryPresenter.new(d).to_json_with_forklifts(false)
       puts content
@@ -142,30 +142,30 @@ module V1
 
     put do
       if (d = DeliveryService.exit?(delivery_params[:id])).nil?
-        return {result:0,content:'运单不存在!'}
+        return {result:0,content:DeliveryMessage::NotExit}
       end
 
       if !DeliveryState.can_delete?(d.state)
-        return {result:0,content:'运单不能修改'}
+        return {result:0,content:DeliveryMessage::CannotUpdate}
       end
 
       if DeliveryService.update(d,delivery_params)
-        {result:1,content:'修改成功'}
+        {result:1,content:DeliveryMessage::UpdateSuccess}
       else
-        {result:0,contnet:'修改失败'}
+        {result:0,contnet:DeliveryMessage::UpdateFailed}
       end
     end
 
     # receive delivery
     post :receive do
       if (d = DeliveryService.exit?(params[:id])).nil?
-        return {result:0,content:'运单不存在!'}
+        return {result:0,content:DeliveryMessage::NotExit}
       end
 
       if DeliveryService.receive(d)
         {result:1,content:DeliveryPresenter.new(d).to_json_with_forklifts(true)}
       else
-        {result:0,content:'运单已接收!'}
+        {result:0,content:DeliveryMessage::AlreadyReceived}
       end
     end
 
@@ -186,13 +186,13 @@ module V1
     # confirm_receive
     post :confirm_receive do
       if (d = DeliveryService.exit?(params[:id])).nil?
-        return {result:0,content:'运单不存在!'}
+        return {result:0,content:DeliveryMessage::NotExit}
       end
 
       if DeliveryService.confirm_received(d,current_user)
-        {result:1,content:'接收成功！'}
+        {result:1,content:DeliveryMessage::ReceiveSuccess}
       else
-        {result:0,content:'接收失败!'}
+        {result:0,content:DeliveryMessage::ReceiveFailed}
       end
 
     end

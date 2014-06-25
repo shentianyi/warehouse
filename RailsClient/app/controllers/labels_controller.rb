@@ -7,7 +7,7 @@ class LabelsController < ApplicationController
   before_action :get_attach, only: [:get_config, :get_config_hash, :get_config_version]
 
   def index
-    @labels=Attachment.paginate(:page => params[:page]).where(attachable_type: @type)
+    @labels=Attachment.paginate(:page => params[:page]).where(attachable_type: @type).order(:created_at)
   end
 
   def new

@@ -1,37 +1,38 @@
-<h1>Listing Label Files</h1>
+<h2>标签设置列表</h2>
 <% if @msg && !@msg.result %>
     <div class="error">
       <%= @msg.content %>
     </div>
 <% end %>
 
-<%= link_to '新建Label文件', send("new_label_path") %>
+<%= link_to '新建标签设置文件', send("new_label_path") %>
 <br>
-<table>
+<table class="table table-bordered table-striped globle-table">
   <thead>
   <tr>
-    <th></th>
-    <th>Type</th>
-    <th>Name</th>
-    <th>PathName</th>
-    <th>Path</th>
+    <th>序 号</th>
+    <th>类型</th>
+    <th>文件名</th>
+    <th>文件保存名</th>
+    <th>文件保存路径</th>
     <th>Version</th>
     <th>MD5</th>
-
+    <th>新建日期</th>
     <th></th>
   </tr>
   </thead>
   <tbody>
   <% @labels.each_with_index do |label, index| %>
       <tr>
-        <td><%= index %>
+        <td><%= index+1 %>
         <td><%= label.type %></td>
         <td><%= label.name %></td>
         <td><%= label.path_name %></td>
         <td><%= label.path %></td>
         <td><%= label.version %></td>
         <td><%= label.md5 %></td>
-        <td><%= link_to 'Destroy', label_path(label.id), method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        <td><%= label.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
+        <td><%= link_to '删除', label_path(label.id), method: :delete, data: {confirm: '确定删除?'} %></td>
       </tr>
   <% end %>
   </tbody>

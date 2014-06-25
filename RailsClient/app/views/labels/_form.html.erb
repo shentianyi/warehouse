@@ -17,9 +17,8 @@
     }
 </script>
 <div>
-  上传数据文件：
+  <span>上传数据文件：</span>
   <input id="item-data-uploader" type="file" name="files[]" data-url="/labels/upload_file">
-
   <div class="abstractblock" id="item-data-uploader-preview" style="display:none;"></div>
 </div>
 
@@ -35,11 +34,11 @@
         </div>
     <% end %>
     <p>
-      <%= f.label :type %>
+      <%= f.label :type,'类型' %>
       <%= f.select(:type, options_from_collection_for_select(@types, 'value', 'display')) %>
     </p>
     <input type="hidden" id="file" name="file">
-    <input type="button" value="创建标签配置" onclick="submitForm();"/>
+    <input type="button" value="创建标签设置" onclick="submitForm();"/>
 <% end %>
 
 

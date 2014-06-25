@@ -71,9 +71,9 @@
         <td><%= delivery.source.name if delivery.source %></td>
         <td><%= delivery.destination.name if delivery.destination %></td>
         <td><%= delivery.remark %></td>
-        <td><%= link_to 'Show', delivery %></td>
-        <td><%= link_to 'Edit', edit_delivery_path(delivery) %></td>
-        <td><%= link_to 'Export', export_delivery_path(delivery) %></td>
+        <td><%= link_to '详细', delivery %></td>
+        <td><%= link_to '编辑', edit_delivery_path(delivery) %></td>
+        <td><%= link_to '导出数据', export_delivery_path(delivery) %></td>
       </tr>
   <% end %>
   </tbody>
