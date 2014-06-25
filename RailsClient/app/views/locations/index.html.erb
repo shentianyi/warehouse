@@ -1,34 +1,36 @@
-<h1>位置列表</h1>
+<h2>地点列表</h2>
 
-<%= link_to "新建位置", send("new_#{@model}_path") %>
-<%= link_to "上传/更新位置", send("import_#{@model.pluralize}_path") %>
+<%= link_to "新建地点", send("new_#{@model}_path") %>
+<%= link_to "上传/更新地点", send("import_#{@model.pluralize}_path") %>
 <%= link_to "下载", send("download_#{@model.pluralize}_path") %>
 
 <table class="table table-bordered table-striped globle-table">
   <thead>
-    <tr>
-      <th>序号</th>
-      <th>编号</th>
-      <th>名称</th>
-      <th>目的地</th>
-      <th>操作</th>
-    </tr>
+  <tr>
+    <th>序号</th>
+    <th>编号</th>
+    <th>名称</th>
+    <th>目的地</th>
+    <th>员工</th>
+    <th>仓库</th>
+    <th></th>
+  </tr>
   </thead>
 
   <tbody>
-    <% @locations.each_with_index do |location,index| %>
+  <% @locations.each_with_index do |location, index| %>
       <tr>
-        <td><%= index %>
+        <td><%= index+1 %>
         <td><%= location.id %></td>
         <td><%= location.name %></td>
         <td><%= location.destination.name if location.destination %></td>
-        <td><%= link_to 'Users',users_location_path(location) %></td>
-        <td><%= link_to 'Ware houses',whouses_location_path(location) %></td>
-        <td><%= link_to 'Show', location %></td>
-        <td><%= link_to 'Edit', edit_location_path(location) %></td>
-        <td><%= link_to 'Destroy', location, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to '员工', users_location_path(location) %></td>
+        <td><%= link_to '仓库', whouses_location_path(location) %></td>
+        <td><%= link_to '详细', location %></td>
+        <td><%= link_to '编辑', edit_location_path(location) %></td>
+        <td><%= link_to '删除', location, method: :delete, data: {confirm: '确认删除?'} %></td>
       </tr>
-    <% end %>
+  <% end %>
   </tbody>
 </table>
 <%= will_paginate @locations, :page_links => false %>
