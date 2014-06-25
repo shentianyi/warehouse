@@ -1,4 +1,4 @@
-<h1>包装箱列表</h1>
+<h2>包装箱列表</h2>
 
 <table class="table table-bordered table-striped globle-table">
   <thead>
@@ -29,7 +29,7 @@
         <td colspan="3"><%= link_to package.forklift_id, package.forklift  if package.forklift%></td>
         <td colspan="3"><%= package.check_in_time %></td>
         <td colspan="3"><%= package.position.whouse.name + ' ' +package.position.detail if package.position %></td>
-        <td><%= link_to 'Edit', edit_package_path(package) %></td>
+        <td><%= link_to '编辑', edit_package_path(package) %></td>
       </tr>
     <% end %>
   </tbody>

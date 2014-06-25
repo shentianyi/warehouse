@@ -1,17 +1,17 @@
 <p id="notice"><%= notice %></p>
 
 <P>
-  <string>ID:</string>
+  <string>零件号:</string>
   <%= @part.id %>
 </P>
 
 <P>
-  <string>UnitPack:</string>
+  <string>单位包装量:</string>
   <%= @part.unit_pack %>
 </P>
 
 <p>
-  <string>Positions:</string>
+  <string>库位:</string>
 <ul>
   <% @part.part_positions.each do |pp| %>
       <li>
@@ -22,5 +22,5 @@
 </ul>
 </p>
 
-<%= link_to 'Edit', edit_part_path(@part) %> |
-<%= link_to 'Back', parts_path %>
+<%= link_to '编辑', edit_part_path(@part) %> |
+<%= link_to '返回', parts_path %>

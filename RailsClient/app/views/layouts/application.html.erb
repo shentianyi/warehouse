@@ -14,8 +14,13 @@
 <% end %>
 <p class="notice"><%= notice %></p>
 <p class="alert"><%= alert %></p>
-
 <%= yield %>
-
 </body>
+<input type="hidden" value="<%= @model %>_li" id='active_li'>
+<script type="text/javascript">
+    $(function () {
+        $("#main-menu li").removeClass('active');
+        $('#' + $('#active_li').val()).addClass('active');
+    });
+</script>
 </html>

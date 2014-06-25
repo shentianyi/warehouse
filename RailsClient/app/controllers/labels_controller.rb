@@ -24,7 +24,7 @@ class LabelsController < ApplicationController
 
     respond_to do |format|
       if @attach.save
-        format.html { redirect_to labels_path, notice: 'Label file was successfully created.' }
+        format.html { redirect_to labels_path, notice: '配置文件创建成功.' }
       else
         format.html { render :new }
       end
@@ -36,7 +36,7 @@ class LabelsController < ApplicationController
     @attach=Attachment.unscoped.find(params[:id])
     @attach.destroy
     respond_to do |format|
-      format.html { redirect_to labels_path, notice: 'Label was successfully destroyed.' }
+      format.html { redirect_to labels_path, notice: '配置文件删除成功.' }
       format.json { head :no_content }
     end
   end

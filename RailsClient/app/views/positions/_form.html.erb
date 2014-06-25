@@ -11,21 +11,21 @@
     </div>
   <% end %>
     <p>
-      <%= f.label :id%>
+      <%= f.label :id,'编 号'%>
       <%= f.text_field :id%>
     </p>
 
     <p>
-      <%= f.label :detail%>
+      <%= f.label :detail,'详细位置'%>
       <%= f.text_field :detail%>
     </p>
 
     <p>
+      <%= f.label :detail,'所属仓库'%>
       <%=  f.select(:whouse_id,Whouse.all.collect{|l| [l.name,l.id]},{include_blank: false})%>
     </p>
 
-
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit value: '提 交', class: 'btn btn-primary btn-lg' %>
   </div>
 <% end %>

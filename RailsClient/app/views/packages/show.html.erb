@@ -1,42 +1,42 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <string>ID:</string>
+  <string>包装箱号:</string>
   <%= @package.id%>
 </p>
 
 <p>
-  <string>Part:</string>
+  <string>零件号:</string>
   <%= @package.part_id%>
 </p>
 
 <p>
-  <string>Quantity:</string>
+  <string>数 量:</string>
   <%= @package.quantity_str%>
 </p>
 
 <p>
-  <string>State:</string>
+  <string>状 态:</string>
   <%= PackageState.display(@package.state)%>
 </p>
 
 <p>
-  <string>Location:</string>
+  <string>地 点:</string>
   <%= @package.location_id %>
 </p>
 
 <p>
-  <string>Creator:</string>
+  <string>创建员工:</string>
   <%= @package.user_id%>
 </p>
 
 <p>
-  <string>Forklift:</string>
+  <string>所属托盘:</string>
   <%= link_to @package.forklift_id, @package.forklift%>
 </p>
 
 <p>
-  <string>Check In Time:</string>
+  <string>yan:</string>
   <%= @package.check_in_time%>
 </p>
 

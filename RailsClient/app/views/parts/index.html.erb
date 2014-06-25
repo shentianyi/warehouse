@@ -17,7 +17,8 @@
   <tr>
     <th>序号</th>
     <th>零件号</th>
-    <th>最小包装量</th>
+    <th>单位包装量</th>
+    <th></th>
   </tr>
   </thead>
 
@@ -27,9 +28,9 @@
         <td><%= index %>
         <td><%= part.id %></td>
         <td><%= part.unit_pack %></td>
-        <td><%= link_to 'Show', part %></td>
-        <td><%= link_to 'Edit', edit_part_path(part) %></td>
-        <td><%= link_to 'Destroy', part, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        <td><%= link_to '详细', part %></td>
+        <td><%= link_to '编辑', edit_part_path(part) %></td>
+        <td><%= link_to '删除', part, method: :delete, data: {confirm: '确认删除?'} %></td>
       </tr>
   <% end %>
   </tbody>

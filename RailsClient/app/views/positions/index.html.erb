@@ -13,6 +13,7 @@
       <th>编号</th>
       <th>详细位置</th>
       <th>所属仓库</th>
+      <th></th>
     </tr>
   </thead>
 
@@ -23,9 +24,9 @@
         <td><%= position.id%></td>
         <td><%= position.detail%></td>
         <td><%= position.whouse.name %></td>
-        <td><%= link_to 'Show', position %></td>
-        <td><%= link_to 'Edit', edit_position_path(position) %></td>
-        <td><%= link_to 'Destroy', position, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to '详细', position %></td>
+        <td><%= link_to '编辑', edit_position_path(position) %></td>
+        <td><%= link_to '删除', position, method: :delete, data: { confirm: '确认删除?' } %></td>
       </tr>
     <% end %>
   </tbody>

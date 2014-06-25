@@ -1,19 +1,19 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <string>ID:</string>
+  <string>编 号:</string>
   <%= @whouse.id%>
 </p>
 <p>
-  <string>Name:</string>
+  <string>名 称:</string>
   <%= @whouse.id%>
 </p>
 
 <p>
-  <string>Location:</string>
+  <string>所属地点:</string>
   <%= @whouse.location.name if @whouse.location%>
 </p>
 
 
-<%= link_to 'Edit', edit_whouse_path(@whouse) %> |
-<%= link_to 'Back', whouses_path %>
+<%= link_to '编辑', edit_whouse_path(@whouse) %> |
+<%= link_to '返回', whouses_path %>

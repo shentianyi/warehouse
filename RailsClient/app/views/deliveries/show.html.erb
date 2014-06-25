@@ -1,57 +1,58 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <string>ID:</string>
+  <string>运单号:</string>
   <%= @delivery.id%>
 </p>
 
 <p>
-  <string>State:</string>
+  <string>状 态:</string>
   <%= DeliveryState.display(@delivery.state)%>
 </p>
 
 <p>
-  <string>Delivery Date:</string>
-  <%= @delivery.delivery_date%>
-</p>
-
-<p>
-  <string>Received Date:</string>
-  <%= @delivery.received_date%>
-</p>
-
-<p>
-  <string>Receiver:</string>
-  <%= @delivery.receiver.name if @delivery.receiver%>
-</p>
-
-<p>
-  <string>Creator:</string>
+  <string>创建员工:</string>
   <%= @delivery.user.name%>
 </p>
 
 <p>
-  <string>Created At:</string>
+  <string>创建日期:</string>
   <%= @delivery.created_at%>
 </p>
 
 <p>
-  <string>Source:</string>
+  <string>发运日期:</string>
+  <%= @delivery.delivery_date%>
+</p>
+
+<p>
+  <string>接收日期:</string>
+  <%= @delivery.received_date%>
+</p>
+
+<p>
+  <string>接收员工:</string>
+  <%= @delivery.receiver.name if @delivery.receiver%>
+</p>
+
+
+<p>
+  <string>发送地:</string>
   <%= @delivery.source.name if @delivery.source%>
 </p>
 
 <p>
-  <string>Destination:</string>
+  <string>目的地:</string>
   <%= @delivery.destination.name if @delivery.destination%>
 </p>
 
 <p>
-  <string>Remark:</string>
+  <string>备 注:</string>
   <%= @delivery.remark%>
 </p>
 
 <p>
-  <string>Forklifts:</string>
+  <string>托盘列表:</string>
   <ul>
     <% @delivery.forklifts.each do |f| %>
     <%= link_to f.id,f%>

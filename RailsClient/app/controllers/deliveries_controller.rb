@@ -47,10 +47,9 @@ class DeliveriesController < ApplicationController
     if delivery_params.has_key?(:state)
       DeliveryService.set_state(@delivery, delivery_params[:state])
     end
-
     respond_to do |format|
-      if @delivery.update(delivery_params)
-        format.html { redirect_to @delivery, notice: 'Delivery was successfully updated.' }
+      if @delivery.update(delivery_params.permit(:state,:remark))
+        format.html { redirect_to @delivery, notice: '运单更新成功.' }
         format.json { render :show, status: :ok, location: @delivery }
       else
         format.html { render :edit }
