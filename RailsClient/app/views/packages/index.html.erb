@@ -9,26 +9,27 @@
       <th>数量</th>
       <th>状态</th>
       <th>所属位置</th>
-      <th>创建者</th>
+      <th>创建员工</th>
       <th>所属清单</th>
       <th>输入时间</th>
       <th>上架位置</th>
+      <th></th>
     </tr>
   </thead>
 
   <tbody>
     <% @packages.each_with_index do |package,index| %>
       <tr>
-        <td colspan="3"><%= index %>
-        <td colspan="3"><%= package.id %></td>
-        <td colspan="3"><%= package.part_id%></td>
-        <td colspan="3"><%= package.quantity_str %></td>
-        <td colspan="3"><%= PackageState.display(package.state) %></td>
-        <td colspan="3"><%= package.location_id %></td>
-        <td colspan="3"><%= package.user_id %></td>
-        <td colspan="3"><%= link_to package.forklift_id, package.forklift  if package.forklift%></td>
-        <td colspan="3"><%= package.check_in_time %></td>
-        <td colspan="3"><%= package.position.whouse.name + ' ' +package.position.detail if package.position %></td>
+        <td><%= index +1%>
+        <td><%= package.id %></td>
+        <td><%= package.part_id%></td>
+        <td><%= package.quantity_str %></td>
+        <td><%= PackageState.display(package.state) %></td>
+        <td><%= package.location_id %></td>
+        <td><%= package.user_id %></td>
+        <td><%= link_to package.forklift_id, package.forklift  if package.forklift%></td>
+        <td><%= package.check_in_time %></td>
+        <td><%= package.position.whouse.name + ' ' +package.position.detail if package.position %></td>
         <td><%= link_to '编辑', edit_package_path(package) %></td>
       </tr>
     <% end %>
