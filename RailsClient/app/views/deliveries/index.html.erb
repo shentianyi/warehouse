@@ -1,17 +1,19 @@
-<h1>Listing deliveries</h1>
-<h2><%= link_to 'Import', import_deliveries_path %></h2>
+<h2>运单列表</h2>
 <div>
   <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
     <div>
       <div>
                <span>运单号：
                     <input type="text" name="delivery[id]" value="<%= @id %>"/>
+                 <input type="hidden" name="delivery[id_fuzzy]"/>
                </span>
                <span>创建员工：
                     <input type="text" name="delivery[user_id]" value="<%= @user_id %>"/>
+                    <input type="hidden" name="delivery[user_id_fuzzy]"/>
                </span>
                <span>接收员工：
                     <input type="text" name="delivery[receiver_id]" value="<%= @receiver_id %>"/>
+                    <input type="hidden" name="delivery[receiver_id_fuzzy]"/>
                </span>
         </span>
                <span>运单状态：
@@ -37,7 +39,7 @@
   </form>
 </div>
 
-<table class="table table-bordered table-striped globle-table">
+<table class="table table-bordered table-striped globle-table table-hover">
   <thead>
   <tr>
     <th>NO.</th>
@@ -76,12 +78,19 @@
   <% end %>
   </tbody>
 </table>
+<h3><%= link_to '导入离线运单', import_deliveries_path %></h3>
 <%= will_paginate @deliveries %>
 <br>
 <script>
     $(function () {
         $(".datepicker").datepicker({
-            showButtonPanel: true
+            showButtonPanel: true,
+            showWeek: true
         });
+
+//        $(".datepicker").each(function () {
+//            if ($(this).val().length == 0)
+//                $(this).datepicker('setDate', new Date())
+//        });
     });
 </script>

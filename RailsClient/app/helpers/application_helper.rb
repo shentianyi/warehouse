@@ -33,7 +33,11 @@ module ApplicationHelper
     query=model
     @condition.each do |k, v|
       if (v.is_a?(Fixnum) || v.is_a?(String)) && !v.blank?
-        query=query.where(Hash[k, v])
+        if @condition.has_key?(k+'_fuzzy')
+          query=query.where("#{k} like ?", "%#{v}%")
+        else
+          query=query.where(Hash[k, v])
+        end
         instance_variable_set("@#{k}", v)
       end
       #if v.is_a?(Array) && !v.empty?
@@ -42,7 +46,7 @@ module ApplicationHelper
       #query=query.where(Hash[k, v]) if v.is_a?(Range)
       if v.is_a?(Hash) && v.values.count==2 && v.values.uniq!=['']
         query=query.where(Hash[k, (v.values[0]..v.values[1])])
-        v.each do |kk,vv|
+        v.each do |kk, vv|
           instance_variable_set("@#{k}_#{kk}", vv)
         end
       end
