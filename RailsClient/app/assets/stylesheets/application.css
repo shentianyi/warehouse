@@ -10,7 +10,8 @@
  *
  *= require_self
  *=require bootstrap.min
- *=require bootstrap-responsive.min
+ *=require bootstrap-theme.min
+ *=require normalize
  *=require docs
  *= require_tree .
  */

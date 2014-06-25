@@ -1,15 +1,32 @@
-<h2>系统登陆</h2>
+<h3>LEONI精密物流控制系统 登陆</h3>
+<%= form_for(resource, as: resource_name, url: session_path(resource_name), html: {class: 'form-horizontal', role: 'form'}) do |f| %>
+    <div class="form-group">
+      <%= f.label :id, '员工号', class: 'col-sm-2 control-label' %>
+      <div class="col-sm-10">
+        <%= f.text_field :id, autofocus: true, class: 'form-control' %>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.label :password, '密 码', class: 'col-sm-2 control-label' %>
+      <div class="col-sm-10">
+        <%= f.password_field :password, autocomplete: "off", class: 'form-control' %>
+      </div>
+    </div>
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div><%= f.label :id,'员工号' %><br />
-  <%= f.text_field :id, autofocus: true %></div>
-
-  <div><%= f.label :password,'密 码' %><br />
-    <%= f.password_field :password, autocomplete: "off" %></div>
-
-  <% if devise_mapping.rememberable? -%>
-    <div><%= f.check_box :remember_me %> <%= f.label :remember_me,'记住我'%></div>
-  <% end -%>
-
-  <div><%= f.submit value: '登 陆', class: 'btn btn-primary btn-lg' %></div>
+    <% if devise_mapping.rememberable? %>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <div class="checkbox">
+              <label>
+                <%= f.check_box :remember_me %> 记住我
+              </label>
+            </div>
+          </div>
+        </div>
+    <% end %>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <%= f.submit value: '登 陆', class: 'btn btn-primary btn-lg' %>
+      </div>
+    </div>
 <% end %>
