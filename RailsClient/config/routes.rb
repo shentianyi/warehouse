@@ -30,6 +30,7 @@ Rails.application.routes.draw do
         get :import
         get :download
         get :template
+        get :search
       end
     end
   end

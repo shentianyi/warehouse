@@ -4,7 +4,18 @@
       <%= @msg.content %>
     </div>
 <% end %>
-
+<div>
+  <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+    <div>
+               <span>零件号：
+                    <input type="text" name="part[id]" value="<%= @id %>"/>
+                 <input type="hidden" name="part[id_fuzzy]"/>
+               </span>
+      <input type="submit" value="查 找" class="btn btn-primary"/>
+    </div>
+</div>
+</form>
+</div>
 
 <%= link_to "新建零件", send("new_#{@model}_path") %>
 <%= link_to "上传/更新零件", send("import_#{@model.pluralize}_path") %>

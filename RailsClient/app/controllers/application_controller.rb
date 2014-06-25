@@ -17,7 +17,9 @@ class ApplicationController < ActionController::Base
   before_filter do
     resource = controller_name.singularize.to_sym
     method = "#{resource}_params"
-    params[resource] &&= send(method) if respond_to?(method, true)
+    unless ['search'].include?(action_name)
+      params[resource] &&= send(method) if respond_to?(method, true)
+    end
   end
 
   layout :layout_by_resource

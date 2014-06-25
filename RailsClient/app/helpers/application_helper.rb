@@ -33,6 +33,7 @@ module ApplicationHelper
     query=model
     @condition.each do |k, v|
       if (v.is_a?(Fixnum) || v.is_a?(String)) && !v.blank?
+        puts @condition.has_key?(k+'_fuzzy')
         if @condition.has_key?(k+'_fuzzy')
           query=query.where("#{k} like ?", "%#{v}%")
         else
