@@ -32,19 +32,20 @@
 
 <p>
   <string>所属托盘:</string>
-  <%= link_to @package.forklift_id, @package.forklift%>
+
+  <%= link_to @package.forklift_id, @package.forklift  if @package.forklift%>
 </p>
 
 <p>
-  <string>yan:</string>
+  <string>入库时间:</string>
   <%= @package.check_in_time%>
 </p>
 
 <p>
-  <string>Position:</string>
+  <string>库位:</string>
   <%= @package.position.whouse.name + ' ' +@package.position.detail if @package.position%>
 </p>
 
 
-<%= link_to 'Edit', edit_package_path(@package) %> |
-<%= link_to 'Back', packages_path %>
+<%= link_to '编辑', edit_package_path(@package) %> |
+<%= link_to '返回', packages_path %>

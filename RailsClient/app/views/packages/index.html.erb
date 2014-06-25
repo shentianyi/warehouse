@@ -10,7 +10,7 @@
       <th>状态</th>
       <th>所属位置</th>
       <th>创建员工</th>
-      <th>所属清单</th>
+      <th>所属托盘</th>
       <th>输入时间</th>
       <th>上架位置</th>
       <th></th>
@@ -31,6 +31,7 @@
         <td><%= package.check_in_time %></td>
         <td><%= package.position.whouse.name + ' ' +package.position.detail if package.position %></td>
         <td><%= link_to '编辑', edit_package_path(package) %></td>
+        <td><%= link_to '详细', package_path(package) %></td>
       </tr>
     <% end %>
   </tbody>
