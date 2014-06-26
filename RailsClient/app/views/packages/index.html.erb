@@ -25,7 +25,7 @@
   <tbody>
     <% @packages.each_with_index do |package,index| %>
       <tr>
-        <td><%= index +1%>
+        <td><%= index+@packages.offset+1%>
         <td><%= package.id %></td>
         <td><%= package.part_id%></td>
         <td><%= package.quantity_str %></td>

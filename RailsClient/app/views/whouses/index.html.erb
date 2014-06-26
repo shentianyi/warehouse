@@ -23,7 +23,7 @@
   <tbody>
     <% @whouses.each_with_index do |whouse,index| %>
       <tr>
-        <td><%= index +1%>
+        <td><%= index +@whouses.offset+1%>
         <td><%= whouse.id %> </td>
         <td><%= whouse.name %></td>
         <td><%= whouse.location.name if whouse.location %></td>
