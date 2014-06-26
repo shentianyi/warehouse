@@ -4,7 +4,7 @@ namespace :sync do
     ## base data
     current=Time.now
     Sync::Execute::LocationSync.sync
-    Sync::Execute::HackerSync.sync
+    Sync::Execute::UserSync.sync
     Sync::Execute::WhouseSync.sync
     Sync::Execute::PartSync.sync
     Sync::Execute::PositionSync.sync

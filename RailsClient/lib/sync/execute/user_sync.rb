@@ -1,6 +1,7 @@
 module Sync
   module Execute
-    class LocationSync< CustomIdSyncBase
+    class UserSync< CustomIdSyncBase
     end
   end
 end
+

@@ -7,7 +7,7 @@ module Sync
     def self.sync
       if Config.enabled
         #begin
-        pull &pull_block
+        get &get_block
         post &post_block
         put &put_block
         delete &delete_block
@@ -20,8 +20,8 @@ module Sync
 
 
     # sync pull
-    def self.pull
-      site=init_site(URI::encode(self::PULL_URL+'?last_time='+Sync::Config.last_time.to_s))
+    def self.get
+      site=init_site(URI::encode(url+'?last_time='+Sync::Config.last_time.to_s))
       response=site.get
       if response.code==200
         yield(JSON.parse(response)) if block_given?
@@ -30,7 +30,7 @@ module Sync
 
     # sync post
     def self.post
-      site=init_site(self::POST_URL)
+      site=init_site(url)
       items=get_posts.collect { |item|
         item.is_new=false
         item.is_dirty=false
@@ -44,7 +44,7 @@ module Sync
 
     # sync update
     def self.put
-      site=init_site(self::POST_URL+'/0')
+      site=init_site(url+'/0')
       items=get_puts.collect { |item|
         item.is_dirty=false
         item
@@ -65,7 +65,7 @@ module Sync
         item.is_new=false
         item
       }
-      site= init_site(self::POST_URL+'/delete')
+      site= init_site(url+'/delete')
       response=site.post({main_key => items.collect { |i| i.id }.to_json})
       if response.code==201
         yield(items, JSON.parse(response)) if block_given?
@@ -73,7 +73,7 @@ module Sync
     end
 
     # blocks
-    def self.pull_block
+    def self.get_block
       m=model
       Config.skip_callbacks(m)
     end
@@ -107,6 +107,10 @@ module Sync
 
 
     private
+
+    def self.url
+        "#{self::BASE_URL}#{main_key.pluralize}"
+    end
 
     def self.get_posts
       model.unscoped.where(is_new: true).all
