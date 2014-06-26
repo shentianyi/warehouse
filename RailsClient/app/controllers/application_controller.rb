@@ -15,10 +15,12 @@ class ApplicationController < ActionController::Base
   # see https://github.com/ryanb/cancan/issues/835
   #============
   before_filter do
-    resource = controller_name.singularize.to_sym
-    method = "#{resource}_params"
-    unless ['search'].include?(action_name)
-      params[resource] &&= send(method) if respond_to?(method, true)
+    unless ['syncs'].include?(controller_name)
+      resource = controller_name.singularize.to_sym
+      method = "#{resource}_params"
+      unless ['search'].include?(action_name)
+        params[resource] &&= send(method) if respond_to?(method, true)
+      end
     end
   end
 

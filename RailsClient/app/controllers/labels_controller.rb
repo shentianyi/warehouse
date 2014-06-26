@@ -2,7 +2,7 @@ class LabelsController < ApplicationController
   #skip_before_filter :set_model
   skip_before_filter :configure_permitted_parameters, if: :devise_controller?
   skip_before_filter :authenticate_user_from_token!
-  skip_before_filter :authenticate_user!
+  skip_before_filter :authenticate_user! ,only:[:get_config,:get_config_hash,:get_config_version]
   before_action :set_attachment_type
   before_action :get_attach, only: [:get_config, :get_config_hash, :get_config_version]
 
