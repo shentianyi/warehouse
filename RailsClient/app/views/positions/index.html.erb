@@ -25,7 +25,7 @@
   <tbody>
     <% @positions.each_with_index do |position,index| %>
       <tr>
-        <td><%= index %>
+        <td><%= index+@positions.offset+1 %>
         <td><%= position.id%></td>
         <td><%= position.detail%></td>
         <td><%= position.whouse.name %></td>

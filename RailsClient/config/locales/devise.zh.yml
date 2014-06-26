@@ -1,21 +1,21 @@
 # Additional translations at https://github.com/plataformatec/devise/wiki/I18n
 
-en:
+zh:
   devise:
     confirmations:
       confirmed: "Your account was successfully confirmed."
       send_instructions: "You will receive an email with instructions about how to confirm your account in a few minutes."
       send_paranoid_instructions: "If your email address exists in our database, you will receive an email with instructions about how to confirm your account in a few minutes."
     failure:
-      already_authenticated: "You are already signed in."
-      inactive: "Your account is not activated yet."
-      invalid: "invalid login info，please enter new."
-      locked: "Your account is locked."
-      last_attempt: "You have one more attempt before your account will be locked."
-      not_found_in_database: "Invalid email or password."
-      timeout: "Your session expired. Please sign in again to continue."
-      unauthenticated: "You need to sign in or sign up before continuing."
-      unconfirmed: "You have to confirm your account before continuing."
+      already_authenticated: "您已登录。"
+      inactive: "您的账号还未激活。"
+      invalid: "登陆信息错误，请重新填写。"
+      locked: "您的账户已被锁定。"
+      last_attempt: "这是您的最后以及机会，否则您的账户将被锁定。"
+      not_found_in_database: "用户名或密码错误"
+      timeout: "您的会话已超时，请重新登陆。"
+      unauthenticated: "需要登录或注册以继续您的操作。"
+      unconfirmed: "需要激活账户以继续您的操作。"
     mailer:
       confirmation_instructions:
         subject: "Confirmation instructions"
@@ -41,8 +41,8 @@ en:
       update_needs_confirmation: "You updated your account successfully, but we need to verify your new email address. Please check your email and click on the confirm link to finalize confirming your new email address."
       updated: "You updated your account successfully."
     sessions:
-      signed_in: "Signed in successfully."
-      signed_out: "Signed out successfully."
+      signed_in: "登录成功。"
+      signed_out: "注销成功。"
     unlocks:
       send_instructions: "You will receive an email with instructions about how to unlock your account in a few minutes."
       send_paranoid_instructions: "If your account exists, you will receive an email with instructions about how to unlock it in a few minutes."

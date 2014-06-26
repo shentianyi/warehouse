@@ -42,7 +42,7 @@
   <tbody>
   <% @parts.each_with_index do |part, index| %>
       <tr>
-        <td><%= index %>
+        <td><%= index+@parts.offset+1 %>
         <td><%= part.id %></td>
         <td><%= part.unit_pack %></td>
         <td><%= link_to '详细', part %></td>

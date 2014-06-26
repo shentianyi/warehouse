@@ -3,7 +3,12 @@
 <%= link_to "新建员工", send("new_#{@model}_path") %>
 <%= link_to "上传/更新员工", send("import_#{@model.pluralize}_path") %>
 <%= link_to "下载", send("download_#{@model.pluralize}_path") %>
-
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @users %>
+  </div>
+  <%= will_paginate @users, :container => false %>
+</div>
 <table class="table table-bordered table-striped globle-table">
   <thead>
   <tr>
@@ -19,7 +24,7 @@
   <tbody>
   <% @users.each_with_index do |user,index| %>
       <tr>
-        <td><%= index %>
+        <td><%= index+@users.offset+1 %>
         <td><%= user.id %>
         <td><%= user.current_sign_in_ip %></td>
         <td><%= user.location.name if user.location%></td>
@@ -32,7 +37,7 @@
   </tbody>
 </table>
 <div class="digg_pagination">
-  <%= will_paginate @deliveries, :container => false %>
+  <%= will_paginate @users, :container => false %>
 </div>
 <br>
 

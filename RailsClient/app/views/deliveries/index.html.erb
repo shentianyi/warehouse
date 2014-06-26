@@ -68,7 +68,7 @@
   <tbody>
   <% @deliveries.each_with_index do |delivery, index| %>
       <tr>
-        <td><%= index+1 %></td>
+        <td><%= index+@deliveries.offset+1 %></td>
         <td><%= delivery.id %></td>
         <td><%= DeliveryState.display(delivery.state) %></td>
         <td><%= delivery.user.name %></td>
