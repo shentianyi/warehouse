@@ -4,7 +4,7 @@ class NetService
   def self.ping
     if $NEED_PING
       begin
-        url = URI.parse($SYNC_HOST+'/api/v1/users/ping')
+        url = URI.parse(Sync::Config.host+'/api/v1/users/ping')
         req = Net::HTTP::Get.new(url.to_s)
         puts url.host
         puts url.port
