@@ -4,6 +4,12 @@
 <%= link_to "上传/更新地点", send("import_#{@model.pluralize}_path") %>
 <%= link_to "下载", send("download_#{@model.pluralize}_path") %>
 
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @locations %>
+  </div>
+  <%= will_paginate @locations, :container => false %>
+</div>
 <table class="table table-bordered table-striped globle-table">
   <thead>
   <tr>
@@ -33,6 +39,8 @@
   <% end %>
   </tbody>
 </table>
-<%= will_paginate @locations%>
 <br>
+<div class="digg_pagination">
+  <%= will_paginate @locations, :container => false %>
+</div>
 

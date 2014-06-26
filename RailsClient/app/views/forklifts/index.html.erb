@@ -1,5 +1,10 @@
 <h2>托盘列表</h2>
-
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @forklifts %>
+  </div>
+  <%= will_paginate @forklifts, :container => false %>
+</div>
 <table class="table table-bordered table-striped globle-table">
   <thead>
     <tr>
@@ -36,5 +41,6 @@
     <% end %>
   </tbody>
 </table>
-<%= will_paginate @forklifts %>
-<br>
+<div class="digg_pagination">
+  <%= will_paginate @forklifts, :container => false %>
+</div>

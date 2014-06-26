@@ -5,8 +5,8 @@ class PositionsController < ApplicationController
   # GET /positions
   # GET /positions.json
   def index
-    @positions = Position.all
-    @positions = @positions.paginate(:page=>params[:page])
+    @positions = Position.paginate(:page=>params[:page])#all
+    #@positions = @positions.paginate(:page=>params[:page])
   end
 
   # GET /positions/1

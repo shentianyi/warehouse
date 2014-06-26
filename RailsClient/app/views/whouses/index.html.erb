@@ -3,7 +3,12 @@
 <%= link_to "新建分仓库", send("new_#{@model}_path") %>
 <%= link_to "上传/更新分仓库", send("import_#{@model.pluralize}_path") %>
 <%= link_to "下载", send("download_#{@model.pluralize}_path") %>
-
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @whouses %>
+  </div>
+  <%= will_paginate @whouses, :container => false %>
+</div>
 <table class="table table-bordered table-striped globle-table">
   <thead>
     <tr>
@@ -29,5 +34,7 @@
     <% end %>
   </tbody>
 </table>
-<%= will_paginate @whouses %>
+<div class="digg_pagination">
+  <%= will_paginate @whouses, :container => false %>
+</div>
 <br>
