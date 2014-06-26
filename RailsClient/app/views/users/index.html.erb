@@ -31,7 +31,9 @@
   <% end %>
   </tbody>
 </table>
-<%= will_paginate @users  %>
+<div class="digg_pagination">
+  <%= will_paginate @deliveries, :container => false %>
+</div>
 <br>
 
 
