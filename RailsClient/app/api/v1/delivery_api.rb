@@ -88,7 +88,7 @@ module V1
         if NetService.ping()
           {result:1,content:DeliveryMessage::SendSuccess}
         else
-          {result:0,content:DeliveryMessage::SendSuccess+DeliveryMessage::NetworkNotGood}
+          {result:1,content:DeliveryMessage::SendSuccess+DeliveryMessage::NetworkNotGood}
         end
 
       else
