@@ -5,8 +5,8 @@ class ForkliftsController < ApplicationController
   # GET /forklifts
   # GET /forklifts.json
   def index
-    @forklifts = Forklift.all
-    @forklifts = @forklifts.paginate(:page=>params[:page])
+    @forklifts = Forklift.paginate(:page=>params[:page])#all
+    #@forklifts = @forklifts.paginate(:page=>params[:page])
   end
 
   # GET /forklifts/1

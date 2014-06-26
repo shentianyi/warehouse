@@ -7,14 +7,14 @@
 <div>
   <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
     <div>
-               <span>零件号：
-                    <input type="text" name="part[id]" value="<%= @id %>"/>
-                 <input type="hidden" name="part[id_fuzzy]"/>
-               </span>
+      <span>零件号：
+        <input type="text" name="part[id]" value="<%= @id %>"/>
+        <input type="hidden" name="part[id_fuzzy]"/>
+      </span>
       <input type="submit" value="查 找" class="btn btn-primary"/>
     </div>
-</div>
 </form>
+</div>
 </div>
 
 <%= link_to "新建零件", send("new_#{@model}_path") %>
@@ -23,6 +23,12 @@
 <%= link_to "上传/更新零件位置", parts_import_positions_path %>
 <%= link_to "下载零件位置", parts_download_positions_path %>
 <br>
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @parts %>
+  </div>
+  <%= will_paginate @parts, :container => false %>
+</div>
 <table class="table table-bordered table-striped globle-table">
   <thead>
   <tr>
@@ -46,5 +52,6 @@
   <% end %>
   </tbody>
 </table>
-
-<%= will_paginate @parts, :page_links => false %>
+<div class="digg_pagination">
+  <%= will_paginate @parts, :container => false %>
+</div>

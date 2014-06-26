@@ -38,7 +38,13 @@
     </div>
   </form>
 </div>
-
+<br/>
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @deliveries %>
+  </div>
+  <%= will_paginate @deliveries, :container => false %>
+</div>
 <table class="table table-bordered table-striped globle-table table-hover">
   <thead>
   <tr>
@@ -82,6 +88,9 @@
   <% end %>
   </tbody>
 </table>
+<div class="digg_pagination">
+  <%= will_paginate @deliveries, :container => false %>
+</div>
 <h3><%= link_to '导入离线运单', import_deliveries_path %></h3>
 <%= will_paginate @deliveries %>
 <br>
