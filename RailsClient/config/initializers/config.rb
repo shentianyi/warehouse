@@ -1,4 +1,4 @@
-$SYNC_HOST = 'http://www.cz-tek.com:9000'
+$SYNC_HOST = 'localhost:3000'
 $OPEN_SYN_LOCK= false
 $NEED_PING= false
 

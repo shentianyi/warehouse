@@ -11,6 +11,7 @@ module V1
       end
 
       post do
+        puts params[:user]
         users=JSON.parse(params[:user])
         users.each do |user|
           user=Hacker.new(user)

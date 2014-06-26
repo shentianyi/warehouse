@@ -7,7 +7,7 @@ module Sync
         item.is_dirty=false
         item
       }
-      site= init_site(self::POST_URL+'/delete')
+      site= init_site(url+'/delete')
       response=site.post({main_key => items.to_json})
       if response.code==201
         yield(items, JSON.parse(response)) if block_given?
