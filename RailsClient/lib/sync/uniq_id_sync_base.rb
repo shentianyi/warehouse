@@ -14,11 +14,10 @@ module Sync
       end
     end
 
-    def self.pull_block
+    def self.get_block
       super
       Proc.new do |items|
         items.each do |item|
-          puts item
           unless ori=model.unscoped.where(model.fk_condition(item)).first
             ori=model.new(item)
             ori.is_new=false

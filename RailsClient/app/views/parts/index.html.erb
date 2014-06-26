@@ -29,7 +29,7 @@
     <th>序号</th>
     <th>零件号</th>
     <th>单位包装量</th>
-    <th></th>
+    <th colspan="3"></th>
   </tr>
   </thead>
 
@@ -47,4 +47,4 @@
   </tbody>
 </table>
 
-<%= will_paginate @parts, :page_links => false %>
+<%= will_paginate @parts %>

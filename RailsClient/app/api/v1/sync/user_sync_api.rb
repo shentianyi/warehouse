@@ -11,7 +11,7 @@ module V1
       end
 
       post do
-        users=JSON.parse(params[:hacker])
+        users=JSON.parse(params[:user])
         users.each do |user|
           user=Hacker.new(user)
           puts user
@@ -20,7 +20,7 @@ module V1
       end
 
       put '/:id' do
-        users=JSON.parse(params[:hacker])
+        users=JSON.parse(params[:user])
         users.each do |user|
           if u=Hacker.unscoped.find_by_id(user['id'])
             u.update(user.except('id'))
@@ -29,7 +29,7 @@ module V1
       end
 
       post :delete do
-        users=JSON.parse(params[:hacker])
+        users=JSON.parse(params[:user])
         users.each do |id|
           if user=Hacker.unscoped.find_by_id(id)
             user.update(is_delete: true)

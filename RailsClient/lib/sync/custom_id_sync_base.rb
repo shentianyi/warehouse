@@ -1,7 +1,7 @@
 require_relative 'base_sync'
 module Sync
   class CustomIdSyncBase<BaseSync
-    def self.pull_block
+    def self.get_block
       super
       Proc.new do |items|
         items.each do |item|
