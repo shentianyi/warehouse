@@ -9,11 +9,7 @@ en:
     failure:
       already_authenticated: "You are already signed in."
       inactive: "Your account is not activated yet."
-<<<<<<< HEAD
       invalid: "invalid login info，please enter new."
-=======
-      invalid: "登录信息错误，请重新填写."
->>>>>>> 093e627ecf44e6a8e1f1baf1b7851eabfd2e568a
       locked: "Your account is locked."
       last_attempt: "You have one more attempt before your account will be locked."
       not_found_in_database: "登录信息错误"
