@@ -50,6 +50,21 @@ class BaseState
     end
   end
 
+  def self.can_set_to? source,desc
+    case source
+      when ORIGINAL
+        [WAY].include? desc
+      when WAY
+        [ORIGINAL,WAY,DESTINATION].include? desc
+      when DESTINATION
+        [WAY,DESTINATION,RECEIVED].include? desc
+      when RECEIVED
+        [DESTINATION].include? desc
+      else
+        false
+    end
+  end
+
   def self.before_state? old_state,new_state
     case old_state
       when ORIGINAL

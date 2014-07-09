@@ -1,52 +1,52 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <string>ID:</string>
+  <string>托盘号:</string>
   <%= @forklift.id%>
 </p>
 
 <p>
-  <string>State:</string>
+  <string>状 态:</string>
   <%= ForkliftState.display(@forklift.state)%>
 </p>
 
 <p>
-  <string>Delivery:</string>
+  <string>所属运单号:</string>
   <%= @forklift.delivery_id%>
 </p>
 
 <p>
-  <string>Stocker:</string>
+  <string>备货员工:</string>
   <%= @forklift.stocker.id if @forklift.stocker%>
 </p>
 
 <p>
-  <string>Creator:</string>
+  <string>创建员工:</string>
   <%= @forklift.user.id if @forklift.user%>
 </p>
 
 <p>
-  <string>Ware House:</string>
+  <string>仓 库:</string>
   <%= @forklift.whouse.name%>
 </p>
 
 <p>
-  <string>Sum Packages:</string>
+  <string>箱包装总数:</string>
   <%= @forklift.sum_packages%>
 </p>
 
 <p>
-  <string>Accepted Packages:</string>
+  <string>接收箱包装总数:</string>
   <%= @forklift.accepted_packages%>
 </p>
 
 <p>
-  <string>remark:</string>
+  <string>备 注:</string>
   <%= @forklift.remark%>
 </p>
 
 <p>
-  <string>Packages:</string>
+  <string>箱包装:</string>
   <ul>
     <%@forklift.packages.each do |p|%>
     <li>
@@ -56,5 +56,5 @@
   </ul>
 </p>
 
-<%= link_to 'Edit', edit_forklift_path(@forklift) %> |
-<%= link_to 'Back', forklifts_path %>
+<%= link_to '编辑', edit_forklift_path(@forklift) %> |
+<%= link_to '返回', forklifts_path %>

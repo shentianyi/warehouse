@@ -1,10 +1,21 @@
-<h1>Listing parts</h1>
+<h2>零件列表</h2>
 <% if @msg && !@msg.result %>
     <div class="error">
       <%= @msg.content %>
     </div>
 <% end %>
-
+<div>
+  <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+    <div>
+      <span>零件号：
+        <input type="text" name="part[id]" value="<%= @id %>"/>
+        <input type="hidden" name="part[id_fuzzy]"/>
+      </span>
+      <input type="submit" value="查 找" class="btn btn-primary"/>
+    </div>
+</form>
+</div>
+</div>
 
 <%= link_to "新建零件", send("new_#{@model}_path") %>
 <%= link_to "上传/更新零件", send("import_#{@model.pluralize}_path") %>
@@ -12,26 +23,35 @@
 <%= link_to "上传/更新零件位置", parts_import_positions_path %>
 <%= link_to "下载零件位置", parts_download_positions_path %>
 <br>
-<table>
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @parts %>
+  </div>
+  <%= will_paginate @parts, :container => false %>
+</div>
+<table class="table table-bordered table-striped globle-table">
   <thead>
   <tr>
-    <th colspan="3">No</th>
-    <th colspan="3">ID</th>
-    <th colspan="3">Unit Pack</th>
+    <th>序号</th>
+    <th>零件号</th>
+    <th>单位包装量</th>
+    <th colspan="3"></th>
   </tr>
   </thead>
 
   <tbody>
   <% @parts.each_with_index do |part, index| %>
       <tr>
-        <td colspan="3"><%= index %>
-        <td colspan="3"><%= part.id %></td>
-        <td colspan="3"><%= part.unit_pack %></td>
-        <td><%= link_to 'Show', part %></td>
-        <td><%= link_to 'Edit', edit_part_path(part) %></td>
-        <td><%= link_to 'Destroy', part, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        <td><%= index+@parts.offset+1 %>
+        <td><%= part.id %></td>
+        <td><%= part.unit_pack %></td>
+        <td><%= link_to '详细', part %></td>
+        <td><%= link_to '编辑', edit_part_path(part) %></td>
+        <td><%= link_to '删除', part, method: :delete, data: {confirm: '确认删除?'} %></td>
       </tr>
   <% end %>
   </tbody>
 </table>
-
+<div class="digg_pagination">
+  <%= will_paginate @parts, :container => false %>
+</div>

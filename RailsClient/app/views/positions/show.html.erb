@@ -1,19 +1,19 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <string>ID:</string>
+  <string>编号:</string>
   <%= @position.id%>
 </p>
 
 <p>
-  <string>Detail:</string>
+  <string>详细库位:</string>
   <%= @position.detail%>
 </p>
 
 <p>
-  <string>Ware House:</string>
+  <string>仓库:</string>
   <%= @position.whouse.name%>
 </p>
 
-<%= link_to 'Edit', edit_position_path(@position) %> |
-<%= link_to 'Back', positions_path %>
+<%= link_to '编辑', edit_position_path(@position) %> |
+<%= link_to '返回', positions_path %>

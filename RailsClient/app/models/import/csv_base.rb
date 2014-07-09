@@ -15,8 +15,8 @@ module Import
           end
           data={}
           self.csv_cols.each do |col|
-            raise(ArgumentError, "行:#{line_no} #{col.header} 值不可为空") if !col.null && row[col.header].blank?
-            if !col.is_foreign || (col.is_foreign && col.foreign.find_by_id(row[col.header]))
+            raise(ArgumentError, "行:#{line_no} #{col.header} 值constantize不可为空") if !col.null && row[col.header].blank?
+            if !col.is_foreign || (col.is_foreign && col.foreign.constantize.find_by_id(row[col.header]))
               data[col.field]=row[col.header]
             end
           end

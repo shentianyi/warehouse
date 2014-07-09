@@ -1,39 +1,46 @@
-<h1>Listing forklifts</h1>
-
-<table>
+<h2>托盘列表</h2>
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @forklifts %>
+  </div>
+  <%= will_paginate @forklifts, :container => false %>
+</div>
+<table class="table table-bordered table-striped globle-table">
   <thead>
     <tr>
-      <th colspan="3">No</th>
-      <th colspan="3">ID:</th>
-      <th colspan="3">State:</th>
-      <th colspan="3">Delivery:</th>
-      <th colspan="3">Stocker:</th>
-      <th colspan="3">Creator:</th>
-      <th colspan="3">Ware House:</th>
-      <th colspan="3">Sum Packages:</th>
-      <th colspan="3">Accepted Packages:</th>
-      <th colspan="3">remark:</th>
+      <th>序号</th>
+      <th>编号</th>
+      <th>状态</th>
+      <th>所属运单</th>
+      <th>备货员工</th>
+      <th>创建员工</th>
+      <th>备货仓库</th>
+      <th>包装箱总数</th>
+      <th>包装箱被接收数</th>
+      <th>备注</th>
+      <th colspan="2"></th>
     </tr>
   </thead>
 
   <tbody>
     <% @forklifts.each_with_index do |forklift,index| %>
       <tr>
-        <td colspan="3"><%= index %>
-        <td colspan="3"><%= forklift.id%></td>
-        <td colspan="3"><%= ForkliftState.display(forklift.state)%></td>
-        <td colspan="3"><%= forklift.delivery_id %></td>
-        <td colspan="3"><%= forklift.stocker.id if forklift.stocker%></td>
-        <td colspan="3"><%= forklift.user.id if forklift.user%></td>
-        <td colspan="3"><%= forklift.whouse.name%></td>
-        <td colspan="3"><%= forklift.sum_packages%></td>
-        <td colspan="3"><%= forklift.accepted_packages%></td>
-        <td colspan="3"><%= forklift.remark%></td>
-        <td><%= link_to 'Show', forklift %></td>
-        <td><%= link_to 'Edit', edit_forklift_path(forklift) %></td>
+        <td><%= index+@forklifts.offset+1%>
+        <td><%= forklift.id%></td>
+        <td><%= ForkliftState.display(forklift.state)%></td>
+        <td><%= forklift.delivery_id %></td>
+        <td><%= forklift.stocker.id if forklift.stocker%></td>
+        <td><%= forklift.user.id if forklift.user%></td>
+        <td><%= forklift.whouse.name%></td>
+        <td><%= forklift.sum_packages%></td>
+        <td><%= forklift.accepted_packages%></td>
+        <td><%= forklift.remark%></td>
+        <td><%= link_to '详细', forklift %></td>
+        <td><%= link_to '编辑', edit_forklift_path(forklift) %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
-<br>
+<div class="digg_pagination">
+  <%= will_paginate @forklifts, :container => false %>
+</div>

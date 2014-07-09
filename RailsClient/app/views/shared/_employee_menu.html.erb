@@ -10,10 +10,10 @@
     }
 </style>
 
-<ul id="main-menu">
-  <li><a href="/">Home</a></li>
-  <li><a href="<%= deliveries_path%>">Deliveries</a></li>
-  <li><a href="<%= forklifts_path%>">Forklifts</a></li>
-  <li><a href="<%= packages_path%>">Packages</a></li>
-  <li><a href="<%= destroy_user_session_path%>">Log out</a></li>
+<ul  id="main-menu" class="nav nav-pills">
+  <li id="welcome_li"><a href="/">主 页</a></li>
+  <li  id='delivery_li'><a href="<%= deliveries_path%>">运 单</a></li>
+  <li id='forklift_li'><a href="<%= forklifts_path%>">托 盘</a></li>
+  <li id='package_li'><a href="<%= packages_path%>">包装箱</a></li>
+  <li><a href="<%= destroy_user_session_path%>">注 销</a></li>
 </ul>

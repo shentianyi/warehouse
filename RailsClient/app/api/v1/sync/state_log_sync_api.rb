@@ -2,10 +2,10 @@ module V1
   module Sync
     class StateLogSyncAPI<SyncBase
       namespace 'state_logs'
-      #rescue_from :all do |e|
-      #  StateLogSyncAPI.error_unlock_sync_pool('state_logs')
-      #  Rack::Response.new([e.message], 500).finish
-      #end
+      rescue_from :all do |e|
+        StateLogSyncAPI.error_unlock_sync_pool('state_logs')
+        Rack::Response.new([e.message], 500).finish
+      end
       get do
         StateLog.unscoped.where('updated_at>=?', params[:last_time]).all
       end

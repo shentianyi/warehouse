@@ -1,11 +1,11 @@
 module V1
   module Sync
     class UserSyncAPI<SyncBase
-      namespace 'users'
-      #rescue_from :all do |e|
-      #  UserSyncAPI.error_unlock_sync_pool('users')
-      #  Rack::Response.new([e.message], 500).finish
-      #end
+      namespace 'hackers'
+      rescue_from :all do |e|
+        UserSyncAPI.error_unlock_sync_pool('users')
+        Rack::Response.new([e.message], 500).finish
+      end
       get do
         Hacker.unscoped.where('updated_at>=?', params[:last_time]).all
       end
@@ -14,7 +14,6 @@ module V1
         users=JSON.parse(params[:hacker])
         users.each do |user|
           user=Hacker.new(user)
-          puts user
           user.save
         end
       end

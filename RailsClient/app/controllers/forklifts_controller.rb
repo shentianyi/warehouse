@@ -5,7 +5,8 @@ class ForkliftsController < ApplicationController
   # GET /forklifts
   # GET /forklifts.json
   def index
-    @forklifts = Forklift.all
+    @forklifts = Forklift.paginate(:page=>params[:page])#all
+    #@forklifts = @forklifts.paginate(:page=>params[:page])
   end
 
   # GET /forklifts/1
@@ -29,7 +30,7 @@ class ForkliftsController < ApplicationController
 
     respond_to do |format|
       if @forklift.save
-        format.html { redirect_to @forklift, notice: 'Forklift was successfully created.' }
+        format.html { redirect_to @forklift, notice: '托盘新建成功' }
         format.json { render :show, status: :created, location: @forklift }
       else
         format.html { render :new }
@@ -47,7 +48,7 @@ class ForkliftsController < ApplicationController
 
     respond_to do |format|
       if @forklift.update(forklift_params)
-        format.html { redirect_to @forklift, notice: 'Forklift was successfully updated.' }
+        format.html { redirect_to @forklift, notice: '托盘更新成功' }
         format.json { render :show, status: :ok, location: @forklift }
       else
         format.html { render :edit }
@@ -61,7 +62,7 @@ class ForkliftsController < ApplicationController
   def destroy
     @forklift.destroy
     respond_to do |format|
-      format.html { redirect_to forklifts_url, notice: 'Forklift was successfully destroyed.' }
+      format.html { redirect_to forklifts_url, notice: '托盘删除成功' }
       format.json { head :no_content }
     end
   end

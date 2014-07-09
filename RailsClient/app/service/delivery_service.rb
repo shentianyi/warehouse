@@ -62,13 +62,12 @@ class DeliveryService
   #=============
   def self.search(args, all=false)
     if all
-      Delivery.where(args)
+      Delivery.where(args).order(created_at: :desc)
     elsif args[:received_date].empty?
       []
     else
       received_date = Time.parse(args[:received_date])
-      Delivery.where(state: args[:state], received_date: (received_date.beginning_of_day..received_date.end_of_day)).all.order(:created_at)
-
+      Delivery.where(state: args[:state], received_date: (received_date.beginning_of_day..received_date.end_of_day)).all.order(:created_at).order(created_at: :desc)
     end
   end
 

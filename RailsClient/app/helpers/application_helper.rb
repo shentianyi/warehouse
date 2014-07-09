@@ -24,20 +24,45 @@ module ApplicationHelper
   end
 
   def search
-    @items=model.where(params[@model].clone.delete_if { |k, v| v.length==0 }).paginate(:page => params[:page], :per_page => 20)
+    @items=model.where(params[@model].clone.delete_if { |k, v| v.length==0 }).paginate(:page => params[:page])
     render :index
   end
+
+  def search
+    @condition=params[@model]
+    query=model
+    @condition.each do |k, v|
+      if (v.is_a?(Fixnum) || v.is_a?(String)) && !v.blank?
+        puts @condition.has_key?(k+'_fuzzy')
+        if @condition.has_key?(k+'_fuzzy')
+          query=query.where("#{k} like ?", "%#{v}%")
+        else
+          query=query.where(Hash[k, v])
+        end
+        instance_variable_set("@#{k}", v)
+      end
+      #if v.is_a?(Array) && !v.empty?
+      #  query= v.size==1 ? query.where(Hash[k, v[0]]) : query.in(Hash[k, v])
+      #end
+      #query=query.where(Hash[k, v]) if v.is_a?(Range)
+      if v.is_a?(Hash) && v.values.count==2 && v.values.uniq!=['']
+        query=query.where(Hash[k, (v.values[0]..v.values[1])])
+        v.each do |kk, vv|
+          instance_variable_set("@#{k}_#{kk}", vv)
+        end
+      end
+    end
+    instance_variable_set("@#{@model.pluralize}", query.paginate(:page => params[:page]).all)
+    render :index
+  end
+
 
   def download
     query=nil
     file_name= @model+'_'+Time.now.strftime('%Y%m%d%H%M%S')+'.csv'
     path=File.join($DOWNLOADPATH, file_name)
     @msg= model.export_csv(path, query)
-    if @msg.result
-      send_file path, :type => 'application/csv', :filename => file_name
-    else
-      render :index
-    end
+    send_file path, :type => 'application/csv', :filename => file_name
   end
 
   def template

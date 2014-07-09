@@ -1,6 +1,6 @@
-<ul>
+<ol>
   <% @users.each do |u|%>
-  <%= link_to u.id, u%>
+  <li><%= link_to u.id, u%></li>
   <% end%>
-</ul>
-<%= link_to 'Back', locations_path %>
+</ol>
+<%= link_to '返回', locations_path %>

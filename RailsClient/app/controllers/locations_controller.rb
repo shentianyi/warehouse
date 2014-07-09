@@ -5,7 +5,8 @@ class LocationsController < ApplicationController
   # GET /locations
   # GET /locations.json
   def index
-    @locations = Location.all
+    @locations = Location.paginate(:page=> params[:page])#all
+    #@locations = @locations.paginate(:page=>params[:page])
   end
 
   # GET /locations/1
@@ -30,7 +31,7 @@ class LocationsController < ApplicationController
 
     respond_to do |format|
       if @location.save
-        format.html { redirect_to @location, notice: 'Location was successfully created.' }
+        format.html { redirect_to @location, notice: '地点创建成功' }
         format.json { render :show, status: :created, location: @location }
       else
         format.html { render :new }
@@ -57,7 +58,7 @@ class LocationsController < ApplicationController
       puts location_params
       puts '##########################'
       if @location.update(location_params)
-        format.html { redirect_to @location, notice: 'Location was successfully updated.' }
+        format.html { redirect_to @location, notice: '地点更新成功.' }
         format.json { render :show, status: :ok, location: @location }
       else
         format.html { render :edit }
@@ -71,13 +72,13 @@ class LocationsController < ApplicationController
   def destroy
     if @location.is_base
       respond_to do |format|
-        format.html { redirect_to locations_url, notice: 'Base Location can\'t be deleted.' }
+        format.html { redirect_to locations_url, notice: '基础地点不可删除.' }
         format.json { head :no_content }
       end
     else
       @location.destroy
       respond_to do |format|
-        format.html { redirect_to locations_url, notice: 'Location was successfully destroyed.' }
+        format.html { redirect_to locations_url, notice: '地点删除成功.' }
         format.json { head :no_content }
       end
     end

@@ -2,10 +2,10 @@ module V1
   module Sync
     class PackagePositionSyncAPI<SyncBase
       namespace 'package_positions'
-      #rescue_from :all do |e|
-      #  PackagePositionSyncAPI.error_unlock_sync_pool('package_positions')
-      #  Rack::Response.new([e.message], 500).finish
-      #end
+      rescue_from :all do |e|
+        PackagePositionSyncAPI.error_unlock_sync_pool('package_positions')
+        Rack::Response.new([e.message], 500).finish
+      end
 
       get do
         PackagePosition.unscoped.where('updated_at>=?', params[:last_time]).all
@@ -13,7 +13,6 @@ module V1
 
       post do
         package_positions=JSON.parse(params[:package_position])
-        puts package_positions
         package_positions.each do |package_position|
           unless PackagePosition.unscoped.where(PackagePosition.fk_condition(package_position)).first
             package_position=PackagePosition.new(package_position)

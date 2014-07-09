@@ -11,7 +11,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140620071250) do
+ActiveRecord::Schema.define(version: 20140623025158) do
+
+  create_table "attachments", force: true do |t|
+    t.string   "name"
+    t.string   "path"
+    t.float    "size"
+    t.string   "path_name"
+    t.string   "attachable_id"
+    t.string   "attachable_type"
+    t.string   "version"
+    t.text     "md5"
+    t.string   "type"
+    t.boolean  "is_delete",       default: false
+    t.boolean  "is_dirty",        default: true
+    t.boolean  "is_new",          default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "attachments", ["attachable_id"], name: "index_attachments_on_attachable_id", using: :btree
+  add_index "attachments", ["attachable_type"], name: "index_attachments_on_attachable_type", using: :btree
+  add_index "attachments", ["id"], name: "index_attachments_on_id", using: :btree
 
   create_table "deliveries", force: true do |t|
     t.string   "uuid",           limit: 36,                 null: false

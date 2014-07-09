@@ -2,10 +2,10 @@ module V1
   module Sync
     class PackageSyncAPI<SyncBase
       namespace 'packages'
-      #rescue_from :all do |e|
-      #  PackageSyncAPI.error_unlock_sync_pool('packages')
-      #  Rack::Response.new([e.message], 500).finish
-      #end
+      rescue_from :all do |e|
+        PackageSyncAPI.error_unlock_sync_pool('packages')
+        Rack::Response.new([e.message], 500).finish
+      end
       get do
         Package.unscoped.where('updated_at>=?', params[:last_time]).all
       end
@@ -14,7 +14,6 @@ module V1
         packages=JSON.parse(params[:package])
         packages.each do |package|
           package=Package.new(package)
-          puts package
           package.save
         end
       end

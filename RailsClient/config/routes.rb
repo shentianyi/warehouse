@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   resources :deliveries do
     collection do
       match :import, to: :import, via: [:get, :post]
+      get :search
     end
     member do
       get :export
@@ -15,9 +16,31 @@ Rails.application.routes.draw do
 
   resources :packages
 
-  resources :whouses do
-    member do
-      get 'positions'
+  resources :forklifts
+
+  get 'parts/import_positions', to: 'parts#import_positions'
+  get 'parts/template_position', to: 'parts#template_position'
+  get 'parts/download_positions', to: 'parts#download_positions'
+  post 'parts/do_import_positions', to: 'parts#do_import_positions'
+
+  [:locations, :whouses, :parts, :positions, :part_positions, :users, :deliveries].each do |model|
+    resources model do
+      collection do
+        post :do_import
+        get :import
+        get :download
+        get :template
+        get :search
+      end
+    end
+  end
+
+  resources :labels do
+    collection do
+      post :upload_file
+      get :get_config
+      get :get_config_hash
+      get :get_config_version
     end
   end
 
@@ -27,27 +50,18 @@ Rails.application.routes.draw do
       get 'whouses'
     end
   end
-  resources :forklifts
 
-  get 'parts/import_positions', to: 'parts#import_positions'
-  get 'parts/template_position', to: 'parts#template_position'
-  get 'parts/download_positions', to: 'parts#download_positions'
-  post 'parts/do_import_positions', to: 'parts#do_import_positions'
-
-  [:locations, :whouses, :parts, :positions, :part_positions, :users].each do |model|
-    resources model do
-      collection do
-        post :do_import
-        get :import
-        get :download
-        get :search
-        get :template
-      end
+  resources :whouses do
+    member do
+      get 'positions'
     end
   end
 
-
-
+  resources :syncs do
+    collection do
+      post :reload
+    end
+  end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

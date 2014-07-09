@@ -12,7 +12,10 @@ module V1
 
     # get binded but not add to delivery forklifts
     get :binds do
-      forklifts = ForkliftService.avaliable_to_bind
+      args={
+          delivery_id: nil
+      }
+      forklifts = ForkliftService.search(args)
       data = []
       ForkliftPresenter.init_presenters(forklifts).each do |fp|
         data<<fp.to_json
@@ -22,46 +25,41 @@ module V1
 
     # create forklift
     post do
-      if Whouse.find_by_id(forklift_params[:whouse_id]).nil?
-        return {result:0,content:'部门未找到'}
-      end
-      f = Forklift.new(forklift_params)
-      unless forklift_params.has_key?(:user_id)
-        f.user = current_user
-      end
-      if f.save
-        {result:1,content:ForkliftPresenter.new(f).to_json}
+      msg = ForkliftService.create(forklift_params,current_user)
+      if msg.result
+        {result:1,content:ForkliftPresenter.new(msg.object).to_json}
       else
-        {result:0,content:f.errors.full_messages}
+        {result:0,content:msg.content}
       end
     end
 
     # check package
     post :check_package do
-      if (f = ForkliftService.exits?(params[:forklift_id])).nil?
-        return {result:0,content:'清单不存在!'}
+      unless f = ForkliftService.exits?(params[:forklift_id])
+        return {result:0,content:ForkliftMessage::NotExit}
       end
-      if !ForkliftState.can_update?(f.state)
-        return {result:0,content:'清单不能修改!'}
+      unless ForkliftState.can_update?(f.state)
+        return {result:0,content:ForkliftMessage::CannotUpdate}
       end
-      if (p = PackageService.exits?(params[:package_id])).nil?
-        return {result:0,content:'包装箱不存在!'}
+      unless p = PackageService.exits?(params[:package_id])
+        return {result:0,content:PackageMessage::NotExit}
       end
+
       if ForkliftService.add_package(f,p)
         {result:1,content:PackagePresenter.new(p).to_json}
       else
-        {result:0,content:'添加失败!'}
+        {result:0,content:ForkliftMessage::AddPackageFailed}
       end
     end
 
     # add package
     post :add_package do
-      if (f = ForkliftService.exits?(params[:forklift_id])).nil?
-        return {result:0,content:'清单不存在!'}
+      unless f = ForkliftService.exits?(params[:forklift_id])
+        return {result:0,content:ForkliftMessage::NotExit}
       end
 
-      if !ForkliftState.can_update?(f.state)
-        return {result:0,content:'清单不能修改!'}
+      unless ForkliftState.can_update?(f.state)
+        return {result:0,content:ForkliftMessage::CannotUpdate}
       end
 
       #create package
@@ -76,17 +74,10 @@ module V1
       res = PackageService.create(args,current_user)
       if res.result
         p = res.object
-        if p
-          if ForkliftService.add_package(f,p)
-            {result:1,content:PackagePresenter.new(p).to_json}
-          else
-            {result:0,content:'添加包装箱失败'}
-          end
+        if ForkliftService.add_package(f,p)
+          {result:1,content:PackagePresenter.new(p).to_json}
         else
-          {
-              result:0,
-              content:'托清单不存在!'
-          }
+          {result:0,content:ForkliftMessage::AddPackageFailed}
         end
       else
         {result:res.result,content:res.content}
@@ -97,14 +88,14 @@ module V1
     # id is forklift_item_id
     delete :remove_package do
       if (p = PackageService.exits?(params[:package_id])).nil?
-        return{result:0,content:'包装箱不存在!'}
+        return{result:0,content:PackageMessage::NotExit}
       end
 
       if !PackageState.can_update?(p.state)
-        return {result:0,content:'包装箱不能修改!'}
+        return {result:0,content:PackageMessage::CannotUpdate}
       end
 
-      if ForkliftService.remove_package(p)
+      if p.remove_from_forklift
         {result:1,content:''}
       else
         {result:0,content:''}
@@ -114,14 +105,14 @@ module V1
 
     #delete forklift
     delete do
-      if (f = ForkliftService.exits?(params[:id])).nil?
-        return {result:0,content:'清单不存在!'}
+      unless f = ForkliftService.exits?(params[:id])
+        return {result:0,content:ForkliftMessage::NotExit}
       end
-      if !ForkliftState.can_delete?(f.state)
-        return {result:0,content:'清单不能修改!'}
+      unless ForkliftState.can_delete?(f.state)
+        return {result:0,content:ForkliftMessage::CannotUpdate}
       end
-      result = ForkliftService.delete(f)
-      {result:result,content:''}
+      ForkliftService.delete(f)
+      {result:1,content:''}
     end
 
     # get forklift detail
@@ -131,25 +122,31 @@ module V1
         fp = ForkliftPresenter.new(f)
         {result:1,content:fp.to_json_with_packages}
       else
-        {reuslt:0,content:'托清单未找到!'}
+        {reuslt:0,content:ForkliftMessage::NotExit}
       end
     end
 
     # update forklift
     put do
       if (f = ForkliftService.exits?(forklift_params[:id])).nil?
-        return {result:0,content:'清单不存在!'}
+        return {result:0,content:ForkliftMessage::NotExit}
       end
 
       if !ForkliftState.can_update?(f.state)
-        return {result:0,content:'清单不能修改!'}
+        return {result:0,content:ForkliftMessage::CannotUpdate}
       end
 
       result = ForkliftService.update(f,forklift_params)
       if result
-        {result:1,content:''}
+        if forklift_params[:whouse_id]
+          packages = PackagePresenter.init_presenters(f.packages).collect {|p| p.to_json}
+          {result:1,content:{packages:packages}}
+        else
+          {result:1,content:ForkliftMessage::UpdateSuccess}
+        end
+
       else
-        {result:0,content:''}
+        {result:0,content:ForkliftMessage::UpdateFailed}
       end
     end
   end
