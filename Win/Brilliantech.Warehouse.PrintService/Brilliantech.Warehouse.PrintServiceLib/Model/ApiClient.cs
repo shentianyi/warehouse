@@ -11,7 +11,7 @@ namespace Brilliantech.Warehouse.PrintServiceLib.Model
 {
     public class ApiClient
     {
-        private static string baseUrl = ApiConfig.Host;
+        private static string baseUrl = ApiConfig.BaseUri;
         private static string token = ApiConfig.Token; 
 
         public T Execute<T>(IRestRequest request) where T : new()

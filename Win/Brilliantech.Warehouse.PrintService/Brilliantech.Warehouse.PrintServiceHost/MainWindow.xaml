@@ -44,10 +44,23 @@
                     </StackPanel>
                 </GroupBox>
             </StackPanel>-->
+            
             <StackPanel  Margin="5,40,0,0">
                 <GroupBox  Header="打印操作" FontSize="14">
                     <StackPanel Orientation="Horizontal">
-                        <Button Content="设置打印机" Margin="480,0,0,0"
+                        <Button Content="服务器设置" Margin="370,0,0,0"
+                                Name="SetServerBtn" Foreground="White" Height="59" Width="96" FontSize="15" Click="SetServerBtn_Click">
+                            <Button.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FF849DF5" Offset="0"/>
+                                    <GradientStop Color="#FF687DD4" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Button.Background>
+                            <Button.Effect>
+                                <DropShadowEffect Opacity="0.295"/>
+                            </Button.Effect>
+                        </Button>
+                        <Button Content="设置打印机" Margin="20,0,0,0"
                                 Name="SetPrinterBtn" Click="SetPrinterBtn_Click" Foreground="White" Height="59" Width="96" FontSize="15">
                             <Button.Background>
                                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
