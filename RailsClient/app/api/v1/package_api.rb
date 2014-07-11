@@ -19,7 +19,9 @@ module V1
       args = {
           forklift_id: nil
       }
-
+      unless params.has_key?(:all)
+        args[:user_id]=current_user.id
+      end
       packages = PackageService.search(args)
       data = []
       presenters = PackagePresenter.init_presenters(packages)

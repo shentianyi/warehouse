@@ -179,7 +179,7 @@ class ForkliftService
   end
 
   def self.search(args)
-    Forklift.where(args).order(created_at: :desc)
+    Forklift.where(args).order(id: :desc)
   end
 
   def self.whouse_exits?(whouse_id)
