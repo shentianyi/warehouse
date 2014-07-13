@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140623025158) do
+ActiveRecord::Schema.define(version: 20140713121924) do
 
   create_table "attachments", force: true do |t|
     t.string   "name"
@@ -93,6 +93,8 @@ ActiveRecord::Schema.define(version: 20140623025158) do
     t.string   "tel"
     t.boolean  "is_base",                   default: false
     t.string   "destination_id"
+    t.string   "prefix",                    default: ""
+    t.string   "suffix",                    default: ""
   end
 
   add_index "locations", ["destination_id"], name: "index_locations_on_destination_id", using: :btree

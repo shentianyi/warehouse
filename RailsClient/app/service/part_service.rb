@@ -1,5 +1,13 @@
 class PartService
-  def self.validate_id id
+  def self.validate_id id,current_user
+    if id.start_with?(current_user.location.prefix)
+      id = id.slice(current_user.location.prefix.length,id.length-current_user.location.prefix)
+    end
+
+    if id.end_with?(current_user.location.suffix)
+      id = id.slice(0,id.length-current_user.location.prefix)
+    end
+
     !Part.find_by_id(id).nil?
   end
 
