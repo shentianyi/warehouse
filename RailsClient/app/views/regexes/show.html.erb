@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @regex.name %>
+</p>
+
+<p>
+  <strong>Code:</strong>
+  <%= @regex.code %>
+</p>
+
+<p>
+  <strong>Prefix length:</strong>
+  <%= @regex.prefix_length %>
+</p>
+
+<p>
+  <strong>Prefix string:</strong>
+  <%= @regex.prefix_string %>
+</p>
+
+<p>
+  <strong>Type:</strong>
+  <%= @regex.type %>
+</p>
+
+<p>
+  <strong>Suffix length:</strong>
+  <%= @regex.suffix_length %>
+</p>
+
+<p>
+  <strong>Suffix string:</strong>
+  <%= @regex.suffix_string %>
+</p>
+
+<p>
+  <strong>Regex string:</strong>
+  <%= @regex.regex_string %>
+</p>
+
+<p>
+  <strong>Localtion:</strong>
+  <%= @regex.localtion %>
+</p>
+
+<%= link_to 'Edit', edit_regex_path(@regex) %> |
+<%= link_to 'Back', regexes_path %>

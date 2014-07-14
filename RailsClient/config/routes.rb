@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :regexes
+
   mount ApplicationAPI => '/api'
   root :to => "welcome#index"
 

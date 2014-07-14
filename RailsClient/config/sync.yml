@@ -10,37 +10,37 @@ sync:
     location:
       name: "地点"
       get: true
-      post: true
+      post: false
       put: false
       delete: false
     hacker:
       name: "员工"
       get: true
-      post: true
+      post: false
       put: false
       delete: false
     whouse:
       name: "仓库"
       get: true
-      post: true
+      post: false
       put: false
       delete: false
     part:
       name: "零件"
       get: true
-      post: true
+      post: false
       put: false
       delete: false
     position:
       name: "库位"
       get: true
-      post: true
+      post: false
       put: false
       delete: false
     part_position:
       name: "零件库位"
       get: true
-      post: true
+      post: false
       put: false
       delete: false
     delivery:

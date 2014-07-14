@@ -1,0 +1,53 @@
+<%= form_for(@regex) do |f| %>
+  <% if @regex.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@regex.errors.count, "error") %> prohibited this regex from being saved:</h2>
+
+      <ul>
+      <% @regex.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :code %><br>
+    <%= f.text_field :code %>
+  </div>
+  <div class="field">
+    <%= f.label :prefix_length %><br>
+    <%= f.number_field :prefix_length %>
+  </div>
+  <div class="field">
+    <%= f.label :prefix_string %><br>
+    <%= f.text_field :prefix_string %>
+  </div>
+  <div class="field">
+    <%= f.label :type %><br>
+    <%= f.number_field :type %>
+  </div>
+  <div class="field">
+    <%= f.label :suffix_length %><br>
+    <%= f.number_field :suffix_length %>
+  </div>
+  <div class="field">
+    <%= f.label :suffix_string %><br>
+    <%= f.number_field :suffix_string %>
+  </div>
+  <div class="field">
+    <%= f.label :regex_string %><br>
+    <%= f.text_field :regex_string %>
+  </div>
+  <div class="field">
+    <%= f.label :localtion_id %><br>
+    <%= f.text_field :localtion_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

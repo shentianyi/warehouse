@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140713121924) do
+ActiveRecord::Schema.define(version: 20140714101037) do
 
   create_table "attachments", force: true do |t|
     t.string   "name"
@@ -93,8 +93,8 @@ ActiveRecord::Schema.define(version: 20140713121924) do
     t.string   "tel"
     t.boolean  "is_base",                   default: false
     t.string   "destination_id"
-    t.string   "prefix",                    default: ""
-    t.string   "suffix",                    default: ""
+    t.string   "prefix",                    default: "-1"
+    t.string   "suffix",                    default: "-1"
   end
 
   add_index "locations", ["destination_id"], name: "index_locations_on_destination_id", using: :btree
@@ -183,6 +183,27 @@ ActiveRecord::Schema.define(version: 20140713121924) do
   add_index "positions", ["id"], name: "index_positions_on_id", using: :btree
   add_index "positions", ["uuid"], name: "index_positions_on_uuid", using: :btree
   add_index "positions", ["whouse_id"], name: "index_positions_on_whouse_id", using: :btree
+
+  create_table "regexes", force: true do |t|
+    t.string   "name",                           null: false
+    t.string   "code",                           null: false
+    t.integer  "prefix_length",  default: 0
+    t.string   "prefix_string"
+    t.integer  "type",                           null: false
+    t.integer  "suffix_length",  default: 0
+    t.integer  "suffix_string"
+    t.string   "regex_string",   default: ""
+    t.string   "location_id"
+    t.boolean  "is_sys_default", default: false
+    t.boolean  "is_delete",      default: false
+    t.boolean  "is_dirty",       default: true
+    t.boolean  "is_new",         default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "regexes", ["id"], name: "index_regexes_on_id", using: :btree
+  add_index "regexes", ["location_id"], name: "index_regexes_on_location_id", using: :btree
 
   create_table "state_logs", force: true do |t|
     t.string   "stateable_id"
