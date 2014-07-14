@@ -3,10 +3,9 @@ class PackageService
   #=============
   #create @args,@current_user=nil
   #=============
-  def self.create args,current_user=nil
-    msg = Message.new(content=[])
-    msg.result = false
-
+  def self.create args, current_user=nil
+    msg = Message.new
+    msg.content=[]
     #current_user
     unless args.has_key?(:user_id)
       args[:user_id] = current_user.id
@@ -54,7 +53,7 @@ class PackageService
   #=============
   #update @package
   #=============
-  def self.update package,args
+  def self.update package, args
     if package.nil?
       return false
     end
@@ -99,7 +98,7 @@ class PackageService
     if package.nil?
       return false
     end
-    if !PackageState.before_state?(PackageState::DESTINATION,package.state)
+    if !PackageState.before_state?(PackageState::DESTINATION, package.state)
       return false
     end
 
@@ -114,7 +113,7 @@ class PackageService
     if package.nil?
       return false
     end
-    if !PackageState.before_state?(PackageState::WAY,package.state)
+    if !PackageState.before_state?(PackageState::WAY, package.state)
       return false
     end
     package.set_state(PackageState::WAY)
@@ -133,11 +132,11 @@ class PackageService
       return false
     end
 
-    if !PackageState.before_state?(PackageState::RECEIVED,package.state)
+    if !PackageState.before_state?(PackageState::RECEIVED, package.state)
       return false
     end
 
-    if set_state(package,PackageState::RECEIVED)
+    if set_state(package, PackageState::RECEIVED)
       package.forklift.package_checked
       true
     else
@@ -158,7 +157,7 @@ class PackageService
       return false
     end
 
-    if set_state(package,PackageState::DESTINATION)
+    if set_state(package, PackageState::DESTINATION)
       package.forklift.package_unchecked
       true
     else
@@ -170,7 +169,7 @@ class PackageService
   #set_state @package,@state
   #set the package to the specific state
   #=============
-  def self.set_state(package,state)
+  def self.set_state(package, state)
     if package.nil?
       return false
     end
@@ -205,7 +204,7 @@ class PackageService
   #=============
   def self.valid_id?(id)
     if id =~ $REG_PACKAGE_ID
-      Package.unscoped.where(id:id,is_delete:[0,1]).first.nil?
+      Package.unscoped.where(id: id, is_delete: [0, 1]).first.nil?
     else
       nil
     end
