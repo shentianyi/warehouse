@@ -7,5 +7,6 @@ module V1
     mount PartAPI
     mount ForkliftAPI
     mount DeliveryAPI
+    mount RegexAPI
   end
 end

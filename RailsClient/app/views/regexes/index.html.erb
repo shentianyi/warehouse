@@ -1,41 +1,26 @@
-<h1>Listing regexes</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Code</th>
-      <th>Prefix length</th>
-      <th>Prefix string</th>
-      <th>Type</th>
-      <th>Suffix length</th>
-      <th>Suffix string</th>
-      <th>Regex string</th>
-      <th>Localtion</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @regexes.each do |regex| %>
+<h3>正则规范配置</h3>
+<div class="config-panel">
+  <div>
+    <h4 class="bg-primary">
+      <span class='config-title'>包装标签规范</span>
+    </h4>
+    <table class="table table-striped globle-table table-hover">
       <tr>
-        <td><%= regex.name %></td>
-        <td><%= regex.code %></td>
-        <td><%= regex.prefix_length %></td>
-        <td><%= regex.prefix_string %></td>
-        <td><%= regex.type %></td>
-        <td><%= regex.suffix_length %></td>
-        <td><%= regex.suffix_string %></td>
-        <td><%= regex.regex_string %></td>
-        <td><%= regex.localtion %></td>
-        <td><%= link_to 'Show', regex %></td>
-        <td><%= link_to 'Edit', edit_regex_path(regex) %></td>
-        <td><%= link_to 'Destroy', regex, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td>规范名称</td>
+        <td>规范代码</td>
+        <td>前缀字符串</td>
+        <td>后缀字符串</td>
+        <td>正则表达式</td>
       </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Regex', new_regex_path %>
+      <% @package_label_regexes.each do |regex| %>
+          <tr <%=regex.id%>>
+            <td><input type="text" class="name" value="<%=regex.name %>"></td>
+            <td><input type="text" class="code" value="<%=regex.code %>"></td>
+            <td><input type="text" class="prefix_string" value="<%=regex.prefix_string %>"></td>
+            <td><input type="text" class="suffix_string" value="<%=regex.suffix_string %>"></td>
+            <td><input type="text" class="regex_string" value="<%=regex.regex_string %>"></td>
+          </tr>
+      <% end %>
+    </table>
+  </div>
+</div>

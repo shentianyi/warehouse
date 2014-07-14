@@ -17,9 +17,8 @@ class Presenter
   end
 
   def self.init_json_presenters params
-    params.map{|param| self.new(param)}
+    params.map{|param| self.new(param).to_json}
   end
-=begin
 
   def to_json
     json={}
@@ -28,5 +27,4 @@ class Presenter
     end
     return json
   end
-=end
 end

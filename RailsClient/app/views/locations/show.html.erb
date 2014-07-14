@@ -25,16 +25,6 @@
   <%= @location.destination.name if @location.destination%>
 </p>
 
-<p>
-  <string>零件号检查前缀:</string>
-  <%= @location.prefix%>
-</p>
-
-<p>
-  <string>零件号检查后缀:</string>
-  <%= @location.suffix%>
-</p>
-
 
 <%= link_to '编辑', edit_location_path(@location) %> |
 <%= link_to '返回', locations_path %>

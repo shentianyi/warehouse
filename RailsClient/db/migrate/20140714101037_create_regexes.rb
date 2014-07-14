@@ -10,7 +10,8 @@ class CreateRegexes < ActiveRecord::Migration
       t.integer :suffix_length, :default => 0
       t.integer :suffix_string
       t.string :regex_string, :default => ''
-      t.string :location_id
+      t.string :regexable_id
+      t.string :regexable_type
       t.boolean :is_sys_default,:default=>false
       #
       t.boolean :is_delete, :default => false
@@ -22,7 +23,8 @@ class CreateRegexes < ActiveRecord::Migration
     end
 
     add_index :regexes, :id
-    add_index :regexes, :location_id
+    add_index :regexes, :regexable_id
+    add_index :regexes, :regexable_type
     execute 'ALTER TABLE regexes ADD PRIMARY KEY(id)'
   end
 

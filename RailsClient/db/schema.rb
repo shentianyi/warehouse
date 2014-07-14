@@ -93,8 +93,6 @@ ActiveRecord::Schema.define(version: 20140714101037) do
     t.string   "tel"
     t.boolean  "is_base",                   default: false
     t.string   "destination_id"
-    t.string   "prefix",                    default: "-1"
-    t.string   "suffix",                    default: "-1"
   end
 
   add_index "locations", ["destination_id"], name: "index_locations_on_destination_id", using: :btree
@@ -193,7 +191,8 @@ ActiveRecord::Schema.define(version: 20140714101037) do
     t.integer  "suffix_length",  default: 0
     t.integer  "suffix_string"
     t.string   "regex_string",   default: ""
-    t.string   "location_id"
+    t.string   "regexable_id"
+    t.string   "regexable_type"
     t.boolean  "is_sys_default", default: false
     t.boolean  "is_delete",      default: false
     t.boolean  "is_dirty",       default: true
@@ -203,7 +202,8 @@ ActiveRecord::Schema.define(version: 20140714101037) do
   end
 
   add_index "regexes", ["id"], name: "index_regexes_on_id", using: :btree
-  add_index "regexes", ["location_id"], name: "index_regexes_on_location_id", using: :btree
+  add_index "regexes", ["regexable_id"], name: "index_regexes_on_regexable_id", using: :btree
+  add_index "regexes", ["regexable_type"], name: "index_regexes_on_regexable_type", using: :btree
 
   create_table "state_logs", force: true do |t|
     t.string   "stateable_id"
