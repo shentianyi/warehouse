@@ -5,7 +5,8 @@ class PartsController < ApplicationController
   # GET /parts
   # GET /parts.json
   def index
-    @parts = Part.all
+    @parts = Part.paginate(:page=>params[:page])#.all
+    #@parts = @parts.paginate(:page=>params[:page])
   end
 
   # GET /parts/1
@@ -32,7 +33,7 @@ class PartsController < ApplicationController
 
     respond_to do |format|
       if @part.save
-        format.html { redirect_to @part, notice: 'Part was successfully created.' }
+        format.html { redirect_to @part, notice: '零件创建成功' }
         format.json { render :show, status: :created, location: @part }
       else
         format.html { render :new }
@@ -46,7 +47,7 @@ class PartsController < ApplicationController
   def update
     respond_to do |format|
       if @part.update(part_params)
-        format.html { redirect_to @part, notice: 'Part was successfully updated.' }
+        format.html { redirect_to @part, notice: '零件更新成功.' }
         format.json { render :show, status: :ok, location: @part }
       else
         format.html { render :edit }
@@ -60,7 +61,7 @@ class PartsController < ApplicationController
   def destroy
     @part.destroy
     respond_to do |format|
-      format.html { redirect_to parts_url, notice: 'Part was successfully destroyed.' }
+      format.html { redirect_to parts_url, notice: '零件删除成功.' }
       format.json { head :no_content }
     end
   end

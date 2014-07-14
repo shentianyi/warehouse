@@ -1,50 +1,51 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <string>ID:</string>
+  <string>包装箱号:</string>
   <%= @package.id%>
 </p>
 
 <p>
-  <string>Part:</string>
+  <string>零件号:</string>
   <%= @package.part_id%>
 </p>
 
 <p>
-  <string>Quantity:</string>
+  <string>数 量:</string>
   <%= @package.quantity_str%>
 </p>
 
 <p>
-  <string>State:</string>
+  <string>状 态:</string>
   <%= PackageState.display(@package.state)%>
 </p>
 
 <p>
-  <string>Location:</string>
+  <string>地 点:</string>
   <%= @package.location_id %>
 </p>
 
 <p>
-  <string>Creator:</string>
+  <string>创建员工:</string>
   <%= @package.user_id%>
 </p>
 
 <p>
-  <string>Forklift:</string>
-  <%= link_to @package.forklift_id, @package.forklift%>
+  <string>所属托盘:</string>
+
+  <%= link_to @package.forklift_id, @package.forklift  if @package.forklift%>
 </p>
 
 <p>
-  <string>Check In Time:</string>
+  <string>入库时间:</string>
   <%= @package.check_in_time%>
 </p>
 
 <p>
-  <string>Position:</string>
+  <string>库位:</string>
   <%= @package.position.whouse.name + ' ' +@package.position.detail if @package.position%>
 </p>
 
 
-<%= link_to 'Edit', edit_package_path(@package) %> |
-<%= link_to 'Back', packages_path %>
+<%= link_to '编辑', edit_package_path(@package) %> |
+<%= link_to '返回', packages_path %>

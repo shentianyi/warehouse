@@ -7,18 +7,17 @@ module Sync
         item.is_dirty=false
         item
       }
-      site= init_site(self::POST_URL+'/delete')
+      site= init_site(url+'/delete')
       response=site.post({main_key => items.to_json})
       if response.code==201
         yield(items, JSON.parse(response)) if block_given?
       end
     end
 
-    def self.pull_block
+    def self.get_block
       super
       Proc.new do |items|
         items.each do |item|
-          puts item
           unless ori=model.unscoped.where(model.fk_condition(item)).first
             ori=model.new(item)
             ori.is_new=false

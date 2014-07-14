@@ -1,0 +1,41 @@
+<h1>Listing regexes</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Code</th>
+      <th>Prefix length</th>
+      <th>Prefix string</th>
+      <th>Type</th>
+      <th>Suffix length</th>
+      <th>Suffix string</th>
+      <th>Regex string</th>
+      <th>Localtion</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @regexes.each do |regex| %>
+      <tr>
+        <td><%= regex.name %></td>
+        <td><%= regex.code %></td>
+        <td><%= regex.prefix_length %></td>
+        <td><%= regex.prefix_string %></td>
+        <td><%= regex.type %></td>
+        <td><%= regex.suffix_length %></td>
+        <td><%= regex.suffix_string %></td>
+        <td><%= regex.regex_string %></td>
+        <td><%= regex.localtion %></td>
+        <td><%= link_to 'Show', regex %></td>
+        <td><%= link_to 'Edit', edit_regex_path(regex) %></td>
+        <td><%= link_to 'Destroy', regex, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Regex', new_regex_path %>

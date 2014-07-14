@@ -10,17 +10,23 @@ module V1
       end
     end
 
-    #
     #******
     #need to add conditions for search
     #******
     # binded but not add to forklift packages
+    # no need to show position
     get :binds do
-      packages = PackageService.avaliable_to_bind
+      args = {
+          forklift_id: nil
+      }
+      unless params.has_key?(:all)
+        args[:user_id]=current_user.id
+      end
+      packages = PackageService.search(args)
       data = []
       presenters = PackagePresenter.init_presenters(packages)
       presenters.each do |p|
-        data<<p.to_json
+        data<<p.to_json_simple
       end
       data
     end
@@ -29,19 +35,19 @@ module V1
     post :validate do
       result = PackageService.valid_id?(params[:id])
       if result
-        {result:1, content: '唯一号可用'}
+        {result:1, content: ''}
       else
-        {result:0, content: '唯一号不可用!'}
+        {result:0, content: PackageMessage::IdNotValid}
       end
     end
 
     # validate quantity string
     post :validate_quantity do
-      result = PackageService.valid_quantity?(params[:id])
+      result = PackageService.quantity_string_valid?(params[:id])
       if result
-        {result:1, content: '包裝箱數量格式正確'}
+        {result:1, content:''}
       else
-        {result:0, content: '包裝箱數量格式錯誤!'}
+        {result:0, content: PackageMessage::QuantityStringError}
       end
     end
 
@@ -49,10 +55,10 @@ module V1
     # if find deleted then update(take care of foreign keys)
     # else create new
     post do
-      # every package has a uniq id,id should not be exits
+      # every package has a uniq id,id should not exited
       m = PackageService.create package_params,current_user
       if m.result
-        {result:1,content:PackagePresenter.new(m.object).to_json}
+        {result:1,content:PackagePresenter.new(m.object).to_json_simple}
       else
         {result:0,content:m.content}
       end
@@ -60,54 +66,42 @@ module V1
 
     # update package
     put do
-      if p = PackageService.exits?(package_params[:id])
-        if PackageService.update(p,package_params)
-          {result:1,content:'修改成功!'}
-        else
-          {result:0,content:'修改失败!'}
-        end
+      msg = PackageService.update(package_params)
+      if msg.result
+        {result:1,content:PackagePresenter.new(msg.object).to_json}
       else
-        {result:0,content:'包装箱不存在!'}
+        {result:0,content:msg.content}
       end
     end
 
     # delete package
     # update is_delete to true
     delete do
-      if p = PackageService.exits?(params[:id])
-        if PackageService.delete(p)
-          {result:1,content:'删除成功'}
-        else
-          {result:0,content:'删除失败'}
-        end
+      msg = PackageService.delete(params[:id])
+      if msg.result
+        {result:1,content:PackageMessage::DeleteSuccess}
       else
-        {result:0,content:'包装箱不存在!'}
+        {result:0,content:msg.content}
       end
     end
 
     # check package
     post :check do
-      if p = PackageService.exits?(params[:id])
-        if PackageService.check(p)
-          {result:1,content:'检查成功'}
-        else
-          {result:0,content:'检查失敗'}
-        end
+      msg = PackageService.check(params[:id])
+      if msg.result
+        {result:1,content:msg.content}
       else
-        {result:0,content:'包装箱不存在!'}
+        {result:0,content:msg.content}
       end
     end
 
     # uncheck package
     post :uncheck do
-      if p = PackageService.exits?(params[:id])
-        if PackageService.uncheck(p)
-          {result:1,content:'取消检查成功'}
-        else
-          {result:0,content:'取消检查失敗'}
-        end
+      msg = PackageService.uncheck(params[:id])
+      if msg.result
+        {result:1,content:msg.content}
       else
-        {result:0,content:'包装箱不存在!'}
+        {result:0,content:msg.content}
       end
     end
   end

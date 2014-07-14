@@ -56,3 +56,6 @@ end
 gem 'whenever'
 gem 'rest_client'
 gem 'oauth'
+
+#
+gem 'will_paginate', '~> 3.0'

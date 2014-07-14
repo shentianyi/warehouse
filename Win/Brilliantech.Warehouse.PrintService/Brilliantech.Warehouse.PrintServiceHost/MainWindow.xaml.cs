@@ -67,6 +67,11 @@ namespace Brilliantech.Warehouse.PrintServiceHost
         }
 
 
+        private void SetServerBtn_Click(object sender, RoutedEventArgs e)
+        {
+            new ServerSetting().ShowDialog();
+        } 
+
         private System.Windows.Forms.NotifyIcon notifyIcon = null;
         private void initNotifyIcon()
         {
@@ -133,6 +138,6 @@ namespace Brilliantech.Warehouse.PrintServiceHost
         {
             this.Visibility = Visibility.Hidden;
             e.Cancel = true;
-        } 
+        }
     }
 }

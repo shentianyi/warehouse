@@ -1,34 +1,40 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <string>ID:</string>
+  <string>编 号:</string>
   <%= @location.id%>
 </p>
 
 <p>
-  <string>Name:</string>
+  <string>名 称:</string>
   <%= @location.name%>
 </p>
 
 <p>
-  <string>Address:</string>
+  <string>地 址:</string>
   <%= @location.address%>
 </p>
 
 <p>
-  <string>Telephone:</string>
+  <string>联系方式:</string>
   <%= @location.tel%>
 </p>
 
 <p>
-  <string>Destination:</string>
+  <string>目的地:</string>
   <%= @location.destination.name if @location.destination%>
 </p>
 
 <p>
-  <string>Is Base?:</string>
-  <%= @location.is_base%>
+  <string>零件号检查前缀:</string>
+  <%= @location.prefix%>
 </p>
 
-<%= link_to 'Edit', edit_location_path(@location) %> |
-<%= link_to 'Back', locations_path %>
+<p>
+  <string>零件号检查后缀:</string>
+  <%= @location.suffix%>
+</p>
+
+
+<%= link_to '编辑', edit_location_path(@location) %> |
+<%= link_to '返回', locations_path %>

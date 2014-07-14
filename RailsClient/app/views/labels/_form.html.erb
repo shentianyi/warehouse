@@ -1,0 +1,44 @@
+<script type="text/javascript">
+    $(function () {
+        data_upload("#item-data-uploader", false, function (data) {
+            if (data.result) {
+                $("#file").val(JSON.stringify(data.content));
+                $("#item-data-uploader-preview > span[info]").html("文件上传成功");
+            } else {
+                $("#file").val('');
+            }
+        });
+    });
+    function submitForm() {
+        if ($("#file").val().length > 0)
+            document.forms[0].submit();
+        else
+            alert('请上传文件');
+    }
+</script>
+<div>
+  <span>上传配置文件：</span>
+  <input id="item-data-uploader" type="file" name="files[]" data-url="/labels/upload_file">
+  <div class="abstractblock" id="item-data-uploader-preview" style="display:none;"></div>
+</div>
+
+<%= form_for(@label, url: '/labels') do |f| %>
+    <% if @label.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@label.errors.count, "error") %> prohibited this label from being saved:</h2>
+          <ul>
+            <% @label.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+    <p>
+      <%= f.label :type,'类 型' %>
+      <%= f.select(:type, options_from_collection_for_select(@types, 'value', 'display')) %>
+    </p>
+    <input type="hidden" id="file" name="file">
+    <input type="button" value="创建配置" onclick="submitForm();" class='btn btn-primary btn-lg'/>
+<% end %>
+
+

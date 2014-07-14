@@ -1,5 +1,6 @@
-$SYNC_HOST = 'http://192.168.1.109:3000'
-$OPEN_SYN_LOCK= false
+#$SYNC_HOST = 'http://www.cz-tek.com:9000'
+#$OPEN_SYN_LOCK= false
+$NEED_PING= false
 
 config=YAML.load(File.open("#{Rails.root}/config/config.yaml"))
 # load format
@@ -25,3 +26,5 @@ $REG_PACKAGE_QUANTITY = /^Q? ?\d*\.?\d*$/
 # api default auth user and password
 auth=config['api']['auth']
 $API_AUTH_USER={user: auth['user'], passwd: auth['passwd']}
+
+WillPaginate.per_page = 10

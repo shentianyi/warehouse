@@ -2,11 +2,11 @@ class Role
 	RoleMethods=[:admin?,:manager?,:sender?,:receiver?]
 
 	@@roles={
-		:'100' => {:name => 'admin', :display => 'Admin'},
-		:'200' => {:name => 'manager', :display => 'Manager'},
-		:'300' => {:name => 'sender', :display => 'Sender'},
-		:'400' => {:name => 'receiver', :display => 'Receiver'},
-		:'500' => {:name => 'receiver', :display => 'Stocker'}
+		:'100' => {:name => 'admin', :display => (I18n.t 'system.role.admin')},
+		:'200' => {:name => 'manager', :display => (I18n.t 'system.role.manager')},
+		:'300' => {:name => 'sender', :display => (I18n.t 'system.role.sender')},
+		:'400' => {:name => 'receiver', :display => (I18n.t 'system.role.receiver')},
+		:'500' => {:name => 'stocker', :display => (I18n.t 'system.role.stocker')}
 	}
 
 	class<<self

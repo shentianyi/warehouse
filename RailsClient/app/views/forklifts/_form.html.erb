@@ -2,7 +2,6 @@
   <% if @forklift.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@forklift.errors.count, "error") %> prohibited this forklift from being saved:</h2>
-
       <ul>
       <% @forklift.errors.full_messages.each do |message| %>
         <li><%= message %></li>
@@ -11,14 +10,14 @@
     </div>
   <% end %>
     <p>
+      <%= f.label :state,'状 态'%>
       <%=  f.select(:state,ForkliftState.state,{include_blank: false})%>
     </p>
-
     <p>
-      <%= f.label :remark%>
+      <%= f.label :remark,'备 注'%>
       <%= f.text_field :remark%>
     </p>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit value: '提 交', class: 'btn btn-primary btn-lg' %>
   </div>
 <% end %>

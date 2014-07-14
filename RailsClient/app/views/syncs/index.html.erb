@@ -1,0 +1,103 @@
+<h2>同步配置</h2>
+<p>同步每5分钟后台自动执行</p>
+<form action='/syncs/reload' method='post'>
+  <input type='submit' value='重新从配置文件载入' class='btn btn-primary'/>
+</form>
+<div class="config-panel">
+  <div>
+    <p class="bg-primary">
+      <span class='config-title'>基本配置</span>
+    </p>
+    <table class="table table-striped globle-table table-hover">
+      <tr>
+        <td><span>同步服务地址</span></td>
+        <td><span><input type="text" value="<%= @host %>" id="host"/></span></td>
+        <td><span>用于数据通信的总服务器服务地址</span></td>
+      </tr>
+      <tr>
+        <td><span>权限控制键(AccessToken)</span></td>
+        <td><span><input type="text" value="<%= @token %>" id='token'/></span></td>
+        <td><span>用于访问同步服务权限验证</span></td>
+      </tr>
+      <tr>
+        <td><span>是否开启同步锁</span></td>
+        <td><span><%= check_box_tag :sync_lock, @sync_lock, @sync_lock %></span></td>
+        <td><span>用于限制同一时间只有一个客户端进行同步(只有总同步服务需要设置)</span></td>
+      </tr>
+      <tr>
+        <td><span>是否开启同步</span></td>
+        <td><span>
+          <%= check_box_tag :enabled, @enabled, @enabled %>
+        </span></td>
+        <td><span>用于开启/关闭客户端同步</span></td>
+      </tr>
+      <tr>
+        <td><span>同步提前时间(秒)</span></td>
+        <td><span><input type="text" value="<%= @advance_second %>" id='advance_second'/></span></td>
+        <td><span>用于降低同步数据由于时间差造成的丢失</span></td>
+      </tr>
+      <tr>
+        <td><span>每次请求发送数据量</span></td>
+        <td><span><input type="text" value="<%= @per_request_size %>" id='per_request_size'/></span></td>
+        <td><span>数据量以条为计量单位</span></td>
+      </tr>
+      <tr>
+        <td colspan="3">
+          <input type='button' value='保存基本配置' class='btn btn-primary' onclick="save_base_config('basic');"/>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div>
+    <p class="bg-primary">
+      <span class='config-title'>同步信息</span>
+    </p>
+    <table class="table table-striped globle-table table-hover">
+      <tr>
+        <td><span>上次同步时间</span></td>
+        <td><span><input type="text" value="<%= @last_time %>" id='last_time'/></span></td>
+        <td><span>上一次同步时间</span></td>
+      </tr>
+      <tr>
+        <td colspan="3"><span>
+          <input type="button" value="手动同步(可先更改上次同步时间)" class='btn btn-primary' onclick="save_base_config('sync');"/>
+        </span></td>
+      </tr>
+    </table>
+  </div>
+  <div>
+    <p class="bg-primary">
+      <span class='config-title'>同步器配置</span>
+    </p>
+    <table class="table table-striped globle-table table-hover">
+      <tr>
+        <td><span>同步器名称</span></td>
+        <td><span>同步动作</span></td>
+      </tr>
+      <% @executors.each_with_index do |ex, i| %>
+          <tr>
+            <td><span><label class='exe_key' key='<%= ex.key %>'><%= ex.name %></label></span></td>
+            <td><span>
+               <%= check_box_tag :get, ex.get, ex.get, id: "#{ex.key}-get" %> GET
+            </span>
+              <span>
+               <%= check_box_tag :post, ex.post, ex.post, id: "#{ex.key}-post" %> POST
+            </span>
+              <span>
+               <%= check_box_tag :put, ex.put, ex.put, id: "#{ex.key}-put" %> PUT
+            </span>
+              <span>
+               <%= check_box_tag :delete, ex.delete, ex.delete, id: "#{ex.key}-delete" %> DELETE
+            </span>
+            </td>
+          </tr>
+      <% end if @executors %>
+      <tr>
+        <td colspan="2"><span>
+          <input type="button" value="保存同步器配置" class='btn btn-primary' onclick="save_base_config('exe');"/>
+        </span></td>
+      </tr>
+    </table>
+  </div>
+</div>
+<%= render :partial => "shared/handling_msg_box", :locals => {:handlemsg => "处理中..."} %>

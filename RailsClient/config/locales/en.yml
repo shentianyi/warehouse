@@ -21,3 +21,10 @@
 
 en:
   hello: "Hello world"
+  system:
+    role:
+      admin: 'Administrator'
+      manager: 'Manager'
+      receiver: 'Receiver'
+      sender: 'Sender'
+      stocker: 'Stocker'

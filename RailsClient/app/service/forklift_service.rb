@@ -1,23 +1,89 @@
 class ForkliftService
+
+  def self.create args, current_usr=nil
+    msg = Message.new
+    msg.result = false
+    unless whouse_exits? args[:whouse_id]
+      msg.content = ForkliftMessage::WarehouseNotExit
+      return msg
+    end
+
+    if current_usr
+      args[:user_id] = current_usr.id
+    end
+
+    forklift = Forklift.new(args)
+
+    if forklift.save
+      msg.result = true
+      msg.object = forklift
+    else
+      msg.content = forklift.errors.full_messages
+    end
+    return msg
+  end
+
+  #=============
+  #delete @forklift
+  #=============
   def self.delete forklift
+    ActiveRecord::Base.transaction do
+      forklift.packages.all.each do |p|
+        p.remove_from_forklift
+      end
+      forklift.destroy
+    end
+  end
+
+  #=============
+  # update @forklift,@args
+  #=============
+  def self.update forklift, args
     if forklift.nil?
       return false
     end
 
-    forklift.packages.all.each do |p|
-      p.remove_from_forklift
+    update_position = false
+    if args[:whouse_id] && args[:whouse_id] != forklift.whouse_id
+      update_position = true
     end
-    forklift.destroy
+
+
+    if forklift.update_attributes(args)
+      if update_position
+        forklift.packages.each do |p|
+          if pp = PartPosition.joins(:position).where({part_positions: {part_id: p.part_id}, positions: {whouse_id: args[:whouse_id]}}).first
+            #puts p.package_position.to_json
+            p.package_position.position_id = pp.position_id
+            p.package_position.save
+          end
+        end
+      end
+      true
+    else
+      false
+    end
   end
 
+  #=============
+  # confirm_received @forklift
+  # set state to RECEIVED
+  #=============
   def self.confirm_received(forklift)
     if forklift.nil?
       return false
     end
-
-    forklift.set_state(ForkliftState::RECEIVED)
+    if forklift.sum_packages > forklift.accepted_packages
+      forklift.set_state(ForkliftState::PART_RECEIVED)
+    else
+      forklift.set_state(ForkliftState::RECEIVED)
+    end
   end
 
+  #=============
+  # receive @forklift
+  # set state to DESTINATION
+  #=============
   def self.receive(forklift)
     if forklift.nil?
       return false
@@ -30,6 +96,10 @@ class ForkliftService
     true
   end
 
+  #=============
+  # send @forklfit
+  # set state to WAY
+  #=============
   def self.send(forklift)
     if forklift.nil?
       return false
@@ -42,6 +112,10 @@ class ForkliftService
     true
   end
 
+  #=============
+  # check @forklift
+  # set state to RECEIVED
+  #=============
   def self.check forklift
     if forklift.nil?
       return false
@@ -51,62 +125,64 @@ class ForkliftService
     else
       return true
     end
-
-=begin
-    if forklift.set_state(ForkliftState::RECEIVED)
-      forklift.packages.each do |p|
-        p.set_state(PackageState::RECEIVED)
-      end
-    else
-      return false
-    end
-=end
   end
 
-  def self.update forklift,args
-    if forklift.nil?
-      return  false
-    end
-    forklift.update_attributes(args)
-  end
-
-  def self.avaliable_to_bind
-    Forklift.where('delivery_id is NULL').all.order(:created_at)
-  end
-
+  #=============
+  #add_package @forklift,@package
+  #add forklift to package
+  #=============
   def self.add_package forklift, package
-    if forklift.nil? || package.nil?
-      return false
-    end
-
-    if package.forklift.nil?
+    if package.forklift_id.nil?
       return package.add_to_forklift forklift
     else
       false
     end
   end
 
-  def self.set_state(forklift,state)
+  #=============
+  #set_state @forklift,@state
+  #set forklift to a specific state
+  #=============
+  def self.set_state(forklift, state)
     if forklift.nil?
       return false
     end
     ActiveRecord::Base.transaction do
       if forklift.set_state(state)
         forklift.packages.each do |p|
-          PackageService.set_state(p,state)
+          PackageService.set_state(p, state)
         end
       end
     end
   end
 
-  def self.remove_package package
-    if package.nil?
-      return false
-    end
-    package.remove_from_forklift
-  end
-
+  #=============
+  #exits? @id
+  #determine if a forklift exits
+  #=============
   def self.exits? id
     Forklift.find_by_id(id)
+  end
+
+  def self.package_checked(id)
+    if f = Forklift.find_by_id(id)
+      f.accepted_packages = f.accepted_packages + 1
+      f.save
+    end
+  end
+
+  def self.package_unchecked(id)
+    if f = Forklift.find_by_id(id)
+      f.accepted_packages = f.accepted_packages - 1
+      f.save
+    end
+  end
+
+  def self.search(args)
+    Forklift.where(args).order(id: :desc)
+  end
+
+  def self.whouse_exits?(whouse_id)
+    !Whouse.find_by_id(whouse_id).nil?
   end
 end

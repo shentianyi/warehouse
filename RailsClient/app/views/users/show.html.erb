@@ -1,12 +1,12 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <string>ID:</string>
+  <string>员工号:</string>
   <%= @user.id%>
 </p>
 
 <p>
-  <string>Name:</string>
+  <string>姓 名:</string>
   <%= @user.name%>
 </p>
 
@@ -16,23 +16,23 @@
 </p>
 
 <p>
-  <string>Location:</string>
+  <string>地 点:</string>
   <%= @user.location.name if @user.location%>
 </p>
 
 <p>
-  <string>Role:</string>
+  <string>角 色:</string>
   <%= @user.role%>
 </p>
 
 <p>
-  <string>Email:</string>
+  <string>邮 箱:</string>
   <%= @user.email%>
 </p>
 <p>
-  <string>Tel:</string>
+  <string>电 话:</string>
   <%= @user.tel%>
 </p>
 
-<%= link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'Back', users_path %>
+<%= link_to '编辑', edit_user_path(@user) %> |
+<%= link_to '返回', users_path %>

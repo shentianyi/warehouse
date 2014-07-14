@@ -10,6 +10,8 @@
 
 #create Admin User
 ActiveRecord::Base.transaction do
-  l = Location.create({id:'Basic',name:'Basic Location',is_base:true})
-  user = User.create({id:'admin',name:'Admin',location_id:l.id,password:'123456@',password_confirmation:'123456@',role_id:100,is_sys:true})
+  l = Location.create({id: 'Basic', name: 'Basic Location', is_base: true}) unless (l=Location.find('Basic'))
+  unless user=User.find('admin')
+    user = User.create({id: 'admin', name: 'Admin', location_id: l.id, password: '123456@', password_confirmation: '123456@', role_id: 100, is_sys: true})
+  end
 end

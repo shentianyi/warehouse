@@ -1,0 +1,18 @@
+zh:
+  activerecord:
+    models:
+      user: '员工'
+      location: '地点'
+      whouse: '仓库'
+      position: '库位'
+      part: '零件'
+      delivery: '运单'
+      forklift: '托盘'
+      package: '包装箱'
+  system:
+    role:
+      admin: '管理员'
+      manager: '管理者'
+      receiver: '接收员'
+      sender: '发送员'
+      stocker: '备货员'

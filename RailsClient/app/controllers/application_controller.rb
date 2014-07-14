@@ -15,12 +15,21 @@ class ApplicationController < ActionController::Base
   # see https://github.com/ryanb/cancan/issues/835
   #============
   before_filter do
-    resource = controller_name.singularize.to_sym
-    method = "#{resource}_params"
-    params[resource] &&= send(method) if respond_to?(method, true)
+    unless ['syncs'].include?(controller_name)
+      resource = controller_name.singularize.to_sym
+      method = "#{resource}_params"
+      unless ['search'].include?(action_name)
+        params[resource] &&= send(method) if respond_to?(method, true)
+      end
+    end
   end
 
   layout :layout_by_resource
+
+  # Overwriting the sign_out redirect path method
+  def after_sign_out_path_for(resource_or_scope)
+    new_user_session_path
+  end
 
   protected
 
