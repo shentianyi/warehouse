@@ -43,7 +43,7 @@ module V1
 
     # validate quantity string
     post :validate_quantity do
-      result = PackageService.quantity_string_valid?(params[:id])
+      result = true #PackageService.quantity_string_valid?(params[:id])
       if result
         {result:1, content:''}
       else
