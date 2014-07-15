@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :regexes
+
 
   mount ApplicationAPI => '/api'
   root :to => "welcome#index"
@@ -62,6 +62,12 @@ Rails.application.routes.draw do
   resources :syncs do
     collection do
       post :reload
+    end
+  end
+
+  resources :regexes   do
+    collection do
+      post :save
     end
   end
   # The priority is based upon order of creation: first created -> highest priority.

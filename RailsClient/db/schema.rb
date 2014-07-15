@@ -93,6 +93,8 @@ ActiveRecord::Schema.define(version: 20140714101037) do
     t.string   "tel"
     t.boolean  "is_base",                   default: false
     t.string   "destination_id"
+    t.string   "prefix",                    default: "-1"
+    t.string   "suffix",                    default: "-1"
   end
 
   add_index "locations", ["destination_id"], name: "index_locations_on_destination_id", using: :btree

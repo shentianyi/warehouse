@@ -18,10 +18,6 @@ $USERPATH=path_config[:import_users_file_path]
 $PARTSPATH=path_config[:import_parts_file_path]
 $PARTPOSITIONSPATH=path_config[:import_part_positions_file_path]
 
-#用於匹配唯一嗎和零件數量的正則表達式
-$REG_PACKAGE_ID = /^WI\d*$/
-$FILTER_PACKAGE_QUANTITY =/\d+(?:\.\d+)?/
-$REG_PACKAGE_QUANTITY = /^Q? ?\d*\.?\d*$/
 
 # api default auth user and password
 auth=config['api']['auth']

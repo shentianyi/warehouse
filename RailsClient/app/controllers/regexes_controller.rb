@@ -4,7 +4,7 @@ class RegexesController < ApplicationController
   # GET /regexes
   # GET /regexes.json
   def index
-    @package_label_regexes = Regex.where(type:RegexType::PACKAGE_LABEL).all
+    @package_label_regexes = Regex.where(type: RegexType::PACKAGE_LABEL).all
   end
 
   # GET /regexes/1
@@ -61,14 +61,29 @@ class RegexesController < ApplicationController
     end
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_regex
-      @regex = Regex.find(params[:id])
-    end
+  def save
+    puts params[:type].class
+    puts params[:regexes]
+    @type=params[:type].to_i
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def regex_params
-      params.require(:regex).permit(:name, :code, :prefix_length, :prefix_string, :type, :suffix_length, :suffix_string, :regex_string, :localtion_id)
+    if @type==RegexType::PACKAGE_LABEL
+      params[:regexes].each do |i, regex|
+        if r=Regex.find_by_id(regex[:id])
+          r.update_attributes(regex.except(:id))
+        end
+      end
     end
+    render json: true
+  end
+
+  private
+  # Use callbacks to share common setup or constraints between actions.
+  def set_regex
+    @regex = Regex.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def regex_params
+    params.require(:regex).permit(:name, :code, :prefix_length, :prefix_string, :type, :suffix_length, :suffix_string, :regex_string, :localtion_id)
+  end
 end

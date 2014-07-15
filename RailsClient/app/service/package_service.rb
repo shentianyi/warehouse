@@ -26,12 +26,6 @@ class PackageService
       return msg
     end
 
-    #if exited
-    unless quantity_string_valid?(args[:quantity_str])
-      msg.content = PackageMessage::QuantityStringError
-      return msg
-    end
-
     #current_user
     unless args.has_key?(:user_id)
       args[:user_id] = current_user.id
@@ -39,7 +33,7 @@ class PackageService
     end
 
     #create
-    args[:quantity] = filt_quantity(args[:quantity_str]).to_f
+
     p = Package.new(args)
     if p.save
       msg.result = true
@@ -98,12 +92,6 @@ class PackageService
     end
 
 
-    if args[:quantity_str] && quantity_string_valid?(args[:quantity_str])
-      args[:quantity] = PackageService.filt_quantity(args[:quantity_str])
-    else
-      msg.content = PackageMessage::QuantityStringError
-      return msg
-    end
 
     need_set_position = false
     if args[:part_id] && package.part_id != args[:part_id]
@@ -233,7 +221,7 @@ class PackageService
 #validate package id's format
 #=============
   def self.valid_id?(id)
-    if id && id =~ $REG_PACKAGE_ID
+    if id
       Package.unscoped.where(id: id).first.nil?
     else
       false
@@ -244,20 +232,10 @@ class PackageService
 #filt_quantity? @quantity_str
 #filt quantity_str
 #=============
-  def self.filt_quantity(quantity_str)
-    quantity_str[$FILTER_PACKAGE_QUANTITY]
-  end
 
   def self.part_exit?(part_id)
     !Part.find_by_id(part_id).nil?
   end
 
-  def self.quantity_string_valid?(quantity_string)
-    if quantity_string =~ $REG_PACKAGE_QUANTITY
-      true
-    else
-      false
-    end
-  end
 
 end
