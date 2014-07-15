@@ -4,7 +4,7 @@ class RegexesController < ApplicationController
   # GET /regexes
   # GET /regexes.json
   def index
-    @package_label_regexes = Regex.where(type: RegexType::PACKAGE_LABEL).all
+    @package_label_regexes = Regex.where(type: RegexType::PACKAGE_LABEL).order('code').all
   end
 
   # GET /regexes/1
@@ -69,7 +69,7 @@ class RegexesController < ApplicationController
     if @type==RegexType::PACKAGE_LABEL
       params[:regexes].each do |i, regex|
         if r=Regex.find_by_id(regex[:id])
-          r.update_attributes(regex.except(:id))
+          r.update(regex.except(:id))
         end
       end
     end

@@ -22,18 +22,21 @@ ActiveRecord::Base.transaction do
     Regex.create(name: '唯一码', code: 'UNIQ', prefix_string: 'WI', regex_string: '^WI\d*$', type: RegexType::PACKAGE_LABEL)
   end
   unless Regex.where(code: 'PART', type: RegexType::PACKAGE_LABEL).first
-    Regex.create(name: '零件号', code: 'PART', prefix_string: 'P', regex_string: '^P', type: RegexType::PACKAGE_LABEL)
+    Regex.create(name: '零件号', code: 'PART', prefix_string: 'P', regex_string: '^P\w+', type: RegexType::PACKAGE_LABEL)
   end
-  unless Regex.where(code: 'PART_TRIM', type: RegexType::PACKAGE_LABEL).first
-    Regex.create(name: '零件号截断', code: 'PART_TRIM',   regex_string: '^P', type: RegexType::PACKAGE_LABEL)
-  end
+  #unless Regex.where(code: 'PART_TRIM', type: RegexType::PACKAGE_LABEL).first
+  #  Regex.create(name: '零件号截断', code: 'PART_TRIM',   regex_string: '^P', type: RegexType::PACKAGE_LABEL)
+  #end
   unless Regex.where(code: 'QUANTITY', type: RegexType::PACKAGE_LABEL).first
-    Regex.create(name: '数量', code: 'QUANTITY', prefix_string: 'Q', regex_string: '^Q? ?\d*\.?\d*$', type: RegexType::PACKAGE_LABEL)
+    Regex.create(name: '数量', code: 'QUANTITY', prefix_string: 'Q', regex_string: '^Q\d+\.?\d*$', type: RegexType::PACKAGE_LABEL)
   end
-  unless Regex.where(code: 'QUANTITY_TRIM', type: RegexType::PACKAGE_LABEL).first
-    Regex.create(name: '数量截断', code: 'QUANTITY_TRIM',regex_string: '\d+(?:\.\d+)?', type: RegexType::PACKAGE_LABEL)
-  end
+  #unless Regex.where(code: 'QUANTITY_TRIM', type: RegexType::PACKAGE_LABEL).first
+  #  Regex.create(name: '数量截断', code: 'QUANTITY_TRIM',regex_string: '^Q', type: RegexType::PACKAGE_LABEL)
+  #end
   unless Regex.where(code: 'DATE', type: RegexType::PACKAGE_LABEL).first
-    Regex.create(name: '入库时间', code: 'DATE', prefix_string: 'W', regex_string: '^W', type: RegexType::PACKAGE_LABEL)
+    Regex.create(name: '入库时间', code: 'DATE', prefix_string: 'W  ', regex_string: '^W\s*\S+',remark:'W后有两个空格，请认真检测标签', type: RegexType::PACKAGE_LABEL)
   end
+  #unless Regex.where(code: 'DATE_TRIM', type: RegexType::PACKAGE_LABEL).first
+  #  Regex.create(name: '入库时间截断', code: 'DATE_TRIM',  regex_string: '^W', type: RegexType::PACKAGE_LABEL)
+  #end
 end

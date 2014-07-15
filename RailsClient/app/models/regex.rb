@@ -3,7 +3,7 @@ class Regex < ActiveRecord::Base
   include Extensions::UUID
   belongs_to :regexable, polymorphic: true
 
-  after_save :count_fix_length
+  before_save :count_fix_length
 
   def count_fix_length
     self.prefix_length=self.prefix_string.length unless self.prefix_string.nil?

@@ -12,6 +12,7 @@ class CreateRegexes < ActiveRecord::Migration
       t.string :regex_string, :default => ''
       t.string :regexable_id
       t.string :regexable_type
+      t.string :remark
       t.boolean :is_sys_default,:default=>false
       #
       t.boolean :is_delete, :default => false

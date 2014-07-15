@@ -54,6 +54,7 @@ function save_regex(type) {
             regex.prefix_string = $(this).find('.prefix_string').val();
             regex.suffix_string = $(this).find('.suffix_string').val();
             regex.regex_string = $(this).find('.regex_string').val();
+            regex.remark = $(this).find('.remark').val();
             regexes.push(regex);
         });
         $.post('/regexes/save', {type: type, regexes: regexes}, function (data) {

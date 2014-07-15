@@ -33,7 +33,7 @@ class PackageService
     end
 
     #create
-
+    args[:quantity]=args[:quantity_str]
     p = Package.new(args)
     if p.save
       msg.result = true
@@ -90,7 +90,6 @@ class PackageService
       msg.content = PackageMessage::PartNotExit
       return msg
     end
-
 
 
     need_set_position = false
