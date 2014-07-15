@@ -24,8 +24,14 @@ ActiveRecord::Base.transaction do
   unless Regex.where(code: 'PART', type: RegexType::PACKAGE_LABEL).first
     Regex.create(name: '零件号', code: 'PART', prefix_string: 'P', regex_string: '^P', type: RegexType::PACKAGE_LABEL)
   end
+  unless Regex.where(code: 'PART_TRIM', type: RegexType::PACKAGE_LABEL).first
+    Regex.create(name: '零件号截断', code: 'PART_TRIM',   regex_string: '^P', type: RegexType::PACKAGE_LABEL)
+  end
   unless Regex.where(code: 'QUANTITY', type: RegexType::PACKAGE_LABEL).first
     Regex.create(name: '数量', code: 'QUANTITY', prefix_string: 'Q', regex_string: '^Q? ?\d*\.?\d*$', type: RegexType::PACKAGE_LABEL)
+  end
+  unless Regex.where(code: 'QUANTITY_TRIM', type: RegexType::PACKAGE_LABEL).first
+    Regex.create(name: '数量截断', code: 'QUANTITY_TRIM',regex_string: '\d+(?:\.\d+)?', type: RegexType::PACKAGE_LABEL)
   end
   unless Regex.where(code: 'DATE', type: RegexType::PACKAGE_LABEL).first
     Regex.create(name: '入库时间', code: 'DATE', prefix_string: 'W', regex_string: '^W', type: RegexType::PACKAGE_LABEL)

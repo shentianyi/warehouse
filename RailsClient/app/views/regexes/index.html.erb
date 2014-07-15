@@ -13,14 +13,19 @@
         <td>正则表达式</td>
       </tr>
       <% @package_label_regexes.each do |regex| %>
-          <tr <%=regex.id%>>
-            <td><input type="text" class="name" value="<%=regex.name %>"></td>
-            <td><input type="text" class="code" value="<%=regex.code %>"></td>
-            <td><input type="text" class="prefix_string" value="<%=regex.prefix_string %>"></td>
-            <td><input type="text" class="suffix_string" value="<%=regex.suffix_string %>"></td>
-            <td><input type="text" class="regex_string" value="<%=regex.regex_string %>"></td>
+          <tr id='<%= regex.id %>' class='package-label-regex'>
+            <td><input type="text" class="name" value="<%= regex.name %>" disabled="disabled"/></td>
+            <td><input type="text" class="code" value="<%= regex.code %>" disabled="disabled"/></td>
+            <td><input type="text" class="prefix_string" value="<%= regex.prefix_string %>"/></td>
+            <td><input type="text" class="suffix_string" value="<%= regex.suffix_string %>"/></td>
+            <td><input type="text" class="regex_string" value="<%= regex.regex_string %>"/></td>
           </tr>
       <% end %>
+      <tr>
+        <td colspan="5">
+          <input type="button" value="保 存" class='btn btn-primary btn-lg'  onclick="save_regex(<%=RegexType::PACKAGE_LABEL%>)"/>
+        </td>
+      </tr>
     </table>
   </div>
 </div>
