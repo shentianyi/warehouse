@@ -24,3 +24,5 @@ auth=config['api']['auth']
 $API_AUTH_USER={user: auth['user'], passwd: auth['passwd']}
 
 WillPaginate.per_page = 10
+
+Regex.initialize_cache

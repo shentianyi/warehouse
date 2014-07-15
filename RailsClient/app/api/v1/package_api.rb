@@ -56,7 +56,7 @@ module V1
     # else create new
     post do
       # every package has a uniq id,id should not exited
-      puts params
+      #puts params
       m = PackageService.create package_params,current_user
       if m.result
         {result:1,content:PackagePresenter.new(m.object).to_json_simple}
