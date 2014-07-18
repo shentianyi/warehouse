@@ -30,6 +30,6 @@ module Warehouse
     # config.i18n.default_locale = :de
     config.middleware.use ActionDispatch::Flash
     config.i18n.enforce_available_locales = false
-    config.cache_store = :memory_store
+    #config.cache_store = :memory_store
   end
 end
