@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
 
 
+  resources :part_types
+
   mount ApplicationAPI => '/api'
   root :to => "welcome#index"
 

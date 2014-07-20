@@ -15,8 +15,8 @@ class Regex < ActiveRecord::Base
   end
 
   def self.initialize_cache
-    RegexType.types.each do |type|
-      Rails.cache.write "regex_cache:#{type}:", RegexType.where(type: type).all
-    end
+    #RegexType.types.each do |type|
+    #  Rails.cache.write "regex_cache:#{type}:", RegexType.where(type: type).all
+    #end
   end
 end
