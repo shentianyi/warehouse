@@ -18,10 +18,10 @@ class PackagePresenter<Presenter
   def to_json
     {
         id: self.id,
-        quantity_str: self.quantity_str,
-        part_id:self.part_id,
+        quantity_str: PackageLabelRegex.quantity_prefix_string+self.quantity_str,
+        part_id:PackageLabelRegex.part_prefix_string+self.part_id,
         quantity:self.quantity,
-        check_in_time:self.check_in_time,
+        check_in_time:PackageLabelRegex.date_prefix_string+self.check_in_time,
         user_id:self.user_id,
         state:self.state,
         state_display:PackageState.display(self.state),
@@ -32,10 +32,10 @@ class PackagePresenter<Presenter
   def to_json_simple
     {
         id: self.id,
-        quantity_str: self.quantity_str,
-        part_id:self.part_id,
+        quantity_str: PackageLabelRegex.quantity_prefix_string+self.quantity_str,
+        part_id:PackageLabelRegex.part_prefix_string+self.part_id,
         quantity:self.quantity,
-        check_in_time:self.check_in_time,
+        check_in_time:PackageLabelRegex.date_prefix_string+self.check_in_time,
         user_id:self.user_id,
         state:self.state,
         state_display:'',

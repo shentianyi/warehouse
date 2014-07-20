@@ -124,25 +124,6 @@ GEM
     rake (10.3.2)
     rdoc (4.1.1)
       json (~> 1.4)
-    redis (3.0.7)
-    redis-actionpack (4.0.0)
-      actionpack (~> 4)
-      redis-rack (~> 1.5.0)
-      redis-store (~> 1.1.0)
-    redis-activesupport (4.0.0)
-      activesupport (~> 4)
-      redis-store (~> 1.1.0)
-    redis-namespace (1.4.1)
-      redis (~> 3.0.4)
-    redis-rack (1.5.0)
-      rack (~> 1.5)
-      redis-store (~> 1.1.0)
-    redis-rails (4.0.0)
-      redis-actionpack (~> 4)
-      redis-activesupport (~> 4)
-      redis-store (~> 1.1.0)
-    redis-store (1.1.4)
-      redis (>= 2.2)
     rest_client (1.7.3)
       netrc (~> 0.7.7)
     rspec-core (3.0.1)
@@ -220,9 +201,6 @@ DEPENDENCIES
   oauth
   rack-oauth2
   rails (= 4.1.0)
-  redis
-  redis-namespace
-  redis-rails
   rest_client
   rspec-rails
   sass-rails (~> 4.0.3)

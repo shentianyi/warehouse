@@ -59,6 +59,6 @@ gem 'oauth'
 gem 'will_paginate', '~> 3.0'
 
 # for cache
-gem 'redis'
-gem 'redis-rails'
-gem 'redis-namespace'
+#gem 'redis'
+#gem 'redis-rails'
+#gem 'redis-namespace'
