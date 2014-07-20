@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140720123422) do
+ActiveRecord::Schema.define(version: 20140720160044) do
 
   create_table "attachments", force: true do |t|
     t.string   "name"
@@ -140,16 +140,20 @@ ActiveRecord::Schema.define(version: 20140720123422) do
   create_table "part_positions", force: true do |t|
     t.string   "part_id"
     t.string   "position_id"
-    t.boolean  "is_delete",   default: false
-    t.boolean  "is_dirty",    default: true
-    t.boolean  "is_new",      default: true
+    t.boolean  "is_delete",       default: false
+    t.boolean  "is_dirty",        default: true
+    t.boolean  "is_new",          default: true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "sourceable_id"
+    t.string   "sourceable_type"
   end
 
   add_index "part_positions", ["id"], name: "index_part_positions_on_id", using: :btree
   add_index "part_positions", ["part_id"], name: "index_part_positions_on_part_id", using: :btree
   add_index "part_positions", ["position_id"], name: "index_part_positions_on_position_id", using: :btree
+  add_index "part_positions", ["sourceable_id"], name: "index_part_positions_on_sourceable_id", using: :btree
+  add_index "part_positions", ["sourceable_type"], name: "index_part_positions_on_sourceable_type", using: :btree
 
   create_table "part_types", force: true do |t|
     t.string   "name"
@@ -160,18 +164,20 @@ ActiveRecord::Schema.define(version: 20140720123422) do
   add_index "part_types", ["id"], name: "index_part_types_on_id", using: :btree
 
   create_table "parts", force: true do |t|
-    t.string   "uuid",        limit: 36,                 null: false
+    t.string   "uuid",         limit: 36,                 null: false
     t.string   "customernum"
     t.string   "user_id"
-    t.boolean  "is_delete",              default: false
-    t.boolean  "is_dirty",               default: true
-    t.boolean  "is_new",                 default: true
+    t.boolean  "is_delete",               default: false
+    t.boolean  "is_dirty",                default: true
+    t.boolean  "is_new",                  default: true
     t.datetime "created_at"
     t.datetime "updated_at"
     t.float    "unit_pack"
+    t.string   "part_type_id"
   end
 
   add_index "parts", ["id"], name: "index_parts_on_id", using: :btree
+  add_index "parts", ["part_type_id"], name: "index_parts_on_part_type_id", using: :btree
   add_index "parts", ["user_id"], name: "index_parts_on_user_id", using: :btree
   add_index "parts", ["uuid"], name: "index_parts_on_uuid", using: :btree
 

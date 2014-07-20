@@ -2,6 +2,7 @@ class Part < ActiveRecord::Base
   include Extensions::UUID
   include Import::PartCsv
   belongs_to :user
+  belongs_to :part_type
   has_many :part_positions, :dependent => :destroy
 
 
