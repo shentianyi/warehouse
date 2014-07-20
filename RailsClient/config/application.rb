@@ -30,5 +30,7 @@ module Warehouse
     # config.i18n.default_locale = :de
     config.middleware.use ActionDispatch::Flash
     I18n.enforce_available_locales = false
+    config.cache_store = :redis_store, $redis
+
   end
 end
