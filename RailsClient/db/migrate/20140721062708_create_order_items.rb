@@ -1,6 +1,6 @@
 class CreateOrderItems < ActiveRecord::Migration
   def change
-    create_table (:order_items,:id => false) do |t|
+    create_table(:order_items,:id=>false) do |t|
     	t.string :uuid, :limited => 36, :null => false
     	t.string :id , :limited => 36, :primary => true, :null => false
     	t.float :quantity
