@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140720160044) do
+ActiveRecord::Schema.define(version: 20140720161032) do
 
   create_table "attachments", force: true do |t|
     t.string   "name"
@@ -93,6 +93,8 @@ ActiveRecord::Schema.define(version: 20140720160044) do
     t.string   "tel"
     t.boolean  "is_base",                   default: false
     t.string   "destination_id"
+    t.string   "prefix",                    default: "-1"
+    t.string   "suffix",                    default: "-1"
   end
 
   add_index "locations", ["destination_id"], name: "index_locations_on_destination_id", using: :btree
@@ -180,6 +182,15 @@ ActiveRecord::Schema.define(version: 20140720160044) do
   add_index "parts", ["part_type_id"], name: "index_parts_on_part_type_id", using: :btree
   add_index "parts", ["user_id"], name: "index_parts_on_user_id", using: :btree
   add_index "parts", ["uuid"], name: "index_parts_on_uuid", using: :btree
+
+  create_table "pick_lists", force: true do |t|
+    t.string   "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "pick_lists", ["id"], name: "index_pick_lists_on_id", using: :btree
+  add_index "pick_lists", ["user_id"], name: "index_pick_lists_on_user_id", using: :btree
 
   create_table "positions", force: true do |t|
     t.string   "uuid",       limit: 36,                 null: false
