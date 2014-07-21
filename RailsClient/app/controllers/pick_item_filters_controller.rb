@@ -1,10 +1,10 @@
 class PickItemFiltersController < ApplicationController
   before_action :set_pick_item_filter, only: [:show, :edit, :update, :destroy]
-
+  before_action :set_condition,only:[:index,:new,:edit,:search]
   # GET /pick_item_filters
   # GET /pick_item_filters.json
   def index
-    @pick_item_filters = PickItemFilter.all
+    @pick_item_filters = PickItemFilter.order(:user_id).paginate(:page=>params[:page])
   end
 
   # GET /pick_item_filters/1
@@ -25,10 +25,9 @@ class PickItemFiltersController < ApplicationController
   # POST /pick_item_filters.json
   def create
     @pick_item_filter = PickItemFilter.new(pick_item_filter_params)
-
     respond_to do |format|
       if @pick_item_filter.save
-        format.html { redirect_to @pick_item_filter, notice: 'Pick item filter was successfully created.' }
+        format.html { redirect_to pick_item_filters_url, notice: '新建成功.' }
         format.json { render :show, status: :created, location: @pick_item_filter }
       else
         format.html { render :new }
@@ -42,7 +41,7 @@ class PickItemFiltersController < ApplicationController
   def update
     respond_to do |format|
       if @pick_item_filter.update(pick_item_filter_params)
-        format.html { redirect_to @pick_item_filter, notice: 'Pick item filter was successfully updated.' }
+        format.html { redirect_to pick_item_filters_url, notice: '更新成功.' }
         format.json { render :show, status: :ok, location: @pick_item_filter }
       else
         format.html { render :edit }
@@ -56,7 +55,7 @@ class PickItemFiltersController < ApplicationController
   def destroy
     @pick_item_filter.destroy
     respond_to do |format|
-      format.html { redirect_to pick_item_filters_url, notice: 'Pick item filter was successfully destroyed.' }
+      format.html { redirect_to pick_item_filters_url, notice: '删除成功.' }
       format.json { head :no_content }
     end
   end
@@ -69,6 +68,11 @@ class PickItemFiltersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def pick_item_filter_params
-      params.require(:pick_item_filter).permit(:id, :user_id, :value, :filterable_id, :filterable_type)
+      params.require(:pick_item_filter).permit( :user_id, :filterable_id, :filterable_type)
     end
+
+
+  def set_condition
+    @types= PickItemFilter.filter_types.values.collect{|v| [v[:display],v[:name]]}
+  end
 end
