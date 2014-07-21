@@ -67,7 +67,7 @@ class DeliveryService
       []
     else
       received_date = Time.parse(args[:received_date])
-      Delivery.where(state: args[:state], received_date: (received_date.beginning_of_day..received_date.end_of_day)).all.order(:created_at).order(created_at: :desc)
+      Delivery.where(state: args[:state], received_date: (received_date.beginning_of_day..received_date.end_of_day)).all.order(created_at: :desc)
     end
   end
 

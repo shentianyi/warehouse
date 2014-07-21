@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :order_items
+  resources :orders
   resources :pick_items
 
   resources :pick_lists
