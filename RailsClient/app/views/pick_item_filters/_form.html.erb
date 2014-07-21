@@ -12,26 +12,18 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :id %><br>
-    <%= f.text_field :id %>
-  </div>
-  <div class="field">
-    <%= f.label :user_id %><br>
+    <%= f.label :user_id,'员工号' %><br>
     <%= f.text_field :user_id %>
   </div>
+    <div class="field">
+      <%= f.label :filterable_type,'筛选类型' %><br>
+      <%=  f.select(:filterable_type, @types)%>
+    </div>
   <div class="field">
-    <%= f.label :value %><br>
-    <%= f.text_field :value %>
-  </div>
-  <div class="field">
-    <%= f.label :filterable_id %><br>
+    <%= f.label :filterable_id,'值' %><br>
     <%= f.text_field :filterable_id %>
   </div>
-  <div class="field">
-    <%= f.label :filterable_type %><br>
-    <%= f.text_field :filterable_type %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+    <div class="actions">
+      <%= f.submit value: '提 交', class: 'btn btn-primary btn-lg' %>
+    </div>
 <% end %>

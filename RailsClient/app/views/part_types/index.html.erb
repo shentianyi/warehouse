@@ -6,14 +6,15 @@
  <br/>
 <div class="digg_pagination">
   <div class="page_info">
-    <%= page_entries_info @parts %>
+    <%= page_entries_info @part_types %>
   </div>
-  <%= will_paginate @parts, :container => false %>
+  <%= will_paginate @part_types, :container => false %>
 </div>
 <table class="table table-bordered table-striped globle-table">
 
   <thead>
     <tr>
+      <th></th>
       <th>ID</th>
       <th>名称</th>
       <th colspan="3"></th>
@@ -21,8 +22,9 @@
   </thead>
 
   <tbody>
-    <% @part_types.each do |part_type| %>
+    <% @part_types.each_with_index do |part_type,i| %>
       <tr>
+        <td><%= i+@part_types.offset+1 %>
         <td><%= part_type.id %></td>
         <td><%= part_type.name %></td>
         <td><%= link_to '编辑', edit_part_type_path(part_type) %></td>
@@ -33,5 +35,5 @@
 </table>
 
 <div class="digg_pagination">
-  <%= will_paginate @parts, :container => false %>
+  <%= will_paginate @part_types, :container => false %>
 </div>

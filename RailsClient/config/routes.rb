@@ -1,8 +1,5 @@
 Rails.application.routes.draw do
 
-
-  resources :pick_item_filters
-
   resources :pick_items
 
   resources :pick_lists
@@ -32,7 +29,7 @@ Rails.application.routes.draw do
   get 'parts/download_positions', to: 'parts#download_positions'
   post 'parts/do_import_positions', to: 'parts#do_import_positions'
 
-  [:locations, :whouses, :parts, :positions, :part_positions, :users, :deliveries,:part_types].each do |model|
+  [:locations, :whouses, :parts, :positions, :part_positions, :users, :deliveries,:part_types,:pick_item_filters].each do |model|
     resources model do
       collection do
         post :do_import
