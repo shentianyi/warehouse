@@ -62,7 +62,7 @@
     margin-bottom: 0px !important;
 }
 
-.error {
+.error,.notice {
     font-weight: bold;
     font-size: 18px;
     color: red;

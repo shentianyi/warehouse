@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Id:</strong>
+  <%= @pick_item_filter.id %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @pick_item_filter.user_id %>
+</p>
+
+<p>
+  <strong>Value:</strong>
+  <%= @pick_item_filter.value %>
+</p>
+
+<p>
+  <strong>Filterable:</strong>
+  <%= @pick_item_filter.filterable_id %>
+</p>
+
+<p>
+  <strong>Filterable type:</strong>
+  <%= @pick_item_filter.filterable_type %>
+</p>
+
+<%= link_to 'Edit', edit_pick_item_filter_path(@pick_item_filter) %> |
+<%= link_to 'Back', pick_item_filters_path %>

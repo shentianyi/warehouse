@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140720161032) do
+ActiveRecord::Schema.define(version: 20140721031508) do
 
   create_table "attachments", force: true do |t|
     t.string   "name"
@@ -93,8 +93,6 @@ ActiveRecord::Schema.define(version: 20140720161032) do
     t.string   "tel"
     t.boolean  "is_base",                   default: false
     t.string   "destination_id"
-    t.string   "prefix",                    default: "-1"
-    t.string   "suffix",                    default: "-1"
   end
 
   add_index "locations", ["destination_id"], name: "index_locations_on_destination_id", using: :btree
@@ -159,6 +157,9 @@ ActiveRecord::Schema.define(version: 20140720161032) do
 
   create_table "part_types", force: true do |t|
     t.string   "name"
+    t.boolean  "is_delete",  default: false
+    t.boolean  "is_dirty",   default: true
+    t.boolean  "is_new",     default: true
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -183,8 +184,43 @@ ActiveRecord::Schema.define(version: 20140720161032) do
   add_index "parts", ["user_id"], name: "index_parts_on_user_id", using: :btree
   add_index "parts", ["uuid"], name: "index_parts_on_uuid", using: :btree
 
+  create_table "pick_item_filters", force: true do |t|
+    t.string   "user_id"
+    t.string   "value"
+    t.string   "filterable_id"
+    t.string   "filterable_type"
+    t.boolean  "is_delete",       default: false
+    t.boolean  "is_dirty",        default: true
+    t.boolean  "is_new",          default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "pick_item_filters", ["filterable_id"], name: "index_pick_item_filters_on_filterable_id", using: :btree
+  add_index "pick_item_filters", ["filterable_type"], name: "index_pick_item_filters_on_filterable_type", using: :btree
+  add_index "pick_item_filters", ["id"], name: "index_pick_item_filters_on_id", using: :btree
+  add_index "pick_item_filters", ["user_id"], name: "index_pick_item_filters_on_user_id", using: :btree
+
+  create_table "pick_items", force: true do |t|
+    t.string   "pick_list_id"
+    t.string   "order_item_id"
+    t.boolean  "is_delete",     default: false
+    t.boolean  "is_dirty",      default: true
+    t.boolean  "is_new",        default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "pick_items", ["id"], name: "index_pick_items_on_id", using: :btree
+  add_index "pick_items", ["order_item_id"], name: "index_pick_items_on_order_item_id", using: :btree
+  add_index "pick_items", ["pick_list_id"], name: "index_pick_items_on_pick_list_id", using: :btree
+
   create_table "pick_lists", force: true do |t|
     t.string   "user_id"
+    t.integer  "state"
+    t.boolean  "is_delete",  default: false
+    t.boolean  "is_dirty",   default: true
+    t.boolean  "is_new",     default: true
     t.datetime "created_at"
     t.datetime "updated_at"
   end

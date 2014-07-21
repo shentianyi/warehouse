@@ -23,10 +23,10 @@ module ApplicationHelper
     render json: msg
   end
 
-  def search
-    @items=model.where(params[@model].clone.delete_if { |k, v| v.length==0 }).paginate(:page => params[:page])
-    render :index
-  end
+  #def search
+  #  @items=model.where(params[@model].clone.delete_if { |k, v| v.length==0 }).paginate(:page => params[:page])
+  #  render :index
+  #end
 
   def search
     @condition=params[@model]
