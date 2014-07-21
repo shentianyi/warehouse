@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
 
 
+  resources :orders
+
   resources :pick_lists
 
   resources :part_types
