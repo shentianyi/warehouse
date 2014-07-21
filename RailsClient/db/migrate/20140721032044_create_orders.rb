@@ -2,7 +2,7 @@ class CreateOrders < ActiveRecord::Migration
   def change
     create_table(:orders,:id=>false) do |t|
       t.string :uuid, :limit => 36, :null => false
-      t.string :id, :limit => 36, :primary => type, :null => false
+      t.string :id, :limit => 36, :primary => true, :null => false
       t.reference :user
       t.timestamps
     end

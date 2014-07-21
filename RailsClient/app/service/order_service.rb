@@ -19,4 +19,28 @@ class OrderService
   def self.search args
     Order.where(args).all.order(created_at: :desc)
   end
+
+  #=============
+  #create order with order items
+  #=============
+  def self.create_with_items args,current_user
+    order = Order.new(args[:order])
+    if order.save
+      #save success
+      ActiveRecord::Base.transaction do
+        begin
+          args[:order_items].each do |order_item|
+            item = OrderItemService.create(item,current_user)
+            item.order = order
+            item.save
+          end
+        rescue ActiveRecord::RecordInvalid => invalid
+          return nil
+        end
+      end
+      return order
+    else
+      return nil
+    end
+  end
 end

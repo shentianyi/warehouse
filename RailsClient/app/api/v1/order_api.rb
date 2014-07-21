@@ -4,7 +4,7 @@ module V1
     guard_all!
 
     #strong parameters
-    helers do
+    helpers do
       def order_params
         ActivonController::Parameters.new(params).require(:order).permit(:id,:user_id)
       end
@@ -33,7 +33,7 @@ module V1
     #get order detail(order item) by order id
     #=============
     get do
-      unless order = Order.find_by_id (params[:id])
+      unless order = Order.find_by_id(params[:id])
         return {result:0,content:OrderMessage::NotFound}
       end
       return {result:1,content:{order:OrderPresenter.new(order).to_json_with_order_items}}
@@ -41,9 +41,11 @@ module V1
 
     #=============
     #create order with order items
+    #before doing this, order item should be
+    #verified
     #=============
     post do
-      
+
     end
   end
 end
