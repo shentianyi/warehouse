@@ -1,9 +1,13 @@
 class CreatePartTypes < ActiveRecord::Migration
   def up
-    create_table :part_types , :id => false do |t|
+    create_table :part_types,:id => false do |t|
       t.string :id, :limit => 36, :primary => true, :null => false
       t.string :name
-
+      #
+      t.boolean :is_delete, :default => false
+      t.boolean :is_dirty, :default => true
+      t.boolean :is_new, :default => true
+      #
       t.timestamps
     end
 
@@ -12,6 +16,6 @@ class CreatePartTypes < ActiveRecord::Migration
   end
 
   def down
-    drop_bable :part_types
+    drop_table :part_types
   end
 end

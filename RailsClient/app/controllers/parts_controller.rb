@@ -6,7 +6,7 @@ class PartsController < ApplicationController
   # GET /parts.json
   def index
     @parts = Part.paginate(:page=>params[:page])#.all
-    #@parts = @parts.paginate(:page=>params[:page])
+    @part_types=PartType.all
   end
 
   # GET /parts/1
@@ -17,10 +17,12 @@ class PartsController < ApplicationController
   # GET /parts/new
   def new
     @part = Part.new
+    @part_types=PartType.all
   end
 
   # GET /parts/1/edit
   def edit
+    @part_types=PartType.all
   end
 
   # POST /parts
@@ -54,6 +56,11 @@ class PartsController < ApplicationController
         format.json { render json: @part.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def search
+    @part_types=PartType.all
+    super
   end
 
   # DELETE /parts/1
@@ -139,6 +146,6 @@ class PartsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def part_params
     #params[:part]
-    params.require(:part).permit(:id, :unit_pack, :customernum, :user_id)
+    params.require(:part).permit(:id, :unit_pack, :customernum, :user_id,:part_type_id)
   end
 end

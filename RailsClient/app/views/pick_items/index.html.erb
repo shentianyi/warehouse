@@ -1,0 +1,29 @@
+<h1>Listing pick_items</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Pick list</th>
+      <th>Order item</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @pick_items.each do |pick_item| %>
+      <tr>
+        <td><%= pick_item.id %></td>
+        <td><%= pick_item.pick_list_id %></td>
+        <td><%= pick_item.order_item_id %></td>
+        <td><%= link_to 'Show', pick_item %></td>
+        <td><%= link_to 'Edit', edit_pick_item_path(pick_item) %></td>
+        <td><%= link_to 'Destroy', pick_item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Pick item', new_pick_item_path %>

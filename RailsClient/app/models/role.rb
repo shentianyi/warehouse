@@ -23,7 +23,7 @@ class Role
 	end
 
 	def self.display id
-		@@roles[id_sym(id)][:name]
+		@@roles[id_sym(id)][:display]
 	end
 
 	def self.id_sym id
