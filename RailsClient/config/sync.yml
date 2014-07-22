@@ -4,7 +4,7 @@ sync:
   token: 3dcba17f596969a676bfdd90b5425c703f983acf7306760e1057c95afe9f17b1d
   sync_lock: false
   enabled: true
-  advance_second: 240
+  advance_second: 300
   per_request_size: 3000
   executor:
     location:
@@ -49,7 +49,7 @@ sync:
       post: true
       put: true
       delete: true
-    fork_lift:
+    forklift:
       name: "托盘"
       get: true
       post: true
