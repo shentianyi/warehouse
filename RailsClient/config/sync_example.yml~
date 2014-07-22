@@ -4,7 +4,7 @@ sync:
   token: 3dcba17f596969a676bfdd90b5425c703f983acf7306760e1057c95afe9f17b1d
   sync_lock: false
   enabled: true
-  advance_second: 300
+  advance_second: 10
   per_request_size: 3000
   executor:
    location:

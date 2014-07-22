@@ -38,7 +38,7 @@ module Sync
         rescue => e
           puts e.class
           puts e.to_s
-          puts e.backtrace
+puts e.backtrace
         end
       end
     end

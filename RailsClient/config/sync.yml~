@@ -49,7 +49,7 @@ sync:
       post: true
       put: true
       delete: true
-    forklift:
+    fork_lift:
       name: "托盘"
       get: true
       post: true
