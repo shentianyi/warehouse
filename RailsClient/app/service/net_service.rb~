@@ -10,8 +10,8 @@ class NetService
         puts url.host
         puts url.port
         http= Net::HTTP.new(url.host, url.port)
-        http.open_timeout = 5
-        http.read_timeout = 5
+        http.open_timeout = 3
+        #http.read_timeout = 5
         #res = http.start(url.host, url.port) { |http|
         #  puts 'Start Request'
         #  http.request(req)
