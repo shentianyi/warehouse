@@ -23,7 +23,7 @@ module Sync
       Sync::Execute::StateLogSync.sync
 
 
-      Sync::Config.last_time=(current- Sync::Config.advance_second.seconds)
+      Sync::Config.last_time=(current- Sync::Config.advance_second.seconds).utc
     end
 
     def self.sync
