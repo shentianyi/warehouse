@@ -74,7 +74,7 @@
         <td><%= delivery.user.name %></td>
         <td><%= delivery.user.id %></td>
         <td><%= delivery.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
-        <td><%= delivery.delivery_date.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
+        <td><%= delivery.delivery_date.localtime.strftime('%Y-%m-%d %H:%M:%S') if delivery.delivery_date%></td>
         <td><%= delivery.receiver.name if delivery.receiver %></td>
         <td><%= delivery.receiver.id if delivery.receiver %></td>
         <td><%= delivery.received_date.localtime.strftime('%Y-%m-%d %H:%M:%S') if delivery.received_date %></td>

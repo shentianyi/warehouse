@@ -2,28 +2,33 @@ require 'net/http'
 
 class NetService
   def self.ping
+    flag=true
     if $NEED_PING
       begin
         url = URI.parse(Sync::Config.host+'/api/v1/users/ping')
         req = Net::HTTP::Get.new(url.to_s)
         puts url.host
         puts url.port
-        res = Net::HTTP.start(url.host, url.port) { |http|
-          http.read_timeout = 15
+        http= Net::HTTP.new(url.host, url.port)
+        http.open_timeout = 5
+        http.read_timeout = 5
+        res = http.start(url.host, url.port) { |http|
           puts 'Start Request'
           http.request(req)
         }
         puts res.body
         puts res.code
         if res.code == 200
-          return true
+          flag= true
         else
-          return false
+          flag= false
         end
-      rescue Net::ReadTimeout
-          return false
+      rescue
+       puts '-------------'
+       flag= false
       end
     end
-    true
+    puts flag
+    return flag
   end
 end

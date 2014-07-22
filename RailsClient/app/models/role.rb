@@ -5,8 +5,8 @@ class Role
 		:'100' => {:name => 'admin', :display => (I18n.t 'system.role.admin')},
 		:'200' => {:name => 'manager', :display => (I18n.t 'system.role.manager')},
 		:'300' => {:name => 'sender', :display => (I18n.t 'system.role.sender')},
-		:'400' => {:name => 'receiver', :display => (I18n.t 'system.role.receiver')},
-		:'500' => {:name => 'stocker', :display => (I18n.t 'system.role.stocker')}
+		:'400' => {:name => 'receiver', :display => (I18n.t 'system.role.receiver')}
+		#:'500' => {:name => 'stocker', :display => (I18n.t 'system.role.stocker')}
 	}
 
 	class<<self

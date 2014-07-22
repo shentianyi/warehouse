@@ -30,7 +30,6 @@ module Sync
       if Config.enabled
         begin
         if executor=Sync::Executor.find(main_key)
-          puts '*******'
           get &get_block if executor.get
           post &post_block if executor.post
           put &put_block if executor.put

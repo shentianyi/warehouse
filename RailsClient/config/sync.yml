@@ -1,6 +1,6 @@
 ---
 sync:
-  host: http://localhost:4000
+  host: http://cz-tek.com:9000
   token: 3dcba17f596969a676bfdd90b5425c703f983acf7306760e1057c95afe9f17b1d
   sync_lock: false
   enabled: true
@@ -9,37 +9,37 @@ sync:
   executor:
     location:
       name: "地点"
-      get: true
+      get: false
       post: false
       put: false
       delete: false
     hacker:
       name: "员工"
-      get: true
+      get: false
       post: false
       put: false
       delete: false
     whouse:
       name: "仓库"
-      get: true
+      get: false
       post: false
       put: false
       delete: false
     part:
       name: "零件"
-      get: true
+      get: false
       post: false
       put: false
       delete: false
     position:
       name: "库位"
-      get: true
+      get: false
       post: false
       put: false
       delete: false
     part_position:
       name: "零件库位"
-      get: true
+      get: false
       post: false
       put: false
       delete: false

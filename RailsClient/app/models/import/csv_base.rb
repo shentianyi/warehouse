@@ -6,6 +6,7 @@ module Import
       msg=Message.new
       begin
         line_no=0
+        puts csv.file_path
         CSV.foreach(csv.file_path, headers: true, col_sep: csv.col_sep, encoding: csv.encoding) do |row|
           row.strip
           line_no+=1
