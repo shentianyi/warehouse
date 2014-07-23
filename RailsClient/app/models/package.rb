@@ -26,6 +26,7 @@ class Package < ActiveRecord::Base
   # add_to_forklift
   def add_to_forklift forklift
     self.forklift = forklift
+    forklift.sum_packages = forklift.sum_packages + 1
     set_position
     self.save
   end
@@ -33,6 +34,7 @@ class Package < ActiveRecord::Base
   # remove_form_forklift
   def remove_from_forklift
     if self.forklift
+      forklift.sum_packages = forklift.sum_packages - 1
       self.forklift = nil
       remove_position
       self.save
