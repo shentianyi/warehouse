@@ -36,6 +36,14 @@ class OrderItemService
 		end
 	end
 
+  def self.verify args,current_user
+    if verify_part_id(args[:part_id],current_user) && verify_position(args[:position],args[:part_id]) && verify_quantity(args[:quantity])
+      return true
+    else
+      return false
+    end
+  end
+
 	#=============
 	#verify position exits?
 	#and part exits in this position?
@@ -66,6 +74,20 @@ class OrderItemService
 	#need to know 
 	#=============
 	def self.verify_quantity quantity
-		
-	end
+		true
+  end
+
+  #=============
+  #exists? id
+  #=============
+  def self.exists? id
+    OrderItem.find_by_id id
+  end
+
+  #=============
+  #update
+  #=============
+  def self.update args
+    true
+  end
 end

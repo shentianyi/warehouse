@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140721062708) do
+ActiveRecord::Schema.define(version: 20140724022058) do
 
   create_table "attachments", force: true do |t|
     t.string   "name"
@@ -100,7 +100,7 @@ ActiveRecord::Schema.define(version: 20140721062708) do
   add_index "locations", ["uuid"], name: "index_locations_on_uuid", using: :btree
 
   create_table "order_items", force: true do |t|
-    t.string   "uuid",         null: false
+    t.string   "uuid",                         null: false
     t.float    "quantity"
     t.integer  "order_id"
     t.integer  "location_id"
@@ -111,6 +111,9 @@ ActiveRecord::Schema.define(version: 20140721062708) do
     t.integer  "part_type_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "is_delete",    default: false
+    t.boolean  "is_dirty",     default: true
+    t.boolean  "is_new",       default: true
   end
 
   add_index "order_items", ["id"], name: "index_order_items_on_id", using: :btree
@@ -123,10 +126,13 @@ ActiveRecord::Schema.define(version: 20140721062708) do
   add_index "order_items", ["uuid"], name: "index_order_items_on_uuid", using: :btree
 
   create_table "orders", force: true do |t|
-    t.string   "uuid",       limit: 36, null: false
+    t.string   "uuid",       limit: 36,                 null: false
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "is_delete",             default: false
+    t.boolean  "is_dirty",              default: true
+    t.boolean  "is_new",                default: true
   end
 
   add_index "orders", ["id"], name: "index_orders_on_id", using: :btree

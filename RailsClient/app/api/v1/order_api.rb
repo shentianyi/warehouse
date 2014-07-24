@@ -22,7 +22,7 @@ module V1
       }
 
       orders = []
-      OrderPresenter.init_presenters(OrderService.order_history_by_time(args)).each do |op|
+      OrderPresenter.init_presenters(OrderService.history_orders_by_time(args)).each do |op|
         orders<<op.to_json
       end
 
@@ -33,7 +33,7 @@ module V1
     #get order detail(order item) by order id
     #=============
     get do
-      unless order = Order.find_by_id(params[:id])
+      unless order = OrderService.exits?(params[:id])
         return {result:0,content:OrderMessage::NotFound}
       end
       return {result:1,content:{order:OrderPresenter.new(order).to_json_with_order_items}}
@@ -45,7 +45,23 @@ module V1
     #verified
     #=============
     post do
-      
+      unless order = OrderService.create_with_items(parans,current_user)
+        return {result:0,content:OrderMessage::CreatedFailed}
+      end
+
+      return {result:1,content:OrderPresenter.new(order).to_json}
+    end
+
+    #=============
+    #delete order
+    #=============
+    delete do
+      unless order = OrderService.exits?(params[:id])
+        return {result:0,content:OrderMessage::NotFound}
+      end
+
+      order.destroy
+      return {result:1,content:OrderMessage::DeleteSuccess}
     end
   end
 end

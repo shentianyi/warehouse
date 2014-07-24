@@ -7,7 +7,7 @@ class CreateOrderItems < ActiveRecord::Migration
     	t.references :order
     	t.references :location
     	t.references :whouse
-    	t.references :source
+    	#t.references :source
     	t.references :user
     	t.references :part
     	t.references :part_type
