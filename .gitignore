@@ -1,3 +1,5 @@
 /.idea
 /RailsClient/log/
 /RailsClient/log/*.log
+*~*
+*#*

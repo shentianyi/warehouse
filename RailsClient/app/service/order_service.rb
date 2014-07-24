@@ -1,6 +1,23 @@
 class OrderService
 
   #=============
+  #get last n days order
+  #params
+  # @user_id:current_user.id,
+  # @days: integer
+  # @state: integer,0
+  #=============
+  def self.get_orders_by_days days,user_id = nil,handled = false
+    if user_id.nil?
+      start_time = days.days.ago.at_beginning_of_day
+      end_time = Time.now.at_end_of_day
+      Order.where(created_at:(start_time..end_time),handled:handled).all.order(created_at: :desc)
+    else
+      
+    end
+  end
+
+  #=============
   #get order history by start and end time
   #filt created_at
   #=============
@@ -10,7 +27,7 @@ class OrderService
       args[:end_time] = Time.parse(args[:end_time])
     end
 
-    Order.where(user_id:args[:user_id],created_at:(args[:start_time]..args[:end_time])).all.order(created: :desc)
+    Order.where(user_id:args[:user_id],created_at:(args[:start_time]..args[:end_time])).all.order(created_at: :desc)
   end
 
   #=============
