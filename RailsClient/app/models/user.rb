@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
   belongs_to :location
   has_many :deliveries
   has_many :pick_lists
+  has_many :pick_item_filters
   before_save :ensure_authentication_token!
 
   validates_uniqueness_of :id

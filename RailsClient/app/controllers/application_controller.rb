@@ -63,7 +63,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_model
-    @model=self.class.name.gsub(/Controller/, '').tableize.singularize.downcase
+    @model=self.class.name.gsub(/Controller/, '').tableize.singularize
   end
 
   def model

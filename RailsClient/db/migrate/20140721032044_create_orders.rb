@@ -1,9 +1,8 @@
 class CreateOrders < ActiveRecord::Migration
-  def change
+  def up
     create_table(:orders,:id=>false) do |t|
       t.string :uuid, :limit => 36, :null => false
       t.string :id, :limit => 36, :primary => true, :null => false
-
       #
       t.boolean :is_delete, :default => false
       t.boolean :is_dirty, :default => true
