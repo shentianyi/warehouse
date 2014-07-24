@@ -10,6 +10,7 @@ class CreateOrderItems < ActiveRecord::Migration
     	t.string :user_id
     	t.string :part_id
     	t.string :part_type_id
+      t.string :source_id
 
       t.boolean :is_delete, :default => false
       t.boolean :is_dirty, :default => true
