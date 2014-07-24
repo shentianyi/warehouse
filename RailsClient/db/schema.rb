@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140724022058) do
+ActiveRecord::Schema.define(version: 20140721062708) do
 
   create_table "attachments", force: true do |t|
     t.string   "name"
@@ -102,18 +102,18 @@ ActiveRecord::Schema.define(version: 20140724022058) do
   create_table "order_items", force: true do |t|
     t.string   "uuid",                         null: false
     t.float    "quantity"
-    t.integer  "order_id"
-    t.integer  "location_id"
-    t.integer  "whouse_id"
-    t.integer  "source_id"
-    t.integer  "user_id"
-    t.integer  "part_id"
-    t.integer  "part_type_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string   "order_id"
+    t.string   "location_id"
+    t.string   "source_id"
+    t.string   "whouse_id"
+    t.string   "user_id"
+    t.string   "part_id"
+    t.string   "part_type_id"
     t.boolean  "is_delete",    default: false
     t.boolean  "is_dirty",     default: true
     t.boolean  "is_new",       default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "order_items", ["id"], name: "index_order_items_on_id", using: :btree
@@ -124,15 +124,16 @@ ActiveRecord::Schema.define(version: 20140724022058) do
   add_index "order_items", ["source_id"], name: "index_order_items_on_source_id", using: :btree
   add_index "order_items", ["user_id"], name: "index_order_items_on_user_id", using: :btree
   add_index "order_items", ["uuid"], name: "index_order_items_on_uuid", using: :btree
+  add_index "order_items", ["whouse_id"], name: "index_order_items_on_whouse_id", using: :btree
 
   create_table "orders", force: true do |t|
     t.string   "uuid",       limit: 36,                 null: false
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
     t.boolean  "is_delete",             default: false
     t.boolean  "is_dirty",              default: true
     t.boolean  "is_new",                default: true
+    t.string   "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "orders", ["id"], name: "index_orders_on_id", using: :btree

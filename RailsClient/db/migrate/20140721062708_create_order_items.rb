@@ -6,11 +6,11 @@ class CreateOrderItems < ActiveRecord::Migration
     	t.float :quantity
     	t.string :order_id
     	t.string :location_id
+      t.string :source_id
     	t.string :whouse_id
     	t.string :user_id
     	t.string :part_id
     	t.string :part_type_id
-      t.string :source_id
 
       t.boolean :is_delete, :default => false
       t.boolean :is_dirty, :default => true
@@ -23,6 +23,7 @@ class CreateOrderItems < ActiveRecord::Migration
     add_index :order_items, :order_id
     add_index :order_items, :location_id
     add_index :order_items, :source_id
+    add_index :order_items, :whouse_id
     add_index :order_items, :user_id
     add_index :order_items, :part_id
     add_index :order_items, :part_type_id
