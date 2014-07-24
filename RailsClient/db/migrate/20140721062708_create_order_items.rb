@@ -4,13 +4,17 @@ class CreateOrderItems < ActiveRecord::Migration
     	t.string :uuid, :limited => 36, :null => false
     	t.string :id , :limited => 36, :primary => true, :null => false
     	t.float :quantity
-    	t.references :order
-    	t.references :location
-    	t.references :whouse
-    	#t.references :source
-    	t.references :user
-    	t.references :part
-    	t.references :part_type
+    	t.string :order_id
+    	t.string :location_id
+    	t.string :whouse_id
+    	t.string :user_id
+    	t.string :part_id
+    	t.string :part_type_id
+
+      t.boolean :is_delete, :default => false
+      t.boolean :is_dirty, :default => true
+      t.boolean :is_new, :default => true
+
     	t.timestamps
     end
     add_index :order_items, :uuid
@@ -22,5 +26,9 @@ class CreateOrderItems < ActiveRecord::Migration
     add_index :order_items, :part_id
     add_index :order_items, :part_type_id
     execute 'ALTER TABLE order_items ADD PRIMARY KEY (id)'
+  end
+
+  def down
+    drop_table :order_items
   end
 end
