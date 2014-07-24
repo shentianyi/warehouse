@@ -1,6 +1,6 @@
 module V1
   class OrderAPI<Base
-    namespace :order
+    namespace :orders
     guard_all!
 
     #strong parameters
@@ -26,7 +26,7 @@ module V1
         orders<<op.to_json
       end
 
-      {result:1,content:{orders:orders}}
+      return {result:1,content:{orders:orders}}
     end
 
     #=============

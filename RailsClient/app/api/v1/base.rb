@@ -9,5 +9,6 @@ module V1
     mount DeliveryAPI
     mount RegexAPI
     mount OrderAPI
+    mount OrderItemAPI
   end
 end

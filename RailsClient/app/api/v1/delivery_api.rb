@@ -88,7 +88,6 @@ module V1
         if NetService.ping()
           {result:1,content:DeliveryMessage::SendSuccess}
         else
-puts '1111111'
           {result:0,content:DeliveryMessage::SendSuccess+DeliveryMessage::NetworkNotGood}
         end
 

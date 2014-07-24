@@ -1,6 +1,6 @@
 module V1
   class OrderItemAPI<Base
-    namespace :order_item
+    namespace :order_items
     guard_all!
 
     #strong parameters
@@ -10,7 +10,7 @@ module V1
       end
     end
 
-    post verify do
+    post :verify do
       unless OrderItemService.verify(params,current_user)
         return {result:0,content:OrderItemMessage::VerifyFailed}
       end
@@ -27,7 +27,7 @@ module V1
       return {result:1,content:OrderItemMessage::DeleteSuccess}
     end
 
-    get detail do
+    get :detail do
       unless item = OrderItemService.exists?(params[:id])
         return {result:0,content:OrderItemMessage::NotFound}
       end
