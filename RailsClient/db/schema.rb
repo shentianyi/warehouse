@@ -109,6 +109,8 @@ ActiveRecord::Schema.define(version: 20140721062708) do
     t.string   "user_id"
     t.string   "part_id"
     t.string   "part_type_id"
+    t.string   "remark"
+    t.boolean  "is_emergency", default: false, null: false
     t.boolean  "is_delete",    default: false
     t.boolean  "is_dirty",     default: true
     t.boolean  "is_new",       default: true

@@ -17,9 +17,9 @@ module V1
     post :history do
       args = {
           start_time:params[:start],
-          end_time:params[:end],
-          user_id:current_user.id
+          end_time:params[:end]
       }
+      args[:user_id] = params[:user_id].nil? ? current_user.id : params[:user_id]
 
       orders = []
       OrderPresenter.init_presenters(OrderService.history_orders_by_time(args)).each do |op|
@@ -45,7 +45,7 @@ module V1
     #verified
     #=============
     post do
-      unless order = OrderService.create_with_items(parans,current_user)
+      unless order = OrderService.create_with_items(params,current_user)
         return {result:0,content:OrderMessage::CreatedFailed}
       end
 
