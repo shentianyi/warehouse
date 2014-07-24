@@ -4,16 +4,17 @@ class OrderService
   #get last n days order
   #params
   # @user_id:current_user.id,
+  # @current_user: get location id
   # @days: integer
   # @state: false
   #=============
-  def self.get_orders_by_days days,user_id = nil,handled = false
+  def self.get_orders_by_days days,current_user,user_id = nil,handled = false
     start_time = days.days.ago.at_beginning_of_day.utc
     end_time = Time.now.at_end_of_day.utc
     if user_id.nil?
-      Order.where(created_at:(start_time..end_time),handled:handled).all.order(created_at: :desc)
+      Order.where(created_at:(start_time..end_time),handled:handled,source_id:current_user.location_id).all.order(created_at: :desc)
     else
-      Order.where(created_at:(start_time..end_time),user_id:user_id,handled:handled).all.order(created_at: :desc)
+      Order.where(created_at:(start_time..end_time),user_id:user_id,handled:handled,source_id:current_user.location_id).all.order(created_at: :desc)
     end
   end
 
