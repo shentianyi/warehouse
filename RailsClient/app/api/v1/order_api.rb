@@ -12,7 +12,7 @@ module V1
 
     #=============
     #get history of orders
-    #post start and end time
+    #post start and end time(local time)
     #=============
     post :history do
       args = {
@@ -45,7 +45,7 @@ module V1
     #verified
     #=============
     post do
-
+      
     end
   end
 end
