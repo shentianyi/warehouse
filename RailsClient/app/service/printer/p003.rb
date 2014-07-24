@@ -1,3 +1,4 @@
+# print accepted
 module Printer
   class P003<Base
     HEAD=[:id,:receive_addr,:user, :receive_date]

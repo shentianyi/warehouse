@@ -13,7 +13,7 @@ class OrderService
       end_time = Time.now.at_end_of_day
       Order.where(created_at:(start_time..end_time),handled:handled).all.order(created_at: :desc)
     else
-      
+
     end
   end
 

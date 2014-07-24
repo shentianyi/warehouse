@@ -130,6 +130,7 @@ ActiveRecord::Schema.define(version: 20140721062708) do
 
   create_table "orders", force: true do |t|
     t.string   "uuid",       limit: 36,                 null: false
+    t.boolean  "handled",               default: false
     t.boolean  "is_delete",             default: false
     t.boolean  "is_dirty",              default: true
     t.boolean  "is_new",                default: true
