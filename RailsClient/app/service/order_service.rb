@@ -18,6 +18,17 @@ class OrderService
   end
 
   #=============
+  #handle
+  #=============
+  def self.handle ids,handled = true
+    orders = Order.where(id: ids)
+    orders.each {|o|
+      o.handled = handled
+      o.save
+    }
+  end
+
+  #=============
   #get order history by start and end time
   #filt created_at
   #=============
