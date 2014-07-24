@@ -1,11 +1,11 @@
 class PartsController < ApplicationController
-  load_and_authorize_resource
+  #load_and_authorize_resource
   before_action :set_part, only: [:show, :edit, :update, :destroy]
 
   # GET /parts
   # GET /parts.json
   def index
-    @parts = Part.paginate(:page=>params[:page])#.all
+    @parts = Part.unscoped.paginate(:page=>params[:page])#.all
     @part_types=PartType.all
   end
 
@@ -140,12 +140,12 @@ class PartsController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_part
-    @part = Part.find(params[:id])
+    @part = Part.unscoped.find_by_id(params[:id])
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def part_params
     #params[:part]
-    params.require(:part).permit(:id, :unit_pack, :customernum, :user_id,:part_type_id)
+    params.require(:part).permit(:id, :unit_pack, :customernum, :user_id,:part_type_id,:is_delete)
   end
 end

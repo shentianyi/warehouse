@@ -1,5 +1,5 @@
 class DeliveriesController < ApplicationController
-  load_and_authorize_resource
+  #load_and_authorize_resource
   before_action :set_delivery, only: [:show, :edit, :update, :destroy]
   skip_before_filter :delivery_params
   before_action :get_states, only: [:index, :search]
