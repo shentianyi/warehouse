@@ -1,3 +1,4 @@
+# print delivery
 module Printer
   class P002<Base
     HEAD=[:id,:send_addr,:receive_addr, :delivery_date]
