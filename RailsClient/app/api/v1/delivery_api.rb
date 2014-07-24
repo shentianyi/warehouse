@@ -137,7 +137,6 @@ puts '1111111'
         return {result:0,content:DeliveryMessage::NotExit}
       end
       content = DeliveryPresenter.new(d).to_json_with_forklifts(false)
-      puts content
       {result:1,content:content}
     end
 

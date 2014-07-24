@@ -3,7 +3,7 @@ class OrderItem < ActiveRecord::Base
 
 	belongs_to :order
 	belongs_to :user
-	belogns_to :locations
+  belongs_to :location
 	belongs_to :whouse
 	belongs_to :supplier, class_name: "Location"
 	belongs_to :part

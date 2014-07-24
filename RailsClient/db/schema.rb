@@ -100,7 +100,7 @@ ActiveRecord::Schema.define(version: 20140721062708) do
   add_index "locations", ["uuid"], name: "index_locations_on_uuid", using: :btree
 
   create_table "order_items", force: true do |t|
-    t.string   "uuid",         null: false
+    t.string   "uuid",                         null: false
     t.float    "quantity"
     t.integer  "order_id"
     t.integer  "location_id"
@@ -109,6 +109,9 @@ ActiveRecord::Schema.define(version: 20140721062708) do
     t.integer  "user_id"
     t.integer  "part_id"
     t.integer  "part_type_id"
+    t.boolean  "is_delete",    default: false
+    t.boolean  "is_dirty",     default: true
+    t.boolean  "is_new",       default: true
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -123,7 +126,10 @@ ActiveRecord::Schema.define(version: 20140721062708) do
   add_index "order_items", ["uuid"], name: "index_order_items_on_uuid", using: :btree
 
   create_table "orders", force: true do |t|
-    t.string   "uuid",       limit: 36, null: false
+    t.string   "uuid",       limit: 36,                 null: false
+    t.boolean  "is_delete",             default: false
+    t.boolean  "is_dirty",              default: true
+    t.boolean  "is_new",                default: true
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
