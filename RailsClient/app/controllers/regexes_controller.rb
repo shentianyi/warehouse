@@ -62,16 +62,14 @@ class RegexesController < ApplicationController
   end
 
   def save
-    puts params[:type].class
-    puts params[:regexes]
     @type=params[:type].to_i
-
     if @type==RegexType::PACKAGE_LABEL
       params[:regexes].each do |i, regex|
         if r=Regex.find_by_id(regex[:id])
           r.update(regex.except(:id))
         end
       end
+      PackageLabelRegex.initialize_methods
     end
     render json: true
   end
