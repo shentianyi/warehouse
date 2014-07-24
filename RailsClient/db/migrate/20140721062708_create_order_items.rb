@@ -7,16 +7,10 @@ class CreateOrderItems < ActiveRecord::Migration
     	t.references :order
     	t.references :location
     	t.references :whouse
-    	t.references :source
+    	#t.references :source
     	t.references :user
     	t.references :part
     	t.references :part_type
-      #
-      t.boolean :is_delete, :default => false
-      t.boolean :is_dirty, :default => true
-      t.boolean :is_new, :default => true
-      #
-
     	t.timestamps
     end
     add_index :order_items, :uuid

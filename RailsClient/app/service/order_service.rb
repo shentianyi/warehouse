@@ -4,7 +4,7 @@ class OrderService
   #get order history by start and end time
   #filt created_at
   #=============
-  def self.order_history_by_time args
+  def self.history_orders_by_time args
     unless args[:start_time].class.name === "Time"
       args[:start_time] = Time.parse(args[:start_time])
       args[:end_time] = Time.parse(args[:end_time])
@@ -25,6 +25,7 @@ class OrderService
   #=============
   def self.create_with_items args,current_user
     order = Order.new(args[:order])
+    order.user = current_user
     if order.save
       #save success
       ActiveRecord::Base.transaction do
@@ -42,5 +43,12 @@ class OrderService
     else
       return nil
     end
+  end
+
+  #=============
+  #exits? id
+  #=============
+  def self.exits? id
+    search({id:id}).first
   end
 end
