@@ -4,7 +4,7 @@ class OrderItemService
 	#params @position, @part_id, @quantity
 	#=============
 	def self.create args,current_user
-		unless pos = verify_position(args[:position])
+		unless pos = verify_department(args[:department])
 			return nil
 		end
 
@@ -45,20 +45,25 @@ class OrderItemService
   end
 
 	#=============
-	#verify position exits?
+	#verify department exits?
 	#and part exits in this position?
 	#=============
-	def self.verify_position pos,part_id
+	def self.verify_department pos,part_id
+=begin
 		unless position = Position.find_by_detail(pos)
 			return nil
 		end
+=end
+    unless whouse = Whouse.find_by_id(pos)
+      return nil
+    end
 
 		#dose this part in this position?
-		unless position.parts.ids.include?(part_id)
-			return nil
-		end
+    unless pp = whouse.part_positions.where(part_id: part_id)
+      return nil
+    end
 
-		return position
+    return pp.position
 	end
 
 	#=============
