@@ -9,8 +9,8 @@ class OrderService
   #=============
   def self.get_orders_by_days days,user_id = nil,handled = false
     if user_id.nil?
-      start_time = days.days.ago.at_beginning_of_day
-      end_time = Time.now.at_end_of_day
+      start_time = days.days.ago.at_beginning_of_day.utc
+      end_time = Time.now.at_end_of_day.utc
       Order.where(created_at:(start_time..end_time),handled:handled).all.order(created_at: :desc)
     else
 
