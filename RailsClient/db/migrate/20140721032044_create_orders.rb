@@ -3,8 +3,13 @@ class CreateOrders < ActiveRecord::Migration
     create_table(:orders,:id=>false) do |t|
       t.string :uuid, :limit => 36, :null => false
       t.string :id, :limit => 36, :primary => true, :null => false
+      #
+      t.boolean :is_delete, :default => false
+      t.boolean :is_dirty, :default => true
+      t.boolean :is_new, :default => true
+      #
 
-      t.references :user
+      t.string :user_id
       t.timestamps
     end
     add_index :orders, :uuid

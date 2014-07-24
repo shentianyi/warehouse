@@ -15,4 +15,4 @@ zh:
       manager: '管理者'
       receiver: '接收员'
       sender: '发送员'
-      stocker: '备货员'
+      orderer: '要货员'
