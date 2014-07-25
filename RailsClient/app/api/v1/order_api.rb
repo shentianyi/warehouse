@@ -14,7 +14,7 @@ module V1
     #get history of orders
     #post start and end time(local time)
     #=============
-    post :history do
+    get :history do
       args = {
           start_time:params[:start],
           end_time:params[:end]

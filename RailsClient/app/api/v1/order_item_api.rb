@@ -11,8 +11,16 @@ module V1
     end
 
     post :verify do
-      unless OrderItemService.verify(params,current_user)
-        return {result:0,content:OrderItemMessage::VerifyFailed}
+      unless OrderItemService.verify_part_id(params[:part_id],current_user)
+        return {result:0,content:OrderItemMessage::PartIDError}
+      end
+
+      unless OrderItemService.verify_department(params[:department],params[:part_id])
+        return {result:0,content:OrderItemMessage::DepartmentError}
+      end
+
+      unless OrderItemService.verify_quantity(params[:quantity])
+        return {result:0,content:OrderItemMessage::QuantityError}
       end
 
       return {result:1,content:OrderItemMessage::Verified}

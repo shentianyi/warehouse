@@ -8,4 +8,5 @@ class OrderItem < ActiveRecord::Base
 	belongs_to :source, class_name: "Location"
 	belongs_to :part
 	belongs_to :part_type
+
 end

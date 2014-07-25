@@ -4,7 +4,7 @@ class OrderItemService
 	#params @position, @part_id, @quantity
 	#=============
 	def self.create args,current_user
-		unless pos = verify_department(args[:department])
+		unless part_position = verify_department(args[:department],args[:part_id])
 			return nil
 		end
 
@@ -12,19 +12,19 @@ class OrderItemService
 			return nil
 		end
 
-		part = Part.find_by_id(part_id)
+		part = Part.find_by_id(args[:part_id])
 
 		unless verify_quantity args[:quantity]
 			return nil
 		end
 
-		quantity = filt_quantity(args[:quantity])
+		quantity = (args[:quantity])
 
 		params = {}
 		#here location and whouse is
-		params[:location_id] = position.whouse.location_id
-		params[:whouse_id] = position.whouse_id
-		params[:source_id] = position.sourceable_id
+		params[:location_id] = part_position.position.whouse.location_id
+		params[:whouse_id] = part_position.position.whouse_id
+		params[:source_id] = part_position.sourceable_id
 		params[:user_id] = current_user.id
 		params[:part_id] = part.id
 		params[:part_type_id] = part.part_type_id
@@ -49,21 +49,16 @@ class OrderItemService
 	#and part exits in this position?
 	#=============
 	def self.verify_department pos,part_id
-=begin
-		unless position = Position.find_by_detail(pos)
-			return nil
-		end
-=end
     unless whouse = Whouse.find_by_id(pos)
       return nil
     end
 
 		#dose this part in this position?
-    unless pp = whouse.part_positions.where(part_id: part_id)
+    unless pp = whouse.part_positions.where(part_id: part_id).first
       return nil
     end
 
-    return pp.position
+    return pp
 	end
 
 	#=============
