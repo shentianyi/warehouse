@@ -29,6 +29,7 @@ class OrderItemService
 		params[:part_id] = part.id
 		params[:part_type_id] = part.part_type_id
 		params[:quantity] = quantity
+    params[:is_emergency] = args[:is_emergency]
 
 		item = OrderItem.new(params)
 		if item.save
