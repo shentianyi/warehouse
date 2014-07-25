@@ -44,6 +44,15 @@ class PartsController < ApplicationController
     end
   end
 
+  # DELETE /parts/delete_position/1
+  # DELETE /parts/delete_position/1.json
+  def delete_position
+    @part_position = PartPosition.find_by_id(params[:id])
+    @part_position.destroy
+
+    render :json => {result:true}
+  end
+
   # PATCH/PUT /parts/1
   # PATCH/PUT /parts/1.json
   def update

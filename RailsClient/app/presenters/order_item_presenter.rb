@@ -47,6 +47,14 @@ class OrderItemPresenter<Presenter
     end
   end
 
+  def position
+    if pp = OrderItemService.verify_department(self.whouse_id,self.part_id)
+      pp.position.detail
+    else
+      ''
+    end
+  end
+
   def to_json
     {
         id:self.id,
@@ -57,8 +65,9 @@ class OrderItemPresenter<Presenter
         user_id: self.creator,
         part_id: self.part_id,
         part_type_id: self.part_type,
-        is_emergenty: self.is_emergency ? 1:0,
-        quantity: self.quantity
+        is_emergency: self.is_emergency ? 1:0,
+        quantity: self.quantity,
+        position: self.position
     }
   end
 end
