@@ -28,7 +28,8 @@
         <td><%= index+@forklifts.offset+1%>
         <td><%= forklift.id%></td>
         <td><%= ForkliftState.display(forklift.state)%></td>
-        <td><%= forklift.delivery_id %></td>
+        <td><%= link_to forklift.delivery_id,forklift.delivery%></td>
+
         <td><%= forklift.stocker.id if forklift.stocker%></td>
         <td><%= forklift.user.id if forklift.user%></td>
         <td><%= forklift.whouse.name%></td>

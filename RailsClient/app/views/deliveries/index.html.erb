@@ -3,34 +3,34 @@
   <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
     <div>
       <div>
-               <span>运单号：
-                    <input type="text" name="delivery[id]" value="<%= @id %>"/>
-                 <input type="hidden" name="delivery[id_fuzzy]"/>
-               </span>
-               <span>创建员工工号：
-                    <input type="text" name="delivery[user_id]" value="<%= @user_id %>"/>
-                    <input type="hidden" name="delivery[user_id_fuzzy]"/>
-               </span>
-               <span>接收员工工号：
-                    <input type="text" name="delivery[receiver_id]" value="<%= @receiver_id %>"/>
-                    <input type="hidden" name="delivery[receiver_id_fuzzy]"/>
-               </span>
+        <span>运单号：
+          <input type="text" name="delivery[id]" value="<%= @id %>"/>
+          <input type="hidden" name="delivery[id_fuzzy]"/>
         </span>
-               <span>运单状态：
-                 <%= select 'delivery', 'state', @states, prompt: '', selected: @state %>
-               </span>
+        <span>创建员工工号：
+          <input type="text" name="delivery[user_id]" value="<%= @user_id %>"/>
+          <input type="hidden" name="delivery[user_id_fuzzy]"/>
+        </span>
+        <span>接收员工工号：
+          <input type="text" name="delivery[receiver_id]" value="<%= @receiver_id %>"/>
+          <input type="hidden" name="delivery[receiver_id_fuzzy]"/>
+        </span>
+        </span>
+        <span>运单状态：
+          <%= select 'delivery', 'state', @states, prompt: '', selected: @state %>
+        </span>
       </div>
       <div>
-      <span>
+        <span>
         发运日期：
-         <input type="text" name="delivery[delivery_date][start]" class="datepicker" value="<%= @delivery_date_start %>"/>
-        ~  <input type="text" name="delivery[delivery_date][end]" class="datepicker" value="<%= @delivery_date_end %>"/>
-          </span>
-      <span>
-        接收日期：
-         <input type="text" name="delivery[received_date][start]" class="datepicker" value="<%= @received_date_start %>"/>
-        ~  <input type="text" name="delivery[received_date][end]" class="datepicker" value="<%= @received_date_end %>"/>
-          </span>
+          <input type="text" name="delivery[delivery_date][start]" class="datepicker" value="<%= @delivery_date_start %>"/>
+          ~  <input type="text" name="delivery[delivery_date][end]" class="datepicker" value="<%= @delivery_date_end %>"/>
+        </span>
+        <span>
+          接收日期：
+          <input type="text" name="delivery[received_date][start]" class="datepicker" value="<%= @received_date_start %>"/>
+          ~  <input type="text" name="delivery[received_date][end]" class="datepicker" value="<%= @received_date_end %>"/>
+        </span>
       </div>
       <div>
         <input type="submit" value="查 找" class="btn btn-primary"/>
@@ -51,9 +51,10 @@
     <th>NO.</th>
     <th>运单号</th>
     <th>状态</th>
+    <th>托清单数</th>
     <th>创建人</th>
     <th>创建员工工号</th>
-    <th>创建日期</th>
+   <!-- <th>创建日期</th>-->
     <th>发运日期</th>
     <th>接收员工</th>
     <th>接收员工工号</th>
@@ -71,10 +72,11 @@
         <td><%= index+@deliveries.offset+1 %></td>
         <td><%= delivery.id %></td>
         <td><%= DeliveryState.display(delivery.state) %></td>
+        <td><%= delivery.forklifts.count %></td>
         <td><%= delivery.user.name %></td>
         <td><%= delivery.user.id %></td>
-        <td><%= delivery.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
-        <td><%= delivery.delivery_date.localtime.strftime('%Y-%m-%d %H:%M:%S') if delivery.delivery_date%></td>
+        <!--<td><%= delivery.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>-->
+        <td><%= delivery.delivery_date.localtime.strftime('%Y-%m-%d %H:%M:%S') if delivery.delivery_date %></td>
         <td><%= delivery.receiver.name if delivery.receiver %></td>
         <td><%= delivery.receiver.id if delivery.receiver %></td>
         <td><%= delivery.received_date.localtime.strftime('%Y-%m-%d %H:%M:%S') if delivery.received_date %></td>

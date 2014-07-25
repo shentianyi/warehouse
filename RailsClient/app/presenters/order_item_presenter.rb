@@ -7,16 +7,56 @@ class OrderItemPresenter<Presenter
     self.delegators = Delegators
   end
 
+  def location
+    if self.location_id
+      Location.find_by_id(self.location_id).name
+    else
+      ''
+    end
+  end
+
+  def whouse
+    if self.whouse_id
+      Whouse.find_by_id(self.whouse_id).name
+    else
+      ''
+    end
+  end
+
+  def source
+    if self.source_id
+      Location.find_by_id(self.source_id).name
+    else
+      ''
+    end
+  end
+
+  def creator
+    if self.user_id
+      User.find_by_id(self.user_id).name
+    else
+      ''
+    end
+  end
+
+  def part_type
+    if self.part_type_id
+      PartType.find_by_id(self.part_type_id)
+    else
+      ''
+    end
+  end
+
   def to_json
     {
         id:self.id,
         order_id: self.order_id,
-        location_id: self.location_id,
-        whouse_id: self.whouse_id,
-        source_id: self.source_id.nil? ? '':self.source_id,
-        user_id: self.user_id,
+        location_id: self.location,
+        whouse_id: self.whouse,
+        source_id: self.source,
+        user_id: self.creator,
         part_id: self.part_id,
-        part_type_id: self.part_type_id,
+        part_type_id: self.part_type,
         is_emergenty: self.is_emergency ? 1:0,
         quantity: self.quantity
     }

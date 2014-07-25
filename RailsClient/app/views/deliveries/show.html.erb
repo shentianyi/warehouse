@@ -17,17 +17,17 @@
 
 <p>
   <string>创建日期:</string>
-  <%= @delivery.created_at%>
+  <%= @delivery.created_at.localtime%>
 </p>
 
 <p>
   <string>发运日期:</string>
-  <%= @delivery.delivery_date%>
+  <%= @delivery.delivery_date.localtime if @delivery.delivery_date%>
 </p>
 
 <p>
   <string>接收日期:</string>
-  <%= @delivery.received_date%>
+  <%= @delivery.received_date.localtime if @delivery.received_date %>
 </p>
 
 <p>
@@ -53,11 +53,9 @@
 
 <p>
   <string>托盘列表:</string>
-  <ul>
-    <% @delivery.forklifts.each do |f| %>
-    <%= link_to f.id,f%>
-    <% end%>
-  </ul>
+  <% @delivery.forklifts.each do |f| %>
+    <p><b>托清单号 :</b><%= link_to f.id,f%>, <b>状态 :</b> <%= ForkliftState.display(f.state) %>, <b>包装箱总数 :</b> <%= f.sum_packages%> , <b>已接收箱数 :</b> <%= f.accepted_packages%></p>
+  <% end%>
 </p>
 
 <%= link_to '编辑', edit_delivery_path(@delivery) %> |

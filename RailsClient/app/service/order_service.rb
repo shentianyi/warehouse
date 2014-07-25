@@ -60,7 +60,7 @@ class OrderService
         if order.save
           #save success
           args[:order_items].each do | item |
-            if item = OrderItemService.create(item,current_user)
+            if item = OrderItemService.new(item,current_user)
               item.order = order
               item.save
             end

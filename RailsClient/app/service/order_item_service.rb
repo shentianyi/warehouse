@@ -3,7 +3,7 @@ class OrderItemService
 	#create
 	#params @position, @part_id, @quantity
 	#=============
-	def self.create args,current_user
+	def self.new args,current_user
 		unless part_position = verify_department(args[:department],args[:part_id])
 			return nil
 		end
@@ -32,9 +32,12 @@ class OrderItemService
     params[:is_emergency] = args[:is_emergency]
 
 		item = OrderItem.new(params)
+=begin
 		if item.save
 			return item
 		end
+=end
+    return item
 	end
 
   def self.verify args,current_user

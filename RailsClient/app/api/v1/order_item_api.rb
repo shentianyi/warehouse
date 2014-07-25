@@ -23,7 +23,11 @@ module V1
         return {result:0,content:OrderItemMessage::QuantityError}
       end
 
-      return {result:1,content:OrderItemMessage::Verified}
+      unless item = OrderItemService.new({department:params[:department],part_id:params[:part_id],quantity:params[:quantity]},current_user)
+        return {result:0,content:OrderItemMessage::VerifyFailed}
+      end
+
+      return {result:1,content:OrderItemPresenter.new(item).to_json}
     end
 
     delete do
