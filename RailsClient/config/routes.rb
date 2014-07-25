@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   resources :orders do
     collection do
       get :panel
+      get :search
     end
   end
 
@@ -47,7 +48,7 @@ Rails.application.routes.draw do
     end
   end
 
-  delete '/parts/delete_position/:id', to: 'parts#delete_position'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  delete '/parts/delete_position/:id', to: 'parts#delete_position'
 
   resources :labels do
     collection do

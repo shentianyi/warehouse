@@ -1,4 +1,36 @@
 <p id="notice"><%= notice %></p>
 
+<p>
+  <string>订单号</string>
+  <%= @order.id %>
+</p>
+
+<p>
+  <string>要货员</string>
+  <%= @order.user.name %>
+</p>
+
+<p>
+  <string>要货员工号</string>
+  <%= @order.user_id %>
+</p>
+
+<p>
+  <string>创建时间</string>
+  <%= @order.created_at.localtime %>
+</p>
+
+<p>
+  <string>订单项目数</string>
+  <%= @order.order_items.count %>
+</p>
+
+<p>
+  <string>订单项目列表</string>
+  <%@order.order_items.each do |item|%>
+  <p><b>订单项目编号 :</b><%= item.id %>, <b>所属仓库 :</b><%= item.location.name %>, <b>备货位置 :</b><%= item.source.name if item.source %>, <b>要货员 :</b><%= item.user.name %>, <b>零件号 :</b><%= item.part_id %>, <b>数量 :</b><%= item.quantity %>, <b>是否加急 :</b><%= item.is_emergency %></p>
+  <%end%>
+</p>
+
 <%= link_to 'Edit', edit_order_path(@order) %> |
 <%= link_to 'Back', orders_path %>
