@@ -53,25 +53,29 @@ class OrderService
   #create order with order items
   #=============
   def self.create_with_items args,current_user
+    puts args[:order]
+    puts args[:order_items]
     order = Order.new(args[:order])
     order.user = current_user
-    if order.save
-      #save success
-      ActiveRecord::Base.transaction do
-        begin
+    ActiveRecord::Base.transaction do
+      begin
+        if order.save
+        #save success
+        
           args[:order_items].each do |order_item|
             item = OrderItemService.create(item,current_user)
             item.order = order
             item.save
           end
-        rescue ActiveRecord::RecordInvalid => invalid
+        else
           return nil
         end
+    
+      rescue ActiveRecord::RecordInvalid => invalid
+        return nil
       end
-      return order
-    else
-      return nil
     end
+    return order
   end
 
   #=============
