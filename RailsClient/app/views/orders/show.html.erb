@@ -17,7 +17,7 @@
 
 <p>
   <string>创建时间</string>
-  <%= @order.created_at.localtime %>
+  <%= @order.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %>
 </p>
 
 <p>

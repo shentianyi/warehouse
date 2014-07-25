@@ -36,7 +36,7 @@
         <td><%= order_item.user.name %></td>
         <td><%= order_item.user_id %></td>
         <td><%= order_item.order_id %></td>
-        <td><%= order_item.created_at.localtime %></td>
+        <td><%= order_item.created_at.localtime.strftime('%Y-%m-%d %H:%M') %></td>
         <td><%= order_item.location.name %></td>
         <td><%= order_item.whouse.name %></td>
         <td><%= order_item.source.name if order_item.source %></td>
