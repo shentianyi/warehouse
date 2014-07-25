@@ -10,6 +10,7 @@
 <table class="table table-bordered table-striped globle-table">
   <thead>
     <tr>
+      <th>Index</th>
       <th>订单项目号</th>
       <th>要货员</th>
       <th>要货员工号</th>
@@ -28,8 +29,9 @@
   </thead>
 
   <tbody>
-    <% @order_items.each do |order_item| %>
+    <% @order_items.each_with_index do |order_item,index| %>
       <tr>
+        <td><%= index+@order_items.offset+1 %></td>
         <td><%= order_item.id %></td>
         <td><%= order_item.user.name %></td>
         <td><%= order_item.user_id %></td>
