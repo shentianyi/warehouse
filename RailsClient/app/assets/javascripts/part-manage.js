@@ -2,16 +2,16 @@ var Manage =  Manage || {};
 
 Manage.part = {};
 
-Manage.part.del_position = function(id){
+Manage.part.del_position = function(id,target){
     var id = id;
+    var target = $(target);
     $.ajax({
-        url:'parts/delete_position',
+        url:'/parts/delete_position/'+id,
         type:'DELETE',
-        data:{id:id},
         dataType:'json',
         success:function(data){
             if(data.result){
-
+                target.parent().remove();
             }
         }
     })

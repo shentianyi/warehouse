@@ -47,6 +47,8 @@ Rails.application.routes.draw do
     end
   end
 
+  delete '/parts/delete_position/:id', to: 'parts#delete_position'
+
   resources :labels do
     collection do
       post :upload_file
