@@ -1,8 +1,28 @@
 <h1>Listing order_items</h1>
 
-<table>
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @order_items %>
+  </div>
+  <%= will_paginate @order_items, :container => false %>
+</div>
+
+<table class="table table-bordered table-striped globle-table">
   <thead>
     <tr>
+      <th>订单项目号</th>
+      <th>要货员</th>
+      <th>要货员工号</th>
+      <th>所属订单</th>
+      <th>创建时间</th>
+      <th>所属位置</th>
+      <th>所属仓库</th>
+      <th>备货位置</th>
+      <th>零件库位</th>
+      <th>零件号</th>
+      <th>数量</th>
+      <th>是否加急</th>
+      <th>是否已删除</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -10,14 +30,26 @@
   <tbody>
     <% @order_items.each do |order_item| %>
       <tr>
-        <td><%= link_to 'Show', order_item %></td>
-        <td><%= link_to 'Edit', edit_order_item_path(order_item) %></td>
-        <td><%= link_to 'Destroy', order_item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= order_item.id %></td>
+        <td><%= order_item.user.name %></td>
+        <td><%= order_item.user_id %></td>
+        <td><%= order_item.order_id %></td>
+        <td><%= order_item.created_at.localtime %></td>
+        <td><%= order_item.location.name %></td>
+        <td><%= order_item.whouse.name %></td>
+        <td><%= order_item.source.name if order_item.source %></td>
+        <td><%if pp = OrderItemService.verify_department(order_item.whouse_id,order_item.part_id) %><%= pp.position.detail%><%end%></td>
+        <td><%= order_item.part_id %></td>
+        <td><%= order_item.quantity %></td>
+        <td><%= order_item.is_delete %></td>
+        <td><%= link_to '详细', order_item %></td>
+        <td><%= link_to '编辑', edit_order_item_path(order_item) %></td>
+        <td><%= link_to '删除', order_item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
+<div class="digg_pagination">
+  <%= will_paginate @order_items, :container => false %>
+</div>
 <br>
-
-<%= link_to 'New Order item', new_order_item_path %>
