@@ -8,4 +8,8 @@ class OrderItem < ActiveRecord::Base
 	belongs_to :source, class_name: "Location"
 	belongs_to :part
 	belongs_to :part_type
+
+  def generate_id
+    "OI#{Time.now.to_milli}"
+  end
 end

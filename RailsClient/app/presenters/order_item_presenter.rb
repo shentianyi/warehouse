@@ -1,5 +1,5 @@
 class OrderItemPresenter<Presenter
-  Delegators=[:id,:order_id,:location_id,:whouse_id,:source_id,:user_id,:part_id,:part_type_id,:quantity]
+  Delegators=[:id,:order_id,:location_id,:whouse_id,:source_id,:user_id,:part_id,:part_type_id,:quantity,:is_emergency]
   def_delegators :@order_item,*Delegators
 
   def initialize(order_item)
@@ -17,6 +17,7 @@ class OrderItemPresenter<Presenter
         user_id: self.user_id,
         part_id: self.part_id,
         part_type_id: self.part_type_id,
+        is_emergenty: self.is_emergency ? 1:0,
         quantity: self.quantity
     }
   end
