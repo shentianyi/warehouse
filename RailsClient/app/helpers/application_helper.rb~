@@ -30,7 +30,7 @@ module ApplicationHelper
 
   def search
     @condition=params[@model]
-    query=model.unscoped
+    query=model
     @condition.each do |k, v|
       if (v.is_a?(Fixnum) || v.is_a?(String)) && !v.blank?
         puts @condition.has_key?(k+'_fuzzy')
