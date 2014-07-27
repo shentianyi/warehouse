@@ -156,15 +156,15 @@ module Sync
     end
 
     def self.get_posts(page=0)
-      model.unscoped.where(is_new: true).offset(page*RECORD_PER_REQUEST_SIZE).limit(RECORD_PER_REQUEST_SIZE).all
+      model.unscoped.where(is_new: true).offset(page*Sync::Config.per_request_size).limit(Sync::Config.per_request_size).all
     end
 
     def self.get_puts(page=0)
-      model.unscoped.where(is_dirty: true, is_new: false, is_delete: false).offset(page*RECORD_PER_REQUEST_SIZE).limit(RECORD_PER_REQUEST_SIZE).all
+      model.unscoped.where(is_dirty: true).offset(page*Sync::Config.per_request_size).limit(Sync::Config.per_request_size).all
     end
 
     def self.get_deletes(page=0)
-      model.unscoped.where(is_dirty: true, is_delete: true).offset(page*RECORD_PER_REQUEST_SIZE).limit(RECORD_PER_REQUEST_SIZE).all
+      model.unscoped.where(is_dirty: true, is_delete: true).offset(page*Sync::Config.per_request_size).limit(Sync::Config.per_request_size).all
     end
 
     def self.clean_put item

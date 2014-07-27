@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140721062708) do
+ActiveRecord::Schema.define(version: 20140727172304) do
 
   create_table "attachments", force: true do |t|
     t.string   "name"
@@ -102,6 +102,7 @@ ActiveRecord::Schema.define(version: 20140721062708) do
   create_table "order_items", force: true do |t|
     t.string   "uuid",                         null: false
     t.float    "quantity"
+    t.integer  "box_quantity", default: 0
     t.string   "order_id"
     t.string   "location_id"
     t.string   "source_id"
@@ -131,6 +132,7 @@ ActiveRecord::Schema.define(version: 20140721062708) do
   create_table "orders", force: true do |t|
     t.string   "uuid",       limit: 36,                 null: false
     t.boolean  "handled",               default: false
+    t.string   "source_id"
     t.boolean  "is_delete",             default: false
     t.boolean  "is_dirty",              default: true
     t.boolean  "is_new",                default: true
@@ -140,6 +142,7 @@ ActiveRecord::Schema.define(version: 20140721062708) do
   end
 
   add_index "orders", ["id"], name: "index_orders_on_id", using: :btree
+  add_index "orders", ["source_id"], name: "index_orders_on_source_id", using: :btree
   add_index "orders", ["user_id"], name: "index_orders_on_user_id", using: :btree
   add_index "orders", ["uuid"], name: "index_orders_on_uuid", using: :btree
 
@@ -247,16 +250,22 @@ ActiveRecord::Schema.define(version: 20140721062708) do
 
   create_table "pick_items", force: true do |t|
     t.string   "pick_list_id"
-    t.string   "order_item_id"
-    t.boolean  "is_delete",     default: false
-    t.boolean  "is_dirty",      default: true
-    t.boolean  "is_new",        default: true
+    t.float    "quantity",              default: 0.0
+    t.integer  "box_quantity",          default: 0
+    t.string   "destination_whouse_id"
+    t.string   "user_id"
+    t.string   "part_id"
+    t.string   "part_type_id"
+    t.string   "remark"
+    t.boolean  "is_emergency",          default: false, null: false
+    t.boolean  "is_delete",             default: false
+    t.boolean  "is_dirty",              default: true
+    t.boolean  "is_new",                default: true
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "pick_items", ["id"], name: "index_pick_items_on_id", using: :btree
-  add_index "pick_items", ["order_item_id"], name: "index_pick_items_on_order_item_id", using: :btree
   add_index "pick_items", ["pick_list_id"], name: "index_pick_items_on_pick_list_id", using: :btree
 
   create_table "pick_lists", force: true do |t|
@@ -332,6 +341,21 @@ ActiveRecord::Schema.define(version: 20140721062708) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "sys_configs", force: true do |t|
+    t.string   "code"
+    t.string   "value"
+    t.string   "name"
+    t.string   "remark"
+    t.boolean  "is_delete",  default: false
+    t.boolean  "is_dirty",   default: true
+    t.boolean  "is_new",     default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "sys_configs", ["code"], name: "index_sys_configs_on_code", using: :btree
+  add_index "sys_configs", ["id"], name: "index_sys_configs_on_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "uuid",                   limit: 36,                 null: false

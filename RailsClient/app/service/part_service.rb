@@ -14,10 +14,13 @@ class PartService
   end
 
   def self.import_part_position csv
-    headers = [{field:'part_id',header: 'Part Nr'} ,{field:'position',header: 'Position'},{field:$UPMARKER,header: $UPMARKER}]
-
+    headers = [{field:'part_id',header: 'PartNr'} ,
+               {field:'position',header: 'Position'},
+               {field:'sourceable_id',header:'LocationId',null:true},
+               {field:$UPMARKER,header: $UPMARKER,null:true}]
+puts headers
     msg=Message.new
-    begin
+    #begin
       line_no=0
       CSV.foreach(csv.file_path, headers: true, col_sep: csv.col_sep, encoding: csv.encoding) do |row|
         row.strip
@@ -28,8 +31,10 @@ class PartService
 
         data={}
         headers.each do |col|
-          raise(ArgumentError, "行:#{line_no} #{col[:field]} 值不可为空") if row[col[:header]].blank?
+          raise(ArgumentError, "行:#{line_no} #{col[:field]} 值不可为空") if row[col[:header]].blank? && col[:null].nil?
           data[col[:field]]=row[col[:header]]
+          data['sourceable_type']='Location'
+          puts data
         end
         if p =  Position.find_by_detail(data['position'])
           data.delete('position')
@@ -37,13 +42,15 @@ class PartService
         else
           raise(ArgumentError, "行:#{line_no} Position 不存在对应的库位")
         end
+
         # clean data
         update_marker=(data.delete($UPMARKER).to_i==1)
 
         #1 means delete
         if update_marker
           #if delete
-          if item=PartPosition.where(data).first
+          query=[part_id:data['part_id'],position_id:  data['position_id'] ]
+          if item=PartPosition.where(query).first
             item.destroy
           end
         else
@@ -54,10 +61,10 @@ class PartService
         msg.result=true
         msg.content='数据导入成功'
       end
-    rescue => e
-      puts e.backtrace
-      msg.content =e.message
-    end
+    #rescue => e
+    #  puts e.backtrace
+    #  msg.content =e.message
+    #end
     return msg
   end
 end

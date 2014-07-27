@@ -4,7 +4,7 @@ class OrdersController < ApplicationController
   # GET /orders
   # GET /orders.json
   def index
-    @orders = Order.unscoped.paginate(:page=>params[:page])
+    @orders = Order.unscoped.paginate(:page => params[:page])
   end
 
   # GET /orders/1
@@ -62,17 +62,28 @@ class OrdersController < ApplicationController
   end
 
   def panel
+    @orders=Order.where(handled: false, source_id: current_user.location.id).order(created_at: :asc).all
+  end
 
+  def items
+    if params[:user_id].blank?
+      @order_items=OrderItem.where(order_id: params[:order_ids])
+      #.group(:part_id,:whouse_id)
+      #.select('order_items.*,sum(order_items.quantity) as quantity')
+    else
+      @order_items=PickItemService.get_order_items(params[:user_id],params[:order_ids])||[]
+    end
+    render partial:'item'
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_order
-      @order = Order.unscoped.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_order
+    @order = Order.unscoped.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def order_params
-      params.require(:order).permit(:id,:user_id)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def order_params
+    params.require(:order).permit(:id, :user_id)
+  end
 end

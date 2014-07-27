@@ -1,12 +1,11 @@
 class PartsController < ApplicationController
   #load_and_authorize_resource
   before_action :set_part, only: [:show, :edit, :update, :destroy]
-
+  before_action :set_part_type,only:[:index,:new,:edit,:search,:download_positions]
   # GET /parts
   # GET /parts.json
   def index
     @parts = Part.unscoped.paginate(:page=>params[:page])#.all
-    @part_types=PartType.all
   end
 
   # GET /parts/1
@@ -17,12 +16,10 @@ class PartsController < ApplicationController
   # GET /parts/new
   def new
     @part = Part.new
-    @part_types=PartType.all
   end
 
   # GET /parts/1/edit
   def edit
-    @part_types=PartType.all
   end
 
   # POST /parts
@@ -67,10 +64,6 @@ class PartsController < ApplicationController
     end
   end
 
-  def search
-    @part_types=PartType.all
-    super
-  end
 
   # DELETE /parts/1
   # DELETE /parts/1.json
@@ -117,34 +110,35 @@ class PartsController < ApplicationController
     send_file path, :type => 'application/csv', :filename => file_name
   end
 
-  # GET /parts/download_positions
-  # GET /parts/download_positions.json
-  def download_positions
-    file_name= 'part_positions_'+Time.now.strftime('%Y%m%d%H%M%S')+'.csv'
-    path=File.join($DOWNLOADPATH, file_name)
-    msg = Message.new
-    msg.result = false
-    begin
-      File.open(path, 'wb') do |f|
-        f.puts PartPosition.csv_headers.join($CSVSP)
-        items=PartPosition.all
-        items.each do |item|
-          line=[]
-          proc=PartPosition.down_block
-          proc.call(line, item)
-          f.puts line.join($CSVSP)
-        end
-      end
-      msg.result=true
-    rescue => e
-      msg.content =e.message
-    end
-    if msg.result
-      send_file path, :type => 'application/csv', :filename => file_name
-    else
-      render :index
-    end
-  end
+  ## GET /parts/download_positions
+  ## GET /parts/download_positions.json
+  #def download_positions
+  #  #@parts = Part.unscoped.paginate(:page=>params[:page])
+  #  file_name= 'part_positions_'+Time.now.strftime('%Y%m%d%H%M%S')+'.csv'
+  #  path=File.join($DOWNLOADPATH, file_name)
+  #  msg = Message.new
+  #  msg.result = false
+  #  #begin
+  #    File.open(path, 'wb') do |f|
+  #      f.puts PartPosition.csv_headers.join($CSVSP)
+  #      items=PartPosition.all
+  #      items.each do |item|
+  #        line=[]
+  #        proc=PartPosition.down_block
+  #        proc.call(line, item)
+  #        f.puts line.join($CSVSP)
+  #      end
+  #    end
+  #    msg.result=true
+  #  #rescue => e
+  #  #  msg.content =e.message
+  #  #end
+  #  if msg.result
+  #    send_file path, :type => 'application/csv', :filename => file_name
+  #  else
+  #    render :index
+  #  end
+  #end
 
   private
   # Use callbacks to share common setup or constraints between actions.
@@ -157,4 +151,9 @@ class PartsController < ApplicationController
     #params[:part]
     params.require(:part).permit(:id, :unit_pack, :customernum, :user_id,:part_type_id,:is_delete)
   end
+
+  def set_part_type
+    @part_types=PartType.all
+  end
+
 end
