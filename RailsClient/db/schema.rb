@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140727172304) do
+ActiveRecord::Schema.define(version: 20140727154505) do
 
   create_table "attachments", force: true do |t|
     t.string   "name"
@@ -139,6 +139,7 @@ ActiveRecord::Schema.define(version: 20140727172304) do
     t.string   "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "source_id"
   end
 
   add_index "orders", ["id"], name: "index_orders_on_id", using: :btree
