@@ -5,10 +5,8 @@ class IosUpdate<CZ::BaseClass
   attr_accessor :app_version, :is_force_update
 
   def self.find
-    if $redis.exists(key)
-      cache=self.new($redis.hgetall key)
-      return cache
-    end
+    cache=self.new({app_version:SysConfigCache.ios_version_value,is_force_update:SysConfigCache.is_force_value})
+    return cache
   end
 
   def old_version? version
@@ -16,7 +14,7 @@ class IosUpdate<CZ::BaseClass
   end
 
   def is_force_update?
-    self.is_force_update ? 1:0
+    self.is_force_update=='1' ? 1:0
   end
 
   def self.key
@@ -24,7 +22,7 @@ class IosUpdate<CZ::BaseClass
   end
 
   def save
-    $redis.hmset Setting.key , 'app_version', self.app_version, 'is_force_update', self.is_force_update
+    #$redis.hmset Setting.key , 'app_version', self.app_version, 'is_force_update', self.is_force_update
   end
 
   def default_version

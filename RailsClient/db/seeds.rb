@@ -44,4 +44,12 @@ ActiveRecord::Base.transaction do
   unless SysConfig.find_by_code('PRINT_SERVER')
     SysConfig.create(code:'PRINT_SERVER',value:'http://192.168.8.77:9000',name:'打印服务器地址')
   end
+
+  unless SysConfig.find_by_code('IOS_VERSION')
+    SysConfig.create(code:'IOS_VERSION',value:'0.1',name:'打印服务器地址')
+  end
+
+  unless SysConfig.find_by_code('IS_FORCE')
+    SysConfig.create(code:'IS_FORCE',value:false ,name:'打印服务器地址')
+  end
 end
