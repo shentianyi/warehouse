@@ -25,7 +25,7 @@ class CreateOrderItems < ActiveRecord::Migration
     add_index :order_items, :id
     add_index :order_items, :order_id
     add_index :order_items, :location_id
-    add_index :order_items, :source_id
+    #add_index :order_items, :source_id
     add_index :order_items, :whouse_id
     add_index :order_items, :user_id
     add_index :order_items, :part_id

@@ -25,9 +25,9 @@ class OrderItemPresenter<Presenter
 
   def source
     if self.source_id
-      Location.find_by_id(self.source_id).name
+      OrderItemService.verify_department(self.whouse_id,self.part_id).sourceable
     else
-      ''
+      {id:''}
     end
   end
 
@@ -65,7 +65,7 @@ class OrderItemPresenter<Presenter
         order_id: self.order_id,
         location_id: self.location,
         whouse_id: self.whouse,
-        source_id: self.source_id,
+        source_id: self.source.id,
         source:self.source,
         user_id: self.creator,
         part_id: self.part_id,

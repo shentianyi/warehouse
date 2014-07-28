@@ -24,7 +24,7 @@ class OrderItemService
 		#here location and whouse is
 		params[:location_id] = part_position.position.whouse.location_id
 		params[:whouse_id] = part_position.position.whouse_id
-		params[:source_id] = part_position.sourceable_id
+		#params[:source_id] = part_position.sourceable_id
 		params[:user_id] = current_user.id
 		params[:part_id] = part.id
 		params[:part_type_id] = part.part_type_id
