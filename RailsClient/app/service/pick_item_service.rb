@@ -1,5 +1,5 @@
 class PickItemService
-  def self.get_order_items user_id, order_ids=nil
+  def self.get_order_items user_id, order_ids
     if user=User.find_by_id(user_id)
       pick_item_filters=user.pick_item_filters
       if pick_item_filters.size >0
@@ -16,10 +16,11 @@ class PickItemService
       end
       if query
         query= OrderItem.where(query)
-        query=query.where(order_id: order_ids) unless order_ids.nil?
-        return query.all
+        query=query.where(order_id: order_ids)
+        return query
+        #.group(:part_id,:whouse_id)
+        #.select('order_items.*,sum(order_items.quantity) as quantity')
       end
     end
-    return []
   end
 end

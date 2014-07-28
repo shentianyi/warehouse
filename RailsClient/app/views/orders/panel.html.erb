@@ -1,0 +1,56 @@
+<h3>需求单处理面板</h3>
+择货员工号：<input type="text" id="user-id-text">
+<%=render partial:'list'%>
+<div class="order-content-div">
+  <h4>选择需求单预览</h4>
+</div>
+<input type="button" value="生成择货单(择货员工号必须填写)" onclick="build_pick_list();">
+<%= render :partial => "shared/handling_msg_box", :locals => { :handlemsg => "处理中..." } %>
+
+<script type="text/javascript">
+    $('body').on('change','.order-checkbox',function(){
+        get_order_items();
+    });
+    $('body').on('keydown','#user-id-text',function(e){
+        if(e.keyCode==13){
+            get_order_items();
+        }
+    });
+    function get_order_items(){
+        var orders=[];
+        $('.order-checkbox:checked').each(function(){
+            orders.push($(this).val());
+        });
+        if(orders.length==0){
+            $('.order-content-div').html("<h4>选择需求单预览</h4>");
+        }else{
+            $.get('/orders/items',{user_id:$('#user-id-text').val(),order_ids:orders},function(data){
+                $('.order-content-div').html(data);
+            },'html');
+        }
+    }
+  function build_pick_list(){
+      var user=$('#user-id-text').val();
+      var orders=[];
+      $('.order-checkbox:checked').each(function(){
+          orders.push($(this).val());
+      });
+      if(!user){
+          alert('请输入择货员工号');
+          return;
+      }
+      if(orders.length==0){
+          alert('请选择需要处理的需求单');
+          return;
+      }
+      show_handle_dialog();
+      $.post('/pick_lists/',{user_id:user,order_ids:orders},function(data){
+          hide_handle_dialog();
+          if(data.result){
+              window.location='/pick_lists/'+data.content.id;
+          }else{
+              alert(data.content);
+          }
+      },'json');
+  }
+</script>

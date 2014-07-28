@@ -7,7 +7,7 @@ module Printer
 
     def generate_data
       d=Delivery.find(self.id)
-      head={id: d.id, receive_addr: d.destination.address, user: d.receiver_id, receive_date: d.received_date.strftime('%Y.%m.%d')}
+      head={id: d.id, receive_addr: d.destination.address, user: d.receiver_id, receive_date: d.received_date.localtime.strftime('%Y.%m.%d')}
       heads=[]
       HEAD.each do |k|
         heads<<{Key: k, Value: head[k]}

@@ -1,11 +1,43 @@
-<h1>Listing pick_items</h1>
+<h1>择货单项目列表</h1>
 
-<table>
+<div>
+  <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+    <div>
+      <div>
+        <span>择货单项目号：
+          <input type="text" name="pick_item[id]" value="<%= @id %>"/>
+          <input type="hidden" name="pick_item[id_fuzzy]"/>
+        </span>
+        <span>择货单号：
+          <input type="text" name="pick_item[pick_list_id]" value="<%= @pick_list_id %>"/>
+          <input type="hidden" name="pick_item[pick_list_id_fuzzy]"/>
+        </span>
+        <span>要货单项目号：
+          <input type="text" name="pick_item[order_item_id]" value="<%= @order_item_id %>"/>
+          <input type="hidden" name="pick_item[order_item_id_fuzzy]"/>
+        </span>
+      </div>
+      <div>
+        <input type="submit" value="查 找" class="btn btn-primary"/>
+      </div>
+    </div>
+  </form>
+</div>
+
+<br/>
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @deliveries %>
+  </div>
+  <%= will_paginate @deliveries, :container => false %>
+</div>
+<table class="table table-bordered table-striped globle-table table-hover">
   <thead>
     <tr>
-      <th>Id</th>
-      <th>Pick list</th>
-      <th>Order item</th>
+      <th>NO.</th>
+      <th>择货单项目号</th>
+      <th>择货单号</th>
+      <th>要货单项目</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -13,17 +45,18 @@
   <tbody>
     <% @pick_items.each do |pick_item| %>
       <tr>
+        <td><%= index+@pick_items.offset+1 %></td>
         <td><%= pick_item.id %></td>
         <td><%= pick_item.pick_list_id %></td>
         <td><%= pick_item.order_item_id %></td>
-        <td><%= link_to 'Show', pick_item %></td>
-        <td><%= link_to 'Edit', edit_pick_item_path(pick_item) %></td>
-        <td><%= link_to 'Destroy', pick_item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to '详细', pick_item %></td>
+        <td><%= link_to '编辑', edit_pick_item_path(pick_item) %></td>
+        <!--<td><%= link_to '删除', pick_item, method: :delete, data: { confirm: 'Are you sure?' } %></td>-->
       </tr>
     <% end %>
   </tbody>
 </table>
-
+<div class="digg_pagination">
+  <%= will_paginate @deliveries, :container => false %>
+</div>
 <br>
-
-<%= link_to 'New Pick item', new_pick_item_path %>

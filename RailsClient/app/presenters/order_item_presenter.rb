@@ -1,5 +1,5 @@
 class OrderItemPresenter<Presenter
-  Delegators=[:id,:order_id,:location_id,:whouse_id,:source_id,:user_id,:part_id,:part_type_id,:quantity,:is_emergency]
+  Delegators=[:id,:order_id,:location_id,:whouse_id,:source_id,:user_id,:part_id,:part_type_id,:quantity,:is_emergency,:box_quantity]
   def_delegators :@order_item,*Delegators
 
   def initialize(order_item)
@@ -55,19 +55,26 @@ class OrderItemPresenter<Presenter
     end
   end
 
+  def uniq_id
+    self.whouse_id + self.part_id + self.is_emergency.to_s
+  end
+
   def to_json
     {
         id:self.id,
         order_id: self.order_id,
         location_id: self.location,
         whouse_id: self.whouse,
-        source_id: self.source,
+        source_id: self.source_id,
+        source:self.source,
         user_id: self.creator,
         part_id: self.part_id,
         part_type_id: self.part_type,
         is_emergency: self.is_emergency ? 1:0,
         quantity: self.quantity,
-        position: self.position
+        position: self.position,
+        uniq_id: self.uniq_id,
+        box_quantity: self.box_quantity
     }
   end
 end

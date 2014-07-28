@@ -18,11 +18,11 @@ module Import
       class_variable_get(:@@csv_cols).collect { |col| col.header }
     end
 
-    def down_block
+    def part_down_block
       Proc.new { |line, item|
         line<<item.id
         line<<item.unit_pack
-        line<<item.part_type.id if item.part_type
+        line<< item.part_type_id
       }
     end
 

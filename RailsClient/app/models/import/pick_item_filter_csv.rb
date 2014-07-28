@@ -16,7 +16,7 @@ module Import
       class_variable_get(:@@csv_cols).collect { |col| col.header }
     end
 
-    def down_block
+    def pack_item_filter_down_block
       Proc.new { |line, item|
         line<<item.user_id
         line<<item.filterable_type

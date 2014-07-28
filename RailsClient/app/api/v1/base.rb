@@ -10,5 +10,6 @@ module V1
     mount RegexAPI
     mount OrderAPI
     mount OrderItemAPI
+    mount IosUpdateAPI
   end
 end

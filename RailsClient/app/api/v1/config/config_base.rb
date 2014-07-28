@@ -1,10 +1,10 @@
 module V1
   module Config
     class ConfigBase < ApplicationAPI
-      include OauthAPIGuard
+      #include OauthAPIGuard
+      include APIGuard
       version 'v1', :using => :path
-      namespace 'config'
-
+      #mount IosUpdateAPI
     end
   end
 end

@@ -36,7 +36,27 @@ ActiveRecord::Base.transaction do
   unless Regex.where(code: 'DATE', type: RegexType::PACKAGE_LABEL).first
     Regex.create(name: '入库时间', code: 'DATE', prefix_string: 'W  ', regex_string: '^W\s*\S+',remark:'W后有两个空格，请认真检测标签', type: RegexType::PACKAGE_LABEL)
   end
-  #unless Regex.where(code: 'DATE_TRIM', type: RegexType::PACKAGE_LABEL).first
+  #unless Regex.whercode: 'DATE_TRIM', type: RegexType::PACKAGE_LABEL).first
   #  Regex.create(name: '入库时间截断', code: 'DATE_TRIM',  regex_string: '^W', type: RegexType::PACKAGE_LABEL)
   #end
+  unless Regex.where(code: 'ORDERITEM_PART', type: RegexType::ORDERITEM_LABEL).first
+    Regex.create(name: '需求单零件号', code: 'ORDERITEM_PART', prefix_string: 'P', regex_string: '^P\w+' , type: RegexType::ORDERITEM_LABEL)
+  end
+
+  unless Regex.where(code: 'ORDERITEM_QTY', type: RegexType::ORDERITEM_LABEL).first
+    Regex.create(name: '需求单数量', code: 'ORDERITEM_QTY', prefix_string: 'Q', regex_string: '^Q\d+\.?\d*$', type: RegexType::ORDERITEM_LABEL)
+  end
+
+  # init system config
+  unless SysConfig.find_by_code('PRINT_SERVER')
+    SysConfig.create(code:'PRINT_SERVER',value:'http://192.168.8.77:9000',name:'打印服务器地址')
+  end
+
+  unless SysConfig.find_by_code('IOS_VERSION')
+    SysConfig.create(code:'IOS_VERSION',value:'0.1',name:'打印服务器地址')
+  end
+
+  unless SysConfig.find_by_code('IS_FORCE')
+    SysConfig.create(code:'IS_FORCE',value:false ,name:'打印服务器地址')
+  end
 end

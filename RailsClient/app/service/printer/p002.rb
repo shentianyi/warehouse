@@ -7,14 +7,14 @@ module Printer
 
     def generate_data
       d=Delivery.find(self.id)
-      head={id: d.id, send_addr:d.source.address,receive_addr:d.destination.address,delivery_date: d.delivery_date.nil? ? '' : d.delivery_date.strftime('%Y.%m.%d')}
+      head={id: d.id, send_addr:d.source.address,receive_addr:d.destination.address,delivery_date: d.delivery_date.nil? ? '' : d.delivery_date.localtime.strftime('%Y.%m.%d')}
       heads=[]
       HEAD.each do |k|
         heads<<{Key: k, Value: head[k]}
       end
       forklifts=d.forklifts
       forklifts.each do |f|
-        puts f.sum_packages
+        #puts f.sum_packages
         body={forklift_id:f.id,quantity:f.sum_packages,whouse:f.whouse_id}
         bodies=[]
         BODY.each do |k|

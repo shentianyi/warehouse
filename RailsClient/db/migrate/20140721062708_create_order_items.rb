@@ -4,6 +4,7 @@ class CreateOrderItems < ActiveRecord::Migration
     	t.string :uuid, :limited => 36, :null => false
     	t.string :id , :limited => 36, :primary => true, :null => false
     	t.float :quantity
+      t.integer :box_quantity, :default => 0
     	t.string :order_id
     	t.string :location_id
       #t.string :source_id

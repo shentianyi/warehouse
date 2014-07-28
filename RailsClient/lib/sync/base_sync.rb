@@ -8,38 +8,42 @@ module Sync
     def self.execute
       ## base data
       current=Time.now
-      Sync::Execute::LocationSync.sync
-      Sync::Execute::HackerSync.sync
-      Sync::Execute::WhouseSync.sync
-      Sync::Execute::PartSync.sync
-      Sync::Execute::PositionSync.sync
-      Sync::Execute::PartPositionSync.sync
+      begin
+        Sync::Execute::LocationSync.sync
+        Sync::Execute::HackerSync.sync
+        Sync::Execute::WhouseSync.sync
+        Sync::Execute::PartSync.sync
+        Sync::Execute::PositionSync.sync
+        Sync::Execute::PartPositionSync.sync
 
-      # dynamic data
-      Sync::Execute::DeliverySync.sync
-      Sync::Execute::ForkliftSync.sync
-      Sync::Execute::PackageSync.sync
-      Sync::Execute::PackagePositionSync.sync
-      Sync::Execute::StateLogSync.sync
-
-
-      Sync::Config.last_time=(current- Sync::Config.advance_second.seconds).utc
+        # dynamic data
+        Sync::Execute::DeliverySync.sync
+        Sync::Execute::ForkliftSync.sync
+        Sync::Execute::PackageSync.sync
+        Sync::Execute::PackagePositionSync.sync
+        Sync::Execute::StateLogSync.sync
+        Sync::Config.last_time=(current- Sync::Config.advance_second.seconds).utc
+      rescue => e
+        puts e.class
+        puts e.to_s
+        puts e.backtrace
+      end
     end
 
     def self.sync
       if Config.enabled
-        begin
+        #begin
         if executor=Sync::Executor.find(main_key)
           get &get_block if executor.get
           post &post_block if executor.post
           put &put_block if executor.put
           delete &delete_block if executor.delete
         end
-        rescue => e
-          puts e.class
-          puts e.to_s
-          puts e.backtrace
-        end
+        #rescue => e
+        #  puts e.class
+        #  puts e.to_s
+        #  puts e.backtrace
+        #end
       end
     end
 
@@ -156,15 +160,15 @@ module Sync
     end
 
     def self.get_posts(page=0)
-      model.unscoped.where(is_new: true).offset(page*RECORD_PER_REQUEST_SIZE).limit(RECORD_PER_REQUEST_SIZE).all
+      model.unscoped.where(is_new: true).offset(page*Sync::Config.per_request_size).limit(Sync::Config.per_request_size).all
     end
 
     def self.get_puts(page=0)
-      model.unscoped.where(is_dirty: true, is_new: false, is_delete: false).offset(page*RECORD_PER_REQUEST_SIZE).limit(RECORD_PER_REQUEST_SIZE).all
+      model.unscoped.where(is_dirty: true).offset(page*Sync::Config.per_request_size).limit(Sync::Config.per_request_size).all
     end
 
     def self.get_deletes(page=0)
-      model.unscoped.where(is_dirty: true, is_delete: true).offset(page*RECORD_PER_REQUEST_SIZE).limit(RECORD_PER_REQUEST_SIZE).all
+      model.unscoped.where(is_dirty: true, is_delete: true).offset(page*Sync::Config.per_request_size).limit(Sync::Config.per_request_size).all
     end
 
     def self.clean_put item
