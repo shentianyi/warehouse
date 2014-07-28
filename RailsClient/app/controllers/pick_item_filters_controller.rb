@@ -1,6 +1,6 @@
 class PickItemFiltersController < ApplicationController
   before_action :set_pick_item_filter, only: [:show, :edit, :update, :destroy]
-  before_action :set_condition,only:[:index,:new,:edit,:search]
+  before_action :set_condition,only:[:index,:new,:edit,:search,:create]
   # GET /pick_item_filters
   # GET /pick_item_filters.json
   def index

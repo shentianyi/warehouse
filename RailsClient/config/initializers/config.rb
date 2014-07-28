@@ -26,3 +26,4 @@ $API_AUTH_USER={user: auth['user'], passwd: auth['passwd']}
 WillPaginate.per_page = 10
 
 PackageLabelRegex.initialize_methods
+SysConfigCache.initialize_methods

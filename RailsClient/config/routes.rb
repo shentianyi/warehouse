@@ -1,8 +1,14 @@
 Rails.application.routes.draw do
 
+  resources :sys_configs
+
   resources :order_items
   resources :pick_items
-  resources :pick_lists
+  resources :pick_lists do
+    collection do
+      post :print
+    end
+  end
 
 
   mount ApplicationAPI => '/api'
@@ -23,6 +29,8 @@ Rails.application.routes.draw do
   resources :orders do
     collection do
       get :panel
+      get :search
+      get :items
     end
   end
 
@@ -35,7 +43,7 @@ Rails.application.routes.draw do
   get 'parts/download_positions', to: 'parts#download_positions'
   post 'parts/do_import_positions', to: 'parts#do_import_positions'
 
-  [:locations, :whouses, :parts, :positions, :part_positions, :users, :deliveries,:part_types,:pick_item_filters,:orders].each do |model|
+  [:locations, :whouses, :parts, :positions, :part_positions, :users, :deliveries, :part_types, :pick_item_filters, :orders].each do |model|
     resources model do
       collection do
         post :do_import
@@ -46,6 +54,8 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  delete '/parts/delete_position/:id', to: 'parts#delete_position'
 
   resources :labels do
     collection do
@@ -75,7 +85,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :regexes   do
+  resources :regexes do
     collection do
       post :save
     end

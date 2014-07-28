@@ -4,7 +4,7 @@ class OrderItemsController < ApplicationController
   # GET /order_items
   # GET /order_items.json
   def index
-    @order_items = OrderItem.all
+    @order_items = OrderItem.unscoped.paginate(:page=>params[:page])
   end
 
   # GET /order_items/1
@@ -64,7 +64,7 @@ class OrderItemsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_order_item
-      @order_item = OrderItem.find(params[:id])
+      @order_item = OrderItem.unscoped.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

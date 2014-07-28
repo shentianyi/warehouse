@@ -53,22 +53,24 @@ module Import
     # export csv
     def export_csv(path, query)
       msg=Message.new
-      begin
+      #begin
         File.open(path, 'wb') do |f|
           f.puts self.csv_headers.join($CSVSP)
           items=query.nil? ? self.all : self.where(query).all
           items.each do |item|
             line=[]
-            proc=self.down_block
+            puts '-------------------'
+            puts self.to_s
+            proc=self.send("#{self.to_s.underscore}_down_block".to_sym)
             proc.call(line, item)
             f.puts line.join($CSVSP)
           end
         end
         msg.result=true
-      rescue => e
-        msg.content =e.message
-      end
-      return msg
+      #rescue => e
+      #  msg.content =e.message
+      #end
+      #return msg
     end
 
   end

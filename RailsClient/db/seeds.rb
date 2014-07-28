@@ -36,7 +36,12 @@ ActiveRecord::Base.transaction do
   unless Regex.where(code: 'DATE', type: RegexType::PACKAGE_LABEL).first
     Regex.create(name: '入库时间', code: 'DATE', prefix_string: 'W  ', regex_string: '^W\s*\S+',remark:'W后有两个空格，请认真检测标签', type: RegexType::PACKAGE_LABEL)
   end
-  #unless Regex.where(code: 'DATE_TRIM', type: RegexType::PACKAGE_LABEL).first
+  #unless Regex.whercode: 'DATE_TRIM', type: RegexType::PACKAGE_LABEL).first
   #  Regex.create(name: '入库时间截断', code: 'DATE_TRIM',  regex_string: '^W', type: RegexType::PACKAGE_LABEL)
   #end
+
+  # init system config
+  unless SysConfig.find_by_code('PRINT_SERVER')
+    SysConfig.create(code:'PRINT_SERVER',value:'http://192.168.8.77:9000',name:'打印服务器地址')
+  end
 end

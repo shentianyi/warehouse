@@ -4,7 +4,7 @@ sync:
   token: 3dcba17f596969a676bfdd90b5425c703f983acf7306760e1057c95afe9f17b1d
   sync_lock: false
   enabled: true
-  advance_second: 300
+  advance_second: 1800
   per_request_size: 3000
   executor:
     location:
@@ -46,30 +46,30 @@ sync:
     delivery:
       name: "运单"
       get: true
-      post: false
-      put: false
-      delete: false
+      post: true
+      put: true
+      delete: true
     forklift:
       name: "托盘"
       get: true
-      post: false
-      put: false
-      delete: false
+      post: true
+      put: true
+      delete: true
     package:
       name: "包装箱"
       get: true
-      post: false
-      put: false
-      delete: false
+      post: true
+      put: true
+      delete: true
     package_postion:
       name: "包装箱库位"
       get: true
-      post: false
-      put: false
-      delete: false
+      post: true
+      put: true
+      delete: true
     state_log:
       name: "状态记录"
       get: true
-      post: false
-      put: false
-      delete: false
+      post: true
+      put: true
+      delete: true

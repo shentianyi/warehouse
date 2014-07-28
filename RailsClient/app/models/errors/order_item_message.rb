@@ -1,4 +1,7 @@
 module OrderItemMessage
+  DepartmentError = '部门错误或部门中不存在次零件'
+  PartIDError = '零件不存在'
+  QuantityError = '数量格式错误'
   VerifyFailed = '验证失败'
   Verified = '验证通过'
   NotFound = '未找到'

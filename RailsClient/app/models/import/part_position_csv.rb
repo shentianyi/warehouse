@@ -11,17 +11,18 @@ module Import
     #@@csv_cols=nil
 
     def uniq_key
-      #%w(part_id position_id)
+      %w(part_id position_id)
     end
 
     def csv_headers
       class_variable_get(:@@csv_cols).collect { |col| col.header }
     end
 
-    def down_block
+    def part_position_down_block
       Proc.new { |line, item|
         line<<item.part_id
         line<<item.position_id
+        line<<item.sourceable_id
         line<<item.position.detail
         line<<item.position.whouse.name
       }
@@ -29,12 +30,11 @@ module Import
 
     def init_csv_cols
       csv_cols=[]
-      csv_cols<< Csv::CsvCol.new(field: 'part_id', header: 'Part Nr')
-      csv_cols<< Csv::CsvCol.new(field: 'position_id', header: 'Position Nr', is_foreign: true, foreign:'Position')
+      csv_cols<< Csv::CsvCol.new(field: 'part_id', header: 'PartNr')
+      csv_cols<< Csv::CsvCol.new(field: 'position_id', header: 'PositionNr', is_foreign: true, foreign:'Position')
+      csv_cols<< Csv::CsvCol.new(field: 'sourceable_id', header: 'LocationId',null:true)
       csv_cols<< Csv::CsvCol.new(field: 'position', header: 'Position')
-      csv_cols<< Csv::CsvCol.new(field: 'whouse', header: 'Ware House')
-
-
+      csv_cols<< Csv::CsvCol.new(field: 'whouse', header: 'Warehouse')
       csv_cols<< Csv::CsvCol.new(field: $UPMARKER, header: $UPMARKER)
       class_variable_set(:@@csv_cols,csv_cols)
     end

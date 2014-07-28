@@ -10,6 +10,7 @@ class PickListsController < ApplicationController
   # GET /pick_lists/1
   # GET /pick_lists/1.json
   def show
+    @pick_items=@pick_list.pick_items
   end
 
   # GET /pick_lists/new
@@ -24,17 +25,13 @@ class PickListsController < ApplicationController
   # POST /pick_lists
   # POST /pick_lists.json
   def create
-    @pick_list = PickList.new(pick_list_params)
-
-    respond_to do |format|
-      if @pick_list.save
-        format.html { redirect_to @pick_list, notice: 'Pick list was successfully created.' }
-        format.json { render :show, status: :created, location: @pick_list }
-      else
-        format.html { render :new }
-        format.json { render json: @pick_list.errors, status: :unprocessable_entity }
-      end
+    msg=Message.new
+    pick_list=PickListService.covert_order_to_pick_list(params[:user_id], params[:order_ids])
+    if pick_list
+      msg.result = true
+      msg.content = pick_list
     end
+    render json: msg
   end
 
   # PATCH/PUT /pick_lists/1
@@ -61,14 +58,30 @@ class PickListsController < ApplicationController
     end
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_pick_list
-      @pick_list = PickList.find(params[:id])
-    end
+  def print
+    msg=Message.new
+    #begin
+    #  puts SysConfigCache.print_server_value
+    #  msg= RestClient::Resource.new("#{SysConfigCache.print_server_value}/printer/print/P005/#{params[:id]}",
+    #                                :timeout => 10,
+    #                                :open_timeout => 10,
+    #                                'content_type' => 'application/json').get
+    #rescue
+    #  msg.result
+    #  msg.content='无法连接打印服务器，请重新配置'
+    #end
+    msg.result =true
+    render json: msg
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def pick_list_params
-      params.require(:pick_list).permit(:id, :user_id)
-    end
+  private
+  # Use callbacks to share common setup or constraints between actions.
+  def set_pick_list
+    @pick_list = PickList.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def pick_list_params
+    params #.require(:pick_list).permit(:id, :user_id)
+  end
 end

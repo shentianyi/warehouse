@@ -11,11 +11,23 @@ module V1
     end
 
     post :verify do
-      unless OrderItemService.verify(params,current_user)
+      unless OrderItemService.verify_part_id(params[:part_id],current_user)
+        return {result:0,content:OrderItemMessage::PartIDError}
+      end
+
+      unless OrderItemService.verify_department(params[:department],params[:part_id])
+        return {result:0,content:OrderItemMessage::DepartmentError}
+      end
+
+      unless OrderItemService.verify_quantity(params[:quantity])
+        return {result:0,content:OrderItemMessage::QuantityError}
+      end
+
+      unless item = OrderItemService.new({department:params[:department],part_id:params[:part_id],quantity:params[:quantity]},current_user)
         return {result:0,content:OrderItemMessage::VerifyFailed}
       end
 
-      return {result:1,content:OrderItemMessage::Verified}
+      return {result:1,content:OrderItemPresenter.new(item).to_json}
     end
 
     delete do

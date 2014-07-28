@@ -47,13 +47,9 @@
 
 <p>
   <string>箱包装:</string>
-  <ul>
     <%@forklift.packages.each do |p|%>
-    <li>
-      <%=link_to p.id,p %>
-    </li>
+      <p><b>包装箱号 :</b><%=link_to p.id,p %>, <b>状态 :</b><%= PackageState.display(p.state)%></p>
     <%end%>
-  </ul>
 </p>
 
 <%= link_to '编辑', edit_forklift_path(@forklift) %> |
