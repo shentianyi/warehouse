@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140727154505) do
+ActiveRecord::Schema.define(version: 20140727172304) do
 
   create_table "attachments", force: true do |t|
     t.string   "name"
@@ -132,7 +132,6 @@ ActiveRecord::Schema.define(version: 20140727154505) do
   create_table "orders", force: true do |t|
     t.string   "uuid",       limit: 36,                 null: false
     t.boolean  "handled",               default: false
-    t.string   "source_id"
     t.boolean  "is_delete",             default: false
     t.boolean  "is_dirty",              default: true
     t.boolean  "is_new",                default: true
@@ -251,22 +250,16 @@ ActiveRecord::Schema.define(version: 20140727154505) do
 
   create_table "pick_items", force: true do |t|
     t.string   "pick_list_id"
-    t.float    "quantity",              default: 0.0
-    t.integer  "box_quantity",          default: 0
-    t.string   "destination_whouse_id"
-    t.string   "user_id"
-    t.string   "part_id"
-    t.string   "part_type_id"
-    t.string   "remark"
-    t.boolean  "is_emergency",          default: false, null: false
-    t.boolean  "is_delete",             default: false
-    t.boolean  "is_dirty",              default: true
-    t.boolean  "is_new",                default: true
+    t.string   "order_item_id"
+    t.boolean  "is_delete",     default: false
+    t.boolean  "is_dirty",      default: true
+    t.boolean  "is_new",        default: true
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "pick_items", ["id"], name: "index_pick_items_on_id", using: :btree
+  add_index "pick_items", ["order_item_id"], name: "index_pick_items_on_order_item_id", using: :btree
   add_index "pick_items", ["pick_list_id"], name: "index_pick_items_on_pick_list_id", using: :btree
 
   create_table "pick_lists", force: true do |t|
