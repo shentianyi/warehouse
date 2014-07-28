@@ -7,8 +7,8 @@ module V1
       RegexPresenter.init_json_presenters(Regex.where(type: RegexType::PACKAGE_LABEL).all)
     end
 
-    get :orderitem_label do
-      RegexPresenter.init_json_presenters(Regex.where(type: RegexType::ORDERITEM_LABEL).all)
+    get :labels do
+      RegexPresenter.init_json_presenters(Regex.all)
     end
   end
 end
