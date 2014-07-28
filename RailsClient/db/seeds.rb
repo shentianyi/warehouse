@@ -39,6 +39,14 @@ ActiveRecord::Base.transaction do
   #unless Regex.whercode: 'DATE_TRIM', type: RegexType::PACKAGE_LABEL).first
   #  Regex.create(name: '入库时间截断', code: 'DATE_TRIM',  regex_string: '^W', type: RegexType::PACKAGE_LABEL)
   #end
+  puts '11111'
+  unless Regex.where(code: 'ORDERITEM_PART', type: RegexType::ORDERITEM_LABEL).first
+    Regex.create(name: '需求单零件号', code: 'ORDERITEM_PART', prefix_string: 'P', regex_string: '^P\w+' , type: RegexType::ORDERITEM_LABEL)
+  end
+
+  unless Regex.where(code: 'ORDERITEM_QTY', type: RegexType::ORDERITEM_LABEL).first
+    Regex.create(name: '需求单数量', code: 'ORDERITEM_QTY', prefix_string: 'Q', regex_string: '^Q\d+\.?\d*$', type: RegexType::ORDERITEM_LABEL)
+  end
 
   # init system config
   unless SysConfig.find_by_code('PRINT_SERVER')

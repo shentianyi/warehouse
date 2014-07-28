@@ -6,7 +6,7 @@ module V1
     #strong parameters
     helpers do
       def order_params
-        ActivonController::Parameters.new(params).require(:order).permit(:id,:user_id,:source_id)
+        ActivonController::Parameters.new(params).require(:order).permit(:id,:source_id,:user_id)
       end
     end
 
