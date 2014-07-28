@@ -59,8 +59,6 @@ module Import
           items=query.nil? ? self.all : self.where(query).all
           items.each do |item|
             line=[]
-            puts '-------------------'
-            puts self.to_s
             proc=self.send("#{self.to_s.underscore}_down_block".to_sym)
             proc.call(line, item)
             f.puts line.join($CSVSP)

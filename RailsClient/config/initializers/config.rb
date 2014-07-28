@@ -25,5 +25,5 @@ $API_AUTH_USER={user: auth['user'], passwd: auth['passwd']}
 
 WillPaginate.per_page = 10
 
-PackageLabelRegex.initialize_methods
-SysConfigCache.initialize_methods
+PackageLabelRegex.initialize_methods if ActiveRecord::Base.connection.table_exists?('regexes')
+SysConfigCache.initialize_methods if ActiveRecord::Base.connection.table_exists?('sys_configs')

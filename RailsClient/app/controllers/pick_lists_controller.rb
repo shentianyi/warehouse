@@ -10,7 +10,9 @@ class PickListsController < ApplicationController
   # GET /pick_lists/1
   # GET /pick_lists/1.json
   def show
+    headers['Access-Control-Allow-Origin'] = "*"
     @pick_items=@pick_list.pick_items
+    @print_url="#{SysConfigCache.print_server_value}/printer/cross_print/P006/#{@pick_list.id}"
   end
 
   # GET /pick_lists/new
@@ -60,16 +62,16 @@ class PickListsController < ApplicationController
 
   def print
     msg=Message.new
-    #begin
-    #  puts SysConfigCache.print_server_value
-    #  msg= RestClient::Resource.new("#{SysConfigCache.print_server_value}/printer/print/P005/#{params[:id]}",
-    #                                :timeout => 10,
-    #                                :open_timeout => 10,
-    #                                'content_type' => 'application/json').get
-    #rescue
-    #  msg.result
-    #  msg.content='无法连接打印服务器，请重新配置'
-    #end
+    begin
+      puts SysConfigCache.print_server_value
+      msg= RestClient::Resource.new("#{SysConfigCache.print_server_value}/printer/print/P006/#{params[:id]}",
+                                    :timeout => 20,
+                                    :open_timeout => 20,
+                                    'content_type' => 'application/json').get
+    rescue
+      msg.result
+      msg.content='无法连接打印服务器，请重新配置'
+    end
     msg.result =true
     render json: msg
   end

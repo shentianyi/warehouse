@@ -31,5 +31,9 @@ module Warehouse
     config.middleware.use ActionDispatch::Flash
     I18n.enforce_available_locales = false
     #config.cache_store = :redis_store, $redis
+    #config.action_dispatch.default_headers.merge!({
+    #                                                  'Access-Control-Allow-Origin' => '*',
+    #                                                  'Access-Control-Request-Method' => '*'
+    #                                              })
   end
 end

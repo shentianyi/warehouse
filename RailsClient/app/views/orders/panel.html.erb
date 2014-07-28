@@ -5,6 +5,7 @@
   <h4>选择需求单预览</h4>
 </div>
 <input type="button" value="生成择货单(择货员工号必须填写)" onclick="build_pick_list();">
+<%= render :partial => "shared/handling_msg_box", :locals => { :handlemsg => "处理中..." } %>
 
 <script type="text/javascript">
     $('body').on('change','.order-checkbox',function(){
@@ -42,7 +43,9 @@
           alert('请选择需要处理的需求单');
           return;
       }
+      show_handle_dialog();
       $.post('/pick_lists/',{user_id:user,order_ids:orders},function(data){
+          hide_handle_dialog();
           if(data.result){
               window.location='/pick_lists/'+data.content.id;
           }else{
