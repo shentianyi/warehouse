@@ -6,7 +6,7 @@ class CreateOrderItems < ActiveRecord::Migration
     	t.float :quantity
     	t.string :order_id
     	t.string :location_id
-      t.string :source_id
+      #t.string :source_id
     	t.string :whouse_id
     	t.string :user_id
     	t.string :part_id
