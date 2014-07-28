@@ -18,7 +18,7 @@ class PartService
                {field:'position',header: 'Position'},
                {field:'sourceable_id',header:'LocationId',null:true},
                {field:$UPMARKER,header: $UPMARKER,null:true}]
-puts headers
+#puts headers
     msg=Message.new
     #begin
       line_no=0
@@ -34,7 +34,7 @@ puts headers
           raise(ArgumentError, "行:#{line_no} #{col[:field]} 值不可为空") if row[col[:header]].blank? && col[:null].nil?
           data[col[:field]]=row[col[:header]]
           data['sourceable_type']='Location'
-          puts data
+          #puts data
         end
         if p =  Position.find_by_detail(data['position'])
           data.delete('position')
@@ -49,7 +49,7 @@ puts headers
         #1 means delete
         if update_marker
           #if delete
-          query=[part_id:data['part_id'],position_id:  data['position_id'] ]
+          query={part_id:data['part_id'],position_id:  data['position_id'] }
           if item=PartPosition.where(query).first
             item.destroy
           end
