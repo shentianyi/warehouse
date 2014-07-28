@@ -4,7 +4,8 @@ class RegexesController < ApplicationController
   # GET /regexes
   # GET /regexes.json
   def index
-    @package_label_regexes = Regex.where(type: RegexType::PACKAGE_LABEL).order('code').all
+    @package_label_regexes = Regex.where({type:RegexType::PACKAGE_LABEL}).order('code').all
+    @orderitem_label_regexes = Regex.where({type:RegexType::ORDERITEM_LABEL}).order('code').all
   end
 
   # GET /regexes/1

@@ -34,4 +34,38 @@
       </tr>
     </table>
   </div>
+  <div>
+    <h4 class="bg-primary">
+      <span class='config-title'>需求单标签规范</span>
+    </h4>
+    <table class="table table-striped globle-table table-hover">
+      <tr>
+        <td>规范名称</td>
+        <td>规范代码</td>
+        <td>前缀字符串</td>
+        <td>前缀长度</td>
+        <td>后缀字符串</td>
+        <td>后缀长度</td>
+        <td>正则表达式</td>
+        <td>备注</td>
+      </tr>
+      <% @orderitem_label_regexes.each do |regex| %>
+          <tr id='<%= regex.id %>' class='package-label-regex'>
+            <td><input type="text" class="name" value="<%= regex.name %>" disabled="disabled"/></td>
+            <td><input type="text" class="code" value="<%= regex.code %>" disabled="disabled"/></td>
+            <td><input type="text" class="prefix_string" value="<%= regex.prefix_string %>"/></td>
+            <td><span><%= regex.prefix_length %></span></td>
+            <td><input type="text" class="suffix_string" value="<%= regex.suffix_string %>"/></td>
+            <td><span><%= regex.suffix_length %></span></td>
+            <td><input type="text" class="regex_string" value="<%= regex.regex_string %>"/></td>
+            <td><input type="text" class="remark" value="<%= regex.remark %>" width="300px"/></td>
+          </tr>
+      <% end %>
+      <tr>
+        <td colspan="5">
+          <input type="button" value="保 存" class='btn btn-primary btn-lg'  onclick="save_regex(<%=RegexType::ORDERITEM_LABEL%>)"/>
+        </td>
+      </tr>
+    </table>
+  </div>
 </div>

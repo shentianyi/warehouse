@@ -4,7 +4,7 @@ class PickListsController < ApplicationController
   # GET /pick_lists
   # GET /pick_lists.json
   def index
-    @pick_lists = PickList.all
+    @pick_lists = PickList.paginate(:page => params[:page]).order(created_at: :desc)#all
   end
 
   # GET /pick_lists/1

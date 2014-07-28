@@ -1,5 +1,6 @@
 class RegexType
   PACKAGE_LABEL=100
+  ORDERITEM_LABEL=200
 
   def self.types
     types = []

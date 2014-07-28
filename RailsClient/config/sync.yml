@@ -73,3 +73,15 @@ sync:
       post: true
       put: true
       delete: true
+    order:
+      name: "需求单"
+      get: true
+      post: true
+      put: true
+      delete: true
+    order_item:
+      name: "需求单项目"
+      get: true
+      post: true
+      put: true
+      delete: true
