@@ -27,7 +27,7 @@ class OrderItemPresenter<Presenter
     if self.part_id && self.whouse_id
       OrderItemService.verify_department(self.whouse_id,self.part_id).sourceable
     else
-      {id:'',name:''}
+      nil
     end
   end
 
@@ -65,8 +65,8 @@ class OrderItemPresenter<Presenter
         order_id: self.order_id,
         location_id: self.location,
         whouse_id: self.whouse,
-        source_id: self.source.id,
-        source:self.source.name,
+        source_id: self.source ? self.source.id : '',
+        source: self.source ? self.source.name : '',
         user_id: self.creator,
         part_id: self.part_id,
         part_type_id: self.part_type,

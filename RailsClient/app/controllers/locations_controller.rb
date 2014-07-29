@@ -42,7 +42,7 @@ class LocationsController < ApplicationController
 
   # GET /locations/1/users
   def users
-    @users = @location.users
+    @users = @location.users.paginate(:page=> params[:page])
   end
 
   # GET /locations/1/whouses

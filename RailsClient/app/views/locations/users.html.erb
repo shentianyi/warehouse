@@ -1,6 +1,32 @@
-<ol>
-  <% @users.each do |u|%>
-  <li><%= link_to u.id, u%></li>
+<h2><%= @location.name%>用户列表</h2>
+<br/>
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @users %>
+  </div>
+  <%= will_paginate @users, :container => false %>
+</div>
+<table class="table table-bordered table-striped globle-table table-hover">
+  <thead>
+  <tr>
+    <td>NO.</td>
+    <td>工号</td>
+    <td>姓名</td>
+    <td>角色</td>
+  </tr>
+  </thead>
+  <tbody>
+  <% @users.each_with_index do |user,index|%>
+  <tr>
+    <td><%= index+1%></td>
+    <td><%= user.id %></td>
+    <td><%= user.name %></td>
+    <td><%= Role.display(user.role_id)%></td>
+  </tr>
   <% end%>
-</ol>
-<%= link_to '返回', locations_path %>
+  </tbody>
+</table>
+<div class="digg_pagination">
+  <%= will_paginate @users, :container => false %>
+</div>
+<%= link_to '返回', locations_path ,:class => "btn btn-primary btn-lg" %>
