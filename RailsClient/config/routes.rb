@@ -85,6 +85,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :positions do
+    member do
+      get 'parts'
+    end
+  end
+
   resources :syncs do
     collection do
       post :reload

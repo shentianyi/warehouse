@@ -59,9 +59,9 @@
           </p>
         </td>
         <td><%= part.is_delete %></td>
-        <td><%= link_to '详细', part %></td>
-        <td><%= link_to '编辑', edit_part_path(part) %></td>
-        <td><%= link_to '删除', part, method: :delete, data: {confirm: '确认删除?'} %></td>
+        <td><%= link_to '详细', part ,:class=>'btn btn-default'%></td>
+        <td><%= link_to '编辑', edit_part_path(part) ,:class=>'btn btn-default'%></td>
+        <td><%= link_to '删除', part, method: :delete, data: {confirm: '确认删除?'} ,:class=>'btn btn-default'%></td>
       </tr>
   <% end %>
   </tbody>

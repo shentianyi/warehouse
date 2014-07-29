@@ -18,7 +18,7 @@
       <th>编号</th>
       <th>详细库位</th>
       <th>所属仓库</th>
-      <th>放置零件</th>
+      <th>零件列表</th>
       <th colspan="3">&nbsp;</th>
     </tr>
   </thead>
@@ -30,16 +30,10 @@
         <td><%= position.id%></td>
         <td><%= position.detail%></td>
         <td><%= position.whouse.name %></td>
-        <td>
-          <p>
-            <%position.parts.each do |part|%>
-            <%= link_to part.id,part%> |
-            <%end%>
-          </p>
-        </td>
-        <td><%= link_to '详细', position %></td>
-        <td><%= link_to '编辑', edit_position_path(position) %></td>
-        <td><%= link_to '删除', position, method: :delete, data: { confirm: '确认删除?' } %></td>
+        <td><%= link_to '零件列表',parts_position_path(position)%><span class="badge"><%= position.parts.count %></span></td>
+        <td><%= link_to '详细', position ,:class=>'btn btn-default'%></td>
+        <td><%= link_to '编辑', edit_position_path(position),:class=>'btn btn-default' %></td>
+        <td><%= link_to '删除', position, method: :delete, data: { confirm: '确认删除?' },:class=>'btn btn-default' %></td>
       </tr>
     <% end %>
   </tbody>
