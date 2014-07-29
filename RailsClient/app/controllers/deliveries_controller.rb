@@ -1,6 +1,6 @@
 class DeliveriesController < ApplicationController
   #load_and_authorize_resource
-  before_action :set_delivery, only: [:show, :edit, :update, :destroy]
+  before_action :set_delivery, only: [:show, :edit, :update, :destroy,:forklifts]
   skip_before_filter :delivery_params
   before_action :get_states, only: [:index, :search]
   #before_action :set_search_variable, only: [:search]
@@ -66,6 +66,11 @@ class DeliveriesController < ApplicationController
       format.html { redirect_to deliveries_url, notice: 'Delivery was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  # GET /deliveries/1/forklifts
+  def forklifts
+    @forklifts = @delivery.forklifts.
   end
 
   def export
