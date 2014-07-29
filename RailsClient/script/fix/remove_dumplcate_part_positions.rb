@@ -9,5 +9,5 @@ grouped.values.each do |duplicates|
     i++
     double.destroy
   }
-end 
+end
 puts '删除'+i.to_s+'条冗余数据'
