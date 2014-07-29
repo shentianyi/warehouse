@@ -48,7 +48,7 @@ class DeliveriesController < ApplicationController
       DeliveryService.set_state(@delivery, delivery_params[:state])
     end
     respond_to do |format|
-      if @delivery.update(delivery_params.permit(:state,:remark))
+      if @delivery.update(delivery_params.permit(:state,:remark,:source_id,:destination_id))
         format.html { redirect_to @delivery, notice: '运单更新成功.' }
         format.json { render :show, status: :ok, location: @delivery }
       else
@@ -70,7 +70,7 @@ class DeliveriesController < ApplicationController
 
   # GET /deliveries/1/forklifts
   def forklifts
-    @forklifts = @delivery.forklifts.
+    @forklifts = @delivery.forklifts.paginate(:page => params[:page]).order(created_at: :desc)
   end
 
   def export
