@@ -55,7 +55,7 @@ class WhousesController < ApplicationController
 
   # GET /whouses/1/whouses
   def positions
-    @positions = @whouse.positions
+    @positions = @whouse.positions.paginate(:page => params[:page])
   end
 
   # DELETE /whouses/1
