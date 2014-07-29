@@ -6,24 +6,23 @@ module V1
     #strong parameters
     helpers do
       def order_params
-        ActivonController::Parameters.new(params).require(:order_item).permit(:id,:position,:quantity,:part_id,:user_id)
+        ActivonController::Parameters.new(params).require(:order_item).permit(:id,:department,:quantity,:part_id,:user_id)
       end
     end
 
     post :verify do
-      unless OrderItemService.verify_part_id(params[:part_id],current_user)
+      unless part = OrderItemService.verify_part_id(params[:part_id],current_user)
         return {result:0,content:OrderItemMessage::PartIDError}
       end
 
-      unless OrderItemService.verify_department(params[:department],params[:part_id])
+      unless part_position = OrderItemService.verify_department(params[:department],params[:part_id])
         return {result:0,content:OrderItemMessage::DepartmentError}
       end
-
-      unless OrderItemService.verify_quantity(params[:quantity])
+      unless quantity = OrderItemService.verify_quantity(params[:quantity])
         return {result:0,content:OrderItemMessage::QuantityError}
       end
 
-      unless item = OrderItemService.new({department:params[:department],part_id:params[:part_id],quantity:params[:quantity]},current_user)
+      unless item = OrderItemService.new(part_position,part,quantity,false,current_user)
         return {result:0,content:OrderItemMessage::VerifyFailed}
       end
 
