@@ -99,6 +99,10 @@ module V1
     post do
       d = Delivery.new(delivery_params)
       d.user = current_user
+
+      d.source = current_user.location
+      d.destination = current_user.location.destination
+
       result = d.save
 
       if params.has_key?(:forklifts)
@@ -159,6 +163,10 @@ module V1
     post :receive do
       if (d = DeliveryService.exit?(params[:id])).nil?
         return {result:0,content:DeliveryMessage::NotExit}
+      end
+
+      if !DeliveryState.before_state?(DeliveryState::DESTINATION,d.state)
+        return false
       end
 
       if DeliveryService.receive(d)

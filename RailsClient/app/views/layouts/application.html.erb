@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>LEONI 精密物流控制系统</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
@@ -15,11 +15,13 @@
 <p class="notice alert"><%= notice %><%= alert %></p>
 <%= yield %>
 </body>
-<input type="hidden" value="<%= @model %>_li" id='active_li'>
+<input type="hidden" value="<%= @model %>_li" id='active_li'/>
+<input type="hidden" value="<%= @print_server %>" id='print-server-hidden'/>
 <script type="text/javascript">
     $(function () {
         $("#main-menu li").removeClass('active');
         $('#' + $('#active_li').val()).addClass('active');
     });
 </script>
+<%= render :partial => "shared/handling_msg_box", :locals => {:handlemsg => "处理中..."} %>
 </html>

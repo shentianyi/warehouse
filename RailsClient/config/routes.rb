@@ -29,14 +29,17 @@ Rails.application.routes.draw do
     end
     member do
       get :export
+      get :forklifts
     end
   end
 
   resources :orders do
     collection do
       get :panel
+      get :panel_list
       get :search
       get :items
+      post :handle
     end
   end
 
@@ -82,6 +85,12 @@ Rails.application.routes.draw do
   resources :whouses do
     member do
       get 'positions'
+    end
+  end
+
+  resources :positions do
+    member do
+      get 'parts'
     end
   end
 

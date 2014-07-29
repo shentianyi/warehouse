@@ -1,5 +1,5 @@
 <div>
-  <a href="/orders/panel" class="btn btn-success">返 回</a>
+  <a href="<%=@back_url%>" class="btn btn-success">返回</a>
 </div>
 <div class="header">
   <p>择货单号：<%= @pick_list.id %></p>
@@ -24,7 +24,6 @@
       <th>备注</th>
     </tr>
     </thead>
-
     <tbody>
     <% @pick_items.each_with_index do |pick_item, index| %>
         <tr>
@@ -45,36 +44,5 @@
   </table>
 </div>
 <div>
-  <input type="button" value="打印择货单" class='btn btn-primary btn-lg' onclick="print_pick_list();"/>
+  <input type="button" value="打印择货单" class='btn btn-primary btn-lg' onclick="print_pick_list('<%= @pick_list.id %>');"/>
 </div>
-<%= render :partial => "shared/handling_msg_box", :locals => {:handlemsg => "处理中..."} %>
-
-<input type="hidden" value="<%= @print_url %>" id='print-url-hidden'>
-<script type="text/javascript">
-    function print_pick_list() {
-        show_handle_dialog();
-        $.ajax({
-            url: $('#print-url-hidden').val(),
-            type: 'get',
-            dataType: 'json',
-            async: false,
-            timeout: 10000,
-            crossDomain: true,
-            success: function (data) {
-                console.log(data);
-               if(data){
-                   alert(data.Content);
-               }else{
-                  alert('打印失败，请开启打印服务器或重新配置');
-               }
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-               if(XMLHttpRequest.status==500)    { alert('打印打印服务程序内部错误，请联系系统管理员或服务商');}else{
-                alert('无法连接打等待印服务器，请开启打印服务器或重新配置');
-               }
-            }
-        }).always(function () {
-                    hide_handle_dialog();
-       });
-    }
-</script>

@@ -50,4 +50,8 @@ class Delivery < ActiveRecord::Base
     .select('packages.*,forklifts.whouse_id')
   end
 
+  def received_packages
+    packages.where(state: PackageState::RECEIVED)
+    .select('packages.*,forklifts.whouse_id')
+  end
 end

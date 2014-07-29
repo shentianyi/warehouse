@@ -17,7 +17,7 @@
         </span>
         </span>
         <span>运单状态：
-          <%= select 'delivery', 'state', @states, prompt: '', selected: @state %>
+          <%= select 'delivery', 'state', @states, selected: @state,include_blank: true %>
         </span>
       </div>
       <div>
@@ -45,22 +45,19 @@
   </div>
   <%= will_paginate @deliveries, :container => false %>
 </div>
-<table class="table table-bordered table-striped globle-table table-hover">
+<table class="table table-striped table-condensed table-hover">
   <thead>
   <tr>
     <th>NO.</th>
     <th>运单号</th>
     <th>状态</th>
-    <th>托清单数</th>
-    <th>创建人</th>
-    <th>创建员工工号</th>
+    <th>托清单列表</th>
     <th>创建日期</th>
     <th>发运日期</th>
-    <th>接收员工</th>
-    <th>接收员工工号</th>
     <th>接收日期</th>
     <th>发送地</th>
-    <th>接收地</th>
+    <th>创建员工</th>
+    <th>接收员工</th>
     <th>备注</th>
     <th colspan="3">&nbsp;</th>
   </tr>
@@ -72,20 +69,17 @@
         <td><%= index+@deliveries.offset+1 %></td>
         <td><%= delivery.id %></td>
         <td><%= DeliveryState.display(delivery.state) %></td>
-        <td><%= delivery.forklifts.count %></td>
-        <td><%= delivery.user.name %></td>
-        <td><%= delivery.user.id %></td>
+        <td><%= link_to '托清单列表',forklifts_delivery_path(delivery) %><span class="badge"><%= delivery.forklifts.count%></span></td>
         <td><%= delivery.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') if delivery.created_at%></td>
         <td><%= delivery.delivery_date.localtime.strftime('%Y-%m-%d %H:%M:%S') if delivery.delivery_date %></td>
-        <td><%= delivery.receiver.name if delivery.receiver %></td>
-        <td><%= delivery.receiver.id if delivery.receiver %></td>
         <td><%= delivery.received_date.localtime.strftime('%Y-%m-%d %H:%M:%S') if delivery.received_date %></td>
         <td><%= delivery.source.name if delivery.source %></td>
-        <td><%= delivery.destination.name if delivery.destination %></td>
+        <td><%= delivery.user.name %></td>
+        <td><%= delivery.receiver.name if delivery.receiver %></td>
         <td><%= delivery.remark %></td>
-        <td><%= link_to '详细', delivery %></td>
-        <td><%= link_to '编辑', edit_delivery_path(delivery) %></td>
-        <td><%= link_to '导出数据', export_delivery_path(delivery) %></td>
+        <td><%= link_to '详细', delivery ,:class=>'btn btn-default'%></td>
+        <td><%= link_to '编辑', edit_delivery_path(delivery)  ,:class=>'btn btn-default' %></td>
+        <td><%= link_to '导出数据', export_delivery_path(delivery)  ,:class=>'btn btn-default' %></td>
       </tr>
   <% end %>
   </tbody>
@@ -101,10 +95,5 @@
             showButtonPanel: true,
             showWeek: true
         });
-
-//        $(".datepicker").each(function () {
-//            if ($(this).val().length == 0)
-//                $(this).datepicker('setDate', new Date())
-//        });
     });
 </script>

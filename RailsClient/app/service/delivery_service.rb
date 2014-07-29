@@ -101,9 +101,7 @@ class DeliveryService
     if delivery.nil?
       return false
     end
-    if !DeliveryState.before_state?(DeliveryState::DESTINATION,delivery.state)
-      return false
-    end
+
     ActiveRecord::Base.transaction do
       if !delivery.set_state(DeliveryState::DESTINATION)
         return false
@@ -129,8 +127,6 @@ class DeliveryService
     end
 
     ActiveRecord::Base.transaction do
-      delivery.source = current_user.location
-      delivery.destination = current_user.location.destination
       delivery.delivery_date = Time.now
       delivery.set_state(DeliveryState::WAY)
       delivery.forklifts.each do |f|

@@ -1,5 +1,5 @@
 class OrderItemPresenter<Presenter
-  Delegators=[:id,:order_id,:location_id,:whouse_id,:source_id,:user_id,:part_id,:part_type_id,:quantity,:is_emergency,:box_quantity]
+  Delegators=[:id,:order_id,:location_id,:whouse_id,:user_id,:part_id,:part_type_id,:quantity,:is_emergency,:box_quantity]
   def_delegators :@order_item,*Delegators
 
   def initialize(order_item)
@@ -24,10 +24,10 @@ class OrderItemPresenter<Presenter
   end
 
   def source
-    if self.source_id
+    if self.part_id && self.whouse_id
       OrderItemService.verify_department(self.whouse_id,self.part_id).sourceable
     else
-      {id:''}
+      nil
     end
   end
 
@@ -65,8 +65,8 @@ class OrderItemPresenter<Presenter
         order_id: self.order_id,
         location_id: self.location,
         whouse_id: self.whouse,
-        source_id: self.source.id,
-        source:self.source,
+        source_id: self.source ? self.source.id : '',
+        source: self.source ? self.source.name : '',
         user_id: self.creator,
         part_id: self.part_id,
         part_type_id: self.part_type,

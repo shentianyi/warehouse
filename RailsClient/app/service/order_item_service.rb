@@ -3,33 +3,16 @@ class OrderItemService
 	#create
 	#params @position, @part_id, @quantity
 	#=============
-	def self.new args,current_user
-		unless part_position = verify_department(args[:department],args[:part_id])
-			return nil
-		end
-
-		unless verify_part_id args[:part_id],current_user
-			return nil
-		end
-
-		part = Part.find_by_id(args[:part_id])
-
-		unless verify_quantity args[:quantity]
-			return nil
-		end
-
-		quantity = (args[:quantity])
-
+	def self.new part_position,part,quantity,is_emergency,current_user
 		params = {}
 		#here location and whouse is
 		params[:location_id] = part_position.position.whouse.location_id
 		params[:whouse_id] = part_position.position.whouse_id
-		#params[:source_id] = part_position.sourceable_id
 		params[:user_id] = current_user.id
 		params[:part_id] = part.id
 		params[:part_type_id] = part.part_type_id
 		params[:quantity] = quantity
-    params[:is_emergency] = args[:is_emergency]
+    params[:is_emergency] = is_emergency
 
 		item = OrderItem.new(params)
 =begin
@@ -78,7 +61,7 @@ class OrderItemService
 	#need to know 
 	#=============
 	def self.verify_quantity quantity
-		true
+    return quantity
   end
 
   #=============

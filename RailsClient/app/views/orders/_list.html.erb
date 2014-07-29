@@ -1,5 +1,4 @@
-<ul>
-  <% @orders.each do |order| %>
+<% @orders.each do |order| %>
       <li>
         <div class="order-item-div" id="<%=order.id%>">
           <input type="checkbox" value="<%= order.id %>" class="order-checkbox"/>
@@ -13,5 +12,4 @@
           生成时间:<%= order.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %>
         </div>
       </li>
-  <% end %>
-</ul>
+<% end %>

@@ -9,4 +9,13 @@ class Order < ActiveRecord::Base
   def generate_id
     "OD#{Time.now.to_milli}"
   end
+
+  def is_emergency
+    self.order_items.each{|item|
+      if item.is_emergency
+        return true
+      end
+    }
+    return false
+  end
 end

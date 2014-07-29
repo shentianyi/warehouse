@@ -28,7 +28,7 @@
 <p>
   <string>订单项目列表</string>
   <%@order.order_items.each do |item|%>
-  <p><b>订单项目编号 :</b><%= item.id %>, <b>所属仓库 :</b><%= item.location.name %>, <b>备货位置 :</b><%= item.source.name if item.source %>, <b>要货员 :</b><%= item.user.name %>, <b>零件号 :</b><%= item.part_id %>, <b>数量 :</b><%= item.quantity %>, <b>是否加急 :</b><%= item.is_emergency %></p>
+  <p><b>订单项目编号 :</b><%= item.id %>, <b>所属仓库 :</b><%= item.location.name %>, <b>要货员 :</b><%= item.user.name %>, <b>零件号 :</b><%= item.part_id %>, <b>数量 :</b><%= item.quantity %>, <b>是否加急 :</b><%= item.is_emergency %></p>
   <%end%>
 </p>
 
