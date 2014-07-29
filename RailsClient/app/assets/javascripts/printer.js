@@ -32,6 +32,21 @@ var printer={
                    });
            }   }
 };
+function print_forklift_list(id){
+    printer.print('P001',id);
+}
+function print_delivery_list(id){
+    printer.print('P002',id);
+}
+function print_delivery_confirm_list(id){
+    printer.print('P003',id);
+}
+function print_delivery_unrece_list(id){
+    printer.print('P004',id);
+}
+function print_delivery_reve_list(id){
+    printer.print('P005',id);
+}
 function print_pick_list(id) {
     printer.print('P006',id);
 }

@@ -70,7 +70,7 @@ class DeliveriesController < ApplicationController
 
   # GET /deliveries/1/forklifts
   def forklifts
-    @forklifts = @delivery.forklifts.
+    @forklifts = @delivery.forklifts
   end
 
   def export

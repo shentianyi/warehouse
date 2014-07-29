@@ -17,7 +17,7 @@
         </span>
         </span>
         <span>运单状态：
-          <%= select 'delivery', 'state', @states, prompt: '', selected: @state %>
+          <%= select 'delivery', 'state', @states, selected: @state,include_blank: true %>
         </span>
       </div>
       <div>
