@@ -6,7 +6,7 @@ module V1
     #strong parameters
     helpers do
       def order_params
-        ActivonController::Parameters.new(params).require(:order).permit(:id,:source_id,:user_id)
+        ActionController::Parameters.new(params).require(:order).permit(:id,:source_id,:user_id)
       end
     end
 
@@ -45,7 +45,7 @@ module V1
     #verified
     #=============
     post do
-      unless order = OrderService.create_with_items(params,current_user)
+      unless order = OrderService.create_with_items({order:order_params,order_items:params[:order_items]},current_user)
         return {result:0,content:OrderMessage::CreatedFailed}
       end
 

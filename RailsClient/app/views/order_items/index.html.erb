@@ -1,4 +1,4 @@
-<h1>Listing order_items</h1>
+<h1>需求单项目列表</h1>
 
 <div class="digg_pagination">
   <div class="page_info">
@@ -18,7 +18,6 @@
       <th>创建时间</th>
       <th>所属位置</th>
       <th>所属仓库</th>
-      <th>备货位置</th>
       <th>零件库位</th>
       <th>零件号</th>
       <th>数量</th>
@@ -39,7 +38,6 @@
         <td><%= order_item.created_at.localtime.strftime('%Y-%m-%d %H:%M') %></td>
         <td><%= order_item.location.name %></td>
         <td><%= order_item.whouse.name %></td>
-        <td><%= order_item.source.name if order_item.source %></td>
         <td><%if pp = OrderItemService.verify_department(order_item.whouse_id,order_item.part_id) %><%= pp.position.detail%><%end%></td>
         <td><%= order_item.part_id %></td>
         <td><%= order_item.quantity %></td>

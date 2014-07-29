@@ -53,6 +53,8 @@ class OrderService
   #create order with order items
   #=============
   def self.create_with_items args,current_user
+    puts args.to_json
+    puts args[:order].to_json
     order = Order.new(args[:order])
     order.user = current_user
     ActiveRecord::Base.transaction do
