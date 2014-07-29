@@ -1,10 +1,14 @@
 <h3>需求单处理面板</h3>
-择货员工号：<input type="text" id="user-id-text">
-<%=render partial:'list'%>
-<div class="order-content-div">
-  <h4>选择需求单预览</h4>
+<p style="padding-left:30px;">择货员工号：</p>
+<input type="text" id="user-id-text" class="panel-input">
+<div class="panel-content">
+  <%=render partial:'list'%>
+  <div class="order-content-div">
+    <h4>选择需求单预览</h4>
+  </div>
 </div>
-<input type="button" value="生成择货单(择货员工号必须填写)" onclick="build_pick_list();">
+
+<input type="button" value="生成择货单(择货员工号必须填写)" onclick="build_pick_list();" style="margin-left:30px;margin-top:20px;">
 <%= render :partial => "shared/handling_msg_box", :locals => { :handlemsg => "处理中..." } %>
 
 <script type="text/javascript">
