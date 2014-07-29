@@ -43,6 +43,10 @@ class PartService
           raise(ArgumentError, "行:#{line_no} Position 不存在对应的库位")
         end
 
+        if pp = PartPosition.where({part_id:data['part_id'],position_id:p.id}).first
+          raise(ArgumentError, "行:#{line_no} 该零件已存在相同库位")
+        end
+
         # clean data
         update_marker=(data.delete($UPMARKER).to_i==1)
 
