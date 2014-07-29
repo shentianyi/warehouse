@@ -23,6 +23,17 @@ namespace Brilliantech.Warehouse.PrintServiceLib
     {
         public Msg<string> Print(string code, string id)
         {
+            WebOperationContext.Current.OutgoingResponse.Headers.Add("Access-Control-Allow-Origin", "*");
+            if (WebOperationContext.Current.IncomingRequest.Method == "OPTIONS")
+            {
+                WebOperationContext.Current.OutgoingResponse.Headers
+                    .Add("Access-Control-Allow-Methods", "POST, OPTIONS, GET");
+                WebOperationContext.Current.OutgoingResponse.Headers
+                    .Add("Access-Control-Allow-Headers",
+                         "Content-Type, Accept, Authorization, x-requested-with");
+                return null;
+            }
+
             Msg<string> msg = new Msg<string>();
             try
             {
