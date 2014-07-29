@@ -45,7 +45,11 @@ Rails.application.routes.draw do
 
   resources :packages
 
-  resources :forklifts
+  resources :forklifts do
+    member do
+      get :packages
+    end
+  end
 
   get 'parts/import_positions', to: 'parts#import_positions'
   get 'parts/template_position', to: 'parts#template_position'

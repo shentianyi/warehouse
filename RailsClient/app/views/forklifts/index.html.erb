@@ -5,15 +5,15 @@
   </div>
   <%= will_paginate @forklifts, :container => false %>
 </div>
-<table class="table table-bordered table-striped globle-table">
+<table class="table table-bordered table-striped table-hover">
   <thead>
     <tr>
       <th>序号</th>
       <th>编号</th>
       <th>状态</th>
       <th>所属运单</th>
+      <th>Package lists</th>
       <th>备货员工</th>
-      <th>创建员工</th>
       <th>备货仓库</th>
       <th>包装箱总数</th>
       <th>包装箱被接收数</th>
@@ -29,16 +29,22 @@
         <td><%= index+@forklifts.offset+1%>
         <td><%= forklift.id%></td>
         <td><%= ForkliftState.display(forklift.state)%></td>
-        <td><%= link_to forklift.delivery_id,forklift.delivery%></td>
-        <td><%= forklift.stocker.id if forklift.stocker%></td>
-        <td><%= forklift.user.id if forklift.user%></td>
+        <td>
+        <% if forklift.delivery %>
+        <%= link_to forklift.delivery do%>
+        <span class="label label-info"><%= forklift.delivery.id %></span>
+        <% end %>
+        <% end %>
+        </td>
+        <td><%= link_to 'Packages list', packages_forklift_path(forklift) %><span class='badge'><%= forklift.packages.count %></span></td>
+        <td><%= forklift.stocker.name if forklift.stocker%></td>
         <td><%= forklift.whouse.name%></td>
         <td><%= forklift.sum_packages%></td>
         <td><%= forklift.accepted_packages%></td>
         <td><%= forklift.remark%></td>
         <td><input type="button" value="托清单" class='btn btn-warning' onclick="print_forklift_list('<%= forklift.id %>');"/></td>
-        <td><%= link_to '详细', forklift %></td>
-        <td><%= link_to '编辑', edit_forklift_path(forklift) %></td>
+        <td><%= link_to '详细', forklift ,:class=> 'btn btn-default' %></td>
+        <td><%= link_to '编辑', edit_forklift_path(forklift) ,:class=> 'btn btn-default'%></td>
       </tr>
     <% end %>
   </tbody>

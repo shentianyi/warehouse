@@ -1,4 +1,21 @@
 <h2>库位列表</h2>
+<% if @msg && !@msg.result %>
+    <div class="error">
+      <%= @msg.content %>
+    </div>
+<% end %>
+<div>
+  <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+    <div>
+      <span>Position Detail：
+        <input type="text" name="position[detail]" value="<%= @detail %>"/>
+        <input type="hidden" name="part[detail_fuzzy]"/>
+      </span>
+      <input type="submit" value="查 找" class="btn btn-primary"/>
+    </div>
+</form>
+</div>
+
 
 <%= link_to "新建库位", send("new_#{@model}_path") %>
 <%= link_to "上传/更新库位", send("import_#{@model.pluralize}_path") %>

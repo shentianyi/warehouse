@@ -1,6 +1,6 @@
 class ForkliftsController < ApplicationController
   #load_and_authorize_resource
-  before_action :set_forklift, only: [:show, :edit, :update, :destroy]
+  before_action :set_forklift, only: [:show, :edit, :update, :destroy,:packages]
 
   # GET /forklifts
   # GET /forklifts.json
@@ -65,6 +65,11 @@ class ForkliftsController < ApplicationController
       format.html { redirect_to forklifts_url, notice: '托盘删除成功' }
       format.json { head :no_content }
     end
+  end
+
+  # GET /forklifts/1/packages
+  def packages
+    @packages = @forklift.packages.paginate(:page=>params[:page]).order(created_at: :desc)
   end
 
   private
