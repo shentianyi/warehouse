@@ -1,19 +1,8 @@
-<p id="notice"><%= notice %></p>
+<h1><%= @position.detail%></h1>
+<span class="label label-primary"><%= @position.id%></span>
 
-<p>
-  <string>编号:</string>
-  <%= @position.id%>
-</p>
+<h4>仓库: <small><%= @position.whouse.name%></small></h4>
 
-<p>
-  <string>详细库位:</string>
-  <%= @position.detail%>
-</p>
-
-<p>
-  <string>仓库:</string>
-  <%= @position.whouse.name%>
-</p>
 
 <%= link_to '编辑', edit_position_path(@position) ,:class=>'btn btn-default'%> |
 <%= link_to '返回', positions_path ,:class=>'btn btn-default'%>
