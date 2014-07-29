@@ -7,7 +7,11 @@ module Printer
 
     def generate_data
       f=Forklift.find_by_id(self.id)
-      head={id: f.id, whouse: f.whouse.name, delivery_date: f.created_at.localtime.strftime('%Y.%m.%d'), user: f.stocker_id}
+
+      head={id: f.id,
+            whouse: f.whouse.name,
+            delivery_date: f.created_at.nil? ? '' : f.created_at.localtime.strftime('%Y.%m.%d'),
+            user: f.stocker_id}
       heads=[]
       HEAD.each do |k|
         heads<<{Key: k, Value: head[k]}
