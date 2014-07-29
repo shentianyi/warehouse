@@ -6,6 +6,6 @@ items=[]
 end
 params={order: {}, order_items: items}
 u=User.find_by_id('admin')
-o=OrderService.create_with_items(params, u)
+  o=OrderService.create_with_items(params, u)
 o.source_id='l002'
 o.save

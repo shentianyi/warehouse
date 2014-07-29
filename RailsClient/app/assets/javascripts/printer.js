@@ -3,13 +3,13 @@ var printer={
                return $('#print-server-hidden').val()+code+'/'+id;
            },
            print:function(code,id){
-               var url=this.url(code,id);
+               if(confirm('确认打印？')){
                show_handle_dialog();
+               var url=this.url(code,id);
                $.ajax({
                    url: url,
                    type: 'get',
                    dataType: 'json',
-                   async: false,
                    timeout: 10000,
                    crossDomain: true,
                    success: function (data) {
@@ -30,8 +30,8 @@ var printer={
                }).always(function () {
                        hide_handle_dialog();
                    });
-           }
+           }   }
 };
-function print_pick_list() {
-    printer.print('P006',$('#pick-list-id-hidden').val());
+function print_pick_list(id) {
+    printer.print('P006',id);
 }

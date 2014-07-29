@@ -38,6 +38,7 @@ Rails.application.routes.draw do
       get :panel_list
       get :search
       get :items
+      post :handle
     end
   end
 

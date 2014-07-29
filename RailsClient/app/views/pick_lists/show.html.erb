@@ -24,7 +24,6 @@
       <th>备注</th>
     </tr>
     </thead>
-
     <tbody>
     <% @pick_items.each_with_index do |pick_item, index| %>
         <tr>
@@ -45,7 +44,5 @@
   </table>
 </div>
 <div>
-  <input type="button" value="打印择货单" class='btn btn-primary btn-lg' onclick="print_pick_list();"/>
+  <input type="button" value="打印择货单" class='btn btn-primary btn-lg' onclick="print_pick_list('<%= @pick_list.id %>');"/>
 </div>
-<%= render :partial => "shared/handling_msg_box", :locals => {:handlemsg => "处理中..."} %>
-<input type="hidden" value="<%= @pick_list.id %>" id='pick-list-id-hidden'>

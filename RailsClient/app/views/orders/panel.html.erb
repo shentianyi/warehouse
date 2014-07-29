@@ -1,78 +1,93 @@
 <h3>需求单处理面板</h3>
-<p style="padding-left:30px;">择货员工号：</p>
-<input type="text" id="user-id-text" class="panel-input">
+<p style="padding-left:30px;">择货员工号：<input type="text" id="user-id-text" class="panel-input-o"></p>
 <input type="button" value="生成择货单(择货员工号必须填写)" onclick="build_pick_list();" style="margin-left:30px;margin-top:0px;">
+<input type="button" value="完成需求单处理" onclick="finish_order_handle(true);" style="margin-left:30px;margin-top:0px;">
 <div class="panel-content">
   <ul id='order-list-panel' class='panel-list'>
-  <%=render partial:'list'%>
-    </ul>
+    <%= render partial: 'list' %>
+  </ul>
   <div class="order-content-div">
     <h4>选择需求单预览</h4>
   </div>
 </div>
-
-<%= render :partial => "shared/handling_msg_box", :locals => { :handlemsg => "处理中..." } %>
 <script type="text/javascript">
-    $('body').on('change','.order-checkbox',function(){
+    $('body').on('change', '.order-checkbox', function () {
         get_order_items();
     });
-    $('body').on('keydown','#user-id-text',function(e){
-        if(e.keyCode==13){
+    $('body').on('keydown', '#user-id-text', function (e) {
+        if (e.keyCode == 13) {
             get_order_items();
         }
     });
-    function get_order_items(){
-        var orders=[];
-        $('.order-checkbox:checked').each(function(){
+    function get_order_items() {
+        var orders = [];
+        $('.order-checkbox:checked').each(function () {
             orders.push($(this).val());
         });
-        if(orders.length==0){
+        if (orders.length == 0) {
             $('.order-content-div').html("<h4>选择需求单预览</h4>");
-        }else{
-            $.get('/orders/items',{user_id:$('#user-id-text').val(),order_ids:orders},function(data){
+        } else {
+            $.get('/orders/items', {user_id: $('#user-id-text').val(), order_ids: orders}, function (data) {
                 $('.order-content-div').html(data);
-            },'html');
+            }, 'html');
         }
     }
-    function build_pick_list(){
-      var user=$('#user-id-text').val();
-      var orders=[];
-      $('.order-checkbox:checked').each(function(){
-          orders.push($(this).val());
-      });
-      if(!user){
-          alert('请输入择货员工号');
-          return;
-      }
-      if(orders.length==0){
-          alert('请选择需要处理的需求单');
-          return;
-      }
-      show_handle_dialog();
-      $.post('/pick_lists/',{user_id:user,order_ids:orders},function(data){
-          hide_handle_dialog();
-          if(data.result){
-              window.location='/pick_lists/'+data.content.id;
-          }else{
-              alert(data.content);
-          }
-      },'json');
-  }
+    function build_pick_list() {
+        var user = $('#user-id-text').val();
+        var orders = [];
+        $('.order-checkbox:checked').each(function () {
+            orders.push($(this).val());
+        });
+        if (!user) {
+            alert('请输入择货员工号');
+            return;
+        }
+        if (orders.length == 0) {
+            alert('请选择需要处理的需求单');
+            return;
+        }
+        show_handle_dialog();
+        $.post('/pick_lists/', {user_id: user, order_ids: orders}, function (data) {
+            hide_handle_dialog();
+            if (data.result) {
+                window.location = '/pick_lists/' + data.content.id;
+            } else {
+                alert(data.content);
+            }
+        }, 'json');
+    }
+
+    function finish_order_handle(handled) {
+        var orders = [];
+        $('.order-checkbox:checked').each(function () {
+            orders.push($(this).val());
+        });
+        if (orders.length > 0 && confirm('确定完成处理？')) {
+            $.post('/orders/handle', {orders: orders, handled: handled}, function (data) {
+             if(handled){
+                $.each(data, function (i,order) {
+                    console.log(order);
+                    $('#' + order).parent().remove();
+                });
+             }
+            }, 'json');
+        }
+    }
     (function refresh_order() {
         setTimeout(function () {
-            var orders=[];
-            $('.order-checkbox').each(function(){
+            var orders = [];
+            $('.order-checkbox').each(function () {
                 orders.push($(this).val());
             });
             $.ajax({
                 url: '/orders/panel_list',
                 dataType: 'html',
-                data:{orders:orders},
+                data: {orders: orders},
                 type: 'get',
                 success: function (data) {
-                   if(data.length>0){
-                       $('#order-list-panel').append(data);
-                   }
+                    if (data.length > 0) {
+                        $('#order-list-panel').append(data);
+                    }
                     refresh_order();
                 },
                 error: function () {
@@ -82,6 +97,6 @@
                     if (xhr.status == 304) return;
                 }
             });
-        }, 5000);
+        }, 30000);
     })();
 </script>
