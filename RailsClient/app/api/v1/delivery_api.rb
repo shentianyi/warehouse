@@ -99,6 +99,10 @@ module V1
     post do
       d = Delivery.new(delivery_params)
       d.user = current_user
+
+      d.source = current_user.location
+      d.destination = current_user.location.destination
+
       result = d.save
 
       if params.has_key?(:forklifts)
