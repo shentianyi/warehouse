@@ -1,19 +1,7 @@
-<p id="notice"><%= notice %></p>
+<h1><%= @whouse.name%></h1>
+<span class="label label-primary"><%= @whouse.id%></span>
 
-<p>
-  <string>编 号:</string>
-  <%= @whouse.id%>
-</p>
-<p>
-  <string>名 称:</string>
-  <%= @whouse.id%>
-</p>
+<h4>所属地点: <small><%= @whouse.location.name %></small></h4>
 
-<p>
-  <string>所属地点:</string>
-  <%= @whouse.location.name if @whouse.location%>
-</p>
-
-
-<%= link_to '编辑', edit_whouse_path(@whouse) %> |
-<%= link_to '返回', whouses_path %>
+<%= link_to '编辑', edit_whouse_path(@whouse),:class=>'btn btn-default' %> |
+<%= link_to '返回', whouses_path ,:class=>'btn btn-default'%>

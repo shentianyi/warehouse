@@ -165,6 +165,10 @@ module V1
         return {result:0,content:DeliveryMessage::NotExit}
       end
 
+      if !DeliveryState.before_state?(DeliveryState::DESTINATION,d.state)
+        return false
+      end
+
       if DeliveryService.receive(d)
         {result:1,content:DeliveryPresenter.new(d).to_json_with_forklifts(true)}
       else
