@@ -35,6 +35,7 @@ Rails.application.routes.draw do
   resources :orders do
     collection do
       get :panel
+      get :panel_list
       get :search
       get :items
     end

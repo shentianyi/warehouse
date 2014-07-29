@@ -1,14 +1,17 @@
 <h3>需求单处理面板</h3>
-择货员工号：<input type="text" id="user-id-text">
-<ul id='order-list-panel'>
+<p style="padding-left:30px;">择货员工号：</p>
+<input type="text" id="user-id-text" class="panel-input">
+<input type="button" value="生成择货单(择货员工号必须填写)" onclick="build_pick_list();" style="margin-left:30px;margin-top:0px;">
+<div class="panel-content">
+  <ul id='order-list-panel' class='panel-list'>
   <%=render partial:'list'%>
-</ul>
-<div class="order-content-div">
-     <h4>选择需求单预览</h4>
+    </ul>
+  <div class="order-content-div">
+    <h4>选择需求单预览</h4>
+  </div>
 </div>
-<input type="button" value="生成择货单(择货员工号必须填写)" onclick="build_pick_list();">
-<%= render :partial => "shared/handling_msg_box", :locals => { :handlemsg => "处理中..." } %>
 
+<%= render :partial => "shared/handling_msg_box", :locals => { :handlemsg => "处理中..." } %>
 <script type="text/javascript">
     $('body').on('change','.order-checkbox',function(){
         get_order_items();
@@ -55,4 +58,30 @@
           }
       },'json');
   }
+    (function refresh_order() {
+        setTimeout(function () {
+            var orders=[];
+            $('.order-checkbox').each(function(){
+                orders.push($(this).val());
+            });
+            $.ajax({
+                url: '/orders/panel_list',
+                dataType: 'html',
+                data:{orders:orders},
+                type: 'get',
+                success: function (data) {
+                   if(data.length>0){
+                       $('#order-list-panel').append(data);
+                   }
+                    refresh_order();
+                },
+                error: function () {
+                    refresh_order();
+                },
+                complete: function (xhr) {
+                    if (xhr.status == 304) return;
+                }
+            });
+        }, 5000);
+    })();
 </script>

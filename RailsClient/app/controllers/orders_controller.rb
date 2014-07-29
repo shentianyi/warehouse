@@ -65,6 +65,11 @@ class OrdersController < ApplicationController
     @orders=OrderService.get_orders_by_days(current_user.location.id).all
   end
 
+  def panel_list
+    @orders=OrderService.get_orders_by_days(current_user.location.id).where.not(id:params[:orders]).all
+    render partial:'list'
+  end
+
   def items
     if params[:user_id].blank?
       @order_items=OrderItem.where(order_id: params[:order_ids])
