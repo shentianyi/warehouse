@@ -10,9 +10,8 @@ class PickListsController < ApplicationController
   # GET /pick_lists/1
   # GET /pick_lists/1.json
   def show
-    headers['Access-Control-Allow-Origin'] = "*"
+    @back_url = params.has_key?(:show) ? '/pick_lists' : '/orders/panel'
     @pick_items=@pick_list.pick_items
-    @print_url="#{SysConfigCache.print_server_value}/printer/cross_print/P006/#{@pick_list.id}"
   end
 
   # GET /pick_lists/new

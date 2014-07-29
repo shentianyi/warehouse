@@ -62,7 +62,23 @@ class OrdersController < ApplicationController
   end
 
   def panel
-    @orders=Order.where(handled: false, source_id: current_user.location.id).order(created_at: :asc).all
+    @orders=OrderService.get_orders_by_days(current_user.location.id).order(created_at: :asc).all
+  end
+
+  def panel_list
+    @orders=OrderService.get_orders_by_days(current_user.location.id).where.not(id:params[:orders]).order(created_at: :asc).all
+    render partial:'list'
+  end
+
+  def handle
+    orders=[]
+    params[:orders].each do |id|
+      if order=Order.find_by_id(id)
+        order.update(handled:params[:handled])
+        orders<<order.id
+      end
+    end
+    render json: orders
   end
 
   def items

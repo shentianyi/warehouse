@@ -46,7 +46,8 @@ module ApplicationHelper
       #end
       #query=query.where(Hash[k, v]) if v.is_a?(Range)
       if v.is_a?(Hash) && v.values.count==2 && v.values.uniq!=['']
-        query=query.where(Hash[k, (v.values[0]..v.values[1])])
+        values=v.values.sort
+        query=query.where(Hash[k, (values[0]..values[1])])
         v.each do |kk, vv|
           instance_variable_set("@#{k}_#{kk}", vv)
         end
