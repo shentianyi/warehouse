@@ -1,38 +1,12 @@
-<p id="notice"><%= notice %></p>
+<h1><%= @user.name%></h1>
+<span class="label label-primary"><%= @user.id%></span>
 
-<p>
-  <string>员工号:</string>
-  <%= @user.id%>
-</p>
+<h4>姓名: <small><%= @user.name%></small></h4>
+<h4>上次登录IP: <small><%= @user.current_sign_in_ip%></small></h4>
+<h4>所属地点: <small><%= @user.location.name if @user.location%></small></h4>
+<h4>角色: <small><%= Role.display(@user.role_id) %></small></h4>
+<h4>邮箱: <small><%= @user.email %></small></h4>
+<h4>电话: <small><%= @user.tel %></small></h4>
 
-<p>
-  <string>姓 名:</string>
-  <%= @user.name%>
-</p>
-
-<p>
-  <string>IP:</string>
-  <%= @user.current_sign_in_ip%>
-</p>
-
-<p>
-  <string>地 点:</string>
-  <%= @user.location.name if @user.location%>
-</p>
-
-<p>
-  <string>角 色:</string>
-  <%= @user.role%>
-</p>
-
-<p>
-  <string>邮 箱:</string>
-  <%= @user.email%>
-</p>
-<p>
-  <string>电 话:</string>
-  <%= @user.tel%>
-</p>
-
-<%= link_to '编辑', edit_user_path(@user) %> |
-<%= link_to '返回', users_path %>
+<%= link_to '编辑', edit_user_path(@user),:class=>'btn btn-default' %> |
+<%= link_to '返回', users_path,:class=>'btn btn-default' %>

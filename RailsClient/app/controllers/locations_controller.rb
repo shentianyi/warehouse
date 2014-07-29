@@ -47,7 +47,7 @@ class LocationsController < ApplicationController
 
   # GET /locations/1/whouses
   def whouses
-    @whouses = @location.whouses
+    @whouses = @location.whouses.paginate(:page=> params[:page])
   end
 
   # PATCH/PUT /locations/1

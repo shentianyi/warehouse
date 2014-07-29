@@ -53,8 +53,6 @@ class OrderService
   #create order with order items
   #=============
   def self.create_with_items args,current_user
-    puts args.to_json
-    puts args[:order].to_json
     order = Order.new(args[:order])
     order.user = current_user
     ActiveRecord::Base.transaction do
@@ -62,7 +60,11 @@ class OrderService
         if order.save
           #save success
           args[:order_items].each do | item |
-            if item = OrderItemService.new(item,current_user)
+            part = OrderItemService.verify_part_id(item[:part_id],current_user)
+            part_position = OrderItemService.verify_department(item[:department],item[:part_id])
+            quantity = item[:quantity]
+
+            if item = OrderItemService.new(part_position,part,quantity,item[:is_emergency],current_user)
               item.order = order
               item.save
             end
