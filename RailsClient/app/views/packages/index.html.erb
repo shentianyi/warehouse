@@ -45,6 +45,7 @@
       <th>所属托盘</th>
       <th>输入时间</th>
       <th>上架位置</th>
+      <th>创建时间</th>
       <th colspan="2">&nbsp;</th>
     </tr>
   </thead>
@@ -62,6 +63,7 @@
         <td><%= link_to package.forklift_id, package.forklift  if package.forklift%></td>
         <td><%= PackageLabelRegex.date_prefix_string+ package.check_in_time %></td>
         <td><%= package.position.whouse.name + ' ' +package.position.detail if package.position %></td>
+        <td><%= package.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') if package.created_at%></td>
         <td><%= link_to '编辑', edit_package_path(package) %></td>
         <td><%= link_to '详细', package_path(package) %></td>
       </tr>
