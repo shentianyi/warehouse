@@ -67,7 +67,13 @@
           <%end%>
         </td>
         <td><%= order.created_at.localtime.strftime('%Y-%m-%d %H:%M') %></td>
-        <td><%= order.handled %></td>
+        <td>
+          <% if order.handled %>
+              <span class="label label-success">是</span>
+          <%else%>
+              <span class="label label-warning">否</span>
+          <%end%>
+        </td>
         <td><%= link_to '订单项目列表', order_items_order_path(order)%><span class="badge pull-right"><%= order.order_items.count %></span></td>
         <td>
           <% if order.is_delete %>

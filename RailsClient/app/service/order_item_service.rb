@@ -3,7 +3,7 @@ class OrderItemService
 	#create
 	#params @position, @part_id, @quantity
 	#=============
-	def self.new part_position,part,quantity,is_emergency,current_user
+	def self.new part_position,part,quantity,is_emergency,box_quantity,current_user
 		params = {}
 		#here location and whouse is
 		params[:location_id] = part_position.position.whouse.location_id
@@ -13,6 +13,7 @@ class OrderItemService
 		params[:part_type_id] = part.part_type_id
 		params[:quantity] = quantity
     params[:is_emergency] = is_emergency
+    params[:box_quantity] = box_quantity
 
 		item = OrderItem.new(params)
 =begin

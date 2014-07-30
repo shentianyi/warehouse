@@ -45,6 +45,7 @@ module V1
     #verified
     #=============
     post do
+      puts params.to_json
       unless order = OrderService.create_with_items({order:order_params,order_items:params[:order_items]},current_user)
         return {result:0,content:OrderMessage::CreatedFailed}
       end

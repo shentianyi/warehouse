@@ -63,8 +63,9 @@ class OrderService
             part = OrderItemService.verify_part_id(item[:part_id],current_user)
             part_position = OrderItemService.verify_department(item[:department],item[:part_id])
             quantity = item[:quantity]
+            box_quantity = item[:box_quantity]
 
-            if item = OrderItemService.new(part_position,part,quantity,item[:is_emergency],current_user)
+            if item = OrderItemService.new(part_position,part,quantity,item[:is_emergency],box_quantity,current_user)
               item.order = order
               item.save
             end

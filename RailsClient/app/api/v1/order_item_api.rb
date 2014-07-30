@@ -22,7 +22,7 @@ module V1
         return {result:0,content:OrderItemMessage::QuantityError}
       end
 
-      unless item = OrderItemService.new(part_position,part,quantity,false,current_user)
+      unless item = OrderItemService.new(part_position,part,quantity,false,0,current_user)
         return {result:0,content:OrderItemMessage::VerifyFailed}
       end
 
