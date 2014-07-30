@@ -3,7 +3,6 @@ class PickListService
     order_items=PickItemService.get_order_items(user_id, order_ids)
     if order_items.count>0
       pick_list=PickList.new(user_id: user_id)
-      puts pick_list.to_json
       order_items.each do |i|
         pick_list.pick_items<<PickItem.new(
             quantity: i.quantity,
