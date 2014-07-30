@@ -1,6 +1,6 @@
 ---
 sync:
-  host: http://192.168.1.168:3000
+  host: http://192.168.1.108:3000
   token: 3dcba17f596969a676bfdd90b5425c703f983acf7306760e1057c95afe9f17b1d
   sync_lock: false
   enabled: true

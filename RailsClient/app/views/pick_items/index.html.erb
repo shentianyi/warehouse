@@ -35,6 +35,7 @@
     <th>要货库位</th>
     <th>是否紧急</th>
     <th>备注</th>
+    <th>创建时间</th>
     <th></th>
   </tr>
   </thead>
@@ -53,6 +54,7 @@
           <% end %></td>
         <td><%= '是' if pick_item.is_emergency %></td>
         <td><%= pick_item.remark %></td>
+        <td><%= pick_item.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_item.created_at%></td>
         <td><%= link_to '编辑', edit_pick_item_path(pick_item) %></td>
       </tr>
   <% end %>

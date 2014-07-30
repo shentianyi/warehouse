@@ -3,12 +3,12 @@ module Sync
   class BaseSync
     # BASE_URL= "#{$SYNC_HOST}/api/v1/sync/"
     # ACCESS_TOKEN='3dcba17f596969a676bfdd90b5425c703f983acf7306760e1057c95afe9f17b1d'
-    RECORD_PER_REQUEST_SIZE=500
+    #RECORD_PER_REQUEST_SIZE=500
 
     def self.execute
       ## base data
-      current=Time.now
       begin
+        current=Time.now
         Sync::Execute::LocationSync.sync
         Sync::Execute::HackerSync.sync
         Sync::Execute::WhouseSync.sync
