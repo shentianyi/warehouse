@@ -59,11 +59,23 @@
         <td><%= order.id %></td>
         <td><%= order.user.name %></td>
         <td><%= order.source.name if order.source%></td>
-        <td><%= order.is_emergency %></td>
+        <td>
+          <% if order.is_emergency %>
+              <span class="label label-success">是</span>
+          <%else%>
+              <span class="label label-warning">否</span>
+          <%end%>
+        </td>
         <td><%= order.created_at.localtime.strftime('%Y-%m-%d %H:%M') %></td>
         <td><%= order.handled %></td>
         <td><%= link_to '订单项目列表', order_items_order_path(order)%><span class="badge pull-right"><%= order.order_items.count %></span></td>
-        <td><%= order.is_delete%></td>
+        <td>
+          <% if order.is_delete %>
+              <span class="label label-success">是</span>
+          <%else%>
+              <span class="label label-warning">否</span>
+          <%end%>
+        </td>
         <td><%= link_to '详细', order ,:class=>'btn btn-default'%></td>
         <td><%= link_to '编辑', edit_order_path(order) ,:class=>'btn btn-default'%></td>
         <td><%= link_to '删除', order, method: :delete, data: { confirm: 'Are you sure?' },:class=>'btn btn-default' %></td>

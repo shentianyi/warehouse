@@ -3,11 +3,23 @@
 
 <h4>要货员: <small><%= @order.user.name %></small></h4>
 <h4>要货员工号: <small><%= @order.user_id %></small></h4>
-<h4>备货地: <small><%= @order.source.name %></small></h4>
-<h4>是否有紧急项目: <small><%= @order.is_emergency %></small></h4>
+<h4>备货地: <small><%= @order.source.name if @order.source%></small></h4>
+<h4>是否有紧急项目: <small>
+  <% if @order.is_emergency %>
+      <span class="label label-success">是</span>
+  <%else%>
+      <span class="label label-warning">否</span>
+  <%end%>
+</small></h4>
 <h4>是否已处理: <small><%= @order.handled%></small></h4>
 <h4>创建时间: <small><%= @order.created_at.localtime.strftime('%Y-%m-%d %H:%M')%></small></h4>
-<h4>是否已删除: <small><%= @order.is_delete %></small></h4>
+<h4>是否已删除: <small>
+  <% if @order.is_delete %>
+      <span class="label label-success">是</span>
+  <%else%>
+      <span class="label label-warning">否</span>
+  <%end%>
+</small></h4>
 
 <%= link_to '编辑', edit_order_path(@order), :class=>'btn btn-default' %> |
 <%= link_to '返回', orders_path, :class=>'btn btn-default' %>
