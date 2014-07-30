@@ -56,10 +56,10 @@ ActiveRecord::Base.transaction do
   end
 
   unless SysConfig.find_by_code('IOS_VERSION')
-    SysConfig.create(code:'IOS_VERSION',value:'0.1',name:'打印服务器地址')
+    SysConfig.create(code:'IOS_VERSION',value:'0.1',name:'IOS版本号')
   end
 
   unless SysConfig.find_by_code('IS_FORCE')
-    SysConfig.create(code:'IS_FORCE',value:false ,name:'打印服务器地址')
+    SysConfig.create(code:'IS_FORCE',value:false ,name:'是否强制更新')
   end
 end

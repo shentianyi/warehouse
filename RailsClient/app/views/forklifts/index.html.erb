@@ -1,23 +1,9 @@
 <h2>托盘列表</h2>
-<<<<<<< HEAD
-
-=======
 <br/>
->>>>>>> 6cc7032c2dd17113a9a653f66df3ff5e0c275634
 <div>
   <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
     <div>
       <div>
-<<<<<<< HEAD
-        <span>托盘号：
-          <input type="text" name="forklift[id]" value="<%= @id %>"/>
-          <input type="hidden" name="forklift[id_fuzzy]"/>
-        </span>
-        <span>备货员工工号：
-          <input type="text" name="forklift[user_id]" value="<%= @user_id %>"/>
-          <input type="hidden" name="forklift[user_id_fuzzy]"/>
-        </span>
-=======
         <span>托清单号：
           <input type="text" name="forklift[id]" value="<%= @id %>"/>
           <input type="hidden" name="forklift[id_fuzzy]"/>
@@ -31,7 +17,6 @@
         </span>
       </div>
       <div>
->>>>>>> 6cc7032c2dd17113a9a653f66df3ff5e0c275634
         <span>
         创建日期：
           <input type="text" name="forklift[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
@@ -45,10 +30,7 @@
   </form>
 </div>
 <br/>
-<<<<<<< HEAD
 <input type="button" value="打印托清单" class='btn btn-warning' onclick="print_forklift_list();"/>
-=======
->>>>>>> 6cc7032c2dd17113a9a653f66df3ff5e0c275634
 <div class="digg_pagination">
   <div class="page_info">
     <%= page_entries_info @forklifts %>

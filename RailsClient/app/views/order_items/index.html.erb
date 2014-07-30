@@ -42,9 +42,9 @@
         <td><%= OrderItemLabelRegex.quantity_prefix_string + order_item.quantity.to_s %></td>
         <td>
           <% if order_item.is_emergency %>
-          <span class="label label-danger">是</span>
+          <span class="label label-success">是</span>
           <%else%>
-              <span class="label label-info">否</span>
+              <span class="label label-warning">否</span>
           <%end%>
         </td>
         <td><%= link_to '详细', order_item ,:class=>'btn btn-default'%></td>
