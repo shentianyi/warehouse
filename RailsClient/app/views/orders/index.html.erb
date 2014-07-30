@@ -75,3 +75,11 @@
   <%= will_paginate @orders, :container => false %>
 </div>
 <br>
+<script>
+    $(function () {
+        $(".datepicker").datepicker({
+            showButtonPanel: true,
+            showWeek: true
+        });
+    });
+</script>

@@ -2,7 +2,11 @@ Rails.application.routes.draw do
 
   resources :sys_configs
 
-  resources :order_items
+  resources :order_items do
+    collection do
+      get :search
+    end
+  end
   resources :pick_items do
     collection do
       get :search
