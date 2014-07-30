@@ -12,16 +12,27 @@ module Sync
         Sync::Execute::LocationSync.sync
         Sync::Execute::HackerSync.sync
         Sync::Execute::WhouseSync.sync
+        Sync::Execute::PartTypeSync.sync
         Sync::Execute::PartSync.sync
         Sync::Execute::PositionSync.sync
         Sync::Execute::PartPositionSync.sync
+        Sync::Execute::PickItemFilterSync.sync
 
-        # dynamic data
+        # sync delivery data
         Sync::Execute::DeliverySync.sync
         Sync::Execute::ForkliftSync.sync
         Sync::Execute::PackageSync.sync
         Sync::Execute::PackagePositionSync.sync
         Sync::Execute::StateLogSync.sync
+
+        # sync order data
+        Sync::Execute::OrderSync.sync
+        Sync::Execute::OrderItemSync.sync
+
+        # sync pick list data
+        Sync::Execute::PickListSync.sync
+        Sync::Execute::PickItemSync.sync
+
         Sync::Config.last_time=(current- Sync::Config.advance_second.seconds).utc
       rescue => e
         puts e.class

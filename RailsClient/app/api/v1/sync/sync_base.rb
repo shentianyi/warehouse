@@ -13,15 +13,23 @@ module V1
       mount LocationSyncAPI
       mount UserSyncAPI
       mount WhouseSyncAPI
+      mount PartTypeSyncAPI
       mount PartSyncAPI
       mount PositionSyncAPI
+      mount PartPositionSyncAPI
+      mount PickItemFilterSyncAPI
+
       mount DeliverySyncAPI
       mount ForkliftSyncAPI
       mount PackageSyncAPI
-
-      mount PartPositionSyncAPI
       mount PackagePositionSyncAPI
       mount StateLogSyncAPI
+
+      mount OrderSyncAPI
+      mount OrderItemSyncAPI
+      mount PickListSyncAPI
+      mount PickItemSyncAPI
+
     end
   end
 end
