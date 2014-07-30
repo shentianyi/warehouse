@@ -7,12 +7,18 @@ module Extensions
       default_scope { where(is_delete: false) }
       validates_uniqueness_of :id
       before_create :generate_uuid
+      before_create :set_timestamps
       before_update :reset_dirty_flag
 
       def generate_uuid
         self.id = self.send(:generate_id) if self.id.nil? && self.respond_to?(:generate_id)
         self.id = SecureRandom.uuid if self.id.nil?
         self.uuid= SecureRandom.uuid if self.respond_to?(:uuid) and self.send(:uuid).nil?
+      end
+
+      def set_timestamps
+        self.created_at = Time.now if self.created_at.nil?
+        self.updated_at = Time.now if self.updated_at.nil?
       end
 
       def reset_dirty_flag
