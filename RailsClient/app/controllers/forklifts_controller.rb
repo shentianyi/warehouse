@@ -81,7 +81,7 @@ class ForkliftsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def forklift_params
     #params[:forklift]
-    params.require(:forklift).permit(:state,:remark)
+    params.require(:forklift).permit(:state,:remark,:whouse_id)
     end
 
   def set_search_variable

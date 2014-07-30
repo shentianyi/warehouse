@@ -47,7 +47,7 @@
         <td><%= position.id%></td>
         <td><%= position.detail%></td>
         <td><%= position.whouse.name %></td>
-        <td><%= link_to '零件列表',parts_position_path(position)%><span class="badge"><%= position.parts.count %></span></td>
+        <td><%= link_to '零件列表',parts_position_path(position)%><span class="badge pull-right"><%= position.parts.count %></span></td>
         <td><%= link_to '详细', position ,:class=>'btn btn-default'%></td>
         <td><%= link_to '编辑', edit_position_path(position),:class=>'btn btn-default' %></td>
         <td><%= link_to '删除', position, method: :delete, data: { confirm: '确认删除?' },:class=>'btn btn-default' %></td>

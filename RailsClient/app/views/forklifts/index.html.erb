@@ -48,6 +48,7 @@
       <th>备货仓库</th>
       <th>包装箱总数</th>
       <th>已接收包装箱数</th>
+      <th>创建时间</th>
       <th>备注</th>
       <th>打印</th>
       <th colspan="2"></th>
@@ -67,11 +68,12 @@
         <% end %>
         <% end %>
         </td>
-        <td><%= link_to '包装箱列表', packages_forklift_path(forklift) %><span class='badge'><%= forklift.packages.count %></span></td>
+        <td><%= link_to '包装箱列表', packages_forklift_path(forklift) %><span class='badge pull-right'><%= forklift.packages.count %></span></td>
         <td><%= forklift.stocker.name if forklift.stocker%></td>
         <td><%= forklift.whouse.name%></td>
         <td><%= forklift.sum_packages%></td>
         <td><%= forklift.accepted_packages%></td>
+        <td><%= forklift.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
         <td><%= forklift.remark%></td>
         <td><input type="button" value="托清单" class='btn btn-warning' onclick="print_forklift_list('<%= forklift.id %>');"/></td>
         <td><%= link_to '详细', forklift ,:class=> 'btn btn-default' %></td>

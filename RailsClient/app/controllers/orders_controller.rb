@@ -1,5 +1,5 @@
 class OrdersController < ApplicationController
-  before_action :set_order, only: [:show, :edit, :update, :destroy]
+  before_action :set_order, only: [:show, :edit, :update, :destroy, :order_items]
 
   # GET /orders
   # GET /orders.json
@@ -90,6 +90,10 @@ class OrdersController < ApplicationController
       @order_items=PickItemService.get_order_items(params[:user_id],params[:order_ids])||[]
     end
     render partial:'item'
+  end
+
+  def order_items
+    @order_items = @order.order_items.paginate(:page => params[:page])
   end
 
   private
