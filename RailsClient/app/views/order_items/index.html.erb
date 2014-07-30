@@ -1,5 +1,32 @@
 <h1>需求单项目列表</h1>
-
+<br/>
+<div>
+  <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+    <div>
+      <span>项目号：
+        <input type="text" name="order_item[id]" value="<%= @id %>"/>
+        <input type="hidden" name="order_item[id_fuzzy]"/>
+      </span>
+      <span>创建员工工号：
+          <input type="text" name="order_item[user_id]" value="<%= @user_id %>"/>
+          <input type="hidden" name="order_item[user_id_fuzzy]"/>
+        </span>
+      <span>所属订单号：
+          <input type="text" name="order_item[order_id]" value="<%= @order_id %>"/>
+          <input type="hidden" name="order_item[order_id_fuzzy]"/>
+        </span>
+    </div>
+    <div>
+        <span>
+        创建日期：
+          <input type="text" name="order_item[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
+          ~  <input type="text" name="order_item[created_at][end]" class="datepicker" value="<%= @created_at_end %>"/>
+        </span>
+    </div>
+    <input type="submit" value="查 找" class="btn btn-primary"/>
+  </form>
+</div>
+<br/>
 <div class="digg_pagination">
   <div class="page_info">
     <%= page_entries_info @order_items %>
@@ -57,3 +84,11 @@
   <%= will_paginate @order_items, :container => false %>
 </div>
 <br>
+<script>
+    $(function () {
+        $(".datepicker").datepicker({
+            showButtonPanel: true,
+            showWeek: true
+        });
+    });
+</script>

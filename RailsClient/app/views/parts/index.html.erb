@@ -66,7 +66,13 @@
           <span class="label label-info"><%= pp.position.detail%><<<%= pp.sourceable.name if pp.sourceable%></span>
           <% end %>
         </td>
-        <td><%= part.is_delete %></td>
+        <td>
+          <% if part.is_delete %>
+              <span class="label label-success">是</span>
+          <%else%>
+              <span class="label label-warning">否</span>
+          <%end%>
+        </td>
         <td><%= link_to '详细', part ,:class=>'btn btn-default'%></td>
         <td><%= link_to '编辑', edit_part_path(part) ,:class=>'btn btn-default'%></td>
         <td><%= link_to '删除', part, method: :delete, data: {confirm: '确认删除?'} ,:class=>'btn btn-default'%></td>
