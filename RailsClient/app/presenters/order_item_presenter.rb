@@ -68,10 +68,10 @@ class OrderItemPresenter<Presenter
         source_id: self.source ? self.source.id : '',
         source: self.source ? self.source.name : '',
         user_id: self.creator,
-        part_id: self.part_id,
+        part_id: OrderItemLabelRegex.part_prefix_string self.part_id,
         part_type_id: self.part_type,
         is_emergency: self.is_emergency ? 1:0,
-        quantity: self.quantity,
+        quantity: OrderItemLabelRegex.quantity_prefix_string + self.quantity.to_s,
         position: self.position,
         uniq_id: self.uniq_id,
         box_quantity: self.box_quantity
