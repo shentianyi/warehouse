@@ -41,8 +41,16 @@ Rails.application.routes.draw do
       get :items
       post :handle
     end
+    member do
+      get :order_items
+    end
   end
 
+  resources :packages do
+    collection do
+      get :search
+    end
+  end
 
   resources :forklifts do
     collection do

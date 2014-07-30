@@ -73,14 +73,23 @@ class ForkliftsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_forklift
-      @forklift = Forklift.find(params[:id])
+  # Use callbacks to share common setup or constraints between actions.
+  def set_forklift
+    @forklift = Forklift.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def forklift_params
+    #params[:forklift]
+    params.require(:forklift).permit(:state,:remark,:whouse_id)
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def forklift_params
-      #params[:forklift]
-      params.require(:forklift).permit(:state,:remark)
-    end
+  def set_search_variable
+    p= params[:forklift]
+    @id=p[:id]
+    @stocker_id=p[:stocker_id]
+    @state=p[:state]
+    @created_at_start=p[:created_at][:start]
+    @created_at_end=p[:created_at][:end]
+  end
 end

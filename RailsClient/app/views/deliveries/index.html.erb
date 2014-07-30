@@ -59,11 +59,11 @@
     <th>状态</th>
     <th>托清单列表</th>
     <th>创建日期</th>
+    <th>创建员工</th>
     <th>发运日期</th>
     <th>接收日期</th>
-    <th>发送地</th>
-    <th>创建员工</th>
     <th>接收员工</th>
+    <th>发送地</th>
     <th>备注</th>
     <th colspan="3">&nbsp;</th>
   </tr>
@@ -76,13 +76,13 @@
         <td><%= index+@deliveries.offset+1 %></td>
         <td><%= delivery.id %></td>
         <td><%= DeliveryState.display(delivery.state) %></td>
-        <td><%= link_to '托清单列表',forklifts_delivery_path(delivery) %><span class="badge"><%= delivery.forklifts.count%></span></td>
+        <td><%= link_to '托清单列表',forklifts_delivery_path(delivery) %><span class="badge pull-right"><%= delivery.forklifts.count%></span></td>
         <td><%= delivery.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') if delivery.created_at%></td>
+        <td><%= delivery.user.name %></td>
         <td><%= delivery.delivery_date.localtime.strftime('%Y-%m-%d %H:%M:%S') if delivery.delivery_date %></td>
         <td><%= delivery.received_date.localtime.strftime('%Y-%m-%d %H:%M:%S') if delivery.received_date %></td>
-        <td><%= delivery.source.name if delivery.source %></td>
-        <td><%= delivery.user.name %></td>
         <td><%= delivery.receiver.name if delivery.receiver %></td>
+        <td><%= delivery.source.name if delivery.source %></td>
         <td><%= delivery.remark %></td>
         <td><%= link_to '详细', delivery ,:class=>'btn btn-default'%></td>
         <td><%= link_to '编辑', edit_delivery_path(delivery)  ,:class=>'btn btn-default' %></td>

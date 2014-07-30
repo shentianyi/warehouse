@@ -28,7 +28,7 @@
         <td><%= whouse.id %> </td>
         <td><%= whouse.name %></td>
         <td><%= whouse.location.name if whouse.location %></td>
-        <td><%= link_to '库位列表',positions_whouse_path(whouse) %><span class="badge"><%= whouse.positions.count%></span></td>
+        <td><%= link_to '库位列表',positions_whouse_path(whouse) %><span class="badge pull-right"><%= whouse.positions.count%></span></td>
         <td><%= link_to '详细', whouse ,:class=>"btn btn-default"%></td>
         <td><%= link_to '编辑', edit_whouse_path(whouse),:class=>"btn btn-default" %></td>
         <td><%= link_to '删除', whouse, method: :delete, data: { confirm: '确认删除?' },:class=>"btn btn-default" %></td>

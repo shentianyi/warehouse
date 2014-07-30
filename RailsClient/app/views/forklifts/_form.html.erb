@@ -14,6 +14,10 @@
       <%=  f.select(:state,ForkliftState.state,{include_blank: false})%>
     </p>
     <p>
+      <%= f.label :whouse_id, '备货仓库' %>
+      <%= f.select(:whouse_id, @forklift.user.location.destination.whouses.collect { |l| [l.name, l.id] }, {include_blank: false}) %>
+    </p>
+    <p>
       <%= f.label :remark,'备 注'%>
       <%= f.text_field :remark%>
     </p>

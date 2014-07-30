@@ -1,9 +1,14 @@
 <h2>托盘列表</h2>
+<<<<<<< HEAD
 
+=======
+<br/>
+>>>>>>> 6cc7032c2dd17113a9a653f66df3ff5e0c275634
 <div>
   <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
     <div>
       <div>
+<<<<<<< HEAD
         <span>托盘号：
           <input type="text" name="forklift[id]" value="<%= @id %>"/>
           <input type="hidden" name="forklift[id_fuzzy]"/>
@@ -12,6 +17,21 @@
           <input type="text" name="forklift[user_id]" value="<%= @user_id %>"/>
           <input type="hidden" name="forklift[user_id_fuzzy]"/>
         </span>
+=======
+        <span>托清单号：
+          <input type="text" name="forklift[id]" value="<%= @id %>"/>
+          <input type="hidden" name="forklift[id_fuzzy]"/>
+        </span>
+        <span>备货员工号：
+          <input type="text" name="forklift[stocker_id]" value="<%= @stocker_id %>"/>
+          <input type="hidden" name="forklift[stocker_id_fuzzy]"/>
+        </span>
+        <span>托清单：
+          <%= select 'forklift', 'state', ForkliftState.state, selected: @state ,include_blank: true %>
+        </span>
+      </div>
+      <div>
+>>>>>>> 6cc7032c2dd17113a9a653f66df3ff5e0c275634
         <span>
         创建日期：
           <input type="text" name="forklift[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
@@ -25,7 +45,10 @@
   </form>
 </div>
 <br/>
+<<<<<<< HEAD
 <input type="button" value="打印托清单" class='btn btn-warning' onclick="print_forklift_list();"/>
+=======
+>>>>>>> 6cc7032c2dd17113a9a653f66df3ff5e0c275634
 <div class="digg_pagination">
   <div class="page_info">
     <%= page_entries_info @forklifts %>
@@ -40,11 +63,12 @@
       <th>编号</th>
       <th>状态</th>
       <th>所属运单</th>
-      <th>Package lists</th>
+      <th>包装箱列表</th>
       <th>备货员工</th>
       <th>备货仓库</th>
       <th>包装箱总数</th>
-      <th>包装箱被接收数</th>
+      <th>已接收包装箱数</th>
+      <th>创建时间</th>
       <th>备注</th>
       <th colspan="2"></th>
     </tr>
@@ -64,11 +88,12 @@
         <% end %>
         <% end %>
         </td>
-        <td><%= link_to 'Packages list', packages_forklift_path(forklift) %><span class='badge'><%= forklift.packages.count %></span></td>
+        <td><%= link_to '包装箱列表', packages_forklift_path(forklift) %><span class='badge pull-right'><%= forklift.packages.count %></span></td>
         <td><%= forklift.stocker.name if forklift.stocker%></td>
         <td><%= forklift.whouse.name%></td>
         <td><%= forklift.sum_packages%></td>
         <td><%= forklift.accepted_packages%></td>
+        <td><%= forklift.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
         <td><%= forklift.remark%></td>
         <td><%= link_to '详细', forklift ,:class=> 'btn btn-default' %></td>
         <td><%= link_to '编辑', edit_forklift_path(forklift) ,:class=> 'btn btn-default'%></td>
