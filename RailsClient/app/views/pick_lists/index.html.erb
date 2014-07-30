@@ -26,8 +26,8 @@
     </div>
   </form>
 </div>
-
 <br/>
+<input type="button" value="打印择货单" class='btn btn-warning' onclick="print_delivery_list();"/>
 <div class="digg_pagination">
   <div class="page_info">
     <%= page_entries_info @pick_lists %>
@@ -37,12 +37,12 @@
 <table class="table table-bordered table-striped globle-table table-hover">
   <thead>
   <tr>
+    <th></th>
     <th>NO.</th>
     <th>择货单号</th>
     <th>择货员工号</th>
     <th>创建时间</th>
     <th>状态</th>
-    <th>打印</th>
     <th></th>
   </tr>
   </thead>
@@ -50,13 +50,13 @@
   <tbody>
   <% @pick_lists.each_with_index do |pick_list, index| %>
       <tr>
+        <td><input type="checkbox" id="<%= pick_list.id %>" class='print-check'></td>
         <td><%= index+@pick_lists.offset+1 %></td>
         <td><%= pick_list.id %></td>
         <td><%= pick_list.user_id %></td>
         <td><%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
         <td><%= pick_list.state %></td>
-        <td><input type="button" value="择货单" class='btn btn-warning' onclick="print_pick_list('<%= pick_list.id %>');"/></td>
-        <td><%= link_to '详细', pick_list_path(id:pick_list,show:true) %></td>
+        <td><%= link_to '详细', pick_list_path(id: pick_list, show: true) %></td>
       </tr>
   <% end %>
   </tbody>
@@ -73,4 +73,5 @@
             showWeek: true
         });
     });
+    init_check();
 </script>

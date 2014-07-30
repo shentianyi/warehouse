@@ -1,9 +1,23 @@
 <h2>包装箱列表</h2>
+<<<<<<< HEAD
+
+=======
 <br/>
+>>>>>>> 6cc7032c2dd17113a9a653f66df3ff5e0c275634
 <div>
   <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
     <div>
       <div>
+<<<<<<< HEAD
+        <span>外库唯一号：
+          <input type="text" name="package[id]" value="<%= @id %>"/>
+          <input type="hidden" name="package[id_fuzzy]"/>
+        </span>
+        <span>备货员工工号：
+          <input type="text" name="package[user_id]" value="<%= @user_id %>"/>
+          <input type="hidden" name="package[user_id_fuzzy]"/>
+        </span>
+=======
         <span>包装箱号：
           <input type="text" name="package[id]" value="<%= @id %>"/>
           <input type="hidden" name="package[id_fuzzy]"/>
@@ -21,6 +35,7 @@
         </span>
       </div>
       <div>
+>>>>>>> 6cc7032c2dd17113a9a653f66df3ff5e0c275634
         <span>
         创建日期：
           <input type="text" name="package[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
@@ -34,6 +49,10 @@
   </form>
 </div>
 <br/>
+<<<<<<< HEAD
+
+=======
+>>>>>>> 6cc7032c2dd17113a9a653f66df3ff5e0c275634
 <div class="digg_pagination">
   <div class="page_info">
     <%= page_entries_info @packages %>
@@ -49,9 +68,18 @@
       <th>数量</th>
       <th>入库时间</th>
       <th>状态</th>
+<<<<<<< HEAD
+      <th>所属位置</th>
+      <th>创建员工工号</th>
+      <th>所属托盘</th>
+      <th>输入时间</th>
+      <th>上架位置</th>
+      <th>创建时间</th>
+=======
       <th>备货员工</th>
       <th>所属托盘</th>
       <th>上架库位</th>
+>>>>>>> 6cc7032c2dd17113a9a653f66df3ff5e0c275634
       <th colspan="2">&nbsp;</th>
     </tr>
   </thead>
@@ -68,8 +96,14 @@
         <td><%= package.user.name %></td>
         <td><%= link_to package.forklift_id, package.forklift  if package.forklift%></td>
         <td><%= package.position.whouse.name + ' ' +package.position.detail if package.position %></td>
+<<<<<<< HEAD
+        <td><%= package.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') if package.created_at%></td>
+        <td><%= link_to '编辑', edit_package_path(package) %></td>
+        <td><%= link_to '详细', package_path(package) %></td>
+=======
         <td><%= link_to '编辑', edit_package_path(package),:class=>'btn btn-default' %></td>
         <td><%= link_to '详细', package_path(package) ,:class=>'btn btn-default' %></td>
+>>>>>>> 6cc7032c2dd17113a9a653f66df3ff5e0c275634
       </tr>
     <% end %>
   </tbody>
@@ -77,3 +111,11 @@
 <div class="digg_pagination">
   <%= will_paginate @packages, :container => false %>
 </div>
+<script>
+    $(function () {
+        $(".datepicker").datepicker({
+            showButtonPanel: true,
+            showWeek: true
+        });
+    });
+</script>
