@@ -43,9 +43,16 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :packages
+  resources :packages do
+    collection do
+      get :search
+    end
+  end
 
   resources :forklifts do
+    collection do
+      get :search
+    end
     member do
       get :packages
     end
