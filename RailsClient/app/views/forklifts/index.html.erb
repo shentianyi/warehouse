@@ -1,4 +1,31 @@
 <h2>托盘列表</h2>
+
+<div>
+  <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+    <div>
+      <div>
+        <span>托盘号：
+          <input type="text" name="forklift[id]" value="<%= @id %>"/>
+          <input type="hidden" name="forklift[id_fuzzy]"/>
+        </span>
+        <span>备货员工工号：
+          <input type="text" name="forklift[user_id]" value="<%= @user_id %>"/>
+          <input type="hidden" name="forklift[user_id_fuzzy]"/>
+        </span>
+        <span>
+        创建日期：
+          <input type="text" name="forklift[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
+          ~  <input type="text" name="forklift[created_at][end]" class="datepicker" value="<%= @created_at_end %>"/>
+        </span>
+      </div>
+      <div>
+        <input type="submit" value="查 找" class="btn btn-primary"/>
+      </div>
+    </div>
+  </form>
+</div>
+<br/>
+<input type="button" value="打印托清单" class='btn btn-warning' onclick="print_forklift_list();"/>
 <div class="digg_pagination">
   <div class="page_info">
     <%= page_entries_info @forklifts %>
@@ -8,6 +35,7 @@
 <table class="table table-bordered table-striped table-hover">
   <thead>
     <tr>
+      <th></th>
       <th>序号</th>
       <th>编号</th>
       <th>状态</th>
@@ -18,7 +46,6 @@
       <th>包装箱总数</th>
       <th>包装箱被接收数</th>
       <th>备注</th>
-      <th>打印</th>
       <th colspan="2"></th>
     </tr>
   </thead>
@@ -26,6 +53,7 @@
   <tbody>
     <% @forklifts.each_with_index do |forklift,index| %>
       <tr>
+        <td><input type="checkbox" id="<%= forklift.id %>" class='print-check'></td>
         <td><%= index+@forklifts.offset+1%>
         <td><%= forklift.id%></td>
         <td><%= ForkliftState.display(forklift.state)%></td>
@@ -42,7 +70,6 @@
         <td><%= forklift.sum_packages%></td>
         <td><%= forklift.accepted_packages%></td>
         <td><%= forklift.remark%></td>
-        <td><input type="button" value="托清单" class='btn btn-warning' onclick="print_forklift_list('<%= forklift.id %>');"/></td>
         <td><%= link_to '详细', forklift ,:class=> 'btn btn-default' %></td>
         <td><%= link_to '编辑', edit_forklift_path(forklift) ,:class=> 'btn btn-default'%></td>
       </tr>
@@ -52,3 +79,13 @@
 <div class="digg_pagination">
   <%= will_paginate @forklifts, :container => false %>
 </div>
+
+<script>
+    $(function () {
+        $(".datepicker").datepicker({
+            showButtonPanel: true,
+            showWeek: true
+        });
+    });
+    init_check();
+</script>

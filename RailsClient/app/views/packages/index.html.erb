@@ -1,4 +1,31 @@
 <h2>包装箱列表</h2>
+
+<div>
+  <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+    <div>
+      <div>
+        <span>外库唯一号：
+          <input type="text" name="package[id]" value="<%= @id %>"/>
+          <input type="hidden" name="package[id_fuzzy]"/>
+        </span>
+        <span>备货员工工号：
+          <input type="text" name="package[user_id]" value="<%= @user_id %>"/>
+          <input type="hidden" name="package[user_id_fuzzy]"/>
+        </span>
+        <span>
+        创建日期：
+          <input type="text" name="package[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
+          ~  <input type="text" name="package[created_at][end]" class="datepicker" value="<%= @created_at_end %>"/>
+        </span>
+      </div>
+      <div>
+        <input type="submit" value="查 找" class="btn btn-primary"/>
+      </div>
+    </div>
+  </form>
+</div>
+<br/>
+
 <div class="digg_pagination">
   <div class="page_info">
     <%= page_entries_info @packages %>
@@ -14,7 +41,7 @@
       <th>数量</th>
       <th>状态</th>
       <th>所属位置</th>
-      <th>创建员工</th>
+      <th>创建员工工号</th>
       <th>所属托盘</th>
       <th>输入时间</th>
       <th>上架位置</th>
@@ -44,3 +71,11 @@
 <div class="digg_pagination">
   <%= will_paginate @packages, :container => false %>
 </div>
+<script>
+    $(function () {
+        $(".datepicker").datepicker({
+            showButtonPanel: true,
+            showWeek: true
+        });
+    });
+</script>
