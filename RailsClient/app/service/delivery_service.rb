@@ -104,6 +104,11 @@ class DeliveryService
     if !DeliveryState.before_state?(DeliveryState::DESTINATION,delivery.state)
       return false
     end
+
+    if(delivery.state == DeliveryState::RECEIVED)
+      return true
+    end
+
     ActiveRecord::Base.transaction do
       if !delivery.set_state(DeliveryState::DESTINATION)
         return false

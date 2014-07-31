@@ -14,6 +14,7 @@ using Brilliantech.ReportGenConnector;
 using System.IO;
 using System.Runtime.Serialization.Json;
 using Brilliantech.Framwork.Utils.LogUtil;
+using Newtonsoft.Json;
 
 namespace Brilliantech.Warehouse.PrintServiceLib
 {
@@ -47,8 +48,23 @@ namespace Brilliantech.Warehouse.PrintServiceLib
             catch (Exception e) {
                 msg.Content = e.Message;
                 LogUtil.Logger.Error(e.Message);
-            } 
-            return msg;
+            }
+            return  msg;
+        }
+
+        public Msg<string> CrossPrint(string code, string id)
+        {
+             WebOperationContext.Current.OutgoingResponse.Headers.Add("Access-Control-Allow-Origin","*");   
+             if (WebOperationContext.Current.IncomingRequest.Method == "OPTIONS")
+             {
+                 WebOperationContext.Current.OutgoingResponse.Headers
+                     .Add("Access-Control-Allow-Methods", "POST, OPTIONS, GET");
+                 WebOperationContext.Current.OutgoingResponse.Headers
+                     .Add("Access-Control-Allow-Headers",
+                          "Content-Type, Accept, Authorization, x-requested-with");
+                 return null;
+             }
+            return Print(code, id); 
         }
 
         public  T parse<T>(string jsonString)
@@ -58,5 +74,14 @@ namespace Brilliantech.Warehouse.PrintServiceLib
                 return (T)new DataContractJsonSerializer(typeof(T)).ReadObject(ms);
             }
         }
+
+        public static string stringify(object jsonObject)
+        {
+            using (var ms = new MemoryStream())
+            {
+                new DataContractJsonSerializer(jsonObject.GetType()).WriteObject(ms, jsonObject);
+                return Encoding.UTF8.GetString(ms.ToArray());
+            }
+        } 
     }
 }

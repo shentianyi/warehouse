@@ -40,7 +40,11 @@
     <Reference Include="log4net">
       <HintPath>..\..\ThirdPart\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\ThirdPart\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Remoting" />
@@ -64,6 +68,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="Cors\CustomHeaderMessageInspector.cs" />
+    <Compile Include="Cors\EnableCrossOriginResourceSharingBehavior.cs" />
     <Compile Include="ServerSetting.xaml.cs">
       <DependentUpon>ServerSetting.xaml</DependentUpon>
     </Compile>
@@ -112,6 +118,7 @@
     </EmbeddedResource>
     <Content Include="app.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Ini\api.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -143,6 +150,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Template\test.tff">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template\PickList.tff">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
