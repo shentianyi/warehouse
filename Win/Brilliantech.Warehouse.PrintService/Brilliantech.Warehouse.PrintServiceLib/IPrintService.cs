@@ -20,6 +20,9 @@ namespace Brilliantech.Warehouse.PrintServiceLib
         /// <param name="id">id for print</param>
         /// <returns></returns>
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, UriTemplate = "print/{code}/{id}")]
-        Msg<string> Print(string code, string id); 
+        Msg<string> Print(string code, string id);
+
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, UriTemplate = "cross_print/{code}/{id}")]
+        Msg<string> CrossPrint(string code, string id); 
     }  
 }
