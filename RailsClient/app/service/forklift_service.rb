@@ -166,15 +166,19 @@ class ForkliftService
 
   def self.package_checked(id)
     if f = Forklift.find_by_id(id)
+      if f.accepted_packages < f.sum_packages
       f.accepted_packages = f.accepted_packages + 1
       f.save
+      end
     end
   end
 
   def self.package_unchecked(id)
     if f = Forklift.find_by_id(id)
+      if f.accepted_packages > 0
       f.accepted_packages = f.accepted_packages - 1
       f.save
+      end
     end
   end
 
