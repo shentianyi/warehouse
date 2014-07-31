@@ -101,16 +101,16 @@ class DeliveryService
     if delivery.nil?
       return false
     end
-<<<<<<< HEAD
-=======
-    if !DeliveryState.before_state?(DeliveryState::DESTINATION,delivery.state)
-      return false
-    end
+#<<<<<<< HEAD
+#=======
+#    if !DeliveryState.before_state?(DeliveryState::DESTINATION,delivery.state)
+#      return false
+#    end
 
     if(delivery.state == DeliveryState::RECEIVED)
       return true
     end
->>>>>>> master
+#>>>>>>> master
 
     ActiveRecord::Base.transaction do
       if !delivery.set_state(DeliveryState::DESTINATION)
