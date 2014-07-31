@@ -19,12 +19,12 @@ class Forklift < ActiveRecord::Base
   end
 
   def package_checked
-    self.accepted_packages = self.accepted_packages + 1 if self.accepted_packages<self.accepted_packages
+    self.accepted_packages = self.accepted_packages + 1
     self.save
   end
 
   def package_unchecked
-    self.accepted_packages = self.accepted_packages - 1 if self.accepted_packages>self.accepted_packages
+    self.accepted_packages = self.accepted_packages - 1
     self.save
   end
 
