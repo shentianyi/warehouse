@@ -72,7 +72,7 @@ class BaseState
       when WAY
         [ORIGINAL].include? target
       when DESTINATION
-        [RECEIVED,DESTINATION,ORIGINAL,WAY].include? new_state
+        [RECEIVED,DESTINATION,ORIGINAL,WAY].include? target
       when RECEIVED
         [WAY,DESTINATION].include? target
       else
