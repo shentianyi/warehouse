@@ -47,6 +47,10 @@ ActiveRecord::Base.transaction do
     Regex.create(name: '需求单数量', code: 'ORDERITEM_QTY', prefix_string: 'Q', regex_string: '^Q\d+\.?\d*$', type: RegexType::ORDERITEM_LABEL)
   end
 
+  unless Regex.where(code: 'ORDERITEM_DEPARTMENT', type: RegexType::ORDERITEM_LABEL).first
+    Regex.create(name: '需求部门', code: 'ORDERITEM_DEPARTMENT', prefix_string: 'LO', regex_string: '^LO\d+\.?\d*$', type: RegexType::ORDERITEM_LABEL)
+  end
+
   # init system config
   unless SysConfig.find_by_code('PRINT_SERVER')
     SysConfig.create(code:'PRINT_SERVER',value:'http://192.168.8.77:9000',name:'打印服务器地址')
