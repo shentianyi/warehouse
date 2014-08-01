@@ -2,7 +2,6 @@ require 'net/http'
 
 class NetService
   def self.ping
-    return false
     flag=true
     if $NEED_PING
       begin
