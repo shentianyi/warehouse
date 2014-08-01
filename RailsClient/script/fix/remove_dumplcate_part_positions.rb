@@ -6,7 +6,7 @@ i = 0
 grouped.values.each do |duplicates|
 	first_one = duplicates.shift
 	duplicates.each{|double|
-    i++
+    i = i + 1
     double.destroy
   }
 end
