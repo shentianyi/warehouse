@@ -11,7 +11,7 @@ module Import
     #@@csv_cols=nil
 
     def uniq_key
-      %w(id,detail)
+      %w(detail)
     end
 
     def csv_headers
