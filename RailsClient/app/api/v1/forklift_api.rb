@@ -143,7 +143,7 @@ module V1
       end
 
       if forklift_params[:whouse_id]
-        unless ForkliftService.parts_in_whouse?(f.packages.collect { |p| p.part_id },f.whouse_id)
+        unless ForkliftService.parts_in_whouse?(f.packages.collect { |p| p.part_id },forklift_params[:whouse_id])
           return {return:0, content: ForkliftMessage::CannotUpdatePartsNotExistInWhouse}
         end
       end
