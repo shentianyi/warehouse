@@ -48,7 +48,7 @@ ActiveRecord::Base.transaction do
   end
 
   unless Regex.where(code: 'ORDERITEM_DEPARTMENT', type: RegexType::ORDERITEM_LABEL).first
-    Regex.create(name: '需求部门', code: 'ORDERITEM_DEPARTMENT', prefix_string: 'LO', regex_string: '^LO\d+\.?\d*$', type: RegexType::ORDERITEM_LABEL)
+    Regex.create(name: '需求部门', code: 'ORDERITEM_DEPARTMENT', prefix_string: 'LO', regex_string: '^LO\w+', type: RegexType::ORDERITEM_LABEL)
   end
 
   # init system config
