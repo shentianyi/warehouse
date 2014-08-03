@@ -1,13 +1,13 @@
 class DeliveriesController < ApplicationController
   #load_and_authorize_resource
-  before_action :set_delivery, only: [:show, :edit, :update, :destroy,:forklifts]
+  before_action :set_delivery, only: [:show, :edit, :update, :destroy, :forklifts]
   skip_before_filter :delivery_params
   before_action :get_states, only: [:index, :search]
   #before_action :set_search_variable, only: [:search]
   # GET /deliveries
   # GET /deliveries.json
   def index
-    @deliveries = Delivery.paginate(:page => params[:page]).order(created_at: :desc)#all
+    @deliveries = Delivery.paginate(:page => params[:page]).order(created_at: :desc) #all
     #@deliveries = @deliveries.paginate(:page => params[:page])
   end
 
@@ -48,7 +48,7 @@ class DeliveriesController < ApplicationController
       DeliveryService.set_state(@delivery, delivery_params[:state])
     end
     respond_to do |format|
-      if @delivery.update(delivery_params.permit(:state,:remark,:source_id,:destination_id))
+      if @delivery.update(delivery_params.permit(:state, :remark, :source_id, :destination_id))
         format.html { redirect_to @delivery, notice: '运单更新成功.' }
         format.json { render :show, status: :ok, location: @delivery }
       else
@@ -113,6 +113,39 @@ class DeliveriesController < ApplicationController
     end
   end
 
+  def generate
+    if request.post?
+      msg=Message.new
+      if params[:files].size==1
+        file=params[:files][0]
+        data=FileData.new(data: file, oriName: file.original_filename, path: $DELIVERYPATH, pathName: "#{Time.now.strftime('%Y%m%d%H%M%S')}-#{file.original_filename}")
+        data.saveFile
+        DeliveryService.send_by_excel(data.full_path)
+        msg.result =true
+        msg.content= '导入成功'
+      else
+        msg.content='未选择文件或只能上传一个文件'
+      end
+      render json: msg
+    end
+  end
+
+  def receive
+    if request.post?
+      msg=Message.new
+      if params[:files].size==1
+        file=params[:files][0]
+        data=FileData.new(data: file, oriName: file.original_filename, path: $DELIVERYPATH, pathName: "#{Time.now.strftime('%Y%m%d%H%M%S')}-#{file.original_filename}")
+        data.saveFile
+        DeliveryService.receive_by_excel(data.full_path)
+        msg.result =true
+        msg.content= '导入成功'
+      else
+        msg.content='未选择文件或只能上传一个文件'
+      end
+      render json: msg
+    end
+  end
 
   private
   # Use callbacks to share common setup or constraints between actions.
@@ -126,7 +159,7 @@ class DeliveriesController < ApplicationController
   end
 
   def get_states
-    @states=DeliveryState.state#.insert(0, %w())
+    @states=DeliveryState.state #.insert(0, %w())
   end
 
   def set_search_variable
