@@ -88,7 +88,7 @@ module V1
         if NetService.ping()
           {result:1,content:DeliveryMessage::SendSuccess}
         else
-          {result:0,content:DeliveryMessage::SendSuccess+DeliveryMessage::NetworkNotGood}
+          {result:1,content:DeliveryMessage::SendSuccess+DeliveryMessage::NetworkNotGood}
         end
 
       else
@@ -97,6 +97,10 @@ module V1
     end
 
     post do
+      if DeliveryService.check_add_forklifts(params[:forklift_ids])
+        return {result:0,content:DeliveryMessage::ForkliftExistInOthers}
+      end
+
       d = Delivery.new(delivery_params)
       d.user = current_user
 
@@ -108,6 +112,7 @@ module V1
       if params.has_key?(:forklifts)
         DeliveryService.add_forklifts(d,params[:forklifts])
       end
+
       if result
         {result:1,content:DeliveryPresenter.new(d).to_json}
       else

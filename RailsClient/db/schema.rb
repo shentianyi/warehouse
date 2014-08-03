@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140727172304) do
+ActiveRecord::Schema.define(version: 20140730101157) do
 
   create_table "attachments", force: true do |t|
     t.string   "name"
@@ -259,8 +259,8 @@ ActiveRecord::Schema.define(version: 20140727172304) do
     t.boolean  "is_delete",             default: false
     t.boolean  "is_dirty",              default: true
     t.boolean  "is_new",                default: true
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
   end
 
   add_index "pick_items", ["destination_whouse_id"], name: "index_pick_items_on_destination_whouse_id", using: :btree
@@ -273,8 +273,8 @@ ActiveRecord::Schema.define(version: 20140727172304) do
     t.boolean  "is_delete",  default: false
     t.boolean  "is_dirty",   default: true
     t.boolean  "is_new",     default: true
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
   add_index "pick_lists", ["id"], name: "index_pick_lists_on_id", using: :btree
