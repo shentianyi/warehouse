@@ -107,7 +107,7 @@ class DeliveryService
 #      return false
 #    end
 
-    if(delivery.state == DeliveryState::RECEIVED)
+    if (delivery.state == DeliveryState::RECEIVED)
       return true
     end
 #>>>>>>> master
@@ -178,11 +178,11 @@ class DeliveryService
     ActiveRecord::Base.transaction do
       Sync::Config.skip_muti_callbacks([Delivery, Forklift, Package, PackagePosition, StateLog])
       data=JSON.parse(IO.read(path))
-      msg.result =true unless Delivery.find_by_id(data['delivery']['id'])
+       msg.result =true # unless Delivery.find_by_id(data['delivery']['id'])
       Delivery.create(data['delivery'])
       Forklift.create(data['forklifts'])
       Package.create(data['packages'])
-      PackagePosition.create(data['package_positions'])
+      PackagePosition.create(data['package_positions'].select { |pp| !pp.nil? })
       StateLog.create(data['state_logs'])
     end
     return msg
