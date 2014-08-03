@@ -1,4 +1,11 @@
 class DeliveryService
+  #=============
+  #check add forklift
+  #=============
+  def self.check_add_forklifts forklift_ids
+    Forklift.where(id:forklift_ids).where.not(delivery_id:nil).count > 0
+  end
+
 
   #=============
   #delete @delivery
@@ -101,16 +108,10 @@ class DeliveryService
     if delivery.nil?
       return false
     end
-#<<<<<<< HEAD
-#=======
-#    if !DeliveryState.before_state?(DeliveryState::DESTINATION,delivery.state)
-#      return false
-#    end
 
     if (delivery.state == DeliveryState::RECEIVED)
       return true
     end
-#>>>>>>> master
 
     ActiveRecord::Base.transaction do
       if !delivery.set_state(DeliveryState::DESTINATION)
