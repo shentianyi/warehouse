@@ -42,7 +42,7 @@ module ApplicationHelper
         instance_variable_set("@#{k}", v)
       end
       #if v.is_a?(Array) && !v.empty?
-      #  query= v.size==1 ? query.where(Hash[k, v[0]]) : query.in(Hash[k, v])
+      #  query= v.size==1 ? query.where(Hash[k, v[0]]) : query.in(Hash[k, v]
       #end
       #query=query.where(Hash[k, v]) if v.is_a?(Range)
       if v.is_a?(Hash) && v.values.count==2 && v.values.uniq!=['']
