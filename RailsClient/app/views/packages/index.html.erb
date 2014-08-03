@@ -66,7 +66,7 @@
         <td><%= PackageLabelRegex.quantity_prefix_string + package.quantity_str %></td>
         <td><%= PackageLabelRegex.date_prefix_string+ package.check_in_time %></td>
         <td><%= PackageState.display(package.state) %></td>
-        <td><%= package.user.name+"|"+package.user_id %></td>
+        <td><%= package.user.name+"|"+package.user_id if package.user%></td>
         <td><%= link_to package.forklift_id, package.forklift  if package.forklift%></td>
         <td><%= package.position.whouse.name + ' ' +package.position.detail if package.position %></td>
         <td><%= package.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') if package.created_at%></td>
