@@ -1,5 +1,5 @@
 class ReportsController < ApplicationController
-	def report
+	def entry_report
 
 	end
 

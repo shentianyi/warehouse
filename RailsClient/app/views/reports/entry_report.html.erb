@@ -1,0 +1,26 @@
+<h2>入库报表</h2>
+<br/>
+<div>
+  <form method="get" action="<%= reports_entry_report_path%>">
+    <div>
+      <div>
+        <span>地点:
+          <%= select_tag(:location_id,options_for_select(Location.all.collect{|l| [l.name,l.id]},@location_id),include_blank: false)%>
+        </span>
+        <span>接收时间:
+          <input type="text" name="received_date_start" class="datepicker" value="<%= @received_date_start%>" />
+          ~ <input type="text" name="received_date_end" class="datepicker" value="<%= @received_date_end%>" />
+        </span>
+      </div>
+    </div>
+  </form>
+</div>
+<script>
+  $(function() {
+  $(".datepicker").datetimepicker({
+  lang: 'ch',
+  format: 'Y-m-d H:i'
+  });
+  });
+  init_check();
+</script>
