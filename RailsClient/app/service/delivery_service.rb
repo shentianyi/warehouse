@@ -174,21 +174,64 @@ class DeliveryService
   #=============
   #import_by_file
   #=============
-  def self.import_by_file path
+ # def self.import_by_file path
+  #  msg=Message.new
+  #  ActiveRecord::Base.transaction do
+   #   Sync::Config.skip_muti_callbacks([Delivery, Forklift, Package, PackagePosition, StateLog])
+    #  data=JSON.parse(IO.read(path))
+    #  msg.result =true # unless Delivery.find_by_id(data['delivery']['id'])
+     # Delivery.create(data['delivery'])
+     # Forklift.create(data['forklifts'])
+     # Package.create(data['packages'])
+     # PackagePosition.create(data['package_positions'].select { |pp| !pp.nil? })
+     # StateLog.create(data['state_logs'])
+   # end
+   # return msg
+ # end
+ def self.import_by_file path
     msg=Message.new
     ActiveRecord::Base.transaction do
       Sync::Config.skip_muti_callbacks([Delivery, Forklift, Package, PackagePosition, StateLog])
       data=JSON.parse(IO.read(path))
       msg.result =true # unless Delivery.find_by_id(data['delivery']['id'])
-      Delivery.create(data['delivery'])
-      Forklift.create(data['forklifts'])
-      Package.create(data['packages'])
+      if dori=Delivery.find_by_id(data['delivery']['id'])
+        dtmp=Delivery.new(data['delivery'])
+        if dori.updated_at<=dtmp.updated_at
+          attr=dori.gen_sync_attr(dtmp)
+          dori.update(attr)
+        end
+      else
+        Delivery.create(data['delivery'])
+      end
+      data['forklifts'].each do |forklift|
+        if fori=Forklift.find_by_id(forklift['id'])
+          ftmp=Forklift.new(forklift)
+          if fori.updated_at<=ftmp.updated_at
+            attr=fori.gen_sync_attr(ftmp)
+            fori.update(attr)
+          end
+        else
+          Forklift.create(forklift)
+        end
+      end
+
+      data['packages'].each do |package|
+        if pori=Package.find_by_id(package['id'])
+          ptmp=Package.new(package)
+          if pori.updated_at<=ptmp.updated_at
+            attr=pori.gen_sync_attr(ptmp)
+            pori.update(attr)
+          end
+        else
+          Package.create(package)
+        end
+      end
+
       PackagePosition.create(data['package_positions'].select { |pp| !pp.nil? })
       StateLog.create(data['state_logs'])
     end
     return msg
   end
-
   def self.send_by_excel file
     ActiveRecord::Base.transaction do
       book=Roo::Excelx.new file
