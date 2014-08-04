@@ -1,7 +1,7 @@
 # print package list
 module Printer
   class P001<Base
-    HEAD=[:id, :whouse, :delivery_date, :user]
+    HEAD=[:id, :whouse, :delivery_date, :user,:total_packages]
     BODY=[:package_id, :part_id, :quantity, :w_date, :receive_position]
 
 
@@ -9,8 +9,9 @@ module Printer
       f=Forklift.find_by_id(self.id)
 
       head={id: f.id,
+            total_packages:f.sum_packages,
             whouse: f.whouse.name,
-            delivery_date: f.created_at.nil? ? '' : f.created_at.localtime.strftime('%Y.%m.%d'),
+            delivery_date: f.created_at.nil? ? '' : f.created_at.localtime.strftime('%Y.%m.%d %H:%M'),
             user: f.stocker_id}
       heads=[]
       HEAD.each do |k|

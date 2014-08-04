@@ -1,16 +1,17 @@
 # print delivery
 module Printer
   class P002<Base
-    HEAD=[:id, :send_addr, :receive_addr, :delivery_date]
+    HEAD=[:id, :send_addr, :receive_addr, :delivery_date,:total_packages]
     BODY=[:forklift_id, :quantity, :whouse]
 
 
     def generate_data
       d=Delivery.find(self.id)
       head={id: d.id,
+            total_packages:d.forklifts.sum(:sum_packages),
             send_addr: d.source.nil? ? '' : d.source.address,
             receive_addr: d.destination.nil? ? '' : d.destination.address,
-            delivery_date: d.delivery_date.nil? ? '' : d.delivery_date.localtime.strftime('%Y.%m.%d')}
+            delivery_date: d.delivery_date.nil? ? '' : d.delivery_date.localtime.strftime('%Y.%m.%d %H:%M')}
       heads=[]
       HEAD.each do |k|
         heads<<{Key: k, Value: head[k]}
