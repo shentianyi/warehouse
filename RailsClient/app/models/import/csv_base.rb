@@ -6,7 +6,6 @@ module Import
       msg=Message.new
       begin
         line_no=0
-        puts csv.file_path
         CSV.foreach(csv.file_path, headers: true, col_sep: csv.col_sep, encoding: csv.encoding) do |row|
           row.strip
           line_no+=1
@@ -53,22 +52,22 @@ module Import
     # export csv
     def export_csv(path, query)
       msg=Message.new
-      begin
+      #begin
         File.open(path, 'wb') do |f|
           f.puts self.csv_headers.join($CSVSP)
           items=query.nil? ? self.all : self.where(query).all
           items.each do |item|
             line=[]
-            proc=self.down_block
+            proc=self.send("#{self.to_s.underscore}_down_block".to_sym)
             proc.call(line, item)
             f.puts line.join($CSVSP)
           end
         end
         msg.result=true
-      rescue => e
-        msg.content =e.message
-      end
-      return msg
+      #rescue => e
+      #  msg.content =e.message
+      #end
+      #return msg
     end
 
   end

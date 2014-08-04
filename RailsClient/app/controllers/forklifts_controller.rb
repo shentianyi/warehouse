@@ -1,11 +1,11 @@
 class ForkliftsController < ApplicationController
   #load_and_authorize_resource
-  before_action :set_forklift, only: [:show, :edit, :update, :destroy]
+  before_action :set_forklift, only: [:show, :edit, :update, :destroy,:packages]
 
   # GET /forklifts
   # GET /forklifts.json
   def index
-    @forklifts = Forklift.paginate(:page=>params[:page])#all
+    @forklifts = Forklift.paginate(:page=>params[:page]).order(created_at: :desc)#all
     #@forklifts = @forklifts.paginate(:page=>params[:page])
   end
 
@@ -67,15 +67,29 @@ class ForkliftsController < ApplicationController
     end
   end
 
+  # GET /forklifts/1/packages
+  def packages
+    @packages = @forklift.packages.paginate(:page=>params[:page]).order(created_at: :desc)
+  end
+
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_forklift
-      @forklift = Forklift.find(params[:id])
+  # Use callbacks to share common setup or constraints between actions.
+  def set_forklift
+    @forklift = Forklift.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def forklift_params
+    #params[:forklift]
+    params.require(:forklift).permit(:state,:remark,:whouse_id)
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def forklift_params
-      #params[:forklift]
-      params.require(:forklift).permit(:state,:remark)
-    end
+  def set_search_variable
+    p= params[:forklift]
+    @id=p[:id]
+    @stocker_id=p[:stocker_id]
+    @state=p[:state]
+    @created_at_start=p[:created_at][:start]
+    @created_at_end=p[:created_at][:end]
+  end
 end

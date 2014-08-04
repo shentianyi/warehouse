@@ -14,5 +14,5 @@
  *=require normalize
  *=require pagination
  *=require docs
- *= require_tree .
+ *=require_tree .
  */

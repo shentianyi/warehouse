@@ -1,10 +1,24 @@
 Rails.application.routes.draw do
 
-  resources :order_items
-  resources :orders
-  resources :pick_items
+  resources :sys_configs
 
-  resources :pick_lists
+  resources :order_items do
+    collection do
+      get :search
+    end
+  end
+  resources :pick_items do
+    collection do
+      get :search
+    end
+  end
+
+  resources :pick_lists do
+    collection do
+      post :print
+      get :search
+    end
+  end
 
 
   mount ApplicationAPI => '/api'
@@ -15,23 +29,57 @@ Rails.application.routes.draw do
   resources :deliveries do
     collection do
       match :import, to: :import, via: [:get, :post]
+      match :generate, to: :generate, via: [:get, :post]
+      match :receive, to: :receive, via: [:get, :post]
       get :search
     end
     member do
       get :export
+      get :forklifts
     end
   end
 
-  resources :packages
 
-  resources :forklifts
+  resources :files do
+    collection do
+      get :download
+    end
+  end
+
+  resources :orders do
+    collection do
+      get :panel
+      get :panel_list
+      get :search
+      get :items
+      post :handle
+    end
+    member do
+      get :order_items
+    end
+  end
+
+  resources :packages do
+    collection do
+      get :search
+    end
+  end
+
+  resources :forklifts do
+    collection do
+      get :search
+    end
+    member do
+      get :packages
+    end
+  end
 
   get 'parts/import_positions', to: 'parts#import_positions'
   get 'parts/template_position', to: 'parts#template_position'
   get 'parts/download_positions', to: 'parts#download_positions'
   post 'parts/do_import_positions', to: 'parts#do_import_positions'
 
-  [:locations, :whouses, :parts, :positions, :part_positions, :users, :deliveries,:part_types,:pick_item_filters].each do |model|
+  [:locations, :whouses, :parts, :positions, :part_positions, :users, :deliveries, :forklifts, :packages, :part_types, :pick_item_filters, :orders].each do |model|
     resources model do
       collection do
         post :do_import
@@ -42,6 +90,10 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  delete '/parts/delete_position/:id', to: 'parts#delete_position'
+
+  get 'reports/report', to: 'reports#report'
 
   resources :labels do
     collection do
@@ -65,13 +117,19 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :positions do
+    member do
+      get 'parts'
+    end
+  end
+
   resources :syncs do
     collection do
       post :reload
     end
   end
 
-  resources :regexes   do
+  resources :regexes do
     collection do
       post :save
     end

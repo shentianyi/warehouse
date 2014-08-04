@@ -1,0 +1,29 @@
+<div class="config-panel">
+  <div>
+    <h4 class="bg-primary">
+      <span class='config-title'>基本配置</span>
+    </h4>
+    <table class="table table-bordered table-striped globle-table">
+      <thead>
+      <tr>
+        <th>配置名称</th>
+        <th>代码</th>
+        <th>值</th>
+        <th></th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <% @sys_configs.each do |sys_config| %>
+          <tr>
+            <td><%= sys_config.name %></td>
+            <td><%= sys_config.code %></td>
+            <td><%= sys_config.value %></td>
+            <td><%= link_to '编辑', edit_sys_config_path(sys_config) ,:class=>'btn btn-default'%></td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+
+  </div>
+</div>

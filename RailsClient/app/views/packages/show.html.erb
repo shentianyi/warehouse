@@ -1,51 +1,15 @@
-<p id="notice"><%= notice %></p>
+<h1><%= @package.id%></h1>
+<span class="label label-primary"><%= @package.id%></span>
 
-<p>
-  <string>包装箱号:</string>
-  <%= @package.id%>
-</p>
+<h4>状态: <small><%= PackageState.display(@package.state) %></small></h4>
+<h4>零件号: <small><%= PackageLabelRegex.part_prefix_string + @package.part_id %></small></h4>
+<h4>数量: <small><%= PackageLabelRegex.quantity_prefix_string+@package.quantity_str %></small></h4>
+<h4>入库时间: <small><%= @package.check_in_time %></small></h4>
+<h4>发货地: <small><%= @package.location.name %></small></h4>
+<h4>备货员工: <small><%=  @package.user.name if @package.user_id %></small></h4>
+<h4>备货员工号: <small><%= @package.user_id if @package.user_id %></small></h4>
+<h4>所属托清单: <small><%=  @package.forklift_id if @package.forklift_id %></small></h4>
+<h4>上架库位: <small><%= @package.position.whouse.name + ' '+@package.position.detail if @package.position %></small></h4>
 
-<p>
-  <string>零件号:</string>
-  <%= @package.part_id%>
-</p>
-
-<p>
-  <string>数 量:</string>
-  <%= @package.quantity_str%>
-</p>
-
-<p>
-  <string>状 态:</string>
-  <%= PackageState.display(@package.state)%>
-</p>
-
-<p>
-  <string>地 点:</string>
-  <%= @package.location_id %>
-</p>
-
-<p>
-  <string>创建员工:</string>
-  <%= @package.user_id%>
-</p>
-
-<p>
-  <string>所属托盘:</string>
-
-  <%= link_to @package.forklift_id, @package.forklift  if @package.forklift%>
-</p>
-
-<p>
-  <string>入库时间:</string>
-  <%= @package.check_in_time%>
-</p>
-
-<p>
-  <string>库位:</string>
-  <%= @package.position.whouse.name + ' ' +@package.position.detail if @package.position%>
-</p>
-
-
-<%= link_to '编辑', edit_package_path(@package) %> |
-<%= link_to '返回', packages_path %>
+<%= link_to '编辑', edit_package_path(@package) ,:class=>'btn btn-default'%> |
+<%= link_to '返回', packages_path,:class=>'btn btn-default' %>

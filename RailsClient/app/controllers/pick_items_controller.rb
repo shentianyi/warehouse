@@ -4,7 +4,7 @@ class PickItemsController < ApplicationController
   # GET /pick_items
   # GET /pick_items.json
   def index
-    @pick_items = PickItem.all
+    @pick_items = PickItem.paginate(:page => params[:page]).order(created_at: :desc)#all
   end
 
   # GET /pick_items/1
@@ -42,7 +42,7 @@ class PickItemsController < ApplicationController
   def update
     respond_to do |format|
       if @pick_item.update(pick_item_params)
-        format.html { redirect_to @pick_item, notice: '更新成功.' }
+        format.html { redirect_to pick_items_url, notice: '更新成功.' }
         format.json { render :show, status: :ok, location: @pick_item }
       else
         format.html { render :edit }
@@ -69,6 +69,6 @@ class PickItemsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def pick_item_params
-      params.require(:pick_item).permit(:id, :pick_list_id, :order_item_id)
+      params.require(:pick_item).permit(:id, :part_id, :quantity,:box_quantity,:destination_whouse_id)
     end
 end

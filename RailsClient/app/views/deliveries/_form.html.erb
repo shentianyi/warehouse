@@ -17,6 +17,16 @@
     </p>
 
     <p>
+      <%= f.label :source_id, '发送地' %>
+      <%= f.select(:source_id, Location.where.not(id: @delivery.destination_id).collect { |l| [l.name, l.id] }, {include_blank: false}) %>
+    </p>
+
+    <p>
+      <%= f.label :destination_id, '目的地' %>
+      <%= f.select(:destination_id, Location.where.not(id: @delivery.source_id).collect { |l| [l.name, l.id] }, {include_blank: false}) %>
+    </p>
+
+    <p>
       <%= f.label :remark,'备 注'%>
       <%= f.text_field :remark%>
     </p>

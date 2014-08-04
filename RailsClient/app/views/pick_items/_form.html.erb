@@ -12,18 +12,24 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :id %><br>
-    <%= f.text_field :id %>
+    <%= f.label :part_id,'零件号' %><br>
+    <%= f.text_field :part_id %>
   </div>
-  <div class="field">
-    <%= f.label :pick_list_id %><br>
-    <%= f.text_field :pick_list_id %>
-  </div>
-  <div class="field">
-    <%= f.label :order_item_id %><br>
-    <%= f.text_field :order_item_id %>
-  </div>
+
+    <div class="field">
+      <%= f.label :quantity,'数量' %><br>
+      <%= f.text_field :quantity %>
+    </div>
+
+    <div class="field">
+      <%= f.label :box_quantity,'箱数' %><br>
+      <%= f.text_field :box_quantity %>
+    </div>
+    <div class="field">
+      <%= f.label :destination_whouse_id,'项目' %><br>
+      <%= f.text_field :destination_whouse_id %>
+    </div>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit value: '提 交', class: 'btn btn-primary btn-lg' %>
   </div>
 <% end %>

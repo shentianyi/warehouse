@@ -1,29 +1,66 @@
-<h1>Listing pick_items</h1>
+<h1>择货单项目列表</h1>
 
-<table>
+<div>
+  <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+    <div>
+      <div>
+        <span>零件号：
+          <input type="text" name="pick_item[part_id]" value="<%= @part_id %>"/>
+          <input type="hidden" name="pick_item[part_id_fuzzy]"/>
+        </span>
+      </div>
+      <div>
+        <input type="submit" value="查 找" class="btn btn-primary"/>
+      </div>
+    </div>
+  </form>
+</div>
+
+<br/>
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @pick_items %>
+  </div>
+  <%= will_paginate @pick_items, :container => false %>
+</div>
+<table class="table table-bordered table-striped globle-table table-hover">
   <thead>
-    <tr>
-      <th>Id</th>
-      <th>Pick list</th>
-      <th>Order item</th>
-      <th colspan="3"></th>
-    </tr>
+  <tr>
+    <th>NO.</th>
+    <th>零件号</th>
+    <th>数量</th>
+    <th>箱数</th>
+    <th>要货员工号</th>
+    <th>项目</th>
+    <th>要货库位</th>
+    <th>是否紧急</th>
+    <th>备注</th>
+    <th>创建时间</th>
+    <th></th>
+  </tr>
   </thead>
 
   <tbody>
-    <% @pick_items.each do |pick_item| %>
+  <% @pick_items.each_with_index do |pick_item, index| %>
       <tr>
-        <td><%= pick_item.id %></td>
-        <td><%= pick_item.pick_list_id %></td>
-        <td><%= pick_item.order_item_id %></td>
-        <td><%= link_to 'Show', pick_item %></td>
-        <td><%= link_to 'Edit', edit_pick_item_path(pick_item) %></td>
-        <td><%= link_to 'Destroy', pick_item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= index+@pick_items.offset+1 %></td>
+        <td><%= pick_item.part_id %></td>
+        <td><%= pick_item.quantity %></td>
+        <td><%= pick_item.box_quantity %></td>
+        <td><%= pick_item.user_id %></td>
+        <td><%= pick_item.destination_whouse.name %></td>
+        <td>
+          <% if pp = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id) %><%= pp.position.detail %>
+          <% end %></td>
+        <td><%= '是' if pick_item.is_emergency %></td>
+        <td><%= pick_item.remark %></td>
+        <td><%= pick_item.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_item.created_at%></td>
+        <td><%= link_to '编辑', edit_pick_item_path(pick_item) %></td>
       </tr>
-    <% end %>
+  <% end %>
   </tbody>
 </table>
-
+<div class="digg_pagination">
+  <%= will_paginate @pick_items, :container => false %>
+</div>
 <br>
-
-<%= link_to 'New Pick item', new_pick_item_path %>

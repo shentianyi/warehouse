@@ -1,0 +1,12 @@
+<script type="text/javascript">
+    $(function () {
+        data_upload("#item-data-uploader", 'xlsx');
+    });
+</script>
+<h3>导入接收数据</h3>
+<div>
+  选择数据文件
+  <input id="item-data-uploader" type="file" name="files[]" data-url="/deliveries/receive">
+  <div class="abstractblock" id="item-data-uploader-preview" style="display:none;"></div>
+</div>
+<div><a href="/files/download?folder=template&file=delivery_receive_template.xlsx">下载模板</a></div>

@@ -1,3 +1,4 @@
+#encoding: utf-8
 module V1
   class UserAPI<Base
     namespace :users

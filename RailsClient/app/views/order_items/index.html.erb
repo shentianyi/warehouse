@@ -1,23 +1,94 @@
-<h1>Listing order_items</h1>
+<h1>需求单项目列表</h1>
+<br/>
+<div>
+  <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+    <div>
+      <span>项目号：
+        <input type="text" name="order_item[id]" value="<%= @id %>"/>
+        <input type="hidden" name="order_item[id_fuzzy]"/>
+      </span>
+      <span>创建员工工号：
+          <input type="text" name="order_item[user_id]" value="<%= @user_id %>"/>
+          <input type="hidden" name="order_item[user_id_fuzzy]"/>
+        </span>
+      <span>所属订单号：
+          <input type="text" name="order_item[order_id]" value="<%= @order_id %>"/>
+          <input type="hidden" name="order_item[order_id_fuzzy]"/>
+        </span>
+    </div>
+    <div>
+        <span>
+        创建日期：
+          <input type="text" name="order_item[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
+          ~  <input type="text" name="order_item[created_at][end]" class="datepicker" value="<%= @created_at_end %>"/>
+        </span>
+    </div>
+    <input type="submit" value="查 找" class="btn btn-primary"/>
+  </form>
+</div>
+<br/>
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @order_items %>
+  </div>
+  <%= will_paginate @order_items, :container => false %>
+</div>
 
-<table>
+<table class="table table-bordered table-striped table-hover">
   <thead>
     <tr>
-      <th colspan="3"></th>
+      <th>NO.</th>
+      <th>订单项目号</th>
+      <th>要货员</th>
+      <th>所属订单</th>
+      <th>创建时间</th>
+      <th>要货位置</th>
+      <th>箱数</th>
+      <th>零件号</th>
+      <th>数量</th>
+      <th>是否加急</th>
+      <th colspan="2"></th>
     </tr>
   </thead>
 
   <tbody>
-    <% @order_items.each do |order_item| %>
+    <% @order_items.each_with_index do |order_item,index| %>
       <tr>
-        <td><%= link_to 'Show', order_item %></td>
-        <td><%= link_to 'Edit', edit_order_item_path(order_item) %></td>
-        <td><%= link_to 'Destroy', order_item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= index+@order_items.offset+1 %></td>
+        <td><%= order_item.id %></td>
+        <td><%= order_item.user.name %></td>
+        <td><span class="label label-info"><%= order_item.order_id %></span></td>
+        <td><%= order_item.created_at.localtime.strftime('%Y-%m-%d %H:%M') %></td>
+        <td>
+          <span class="label label-info"><%= order_item.location.name %></span>
+          <span class="label label-info"><%= order_item.whouse.name %></span>
+          <span class="label label-info"><%if pp = OrderItemService.verify_department(order_item.whouse_id,order_item.part_id) %><%= pp.position.detail%><%end%></span>
+        </td>
+        <td><%= order_item.box_quantity %></td>
+        <td><span class="label label-info"><%= OrderItemLabelRegex.part_prefix_string + order_item.part_id %></span></td>
+        <td><%= OrderItemLabelRegex.quantity_prefix_string + order_item.quantity.to_s %></td>
+        <td>
+          <% if order_item.is_emergency %>
+          <span class="label label-success">是</span>
+          <%else%>
+              <span class="label label-warning">否</span>
+          <%end%>
+        </td>
+        <td><%= link_to '详细', order_item ,:class=>'btn btn-default'%></td>
+        <td><%= link_to '编辑', edit_order_item_path(order_item),:class=>'btn btn-default' %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
+<div class="digg_pagination">
+  <%= will_paginate @order_items, :container => false %>
+</div>
 <br>
-
-<%= link_to 'New Order item', new_order_item_path %>
+<script>
+    $(function () {
+        $(".datepicker").datetimepicker({
+            lang:'ch',
+            format: 'Y-m-d H:i'
+        });
+    });
+</script>

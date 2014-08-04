@@ -5,6 +5,7 @@ module PackageMessage
   DeleteSuccess='删除成功'
 
   NotExit='包装箱不存在'
+  PartNotInWhouse = '包装箱中的零件不存在该部门中'
   QuantityStringError='数量格式错误'
   PartNotExit='零件号不存在'
   CannotDelete='不能删除'

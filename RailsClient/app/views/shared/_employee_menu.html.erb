@@ -12,8 +12,31 @@
 
 <ul  id="main-menu" class="nav nav-pills">
   <li id="welcome_li"><a href="/">主 页</a></li>
-  <li  id='delivery_li'><a href="<%= deliveries_path%>">运 单</a></li>
-  <li id='forklift_li'><a href="<%= forklifts_path%>">托 盘</a></li>
-  <li id='package_li'><a href="<%= packages_path%>">包装箱</a></li>
-  <li><a href="<%= destroy_user_session_path%>">注 销</a></li>
+  <li id="welcome_li"><a href="<%=panel_orders_path%>">需求面板</a></li>
+
+  <li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">择货流程<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="manage">
+      <li id='pick_li' ><a href="<%= pick_lists_path %>">择货单</a></li>
+      <li id='pick_item_li' ><a href="<%= pick_items_path %>">择货单项目</a></li>
+    </ul>
+  </li>
+
+  <li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">要货流程<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="manage">
+      <li id='order_li' ><a href="<%= orders_path %>">需求单</a></li>
+      <li id='order_item_li' ><a href="<%= order_items_path %>">需求单项目</a></li>
+    </ul>
+  </li>
+
+  <li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">发运流程<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="send">
+      <li id='delivery_li' ><a href="<%= deliveries_path %>">运 单</a></li>
+      <li id='forklift_li' ><a href="<%= forklifts_path %>">托 盘</a></li>
+      <li id='package_li' ><a href="<%= packages_path %>">包装箱</a></li>
+    </ul>
+  </li>
+  <li><a href="<%= destroy_user_session_path%>">|注 销|</a></li>
 </ul>

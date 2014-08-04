@@ -47,6 +47,9 @@ module V1
       unless p = PackageService.exits?(params[:package_id])
         return {result: 0, content: PackageMessage::NotExit}
       end
+      unless ForkliftService.parts_in_whouse?([p.part_id],f.whouse_id)
+        return {return: 0, content:PackageMessage::PartNotInWhouse}
+      end
 
       if ForkliftService.add_package(f, p)
         {result: 1, content: PackagePresenter.new(p).to_json}
@@ -137,6 +140,12 @@ module V1
 
       if !ForkliftState.can_update?(f.state)
         return {result: 0, content: ForkliftMessage::CannotUpdate}
+      end
+
+      if forklift_params[:whouse_id]
+        unless ForkliftService.parts_in_whouse?(f.packages.collect { |p| p.part_id },forklift_params[:whouse_id])
+          return {return:0, content: ForkliftMessage::CannotUpdatePartsNotExistInWhouse}
+        end
       end
 
       result = ForkliftService.update(f, forklift_params)

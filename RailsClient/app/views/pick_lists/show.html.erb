@@ -1,14 +1,48 @@
-<p id="notice"><%= notice %></p>
+<div>
+  <a href="<%=@back_url%>" class="btn btn-success">返回</a>
+</div>
+<div class="header">
+  <p>择货单号：<%= @pick_list.id %></p>
 
-<p>
-  <strong>Id:</strong>
-  <%= @pick_list.id %>
-</p>
+  <p>择货员工号：<%= @pick_list.user_id %></p>
 
-<p>
-  <strong>User:</strong>
-  <%= @pick_list.user_id %>
-</p>
+  <p>生成时间：<%= @pick_list.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></p>
+</div>
 
-<%= link_to 'Edit', edit_pick_list_path(@pick_list) %> |
-<%= link_to 'Back', pick_lists_path %>
+<div class="body">
+  <table class="table table-bpicked table-striped globle-table">
+    <thead>
+    <tr>
+      <th>NO.</th>
+      <th>零件号</th>
+      <th>数量</th>
+      <th>箱数</th>
+      <th>要货员工号</th>
+      <th>要货项目</th>
+      <th>要货库位</th>
+      <th>是否加急</th>
+      <th>备注</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @pick_items.each_with_index do |pick_item, index| %>
+        <tr>
+          <td><%= index+1 %></td>
+          <td><%= pick_item.part_id %></td>
+          <td><%= pick_item.quantity %></td>
+          <td><%= pick_item.box_quantity %></td>
+          <td><%= pick_item.user_id %></td>
+          <td><%= pick_item.destination_whouse.name %></td>
+          <td>
+            <% if pp = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id) %><%= pp.position.detail %>
+            <% end %></td>
+          <td><%= '是' if pick_item.is_emergency %></td>
+          <td><%= pick_item.remark %></td>
+        </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
+<div>
+  <input type="button" value="打印择货单" class='btn btn-primary btn-lg' onclick="print_pick_list('<%= @pick_list.id %>');"/>
+</div>

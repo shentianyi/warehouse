@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   include ApplicationHelper
   before_filter :set_model
-
+  before_action :get_print_server
   before_filter :configure_permitted_parameters, if: :devise_controller?
   before_filter :authenticate_user_from_token!
   before_filter :authenticate_user!
@@ -63,7 +63,11 @@ class ApplicationController < ActionController::Base
   end
 
   def set_model
-    @model=self.class.name.gsub(/Controller/, '').tableize.singularize.downcase
+    @model=self.class.name.gsub(/Controller/, '').tableize.singularize
+  end
+
+  def get_print_server
+    @print_server="#{SysConfigCache.print_server_value}#{SysConfigCache.print_action_value}"
   end
 
   def model

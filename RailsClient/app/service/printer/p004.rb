@@ -1,3 +1,4 @@
+# print rejected packages detail
 module Printer
   class P004<Base
     HEAD=[:id, :receive_addr, :user, :receive_date]
@@ -6,7 +7,10 @@ module Printer
 
     def generate_data
       d=Delivery.find(self.id)
-      head={id: d.id, receive_addr: d.destination.address, user: d.receiver_id, receive_date: d.received_date.strftime('%Y.%m.%d')}
+      head={id: d.id,
+            receive_addr:  d.destination.nil? ? '' : d.destination.address,
+            user: d.receiver_id,
+            receive_date: d.received_date.nil? ? '' : d.received_date.localtime.strftime('%Y.%m.%d %H:%M')}
       heads=[]
       HEAD.each do |k|
         heads<<{Key: k, Value: head[k]}

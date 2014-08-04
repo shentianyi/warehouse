@@ -1,0 +1,31 @@
+<table class="table table-bordered table-striped globle-table">
+  <thead>
+  <tr>
+    <th>NO.</th>
+    <th>零件号</th>
+    <th>数量</th>
+    <th>箱数</th>
+    <th>要货员工号</th>
+    <th>要货项目</th>
+    <th>要货库位</th>
+    <th>是否加急</th>
+    <th>备注</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @order_items.each_with_index do |order_item,index| %>
+      <tr>
+        <td><%= index+1%></td>
+        <td><%= order_item.part_id %></td>
+        <td><%= order_item.quantity %></td>
+        <td><%= order_item.box_quantity %></td>
+        <td><%= order_item.user_id %></td>
+        <td><%= order_item.whouse.name %></td>
+        <td><%if pp = OrderItemService.verify_department(order_item.whouse_id,order_item.part_id) %><%= pp.position.detail%><%end%></td>
+        <td><%=order_item.is_emergency%></td>
+        <td><%=order_item.remark%></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>

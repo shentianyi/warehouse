@@ -1,10 +1,10 @@
 class OrdersController < ApplicationController
-  before_action :set_order, only: [:show, :edit, :update, :destroy]
+  before_action :set_order, only: [:show, :edit, :update, :destroy, :order_items]
 
   # GET /orders
   # GET /orders.json
   def index
-    @orders = Order.all
+    @orders = Order.unscoped.paginate(:page => params[:page]).order(created_at: :desc)
   end
 
   # GET /orders/1
@@ -61,15 +61,49 @@ class OrdersController < ApplicationController
     end
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_order
-      @order = Order.find(params[:id])
-    end
+  def panel
+    @orders=OrderService.get_orders_by_days(current_user.location.id).order(created_at: :asc).all
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def order_params
-      #params[:order]
-      params.require(:order).permit(:id,:user_id)
+  def panel_list
+    @orders=OrderService.get_orders_by_days(current_user.location.id).where.not(id:params[:orders]).order(created_at: :asc).all
+    render partial:'list'
+  end
+
+  def handle
+    orders=[]
+    params[:orders].each do |id|
+      if order=Order.find_by_id(id)
+        order.update(handled:params[:handled])
+        orders<<order.id
+      end
     end
+    render json: orders
+  end
+
+  def items
+    if params[:user_id].blank?
+      @order_items=OrderItem.where(order_id: params[:order_ids])
+      #.group(:part_id,:whouse_id)
+      #.select('order_items.*,sum(order_items.quantity) as quantity')
+    else
+      @order_items=PickItemService.get_order_items(params[:user_id],params[:order_ids])||[]
+    end
+    render partial:'item'
+  end
+
+  def order_items
+    @order_items = @order.order_items.paginate(:page => params[:page])
+  end
+
+  private
+  # Use callbacks to share common setup or constraints between actions.
+  def set_order
+    @order = Order.unscoped.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def order_params
+    params.require(:order).permit(:id, :user_id,:handled,:is_delete)
+  end
 end

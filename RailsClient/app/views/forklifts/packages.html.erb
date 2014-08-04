@@ -1,0 +1,28 @@
+<h2><%= @forklift.id%>包装箱列表</h2>
+<br/>
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @packages %>
+  </div>
+  <%= will_paginate @packages, :container => false %>
+</div>
+<table class="table table-bordered table-striped globle-table table-hover">
+  <thead>
+  <tr>
+    <td>NO.</td>
+    <td>零件号</td>
+  </tr>
+  </thead>
+  <tbody>
+  <% @packages.each_with_index do |part,index|%>
+      <tr>
+        <td><%= index+@packages.offset+1%></td>
+        <td><%= part.id %></td>
+      </tr>
+  <% end%>
+  </tbody>
+</table>
+<div class="digg_pagination">
+  <%= will_paginate @packages, :container => false %>
+</div>
+<%= link_to '返回', forklifts_path ,:class => "btn btn-default btn-lg" %>
