@@ -11,6 +11,7 @@ module Warehouse
     #config.paths['config/database']='config/wangsong_database.yml' if ENV['USER']=='wangsong'
     #config.paths['config/database']='config/charlot_database.yml' if ENV['USER']=='charlot'
     config.paths['config/database']='config/wangzixiao_database.yml' if ENV['USER']=='wayne'
+    config.paths['config/database']='config/luna_database.yml' if ENV['USER']=='Luna'
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
     # for the api
     %w{models api service presenters caches}.each do |namespace|

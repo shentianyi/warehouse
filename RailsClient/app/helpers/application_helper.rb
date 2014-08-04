@@ -42,11 +42,13 @@ module ApplicationHelper
         instance_variable_set("@#{k}", v)
       end
       #if v.is_a?(Array) && !v.empty?
-      #  query= v.size==1 ? query.where(Hash[k, v[0]]) : query.in(Hash[k, v])
+      #  query= v.size==1 ? query.where(Hash[k, v[0]]) : query.in(Hash[k, v]
       #end
       #query=query.where(Hash[k, v]) if v.is_a?(Range)
       if v.is_a?(Hash) && v.values.count==2 && v.values.uniq!=['']
         values=v.values.sort
+        values[0]=Time.parse(values[0]).utc.to_s if values[0].is_date?
+        values[1]=Time.parse(values[1]).utc.to_s if values[1].is_date?
         query=query.where(Hash[k, (values[0]..values[1])])
         v.each do |kk, vv|
           instance_variable_set("@#{k}_#{kk}", vv)

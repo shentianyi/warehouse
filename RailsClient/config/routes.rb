@@ -29,11 +29,20 @@ Rails.application.routes.draw do
   resources :deliveries do
     collection do
       match :import, to: :import, via: [:get, :post]
+      match :generate, to: :generate, via: [:get, :post]
+      match :receive, to: :receive, via: [:get, :post]
       get :search
     end
     member do
       get :export
       get :forklifts
+    end
+  end
+
+
+  resources :files do
+    collection do
+      get :download
     end
   end
 
@@ -70,7 +79,7 @@ Rails.application.routes.draw do
   get 'parts/download_positions', to: 'parts#download_positions'
   post 'parts/do_import_positions', to: 'parts#do_import_positions'
 
-  [:locations, :whouses, :parts, :positions, :part_positions, :users, :deliveries,:forklifts,:packages, :part_types, :pick_item_filters, :orders].each do |model|
+  [:locations, :whouses, :parts, :positions, :part_positions, :users, :deliveries, :forklifts, :packages, :part_types, :pick_item_filters, :orders].each do |model|
     resources model do
       collection do
         post :do_import

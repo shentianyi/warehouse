@@ -6,6 +6,7 @@ module DeliveryMessage
   DeleteForkliftFailed='删除清单失败'
   CannotUpdate='不能修改'
   CannotDelete='不能删除'
+  ForkliftExistInOthers = '托清单已经存在运单中,不能创建'
   SendSuccess='发送成功'
   SendFailed='发送失败'
   NetworkNotGood=',网络不通畅，请导出运单!'
