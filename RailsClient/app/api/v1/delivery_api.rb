@@ -22,7 +22,7 @@ module V1
         data << d.to_json
       end
       #puts data
-      {result:true,content:data}
+      {result:true,content:[]}
     end
 
     # check forklift
