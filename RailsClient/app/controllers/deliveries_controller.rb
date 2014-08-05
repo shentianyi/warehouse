@@ -96,7 +96,7 @@ class DeliveriesController < ApplicationController
   def import
     if request.post?
       msg=Message.new
-      begin
+      #begin
         if params[:files].size==1
           file=params[:files][0]
           data=FileData.new(data: file, oriName: file.original_filename, path: $DELIVERYPATH, pathName: "#{Time.now.strftime('%Y%m%d%H%M%S')}-#{file.original_filename}")
@@ -106,9 +106,9 @@ class DeliveriesController < ApplicationController
         else
           msg.content='未选择文件或只能上传一个文件'
         end
-      rescue => e
-        msg.content = e.message
-      end
+      #rescue => e
+      #  msg.content = e.message
+      #end
       render json: msg
     end
   end
