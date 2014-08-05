@@ -53,8 +53,6 @@ class ReportsController < ApplicationController
   end
 
   def entry_download
-    file_name= 'entry_report'+params[:type]+Time.now.strftime('%Y%m%d%H%M%S')+'.csv'
-    path=File.join($DOWNLOADPATH, file_name)
   end
 
   def removal_download
