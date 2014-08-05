@@ -11,29 +11,57 @@ module V1
       end
 
       post do
-        orders=JSON.parse(params[:order])
-        orders.each do |order|
-          order=Order.new(order)
-          order.save
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            orders=JSON.parse(params[:order])
+            orders.each do |order|
+              order=Order.new(order)
+              order.save
+            end
+          end
+          msg.result =true
+        rescue => e
+          msg.content = "post:#{e.message}"
         end
+        return msg
       end
 
       put '/:id' do
-        orders=JSON.parse(params[:order])
-        orders.each do |order|
-          if u=Order.unscoped.find_by_id(order['id'])
-            u.update(order.except('id'))
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            orders=JSON.parse(params[:order])
+            orders.each do |order|
+              if u=Order.unscoped.find_by_id(order['id'])
+                u.update(order.except('id'))
+              end
+            end
           end
+
+          msg.result =true
+        rescue => e
+          msg.content = "put:#{e.message}"
         end
+        return msg
       end
 
       post :delete do
-        orders=JSON.parse(params[:order])
-        orders.each do |id|
-          if order=Order.unscoped.find_by_id(id)
-            order.update(is_delete: true)
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            orders=JSON.parse(params[:order])
+            orders.each do |id|
+              if order=Order.unscoped.find_by_id(id)
+                order.update(is_delete: true)
+              end
+            end
           end
+          msg.result =true
+        rescue => e
+          msg.content = "delete:#{e.message}"
         end
+        return msg
       end
     end
   end

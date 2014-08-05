@@ -13,7 +13,7 @@ module Sync
           else
             item=model.new(item)
             if ori.is_delete
-              attr={is_delete: true, is_dirty: false, is_new: false}.merge(ori.gen_sync_attr(item))
+              attr={ is_dirty: false, is_new: false}.merge(ori.gen_sync_attr(item))
               ori.update(attr)
             else
               attr={is_dirty: false, is_new: false}.merge(ori.gen_sync_attr(item))

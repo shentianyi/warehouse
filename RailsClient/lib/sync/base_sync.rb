@@ -7,54 +7,74 @@ module Sync
 
     def self.execute
       ## base data
+      #begin
+      current=Time.now
+      #Sync::Execute::LocationSync.sync
+      #Sync::Execute::HackerSync.sync
+      #Sync::Execute::WhouseSync.sync
+      #Sync::Execute::PartTypeSync.sync
+      #Sync::Execute::PartSync.sync
+      #Sync::Execute::PositionSync.sync
+      #Sync::Execute::PartPositionSync.sync
+      #Sync::Execute::PickItemFilterSync.sync
+      no_error=true
+      # sync delivery data
       begin
-        current=Time.now
-        Sync::Execute::LocationSync.sync
-        Sync::Execute::HackerSync.sync
-        Sync::Execute::WhouseSync.sync
-        Sync::Execute::PartTypeSync.sync
-        Sync::Execute::PartSync.sync
-        Sync::Execute::PositionSync.sync
-        Sync::Execute::PartPositionSync.sync
-        Sync::Execute::PickItemFilterSync.sync
-
-        # sync delivery data
         Sync::Execute::DeliverySync.sync
         Sync::Execute::ForkliftSync.sync
         Sync::Execute::PackageSync.sync
         Sync::Execute::PackagePositionSync.sync
         Sync::Execute::StateLogSync.sync
-
-        # sync order data
-        Sync::Execute::OrderSync.sync
-        Sync::Execute::OrderItemSync.sync
-
-        # sync pick list data
-        Sync::Execute::PickListSync.sync
-        Sync::Execute::PickItemSync.sync
-
-        Sync::Config.last_time=(current- Sync::Config.advance_second.seconds).utc
       rescue => e
+        no_error=false
+        puts "[#{Time.now.localtime}][ERROR]"
         puts e.class
         puts e.to_s
         puts e.backtrace
       end
+
+      begin
+        # sync order data
+        Sync::Execute::OrderSync.sync
+        Sync::Execute::OrderItemSync.sync
+      rescue => e
+        no_error=false
+        puts "[#{Time.now.localtime}][ERROR]"
+        puts e.class
+        puts e.to_s
+        puts e.backtrace
+      end
+      begin
+        # sync pick list data
+        Sync::Execute::PickListSync.sync
+        Sync::Execute::PickItemSync.sync
+      rescue => e
+        no_error=false
+        puts "[#{Time.now.localtime}][ERROR]"
+        puts e.class
+        puts e.to_s
+        puts e.backtrace
+      end
+      Sync::Config.last_time=(current- Sync::Config.advance_second.seconds).utc if no_error
+      #rescue => e
+      #  puts "[#{Time.now.localtime}][ERROR]"
+      #  puts e.class
+      #  puts e.to_s
+      #  puts e.backtrace
+      #end
     end
 
     def self.sync
       if Config.enabled
-        #begin
         if executor=Sync::Executor.find(main_key)
+          puts "[#{Time.now.localtime}][INFO]"
+          puts "[#{Time.now.localtime}]#{executor.key} start sync..."
           get &get_block if executor.get
           post &post_block if executor.post
           put &put_block if executor.put
           delete &delete_block if executor.delete
+          puts "[#{Time.now.localtime}]#{executor.key} finsh sync..."
         end
-        #rescue => e
-        #  puts e.class
-        #  puts e.to_s
-        #  puts e.backtrace
-        #end
       end
     end
 
@@ -63,6 +83,7 @@ module Sync
     def self.get
       site=init_site(URI::encode(url+'?last_time='+Sync::Config.last_time.to_s))
       response=site.get
+
       if response.code==200
         yield(JSON.parse(response)) if block_given?
       end
@@ -82,7 +103,12 @@ module Sync
         }
         response= site.post({main_key => items.to_json})
         if response.code==201
-          yield(items, JSON.parse(response)) if block_given?
+          msg= JSON.parse(response.body)
+          if msg['result']
+            yield(items, JSON.parse(response)) if block_given?
+          else
+            puts "[#{Time.now.localtime}][ERROR]#{msg}"
+          end
         end
         i+=1
       end
@@ -104,7 +130,13 @@ module Sync
         }
         response=site.put({main_key => items_hash.to_json})
         if response.code==200
-          yield(items, JSON.parse(response)) if block_given?
+          #yield(items, JSON.parse(response)) if block_given?
+          msg= JSON.parse(response.body)
+          if msg['result']
+            yield(items, JSON.parse(response)) if block_given?
+          else
+            puts "[#{Time.now.localtime}][ERROR]#{msg}"
+          end
         end
         i+=1
       end
@@ -124,7 +156,13 @@ module Sync
         site= init_site(url+'/delete')
         response=site.post({main_key => items.collect { |i| i.id }.to_json})
         if response.code==201
-          yield(items, JSON.parse(response)) if block_given?
+          #yield(items, JSON.parse(response)) if block_given?
+          msg= JSON.parse(response.body)
+          if msg['result']
+            yield(items, JSON.parse(response)) if block_given?
+          else
+            puts "[#{Time.now.localtime}][ERROR]#{msg}"
+          end
         end
         i+=1
       end

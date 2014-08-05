@@ -29,6 +29,7 @@ module Extensions
 
       def destroy
         self.is_delete=true
+        self.is_dirty=true
         self.save
       end
 
@@ -55,6 +56,10 @@ module Extensions
           attr[k.to_sym]=item.send(k.to_sym)
         end
         return attr
+      end
+
+      def can_sync_post
+        true
       end
     end
   end

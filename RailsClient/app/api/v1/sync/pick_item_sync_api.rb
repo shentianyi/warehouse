@@ -11,29 +11,56 @@ module V1
       end
 
       post do
-        pick_items=JSON.parse(params[:pick_item])
-        pick_items.each do |pick_item|
-          pick_item=PickItem.new(pick_item)
-          pick_item.save
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            pick_items=JSON.parse(params[:pick_item])
+            pick_items.each do |pick_item|
+              pick_item=PickItem.new(pick_item)
+              pick_item.save
+            end
+          end
+          msg.result =true
+        rescue => e
+          msg.content = "post:#{e.message}"
         end
+        return msg
       end
 
       put '/:id' do
-        pick_items=JSON.parse(params[:pick_item])
-        pick_items.each do |pick_item|
-          if u=PickItem.unscoped.find_by_id(pick_item['id'])
-            u.update(pick_item.except('id'))
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            pick_items=JSON.parse(params[:pick_item])
+            pick_items.each do |pick_item|
+              if u=PickItem.unscoped.find_by_id(pick_item['id'])
+                u.update(pick_item.except('id'))
+              end
+            end
           end
+          msg.result =true
+        rescue => e
+          msg.content = "put:#{e.message}"
         end
+        return msg
       end
 
       post :delete do
-        pick_items=JSON.parse(params[:pick_item])
-        pick_items.each do |id|
-          if pick_item=PickItem.unscoped.find_by_id(id)
-            pick_item.update(is_delete: true)
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            pick_items=JSON.parse(params[:pick_item])
+            pick_items.each do |id|
+              if pick_item=PickItem.unscoped.find_by_id(id)
+                pick_item.update(is_delete: true)
+              end
+            end
           end
+          msg.result =true
+        rescue => e
+          msg.content = "delete:#{e.message}"
         end
+        return msg
       end
     end
   end

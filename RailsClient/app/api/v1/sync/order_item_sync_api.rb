@@ -11,29 +11,56 @@ module V1
       end
 
       post do
-        order_items=JSON.parse(params[:order_item])
-        order_items.each do |order_item|
-          order_item=OrderItem.new(order_item)
-          order_item.save
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            order_items=JSON.parse(params[:order_item])
+            order_items.each do |order_item|
+              order_item=OrderItem.new(order_item)
+              order_item.save
+            end
+          end
+          msg.result =true
+        rescue => e
+          msg.content = "post:#{e.message}"
         end
+        return msg
       end
 
       put '/:id' do
-        order_items=JSON.parse(params[:order_item])
-        order_items.each do |order_item|
-          if u=OrderItem.unscoped.find_by_id(order_item['id'])
-            u.update(order_item.except('id'))
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            order_items=JSON.parse(params[:order_item])
+            order_items.each do |order_item|
+              if u=OrderItem.unscoped.find_by_id(order_item['id'])
+                u.update(order_item.except('id'))
+              end
+            end
           end
+          msg.result =true
+        rescue => e
+          msg.content = "put:#{e.message}"
         end
+        return msg
       end
 
       post :delete do
-        order_items=JSON.parse(params[:order_item])
-        order_items.each do |id|
-          if order_item=OrderItem.unscoped.find_by_id(id)
-            order_item.update(is_delete: true)
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            order_items=JSON.parse(params[:order_item])
+            order_items.each do |id|
+              if order_item=OrderItem.unscoped.find_by_id(id)
+                order_item.update(is_delete: true)
+              end
+            end
           end
+          msg.result =true
+        rescue => e
+          msg.content = "delete:#{e.message}"
         end
+        return msg
       end
     end
   end

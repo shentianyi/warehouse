@@ -1,4 +1,4 @@
-<h2><%= @delivery.id%>托清单列表</h2>
+<h2><%= @delivery.id %>托清单列表</h2>
 <br/>
 <div class="digg_pagination">
   <div class="page_info">
@@ -19,20 +19,20 @@
   </tr>
   </thead>
   <tbody>
-  <% @forklifts.each_with_index do |f,index|%>
+  <% @forklifts.each_with_index do |f, index| %>
       <tr>
-        <td><%= index+@forklifts.offset+1%></td>
+        <td><%= index+@forklifts.offset+1 %></td>
         <td><%= f.id %></td>
         <td><%= ForkliftState.display(f.state) %></td>
         <td><%= f.whouse.name %></td>
         <td><%= f.sum_packages %></td>
         <td><%= f.accepted_packages %></td>
-        <td><%= f.stocker.name %></td>
+        <td><%= f.stocker.name if f.stocker %></td>
       </tr>
-  <% end%>
+  <% end %>
   </tbody>
 </table>
 <div class="digg_pagination">
   <%= will_paginate @forklifts, :container => false %>
 </div>
-<%= link_to '返回', deliveries_path ,:class => "btn btn-default btn-lg" %>
+<%= link_to '返回', deliveries_path, :class => "btn btn-default btn-lg" %>
