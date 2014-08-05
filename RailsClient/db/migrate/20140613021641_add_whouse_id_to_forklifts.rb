@@ -15,7 +15,7 @@ REFERENCES whouses(id)
       dir.down do
         execute <<-SQL
         ALTER TABLE fortlifts
-DROP FOREIGN fk_forklifts_whouses
+DROP FOREIGN KEY fk_forklifts_whouses
         SQL
       end
     end
