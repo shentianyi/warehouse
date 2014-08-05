@@ -32,6 +32,7 @@ module V1
         begin
           ActiveRecord::Base.transaction do
             packages=JSON.parse(params[:package])
+            puts packages.count
             packages.each do |package|
               if u=Package.unscoped.find_by_id(package['id'])
                 u.update(package.except('id'))
