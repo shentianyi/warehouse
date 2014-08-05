@@ -94,6 +94,7 @@ Rails.application.routes.draw do
   delete '/parts/delete_position/:id', to: 'parts#delete_position'
 
   get 'reports/entry_report', to: 'reports#entry_report'
+  get 'reports/removal_report', to: 'reports#removal_report'
 
   resources :labels do
     collection do

@@ -1,13 +1,13 @@
 <div class="panel panel-warning">
   <div class="panel-heading">
-    <h2>收货报表</h2>
-    包括收货总量,实际接收量,以及拒收总量
+    <h2>发货报表</h2>
+    包括发货总量,实际发货,以及被拒收总量
   </div>
   <div class="panel-body">
     <br/>
 
     <div>
-      <form method="get" action="<%= reports_entry_report_path %>">
+      <form method="get" action="<%= reports_removal_report_path %>">
         <div>
           <div>
             <span>地点:
@@ -18,7 +18,7 @@
               ~ <input type="text" name="received_date_end" class="datepicker" value="<%= @received_date_end %>"/>
             </span>
             <span>报表类型:
-              <%= select_tag(:type, options_for_select([["接收总量","total"],["实际接收","received"],["拒收总量","rejected"]], @type), include_blank: false) %>
+              <%= select_tag(:type, options_for_select([["发货总量","total"],["实际发货","send"],["被拒收总量","rejected"]], @type), include_blank: false) %>
             </span>
             <input type="submit" value="查找" class="btn btn-info"/>
           </div>
