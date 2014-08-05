@@ -21,8 +21,8 @@ class ReportsController < ApplicationController
     end
     @packages = Package.joins(forklift: :delivery)
     .where(condition)
-    .select("packages.state,packages.part_id,COUNT(packages.id) as count,forklifts.whouse_id as whouse_id,deliveries.delivery_date as ddate,deliveries.user_id as sender_id,deliveries.id as did")
-    .group("packages.part_id").order("ddate DESC ,forklifts.whouse_id, did")
+    .select("packages.state,packages.part_id,COUNT(packages.id) as count,forklifts.whouse_id as whouse_id,deliveries.received_date as rdate,deliveries.receiver_id as receover_id,deliveries.id as did")
+    .group("packages.part_id").order("rdate DESC,did,whouse_id")
     render
   end
 
@@ -48,7 +48,7 @@ class ReportsController < ApplicationController
     @packages = Package.joins(forklift: :delivery)
     .where(condition)
     .select("packages.state,packages.part_id,COUNT(packages.id) as count,forklifts.whouse_id as whouse_id,deliveries.delivery_date as ddate,deliveries.user_id as sender_id,deliveries.id as did")
-    .group("packages.part_id").order("ddate DESC ,forklifts.whouse_id, did")
+    .group("packages.part_id").order("ddate DESC,did ,whouse_id ")
     render
   end
 end
