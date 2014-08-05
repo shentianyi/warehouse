@@ -43,7 +43,7 @@
 <input type="button" value="打印接收确认单" class='btn btn-info' onclick="print_delivery_confirm_list();"/>
 <input type="button" value="打印未接收清单" class='btn btn-success' onclick="print_delivery_unrece_list();"/>
 <input type="button" value="打印接收清单" class='btn btn-primary' onclick="print_delivery_reve_list();"/>
-<h3><%= link_to '导入离线运单', import_deliveries_path %></h3>
+<h3><%= link_to '导入离线运单', import_deliveries_path, :class=>"btn btn-warning" %></h3>
 <div class="digg_pagination">
   <div class="page_info">
     <%= page_entries_info @deliveries %>
