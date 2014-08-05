@@ -189,7 +189,8 @@ class DeliveryService
    # return msg
  # end
  def self.import_by_file path
-    msg=Message.new
+  msg=Message.new
+   begin
     ActiveRecord::Base.transaction do
       Sync::Config.skip_muti_callbacks([Delivery, Forklift, Package, PackagePosition, StateLog])
       data=JSON.parse(IO.read(path))
@@ -230,9 +231,17 @@ class DeliveryService
       PackagePosition.create(data['package_positions'].select { |pp| !pp.nil? })
       StateLog.create(data['state_logs'])
     end
+       msg.result=false
+       msg.content=''
+    rescue => e
+        msg.result =false
+        msg.content=e.message
+    end
     return msg
   end
   def self.send_by_excel file
+    msg=Message.new
+    begin
     ActiveRecord::Base.transaction do
       book=Roo::Excelx.new file
       book.default_sheet=book.sheets.first
@@ -275,10 +284,19 @@ class DeliveryService
         forklift.sum_packages=forklift.accepted_packages=forklift.packages.count
       end
       delivery.save
+      msg.content ='处理成功'
+      msg.result =true
     end
+    rescue => e
+      msg.result=false
+      msg.content = e.message
+    end
+    return msg
   end
 
   def self.receive_by_excel file
+    msg=Message.new
+    begin
     ActiveRecord::Base.transaction do
       book=Roo::Excelx.new file
       book.default_sheet=book.sheets.first
@@ -289,5 +307,12 @@ class DeliveryService
         end
       end
     end
+      msg.result =true
+      msg.content = '处理成功'
+  rescue => e
+    msg.result=false
+    msg.content = e.message
+  end
+  return msg
   end
 end
