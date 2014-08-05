@@ -309,10 +309,8 @@ class DeliveryService
         2.upto(book.last_row) do |row|
           if package=Package.find_by_id(book.cell(row, 1))
             package.update(state: PackageState::RECEIVED)
-            forklift=package.forklift
             if  forklift=package.forklift
               forklift.update(state: ForkliftState::RECEIVED, accepted_packages: forklift.packages.count(state: PackageState::RECEIVED))
-
               if delivery= forklift.delivery
                 delivery.update(state: DeliveryState::RECEIVED)
               end
