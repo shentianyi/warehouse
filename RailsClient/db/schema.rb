@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140803173457) do
+ActiveRecord::Schema.define(version: 20140805143741) do
 
   create_table "attachments", force: true do |t|
     t.string   "name"
@@ -105,6 +105,7 @@ ActiveRecord::Schema.define(version: 20140803173457) do
     t.integer  "box_quantity", default: 0
     t.string   "order_id"
     t.string   "location_id"
+    t.string   "source_id"
     t.string   "whouse_id"
     t.string   "user_id"
     t.string   "part_id"
@@ -123,6 +124,7 @@ ActiveRecord::Schema.define(version: 20140803173457) do
   add_index "order_items", ["order_id"], name: "index_order_items_on_order_id", using: :btree
   add_index "order_items", ["part_id"], name: "index_order_items_on_part_id", using: :btree
   add_index "order_items", ["part_type_id"], name: "index_order_items_on_part_type_id", using: :btree
+  add_index "order_items", ["source_id"], name: "index_order_items_on_source_id", using: :btree
   add_index "order_items", ["user_id"], name: "index_order_items_on_user_id", using: :btree
   add_index "order_items", ["uuid"], name: "index_order_items_on_uuid", using: :btree
   add_index "order_items", ["whouse_id"], name: "index_order_items_on_whouse_id", using: :btree
@@ -267,7 +269,6 @@ ActiveRecord::Schema.define(version: 20140803173457) do
     t.datetime "updated_at"
   end
 
-  add_index "pick_items", ["destination_whouse_id"], name: "index_pick_items_on_destination_whouse_id", using: :btree
   add_index "pick_items", ["id"], name: "index_pick_items_on_id", using: :btree
   add_index "pick_items", ["pick_list_id"], name: "index_pick_items_on_pick_list_id", using: :btree
 
