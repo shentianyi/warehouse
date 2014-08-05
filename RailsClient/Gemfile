@@ -58,8 +58,6 @@ gem 'oauth'
 
 gem 'will_paginate', '~> 3.0'
 
-gem 'fastercsv'
-
 # for cache
 #gem 'redis'
 #gem 'redis-rails'
