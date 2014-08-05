@@ -59,7 +59,6 @@ GEM
     equalizer (0.0.9)
     erubis (2.7.0)
     execjs (2.2.0)
-    fastercsv (1.5.5)
     grape (0.7.0)
       activesupport
       builder
@@ -195,7 +194,6 @@ DEPENDENCIES
   cancan
   coffee-rails (~> 4.0.0)
   devise
-  fastercsv
   grape
   jbuilder (~> 2.0)
   jquery-rails
