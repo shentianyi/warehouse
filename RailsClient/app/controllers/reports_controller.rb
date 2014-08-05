@@ -19,9 +19,9 @@ class ReportsController < ApplicationController
       when "rejected"
         condition["packages.state"] = [PackageState::DESTINATION]
     end
-    @packages = Package.joins(forklift: :delivery)
+    @packages = Package.joins(:part).joins(forklift: :delivery)
     .where(condition)
-    .select("packages.state,packages.part_id,COUNT(packages.id) as count,forklifts.whouse_id as whouse_id,deliveries.received_date as rdate,deliveries.receiver_id as receover_id,deliveries.id as did")
+    .select("parts.unit_pack as upack,packages.state,packages.part_id,COUNT(packages.id) as count,forklifts.whouse_id as whouse_id,deliveries.received_date as rdate,deliveries.receiver_id as receover_id,deliveries.id as did")
     .group("packages.part_id").order("rdate DESC,did,whouse_id")
     render
   end
@@ -45,10 +45,19 @@ class ReportsController < ApplicationController
       when "rejected"
         condition["packages.state"] = [PackageState::DESTINATION]
     end
-    @packages = Package.joins(forklift: :delivery)
+    @packages = Package.joins(:part).joins(forklift: :delivery)
     .where(condition)
-    .select("packages.state,packages.part_id,COUNT(packages.id) as count,forklifts.whouse_id as whouse_id,deliveries.delivery_date as ddate,deliveries.user_id as sender_id,deliveries.id as did")
+    .select("parts.unit_pack as upack,packages.state,packages.part_id,COUNT(packages.id) as count,forklifts.whouse_id as whouse_id,deliveries.delivery_date as ddate,deliveries.user_id as sender_id,deliveries.id as did")
     .group("packages.part_id").order("ddate DESC,did ,whouse_id ")
     render
+  end
+
+  def entry_download
+    file_name= 'entry_report'+params[:type]+Time.now.strftime('%Y%m%d%H%M%S')+'.csv'
+    path=File.join($DOWNLOADPATH, file_name)
+  end
+
+  def removal_download
+
   end
 end
