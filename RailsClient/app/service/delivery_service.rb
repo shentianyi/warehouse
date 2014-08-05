@@ -13,10 +13,12 @@ class DeliveryService
   #=============
   def self.delete delivery
     if delivery
-      delivery.forklifts.each do |f|
-        f.remove_from_delivery
+      ActiveRecord::Base.transaction do
+        delivery.forklifts.each do |f|
+          f.remove_from_delivery
+        end
+        delivery.destroy
       end
-      delivery.destroy
     else
       false
     end

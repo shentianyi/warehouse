@@ -176,9 +176,13 @@ class PackageService
       msg.content = PackageMessage::CannotCheck
       return msg
     end
-
-    if package.set_state(PackageState::RECEIVED)
-      ForkliftService.package_checked(package.forklift_id)
+    ActiveRecord::Base.transaction do
+      if package.set_state(PackageState::RECEIVED)
+        #ForkliftService.package_checked(package.forklift_id)
+        f = package.forklift
+        f.accepted_packages = f.packages.where(state:PackageState::RECEIVED)
+        f.save
+      end
     end
     msg.result = true
     msg.content = PackageMessage::CheckSuccess
@@ -209,9 +213,13 @@ class PackageService
       msg.content = PackageMessage::CannotCancelCheck
       return msg
     end
-
-    if package.set_state(PackageState::DESTINATION)
-      ForkliftService.package_unchecked(package.forklift_id)
+    ActiveRecord::Base.transaction do
+      if package.set_state(PackageState::DESTINATION)
+        #ForkliftService.package_unchecked(package.forklift_id)
+        f = package.forklift
+        f.accepted_packages = f.packages.where(state:PackageState::RECEIVED)
+        f.save
+      end
     end
     msg.result = true
     msg.content = PackageMessage::CancelCheckSuccess

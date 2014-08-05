@@ -48,20 +48,22 @@ class ForkliftService
       update_position = true
     end
 
+    ActiveRecord::Base.transactin do
+      if forklift.update_attributes(args)
+        if update_position
 
-    if forklift.update_attributes(args)
-      if update_position
-        forklift.packages.each do |p|
-          if pp = PartPosition.joins(:position).where({part_positions: {part_id: p.part_id}, positions: {whouse_id: args[:whouse_id]}}).first
-            #puts p.package_position.to_json
-            p.package_position.position_id = pp.position_id
-            p.package_position.save
+          forklift.packages.each do |p|
+            if pp = PartPosition.joins(:position).where({part_positions: {part_id: p.part_id}, positions: {whouse_id: args[:whouse_id]}}).first
+              #puts p.package_position.to_json
+              p.package_position.position_id = pp.position_id
+              p.package_position.save
+            end
           end
         end
+        true
+      else
+        false
       end
-      true
-    else
-      false
     end
   end
 
@@ -99,10 +101,11 @@ class ForkliftService
     if forklift.nil?
       return false
     end
-
-    forklift.set_state(ForkliftState::DESTINATION)
-    forklift.packages.each do |p|
-      PackageService.receive(p)
+    ActiveRecord::Base.transaction do
+      forklift.set_state(ForkliftState::DESTINATION)
+      forklift.packages.each do |p|
+        PackageService.receive(p)
+      end
     end
     true
   end
@@ -117,8 +120,10 @@ class ForkliftService
     end
 
     forklift.set_state(ForkliftState::WAY)
-    forklift.packages.each do |p|
-      PackageService.send(p)
+    ActiveRecord::Base.transaction do
+      forklift.packages.each do |p|
+        PackageService.send(p)
+      end
     end
     true
   end
@@ -144,7 +149,18 @@ class ForkliftService
   #=============
   def self.add_package forklift, package
     if package.forklift_id.nil?
-      return package.add_to_forklift forklift
+      #return package.add_to_forklift forklift
+      begin
+        ActiveRecord::Base.transaction do
+          package.forklift_id = forklift.id
+          package.set_position()
+          package.save!
+          forklift.sum_packages = forklift.packages.count
+          forklift.save!
+        end
+      rescue Exception=>ex
+        false
+      end
     else
       false
     end
@@ -177,19 +193,24 @@ class ForkliftService
 
   def self.package_checked(id)
     if f = Forklift.find_by_id(id)
-      if f.accepted_packages < f.sum_packages
-      f.accepted_packages = f.accepted_packages + 1
+      #bug code
+      #if f.accepted_packages < f.sum_packages
+      #f.accepted_packages = f.accepted_packages + 1
+      #f.save
+      #end
+      f.accepted_packages = f.packages.where(state:PackageState::RECEIVED)
       f.save
-      end
     end
   end
 
   def self.package_unchecked(id)
     if f = Forklift.find_by_id(id)
-      if f.accepted_packages > 0
-      f.accepted_packages = f.accepted_packages - 1
+      #if f.accepted_packages > 0
+      #f.accepted_packages = f.accepted_packages - 1
+      #f.save
+      #end
+      f.accepted_packages = f.packages.where(state:PackageState::RECEIVED)
       f.save
-      end
     end
   end
 

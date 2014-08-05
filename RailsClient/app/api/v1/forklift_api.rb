@@ -48,7 +48,10 @@ module V1
         return {result: 0, content: PackageMessage::NotExit}
       end
       unless ForkliftService.parts_in_whouse?([p.part_id],f.whouse_id)
-        return {return: 0, content:PackageMessage::PartNotInWhouse}
+        return {reuslt: 0, content:PackageMessage::PartNotInWhouse}
+      end
+      unless p.forklift_id.nil?
+        return {result: 0, content:PackageMessage::InOtherForklift}
       end
 
       if ForkliftService.add_package(f, p)
