@@ -18,7 +18,7 @@ module Sync
             else
               attr={is_dirty: false, is_new: false}.merge(ori.gen_sync_attr(item))
               ori.update(attr)
-            end if ori.updated_at<=item.updated_at
+            end if ori.updated_at<item.updated_at
           end
         end
       end

@@ -38,7 +38,6 @@ module Extensions
         self::FK.each do |k|
           c[k]=arg[k]
         end
-        puts "---#{c}"
         return c
       end
 
