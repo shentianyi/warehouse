@@ -11,6 +11,7 @@
   <tr>
     <td>NO.</td>
     <td>托清单号</td>
+    <td>包装箱列表</td>
     <td>状态</td>
     <td>备货仓库</td>
     <td>包装箱总数</td>
@@ -22,7 +23,8 @@
   <% @forklifts.each_with_index do |f, index| %>
       <tr>
         <td><%= index+@forklifts.offset+1 %></td>
-        <td><%= f.id %></td>
+        <td><%=f.id%></td>
+        <td><%= link_to '包装箱列表', packages_forklift_path(f),{target:'_blank'} %></td>
         <td><%= ForkliftState.display(f.state) %></td>
         <td><%= f.whouse.name %></td>
         <td><%= f.sum_packages %></td>
