@@ -5,7 +5,7 @@ sync:
   sync_lock: false
   enabled: true
   advance_second: 1800
-  per_request_size: 200
+  per_request_size: 500
   executor:
     location:
       name: "地点"
