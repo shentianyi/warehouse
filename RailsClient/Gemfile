@@ -64,4 +64,4 @@ gem 'will_paginate', '~> 3.0'
 #gem 'redis-namespace'
 
 # for excel
-#gem 'roo'
+gem 'roo'
