@@ -37,11 +37,12 @@ class Package < ActiveRecord::Base
   def remove_from_forklift
     if self.forklift
       ActiveRecord::Base.transaction do
+        forklift = self.forklift
         self.forklift = nil
         remove_position
         self.save
-        self.forklift.sum_packages = self.forklift.packages.count
-        self.forklift.save
+        forklift.sum_packages = forklift.packages.count
+        forklift.save
       end
     end
     true
