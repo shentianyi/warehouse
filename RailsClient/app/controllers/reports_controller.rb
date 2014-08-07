@@ -19,10 +19,11 @@ class ReportsController < ApplicationController
       when "rejected"
         condition["packages.state"] = [PackageState::DESTINATION]
     end
+
     @packages = Package.joins(:part).joins(forklift: :delivery)
     .where(condition)
-    .select("parts.unit_pack as upack,packages.state,packages.part_id,COUNT(packages.id) as count,forklifts.whouse_id as whouse_id,deliveries.received_date as rdate,deliveries.receiver_id as receover_id,deliveries.id as did")
-    .group("packages.part_id").order("rdate DESC,did,whouse_id")
+    .select("packages.state as state,packages.part_id,COUNT(packages.id) as box_count,SUM(packages.quantity) as total,forklifts.whouse_id as whouse_id,deliveries.received_date as rdate,deliveries.receiver_id as receover_id,deliveries.id as did")
+    .group("packages.part_id,state").order("rdate DESC,did,whouse_id")
     render
   end
 
@@ -47,8 +48,8 @@ class ReportsController < ApplicationController
     end
     @packages = Package.joins(:part).joins(forklift: :delivery)
     .where(condition)
-    .select("parts.unit_pack as upack,packages.state,packages.part_id,COUNT(packages.id) as count,forklifts.whouse_id as whouse_id,deliveries.delivery_date as ddate,deliveries.user_id as sender_id,deliveries.id as did")
-    .group("packages.part_id").order("ddate DESC,did ,whouse_id ")
+    .select("packages.state,packages.part_id,COUNT(packages.id) as box_count,SUM(packages.quantity) as total,forklifts.whouse_id as whouse_id,deliveries.delivery_date as ddate,deliveries.user_id as sender_id,deliveries.id as did")
+    .group("packages.part_id,state").order("ddate DESC,did ,whouse_id")
     render
   end
 
@@ -74,8 +75,8 @@ class ReportsController < ApplicationController
 
     @packages = Package.joins(:part).joins(forklift: :delivery)
     .where(condition)
-    .select("parts.unit_pack as upack,packages.state,packages.part_id,COUNT(packages.id) as count,forklifts.whouse_id as whouse_id,deliveries.received_date as rdate,deliveries.receiver_id as receover_id,deliveries.id as did")
-    .group("packages.part_id").order("rdate DESC,did,whouse_id")
+    .select("packages.state,packages.part_id,COUNT(packages.id) as box_count,SUM(packages.quantity) as total,forklifts.whouse_id as whouse_id,deliveries.received_date as rdate,deliveries.receiver_id as receover_id,deliveries.id as did")
+    .group("packages.part_id,state").order("rdate DESC,did,whouse_id")
 
     filename = "Report_Entry_#{Location.find_by_id(@location_id).name}_#{@type}_#{Time.now.to_i}.csv"
 
@@ -109,8 +110,8 @@ class ReportsController < ApplicationController
     end
     @packages = Package.joins(:part).joins(forklift: :delivery)
     .where(condition)
-    .select("parts.unit_pack as upack,packages.state,packages.part_id,COUNT(packages.id) as count,forklifts.whouse_id as whouse_id,deliveries.delivery_date as ddate,deliveries.user_id as sender_id,deliveries.id as did")
-    .group("packages.part_id").order("ddate DESC,did ,whouse_id ")
+    .select("packages.state,packages.part_id,COUNT(packages.id) as box_count,SUM(packages.quantity) as total,forklifts.whouse_id as whouse_id,deliveries.delivery_date as ddate,deliveries.user_id as sender_id,deliveries.id as did")
+    .group("packages.part_id,state").order("ddate DESC,did ,whouse_id ")
 
     filename = "Report_Removal_#{Location.find_by_id(@location_id).name}_#{@type}_#{Time.now.to_i}.csv"
 
@@ -127,14 +128,14 @@ class ReportsController < ApplicationController
   private
   def csv_content_entry(packages)
     CSV.generate do |csv|
-      csv << ["编号", "零件号","最小包装量","箱数","部门","运单号","收货时间","收货人","已接收"]
+      csv << ["编号", "零件号","总数","箱数","部门","运单号","收货时间","收货人","已接收"]
 
       packages.each_with_index do |p,index|
         csv << [
             index+1,
             p.part_id,
-            p.upack,
-            p.count,
+            p.total,
+            p.box_count,
             p.whouse_id,
             p.did,
             p.rdate.nil? ? '' : p.rdate.localtime.to_formatted_s(:db),
@@ -147,14 +148,14 @@ class ReportsController < ApplicationController
 
   def csv_content_removal(packages)
     CSV.generate do |csv|
-      csv << ["编号", "零件号","最小包装量","箱数","部门","运单号","发货时间","发货人","是否被拒绝"]
+      csv << ["编号", "零件号","总数","箱数","部门","运单号","发货时间","发货人","是否被拒绝"]
 
       packages.each_with_index do |p,index|
         csv << [
             index+1,
             p.part_id,
-            p.upack,
-            p.count,
+            p.total,
+            p.box_count,
             p.whouse_id,
             p.did,
             p.ddate.nil? ? '' : p.ddate.localtime.to_formatted_s(:db),
