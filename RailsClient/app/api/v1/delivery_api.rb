@@ -171,7 +171,7 @@ module V1
       end
 
       if !DeliveryState.before_state?(DeliveryState::DESTINATION,d.state)
-        return false
+        return {result:0,content:DeliveryMessage::ReceiveFailed+DeliveryMessage::NotSend}
       end
 
       if DeliveryService.receive(d)
