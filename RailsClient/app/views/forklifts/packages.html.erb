@@ -10,14 +10,22 @@
   <thead>
   <tr>
     <td>NO.</td>
+    <td>唯一号</td>
     <td>零件号</td>
+    <td>数量</td>
+    <td>上架库位</td>
+    <td>状态</td>
   </tr>
   </thead>
   <tbody>
-  <% @packages.each_with_index do |part,index|%>
+  <% @packages.each_with_index do |package,index|%>
       <tr>
         <td><%= index+@packages.offset+1%></td>
-        <td><%= part.id %></td>
+        <td><%= package.id %></td>
+        <td><%= PackageLabelRegex.part_prefix_string+package.part_id %></td>
+        <td><%= PackageLabelRegex.quantity_prefix_string + package.quantity_str %></td>
+        <td><%= package.position.whouse_id + " "+package.position.detail if package.position %></td>
+        <td><%= PackageState.display(package.state)%></td>
       </tr>
   <% end%>
   </tbody>

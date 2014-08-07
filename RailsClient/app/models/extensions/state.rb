@@ -12,8 +12,9 @@ module Extensions
 
       def set_state state
         if Kernel.const_get(self.class.name+"State").can_change?self.state,state
-          self.state = state
-          self.save
+          #self.state = state
+          #self.save
+          self.update(state:state)
           true
         else
           false

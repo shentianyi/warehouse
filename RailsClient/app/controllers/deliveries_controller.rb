@@ -120,7 +120,7 @@ class DeliveriesController < ApplicationController
         file=params[:files][0]
         data=FileData.new(data: file, oriName: file.original_filename, path: $DELIVERYPATH, pathName: "#{Time.now.strftime('%Y%m%d%H%M%S')}-#{file.original_filename}")
         data.saveFile
-       msg= DeliveryService.send_by_excel(data.full_path)
+        msg= DeliveryService.send_by_excel(data.full_path)
         #msg.result =true
         #msg.content= '导入成功'
       else
