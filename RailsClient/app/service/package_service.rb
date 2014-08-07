@@ -218,6 +218,11 @@ class PackageService
         #ForkliftService.package_unchecked(package.forklift_id)
         f = package.forklift
         f.accepted_packages = f.packages.where(state:PackageState::RECEIVED)
+        if f.accepted_packages < f.sum_packages
+          f.state = ForkliftState::PART_RECEIVED
+        elsif f.accepted_packages == 0
+          f.state = ForkliftState::DESTINATION
+        end
         f.save
       end
     end

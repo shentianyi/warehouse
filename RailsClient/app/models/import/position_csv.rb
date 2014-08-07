@@ -20,7 +20,6 @@ module Import
 
     def position_down_block
       Proc.new { |line, item|
-        line<<item.id
         line<<item.detail
         line<<item.whouse_id
       }
@@ -28,7 +27,6 @@ module Import
 
     def init_csv_cols
       csv_cols=[]
-      csv_cols<< Csv::CsvCol.new(field: 'id', header: 'Position Nr')
       csv_cols<< Csv::CsvCol.new(field: 'detail', header: 'Position')
       csv_cols<< Csv::CsvCol.new(field: 'whouse_id', header: 'Ware House',if_foreign: true,foreign: 'Whouse')
       csv_cols<< Csv::CsvCol.new(field: $UPMARKER, header: $UPMARKER)
