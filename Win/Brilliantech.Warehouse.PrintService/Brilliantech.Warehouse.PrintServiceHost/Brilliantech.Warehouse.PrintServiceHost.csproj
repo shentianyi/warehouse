@@ -112,6 +112,7 @@
     </EmbeddedResource>
     <Content Include="app.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Ini\api.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
