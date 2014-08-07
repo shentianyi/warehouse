@@ -32,7 +32,11 @@ module Import
           update_marker=(data.delete($UPMARKER).to_i==1)
           if query
             if item=self.where(query).first
-              item.update(data) if update_marker
+              if update_marker
+                item.update(data)
+              else
+                raise(ArgumentError, "行:#{line_no} 已经存在")
+              end
             else
               self.create(data)
             end

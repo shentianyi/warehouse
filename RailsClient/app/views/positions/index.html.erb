@@ -50,7 +50,7 @@
         <td><%= link_to '零件列表',parts_position_path(position)%><span class="badge pull-right"><%= position.parts.count %></span></td>
         <td><%= link_to '详细', position ,:class=>'btn btn-default'%></td>
         <td><%= link_to '编辑', edit_position_path(position),:class=>'btn btn-default' %></td>
-        <td><%= link_to '删除', position, method: :delete, data: { confirm: '确认删除?' },:class=>'btn btn-default' %></td>
+        <td><%= link_to '删除', position, method: :delete, data: { confirm: '确认删除?' },:class=>'btn btn-default' %><%if position.is_delete %><span class="label label-danger pull-right">Deleted</span><%end%></td>
       </tr>
     <% end %>
   </tbody>

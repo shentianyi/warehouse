@@ -4,6 +4,7 @@ module Import
       base.extend ClassMethods
       base.extend CsvBase
       base.init_csv_cols
+      base.init_uniq_key
     end
   end
 
@@ -11,7 +12,7 @@ module Import
     #@@csv_cols=nil
 
     def uniq_key
-      %w(detail)
+      class_variable_get(:@@ukeys)
     end
 
     def csv_headers
@@ -35,6 +36,10 @@ module Import
 
     def csv_cols
       class_variable_get(:@@csv_cols)
+    end
+
+    def init_uniq_key
+      class_variable_set(:@@ukeys,%w(detail whouse_id))
     end
   end
 end
