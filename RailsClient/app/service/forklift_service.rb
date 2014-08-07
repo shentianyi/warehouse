@@ -75,6 +75,9 @@ class ForkliftService
     if forklift.nil?
       return false
     end
+    puts forklift.sum_packages
+    puts forklift.accepted_packages
+
     if forklift.sum_packages > forklift.accepted_packages
       forklift.set_state(ForkliftState::PART_RECEIVED)
     else
