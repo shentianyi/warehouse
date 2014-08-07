@@ -1,14 +1,8 @@
-<p id="notice"><%= notice %></p>
+<h1><%= @part.id%></h1>
+<span class="label label-primary"><%= @part.id%></span>
 
-<P>
-  <string>零件号:</string>
-  <%= @part.id %>
-</P>
-
-<P>
-  <string>单位包装量:</string>
-  <%= @part.unit_pack %>
-</P>
+<h4>零件类型: <small><%= @part.part_type_id %></small></h4>
+<h4>单位包装量: <small><%= @part.unit_pack %></small></h4>
 
 <p>
   <string>库位:</string>
@@ -17,10 +11,10 @@
       <li>
         <string><%= pp.position.whouse.name %></string>
         <string><%= pp.position.detail %></string>
+        <button type="button" class="btn btn-default" onclick="Manage.part.del_position('<%= pp.id.to_s %>',this)">Delete</button>
       </li>
   <% end %>
 </ul>
 </p>
-
-<%= link_to '编辑', edit_part_path(@part) %> |
-<%= link_to '返回', parts_path %>
+<%= link_to '编辑', edit_part_path(@part) ,:class=>'btn btn-default'%> |
+<%= link_to '返回', parts_path ,:class=>'btn btn-default'%>

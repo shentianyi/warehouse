@@ -35,6 +35,9 @@ class PackageService
     #create
     args[:quantity]=args[:quantity_str]
     p = Package.new(args)
+    #l=p.user.location
+    #p.positionable_type=l.name
+    #p.positionable_id=l.id
     if p.save
       msg.result = true
       msg.object = p

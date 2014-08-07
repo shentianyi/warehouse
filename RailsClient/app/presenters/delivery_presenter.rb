@@ -24,8 +24,8 @@ class DeliveryPresenter<Presenter
   def to_json
     {
         id:self.id,
-        delivery_date:self.delivery_date,
-        received_date:self.received_date,
+        delivery_date:self.delivery_date.nil? ? '' : self.delivery_date.localtime,
+        received_date:self.received_date.nil? ? '' : self.received_date.localtime,
         receiver_id:self.receiver_id,
         state:self.state,
         state_display:DeliveryState.display(self.state),
@@ -39,8 +39,8 @@ class DeliveryPresenter<Presenter
   def to_json_with_forklifts with_package #boolean?
     {
         id:self.id.to_s,
-        delivery_date:self.delivery_date.to_s,
-        received_date:self.received_date.to_s,
+        delivery_date:self.delivery_date.nil? ? '' : self.delivery_date.localtime.to_s,
+        received_date:self.received_date.nil? ? '' : self.received_date.localtime.to_s,
         receiver_id:self.receiver_id.to_s,
         state:self.state.to_s,
         state_display:DeliveryState.display(self.state).to_s,

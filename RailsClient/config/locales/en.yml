@@ -27,4 +27,4 @@ en:
       manager: 'Manager'
       receiver: 'Receiver'
       sender: 'Sender'
-      stocker: 'Stocker'
+      stocker: 'Orderer'

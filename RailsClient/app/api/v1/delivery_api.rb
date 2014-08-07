@@ -97,13 +97,22 @@ module V1
     end
 
     post do
+      if DeliveryService.check_add_forklifts(params[:forklift_ids])
+        return {result:0,content:DeliveryMessage::ForkliftExistInOthers}
+      end
+
       d = Delivery.new(delivery_params)
       d.user = current_user
+
+      d.source = current_user.location
+      d.destination = current_user.location.destination
+
       result = d.save
 
       if params.has_key?(:forklifts)
         DeliveryService.add_forklifts(d,params[:forklifts])
       end
+
       if result
         {result:1,content:DeliveryPresenter.new(d).to_json}
       else
@@ -136,7 +145,6 @@ module V1
         return {result:0,content:DeliveryMessage::NotExit}
       end
       content = DeliveryPresenter.new(d).to_json_with_forklifts(false)
-      puts content
       {result:1,content:content}
     end
 
@@ -160,6 +168,10 @@ module V1
     post :receive do
       if (d = DeliveryService.exit?(params[:id])).nil?
         return {result:0,content:DeliveryMessage::NotExit}
+      end
+
+      if !DeliveryState.before_state?(DeliveryState::DESTINATION,d.state)
+        return false
       end
 
       if DeliveryService.receive(d)

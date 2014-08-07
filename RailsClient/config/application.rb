@@ -10,9 +10,11 @@ module Warehouse
   class Application < Rails::Application
     #config.paths['config/database']='config/wangsong_database.yml' if ENV['USER']=='wangsong'
     #config.paths['config/database']='config/charlot_database.yml' if ENV['USER']=='charlot'
+    config.paths['config/database']='config/wangzixiao_database.yml' if ENV['USER']=='wayne'
+    config.paths['config/database']='config/luna_database.yml' if ENV['USER']=='Luna'
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
     # for the api
-    %w{models api service presenters}.each do |namespace|
+    %w{models api service presenters caches}.each do |namespace|
       config.paths.add File.join('app', namespace), glob: File.join('**', '*.rb')
       config.autoload_paths += Dir[Rails.root.join('app', namespace, '**')]
     end
@@ -29,7 +31,11 @@ module Warehouse
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
     config.middleware.use ActionDispatch::Flash
-    config.i18n.enforce_available_locales = false
-    config.cache_store = :memory_store
+    I18n.enforce_available_locales = false
+    #config.cache_store = :redis_store, $redis
+    #config.action_dispatch.default_headers.merge!({
+    #                                                  'Access-Control-Allow-Origin' => '*',
+    #                                                  'Access-Control-Request-Method' => '*'
+    #                                              })
   end
 end

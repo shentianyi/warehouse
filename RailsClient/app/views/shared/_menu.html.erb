@@ -1,16 +1,73 @@
 <ul id="main-menu" class="nav nav-pills">
-  <li id="welcome_li"><a href="/">首 页</a></li>
-  <li id='user_li'><a href="<%= users_path %>">员 工</a></li>
-  <li id='location_li'><a href="<%= locations_path %>">地 点</a></li>
-  <li id='whouse_li'><a href="<%= whouses_path %>">仓 库</a></li>
-  <li id='position_li'><a href="<%= positions_path %>">库 位</a></li>
-  <li id='part_li'><a href="<%= parts_path %>">零件</a></li>
-  <li id='delivery_li'><a href="<%= deliveries_path %>">运 单</a></li>
-  <li id='forklift_li'><a href="<%= forklifts_path %>">托 盘</a></li>
-  <li id='package_li'><a href="<%= packages_path %>">包装箱</a></li>
-  <li id='regex_li'><a href="<%= regexes_path %>">正则规范配置</a></li>
-  <li id='label_li'><a href="<%= labels_path %>">标签配置</a></li>
-  <li id='sync_li'><a href="<%= syncs_path %>">同步配置</a></li>
+  <Li id="welcome_li"><a href="/">首 页</a></li>
+  <li id="welcome_li"><a href="<%= panel_orders_path %>">需求面板</a></li>
+
+  <li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">择货流程<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="manage">
+      <li id='pick_li'><a href="<%= pick_lists_path %>">择货单</a></li>
+      <li id='pick_item_li'><a href="<%= pick_items_path %>">择货单项目</a></li>
+    </ul>
+  </li>
+
+  <li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">要货流程<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="manage">
+      <li id='order_li'><a href="<%= orders_path %>">需求单</a></li>
+      <li id='order_item_li'><a href="<%= order_items_path %>">需求单项目</a></li>
+    </ul>
+  </li>
+
+  <li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">发运流程<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="send">
+      <li id='delivery_li'><a href="<%= deliveries_path %>">运 单</a></li>
+      <li id='forklift_li'><a href="<%= forklifts_path %>">托 盘</a></li>
+      <li id='package_li'><a href="<%= packages_path %>">包装箱</a></li>
+    </ul>
+  </li>
+
+  <li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">报表<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="reporter">
+    <li id="reports_entry_report"><a href="<%= reports_entry_report_path %>">入库报表</a></li>
+    <li id="reports_removal_report"></li>
+    </ul>
+  </li>
+
+
+  <li class="dropdown">
+    <a class="dropdown-toggle " data-toggle="dropdown" href="#">管理<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="manage">
+      <li id='location_li'><a href="<%= locations_path %>">地 点</a></li>
+      <li id='user_li'><a href="<%= users_path %>">员 工</a></li>
+      <li id='whouse_li'><a href="<%= whouses_path %>">仓 库</a></li>
+      <li id='position_li'><a href="<%= positions_path %>">库 位</a></li>
+      <li class="divider"></li>
+      <li id='part_type_li'><a href="<%= part_types_path %>">零件类型</a></li>
+      <li id='part_li'><a href="<%= parts_path %>">零件</a></li>
+      <li class="divider"></li>
+      <li id='pick_item_filter_li'><a href="<%= pick_item_filters_path %>">员工择货规则</a></li>
+    </ul>
+  </li>
+
+  <li class="dropdown">
+    <a class="dropdown-toggle " data-toggle="dropdown" href="#">应急处理<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="manage">
+      <li><a href="<%= generate_deliveries_path %>">导入发运数据</a></li>
+      <li><a href="<%= receive_deliveries_path %>">导入接收数据</a></li>
+    </ul>
+  </li>
+
+  <li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">配置<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="setting">
+      <li id='regex_li'><a href="<%= regexes_path %>">正则规范配置</a></li>
+      <li id='label_li'><a href="<%= labels_path %>">标签配置</a></li>
+      <li id='sync_li'><a href="<%= syncs_path %>">同步配置</a></li>
+      <li class="divider"></li>
+      <li id='sys_config_li'><a href="<%= sys_configs_path %>">系统配置</a></li>
+    </ul>
+  </li>
   <li><a href="<%= destroy_user_session_path %>">｜注 销｜</a></li>
 </ul>
-

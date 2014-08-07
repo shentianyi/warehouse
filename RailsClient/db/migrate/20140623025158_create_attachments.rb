@@ -1,5 +1,5 @@
 class CreateAttachments < ActiveRecord::Migration
-  def change
+  def up
     create_table :attachments, :id => false do |t|
       t.string :id, :limit => 36, :primary => true, :null => false
       t.string :name
@@ -25,5 +25,9 @@ class CreateAttachments < ActiveRecord::Migration
     add_index :attachments, :attachable_type
     add_index :attachments, :id
     execute 'ALTER TABLE attachments ADD PRIMARY KEY (id)'
+  end
+
+  def down
+    drop_table :attachments
   end
 end

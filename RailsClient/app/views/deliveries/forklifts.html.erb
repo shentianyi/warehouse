@@ -1,0 +1,38 @@
+<h2><%= @delivery.id%>托清单列表</h2>
+<br/>
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @forklifts %>
+  </div>
+  <%= will_paginate @forklifts, :container => false %>
+</div>
+<table class="table table-bordered table-striped globle-table table-hover">
+  <thead>
+  <tr>
+    <td>NO.</td>
+    <td>托清单号</td>
+    <td>状态</td>
+    <td>备货仓库</td>
+    <td>包装箱总数</td>
+    <td>已接收数</td>
+    <td>备货员工</td>
+  </tr>
+  </thead>
+  <tbody>
+  <% @forklifts.each_with_index do |f,index|%>
+      <tr>
+        <td><%= index+@forklifts.offset+1%></td>
+        <td><%= f.id %></td>
+        <td><%= ForkliftState.display(f.state) %></td>
+        <td><%= f.whouse.name %></td>
+        <td><%= f.sum_packages %></td>
+        <td><%= f.accepted_packages %></td>
+        <td><%= f.stocker.name %></td>
+      </tr>
+  <% end%>
+  </tbody>
+</table>
+<div class="digg_pagination">
+  <%= will_paginate @forklifts, :container => false %>
+</div>
+<%= link_to '返回', deliveries_path ,:class => "btn btn-default btn-lg" %>

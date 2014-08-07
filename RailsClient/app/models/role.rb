@@ -6,7 +6,7 @@ class Role
 		:'200' => {:name => 'manager', :display => (I18n.t 'system.role.manager')},
 		:'300' => {:name => 'sender', :display => (I18n.t 'system.role.sender')},
 		:'400' => {:name => 'receiver', :display => (I18n.t 'system.role.receiver')},
-		:'500' => {:name => 'stocker', :display => (I18n.t 'system.role.stocker')}
+		:'500' => {:name => 'stocker', :display => (I18n.t 'system.role.orderer')},
 	}
 
 	class<<self
@@ -23,7 +23,7 @@ class Role
 	end
 
 	def self.display id
-		@@roles[id_sym(id)][:name]
+		@@roles[id_sym(id)][:display]
 	end
 
 	def self.id_sym id

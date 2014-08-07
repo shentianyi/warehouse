@@ -1,0 +1,54 @@
+<h2>入库报表</h2>
+<br/>
+<div>
+  <form method="get" action="<%= reports_entry_report_path%>">
+    <div>
+      <div>
+        <span>地点:
+          <%= select_tag(:location_id,options_for_select(Location.all.collect{|l| [l.name,l.id]},@location_id),include_blank: false)%>
+        </span>
+        <span>接收时间:
+          <input type="text" name="received_date_start" class="datepicker" value="<%= @received_date_start%>" />
+          ~ <input type="text" name="received_date_end" class="datepicker" value="<%= @received_date_end%>" />
+        </span>
+        <span>报表类型:
+          <%= select_tag(:report_type,options_for_select([["接收总量","total"],["实际接收","received"],["未接收","rejected"]],@report_type),include: false)%>
+        </span>
+        <input type="submit" value="查找" class="btn btn-info">
+      </div>
+    </div>
+  </form>
+</div>
+<br/>
+<div>
+  <input type="submit" value="导出报表" class="btn btn-warning">
+</div>
+<table class="table table-striped table-condensed table-hover">
+  <thead>
+    <tr>
+      <th>No.</th>
+      <th>零件</th>
+      <th>箱数</th>
+      <th>部门</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%@packages.all.each_with_index do |p,index|%>
+    <tr>
+      <td><%= index+1%></td>
+      <td><span class="label label-info"><%= p.part_id %></span></td>
+      <td><%= p.count %></td>
+      <td><%= p.whouse_id %></td>
+    </tr>
+    <%end%>
+  </tbody>
+</table>
+<script>
+  $(function() {
+  $(".datepicker").datetimepicker({
+  lang: 'ch',
+  format: 'Y-m-d H:i'
+  });
+  });
+  init_check();
+</script>

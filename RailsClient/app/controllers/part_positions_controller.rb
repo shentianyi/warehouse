@@ -1,0 +1,3 @@
+class PartPositionsController < ApplicationController
+
+end

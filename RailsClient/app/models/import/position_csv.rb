@@ -11,14 +11,14 @@ module Import
     #@@csv_cols=nil
 
     def uniq_key
-      %w(id)
+      %w(detail)
     end
 
     def csv_headers
       class_variable_get(:@@csv_cols).collect { |col| col.header }
     end
 
-    def down_block
+    def position_down_block
       Proc.new { |line, item|
         line<<item.id
         line<<item.detail

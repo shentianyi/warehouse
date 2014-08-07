@@ -15,4 +15,3 @@
 </div>
 <div>下载模板：<%= link_to '下载数据模板', send("template_#{@model.pluralize}_path") %></div>
 <%= link_to '返回', send("#{@model.pluralize}_path") %>
-<%= render :partial => "shared/handling_msg_box", :locals => { :handlemsg => "处理中..." } %>

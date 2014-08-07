@@ -17,6 +17,7 @@ class Package < ActiveRecord::Base
   # when a package is added to the forklift
   # please do this
   #here is code for Leoni
+  before_save :set_package_position
   after_save :auto_shelved
 
   #-------------
@@ -26,6 +27,8 @@ class Package < ActiveRecord::Base
   # add_to_forklift
   def add_to_forklift forklift
     self.forklift = forklift
+    forklift.sum_packages = forklift.sum_packages + 1
+    forklift.save
     set_position
     self.save
   end
@@ -33,6 +36,8 @@ class Package < ActiveRecord::Base
   # remove_form_forklift
   def remove_from_forklift
     if self.forklift
+      forklift.sum_packages = forklift.sum_packages - 1
+      forklift.save
       self.forklift = nil
       remove_position
       self.save
@@ -47,7 +52,7 @@ class Package < ActiveRecord::Base
       return
     end
 
-    if pp = PartPosition.joins(:position).where({part_positions:{part_id:self.part_id},positions:{whouse_id:self.forklift.whouse_id}}).first
+    if pp = PartPosition.joins(:position).where({part_positions: {part_id: self.part_id}, positions: {whouse_id: self.forklift.whouse_id}}).first
       if self.package_position.nil?
         self.create_package_position(position_id: pp.position_id)
       else
@@ -79,5 +84,22 @@ class Package < ActiveRecord::Base
     if self.part_id_changed?
       set_position
     end
+  end
+
+  def set_package_position
+    case self.state
+      when PackageState::ORIGINAL
+        p=self.user.location
+      when PackageState::WAY
+        p=Whouse.find_by_id('TransWhouse')
+      when PackageState::RECEIVED
+        p=self.position
+    end
+
+    if p
+      self.positionable_id=p.id
+      self.positionable_type=p.class.name
+    end
+
   end
 end

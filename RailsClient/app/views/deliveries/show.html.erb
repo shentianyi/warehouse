@@ -1,64 +1,18 @@
-<p id="notice"><%= notice %></p>
+<h1><%= @delivery.id%></h1>
+<span class="label label-primary"><%= @delivery.id%></span>
 
-<p>
-  <string>运单号:</string>
-  <%= @delivery.id%>
-</p>
+<h4>状态: <small><%= DeliveryState.display(@delivery.state) %></small></h4>
+<h4>创建时间: <small><%= @delivery.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></small></h4>
+<h4>创建员工号: <small><%= @delivery.user_id%></small></h4>
+<h4>创建员工: <small><%= @delivery.user.name%></small></h4>
+<h4>发送时间: <small><%= @delivery.delivery_date.localtime.strftime('%Y-%m-%d %H:%M:%S') if @delivery.delivery_date %></small></h4>
+<h4>接收时间: <small><%= @delivery.received_date.localtime.strftime('%Y-%m-%d %H:%M:%S') if @delivery.received_date %></small></h4>
+<h4>接收员工号: <small><%= @delivery.receiver_id if @delivery.receiver_id %></small></h4>
+<h4>接收员工: <small><%= @delivery.receiver.name if @delivery.receiver %></small></h4>
+<h4>发送地: <small><%= @delivery.source.name if @delivery.source %></small></h4>
+<h4>目的地: <small><%= @delivery.destination.name if @delivery.destination %></small></h4>
+<h4>托清单数: <small><%= @delivery.forklifts.count %></small></h4>
+<h4>备注: <small><%= @delivery.remark %></small></h4>
 
-<p>
-  <string>状 态:</string>
-  <%= DeliveryState.display(@delivery.state)%>
-</p>
-
-<p>
-  <string>创建员工:</string>
-  <%= @delivery.user.name%>
-</p>
-
-<p>
-  <string>创建日期:</string>
-  <%= @delivery.created_at%>
-</p>
-
-<p>
-  <string>发运日期:</string>
-  <%= @delivery.delivery_date%>
-</p>
-
-<p>
-  <string>接收日期:</string>
-  <%= @delivery.received_date%>
-</p>
-
-<p>
-  <string>接收员工:</string>
-  <%= @delivery.receiver.name if @delivery.receiver%>
-</p>
-
-
-<p>
-  <string>发送地:</string>
-  <%= @delivery.source.name if @delivery.source%>
-</p>
-
-<p>
-  <string>目的地:</string>
-  <%= @delivery.destination.name if @delivery.destination%>
-</p>
-
-<p>
-  <string>备 注:</string>
-  <%= @delivery.remark%>
-</p>
-
-<p>
-  <string>托盘列表:</string>
-  <ul>
-    <% @delivery.forklifts.each do |f| %>
-    <%= link_to f.id,f%>
-    <% end%>
-  </ul>
-</p>
-
-<%= link_to '编辑', edit_delivery_path(@delivery) %> |
-<%= link_to '返回', deliveries_path %>
+<%= link_to '编辑', edit_delivery_path(@delivery),:class=>'btn btn-default' %> |
+<%= link_to '返回', deliveries_path ,:class=>'btn btn-default' %>

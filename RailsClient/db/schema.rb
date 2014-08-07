@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140714101037) do
+ActiveRecord::Schema.define(version: 20140803173457) do
 
   create_table "attachments", force: true do |t|
     t.string   "name"
@@ -93,13 +93,56 @@ ActiveRecord::Schema.define(version: 20140714101037) do
     t.string   "tel"
     t.boolean  "is_base",                   default: false
     t.string   "destination_id"
-    t.string   "prefix",                    default: "-1"
-    t.string   "suffix",                    default: "-1"
   end
 
   add_index "locations", ["destination_id"], name: "index_locations_on_destination_id", using: :btree
   add_index "locations", ["id"], name: "index_locations_on_id", using: :btree
   add_index "locations", ["uuid"], name: "index_locations_on_uuid", using: :btree
+
+  create_table "order_items", force: true do |t|
+    t.string   "uuid",                         null: false
+    t.float    "quantity"
+    t.integer  "box_quantity", default: 0
+    t.string   "order_id"
+    t.string   "location_id"
+    t.string   "whouse_id"
+    t.string   "user_id"
+    t.string   "part_id"
+    t.string   "part_type_id"
+    t.string   "remark"
+    t.boolean  "is_emergency", default: false, null: false
+    t.boolean  "is_delete",    default: false
+    t.boolean  "is_dirty",     default: true
+    t.boolean  "is_new",       default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "order_items", ["id"], name: "index_order_items_on_id", using: :btree
+  add_index "order_items", ["location_id"], name: "index_order_items_on_location_id", using: :btree
+  add_index "order_items", ["order_id"], name: "index_order_items_on_order_id", using: :btree
+  add_index "order_items", ["part_id"], name: "index_order_items_on_part_id", using: :btree
+  add_index "order_items", ["part_type_id"], name: "index_order_items_on_part_type_id", using: :btree
+  add_index "order_items", ["user_id"], name: "index_order_items_on_user_id", using: :btree
+  add_index "order_items", ["uuid"], name: "index_order_items_on_uuid", using: :btree
+  add_index "order_items", ["whouse_id"], name: "index_order_items_on_whouse_id", using: :btree
+
+  create_table "orders", force: true do |t|
+    t.string   "uuid",       limit: 36,                 null: false
+    t.boolean  "handled",               default: false
+    t.boolean  "is_delete",             default: false
+    t.boolean  "is_dirty",              default: true
+    t.boolean  "is_new",                default: true
+    t.string   "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "source_id"
+  end
+
+  add_index "orders", ["id"], name: "index_orders_on_id", using: :btree
+  add_index "orders", ["source_id"], name: "index_orders_on_source_id", using: :btree
+  add_index "orders", ["user_id"], name: "index_orders_on_user_id", using: :btree
+  add_index "orders", ["uuid"], name: "index_orders_on_uuid", using: :btree
 
   create_table "package_positions", force: true do |t|
     t.string   "position_id"
@@ -116,58 +159,130 @@ ActiveRecord::Schema.define(version: 20140714101037) do
   add_index "package_positions", ["position_id"], name: "index_package_positions_on_position_id", using: :btree
 
   create_table "packages", force: true do |t|
-    t.string   "uuid",                          null: false
+    t.string   "uuid",                              null: false
     t.string   "part_id"
-    t.float    "quantity",      default: 0.0
-    t.integer  "state",         default: 0,     null: false
+    t.float    "quantity",          default: 0.0
+    t.integer  "state",             default: 0,     null: false
     t.string   "location_id"
     t.string   "user_id"
     t.string   "forklift_id"
-    t.boolean  "is_delete",     default: false
-    t.boolean  "is_dirty",      default: true
-    t.boolean  "is_new",        default: true
+    t.boolean  "is_delete",         default: false
+    t.boolean  "is_dirty",          default: true
+    t.boolean  "is_new",            default: true
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "quantity_str"
     t.string   "check_in_time"
+    t.string   "positionable_id"
+    t.string   "positionable_type"
   end
 
   add_index "packages", ["forklift_id"], name: "index_packages_on_forklift_id", using: :btree
   add_index "packages", ["id"], name: "index_packages_on_id", using: :btree
   add_index "packages", ["location_id"], name: "index_packages_on_location_id", using: :btree
   add_index "packages", ["part_id"], name: "index_packages_on_part_id", using: :btree
+  add_index "packages", ["positionable_id"], name: "index_packages_on_positionable_id", using: :btree
+  add_index "packages", ["positionable_type"], name: "index_packages_on_positionable_type", using: :btree
   add_index "packages", ["user_id"], name: "index_packages_on_user_id", using: :btree
   add_index "packages", ["uuid"], name: "index_packages_on_uuid", using: :btree
 
   create_table "part_positions", force: true do |t|
     t.string   "part_id"
     t.string   "position_id"
-    t.boolean  "is_delete",   default: false
-    t.boolean  "is_dirty",    default: true
-    t.boolean  "is_new",      default: true
+    t.boolean  "is_delete",       default: false
+    t.boolean  "is_dirty",        default: true
+    t.boolean  "is_new",          default: true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "sourceable_id"
+    t.string   "sourceable_type"
   end
 
   add_index "part_positions", ["id"], name: "index_part_positions_on_id", using: :btree
   add_index "part_positions", ["part_id"], name: "index_part_positions_on_part_id", using: :btree
   add_index "part_positions", ["position_id"], name: "index_part_positions_on_position_id", using: :btree
+  add_index "part_positions", ["sourceable_id"], name: "index_part_positions_on_sourceable_id", using: :btree
+  add_index "part_positions", ["sourceable_type"], name: "index_part_positions_on_sourceable_type", using: :btree
+
+  create_table "part_types", force: true do |t|
+    t.string   "name"
+    t.boolean  "is_delete",  default: false
+    t.boolean  "is_dirty",   default: true
+    t.boolean  "is_new",     default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "part_types", ["id"], name: "index_part_types_on_id", using: :btree
 
   create_table "parts", force: true do |t|
-    t.string   "uuid",        limit: 36,                 null: false
+    t.string   "uuid",         limit: 36,                 null: false
     t.string   "customernum"
     t.string   "user_id"
-    t.boolean  "is_delete",              default: false
-    t.boolean  "is_dirty",               default: true
-    t.boolean  "is_new",                 default: true
+    t.boolean  "is_delete",               default: false
+    t.boolean  "is_dirty",                default: true
+    t.boolean  "is_new",                  default: true
     t.datetime "created_at"
     t.datetime "updated_at"
     t.float    "unit_pack"
+    t.string   "part_type_id"
   end
 
   add_index "parts", ["id"], name: "index_parts_on_id", using: :btree
+  add_index "parts", ["part_type_id"], name: "index_parts_on_part_type_id", using: :btree
   add_index "parts", ["user_id"], name: "index_parts_on_user_id", using: :btree
   add_index "parts", ["uuid"], name: "index_parts_on_uuid", using: :btree
+
+  create_table "pick_item_filters", force: true do |t|
+    t.string   "user_id"
+    t.string   "value"
+    t.string   "filterable_id"
+    t.string   "filterable_type"
+    t.boolean  "is_delete",       default: false
+    t.boolean  "is_dirty",        default: true
+    t.boolean  "is_new",          default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "pick_item_filters", ["filterable_id"], name: "index_pick_item_filters_on_filterable_id", using: :btree
+  add_index "pick_item_filters", ["filterable_type"], name: "index_pick_item_filters_on_filterable_type", using: :btree
+  add_index "pick_item_filters", ["id"], name: "index_pick_item_filters_on_id", using: :btree
+  add_index "pick_item_filters", ["user_id"], name: "index_pick_item_filters_on_user_id", using: :btree
+
+  create_table "pick_items", force: true do |t|
+    t.string   "pick_list_id"
+    t.float    "quantity",              default: 0.0
+    t.integer  "box_quantity",          default: 0
+    t.string   "destination_whouse_id"
+    t.string   "user_id"
+    t.string   "part_id"
+    t.string   "part_type_id"
+    t.string   "remark"
+    t.boolean  "is_emergency",          default: false, null: false
+    t.boolean  "is_delete",             default: false
+    t.boolean  "is_dirty",              default: true
+    t.boolean  "is_new",                default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "pick_items", ["destination_whouse_id"], name: "index_pick_items_on_destination_whouse_id", using: :btree
+  add_index "pick_items", ["id"], name: "index_pick_items_on_id", using: :btree
+  add_index "pick_items", ["pick_list_id"], name: "index_pick_items_on_pick_list_id", using: :btree
+
+  create_table "pick_lists", force: true do |t|
+    t.string   "user_id"
+    t.integer  "state"
+    t.boolean  "is_delete",  default: false
+    t.boolean  "is_dirty",   default: true
+    t.boolean  "is_new",     default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "pick_lists", ["id"], name: "index_pick_lists_on_id", using: :btree
+  add_index "pick_lists", ["user_id"], name: "index_pick_lists_on_user_id", using: :btree
 
   create_table "positions", force: true do |t|
     t.string   "uuid",       limit: 36,                 null: false
@@ -229,6 +344,21 @@ ActiveRecord::Schema.define(version: 20140714101037) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "sys_configs", force: true do |t|
+    t.string   "code"
+    t.string   "value"
+    t.string   "name"
+    t.string   "remark"
+    t.boolean  "is_delete",  default: false
+    t.boolean  "is_dirty",   default: true
+    t.boolean  "is_new",     default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "sys_configs", ["code"], name: "index_sys_configs_on_code", using: :btree
+  add_index "sys_configs", ["id"], name: "index_sys_configs_on_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "uuid",                   limit: 36,                 null: false

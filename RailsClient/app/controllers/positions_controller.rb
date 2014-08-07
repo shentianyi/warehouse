@@ -1,6 +1,6 @@
 class PositionsController < ApplicationController
-  load_and_authorize_resource
-  before_action :set_position, only: [:show, :edit, :update, :destroy]
+  #load_and_authorize_resource
+  before_action :set_position, only: [:show, :edit, :update, :destroy, :parts]
 
   # GET /positions
   # GET /positions.json
@@ -62,6 +62,12 @@ class PositionsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  # GET /positions/users
+  def parts
+    @parts = @position.parts.paginate(:page=>params[:page])
+  end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.

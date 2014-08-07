@@ -20,12 +20,14 @@ class ForkliftState<BaseState
     end
   end
 
-  def self.before_state? old_state,new_state
-    case old_state
+  def self.before_state? source,target
+    case source
+      when DESTINATION
+        [DESTINATION,WAY,ORIGINAL].include? target
       when PART_RECEIVED
-        [WAY,DESTINATION].include? new_state
+        [WAY,DESTINATION].include? target
       else
-        super old_state,new_state
+        super source,target
     end
   end
 end

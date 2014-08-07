@@ -1,23 +1,58 @@
 <h2>包装箱列表</h2>
+<br/>
+<div>
+  <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+    <div>
+      <div>
+        <span>包装箱号：
+          <input type="text" name="package[id]" value="<%= @id %>"/>
+          <input type="hidden" name="package[id_fuzzy]"/>
+        </span>
+        <span>零件号：
+          <input type="text" name="package[part_id]" value="<%= @id %>"/>
+          <input type="hidden" name="package[part_id_fuzzy]"/>
+        </span>
+        <span>备货员工号：
+          <input type="text" name="package[user_id]" value="<%= @user_id %>"/>
+          <input type="hidden" name="package[user_id_fuzzy]"/>
+        </span>
+        <span>状态：
+          <%= select 'package', 'state', PackageState.state, selected: @state ,include_blank: true %>
+        </span>
+      </div>
+      <div>
+        <span>
+        创建日期：
+          <input type="text" name="package[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
+          ~  <input type="text" name="package[created_at][end]" class="datepicker" value="<%= @created_at_end %>"/>
+        </span>
+      </div>
+      <div>
+        <input type="submit" value="查 找" class="btn btn-primary"/>
+      </div>
+    </div>
+  </form>
+</div>
+<br/>
 <div class="digg_pagination">
   <div class="page_info">
     <%= page_entries_info @packages %>
   </div>
   <%= will_paginate @packages, :container => false %>
 </div>
-<table class="table table-bordered table-striped globle-table">
+<table class="table table-bordered table-striped table-hover">
   <thead>
     <tr>
       <th>序号</th>
       <th>编号</th>
       <th>零件号</th>
       <th>数量</th>
+      <th>入库时间</th>
       <th>状态</th>
-      <th>所属位置</th>
-      <th>创建员工</th>
+      <th>备货员工</th>
       <th>所属托盘</th>
-      <th>输入时间</th>
-      <th>上架位置</th>
+      <th>上架库位</th>
+      <th>创建时间</th>
       <th colspan="2">&nbsp;</th>
     </tr>
   </thead>
@@ -27,16 +62,16 @@
       <tr>
         <td><%= index+@packages.offset+1%>
         <td><%= package.id %></td>
-        <td><%= package.part_id%></td>
-        <td><%= package.quantity_str %></td>
+        <td><span class="label label-info"><%= PackageLabelRegex.part_prefix_string+ package.part_id%></span></td>
+        <td><%= PackageLabelRegex.quantity_prefix_string + package.quantity_str %></td>
+        <td><%= PackageLabelRegex.date_prefix_string+ package.check_in_time %></td>
         <td><%= PackageState.display(package.state) %></td>
-        <td><%= package.location_id %></td>
-        <td><%= package.user_id %></td>
+        <td><%= package.user.name+"|"+package.user_id if package.user%></td>
         <td><%= link_to package.forklift_id, package.forklift  if package.forklift%></td>
-        <td><%= package.check_in_time %></td>
         <td><%= package.position.whouse.name + ' ' +package.position.detail if package.position %></td>
-        <td><%= link_to '编辑', edit_package_path(package) %></td>
-        <td><%= link_to '详细', package_path(package) %></td>
+        <td><%= package.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') if package.created_at%></td>
+        <td><%= link_to '编辑', edit_package_path(package),:class=>'btn btn-default' %></td>
+        <td><%= link_to '详细', package_path(package) ,:class=>'btn btn-default' %></td>
       </tr>
     <% end %>
   </tbody>
@@ -44,3 +79,11 @@
 <div class="digg_pagination">
   <%= will_paginate @packages, :container => false %>
 </div>
+<script>
+    $(function () {
+        $(".datepicker").datetimepicker({
+            lang:'ch',
+            format: 'Y-m-d H:i'
+        });
+    });
+</script>

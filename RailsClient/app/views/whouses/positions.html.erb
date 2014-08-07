@@ -1,6 +1,31 @@
-<ul>
-  <% @positions.each do |p|%>
-      <%= link_to p.id, p%>
+
+<h2><%= @whouse.name%>库位列表</h2>
+<br/>
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @positions %>
+  </div>
+  <%= will_paginate @positions, :container => false %>
+</div>
+<table class="table table-bordered table-striped globle-table table-hover">
+  <thead>
+  <tr>
+    <td>NO.</td>
+    <td>编号</td>
+    <td>位置详细</td>
+  </tr>
+  </thead>
+  <tbody>
+  <% @positions.each_with_index do |pos,index|%>
+      <tr>
+        <td><%= index+@positions.offset+1%></td>
+        <td><%= pos.id %></td>
+        <td><%= pos.detail %></td>
+      </tr>
   <% end%>
-</ul>
-<%= link_to 'Back', whouses_path %>
+  </tbody>
+</table>
+<div class="digg_pagination">
+  <%= will_paginate @positions, :container => false %>
+</div>
+<%= link_to '返回', whouses_path ,:class => "btn btn-default btn-lg" %>

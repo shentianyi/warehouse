@@ -1,6 +1,6 @@
 #$SYNC_HOST = 'http://www.cz-tek.com:9000'
 #$OPEN_SYN_LOCK= false
-$NEED_PING= false
+$NEED_PING= true
 
 config=YAML.load(File.open("#{Rails.root}/config/config.yaml"))
 # load format
@@ -23,6 +23,7 @@ $PARTPOSITIONSPATH=path_config[:import_part_positions_file_path]
 auth=config['api']['auth']
 $API_AUTH_USER={user: auth['user'], passwd: auth['passwd']}
 
-WillPaginate.per_page = 10
+WillPaginate.per_page = 20
 
-Regex.initialize_cache
+PackageLabelRegex.initialize_methods if ActiveRecord::Base.connection.table_exists?('regexes')
+SysConfigCache.initialize_methods if ActiveRecord::Base.connection.table_exists?('sys_configs')

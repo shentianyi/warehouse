@@ -83,6 +83,7 @@ module Sync
       model.record_timestamps=false
       model.skip_callback(:update, :before, :reset_dirty_flag)
       model.skip_callback(:save, :after, :log_state)
+      model.skip_callback(:save, :before, :set_package_position)
       model.skip_callback(:update, :after, :set_update_flag)
       model.skip_callback(:save, :after, :auto_shelved)
     end

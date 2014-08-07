@@ -42,6 +42,7 @@ namespace Brilliantech.Warehouse.PrintServiceLib.Config
             set
             {
                 host = value;
+                BaseUri = Protocal + "://" + host + ":" + port + ApiUri;
                 config.Set("Host", value);
                 config.Save();
             }
@@ -52,6 +53,7 @@ namespace Brilliantech.Warehouse.PrintServiceLib.Config
             set
             {
                 port = value;
+                BaseUri = Protocal + "://" + host + ":" + port + ApiUri;
                 config.Set("Port", value);
                 config.Save();
             }

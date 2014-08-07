@@ -4,7 +4,8 @@ class RegexesController < ApplicationController
   # GET /regexes
   # GET /regexes.json
   def index
-    @package_label_regexes = Regex.where(type: RegexType::PACKAGE_LABEL).order('code').all
+    @package_label_regexes = Regex.where({type:RegexType::PACKAGE_LABEL}).order('code').all
+    @orderitem_label_regexes = Regex.where({type:RegexType::ORDERITEM_LABEL}).order('code').all
   end
 
   # GET /regexes/1
@@ -62,16 +63,14 @@ class RegexesController < ApplicationController
   end
 
   def save
-    puts params[:type].class
-    puts params[:regexes]
     @type=params[:type].to_i
-
     if @type==RegexType::PACKAGE_LABEL
       params[:regexes].each do |i, regex|
         if r=Regex.find_by_id(regex[:id])
           r.update(regex.except(:id))
         end
       end
+      PackageLabelRegex.initialize_methods
     end
     render json: true
   end

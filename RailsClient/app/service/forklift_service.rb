@@ -81,6 +81,17 @@ class ForkliftService
   end
 
   #=============
+  #verify package
+  #check if parts in this warehouse
+  #=============
+  def self.parts_in_whouse? part_ids,whouse_id
+    unless whouse = Whouse.find_by_id(whouse_id)
+      return false
+    end
+    (part_ids - whouse.parts.ids).empty?
+  end
+
+  #=============
   # receive @forklift
   # set state to DESTINATION
   #=============
@@ -166,15 +177,19 @@ class ForkliftService
 
   def self.package_checked(id)
     if f = Forklift.find_by_id(id)
+      if f.accepted_packages < f.sum_packages
       f.accepted_packages = f.accepted_packages + 1
       f.save
+      end
     end
   end
 
   def self.package_unchecked(id)
     if f = Forklift.find_by_id(id)
+      if f.accepted_packages > 0
       f.accepted_packages = f.accepted_packages - 1
       f.save
+      end
     end
   end
 

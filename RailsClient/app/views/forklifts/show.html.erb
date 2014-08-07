@@ -1,60 +1,15 @@
-<p id="notice"><%= notice %></p>
+<h1><%= @forklift.id%></h1>
+<span class="label label-primary"><%= @forklift.id%></span>
 
-<p>
-  <string>托盘号:</string>
-  <%= @forklift.id%>
-</p>
+<h4>状态: <small><%= ForkliftState.display(@forklift.state) %></small></h4>
+<h4>所属运单: <small><%= @forklift.delivery_id if @forklift.delivery_id %></small></h4>
+<h4>备货仓库: <small><%= @forklift.whouse.name %></small></h4>
+<h4>备货员工号: <small><%= @forklift.stocker_id if @forklift.stocker_id %></small></h4>
+<h4>备货员工: <small><%=  @forklift.stocker.name if @forklift.stocker_id %></small></h4>
+<h4>创建时间: <small><%=  @forklift.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S')%></small></h4>
+<h4>包装箱数: <small><%= @forklift.sum_packages%></small></h4>
+<h4>已接收包装箱数: <small><%=  @forklift.accepted_packages%></small></h4>
+<h4>备注: <small><%=  @forklift.remark%></small></h4>
 
-<p>
-  <string>状 态:</string>
-  <%= ForkliftState.display(@forklift.state)%>
-</p>
-
-<p>
-  <string>所属运单号:</string>
-  <%= @forklift.delivery_id%>
-</p>
-
-<p>
-  <string>备货员工:</string>
-  <%= @forklift.stocker.id if @forklift.stocker%>
-</p>
-
-<p>
-  <string>创建员工:</string>
-  <%= @forklift.user.id if @forklift.user%>
-</p>
-
-<p>
-  <string>仓 库:</string>
-  <%= @forklift.whouse.name%>
-</p>
-
-<p>
-  <string>箱包装总数:</string>
-  <%= @forklift.sum_packages%>
-</p>
-
-<p>
-  <string>接收箱包装总数:</string>
-  <%= @forklift.accepted_packages%>
-</p>
-
-<p>
-  <string>备 注:</string>
-  <%= @forklift.remark%>
-</p>
-
-<p>
-  <string>箱包装:</string>
-  <ul>
-    <%@forklift.packages.each do |p|%>
-    <li>
-      <%=link_to p.id,p %>
-    </li>
-    <%end%>
-  </ul>
-</p>
-
-<%= link_to '编辑', edit_forklift_path(@forklift) %> |
-<%= link_to '返回', forklifts_path %>
+<%= link_to '编辑', edit_forklift_path(@forklift),:class=>'btn btn-default' %> |
+<%= link_to '返回', forklifts_path ,:class=>'btn btn-default' %>

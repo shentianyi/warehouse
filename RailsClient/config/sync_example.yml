@@ -1,75 +1,111 @@
 ---
 sync:
-  host: http://www.cz-tek.com:9000
+  host: http://cz-tek.com:9000
   token: 3dcba17f596969a676bfdd90b5425c703f983acf7306760e1057c95afe9f17b1d
   sync_lock: false
   enabled: true
-  advance_second: 10
+  advance_second: 1800
   per_request_size: 3000
   executor:
-   location:
-     name: 地点
-     get: true
-     post: false
-     put: false
-     delete: false
-   hacker:
-     name: 员工
-     get: true
-     post: false
-     put: false
-     delete: false
-   whouse:
-     name: 仓库
-     get: true
-     post: false
-     put: false
-     delete: false
-   part:
-     name: 零件
-     get: true
-     post: false
-     put: false
-     delete: false
-   position:
-     name: 库位
-     get: true
-     post: false
-     put: false
-     delete: false
-   part_position:
-     name: 零件库位
-     get: true
-     post: false
-     put: false
-     delete: false
-   delivery:
-     name: 运单
-     get: true
-     post: true
-     put: true
-     delete: true
-   fork_lift:
-     name: 托盘
-     get: true
-     post: true
-     put: true
-     delete: true
-   package:
-     name: 包装箱
-     get: true
-     post: true
-     put: true
-     delete: true
-   package_postion:
-     name: 包装箱库位
-     get: true
-     post: true
-     put: true
-     delete: true
-   state_log:
-     name: 状态记录
-     get: true
-     post: true
-     put: true
-     delete: true
+    location:
+      name: "地点"
+      get: false
+      post: false
+      put: false
+      delete: false
+    hacker:
+      name: "员工"
+      get: false
+      post: false
+      put: false
+      delete: false
+    whouse:
+      name: "仓库"
+      get: false
+      post: false
+      put: false
+      delete: false
+    part_type:
+      name: "零件类型"
+      get: false
+      post: false
+      put: false
+      delete: false
+    part:
+      name: "零件"
+      get: false
+      post: false
+      put: false
+      delete: false
+    position:
+      name: "库位"
+      get: false
+      post: false
+      put: false
+      delete: false
+    part_position:
+      name: "零件库位"
+      get: false
+      post: false
+      put: false
+      delete: false
+    pick_item_filter:
+      name: "员工择货规则"
+      get: false
+      post: false
+      put: false
+      delete: false
+    delivery:
+      name: "运单"
+      get: true
+      post: true
+      put: true
+      delete: true
+    forklift:
+      name: "托盘"
+      get: true
+      post: true
+      put: true
+      delete: true
+    package:
+      name: "包装箱"
+      get: true
+      post: true
+      put: true
+      delete: true
+    package_postion:
+      name: "包装箱库位"
+      get: true
+      post: true
+      put: true
+      delete: true
+    state_log:
+      name: "状态记录"
+      get: true
+      post: true
+      put: true
+      delete: true
+    order:
+      name: "需求单"
+      get: true
+      post: true
+      put: true
+      delete: true
+    order_item:
+      name: "需求单项目"
+      get: true
+      post: true
+      put: true
+      delete: true
+    pick_list:
+      name: "择货单"
+      get: true
+      post: true
+      put: true
+      delete: true
+    pick_item:
+      name: "择货单项"
+      get: true
+      post: true
+      put: true
+      delete: true

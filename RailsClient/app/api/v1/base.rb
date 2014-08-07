@@ -8,5 +8,8 @@ module V1
     mount ForkliftAPI
     mount DeliveryAPI
     mount RegexAPI
+    mount OrderAPI
+    mount OrderItemAPI
+    mount IosUpdateAPI
   end
 end
