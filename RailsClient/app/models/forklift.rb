@@ -13,7 +13,7 @@ class Forklift < ActiveRecord::Base
 
   #add_to_delivery
   def add_to_delivery delivery_id
-    self.sum_packages = self.packages.count
+    #self.sum_packages = self.packages.count
     self.delivery_id = delivery_id
     self.save
   end
@@ -33,6 +33,6 @@ class Forklift < ActiveRecord::Base
   end
 
   def accepted_packages
-    self.packages.count(state:PackageState::RECEIVED)
+    self.packages.where(state:PackageState::RECEIVED).count
   end
 end
