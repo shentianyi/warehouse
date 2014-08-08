@@ -35,6 +35,14 @@ class ForkliftPresenter<Presenter
     end
   end
 
+  def sum_packages
+    @forklift.sum_packages
+  end
+
+  def accepted_packages
+    @forklift.accepted_packages
+  end
+
   def all_packages
     packages = []
     pp = PackagePresenter.init_presenters(self.packages)

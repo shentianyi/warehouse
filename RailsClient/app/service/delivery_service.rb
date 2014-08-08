@@ -170,7 +170,7 @@ class DeliveryService
   #exit? @id
   #=============
   def self.exit? id
-    Delivery.find_by_id(id)
+    Delivery.includes(forklifts: :packages).find_by_id(id)
   end
 
   #=============
