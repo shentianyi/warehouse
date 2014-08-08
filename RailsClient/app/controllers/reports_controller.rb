@@ -20,10 +20,7 @@ class ReportsController < ApplicationController
         condition["packages.state"] = [PackageState::DESTINATION]
     end
 
-    @packages = Package.joins(:part).joins(forklift: :delivery)
-    .where(condition)
-    .select("packages.state as state,packages.part_id,COUNT(packages.id) as box_count,SUM(packages.quantity) as total,forklifts.whouse_id as whouse_id,deliveries.received_date as rdate,deliveries.receiver_id as receover_id,deliveries.id as did")
-    .group("packages.part_id,state").order("rdate DESC,did,whouse_id")
+    @packages = Package.entry_report(condition)
     render
   end
 
@@ -46,10 +43,7 @@ class ReportsController < ApplicationController
       when "rejected"
         condition["packages.state"] = [PackageState::DESTINATION]
     end
-    @packages = Package.joins(:part).joins(forklift: :delivery)
-    .where(condition)
-    .select("packages.state,packages.part_id,COUNT(packages.id) as box_count,SUM(packages.quantity) as total,forklifts.whouse_id as whouse_id,deliveries.delivery_date as ddate,deliveries.user_id as sender_id,deliveries.id as did")
-    .group("packages.part_id,state").order("ddate DESC,did ,whouse_id")
+    @packages = Package.removal_report(condition);
     render
   end
 
@@ -76,10 +70,7 @@ class ReportsController < ApplicationController
         report = "拒收报表"
     end
 
-    @packages = Package.joins(:part).joins(forklift: :delivery)
-    .where(condition)
-    .select("packages.state,packages.part_id,COUNT(packages.id) as box_count,SUM(packages.quantity) as total,forklifts.whouse_id as whouse_id,deliveries.received_date as rdate,deliveries.receiver_id as receover_id,deliveries.id as did")
-    .group("packages.part_id,state").order("rdate DESC,did,whouse_id")
+    @packages = Package.entry_report(condition)
 
     filename = "#{Location.find_by_id(@location_id).name}#{report}_#{@received_date_start}_#{@received_date_end}"
 
@@ -120,10 +111,7 @@ class ReportsController < ApplicationController
         condition["packages.state"] = [PackageState::DESTINATION]
         report = "被拒收报表"
     end
-    @packages = Package.joins(:part).joins(forklift: :delivery)
-    .where(condition)
-    .select("packages.state,packages.part_id,COUNT(packages.id) as box_count,SUM(packages.quantity) as total,forklifts.whouse_id as whouse_id,deliveries.delivery_date as ddate,deliveries.user_id as sender_id,deliveries.id as did")
-    .group("packages.part_id,state").order("ddate DESC,did ,whouse_id ")
+    @packages = Package.removal_report(condition)
 
     filename = "#{Location.find_by_id(@location_id).name}#{report}_#{@received_date_start}_#{@received_date_end}"
 
