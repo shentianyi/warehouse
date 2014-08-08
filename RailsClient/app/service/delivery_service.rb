@@ -93,9 +93,10 @@ class DeliveryService
         delivery.forklifts.each do |f|
           ForkliftService.confirm_received(f)
         end
-        delivery.receiver = current_user
-        delivery.received_date = Time.now
-        delivery.save
+        #delivery.receiver = current_user
+        #delivery.received_date = Time.now
+        #delivery.save
+        delivery.update({receiver: current_user,received_date:Time.now})
       else
         false
       end

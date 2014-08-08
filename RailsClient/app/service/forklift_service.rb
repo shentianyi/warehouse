@@ -55,8 +55,9 @@ class ForkliftService
           forklift.packages.each do |p|
             if pp = PartPosition.joins(:position).where({part_positions: {part_id: p.part_id}, positions: {whouse_id: args[:whouse_id]}}).first
               #puts p.package_position.to_json
-              p.package_position.position_id = pp.position_id
-              p.package_position.save
+              #p.package_position.position_id = pp.position_id
+              #p.package_position.save
+              p.package_position.update({position:pp.position_id})
             end
           end
         end
@@ -153,9 +154,10 @@ class ForkliftService
       #return package.add_to_forklift forklift
       begin
         ActiveRecord::Base.transaction do
-          package.forklift_id = forklift.id
+          #package.forklift_id = forklift.id
+          package.update({forklift_id:forklift.id})
           package.set_position()
-          package.save!
+          #package.save!
 =begin
           forklift.sum_packages = forklift.packages.count
           forklift.save!
