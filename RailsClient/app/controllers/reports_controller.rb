@@ -63,14 +63,17 @@ class ReportsController < ApplicationController
     condition = {}
     condition["deliveries.destination_id"] = @location_id
     condition["deliveries.received_date"] = time_range
-
+    report = ""
     case @type
       when "total"
         condition["deliveries.state"] = [DeliveryState::WAY,DeliveryState::DESTINATION,DeliveryState::RECEIVED]
+        report = "收货报表"
       when "received"
         condition["packages.state"] = [PackageState::RECEIVED]
+        report = "实际收货报表"
       when "rejected"
         condition["packages.state"] = [PackageState::DESTINATION]
+        report = "拒收报表"
     end
 
     @packages = Package.joins(:part).joins(forklift: :delivery)
@@ -78,14 +81,20 @@ class ReportsController < ApplicationController
     .select("packages.state,packages.part_id,COUNT(packages.id) as box_count,SUM(packages.quantity) as total,forklifts.whouse_id as whouse_id,deliveries.received_date as rdate,deliveries.receiver_id as receover_id,deliveries.id as did")
     .group("packages.part_id,state").order("rdate DESC,did,whouse_id")
 
-    filename = "Report_Entry_#{Location.find_by_id(@location_id).name}_#{@type}_#{Time.now.to_i}.csv"
+    filename = "#{Location.find_by_id(@location_id).name}#{report}_#{@received_date_start}_#{@received_date_end}"
 
     respond_to do |format|
       format.csv do
         send_data(csv_content_entry(@packages),
                   :type => "text/csv;charset=utf-8; header=present",
-                  :filename => filename)
+                  :filename => filename+".csv")
       end
+      format.xls do
+        headers['Content-Type'] = "application/vnd.ms-excel"
+        headers["Content-disposition"] = "inline;  filename=#{filename}.xls"
+        headers['Cache-Control'] = ''
+      end
+      format.html
     end
   end
 
@@ -99,27 +108,35 @@ class ReportsController < ApplicationController
     condition = {}
     condition["deliveries.source_id"] = @location_id
     condition["deliveries.delivery_date"] = time_range
-
+    report = ""
     case @type
       when "total"
         condition["deliveries.state"] = [DeliveryState::WAY,DeliveryState::DESTINATION,DeliveryState::RECEIVED]
+        report="发货报表"
       when "send"
         condition["packages.state"] = [PackageState::RECEIVED]
+        report = "实际发货报表"
       when "rejected"
         condition["packages.state"] = [PackageState::DESTINATION]
+        report = "被拒收报表"
     end
     @packages = Package.joins(:part).joins(forklift: :delivery)
     .where(condition)
     .select("packages.state,packages.part_id,COUNT(packages.id) as box_count,SUM(packages.quantity) as total,forklifts.whouse_id as whouse_id,deliveries.delivery_date as ddate,deliveries.user_id as sender_id,deliveries.id as did")
     .group("packages.part_id,state").order("ddate DESC,did ,whouse_id ")
 
-    filename = "Report_Removal_#{Location.find_by_id(@location_id).name}_#{@type}_#{Time.now.to_i}.csv"
+    filename = "#{Location.find_by_id(@location_id).name}#{report}_#{@received_date_start}_#{@received_date_end}"
 
     respond_to do |format|
       format.csv do
         send_data(csv_content_removal(@packages),
                   :type => "text/csv;charset=utf-8; header=present",
-                  :filename => filename)
+                  :filename => "#{filename}.csv")
+      end
+      format.xls do
+        headers['Content-Type'] = "application/vnd.ms-excel"
+        headers["Content-disposition"] = "inline;  filename=#{filename}.xls"
+        headers['Cache-Control'] = ''
       end
     end
   end
