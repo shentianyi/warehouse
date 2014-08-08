@@ -75,8 +75,6 @@ class ForkliftService
     if forklift.nil?
       return false
     end
-    puts forklift.sum_packages
-    puts forklift.accepted_packages
 
     if forklift.sum_packages > forklift.accepted_packages
       forklift.set_state(ForkliftState::PART_RECEIVED)
@@ -158,8 +156,10 @@ class ForkliftService
           package.forklift_id = forklift.id
           package.set_position()
           package.save!
+=begin
           forklift.sum_packages = forklift.packages.count
           forklift.save!
+=end
         end
       rescue Exception=>ex
         false
@@ -201,8 +201,8 @@ class ForkliftService
       #f.accepted_packages = f.accepted_packages + 1
       #f.save
       #end
-      f.accepted_packages = f.packages.where(state:PackageState::RECEIVED)
-      f.save
+      #f.accepted_packages = f.packages.where(state:PackageState::RECEIVED)
+      #f.save
     end
   end
 
@@ -212,8 +212,8 @@ class ForkliftService
       #f.accepted_packages = f.accepted_packages - 1
       #f.save
       #end
-      f.accepted_packages = f.packages.where(state:PackageState::RECEIVED)
-      f.save
+      #f.accepted_packages = f.packages.where(state:PackageState::RECEIVED)
+      #f.save
     end
   end
 

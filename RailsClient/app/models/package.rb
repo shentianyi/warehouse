@@ -27,8 +27,8 @@ class Package < ActiveRecord::Base
   # add_to_forklift
   def add_to_forklift forklift
     self.forklift = forklift
-    forklift.sum_packages = forklift.sum_packages + 1
-    forklift.save
+    #forklift.sum_packages = forklift.sum_packages + 1
+    #forklift.save
 #<<<<<<< HEAD
     set_position
     self.save
@@ -48,8 +48,8 @@ class Package < ActiveRecord::Base
         self.forklift = nil
         remove_position
         self.save
-        forklift.sum_packages = forklift.packages.count
-        forklift.save
+        #forklift.sum_packages = forklift.packages.count
+        #forklift.save
       end
     end
     true

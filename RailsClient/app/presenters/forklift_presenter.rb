@@ -1,5 +1,5 @@
 class ForkliftPresenter<Presenter
-  Delegators=[:id,:whouse_id,:created_at,:user,:stocker,:state,:packages,:user_id,:stocker_id,:whouse,:sum_packages,:accepted_packages]
+  Delegators=[:id,:whouse_id,:created_at,:user,:stocker,:state,:packages,:user_id,:stocker_id,:whouse]
   def_delegators :@forklift,*Delegators
 
   def initialize(forklift)

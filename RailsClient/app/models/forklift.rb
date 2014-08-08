@@ -27,4 +27,12 @@ class Forklift < ActiveRecord::Base
   def generate_id
     "F#{Time.now.to_milli}"
   end
+
+  def sum_packages
+    self.packages.count
+  end
+
+  def accepted_packages
+    self.packages.count(state:PackageState::RECEIVED)
+  end
 end

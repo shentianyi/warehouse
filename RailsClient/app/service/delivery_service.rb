@@ -286,9 +286,11 @@ class DeliveryService
         end
 
         delivery.save
+=begin
         forklifts.values.each do |forklift|
           forklift.update(sum_packages: forklift.packages.count)
         end
+=end
         msg.content ='处理成功'
         msg.result =true
       end
@@ -310,7 +312,7 @@ class DeliveryService
           if package=Package.find_by_id(book.cell(row, 1))
             package.update(state: PackageState::RECEIVED)
             if  forklift=package.forklift
-              forklift.update(state: ForkliftState::RECEIVED, accepted_packages: forklift.packages.count(state: PackageState::RECEIVED))
+              forklift.update(state: ForkliftState::RECEIVED)
               if delivery= forklift.delivery
                 delivery.update(state: DeliveryState::RECEIVED)
               end
