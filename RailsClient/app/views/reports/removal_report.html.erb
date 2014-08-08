@@ -20,7 +20,9 @@
             <span>报表类型:
               <%= select_tag(:type, options_for_select([["发货总量","total"],["实际发货","send"],["被拒收总量","rejected"]], @type), include_blank: false) %>
             </span>
-            <%= select_tag :format, options_for_select([["查找", "html"],["导出xlsx","xlsx"],["导出xls", "xls"],["导出CSV", "csv"]], "html") %>
+            <span>查看类型：
+            <%= select_tag :format, options_for_select([["查找", "html"],["导出xls", "xls"],["导出CSV", "csv"]], "html") %>
+            </span>
             <input type="submit" value="确定" class="btn btn-warning" name="commit"/>
           </div>
         </div>
