@@ -85,6 +85,11 @@ class ReportsController < ApplicationController
         headers["Content-disposition"] = "inline;  filename=#{filename}.xls"
         headers['Cache-Control'] = ''
       end
+      format.xlsx do
+        headers['Content-Type'] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        headers["Content-disposition"] = "inline;  filename=#{filename}.xlsx"
+        headers['Cache-Control'] = ''
+      end
       format.html
     end
   end
@@ -124,6 +129,11 @@ class ReportsController < ApplicationController
       format.xls do
         headers['Content-Type'] = "application/vnd.ms-excel"
         headers["Content-disposition"] = "inline;  filename=#{filename}.xls"
+        headers['Cache-Control'] = ''
+      end
+      format.xlsx do
+        headers['Content-Type'] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        headers["Content-disposition"] = "inline;  filename=#{filename}.xlsx"
         headers['Cache-Control'] = ''
       end
     end

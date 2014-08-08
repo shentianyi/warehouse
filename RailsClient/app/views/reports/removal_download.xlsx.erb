@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+          xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:x="urn:schemas-microsoft-com:office:excel"
+          xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+          xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">编号</Data></Cell>
+        <Cell><Data ss:Type="String">零件号</Data></Cell>
+        <Cell><Data ss:Type="String">总数</Data></Cell>
+        <Cell><Data ss:Type="String">箱数</Data></Cell>
+        <Cell><Data ss:Type="String">部门</Data></Cell>
+        <Cell><Data ss:Type="String">发货时间</Data></Cell>
+        <Cell><Data ss:Type="String">发货人</Data></Cell>
+        <Cell><Data ss:Type="String">是否被拒绝</Data></Cell>
+      </Row>
+      <% @packages.each_with_index do |p,index| %>
+          <Row>
+            <Cell><Data ss:Type="String"><%= index+1 %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= p.part_id %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= p.total %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= p.box_count %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= p.whouse_id %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= p.ddate.nil? ? '' : p.ddate.localtime.to_formatted_s(:db) %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= p.sender_id.nil? ? '' : User.find_by_id(p.sender_id).name %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= p.state == PackageState::DESTINATION ? "是":"否" %></Data></Cell>
+          </Row>
+      <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>
