@@ -12,7 +12,6 @@
         <Cell><Data ss:Type="String">总数</Data></Cell>
         <Cell><Data ss:Type="String">箱数</Data></Cell>
         <Cell><Data ss:Type="String">部门</Data></Cell>
-        <Cell><Data ss:Type="String">运单号</Data></Cell>
         <Cell><Data ss:Type="String">收货时间</Data></Cell>
         <Cell><Data ss:Type="String">收货人</Data></Cell>
         <Cell><Data ss:Type="String">已接收</Data></Cell>
@@ -24,7 +23,6 @@
             <Cell><Data ss:Type="String"><%= p.total %></Data></Cell>
             <Cell><Data ss:Type="String"><%= p.box_count %></Data></Cell>
             <Cell><Data ss:Type="String"><%= p.whouse_id %></Data></Cell>
-            <Cell><Data ss:Type="String"><%= p.did %></Data></Cell>
             <Cell><Data ss:Type="String"><%= p.rdate.nil? ? '' : p.rdate.localtime.to_formatted_s(:db) %></Data></Cell>
             <Cell><Data ss:Type="String"><%= p.receover_id.nil? ? '' : User.find_by_id(p.receover_id).name %></Data></Cell>
             <Cell><Data ss:Type="String"><%= p.state == PackageState::RECEIVED ? "是":"否" %></Data></Cell>

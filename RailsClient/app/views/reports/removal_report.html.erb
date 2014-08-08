@@ -39,7 +39,6 @@
         <th>总数</th>
         <th>箱数</th>
         <th>部门</th>
-        <th>运单号</th>
         <th>发货时间</th>
         <th>发货人</th>
         <th>是否被拒收</th>
@@ -53,7 +52,6 @@
             <td><span class="badge"><%= p.total%></span></td>
             <td><span class="badge"><%= p.box_count %></span></td>
             <td><%= p.whouse_id %></td>
-            <td><span class="label label-info"><%= p.did %></span></td>
             <td><%= p.ddate.localtime.to_formatted_s(:db) if p.ddate%></td>
             <td>
               <%if u = User.find_by_id(p.sender_id)%>

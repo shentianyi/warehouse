@@ -133,7 +133,7 @@ class ReportsController < ApplicationController
   private
   def csv_content_entry(packages)
     CSV.generate do |csv|
-      csv << ["编号", "零件号","总数","箱数","部门","运单号","收货时间","收货人","已接收"]
+      csv << ["编号", "零件号","总数","箱数","部门","收货时间","收货人","已接收"]
 
       packages.each_with_index do |p,index|
         csv << [
@@ -142,7 +142,6 @@ class ReportsController < ApplicationController
             p.total,
             p.box_count,
             p.whouse_id,
-            p.did,
             p.rdate.nil? ? '' : p.rdate.localtime.to_formatted_s(:db),
             p.receover_id.nil? ? '' : User.find_by_id(p.receover_id).name,
             p.state == PackageState::RECEIVED ? "是":"否"
@@ -153,7 +152,7 @@ class ReportsController < ApplicationController
 
   def csv_content_removal(packages)
     CSV.generate do |csv|
-      csv << ["编号", "零件号","总数","箱数","部门","运单号","发货时间","发货人","是否被拒绝"]
+      csv << ["编号", "零件号","总数","箱数","部门","发货时间","发货人","是否被拒绝"]
 
       packages.each_with_index do |p,index|
         csv << [
@@ -162,7 +161,6 @@ class ReportsController < ApplicationController
             p.total,
             p.box_count,
             p.whouse_id,
-            p.did,
             p.ddate.nil? ? '' : p.ddate.localtime.to_formatted_s(:db),
             p.sender_id.nil? ? '' : User.find_by_id(p.sender_id).name,
             p.state == PackageState::DESTINATION ? "是":"否"
