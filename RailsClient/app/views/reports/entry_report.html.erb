@@ -29,7 +29,8 @@
 
     <div>
       <%= link_to "导出CSV",reports_entry_download_path(:received_date_start => @received_date_start,:received_date_end=>@received_date_end,:location_id => @location_id,:type=>@type,:format => 'csv'),:class=>"btn btn-warning" %>
-      <%= link_to "导出Excel",reports_entry_download_path(:received_date_start => @received_date_start,:received_date_end=>@received_date_end,:location_id => @location_id,:type=>@type,:format => 'xls'),:class=>"btn btn-warning" %>
+      <%= link_to "导出 MS Excel 2003",reports_entry_download_path(:received_date_start => @received_date_start,:received_date_end=>@received_date_end,:location_id => @location_id,:type=>@type,:format => 'xls'),:class=>"btn btn-warning" %>
+      <%= link_to "导出 MS Excel 2007或更新",reports_entry_download_path(:received_date_start => @received_date_start,:received_date_end=>@received_date_end,:location_id => @location_id,:type=>@type,:format => 'xlsx'),:class=>"btn btn-warning" %>
     </div>
     <table class="table table-striped table-condensed table-hover">
       <thead>
@@ -39,7 +40,6 @@
         <th>总数</th>
         <th>箱数</th>
         <th>部门</th>
-        <th>运单号</th>
         <th>收货时间</th>
         <th>收货人</th>
         <th>已接收</th>
@@ -53,7 +53,6 @@
             <td><span class="badge"><%= p.total%></span></td>
             <td><span class="badge"><%= p.box_count %></span></td>
             <td><%= p.whouse_id %></td>
-            <td><span class="label label-info"><%= p.did %></span></td>
             <td><%= p.rdate.localtime.to_formatted_s(:db) if p.rdate%></td>
             <td>
               <%if u = User.find_by_id(p.receover_id)%>
