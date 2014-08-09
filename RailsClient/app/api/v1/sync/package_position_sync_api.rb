@@ -14,7 +14,6 @@ module V1
       post do
         msg=Message.new
         begin
-
           ActiveRecord::Base.transaction do
             package_positions=JSON.parse(params[:package_position])
             package_positions.each do |package_position|
@@ -47,7 +46,6 @@ module V1
           msg.content = "put:#{e.message}"
         end
         return msg
-
       end
 
       post :delete do
