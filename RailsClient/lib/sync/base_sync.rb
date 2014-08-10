@@ -9,14 +9,22 @@ module Sync
       ## base data
       #begin
       current=Time.now
-      #Sync::Execute::LocationSync.sync
-      #Sync::Execute::HackerSync.sync
-      #Sync::Execute::WhouseSync.sync
-      #Sync::Execute::PartTypeSync.sync
-      #Sync::Execute::PartSync.sync
-      #Sync::Execute::PositionSync.sync
-      #Sync::Execute::PartPositionSync.sync
-      #Sync::Execute::PickItemFilterSync.sync
+ begin      
+      Sync::Execute::LocationSync.sync
+      Sync::Execute::HackerSync.sync
+      Sync::Execute::WhouseSync.sync
+      Sync::Execute::PartTypeSync.sync
+      Sync::Execute::PartSync.sync
+      Sync::Execute::PositionSync.sync
+      Sync::Execute::PartPositionSync.sync
+      Sync::Execute::PickItemFilterSync.sync
+   rescue => e 
+        puts "[#{Time.now.localtime}][ERROR]"
+        puts e.class
+        puts e.to_s
+        puts e.backtrace
+      end
+
       no_error=true
       # sync delivery data
       begin
