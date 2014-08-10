@@ -157,6 +157,7 @@ class ForkliftService
           #package.forklift_id = forklift.id
           package.update({forklift_id:forklift.id})
           package.set_position()
+          true
           #package.save!
 =begin
           forklift.sum_packages = forklift.packages.count
