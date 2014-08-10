@@ -275,6 +275,9 @@ class DeliveryService
         book.default_sheet=book.sheets[2]
         return nil if book.cell(2, 1).nil?
         2.upto(book.last_row) do |row|
+          if package=Package.find_by_id(book.cell(row, 2))
+ forklifts[book.cell(row, 1)].packages<<package
+else
           forklifts[book.cell(row, 1)].packages<<Package.new(id: book.cell(row, 2),
                                                              location_id: delivery.source_id,
                                                              user_id: delivery.user_id,
@@ -284,6 +287,7 @@ class DeliveryService
                                                              check_in_time: book.cell(row, 5).sub(/W\s*/, ''),
                                                              state: PackageState::WAY
           )
+end
         end
 
         delivery.save
