@@ -9,14 +9,22 @@ module Sync
       ## base data
       #begin
       current=Time.now
-      #Sync::Execute::LocationSync.sync
-      #Sync::Execute::HackerSync.sync
-      #Sync::Execute::WhouseSync.sync
-      #Sync::Execute::PartTypeSync.sync
-      #Sync::Execute::PartSync.sync
-      #Sync::Execute::PositionSync.sync
-      #Sync::Execute::PartPositionSync.sync
-      #Sync::Execute::PickItemFilterSync.sync
+ begin      
+      Sync::Execute::LocationSync.sync
+      Sync::Execute::HackerSync.sync
+      Sync::Execute::WhouseSync.sync
+      Sync::Execute::PartTypeSync.sync
+      Sync::Execute::PartSync.sync
+      Sync::Execute::PositionSync.sync
+      Sync::Execute::PartPositionSync.sync
+      Sync::Execute::PickItemFilterSync.sync
+   rescue => e 
+        puts "[#{Time.now.localtime}][ERROR]"
+        puts e.class
+        puts e.to_s
+        puts e.backtrace
+      end
+
       no_error=true
       # sync delivery data
       begin
@@ -150,7 +158,6 @@ module Sync
         break if items.count==0
         items.collect { |item|
           item.is_dirty=false
-          item.is_new=false
           item
         }
         site= init_site(url+'/delete')
@@ -209,15 +216,15 @@ module Sync
     end
 
     def self.get_posts(page=0)
-      model.unscoped.where(is_new: true).offset(page*Sync::Config.per_request_size).limit(Sync::Config.per_request_size).all
+      model.unscoped.where(is_new: true).limit(Sync::Config.per_request_size).all
     end
 
     def self.get_puts(page=0)
-      model.unscoped.where(is_dirty: true, is_delete: false).offset(page*Sync::Config.per_request_size).limit(Sync::Config.per_request_size).all
+      model.unscoped.where(is_dirty: true, is_delete: false).limit(Sync::Config.per_request_size).all
     end
 
     def self.get_deletes(page=0)
-      model.unscoped.where(is_dirty: true, is_delete: true).offset(page*Sync::Config.per_request_size).limit(Sync::Config.per_request_size).all
+      model.unscoped.where(is_dirty: true, is_delete: true).limit(Sync::Config.per_request_size).all
     end
 
     def self.clean_put item

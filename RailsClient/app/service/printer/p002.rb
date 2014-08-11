@@ -8,7 +8,7 @@ module Printer
     def generate_data
       d=Delivery.find(self.id)
       head={id: d.id,
-            total_packages:d.forklifts.sum(:sum_packages),
+            total_packages: d.packages.count,
             send_addr: d.source.nil? ? '' : d.source.address,
             receive_addr: d.destination.nil? ? '' : d.destination.address,
             delivery_date: d.delivery_date.nil? ? '' : d.delivery_date.localtime.strftime('%Y.%m.%d %H:%M')}
