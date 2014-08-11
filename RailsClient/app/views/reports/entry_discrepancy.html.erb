@@ -56,9 +56,10 @@
       <th>编号</th>
       <th>零件号</th>
       <th>部门</th>
-      <th>报表数量</th>
       <th>系统数量</th>
+      <th>报表数量</th>
       <th>差异值</th>
+      <th>Test</th>
     </tr>
     </thead>
     <tbody>
@@ -67,9 +68,10 @@
       <td><%= index+1%></td>
       <td><%= p.part_id %></td>
       <td><%= p.whouse_id %></td>
-      <td><%= @result[p.part_id+p.whouse_id] %></td>
       <td><%= p.total %></td>
-      <td><%= @result[p.part_id+p.whouse_id].nil? ? p.total : p.total-@result[p.part_id+p.whouse_id] %></td>
+      <td><%= @results[p.part_id+p.whouse_id].nil? ? 0 : @results[p.part_id+p.whouse_id] %></td>
+      <td><%= @results[p.part_id+p.whouse_id].nil? ? p.total : p.total-@results[p.part_id+p.whouse_id] %></td>
+      <td><%= p.part_id + p.whouse_id%></td>
     </tr>
     <% end %>
     </tbody>
