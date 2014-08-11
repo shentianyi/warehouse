@@ -44,7 +44,7 @@
               <%= select_tag :format, options_for_select([["查找", "html"],["导出xlsx", "xlsx"]], "html") %>
             </span>
             <input type="hidden" id="file" name="file">
-            <input type="submit" value="确定" class="btn btn-warning" name="commit"/>
+            <input type="button" value="确定" class="btn btn-warning" name="commit" onclick="submitForm()"/>
           </div>
       </form>
     </div>
