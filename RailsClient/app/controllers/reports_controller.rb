@@ -122,34 +122,54 @@ class ReportsController < ApplicationController
 
     @packages = Package.entry_report(condition)
 
-    f = FileData.new(JSON.parse(params[:file]))
+    @results = {}
 
-    book = Roo::Excelx.new f.full_path
+    unless params[:file].nil?
 
-    book.default_sheet = book.sheets.first
-    headers = []
-    book.row(1).each {|header|
-      headers << header
-    }
+      f = FileData.new(JSON.parse(params[:file]))
 
-    fors_data = []
-    2.upto(book.last_row) do |line|
-      params ={}
-      headers.each_with_index{|key,i|
-        params[key]=book.cell(line,i+1)
+      book = Roo::Excelx.new f.full_path
+
+      book.default_sheet = book.sheets.first
+      headers = []
+      book.row(1).each {|header|
+        headers << header
       }
 
-      _params = {}
-      fors_keys.each{|key|
-        _params[key] = params[key]
+      fors_data = []
+      2.upto(book.last_row) do |line|
+        params ={}
+        headers.each_with_index{|key,i|
+          params[key]=book.cell(line,i+1)
+        }
+
+        _params = {}
+        fors_keys.each{|key|
+          _params[key] = params[key].to_i == 0 ? params[key] : params[key].to_i.to_s
+        }
+        fors_data<<_params
+      end
+
+
+      fors_data.each {|f|
+        if @results[f["PartNr."]+f["Warehouse"]].nil?
+          @results[f["PartNr."]+f["Warehouse"]] = 0
+        end
+        @results[f["PartNr."]+f["Warehouse"]] = @results[f["PartNr."]+f["Warehouse"]] + f["Quantity"].to_f
       }
-      fors_data<<_params
+
     end
 
-    
+    filename = "#{Location.find_by_id(@location_id).name}收货差异报表_#{@received_date_start}_#{@received_date_end}"
 
     respond_to do|format|
       format.html
+      format.xlsx do
+        send_data(entry_discrepancy_xlsx(@packages,@results),
+                  :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+                  :filename => filename+".xlsx"
+        )
+      end
     end
   end
 
@@ -158,6 +178,26 @@ class ReportsController < ApplicationController
   end
 
   private
+
+  def entry_discrepancy_xlsx packages,results
+    p = Axlsx::Package.new
+    wb = p.workbook
+    wb.add_worksheet(:name=>"Basic Sheet") do |sheet|
+      sheet.add_row discrepancy_header
+      packages.each_with_index { |p,index|
+        sheet.add_row [
+                          index+1,
+                          p.part_id,
+                          p.whouse_id,
+                          p.total,
+                          results[p.part_id+p.whouse_id].nil? ? 0 : results[p.part_id+p.whouse_id],
+                          results[p.part_id+p.whouse_id].nil? ? p.total : p.total - results[p.part_id+p.whouse_id]
+                      ], :types => [:string]
+      }
+    end
+    p.to_stream.read
+  end
+
   def entry_with_xlsx packages
     p = Axlsx::Package.new
     wb = p.workbook
@@ -239,27 +279,16 @@ class ReportsController < ApplicationController
     end
   end
 
-  def filter_fors_excel file
-    book = Roo::Excelx.new file
-    book.default_sheet = book.sheets.first
-
-    fors_data = []
-    2.upto(book.last_row) do |line|
-      params = {}
-      fors_keys.each_with_index{|key,index|
-        params[key] = book.cell(line,i+1)
-      }
-      puts "========================="
-      puts params
-    end
-  end
-
   def entry_header
     ["编号", "零件号","总数","箱数","部门","收货时间","收货人","已接收"]
   end
 
   def removal_header
     ["编号", "零件号","总数","箱数","部门","发货时间","发货人","是否被拒绝"]
+  end
+
+  def discrepancy_header
+    ["编号","零件号","部门","系统数量","报表数量","差值"]
   end
 
   def fors_keys
