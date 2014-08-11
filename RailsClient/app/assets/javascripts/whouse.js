@@ -11,7 +11,7 @@ function hide_handle_dialog() {
 function data_upload(idStr, format, callback) {
     var vali = true;
     var lock = false;
-    var reg = /(\.|\/)(josn|csv|tff)$/i;
+    var reg = /(\.|\/)(josn|csv|tff|xls|xlsx)$/i;
     if (format != null) {
         if (format != false) {
             reg = new RegExp('(\.|\/)(' + format + ')$', 'i');
@@ -22,7 +22,7 @@ function data_upload(idStr, format, callback) {
 
     $(idStr).fileupload({
         singleFileUploads: false,
-        acceptFileTypes: /(\.|\/)(json|csv|tff)$/i,
+        acceptFileTypes: /(\.|\/)(json|csv|tff|xls|xlsx)$/i,
         dataType: 'json',
         change: function (e, data) {
             vali = true;

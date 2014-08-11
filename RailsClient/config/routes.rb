@@ -95,6 +95,9 @@ Rails.application.routes.draw do
 
   get 'reports/entry_report', to: 'reports#entry_report'
   get 'reports/removal_report', to: 'reports#removal_report'
+  get 'reports/entry_discrepancy', to: 'reports#entry_discrepancy'
+  get 'reports/removal_discrepancy', to: 'reports#removal_discrepancy'
+  post 'reports/upload_file', to: 'reports#upload_file'
 
   resources :labels do
     collection do

@@ -64,11 +64,11 @@ module V1
     # add package
     post :add_package do
       unless f = ForkliftService.exits?(params[:forklift_id])
-        return {result: 0, content: ForkliftMessage::NotExit}
+        return {result: 0, content: {message:ForkliftMessage::NotExit}}
       end
 
       unless ForkliftState.can_update?(f.state)
-        return {result: 0, content: ForkliftMessage::CannotUpdate}
+        return {result: 0, content: {message:ForkliftMessage::CannotUpdate}}
       end
 
       #create package
@@ -84,12 +84,18 @@ module V1
       if res.result
         p = res.object
         if ForkliftService.add_package(f, p)
-          {result: 1, content: PackagePresenter.new(p).to_json}
+          part = PackageService.part_exit?(params[:part_id])
+          if part.positions.where(whouse_id:f.whouse_id) || part.positions.count == 0
+            {result: 1, content: {message:ForkliftMessage::AddPackageSuccess,package:PackagePresenter.new(p).to_json}}
+          else
+            {result: 1, content:{message:ForkliftMessage::NotExitInWarehouse,package:PackagePresenter.new(p).to_json}}
+          end
+
         else
-          {result: 0, content: ForkliftMessage::AddPackageFailed}
+          {result: 0, content: {message:ForkliftMessage::AddPackageFailed}}
         end
       else
-        {result: res.result, content: res.content}
+        {result: 0, content: {message:res.content}}
       end
     end
 

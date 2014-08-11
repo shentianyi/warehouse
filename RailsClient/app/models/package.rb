@@ -59,17 +59,20 @@ class Package < ActiveRecord::Base
   # set_position
   def set_position
     if self.forklift_id.nil?
-      return
+      return true
     end
 
     if pp = PartPosition.joins(:position).where({part_positions: {part_id: self.part_id}, positions: {whouse_id: self.forklift.whouse_id}}).first
       if self.package_position.nil?
         self.create_package_position(position_id: pp.position_id)
       else
-        self.package_position.position_id = pp.position_id
-        self.package_position.is_delete = false
+        #self.package_position.position_id = pp.position_id
+        #self.package_position.is_delete = false
+        self.package_position.update({position_id:pp.position_id})
       end
-      self.package_position.save
+      #self.package_position.save
+    else
+      return false
     end
   end
 

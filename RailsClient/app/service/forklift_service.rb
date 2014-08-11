@@ -150,6 +150,8 @@ class ForkliftService
   #add forklift to package
   #=============
   def self.add_package forklift, package
+    msg = Message.new
+    msg.result = false
     if package.forklift_id.nil?
       #return package.add_to_forklift forklift
       begin
@@ -158,18 +160,14 @@ class ForkliftService
           package.update({forklift_id:forklift.id})
           package.set_position()
           true
-          #package.save!
-=begin
-          forklift.sum_packages = forklift.packages.count
-          forklift.save!
-=end
         end
       rescue Exception=>ex
-        false
+        msg.result = false
       end
     else
       false
     end
+    return msg
   end
 
   #=============
