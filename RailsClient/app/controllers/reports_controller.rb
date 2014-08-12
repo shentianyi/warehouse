@@ -10,7 +10,6 @@ class ReportsController < ApplicationController
     condition = {}
     condition["deliveries.destination_id"] = @location_id
     condition["deliveries.received_date"] = time_range
-    condition["packages.part_id"] = '491013501'
     report = ""
     case @type
       when "total"
