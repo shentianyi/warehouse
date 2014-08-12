@@ -146,7 +146,7 @@ class ReportsController < ApplicationController
       fors_data<<_params
     end
 
-    
+
 
     respond_to do|format|
       format.html
