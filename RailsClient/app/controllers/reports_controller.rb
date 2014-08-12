@@ -120,36 +120,65 @@ class ReportsController < ApplicationController
     condition["deliveries.received_date"] = time_range
     condition["packages.state"] = [PackageState::RECEIVED]
 
-    @packages = Package.entry_report(condition)
+    @packages = {}
 
-    f = FileData.new(JSON.parse(params[:file]))
-
-    book = Roo::Excelx.new f.full_path
-
-    book.default_sheet = book.sheets.first
-    headers = []
-    book.row(1).each {|header|
-      headers << header
+    Package.entry_report(condition).each {|p|
+      if @packages[p.part_id+p.whouse_id].nil?
+        @packages[p.part_id+p.whouse_id] = {"PartNr."=>p.part_id,"Warehouse"=>p.whouse_id,"Amount"=>0}
+      end
+      @packages[p.part_id+p.whouse_id]["Amount"] = @packages[p.part_id+p.whouse_id]["Amount"] + p.total
     }
 
-    fors_data = []
-    2.upto(book.last_row) do |line|
-      params ={}
-      headers.each_with_index{|key,i|
-        params[key]=book.cell(line,i+1)
+    @results = {}
+
+    unless params[:file].nil?
+
+      f = FileData.new(JSON.parse(params[:file]))
+
+      book = Roo::Excelx.new f.full_path
+
+      book.default_sheet = book.sheets.first
+      headers = []
+      book.row(1).each {|header|
+        headers << header
       }
 
-      _params = {}
-      fors_keys.each{|key|
-        _params[key] = params[key]
+      fors_data = []
+      2.upto(book.last_row) do |line|
+        params ={}
+        headers.each_with_index{|key,i|
+          params[key]=book.cell(line,i+1).to_s
+        }
+
+        _params = {}
+        fors_keys.each{|key|
+          if  params[key].is_number?
+            _params[key] = params[key].to_i.to_s
+          else
+            _params[key] = params[key]
+          end
+        }
+        fors_data<<_params
+      end
+
+      fors_data.each {|f|
+        if @results[f["PartNr."]+f["Warehouse"]].nil?
+          @results[f["PartNr."]+f["Warehouse"]] = {"PartNr."=>f["PartNr."],"Warehouse"=>f["Warehouse"],"Amount"=>0}
+        end
+        @results[f["PartNr."]+f["Warehouse"]]["Amount"] = @results[f["PartNr."]+f["Warehouse"]]["Amount"] + f["Quantity"].to_f
       }
-      fors_data<<_params
     end
 
-
+    filename = "#{Location.find_by_id(@location_id).name}收货差异报表_#{@received_date_start}_#{@received_date_end}"
 
     respond_to do|format|
       format.html
+      format.xlsx do
+        send_data(entry_discrepancy_xlsx(@packages,@results),
+                  :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+                  :filename => filename+".xlsx"
+        )
+      end
     end
   end
 
@@ -158,6 +187,25 @@ class ReportsController < ApplicationController
   end
 
   private
+
+  def entry_discrepancy_xlsx packages,results
+    p = Axlsx::Package.new
+    wb = p.workbook
+    wb.add_worksheet(:name=>"Basic Sheet") do |sheet|
+      sheet.add_row discrepancy_header
+      results.each { |k,v|
+        sheet.add_row [
+                          v["PartNr."],
+                          v["Warehouse"],
+                          v["Amount"],
+                          packages[k].nil? ? 0 : packages[k]["Amount"],
+                          packages[k].nil? ? v["Amount"] : v["Amount"] - packages[k]["Amount"]
+                      ], :types => [:string]
+      }
+    end
+    p.to_stream.read
+  end
+
   def entry_with_xlsx packages
     p = Axlsx::Package.new
     wb = p.workbook
@@ -239,27 +287,16 @@ class ReportsController < ApplicationController
     end
   end
 
-  def filter_fors_excel file
-    book = Roo::Excelx.new file
-    book.default_sheet = book.sheets.first
-
-    fors_data = []
-    2.upto(book.last_row) do |line|
-      params = {}
-      fors_keys.each_with_index{|key,index|
-        params[key] = book.cell(line,i+1)
-      }
-      puts "========================="
-      puts params
-    end
-  end
-
   def entry_header
     ["编号", "零件号","总数","箱数","部门","收货时间","收货人","已接收"]
   end
 
   def removal_header
     ["编号", "零件号","总数","箱数","部门","发货时间","发货人","是否被拒绝"]
+  end
+
+  def discrepancy_header
+    ["零件号","部门","报表数量","系统数量","差值"]
   end
 
   def fors_keys
