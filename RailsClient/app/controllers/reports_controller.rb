@@ -153,15 +153,24 @@ class ReportsController < ApplicationController
           params[key]=book.cell(line,i+1).to_s
         }
 
+        insert = true
         _params = {}
         fors_keys.each{|key|
-          if  params[key] && params[key].is_number?
+          if insert && params[key].nil?
+            insert = false
+            break
+          end
+
+          if  params[key].is_number?
             _params[key] = params[key].to_i.to_s
           else
             _params[key] = params[key]
           end
         }
-        fors_data<<_params
+
+        if insert
+          fors_data<<_params
+        end
       end
 
       fors_data.each {|f|
