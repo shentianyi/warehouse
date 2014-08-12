@@ -12,6 +12,7 @@ module PackageMessage
   CannotUpdate='不能修改'
   CannotCheck='已被接收或未发送'
   CannotCancelCheck='不能取消接收'
+  InOtherForklift='已存在于其他托清单中'
   IdNotValid='唯一号不可用'
   StateError='状态错误'
 

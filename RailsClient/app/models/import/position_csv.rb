@@ -4,6 +4,7 @@ module Import
       base.extend ClassMethods
       base.extend CsvBase
       base.init_csv_cols
+      base.init_uniq_key
     end
   end
 
@@ -11,7 +12,7 @@ module Import
     #@@csv_cols=nil
 
     def uniq_key
-      %w(detail)
+      class_variable_get(:@@ukeys)
     end
 
     def csv_headers
@@ -20,7 +21,6 @@ module Import
 
     def position_down_block
       Proc.new { |line, item|
-        line<<item.id
         line<<item.detail
         line<<item.whouse_id
       }
@@ -28,7 +28,6 @@ module Import
 
     def init_csv_cols
       csv_cols=[]
-      csv_cols<< Csv::CsvCol.new(field: 'id', header: 'Position Nr')
       csv_cols<< Csv::CsvCol.new(field: 'detail', header: 'Position')
       csv_cols<< Csv::CsvCol.new(field: 'whouse_id', header: 'Ware House',if_foreign: true,foreign: 'Whouse')
       csv_cols<< Csv::CsvCol.new(field: $UPMARKER, header: $UPMARKER)
@@ -37,6 +36,10 @@ module Import
 
     def csv_cols
       class_variable_get(:@@csv_cols)
+    end
+
+    def init_uniq_key
+      class_variable_set(:@@ukeys,%w(detail whouse_id))
     end
   end
 end

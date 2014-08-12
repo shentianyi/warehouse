@@ -11,7 +11,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140803173457) do
+ActiveRecord::Schema.define(version: 20140808061718) do
+
+  create_table "api_logs", force: true do |t|
+    t.string   "user_id"
+    t.string   "targetable_id"
+    t.string   "targetable_type"
+    t.string   "action"
+    t.string   "action_code"
+    t.boolean  "result"
+    t.string   "message"
+    t.boolean  "is_delete",       default: false
+    t.boolean  "is_dirty",        default: true
+    t.boolean  "is_new",          default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "api_logs", ["id"], name: "index_api_logs_on_id", using: :btree
+  add_index "api_logs", ["targetable_id"], name: "index_api_logs_on_targetable_id", using: :btree
+  add_index "api_logs", ["user_id"], name: "index_api_logs_on_user_id", using: :btree
 
   create_table "attachments", force: true do |t|
     t.string   "name"
@@ -58,20 +77,18 @@ ActiveRecord::Schema.define(version: 20140803173457) do
   add_index "deliveries", ["uuid"], name: "index_deliveries_on_uuid", using: :btree
 
   create_table "forklifts", force: true do |t|
-    t.string   "uuid",              limit: 36,                 null: false
-    t.integer  "state",                        default: 0,     null: false
+    t.string   "uuid",        limit: 36,                 null: false
+    t.integer  "state",                  default: 0,     null: false
     t.string   "delivery_id"
     t.string   "remark"
     t.string   "stocker_id"
     t.string   "user_id"
-    t.boolean  "is_delete",                    default: false
-    t.boolean  "is_dirty",                     default: true
-    t.boolean  "is_new",                       default: true
+    t.boolean  "is_delete",              default: false
+    t.boolean  "is_dirty",               default: true
+    t.boolean  "is_new",                 default: true
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "whouse_id"
-    t.integer  "sum_packages",                 default: 0
-    t.integer  "accepted_packages",            default: 0
   end
 
   add_index "forklifts", ["delivery_id"], name: "index_forklifts_on_delivery_id", using: :btree

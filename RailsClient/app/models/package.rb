@@ -27,20 +27,30 @@ class Package < ActiveRecord::Base
   # add_to_forklift
   def add_to_forklift forklift
     self.forklift = forklift
-    forklift.sum_packages = forklift.sum_packages + 1
-    forklift.save
+    #forklift.sum_packages = forklift.sum_packages + 1
+    #forklift.save
+#<<<<<<< HEAD
     set_position
     self.save
+    #set_position
+#=======
+    #self.save
+#    set_position
+#    self.save
+#>>>>>>> a0a32e3e27a1908ebc6397024f1e965812b73ae1
   end
 
   # remove_form_forklift
   def remove_from_forklift
     if self.forklift
-      forklift.sum_packages = forklift.sum_packages - 1
-      forklift.save
-      self.forklift = nil
-      remove_position
-      self.save
+      ActiveRecord::Base.transaction do
+        forklift = self.forklift
+        self.forklift = nil
+        remove_position
+        self.save
+        #forklift.sum_packages = forklift.packages.count
+        #forklift.save
+      end
     end
     true
   end
@@ -49,17 +59,20 @@ class Package < ActiveRecord::Base
   # set_position
   def set_position
     if self.forklift_id.nil?
-      return
+      return true
     end
 
     if pp = PartPosition.joins(:position).where({part_positions: {part_id: self.part_id}, positions: {whouse_id: self.forklift.whouse_id}}).first
       if self.package_position.nil?
         self.create_package_position(position_id: pp.position_id)
       else
-        self.package_position.position_id = pp.position_id
-        self.package_position.is_delete = false
+        #self.package_position.position_id = pp.position_id
+        #self.package_position.is_delete = false
+        self.package_position.update({position_id:pp.position_id})
       end
-      self.package_position.save
+      #self.package_position.save
+    else
+      return false
     end
   end
 
@@ -101,5 +114,19 @@ class Package < ActiveRecord::Base
       self.positionable_type=p.class.name
     end
 
+  end
+
+  def self.entry_report condition
+    self.joins(:part).joins(forklift: :delivery)
+    .where(condition)
+    .select("packages.state as state,packages.part_id,COUNT(packages.id) as box_count,SUM(packages.quantity) as total,forklifts.whouse_id as whouse_id,deliveries.received_date as rdate,deliveries.receiver_id as receover_id")
+    .group("packages.part_id,whouse_id,state").order("whouse_id,rdate DESC")
+  end
+
+  def self.removal_report condition
+    self.joins(:part).joins(forklift: :delivery)
+    .where(condition)
+    .select("packages.state,packages.part_id,COUNT(packages.id) as box_count,SUM(packages.quantity) as total,forklifts.whouse_id as whouse_id,deliveries.delivery_date as ddate,deliveries.user_id as sender_id")
+    .group("packages.part_id,whouse_id,state").order("whouse_id,ddate DESC")
   end
 end

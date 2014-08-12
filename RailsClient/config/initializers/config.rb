@@ -17,6 +17,7 @@ $DELIVERYPATH=path_config[:import_delivery_file_path]
 $USERPATH=path_config[:import_users_file_path]
 $PARTSPATH=path_config[:import_parts_file_path]
 $PARTPOSITIONSPATH=path_config[:import_part_positions_file_path]
+$FORSREPROTSPATH=path_config[:fors_reports_file_path]
 
 
 # api default auth user and password

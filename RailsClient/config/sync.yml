@@ -5,7 +5,7 @@ sync:
   sync_lock: false
   enabled: true
   advance_second: 1800
-  per_request_size: 3000
+  per_request_size: 1000
   executor:
     location:
       name: "地点"
@@ -73,7 +73,7 @@ sync:
       post: true
       put: true
       delete: true
-    package_postion:
+    package_position:
       name: "包装箱库位"
       get: true
       post: true

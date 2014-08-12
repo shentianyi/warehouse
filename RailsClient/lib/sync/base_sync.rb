@@ -7,54 +7,82 @@ module Sync
 
     def self.execute
       ## base data
-      begin
-        current=Time.now
-        Sync::Execute::LocationSync.sync
-        Sync::Execute::HackerSync.sync
-        Sync::Execute::WhouseSync.sync
-        Sync::Execute::PartTypeSync.sync
-        Sync::Execute::PartSync.sync
-        Sync::Execute::PositionSync.sync
-        Sync::Execute::PartPositionSync.sync
-        Sync::Execute::PickItemFilterSync.sync
+      #begin
+      current=Time.now
+ begin      
+      Sync::Execute::LocationSync.sync
+      Sync::Execute::HackerSync.sync
+      Sync::Execute::WhouseSync.sync
+      Sync::Execute::PartTypeSync.sync
+      Sync::Execute::PartSync.sync
+      Sync::Execute::PositionSync.sync
+      Sync::Execute::PartPositionSync.sync
+      Sync::Execute::PickItemFilterSync.sync
+   rescue => e 
+        puts "[#{Time.now.localtime}][ERROR]"
+        puts e.class
+        puts e.to_s
+        puts e.backtrace
+      end
 
-        # sync delivery data
+      no_error=true
+      # sync delivery data
+      begin
         Sync::Execute::DeliverySync.sync
         Sync::Execute::ForkliftSync.sync
         Sync::Execute::PackageSync.sync
         Sync::Execute::PackagePositionSync.sync
         Sync::Execute::StateLogSync.sync
-
-        # sync order data
-        Sync::Execute::OrderSync.sync
-        Sync::Execute::OrderItemSync.sync
-
-        # sync pick list data
-        Sync::Execute::PickListSync.sync
-        Sync::Execute::PickItemSync.sync
-
-        Sync::Config.last_time=(current- Sync::Config.advance_second.seconds).utc
       rescue => e
+        no_error=false
+        puts "[#{Time.now.localtime}][ERROR]"
         puts e.class
         puts e.to_s
         puts e.backtrace
       end
+
+      begin
+        # sync order data
+        Sync::Execute::OrderSync.sync
+        Sync::Execute::OrderItemSync.sync
+      rescue => e
+        no_error=false
+        puts "[#{Time.now.localtime}][ERROR]"
+        puts e.class
+        puts e.to_s
+        puts e.backtrace
+      end
+      begin
+        # sync pick list data
+        Sync::Execute::PickListSync.sync
+        Sync::Execute::PickItemSync.sync
+      rescue => e
+        no_error=false
+        puts "[#{Time.now.localtime}][ERROR]"
+        puts e.class
+        puts e.to_s
+        puts e.backtrace
+      end
+      Sync::Config.last_time=(current- Sync::Config.advance_second.seconds).utc if no_error
+      #rescue => e
+      #  puts "[#{Time.now.localtime}][ERROR]"
+      #  puts e.class
+      #  puts e.to_s
+      #  puts e.backtrace
+      #end
     end
 
     def self.sync
       if Config.enabled
-        #begin
         if executor=Sync::Executor.find(main_key)
+          puts "[#{Time.now.localtime}][INFO]"
+          puts "[#{Time.now.localtime}]#{executor.key} start sync..."
           get &get_block if executor.get
           post &post_block if executor.post
           put &put_block if executor.put
           delete &delete_block if executor.delete
+          puts "[#{Time.now.localtime}]#{executor.key} finsh sync..."
         end
-        #rescue => e
-        #  puts e.class
-        #  puts e.to_s
-        #  puts e.backtrace
-        #end
       end
     end
 
@@ -63,6 +91,7 @@ module Sync
     def self.get
       site=init_site(URI::encode(url+'?last_time='+Sync::Config.last_time.to_s))
       response=site.get
+
       if response.code==200
         yield(JSON.parse(response)) if block_given?
       end
@@ -82,7 +111,12 @@ module Sync
         }
         response= site.post({main_key => items.to_json})
         if response.code==201
-          yield(items, JSON.parse(response)) if block_given?
+          msg= JSON.parse(response.body)
+          if msg['result']
+            yield(items, JSON.parse(response)) if block_given?
+          else
+            puts "[#{Time.now.localtime}][ERROR]#{msg}"
+          end
         end
         i+=1
       end
@@ -104,7 +138,13 @@ module Sync
         }
         response=site.put({main_key => items_hash.to_json})
         if response.code==200
-          yield(items, JSON.parse(response)) if block_given?
+          #yield(items, JSON.parse(response)) if block_given?
+          msg= JSON.parse(response.body)
+          if msg['result']
+            yield(items, JSON.parse(response)) if block_given?
+          else
+            puts "[#{Time.now.localtime}][ERROR]#{msg}"
+          end
         end
         i+=1
       end
@@ -118,13 +158,18 @@ module Sync
         break if items.count==0
         items.collect { |item|
           item.is_dirty=false
-          item.is_new=false
           item
         }
         site= init_site(url+'/delete')
         response=site.post({main_key => items.collect { |i| i.id }.to_json})
         if response.code==201
-          yield(items, JSON.parse(response)) if block_given?
+          #yield(items, JSON.parse(response)) if block_given?
+          msg= JSON.parse(response.body)
+          if msg['result']
+            yield(items, JSON.parse(response)) if block_given?
+          else
+            puts "[#{Time.now.localtime}][ERROR]#{msg}"
+          end
         end
         i+=1
       end
@@ -171,15 +216,15 @@ module Sync
     end
 
     def self.get_posts(page=0)
-      model.unscoped.where(is_new: true).offset(page*Sync::Config.per_request_size).limit(Sync::Config.per_request_size).all
+      model.unscoped.where(is_new: true).limit(Sync::Config.per_request_size).all
     end
 
     def self.get_puts(page=0)
-      model.unscoped.where(is_dirty: true).offset(page*Sync::Config.per_request_size).limit(Sync::Config.per_request_size).all
+      model.unscoped.where(is_dirty: true, is_delete: false).limit(Sync::Config.per_request_size).all
     end
 
     def self.get_deletes(page=0)
-      model.unscoped.where(is_dirty: true, is_delete: true).offset(page*Sync::Config.per_request_size).limit(Sync::Config.per_request_size).all
+      model.unscoped.where(is_dirty: true, is_delete: true).limit(Sync::Config.per_request_size).all
     end
 
     def self.clean_put item
