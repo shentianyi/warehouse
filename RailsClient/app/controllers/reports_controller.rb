@@ -10,6 +10,7 @@ class ReportsController < ApplicationController
     condition = {}
     condition["deliveries.destination_id"] = @location_id
     condition["deliveries.received_date"] = time_range
+    condition["packages.part_id"] = '491013501'
     report = ""
     case @type
       when "total"
@@ -130,9 +131,11 @@ class ReportsController < ApplicationController
     }
 
     @results = {}
-
+    @file = nil
+    @jsonfile = nil
     unless params[:file].nil?
-
+      @file = JSON.parse(params[:file])
+      @jsonfile = params[:file]
       f = FileData.new(JSON.parse(params[:file]))
 
       book = Roo::Excelx.new f.full_path
@@ -152,7 +155,7 @@ class ReportsController < ApplicationController
 
         _params = {}
         fors_keys.each{|key|
-          if  params[key].is_number?
+          if  params[key] && params[key].is_number?
             _params[key] = params[key].to_i.to_s
           else
             _params[key] = params[key]

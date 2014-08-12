@@ -1,7 +1,7 @@
 <div class="panel panel-warning">
   <div class="panel-heading">
     <h2>差异报表报表</h2>
-    导入原有系统的报表,选择位置,以及时间,可以在网页段查看或者到处xlsx格式的报表
+    导入原有系统的报表,选择位置,以及时间,可以在网页段查看或者导出xlsx格式的报表
   </div>
   <div class="panel-body">
     <br/>
@@ -27,7 +27,13 @@
       <div>
         <span>上传报表：</span>
         <input id="item-data-uploader" type="file" name="files[]" data-url="/reports/upload_file">
-        <div class="abstractblock" id="item-data-uploader-preview" style="display:none;"></div>
+        <div class="abstractblock" id="item-data-uploader-preview" style="<%= "display:none" if @file.nil? %>;">
+          <% if @file %>
+              <span>文件：<%= @file["data"]["original_filename"] %></span>
+              <br>
+              <span info>文件上传成功</span>
+          <% end%>
+        </div>
       </div>
     </div>
     <div>
@@ -43,7 +49,7 @@
             <span>查看类型：
               <%= select_tag :format, options_for_select([["查找", "html"],["导出xlsx", "xlsx"]], "html") %>
             </span>
-            <input type="hidden" id="file" name="file">
+            <input type="hidden" id="file" name="file" value="<%= @jsonfile%>">
             <input type="button" value="确定" class="btn btn-warning" name="commit" onclick="submitForm()"/>
           </div>
       </form>
@@ -73,9 +79,9 @@
       <td>
         <% d =  @packages[key].nil? ? value["Amount"] : value["Amount"] - @packages[key]["Amount"]%>
         <% if d > 0%>
-            <span class="label label-warning"><%= d %></span>
-        <% elsif d < 0%>
             <span class="label label-danger"><%= d %></span>
+        <% elsif d < 0%>
+            <span class="label label-warning"><%= d %></span>
         <% else%>
         <span class="label label-primary"><%= d %></span>
         <% end %>
