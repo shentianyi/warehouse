@@ -131,7 +131,7 @@ class ReportsController < ApplicationController
 
     @results = {}
     res_hash = {}
-    
+
     @file = nil
     @jsonfile = nil
     unless params[:file].nil?
