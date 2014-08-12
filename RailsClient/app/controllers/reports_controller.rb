@@ -130,6 +130,8 @@ class ReportsController < ApplicationController
     }
 
     @results = {}
+    res_hash = {}
+
     @file = nil
     @jsonfile = nil
     unless params[:file].nil?
@@ -145,6 +147,8 @@ class ReportsController < ApplicationController
         headers << header
       }
 
+
+
       fors_data = []
       2.upto(book.last_row) do |line|
         params ={}
@@ -155,7 +159,7 @@ class ReportsController < ApplicationController
         insert = true
         _params = {}
         fors_keys.each{|key|
-          if insert && params[key].nil?
+          if insert && (params[key].nil? || params[key].to_s.blank?)
             insert = false
             break
           end
@@ -173,12 +177,14 @@ class ReportsController < ApplicationController
       end
 
       fors_data.each {|f|
-        if @results[f["PartNr."]+f["Warehouse"]].nil?
-          @results[f["PartNr."]+f["Warehouse"]] = {"PartNr."=>f["PartNr."],"Warehouse"=>f["Warehouse"],"Amount"=>0}
+        if res_hash[f["PartNr."]+f["Warehouse"]].nil?
+          res_hash[f["PartNr."]+f["Warehouse"]] = {"PartNr."=>f["PartNr."],"Warehouse"=>f["Warehouse"],"Amount"=>0}
         end
-        @results[f["PartNr."]+f["Warehouse"]]["Amount"] = @results[f["PartNr."]+f["Warehouse"]]["Amount"] + f["Quantity"].to_f
+        res_hash[f["PartNr."]+f["Warehouse"]]["Amount"] = res_hash[f["PartNr."]+f["Warehouse"]]["Amount"] + f["Quantity"].to_f
       }
     end
+
+    @results = res_hash.sort_by {|key,value| value["Warehouse"]}
 
     filename = "#{Location.find_by_id(@location_id).name}收货差异报表_#{@received_date_start}_#{@received_date_end}"
 
