@@ -183,7 +183,76 @@ class ReportsController < ApplicationController
   end
 
   def removal_discrepancy
+    @location_id = params[:location_id].nil? ? current_user.location_id : params[:location_id]
+    @received_date_start = params[:received_date_start].nil? ? 1.day.ago.strftime("%Y-%m-%d 7:00") : params[:received_date_start]
+    @received_date_end = params[:received_date_end].nil? ? Time.now.strftime("%Y-%m-%d 7:00") : params[:received_date_end]
+    time_range = Time.parse(@received_date_start).utc..Time.parse(@received_date_end).utc
 
+    condition = {}
+    condition["deliveries.destination_id"] = @location_id
+    condition["deliveries.received_date"] = time_range
+    condition["packages.state"] = [PackageState::RECEIVED]
+
+    @packages = {}
+
+    Package.entry_report(condition).each {|p|
+      if @packages[p.part_id+p.whouse_id].nil?
+        @packages[p.part_id+p.whouse_id] = {"PartNr."=>p.part_id,"Warehouse"=>p.whouse_id,"Amount"=>0}
+      end
+      @packages[p.part_id+p.whouse_id]["Amount"] = @packages[p.part_id+p.whouse_id]["Amount"] + p.total
+    }
+
+    @results = {}
+
+    unless params[:file].nil?
+
+      f = FileData.new(JSON.parse(params[:file]))
+
+      book = Roo::Excelx.new f.full_path
+
+      book.default_sheet = book.sheets.first
+      headers = []
+      book.row(1).each {|header|
+        headers << header
+      }
+
+      fors_data = []
+      2.upto(book.last_row) do |line|
+        params ={}
+        headers.each_with_index{|key,i|
+          params[key]=book.cell(line,i+1).to_s
+        }
+
+        _params = {}
+        fors_keys.each{|key|
+          if  params[key].is_number?
+            _params[key] = params[key].to_i.to_s
+          else
+            _params[key] = params[key]
+          end
+        }
+        fors_data<<_params
+      end
+
+      fors_data.each {|f|
+        if @results[f["PartNr."]+f["Warehouse"]].nil?
+          @results[f["PartNr."]+f["Warehouse"]] = {"PartNr."=>f["PartNr."],"Warehouse"=>f["Warehouse"],"Amount"=>0}
+        end
+        @results[f["PartNr."]+f["Warehouse"]]["Amount"] = @results[f["PartNr."]+f["Warehouse"]]["Amount"] + f["Quantity"].to_f
+      }
+    end
+
+    filename = "#{Location.find_by_id(@location_id).name}收货差异报表_#{@received_date_start}_#{@received_date_end}"
+
+    respond_to do|format|
+      format.html
+      format.xlsx do
+        send_data(entry_discrepancy_xlsx(@packages,@results),
+                  :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+                  :filename => filename+".xlsx"
+        )
+      end
+    end
   end
 
   private
