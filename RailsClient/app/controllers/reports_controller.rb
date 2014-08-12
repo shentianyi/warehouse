@@ -130,6 +130,8 @@ class ReportsController < ApplicationController
     }
 
     @results = {}
+    res_hash = {}
+    
     @file = nil
     @jsonfile = nil
     unless params[:file].nil?
@@ -145,7 +147,7 @@ class ReportsController < ApplicationController
         headers << header
       }
 
-      res_hash = {}
+
 
       fors_data = []
       2.upto(book.last_row) do |line|
