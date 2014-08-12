@@ -315,11 +315,11 @@ end
         return nil if book.cell(2, 1).nil?
         2.upto(book.last_row) do |row|
           if package=Package.find_by_id(book.cell(row, 1))
-            package.update(state: PackageState::RECEIVED)
+            package.update(state: PackageState::RECEIVED,is_dirty:true)
             if  forklift=package.forklift
-              forklift.update(state: ForkliftState::RECEIVED)
+              forklift.update(state: ForkliftState::RECEIVED,is_dirty:true)
               if delivery= forklift.delivery
-                delivery.update(state: DeliveryState::RECEIVED)
+                delivery.update(state: DeliveryState::RECEIVED,is_dirty:true)
               end
             end
           end

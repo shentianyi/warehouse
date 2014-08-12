@@ -20,6 +20,18 @@ module Extensions
           false
         end
       end
+
+
+      def can_reset_sync_dirty_flag
+        puts '-------------'
+        puts self.class.name
+        new_item=self.class.unscoped.find_by_id(self.id)
+        self.attributes.except('uuid','id','created_at','updated_at','is_dirty','is_new','is_delete').keys.each do |attr|
+          return false if self.send(attr.to_sym)!=new_item.send(attr.to_sym)
+        end
+        return true
+      end
+
     end
   end
 end
