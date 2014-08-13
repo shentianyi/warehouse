@@ -170,6 +170,14 @@ class ForkliftService
     return msg
   end
 
+  def self.check_part_position(part,whouse_id)
+    if part.positions.where(whouse_id:f.whouse_id).count > 0 || part.positions.count == 0
+      true
+    else
+      false
+    end
+  end
+
   #=============
   #set_state @forklift,@state
   #set forklift to a specific state

@@ -47,9 +47,9 @@ module V1
       unless p = PackageService.exits?(params[:package_id])
         return {result: 0, content: PackageMessage::NotExit}
       end
-      unless ForkliftService.parts_in_whouse?([p.part_id],f.whouse_id)
-        return {reuslt: 0, content:PackageMessage::PartNotInWhouse}
-      end
+      #unless ForkliftService.check_part_position(p.part,f.whouse_id)
+        #return {result: 0, content:PackageMessage::PartNotInWhouse}
+      #end
       unless p.forklift_id.nil?
         return {result: 0, content:PackageMessage::InOtherForklift}
       end
@@ -84,8 +84,8 @@ module V1
       if res.result
         p = res.object
         if ForkliftService.add_package(f, p)
-          part = PackageService.part_exit?(params[:part_id])
-          if part.positions.where(whouse_id:f.whouse_id) || part.positions.count == 0
+          part = Part.find_by_id(params[:part_id])#PackageService.part_exit?(params[:part_id])
+          if part.positions.where(whouse_id:f.whouse_id).count > 0 || part.positions.count == 0
             {result: 1, content: {message:ForkliftMessage::AddPackageSuccess,package:PackagePresenter.new(p).to_json}}
           else
             {result: 1, content:{message:ForkliftMessage::NotExitInWarehouse,package:PackagePresenter.new(p).to_json}}
