@@ -47,9 +47,9 @@ module V1
       unless p = PackageService.exits?(params[:package_id])
         return {result: 0, content: PackageMessage::NotExit}
       end
-      unless ForkliftService.parts_in_whouse?([p.part_id],f.whouse_id)
-        return {reuslt: 0, content:PackageMessage::PartNotInWhouse}
-      end
+      #unless ForkliftService.check_part_position(p.part,f.whouse_id)
+        #return {result: 0, content:PackageMessage::PartNotInWhouse}
+      #end
       unless p.forklift_id.nil?
         return {result: 0, content:PackageMessage::InOtherForklift}
       end
