@@ -22,7 +22,7 @@ module Extensions
       end
 
       def reset_dirty_flag
-        unless self.is_dirty_changed?
+        if !self.is_dirty_changed? and self.changes.count>0
           self.is_dirty=true
         end
       end
@@ -58,7 +58,7 @@ module Extensions
         return attr
       end
 
-      def can_sync_post
+      def can_reset_sync_dirty_flag
         true
       end
     end

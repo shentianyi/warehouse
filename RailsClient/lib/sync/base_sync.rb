@@ -185,7 +185,7 @@ module Sync
       Proc.new do |items, response|
         model.record_timestamps=false
         items.each do |item|
-          item.save
+          item.save if item.can_reset_sync_dirty_flag
         end
       end
     end
@@ -194,7 +194,7 @@ module Sync
       Proc.new do |items, response|
         model.record_timestamps=false
         items.each do |item|
-          item.save
+          item.save if item.can_reset_sync_dirty_flag
         end
       end
     end
