@@ -92,10 +92,10 @@ module V1
           end
 
         else
-          {result: 0, content: {message:ForkliftMessage::AddPackageFailed}}
+          {result: 0, content: ForkliftMessage::AddPackageFailed }
         end
       else
-        {result: 0, content: {message:res.content}}
+        {result: 0, content: res.content}
       end
     end
 
