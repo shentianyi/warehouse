@@ -2,7 +2,7 @@
 module Printer
   class P007<Base
     HEAD=[:id,:user,:created_at,:total_packages,:whouse]
-    BODY=[:package_id,:part_id,:from_warehouse,:from_location,:to_warehouse,:to_location,:quantity]
+    BODY=[:package_id,:part_id,:from_whouse_code,:from_whouse_position,:to_whouse_code,:to_whouse_position,:quantity,:transfer_data]
 
     def generate_data
       f = Forklift.find_by_id(self.id)
@@ -24,11 +24,12 @@ module Printer
         body = {
             package_id: p.id,
             part_id: p.part_id,
-            quantity: p.quantity,
-            from_warehouse: SysConfigCache.trans_warehouse_value,
-            from_location: Position.trans_position,
-            to_warehouse: p.forklift.whouse.name,
-            to_location: p.position.detail
+            quantity: p.quantity_str,
+            from_whouse_code: SysConfigCache.trans_warehouse_value,
+            from_whouse_position: Position.trans_position,
+            to_whouse_code: p.forklift.whouse.name,
+            to_whouse_position: p.position.detail,
+            transfer_data: '\n\n\n#{p.forklift.whouse.name}\n#{p.position.detail}\n#{p.quantity_str}\n#{p.part_id}'
         }
 
         bodies=[]
@@ -36,7 +37,6 @@ module Printer
           bodies<<{Key: k, Value: body[k]}
         end
         self.data_set <<(heads+bodies)
-
       end
     end
   end
