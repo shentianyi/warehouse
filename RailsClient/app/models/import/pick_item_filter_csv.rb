@@ -39,7 +39,7 @@ module Import
     end
 
     def init_uniq_key
-      class_variable_set(:ukeys,%w(user_id filterable_type filterable_id))
+      class_variable_set(:@@ukeys,%w(user_id filterable_type filterable_id))
     end
   end
 end
