@@ -70,4 +70,8 @@ ActiveRecord::Base.transaction do
   unless SysConfig.find_by_code('IS_FORCE')
     SysConfig.create(code: 'IS_FORCE', value: false, name: '是否强制更新')
   end
+
+  unless SysConfig.find_by_code('TRANS_WAREHOUSE')
+    SysConfig.create(code: 'TRANS_WAREHOUSE', value: 'ITLZ', name: '在途库编号')
+  end
 end
