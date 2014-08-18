@@ -1,7 +1,7 @@
 #print fors report
 module Printer
   class P007<Base
-    HEAD=[:id,:user,:created_at,:total_packages,:whouse]
+    HEAD=[:id,:user,:delivery_date,:total_packages,:whouse]
     BODY=[:package_id,:part_id,:from_whouse_code,:from_whouse_position,:to_whouse_code,:to_whouse_position,:quantity,:transfer_data]
 
     def generate_data
@@ -9,9 +9,9 @@ module Printer
       head = {
           id:f.id,
           total_packages: f.sum_packages,
-          created_at: f.created_at.nil? ? '' : f.created_at.localtime.strftime('%Y.%m.%d %H:%M'),
+          delivery_date: f.created_at.nil? ? '' : f.created_at.localtime.strftime('%Y.%m.%d %H:%M'),
           whouse: f.whouse.name,
-          user: f.stocker_id
+          user: f.stocker.name
       }
 
       heads=[]
