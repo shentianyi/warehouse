@@ -1,17 +1,19 @@
 #print fors report
 module Printer
   class P007<Base
-    HEAD=[:id,:user,:delivery_date,:total_packages,:whouse]
-    BODY=[:package_id,:part_id,:from_whouse_code,:from_whouse_position,:to_whouse_code,:to_whouse_position,:quantity,:transfer_data]
+    HEAD=[:id,:user,:delivery_date,:whouse,:total_packages]
+    BODY=[:part_id,:from_whouse_code,:from_whouse_position,:to_whouse_code,:to_whouse_position,:quantity,:transfer_data]
 
     def generate_data
       f = Forklift.find_by_id(self.id)
+      whosue = f.whouse.nil? ? '' : f.whouse.name
+      stocker = f.stocker.nil? ? '': f.stocker.name
       head = {
           id:f.id,
-          total_packages: f.sum_packages,
           delivery_date: f.created_at.nil? ? '' : f.created_at.localtime.strftime('%Y.%m.%d %H:%M'),
-          whouse: f.whouse.name,
-          user: f.stocker.name
+          whouse: whosue,
+          user: stocker,
+          total_packages: f.sum_packages
       }
 
       heads=[]
@@ -20,16 +22,18 @@ module Printer
       end
 
       packages = f.packages
+
       packages.each do |p|
+        position = p.position.nil? ? '' : p.position.detail
+
         body = {
-            package_id: p.id,
             part_id: p.part_id,
             quantity: p.quantity_str,
             from_whouse_code: SysConfigCache.trans_warehouse_value,
             from_whouse_position: Position.trans_position,
-            to_whouse_code: p.forklift.whouse.name,
-            to_whouse_position: p.position.detail,
-            transfer_data: '\n\n\n#{p.forklift.whouse.name}\n#{p.position.detail}\n#{p.quantity_str}\n#{p.part_id}'
+            to_whouse_code: whosue,
+            to_whouse_position:  position,
+            transfer_data: "\r\r\r#{whosue}\r#{position}\r#{p.quantity_str}\r#{p.part_id}"
         }
 
         bodies=[]
