@@ -6,6 +6,7 @@ class Part < ActiveRecord::Base
   belongs_to :part_type
   has_many :part_positions, :dependent => :destroy
   has_many :positions, :through => :part_positions
+  has_many :packages
 
   # validate part id existance
   # delete ,no use tesla at 2014-7-21

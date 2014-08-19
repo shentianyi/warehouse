@@ -12,29 +12,64 @@ module V1
       end
 
       post do
-        forklifts=JSON.parse(params[:forklift])
-        forklifts.each do |forklift|
-          forklift=Forklift.new(forklift)
-          forklift.save
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            forklifts=JSON.parse(params[:forklift])
+            forklifts.each do |forklift|
+              forklift=Forklift.new(forklift)
+              forklift.save
+            end
+          end
+          msg.result =true
+        rescue => e
+          msg.content = "post:#{e.message}"
         end
+        return msg
+        #ActiveRecord::Base.transaction do
+        #  forklifts=JSON.parse(params[:forklift])
+        #  forklifts.each do |forklift|
+        #    forklift=Forklift.new(forklift)
+        #    forklift.save
+        #  end
+        #end
       end
 
       put '/:id' do
-        forklifts=JSON.parse(params[:forklift])
-        forklifts.each do |forklift|
-          if u=Forklift.unscoped.find_by_id(forklift['id'])
-            u.update(forklift.except('id'))
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            forklifts=JSON.parse(params[:forklift])
+            forklifts.each do |forklift|
+              if u=Forklift.unscoped.find_by_id(forklift['id'])
+                u.update(forklift.except('id'))
+              end
+            end
           end
+          msg.result =true
+        rescue => e
+          msg.content = "put:#{e.message}"
         end
+        return msg
       end
 
       post :delete do
-        forklifts=JSON.parse(params[:forklift])
-        forklifts.each do |id|
-          if forklift=Forklift.unscoped.find_by_id(id)
-            forklift.update(is_delete: true)
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            forklifts=JSON.parse(params[:forklift])
+            forklifts.each do |id|
+              if forklift=Forklift.unscoped.find_by_id(id)
+                forklift.update(is_delete: true)
+              end
+            end
           end
+          msg.result =true
+        rescue => e
+
+          msg.content = "#{this}:#{e.message}"
         end
+        return msg
       end
     end
   end

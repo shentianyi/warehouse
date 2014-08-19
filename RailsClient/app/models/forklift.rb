@@ -13,18 +13,8 @@ class Forklift < ActiveRecord::Base
 
   #add_to_delivery
   def add_to_delivery delivery_id
-    self.sum_packages = self.packages.count
+    #self.sum_packages = self.packages.count
     self.delivery_id = delivery_id
-    self.save
-  end
-
-  def package_checked
-    self.accepted_packages = self.accepted_packages + 1 if self.accepted_packages<self.accepted_packages
-    self.save
-  end
-
-  def package_unchecked
-    self.accepted_packages = self.accepted_packages - 1 if self.accepted_packages>self.accepted_packages
     self.save
   end
 
@@ -36,5 +26,13 @@ class Forklift < ActiveRecord::Base
 
   def generate_id
     "F#{Time.now.to_milli}"
+  end
+
+  def sum_packages
+    self.packages.count
+  end
+
+  def accepted_packages
+    self.packages.where(state:PackageState::RECEIVED).count
   end
 end

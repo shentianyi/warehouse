@@ -1,13 +1,13 @@
 <div class="panel panel-warning">
   <div class="panel-heading">
-    <h2>收货报表</h2>
-    包括收货总量,实际接收量,以及拒收总量
+    <h2>发货报表</h2>
+    包括发货总量,实际发货,以及被拒收总量
   </div>
   <div class="panel-body">
     <br/>
 
     <div>
-      <form method="get" action="<%= reports_entry_report_path %>">
+      <form method="get" action="<%= reports_removal_report_path %>">
         <div>
           <div>
             <span>地点:
@@ -18,7 +18,7 @@
               ~ <input type="text" name="received_date_end" class="datepicker" value="<%= @received_date_end %>"/>
             </span>
             <span>报表类型:
-              <%= select_tag(:type, options_for_select([["接收总量","total"],["实际接收","received"],["拒收总量","rejected"]], @type), include_blank: false) %>
+              <%= select_tag(:type, options_for_select([["发货总量","total"],["实际发货","send"],["被拒收总量","rejected"]], @type), include_blank: false) %>
             </span>
             <span>查看类型：
             <%= select_tag :format, options_for_select([["查找", "html"],["导出xlsx", "xlsx"],["导出xls", "xls"],["导出CSV", "csv"]], "html") %>
@@ -37,26 +37,26 @@
         <th>总数</th>
         <th>箱数</th>
         <th>部门</th>
-        <th>收货时间</th>
-        <th>收货人</th>
-        <th>已接收</th>
+        <th>发货时间</th>
+        <th>发货人</th>
+        <th>是否被拒收</th>
       </tr>
       </thead>
       <tbody>
       <% @packages.all.each_with_index do |p, index| %>
-          <tr class=<%="danger" if p.state != PackageState::RECEIVED%>>
+          <tr class=<%="danger" if p.state == PackageState::DESTINATION%>>
             <td><%= index+1 %></td>
             <td><span class="label label-info"><%= p.part_id %></span></td>
             <td><span class="badge"><%= p.total%></span></td>
             <td><span class="badge"><%= p.box_count %></span></td>
             <td><%= p.whouse_id %></td>
-            <td><%= p.rdate.localtime.to_formatted_s(:db) if p.rdate%></td>
+            <td><%= p.ddate.localtime.to_formatted_s(:db) if p.ddate%></td>
             <td>
-              <%if u = User.find_by_id(p.receover_id)%>
+              <%if u = User.find_by_id(p.sender_id)%>
               <%= u.name %>
               <%end%>
             </td>
-            <td><%= p.state == PackageState::RECEIVED ? "是":"否"%></td>
+            <td><%= p.state == PackageState::DESTINATION ? "是":"否"%></td>
           </tr>
       <% end %>
       </tbody>

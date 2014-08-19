@@ -48,20 +48,23 @@ class ForkliftService
       update_position = true
     end
 
+    ActiveRecord::Base.transactin do
+      if forklift.update_attributes(args)
+        if update_position
 
-    if forklift.update_attributes(args)
-      if update_position
-        forklift.packages.each do |p|
-          if pp = PartPosition.joins(:position).where({part_positions: {part_id: p.part_id}, positions: {whouse_id: args[:whouse_id]}}).first
-            #puts p.package_position.to_json
-            p.package_position.position_id = pp.position_id
-            p.package_position.save
+          forklift.packages.each do |p|
+            if pp = PartPosition.joins(:position).where({part_positions: {part_id: p.part_id}, positions: {whouse_id: args[:whouse_id]}}).first
+              #puts p.package_position.to_json
+              #p.package_position.position_id = pp.position_id
+              #p.package_position.save
+              p.package_position.update({position:pp.position_id})
+            end
           end
         end
+        true
+      else
+        false
       end
-      true
-    else
-      false
     end
   end
 
@@ -73,6 +76,7 @@ class ForkliftService
     if forklift.nil?
       return false
     end
+
     if forklift.sum_packages > forklift.accepted_packages
       forklift.set_state(ForkliftState::PART_RECEIVED)
     else
@@ -99,10 +103,11 @@ class ForkliftService
     if forklift.nil?
       return false
     end
-
-    forklift.set_state(ForkliftState::DESTINATION)
-    forklift.packages.each do |p|
-      PackageService.receive(p)
+    ActiveRecord::Base.transaction do
+      forklift.set_state(ForkliftState::DESTINATION)
+      forklift.packages.each do |p|
+        PackageService.receive(p)
+      end
     end
     true
   end
@@ -117,8 +122,10 @@ class ForkliftService
     end
 
     forklift.set_state(ForkliftState::WAY)
-    forklift.packages.each do |p|
-      PackageService.send(p)
+    ActiveRecord::Base.transaction do
+      forklift.packages.each do |p|
+        PackageService.send(p)
+      end
     end
     true
   end
@@ -143,8 +150,29 @@ class ForkliftService
   #add forklift to package
   #=============
   def self.add_package forklift, package
+    msg = Message.new
+    msg.result = false
     if package.forklift_id.nil?
-      return package.add_to_forklift forklift
+      #return package.add_to_forklift forklift
+      begin
+        ActiveRecord::Base.transaction do
+          #package.forklift_id = forklift.id
+          package.update({forklift_id:forklift.id})
+          package.set_position()
+          true
+        end
+      rescue Exception=>ex
+        msg.result = false
+      end
+    else
+      false
+    end
+    return msg
+  end
+
+  def self.check_part_position(part,whouse_id)
+    if part.positions.where(whouse_id:f.whouse_id).count > 0 || part.positions.count == 0
+      true
     else
       false
     end
@@ -177,19 +205,24 @@ class ForkliftService
 
   def self.package_checked(id)
     if f = Forklift.find_by_id(id)
-      if f.accepted_packages < f.sum_packages
-      f.accepted_packages = f.accepted_packages + 1
-      f.save
-      end
+      #bug code
+      #if f.accepted_packages < f.sum_packages
+      #f.accepted_packages = f.accepted_packages + 1
+      #f.save
+      #end
+      #f.accepted_packages = f.packages.where(state:PackageState::RECEIVED)
+      #f.save
     end
   end
 
   def self.package_unchecked(id)
     if f = Forklift.find_by_id(id)
-      if f.accepted_packages > 0
-      f.accepted_packages = f.accepted_packages - 1
-      f.save
-      end
+      #if f.accepted_packages > 0
+      #f.accepted_packages = f.accepted_packages - 1
+      #f.save
+      #end
+      #f.accepted_packages = f.packages.where(state:PackageState::RECEIVED)
+      #f.save
     end
   end
 

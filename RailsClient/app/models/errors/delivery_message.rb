@@ -17,4 +17,5 @@ module DeliveryMessage
   AlreadyReceived='已接收'
   ReceiveSuccess='接收成功'
   ReceiveFailed='接收失败'
+  NotSend=',运单未发送,请联系发货人员发货'
 end

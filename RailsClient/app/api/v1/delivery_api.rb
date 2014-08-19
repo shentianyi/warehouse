@@ -16,13 +16,13 @@ module V1
     # optional params: created_at, user_id, state...
     get :list do
       delivery_date = Time.parse(params[:delivery_date])
-      deliveries = Delivery.where(created_at: (delivery_date.beginning_of_day..delivery_date.end_of_day)).all.order(:created_at).order(created_at: :desc)
+      deliveries = Delivery.where(created_at: (12.hour.ago..delivery_date.end_of_day)).all.order(created_at: :desc)
       data = []
       DeliveryPresenter.init_presenters(deliveries).each do |d|
         data << d.to_json
       end
       #puts data
-      {result:true,content:data}
+      {result:1,content:data}
     end
 
     # check forklift
@@ -136,7 +136,6 @@ module V1
       else
         {result:0,content:DeliveryMessage::DeleteFailed}
       end
-
     end
 
     # get delivery detail
@@ -171,7 +170,7 @@ module V1
       end
 
       if !DeliveryState.before_state?(DeliveryState::DESTINATION,d.state)
-        return false
+        return {result:0,content:DeliveryMessage::ReceiveFailed+DeliveryMessage::NotSend}
       end
 
       if DeliveryService.receive(d)

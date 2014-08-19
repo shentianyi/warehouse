@@ -11,29 +11,56 @@ module V1
       end
 
       post do
-        state_logs=JSON.parse(params[:state_log])
-        state_logs.each do |state_log|
-          state_log=StateLog.new(state_log)
-          state_log.save
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            state_logs=JSON.parse(params[:state_log])
+            state_logs.each do |state_log|
+              state_log=StateLog.new(state_log)
+              state_log.save
+            end
+          end
+          msg.result =true
+        rescue => e
+          msg.content = "post:#{e.message}"
         end
+        return msg
       end
 
       put '/:id' do
-        state_logs=JSON.parse(params[:state_log])
-        state_logs.each do |state_log|
-          if u=StateLog.unscoped.find_by_id(state_log['id'])
-            u.update(state_log.except('id'))
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            state_logs=JSON.parse(params[:state_log])
+            state_logs.each do |state_log|
+              if u=StateLog.unscoped.find_by_id(state_log['id'])
+                u.update(state_log.except('id'))
+              end
+            end
           end
+          msg.result =true
+        rescue => e
+          msg.content = "put:#{e.message}"
         end
+        return msg
       end
 
       post :delete do
-        state_logs=JSON.parse(params[:state_log])
-        state_logs.each do |id|
-          if state_log=StateLog.find_by_id(id)
-            state_log.update(is_delete: true)
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            state_logs=JSON.parse(params[:state_log])
+            state_logs.each do |id|
+              if state_log=StateLog.find_by_id(id)
+                state_log.update(is_delete: true)
+              end
+            end
           end
+          msg.result =true
+        rescue => e
+          msg.content = "delete:#{e.message}"
         end
+        return msg
       end
     end
   end

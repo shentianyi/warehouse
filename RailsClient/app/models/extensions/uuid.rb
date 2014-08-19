@@ -22,13 +22,14 @@ module Extensions
       end
 
       def reset_dirty_flag
-        unless self.is_dirty_changed?
+        if !self.is_dirty_changed? and self.changes.count>0
           self.is_dirty=true
         end
       end
 
       def destroy
         self.is_delete=true
+        self.is_dirty=true
         self.save
       end
 
@@ -38,7 +39,6 @@ module Extensions
         self::FK.each do |k|
           c[k]=arg[k]
         end
-        puts "---#{c}"
         return c
       end
 
@@ -56,6 +56,10 @@ module Extensions
           attr[k.to_sym]=item.send(k.to_sym)
         end
         return attr
+      end
+
+      def can_reset_sync_dirty_flag
+        true
       end
     end
   end

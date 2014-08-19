@@ -24,8 +24,9 @@ class OrderService
   def self.handle ids,handled = true
     orders = Order.where(id: ids)
     orders.each {|o|
-      o.handled = handled
-      o.save
+      #o.handled = handled
+      #o.save
+      o.update({handled:handled})
     }
   end
 

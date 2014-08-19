@@ -13,4 +13,12 @@ class Location < ActiveRecord::Base
       Location.where(location_type:LocationType::BASE).first
     end
   end
+
+  def self.list
+    self.all.select { |l| l unless l.is_base }
+  end
+
+  def self.list_menu
+    self.list.collect{|l| [l.name,l.id]}
+  end
 end

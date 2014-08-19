@@ -47,8 +47,7 @@ class PartService
         update_marker=(data.delete($UPMARKER).to_i==1)
 
         if pp = PartPosition.where({part_id:data['part_id'],position_id:p.id}).first && !update_marker
-          #raise(ArgumentError, "行:#{line_no} 该零件已存在相同库位")
-          next
+          raise(ArgumentError, "行:#{line_no} 该零件已存在相同库位")
         end
 
         #1 means delete
