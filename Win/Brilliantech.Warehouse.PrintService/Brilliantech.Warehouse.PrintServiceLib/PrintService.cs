@@ -15,6 +15,7 @@ using System.IO;
 using System.Runtime.Serialization.Json;
 using Brilliantech.Framwork.Utils.LogUtil;
 using Newtonsoft.Json;
+using System.Drawing.Printing;
 
 namespace Brilliantech.Warehouse.PrintServiceLib
 {
@@ -23,17 +24,53 @@ namespace Brilliantech.Warehouse.PrintServiceLib
     {
         public Msg<string> Print(string code, string id)
         {
-            WebOperationContext.Current.OutgoingResponse.Headers.Add("Access-Control-Allow-Origin", "*");
-            if (WebOperationContext.Current.IncomingRequest.Method == "OPTIONS")
+            return basePrint(code, id);
+        }
+        
+        public Msg<string> Print(string code, string id, string printer_name)
+        {
+            return basePrint(code, id, printer_name);
+        }
+
+        public Msg<string> Print(string code, string id, string printer_name, string copy)
+        {
+            return basePrint(code, id, printer_name, copy);
+        }
+
+
+        public Msg<string> CrossPrint(string code, string id)
+        {
+            return basePrint(code, id);
+        }
+
+
+        public Msg<List<string>> Printers()
+        {
+            Msg<List<string>> msg = new Msg<List<string>>();
+            try
             {
-                WebOperationContext.Current.OutgoingResponse.Headers
-                    .Add("Access-Control-Allow-Methods", "POST, OPTIONS, GET");
-                WebOperationContext.Current.OutgoingResponse.Headers
-                    .Add("Access-Control-Allow-Headers",
-                         "Content-Type, Accept, Authorization, x-requested-with");
+                List<string> printers = new List<string>();
+                foreach (string printer in PrinterSettings.InstalledPrinters)
+                {
+                    printers.Add(printer);
+                }
+                msg.Result = true;
+                msg.Object = printers;
+            }
+            catch (Exception e)
+            {
+                msg.Content = e.Message;
+                LogUtil.Logger.Error(e.Message);
+            }
+            return msg;
+        }
+
+        private Msg<string> basePrint(string code, string id, string printer_name = null, string copy = null)
+        {
+            if (!setHead())
+            {
                 return null;
             }
-
             Msg<string> msg = new Msg<string>();
             try
             {
@@ -43,42 +80,43 @@ namespace Brilliantech.Warehouse.PrintServiceLib
                 req.AddParameter("id", id);
                 Printer printer = PrinterConfig.Find(code);
 
-              //  var data = new ApiClient().Execute<RecordSet>(req);
+                //  var data = new ApiClient().Execute<RecordSet>(req);
                 var res = new ApiClient().Execute(req);
                 var data = parse<RecordSet>(res.Content);
                 if (data != null && data.Count > 0)
                 {
-                    printer.Print(data);
-                    msg.SetTrue();
+                    printer.Print(data,printer_name,copy);
+                    msg.Result = true;
                     msg.Content = "打印成功";
                 }
-                else {
+                else
+                {
                     msg.Content = "打印失败,无打印内容";
                 }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 msg.Content = e.Message;
                 LogUtil.Logger.Error(e.Message);
             }
-            return  msg;
+            return msg;
         }
-
-        public Msg<string> CrossPrint(string code, string id)
+        private bool setHead()
         {
-             WebOperationContext.Current.OutgoingResponse.Headers.Add("Access-Control-Allow-Origin","*");   
-             if (WebOperationContext.Current.IncomingRequest.Method == "OPTIONS")
-             {
-                 WebOperationContext.Current.OutgoingResponse.Headers
-                     .Add("Access-Control-Allow-Methods", "POST, OPTIONS, GET");
-                 WebOperationContext.Current.OutgoingResponse.Headers
-                     .Add("Access-Control-Allow-Headers",
-                          "Content-Type, Accept, Authorization, x-requested-with");
-                 return null;
-             }
-            return Print(code, id); 
+            WebOperationContext.Current.OutgoingResponse.Headers.Add("Access-Control-Allow-Origin", "*");
+            if (WebOperationContext.Current.IncomingRequest.Method == "OPTIONS")
+            {
+                WebOperationContext.Current.OutgoingResponse.Headers
+                    .Add("Access-Control-Allow-Methods", "POST, OPTIONS, GET");
+                WebOperationContext.Current.OutgoingResponse.Headers
+                    .Add("Access-Control-Allow-Headers",
+                         "Content-Type, Accept, Authorization, x-requested-with");
+                return false;
+            }
+            return true;
         }
 
-        public  T parse<T>(string jsonString)
+        public T parse<T>(string jsonString)
         {
             using (var ms = new MemoryStream(Encoding.UTF8.GetBytes(jsonString)))
             {
@@ -93,6 +131,6 @@ namespace Brilliantech.Warehouse.PrintServiceLib
                 new DataContractJsonSerializer(jsonObject.GetType()).WriteObject(ms, jsonObject);
                 return Encoding.UTF8.GetString(ms.ToArray());
             }
-        } 
+        }
     }
 }

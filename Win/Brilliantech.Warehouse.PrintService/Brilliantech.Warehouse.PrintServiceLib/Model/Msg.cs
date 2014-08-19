@@ -7,20 +7,27 @@ namespace Brilliantech.Warehouse.PrintServiceLib.Model
 {
     public class Msg<T>
     {
+        private bool result;
         public Msg()
         {
             this.Result = false;
             this.Code = 0;
         }
-    
-        public bool Result { get; set; }
+
+        public bool Result
+        {
+            get { return result; }
+            set
+            {
+                if (value)
+                {
+                    this.Code = 1;
+                }
+                result = value;
+            }
+        }
         public int Code{get;set;}
         public string Content { get; set; }
         public T Object { get; set; }
-
-        public void SetTrue() {
-            this.Result = true;
-            this.Code = 1;
-        }
     }
 }
