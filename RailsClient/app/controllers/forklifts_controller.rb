@@ -46,8 +46,17 @@ class ForkliftsController < ApplicationController
       ForkliftService.set_state(@forklift,forklift_params[:state])
     end
 
+    if forklift_params.has_key?(:whouse_id)
+      whouse_change = @forklift.whouse_id != forklift_params[:whouse_id]
+    end
+
     respond_to do |format|
       if @forklift.update(forklift_params)
+        if whouse_change
+          @forklift.packages.each do |p|
+            p.set_position
+          end
+        end
         format.html { redirect_to @forklift, notice: '托盘更新成功' }
         format.json { render :show, status: :ok, location: @forklift }
       else
