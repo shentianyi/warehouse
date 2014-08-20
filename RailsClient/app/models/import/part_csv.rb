@@ -1,8 +1,8 @@
 module Import
   module PartCsv
     def self.included(base)
-      base.extend ClassMethods
       base.extend CsvBase
+      base.extend ClassMethods
       base.init_csv_cols
       base.init_uniq_key
     end
@@ -43,5 +43,6 @@ module Import
     def init_uniq_key
       class_variable_set(:@@ukeys,%w(id))
     end
+
   end
 end

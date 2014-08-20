@@ -67,9 +67,9 @@ module Import
         end
 
         update_marker=(data.delete($UPMARKER).to_i==1)
-
+        p = Position.find_by_detail(data['detail'])
         if update_marker
-          if p = Position.find_by_detail(data['detail'])
+          if p
             #update
             if data['detail_new']
               data['detail'] = data['detail_new']
@@ -82,6 +82,9 @@ module Import
           end
         else
           #new
+          if p
+            next
+          end
           data.delete('detail_new')
           Position.create(data)
         end
