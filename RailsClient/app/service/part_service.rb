@@ -70,7 +70,7 @@ class PartService
           if pp
             pp.update(data)
           else
-            raise(ArgumentError, "行:#{line_no} 零件库位不存在")
+            raise(ArgumentError, "行:#{line_no} 零件#{data['part_id']}库位#{p.detail}不存在")
           end
         when 2
           #delete
