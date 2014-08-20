@@ -67,7 +67,11 @@ class PartService
             #raise(ArgumentError, "行:#{line_no} Position New 不存在对应的库位")
           end
           data.delete('position_new')
-          pp.update(data)
+          if pp
+            pp.update(data)
+          else
+            raise(ArgumentError, "行:#{line_no} 零件库位不存在")
+          end
         when 2
           #delete
           if pp
