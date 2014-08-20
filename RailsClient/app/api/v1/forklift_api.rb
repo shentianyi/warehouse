@@ -84,18 +84,17 @@ module V1
       if res.result
         p = res.object
         if ForkliftService.add_package(f, p)
-          part = Part.find_by_id(params[:part_id])#PackageService.part_exit?(params[:part_id])
+          part = Part.find_by_id(params[:part_id])
           if part.positions.where(whouse_id:f.whouse_id).count > 0 || part.positions.count == 0
-            {result: 1, content: {message:ForkliftMessage::AddPackageSuccess,package:PackagePresenter.new(p).to_json}}
+            {result: 1, result_code:ResultCodeEnum::Success, content: PackagePresenter.new(p).to_json}
           else
-            {result: 1, content:{message:ForkliftMessage::NotExitInWarehouse,package:PackagePresenter.new(p).to_json}}
+            {result: 1,result_code:ResultCodeEnum::TargetNotInPosition, content:PackagePresenter.new(p).to_json}
           end
-
         else
-          {result: 0, content: ForkliftMessage::AddPackageFailed }
+          {result: 0,result_code:ResultCodeEnum::Failed, content: ForkliftMessage::AddPackageFailed }
         end
       else
-        {result: 0, content: res.content}
+        {result: 0, result_code:ResultCodeEnum::Failed, content: res.content}
       end
     end
 
