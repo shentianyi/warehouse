@@ -65,7 +65,11 @@ class PartService
 
       #1 means delete
       if update_marker
-        pp.update(data) if pp
+        if pp
+          pp.update(data)
+        else
+          raise(ArgumentError, "行:#{line_no} 零件库位不存在，无法修改")
+        end
       else
         PartPosition.create(data)
       end
