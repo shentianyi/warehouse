@@ -48,8 +48,8 @@ class PartService
       # clean data
       update_marker=(data.delete($UPMARKER).to_i==1)
 
-      if update_marker
-        if data['position_new'] && p_new = Position.find_by_detail(data['position_new'])
+      if update_marker && data['position_new']
+        if  p_new = Position.find_by_detail(data['position_new'])
           data.delete('position_new')
           data['position_id'] = p_new.id
         else
