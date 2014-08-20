@@ -7,9 +7,12 @@
 <div>
   <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
     <div>
-      <span>Position Detail：
+      <span> 库位号：
         <input type="text" name="position[detail]" value="<%= @detail %>"/>
         <input type="hidden" name="position[detail_fuzzy]"/>
+      </span>
+      <span> 所属部门：
+        <%=  select_tag('position[whouse_id]',options_from_collection_for_select(Whouse.all,'id','name',@whouse_id), include_blank: true)%>
       </span>
       <input type="submit" value="查 找" class="btn btn-primary"/>
     </div>

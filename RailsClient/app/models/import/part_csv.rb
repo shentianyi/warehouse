@@ -1,8 +1,8 @@
 module Import
   module PartCsv
     def self.included(base)
-      base.extend CsvBase
       base.extend ClassMethods
+      base.extend CsvBase
       base.init_csv_cols
       base.init_uniq_key
     end

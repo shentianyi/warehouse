@@ -46,32 +46,35 @@ class PartService
       end
 
       # clean data
-      update_marker=(data.delete($UPMARKER).to_i==1)
+      op_code = data.delete($UPMARKER).to_i
 
-      if update_marker && data['position_new']
-        if  p_new = Position.find_by_detail(data['position_new'])
+      pp = PartPosition.where({part_id: data['part_id'], position_id: p.id}).first
+
+      case op_code
+        when 0
+          #create
           data.delete('position_new')
-          data['position_id'] = p_new.id
-        else
-          raise(ArgumentError, "行:#{line_no} Position New 不存在对应的库位")
-        end
-      end
-      data.delete('position_new')
-
-      if (pp = PartPosition.where({part_id: data['part_id'], position_id: p.id}).first) && !update_marker
-        skip = skip + 1
-        next
-      end
-
-      #1 means delete
-      if update_marker
-        if pp
+          if pp
+            skip = skip + 1
+            next
+          end
+          PartPosition.create(data)
+        when 1
+          #update
+          if  p_new = Position.find_by_detail(data['position_new'])
+            data['position_id'] = p_new.id
+          else
+            #raise(ArgumentError, "行:#{line_no} Position New 不存在对应的库位")
+          end
+          data.delete('position_new')
           pp.update(data)
-        else
-          raise(ArgumentError, "行:#{line_no} 零件库位不存在，无法修改")
-        end
-      else
-        PartPosition.create(data)
+        when 2
+          #delete
+          if pp
+            pp.destroy
+          else
+            next
+          end
       end
     end
     msg.result=true
