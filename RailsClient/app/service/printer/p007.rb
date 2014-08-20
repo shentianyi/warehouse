@@ -1,7 +1,7 @@
 #print fors report
 module Printer
   class P007<Base
-    HEAD=[:id,:user,:delivery_date,:whouse,:total_packages,:from_whouse_code,:from_whouse_position]
+    HEAD=[:id,:user,:delivery_date,:whouse,:total_package_num,:from_whouse_code,:from_whouse_position]
     BODY=[:part_id,:to_whouse_code,:to_whouse_position,:quantity,:transfer_data]
 
     def generate_data
@@ -13,7 +13,7 @@ module Printer
           delivery_date: f.created_at.nil? ? '' : f.created_at.localtime.strftime('%Y.%m.%d %H:%M'),
           whouse: whosue,
           user: stocker,
-          total_packages: f.sum_packages,
+          total_package_num: f.sum_packages,
           from_whouse_code: SysConfigCache.trans_warehouse_value,
           from_whouse_position: Position.trans_position
       }
