@@ -6,6 +6,7 @@ using System.ServiceModel;
 using System.Text;
 using System.ServiceModel.Web;
 using Brilliantech.Warehouse.PrintServiceLib.Model;
+using Brilliantech.Warehouse.PrintServiceHost.Config;
 
 namespace Brilliantech.Warehouse.PrintServiceLib
 {
@@ -39,6 +40,6 @@ namespace Brilliantech.Warehouse.PrintServiceLib
 
 
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, UriTemplate = "printers")]
-        Msg<List<string>> Printers();
+        Msg<PrintSet> Printers();
     }  
 }

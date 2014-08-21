@@ -44,18 +44,15 @@ namespace Brilliantech.Warehouse.PrintServiceLib
         }
 
 
-        public Msg<List<string>> Printers()
+        public Msg<PrintSet> Printers()
         {
-            Msg<List<string>> msg = new Msg<List<string>>();
+            
+            Msg<PrintSet> msg = new Msg<PrintSet>();
             try
             {
-                List<string> printers = new List<string>();
-                foreach (string printer in PrinterSettings.InstalledPrinters)
-                {
-                    printers.Add(printer);
-                }
+                PrintSet ps=new PrintSet(){ DefaultPrinters=PrinterConfig.Printers,SystemPrinters=PrinterConfig.SystemPrinters};
                 msg.Result = true;
-                msg.Object = printers;
+                msg.Object = ps;
             }
             catch (Exception e)
             {
