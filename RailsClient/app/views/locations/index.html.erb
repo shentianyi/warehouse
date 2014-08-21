@@ -43,3 +43,8 @@
 <div class="digg_pagination">
   <%= will_paginate @locations, :container => false %>
 </div>
+
+<% content_for :javascript_includes do%>
+    <%= javascript_include_tag "colorpicker.js"%>
+<%end%>
+
