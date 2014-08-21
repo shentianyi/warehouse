@@ -39,25 +39,26 @@ module V1
     # check package
     post :check_package do
       unless f = ForkliftService.exits?(params[:forklift_id])
-        return {result: 0, content: ForkliftMessage::NotExit}
+        return {result: 0, result_code: ResultCodeEnum::Failed,content: ForkliftMessage::NotExit}
       end
       unless ForkliftState.can_update?(f.state)
-        return {result: 0, content: ForkliftMessage::CannotUpdate}
+        return {result: 0, result_code: ResultCodeEnum::Failed,content: ForkliftMessage::CannotUpdate}
       end
       unless p = PackageService.exits?(params[:package_id])
-        return {result: 0, content: PackageMessage::NotExit}
+        return {result: 0, result_code: ResultCodeEnum::Failed,content: PackageMessage::NotExit}
       end
-      #unless ForkliftService.check_part_position(p.part,f.whouse_id)
-        #return {result: 0, content:PackageMessage::PartNotInWhouse}
-      #end
       unless p.forklift_id.nil?
-        return {result: 0, content:PackageMessage::InOtherForklift}
+        return {result: 0, result_code: ResultCodeEnum::Failed,content:PackageMessage::InOtherForklift}
       end
 
       if ForkliftService.add_package(f, p)
-        {result: 1, content: PackagePresenter.new(p).to_json}
+        unless p.position.nil?
+          {result: 1, result_code: ResultCodeEnum::Success,content: PackagePresenter.new(p).to_json}
+        else
+          {result: 1, result_code: ResultCodeEnum::TargetNotInPosition, content: PackagePresenter.new(p).to_json}
+        end
       else
-        {result: 0, content: ForkliftMessage::AddPackageFailed}
+        {result: 0,result_code: ResultCodeEnum::Failed, content: ForkliftMessage::AddPackageFailed}
       end
     end
 
