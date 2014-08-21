@@ -43,5 +43,6 @@ module Import
     def init_uniq_key
       class_variable_set(:@@ukeys,%w(id))
     end
+
   end
 end

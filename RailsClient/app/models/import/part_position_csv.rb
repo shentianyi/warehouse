@@ -32,7 +32,7 @@ module Import
     def init_csv_cols
       csv_cols=[]
       csv_cols<< Csv::CsvCol.new(field: 'part_id', header: 'PartNr')
-      csv_cols<< Csv::CsvCol.new(field: 'position_id', header: 'PositionNr', is_foreign: true, foreign:'Position')
+      csv_cols<< Csv::CsvCol.new(field: 'position_id', header: 'Position', is_foreign: true, foreign:'Position')
       csv_cols<< Csv::CsvCol.new(field: 'sourceable_id', header: 'LocationId',null:true)
       csv_cols<< Csv::CsvCol.new(field: 'position', header: 'Position')
       csv_cols<< Csv::CsvCol.new(field: 'whouse', header: 'Warehouse')

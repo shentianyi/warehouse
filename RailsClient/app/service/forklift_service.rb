@@ -48,16 +48,13 @@ class ForkliftService
       update_position = true
     end
 
-    ActiveRecord::Base.transactin do
+    ActiveRecord::Base.transaction do
       if forklift.update_attributes(args)
         if update_position
 
           forklift.packages.each do |p|
             if pp = PartPosition.joins(:position).where({part_positions: {part_id: p.part_id}, positions: {whouse_id: args[:whouse_id]}}).first
-              #puts p.package_position.to_json
-              #p.package_position.position_id = pp.position_id
-              #p.package_position.save
-              p.package_position.update({position:pp.position_id})
+              p.set_position
             end
           end
         end
