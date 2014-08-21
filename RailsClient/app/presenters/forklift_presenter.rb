@@ -73,6 +73,7 @@ class ForkliftPresenter<Presenter
         whouse_id:self.whouse_name.to_s,
         sum_packages:self.sum_packages.to_s,
         accepted_packages:self.accepted_packages.to_s,
+        created_at:self.created_at.strftime("%Y-%m-%d %H:%M"),
         packages:self.all_packages
     }
   end

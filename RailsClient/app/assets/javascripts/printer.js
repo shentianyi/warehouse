@@ -52,6 +52,10 @@ function print_delivery_reve_list() {
 function print_pick_list() {
     printer.print('P006');
 }
+function print_pick_list_with_id(id){
+    printer.id=function(){return id};
+    printer.print('P006');
+}
 function init_check() {
     $('body').on('change', '.print-check', function () {
         $(this).prop('checked', $(this).is(':checked'));
