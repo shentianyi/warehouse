@@ -57,7 +57,7 @@
       <tr>
         <td><%= index+@orders.offset+1 %></td>
         <td><%= order.id %></td>
-        <td><%= order.user.name %></td>
+        <td><%= order.user.name if order.user%></td>
         <td><%= order.source.name if order.source%></td>
         <td>
           <% if order.is_emergency %>
