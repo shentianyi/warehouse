@@ -1,8 +1,8 @@
 <h2>仓库列表</h2>
 
-<%= link_to "新建分仓库", send("new_#{@model}_path") %>
-<%= link_to "上传/更新分仓库", send("import_#{@model.pluralize}_path") %>
-<%= link_to "下载", send("download_#{@model.pluralize}_path") %>
+<%= link_to "新建分仓库", send("new_#{@model}_path"),:class=>'btn btn-default' %>
+<%= link_to "上传/更新分仓库", send("import_#{@model.pluralize}_path") ,:class=>'btn btn-default'%>
+<%= link_to "下载", send("download_#{@model.pluralize}_path"),data: { confirm: 'Are you sure?' },:class=>'btn btn-default' %>
 <div class="digg_pagination">
   <div class="page_info">
     <%= page_entries_info @whouses %>
