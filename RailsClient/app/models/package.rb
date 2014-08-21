@@ -71,8 +71,10 @@ class Package < ActiveRecord::Base
         self.package_position.update({position_id:pp.position_id})
       end
       #self.package_position.save
+    elsif self.package_position
+      self.package_position.destroy
     else
-      return false
+      return true
     end
   end
 
