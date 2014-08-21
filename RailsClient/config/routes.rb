@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-
+  resources :led_states
   resources :sys_configs
 
   resources :order_items do

@@ -1,0 +1,26 @@
+<h2>LED配置列表</h2>
+<% if @msg && !@msg.result %>
+    <div class="error">
+      <%= @msg.content %>
+    </div>
+<% end %>
+<%= link_to '新建LED配置', send("new_led_state_path"), :class => 'btn btn-default'%>
+
+<table class="table table-bordered table-striped globle-table">
+  <thead>
+  <tr>
+    <th>状态</th>
+    <th>颜色</th>
+    <th>闪烁代码</th>
+  </tr>
+  </thead>
+  <tbody>
+  <%@led_states.each do |led|%>
+      <tr>
+        <td><%=led.name%></td>
+        <td><%=led.rgb%></td>
+        <td><%=led.led_code%></td>
+      </tr>
+  <%end%>
+  </tbody>
+</table>
