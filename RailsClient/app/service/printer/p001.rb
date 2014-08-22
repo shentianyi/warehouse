@@ -17,7 +17,7 @@ module Printer
       HEAD.each do |k|
         heads<<{Key: k, Value: head[k]}
       end
-      packages=f.packages.order("part_id")
+      packages=f.packages.order("part_id,id")
       packages.each do |p|
         body={package_id: p.id,
               part_id: PackageLabelRegex.part_prefix_string+ p.part_id,
