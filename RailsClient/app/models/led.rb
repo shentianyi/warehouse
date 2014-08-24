@@ -19,9 +19,8 @@ class Led < ActiveRecord::Base
   def send_led_message
     if self.current_state_changed? && !self.current_state.blank? && (modem=self.modem)
       #msg=LedState.get_message_by_state(self.current_state)
-      puts '___________________________-'
       msg=self.current_state
-      LedService.send_msg(self.id, msg, modem.ip)
+   puts    LedService.send_msg(self.id, msg, modem.ip).to_json
     end
   end
 end

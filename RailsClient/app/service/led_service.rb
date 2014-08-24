@@ -29,7 +29,7 @@ class LedService
   def self.update_led_state(led, led_state)
     msg=Message.new
     if led
-      led.update(currend_state: led_state)
+      led.update(current_state: led_state)
       msg.result =true
       msg.content ='LED 状态已改变'
     else
