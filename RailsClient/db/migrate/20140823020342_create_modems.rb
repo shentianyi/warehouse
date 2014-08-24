@@ -1,10 +1,9 @@
-class CreateLedStates < ActiveRecord::Migration
+class CreateModems < ActiveRecord::Migration
   def up
-    create_table :led_states,:id=>false do |t|
+    create_table :modems , :id => false do |t|
       t.string :id, :limit => 36, :primary => true, :null => false
       t.string :name
-      t.string :rgb
-      t.string :led_code
+      t.string :ip
       #
       t.boolean :is_delete, :default => false
       t.boolean :is_dirty, :default => true
@@ -12,10 +11,13 @@ class CreateLedStates < ActiveRecord::Migration
       #
       t.timestamps
     end
-    execute 'ALTER TABLE led_states ADD PRIMARY KEY (id)'
+
+    add_index :modems, :id
+
+    execute 'ALTER TABLE modems ADD PRIMARY KEY (id)'
   end
 
   def down
-    drop_table :led_states
+    drop_table :modems
   end
 end

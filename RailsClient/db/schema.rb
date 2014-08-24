@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140821085247) do
+ActiveRecord::Schema.define(version: 20140823030424) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -76,21 +76,6 @@ ActiveRecord::Schema.define(version: 20140821085247) do
   add_index "deliveries", ["user_id"], name: "index_deliveries_on_user_id", using: :btree
   add_index "deliveries", ["uuid"], name: "index_deliveries_on_uuid", using: :btree
 
-  create_table "forklift_items", force: true do |t|
-    t.string   "forklift_id"
-    t.string   "package_id"
-    t.integer  "state"
-    t.boolean  "is_delete",   default: false
-    t.boolean  "is_dirty",    default: true
-    t.boolean  "is_new",      default: true
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "forklift_items", ["forklift_id"], name: "index_forklift_items_on_forklift_id", using: :btree
-  add_index "forklift_items", ["id"], name: "index_forklift_items_on_id", using: :btree
-  add_index "forklift_items", ["package_id"], name: "index_forklift_items_on_package_id", using: :btree
-
   create_table "forklifts", force: true do |t|
     t.string   "uuid",        limit: 36,                 null: false
     t.integer  "state",                  default: 0,     null: false
@@ -124,6 +109,24 @@ ActiveRecord::Schema.define(version: 20140821085247) do
     t.datetime "updated_at"
   end
 
+  create_table "leds", force: true do |t|
+    t.string   "name"
+    t.string   "signal_id"
+    t.integer  "current_state"
+    t.boolean  "is_delete",     default: false
+    t.boolean  "is_dirty",      default: true
+    t.boolean  "is_new",        default: true
+    t.string   "modem_id"
+    t.string   "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "leds", ["id"], name: "index_leds_on_id", using: :btree
+  add_index "leds", ["modem_id"], name: "index_leds_on_modem_id", using: :btree
+  add_index "leds", ["position"], name: "index_leds_on_position", using: :btree
+  add_index "leds", ["signal_id"], name: "index_leds_on_signal_id", using: :btree
+
   create_table "locations", force: true do |t|
     t.string   "uuid",           limit: 36,                 null: false
     t.string   "name"
@@ -141,6 +144,18 @@ ActiveRecord::Schema.define(version: 20140821085247) do
   add_index "locations", ["destination_id"], name: "index_locations_on_destination_id", using: :btree
   add_index "locations", ["id"], name: "index_locations_on_id", using: :btree
   add_index "locations", ["uuid"], name: "index_locations_on_uuid", using: :btree
+
+  create_table "modems", force: true do |t|
+    t.string   "name"
+    t.string   "ip"
+    t.boolean  "is_delete",  default: false
+    t.boolean  "is_dirty",   default: true
+    t.boolean  "is_new",     default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "modems", ["id"], name: "index_modems_on_id", using: :btree
 
   create_table "order_items", force: true do |t|
     t.string   "uuid",                         null: false

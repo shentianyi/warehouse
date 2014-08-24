@@ -31,7 +31,7 @@ module Import
           # clean data
           update_marker=(data.delete($UPMARKER).to_i==1)
           if query
-            if item=self.where(query).first
+            if item=self.unscoped.where(query).first
               if update_marker
                 item.update(data)
               else

@@ -74,4 +74,11 @@ ActiveRecord::Base.transaction do
   unless SysConfig.find_by_code('TRANS_WAREHOUSE')
     SysConfig.create(code: 'TRANS_WAREHOUSE', value: 'ITLZ', name: '在途库编号')
   end
+
+  unless SysConfig.find_by_code('LED_SERVICE_PORT')
+    SysConfig.create(code: 'LED_SERVICE_PORT', value: '9001', name: 'LED服务端口')
+  end
+  unless SysConfig.find_by_code('LED_SEND_MSG_ACTION')
+    SysConfig.create(code: 'LED_SEND_MSG_ACTION', value: '/led/send_msg/', name: 'LED服务发送消息方法')
+  end
 end

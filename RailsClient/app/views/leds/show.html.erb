@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>编号(解调器自动分配的ID):</strong>
+  <%= @led.signal_id %>
+</p>
+
+<p>
+  <strong>解调器ID:</strong>
+  <%= @led.modem_id %>
+</p>
+
+<p>
+  <strong>解调器IP:</strong>
+  <%= @led.modem.ip if @led.modem %>
+</p>
+
+
+<p>
+  <strong>库位:</strong>
+  <%= @led.position %>
+</p>
+
+<p>
+  <strong>当前状态:</strong>
+  <%= LedLightState.display(@led.current_state) %>
+</p>
+
+
+<%= link_to '编辑', edit_led_path(@led) %> |
+<%= link_to '返回', leds_path %>

@@ -1,0 +1,40 @@
+<%= form_for(@led) do |f| %>
+    <% if @led.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@led.errors.count, "error") %> prohibited this led from being saved:</h2>
+          <ul>
+            <% @led.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="field">
+      <%= f.label :signal_id, '编号(解调器自动分配的ID)' %>
+      <br>
+      <%= f.text_field :signal_id %>
+    </div>
+
+    <div class="field">
+      <%= f.label :modem_id, '解调器ID' %>
+      <br>
+      <%= f.text_field :modem_id %>
+    </div>
+
+    <div class="field">
+      <%= f.label :position, '库位' %>
+      <br>
+      <%= f.text_field :position %>
+    </div>
+
+    <div class="field">
+      <%= f.label :current_state, '当前状态' %>
+      <br>
+      <%= f.select(:current_state, LedLightState.list, {include_blank: false}) %>
+    </div>
+
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+<% end %>

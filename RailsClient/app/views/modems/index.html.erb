@@ -1,0 +1,37 @@
+<h1>解调器列表</h1>
+
+<%= link_to "新建解调器", send("new_#{@model}_path"),:class=>'btn btn-default' %>
+<%= link_to "上传/更新解调器", send("import_#{@model.pluralize}_path"),:class=>'btn btn-default' %>
+<%= link_to "下载", send("download_#{@model.pluralize}_path"),data: { confirm: '确定下载?' },:class=>'btn btn-default' %>
+
+
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @modems %>
+  </div>
+  <%= will_paginate @modems, :container => false %>
+</div>
+<table class="table table-bordered table-striped globle-table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>名称</th>
+      <th>IP</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @modems.each do |modem| %>
+      <tr>
+        <td><%= modem.id %></td>
+        <td><%= modem.name %></td>
+        <td><%= modem.ip %></td>
+        <td><%= link_to '编辑', edit_modem_path(modem) %></td>
+        <td><%= link_to '删除', modem, method: :delete, data: { confirm: '确定删除?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
