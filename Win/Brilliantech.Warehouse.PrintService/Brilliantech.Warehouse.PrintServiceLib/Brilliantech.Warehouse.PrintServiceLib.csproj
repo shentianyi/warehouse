@@ -53,6 +53,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
@@ -86,6 +87,9 @@
     <None Include="Template\ForkliftList.tff" />
     <None Include="Template\read.ini" />
     <None Include="Template\test.tff" />
+    <Content Include="Template\TransferForkliftList.tff">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Brilliantech.Framwork\Brilliantech.Framwork.csproj">

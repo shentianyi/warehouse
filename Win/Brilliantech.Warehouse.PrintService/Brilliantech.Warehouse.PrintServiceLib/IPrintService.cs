@@ -6,6 +6,7 @@ using System.ServiceModel;
 using System.Text;
 using System.ServiceModel.Web;
 using Brilliantech.Warehouse.PrintServiceLib.Model;
+using Brilliantech.Warehouse.PrintServiceHost.Config;
 
 namespace Brilliantech.Warehouse.PrintServiceLib
 {
@@ -20,9 +21,25 @@ namespace Brilliantech.Warehouse.PrintServiceLib
         /// <param name="id">id for print</param>
         /// <returns></returns>
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, UriTemplate = "print/{code}/{id}")]
+        [OperationContractAttribute(Name="Print")]
         Msg<string> Print(string code, string id);
 
+
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, UriTemplate = "print/{code}/{id}/{printer_name}")]
+        [OperationContractAttribute(Name = "PrintWithName")]
+        Msg<string> Print(string code, string id, string printer_name);
+
+
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, UriTemplate = "print/{code}/{id}/{printer_name}/{copy}")]
+        [OperationContractAttribute(Name = "PrintWithNameAndCopy")]
+        Msg<string> Print(string code, string id, string printer_name, string copy);
+
+
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, UriTemplate = "cross_print/{code}/{id}")]
-        Msg<string> CrossPrint(string code, string id); 
+        Msg<string> CrossPrint(string code, string id);
+
+
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, UriTemplate = "printers")]
+        Msg<PrintSet> Printers();
     }  
 }

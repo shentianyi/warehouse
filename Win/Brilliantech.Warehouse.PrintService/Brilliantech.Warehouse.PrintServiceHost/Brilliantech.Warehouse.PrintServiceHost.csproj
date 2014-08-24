@@ -158,6 +158,9 @@
     <Content Include="Template\DeliveryReceivedConfirmList.tff">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Template\TransferForkliftList.tff">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Brilliantech.Framwork\Brilliantech.Framwork.csproj">

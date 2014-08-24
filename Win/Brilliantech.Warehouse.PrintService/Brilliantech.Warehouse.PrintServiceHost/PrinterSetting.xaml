@@ -9,6 +9,9 @@
         <Style x:Name="ComboBoxStyle" TargetType="ComboBox">
             <Setter Property="FontSize" Value="15"/>
         </Style>
+        <Style x:Name="CheckBoxStyle" TargetType="CheckBox">
+            <Setter Property="FontSize" Value="15"/>
+        </Style>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -44,6 +47,8 @@
                     <Label Content="选择打印机"/>
                 </StackPanel>
                 <ComboBox Name="PrinterCB" Width="270" />
+                <CheckBox Content="全部使用此打印机" Height="27" 
+                          Name="AllPrinterSetCB" Foreground="#FFF26B16" Width="141" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
                 <StackPanel Width="150">

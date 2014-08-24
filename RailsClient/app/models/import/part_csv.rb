@@ -12,7 +12,7 @@ module Import
     #@@csv_cols=nil
 
     def uniq_key
-      class_variable_get(:@@keys)
+      class_variable_get(:@@ukeys)
     end
 
     def csv_headers
@@ -43,5 +43,6 @@ module Import
     def init_uniq_key
       class_variable_set(:@@ukeys,%w(id))
     end
+
   end
 end

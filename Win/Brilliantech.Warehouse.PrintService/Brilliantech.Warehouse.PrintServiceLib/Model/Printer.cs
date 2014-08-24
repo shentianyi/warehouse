@@ -23,13 +23,13 @@ namespace Brilliantech.Warehouse.PrintServiceLib.Model
         public string Name { get; set; }
         public int Type { get; set; }
         public int Copy { get; set; }
-        public void Print(RecordSet data)
+        public void Print(RecordSet data,string printer_name=null,string copy=null)
         {
             IReportGen gen = new TecITGener();
             ReportGenConfig config = new ReportGenConfig()
             {
-                Printer = this.Name,
-                NumberOfCopies = this.Copy,
+                Printer = string.IsNullOrEmpty(printer_name) ? this.Name : printer_name,
+                NumberOfCopies = string.IsNullOrEmpty(copy) ? this.Copy : int.Parse(copy),
                 PrinterType = (PrinterType)this.Type,
                 Template = this.TemplatePath
             };
