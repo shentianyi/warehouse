@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{6BBF4174-5A04-4155-A68C-E1660F917B71}</ProjectGuid>
+    <ProjectGuid>{87E715B1-BFC4-486B-8454-9C93FB77CBA5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Brilliantech.Warehouse.PrintServiceLib</RootNamespace>
-    <AssemblyName>Brilliantech.Warehouse.PrintServiceLib</AssemblyName>
+    <RootNamespace>Brilliantech.Warehouse.LEDServiceLib</RootNamespace>
+    <AssemblyName>Brilliantech.Warehouse.LEDServiceLib</AssemblyName>
     <ProjectTypeGuids>{3D9AD99F-2412-4246-B90B-4EAA41C64699};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <StartArguments>/client:"WcfTestClient.exe"</StartArguments>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
@@ -34,22 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Brilliantech.ReportGenConnector">
-      <HintPath>..\..\ThirdPart\Brilliantech.ReportGenConnector.dll</HintPath>
-    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\ThirdPart\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\ThirdPart\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Nini">
-      <HintPath>..\..\ThirdPart\Nini.dll</HintPath>
-    </Reference>
-    <Reference Include="RestSharp">
-      <HintPath>..\..\ThirdPart\RestSharp.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -58,34 +46,21 @@
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="TECIT.TFORMer, Version=6.0.3.0, Culture=neutral, PublicKeyToken=1b5f4306b234b83d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\ThirdPart\TECIT.TFORMer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config\ApiConfig.cs" />
-    <Compile Include="Config\PrinterConfig.cs" />
-    <Compile Include="IPrintService.cs" />
-    <Compile Include="Model\ApiClient.cs" />
+    <Compile Include="Config\SerialPortConfig.cs" />
+    <Compile Include="CusException\SerialPortNotUsableException.cs" />
+    <Compile Include="ILedService.cs" />
     <Compile Include="Model\Msg.cs" />
-    <Compile Include="Model\Printer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PrintService.cs" />
+    <Compile Include="LedService.cs" />
+    <Compile Include="SerialPortHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Ini\api.ini" />
-    <None Include="Ini\printers.ini" />
-    <None Include="Template\DeliveryList.tff" />
-    <None Include="Template\DeliveryReceivedList.tff" />
-    <None Include="Template\DeliveryUnReceivedList.tff" />
-    <None Include="Template\ForkliftList.tff" />
-    <None Include="Template\read.ini" />
-    <None Include="Template\test.tff" />
+    <None Include="App.config" />
+    <Content Include="Ini\serial_port.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Brilliantech.Framwork\Brilliantech.Framwork.csproj">
