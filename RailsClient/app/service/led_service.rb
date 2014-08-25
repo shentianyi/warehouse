@@ -1,7 +1,7 @@
 class LedService
 
-  def self.send_msg( msg, modem_ip)
-    return ModemRest::Msg.new( msg: msg, ip: modem_ip).send
+  def self.send_msg(led_id, msg, modem_ip)
+    return ModemRest::Msg.new(led_id:led_id, msg: msg, ip: modem_ip).change_led_state
   end
 
   #def self.send_msg_by_led_state(led_state, position_detail)

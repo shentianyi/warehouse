@@ -23,6 +23,8 @@ module Import
       Proc.new { |line, item|
         line<<item.signal_id
         line<<item.modem_id
+        line<<item.mac
+        line<<item.current_state
         line<< item.position
       }
     end
@@ -32,6 +34,7 @@ module Import
       csv_cols<< Csv::CsvCol.new(field: 'signal_id', header: 'NodeId')
       csv_cols<< Csv::CsvCol.new(field: 'modem_id', header: 'PAN_ID', is_foreign:true, foreign:'Modem')
       csv_cols<< Csv::CsvCol.new(field: 'mac', header: 'Mac')
+      csv_cols<< Csv::CsvCol.new(field: 'current_state', header: 'State')
       csv_cols<< Csv::CsvCol.new(field: 'position', header: 'Position')
       csv_cols<< Csv::CsvCol.new(field: $UPMARKER, header: $UPMARKER)
       class_variable_set(:@@csv_cols, csv_cols)
