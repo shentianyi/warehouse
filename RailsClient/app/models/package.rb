@@ -86,6 +86,10 @@ class Package < ActiveRecord::Base
 
   private
   def led_state_change
+    if self.position.nil?
+      return 
+    end
+
     led = Led.find_by_position(self.position.detail)
 
     if led.nil?
