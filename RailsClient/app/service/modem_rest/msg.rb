@@ -1,6 +1,6 @@
 module ModemRest
   class Msg<CZ::BaseClass
-    attr_accessor :msg, :id, :ip
+    attr_accessor :msg, :ip
 
     def send
       process_msg=Message.new
@@ -25,8 +25,9 @@ module ModemRest
     end
 
     def get_send_message_url
-       "http://#{self.ip}:#{SysConfigCache.led_service_port_value}/#{SysConfigCache.led_send_msg_action_value}/#{self.id}/#{self.msg}"
-     
+    p=   "http://#{self.ip}:#{SysConfigCache.led_service_port_value}/#{SysConfigCache.led_send_msg_action_value}/#{self.msg}"
+     puts p
+      return p
     end
 
     def get_resource(url)
