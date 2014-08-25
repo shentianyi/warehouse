@@ -1,3 +1,15 @@
+<style>
+    #picker {
+        margin:0;
+        padding:0;
+        border:0;
+        width:120px;
+        height:20px;
+        border-right:20px solid;
+        line-height:20px;
+    }
+</style>
+
 <%= form_for(@led_state) do |f| %>
     <% if @led_state.errors.any? %>
         <div id="error_explanation">
@@ -12,18 +24,19 @@
     <% end %>
 
     <p>
-      <%= f.label :state,'状 态'%>
-      <%=  f.select(:state,LedLightState.list,{include_blank: false})%>
+      <%= f.label :state, '状 态' %>
+      <%= f.select(:state, LedLightState.list, {include_blank: false}) %>
     </p>
 
     <p>
-      <%= f.label :rgb, 'RGB颜色'%>
-      <%= f.text_field :rgb%>
+      <%= f.label :rgb, 'RGB颜色' %>
+      <%= f.text_field :rgb, :id=>"picker"%>
     </p>
 
+
     <p>
-      <%= f.label :led_code, 'LED闪烁代码'%>
-      <%= f.text_field :led_code%>
+      <%= f.label :led_code, 'LED闪烁代码' %>
+      <%= f.text_field :led_code %>
     </p>
 
     <div class="actions">
@@ -31,3 +44,22 @@
     </div>
 <% end %>
 
+<script type="text/javascript">
+  $("document").ready(function () {
+      $('#picker').colpick({
+          layout:'rgb',
+          submit:0,
+          <%= "color:{r:#{@led_state.R},g:#{@led_state.G},b:#{@led_state.B}}," if @led_state.rgb %>
+          onChange:function(hsb,hex,rgb,el,bySetColor) {
+              $(el).css('border-color','#'+hex);
+              // Fill the text box just if the color was set using the picker, and not the colpickSetColor function.
+              if(!bySetColor) $(el).val(rgb.r+" "+rgb.g+" "+rgb.b);
+          }
+      }).keyup(function(){
+          $(this).colpickSetColor(this.value);
+      });
+  })
+</script>
+<% content_for :javascript_includes do%>
+    <%= javascript_include_tag "colpick"%>
+<% end%>
