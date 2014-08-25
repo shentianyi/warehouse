@@ -4,7 +4,7 @@ class CreateLedStates < ActiveRecord::Migration
       t.string :id, :limit => 36, :primary => true, :null => false
       t.integer :state
       t.string :rgb
-      t.integer :led_code
+        t.integer :led_code
       #
       t.boolean :is_delete, :default => false
       t.boolean :is_dirty, :default => true

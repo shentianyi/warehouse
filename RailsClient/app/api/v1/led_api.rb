@@ -8,10 +8,10 @@ module V1
       end
     end
 
-    # params[:position_detail]
+    # params[:position]
     # params[:state]
     post :reset do
-      msg=LedService.update_led_state_by_position(params[:position_detail], params[:state])
+      msg=LedService.update_led_state_by_position(params[:position], params[:state])
       msg.result = msg.result ? 1 : 0
       return msg
     end

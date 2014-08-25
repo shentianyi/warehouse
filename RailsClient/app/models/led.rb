@@ -5,6 +5,7 @@ class Led < ActiveRecord::Base
 
   validate :validate_save
   after_save :send_led_message
+
   private
 
   def validate_save
@@ -18,10 +19,11 @@ class Led < ActiveRecord::Base
 
   def send_led_message
     if self.current_state_changed? && !self.current_state.blank? && (modem=self.modem)
-      #msg=LedState.get_message_by_state(self.current_state)
-      msg=URI::escape("#{self.signal_id} #{self.current_state}")
-      puts msg
-      puts LedService.send_msg( msg, modem.ip).to_json
+      if msg=LedState.get_message_by_state(self.current_state)
+        puts LedService.send_msg(self.signal_id,msg, modem.ip).to_json
+      end
     end
   end
+
+
 end

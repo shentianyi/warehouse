@@ -5,10 +5,7 @@ class LedState < ActiveRecord::Base
 
   def self.get_message_by_state state
     ls = LedState.find_by_state state
-    if ls.nil?
-      return " "
-    end
-
+    return nil if ls.nil?
     return "#{ls.rgb} #{ls.led_code}"
   end
 

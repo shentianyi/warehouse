@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140823030424) do
+ActiveRecord::Schema.define(version: 20140825033530) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -76,21 +76,6 @@ ActiveRecord::Schema.define(version: 20140823030424) do
   add_index "deliveries", ["user_id"], name: "index_deliveries_on_user_id", using: :btree
   add_index "deliveries", ["uuid"], name: "index_deliveries_on_uuid", using: :btree
 
-  create_table "forklift_items", force: true do |t|
-    t.string   "forklift_id"
-    t.string   "package_id"
-    t.integer  "state"
-    t.boolean  "is_delete",   default: false
-    t.boolean  "is_dirty",    default: true
-    t.boolean  "is_new",      default: true
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "forklift_items", ["forklift_id"], name: "index_forklift_items_on_forklift_id", using: :btree
-  add_index "forklift_items", ["id"], name: "index_forklift_items_on_id", using: :btree
-  add_index "forklift_items", ["package_id"], name: "index_forklift_items_on_package_id", using: :btree
-
   create_table "forklifts", force: true do |t|
     t.string   "uuid",        limit: 36,                 null: false
     t.integer  "state",                  default: 0,     null: false
@@ -114,9 +99,9 @@ ActiveRecord::Schema.define(version: 20140823030424) do
   add_index "forklifts", ["whouse_id"], name: "index_forklifts_on_whouse_id", using: :btree
 
   create_table "led_states", force: true do |t|
-    t.integer  "state"
+    t.string   "name"
     t.string   "rgb"
-    t.integer  "led_code"
+    t.string   "led_code"
     t.boolean  "is_delete",  default: false
     t.boolean  "is_dirty",   default: true
     t.boolean  "is_new",     default: true
@@ -135,6 +120,7 @@ ActiveRecord::Schema.define(version: 20140823030424) do
     t.string   "position"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "mac"
   end
 
   add_index "leds", ["id"], name: "index_leds_on_id", using: :btree
