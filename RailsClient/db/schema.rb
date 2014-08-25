@@ -114,7 +114,11 @@ ActiveRecord::Schema.define(version: 20140825033530) do
   add_index "forklifts", ["whouse_id"], name: "index_forklifts_on_whouse_id", using: :btree
 
   create_table "led_states", force: true do |t|
+<<<<<<< HEAD
+    t.string   "state"
+=======
     t.integer  "state"
+>>>>>>> 10aaaa2f90742c1cad021a18d4540f28803b314b
     t.string   "rgb"
     t.integer  "led_code"
     t.boolean  "is_delete",  default: false
