@@ -94,7 +94,7 @@ class Package < ActiveRecord::Base
     if self.position.nil?
       return
     end
-    to_state = LedLightState::NORMAL
+    to_state = -1 #LedLightState::NORMAL
 
     case self.state
       when PackageState::WAY
@@ -103,7 +103,9 @@ class Package < ActiveRecord::Base
         to_state = LedLightState::RECEIVED
     end
 
-    LedService.update_led_state_by_position(self.position.detail,to_state)
+    if to_state != -1
+      LedService.update_led_state_by_position(self.position.detail,to_state)
+    end
   end
 
   private
