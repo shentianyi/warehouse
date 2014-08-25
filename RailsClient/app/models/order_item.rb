@@ -13,6 +13,7 @@ class OrderItem < ActiveRecord::Base
 
   def led_state_change
     position = OrderItemService.verify_department(self.whouse.name,self.part_id)
+
     if position.nil?
       return
     end

@@ -2,7 +2,7 @@ class LedStatesController < ApplicationController
   before_action :set_led_state, only: [:show, :edit, :update, :destroy]
 
   def index
-    @led_states = LedState.all
+    @led_states = LedState.all.order(:state)
   end
 
   def new
