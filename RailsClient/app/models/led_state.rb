@@ -3,13 +3,25 @@ class LedState < ActiveRecord::Base
 
   validate :validate_create_update
 
-  def get_message_by_state state
+  def self.get_message_by_state state
     ls = LedState.find_by_state state
     if ls.nil?
       return " "
     end
 
     return "#{ls.rgb} #{ls.led_code}"
+  end
+
+  def R
+    self.rgb.split(" ")[0]
+  end
+
+  def G
+    self.rgb.split(" ")[1]
+  end
+
+  def B
+    self.rgb.split(" ")[2]
   end
 
   private

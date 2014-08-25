@@ -32,7 +32,14 @@ module V1
         {result:0,content:'LED灯状态错误,请重置'}
       end
 
-      {result:1,content:{position:pp.position.detail,rgb:ls.rgb,state:led.current_state}}
+      {result:1,content:{position:pp.position.detail,state:led.current_state}}
+    end
+
+    get :led_state_list do
+      list = []
+      LedState.all.order(:state).each do |ls|
+        list << {state:ls.state,}
+      end
     end
   end
 end
