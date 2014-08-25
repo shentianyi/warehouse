@@ -1,1 +1,1 @@
-SignalId;ModemId;PositionId;DOUPDATE
+NodeId;PAN_ID;Mac;Position;DOUPDATE
