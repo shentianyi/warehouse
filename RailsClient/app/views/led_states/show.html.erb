@@ -8,7 +8,7 @@
 <p>
   <strong>RGB颜色:</strong>
   <%= @led_state.rgb %>
-  <input type="button" style="background-color: #f0ad4e;width: 30px"/>
+  <input type="button" style='<%= "background-color: rgb(#{@led_state.R},#{@led_state.G},#{@led_state.B})" %>;width:30px'/>
 </p>
 
 <p>
