@@ -52,6 +52,9 @@ module V1
       end
 
       if ForkliftService.add_package(f, p)
+        puts "------------------------------"
+        puts p.position
+        puts "------------------------------"
         unless p.position.nil?
           {result: 1, result_code: ResultCodeEnum::Success,content: PackagePresenter.new(p).to_json}
         else

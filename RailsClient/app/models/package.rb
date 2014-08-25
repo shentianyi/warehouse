@@ -5,7 +5,7 @@ class Package < ActiveRecord::Base
   #belongs_to :forklift, :throuth => :forklift_item
   #has_one :forklift_item, :dependent => :destroy
   has_one :package_position, :dependent => :destroy
-  has_one :position, :through => :package_position
+  #has_one :position, :through => :package_position
   has_many :state_logs, as: :stateable
 
   belongs_to :user
@@ -30,6 +30,12 @@ class Package < ActiveRecord::Base
     self.forklift = forklift
     set_position
     self.save
+  end
+
+  def position
+    if self.package_position
+      self.package_position.position
+    end
   end
 
   # remove_form_forklift
