@@ -9,6 +9,18 @@ class LedState < ActiveRecord::Base
     return "#{ls.rgb} #{ls.led_code}"
   end
 
+  def R
+    self.rgb.split(" ")[0]
+  end
+
+  def G
+    self.rgb.split(" ")[1]
+  end
+
+  def B
+    self.rgb.split(" ")[2]
+  end
+
   private
   def validate_create_update
     errors.add(:state, "不能重复") if LedState.where(:state => self.state).first if new_record?

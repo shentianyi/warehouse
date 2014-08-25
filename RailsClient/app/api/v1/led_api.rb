@@ -17,7 +17,7 @@ module V1
     end
 
     # params[:whouse,:part_id]
-    get :led_state do
+    get :position_state do
       pp = OrderItemService.verify_department(params[:whouse],params[:part_id])
       if pp.nil?
         {result:0,content:'库位不存在'}
@@ -32,7 +32,15 @@ module V1
         {result:0,content:'LED灯状态错误,请重置'}
       end
 
-      {result:1,content:{position:pp.position.detail,rgb:ls.rgb,state:led.current_state}}
+      {result:1,content:{position:pp.position.detail,state:led.current_state}}
+    end
+
+    get :led_state_list do
+      list = []
+      LedState.all.order(:state).each do |ls|
+        list << {state:ls.state,R:ls.R,G:ls.G,B:ls.B}
+      end
+      {result:1,content:list}
     end
   end
 end
