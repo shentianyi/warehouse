@@ -77,9 +77,9 @@ ActiveRecord::Schema.define(version: 20140823030424) do
   add_index "deliveries", ["uuid"], name: "index_deliveries_on_uuid", using: :btree
 
   create_table "forklift_items", force: true do |t|
-    t.string   "forklift_id",                 null: false
-    t.string   "package_id",                  null: false
-    t.integer  "state",       default: 0,     null: false
+    t.string   "forklift_id"
+    t.string   "package_id"
+    t.integer  "state"
     t.boolean  "is_delete",   default: false
     t.boolean  "is_dirty",    default: true
     t.boolean  "is_new",      default: true
@@ -114,9 +114,9 @@ ActiveRecord::Schema.define(version: 20140823030424) do
   add_index "forklifts", ["whouse_id"], name: "index_forklifts_on_whouse_id", using: :btree
 
   create_table "led_states", force: true do |t|
-    t.string   "name"
+    t.integer  "state"
     t.string   "rgb"
-    t.string   "led_code"
+    t.integer  "led_code"
     t.boolean  "is_delete",  default: false
     t.boolean  "is_dirty",   default: true
     t.boolean  "is_new",     default: true
