@@ -14,7 +14,7 @@ class LedLightState
   end
 
   def self.display state
-    case state
+    case state.to_i
       when NORMAL
         'Normal'
       when ORDERED

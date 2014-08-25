@@ -2,9 +2,9 @@ class CreateLedStates < ActiveRecord::Migration
   def up
     create_table :led_states,:id=>false do |t|
       t.string :id, :limit => 36, :primary => true, :null => false
-      t.string :name
+      t.integer :state
       t.string :rgb
-      t.string :led_code
+      t.integer :led_code
       #
       t.boolean :is_delete, :default => false
       t.boolean :is_dirty, :default => true

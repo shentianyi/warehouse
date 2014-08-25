@@ -18,7 +18,7 @@ class Package < ActiveRecord::Base
   # please do this
   #here is code for Leoni
   before_save :set_package_position
-  after_save :auto_shelved
+  after_save :auto_shelved,:led_state_change
 
   #-------------
   # Instance Methods
@@ -27,17 +27,8 @@ class Package < ActiveRecord::Base
   # add_to_forklift
   def add_to_forklift forklift
     self.forklift = forklift
-    #forklift.sum_packages = forklift.sum_packages + 1
-    #forklift.save
-#<<<<<<< HEAD
     set_position
     self.save
-    #set_position
-#=======
-    #self.save
-#    set_position
-#    self.save
-#>>>>>>> a0a32e3e27a1908ebc6397024f1e965812b73ae1
   end
 
   # remove_form_forklift
@@ -94,6 +85,32 @@ class Package < ActiveRecord::Base
   end
 
   private
+  def led_state_change
+    if self.position.nil?
+      return 
+    end
+
+    led = Led.find_by_position(self.position.detail)
+
+    if led.nil?
+      return
+    end
+
+    led_state = led.current_state
+    to_state = LedLightState::NORMAL
+
+    case self.state
+      when PackageState::WAY
+        to_state = LedLightState::DELIVERED
+      when PackageState::RECEIVED
+        to_state = LedLightState::RECEIVED
+    end
+
+    if led_state != to_state
+      led.update({current_state:to_state})
+    end
+  end
+
   def auto_shelved
     #if partnum changed, reset package position
     if self.part_id_changed?
