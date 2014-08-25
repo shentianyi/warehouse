@@ -29,8 +29,9 @@ module Import
 
     def init_csv_cols
       csv_cols=[]
-      csv_cols<< Csv::CsvCol.new(field: 'signal_id', header: 'SignalId')
+      csv_cols<< Csv::CsvCol.new(field: 'signal_id', header: 'PAN_ID')
       csv_cols<< Csv::CsvCol.new(field: 'modem_id', header: 'ModemId', is_foreign:true, foreign:'Modem')
+      csv_cols<< Csv::CsvCol.new(field: 'mac', header: 'Mac')
       csv_cols<< Csv::CsvCol.new(field: 'position', header: 'Position')
       csv_cols<< Csv::CsvCol.new(field: $UPMARKER, header: $UPMARKER)
       class_variable_set(:@@csv_cols, csv_cols)
