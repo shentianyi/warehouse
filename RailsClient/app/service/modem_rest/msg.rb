@@ -6,6 +6,8 @@ module ModemRest
       process_msg=Message.new
       begin
         response= self.get_resource(self.get_change_led_state_url).post(nil)
+       puts 'response-------'
+        puts response.to_json
         if response.code==200
           msg= JSON.parse(response.body)
           if msg['Result']
@@ -20,6 +22,8 @@ module ModemRest
       rescue => e
         process_msg.content = e.message
       end
+      puts 'process'
+      puts process_msg.to_json
       return process_msg
     end
 
@@ -34,9 +38,12 @@ module ModemRest
     end
 
     def get_resource(url)
+      puts 'url----------------------'
+      puts url
+
       RestClient::Resource.new(url,
-                               timeout: 5,
-                               open_timeout: 5,
+                               timeout: 100,
+                      open_timeout: 100,
                                content_type: 'application/json')
     end
   end

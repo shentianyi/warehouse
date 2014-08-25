@@ -12,10 +12,12 @@ class OrderItem < ActiveRecord::Base
   after_create :led_state_change
 
   def led_state_change
+    puts 'order item created...........'
     pp = OrderItemService.verify_department(self.whouse_id,self.part_id)
     if pp.nil?
       return
     end
+    puts 'position...........'
     LedService.update_led_state_by_position(pp.position.detail,LedLightState::ORDERED)
 =begin
     led = Led.find_by_position(position.detail)

@@ -35,6 +35,8 @@ class LedService
     else
       msg.content = 'LED 不存在'
     end
+    puts '-----------------------m-sg------'
+    puts msg.to_json
     return msg
   end
 end
