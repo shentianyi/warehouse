@@ -8,8 +8,8 @@ class PackagePresenter<Presenter
   end
 
   def position_nr
-    if self.position
-      self.position.detail
+    if self.package_position
+      self.package_position.position.detail
     else
       ''
     end

@@ -26,7 +26,6 @@ module V1
       if led.nil?
         return {result:0,content:'LED灯未找到'}
       end
-
       ls = LedState.find_by_state(led.current_state)
       if ls.nil?
         return {result:0,content:'LED灯状态错误,请重置'}

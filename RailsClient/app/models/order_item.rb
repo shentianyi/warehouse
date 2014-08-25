@@ -9,19 +9,21 @@ class OrderItem < ActiveRecord::Base
 	belongs_to :part
 	belongs_to :part_type
 
-  after_create led_state_change
+  after_create :led_state_change
 
   def led_state_change
-    position = OrderItemService.verify_department(self.whouse.name,self.part_id)
-
-    if position.nil?
+    pp = OrderItemService.verify_department(self.whouse_id,self.part_id)
+    if pp.nil?
       return
     end
+    LedService.update_led_state_by_position(pp.position.detail,LedLightState::ORDERED)
+=begin
     led = Led.find_by_position(position.detail)
     to_state = LedLightState::ORDERED
     if led.current_state != to_state
       led.update({current_state:to_state})
     end
+=end
   end
 
   def generate_id
