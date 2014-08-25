@@ -18,7 +18,7 @@
   <tbody>
   <%@led_states.each do |led|%>
       <tr>
-        <td><%=led.name%></td>
+        <td><%=LedLightState.display(led.state)%></td>
         <td><%=led.rgb%></td>
         <td><%=led.led_code%></td>
         <td><%= link_to "编辑",edit_led_state_path(led),:class=>"btn btn-default" %></td>

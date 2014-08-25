@@ -57,6 +57,6 @@ class LedStatesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def led_state_params
-    params.require(:led_state).permit(:name,:rgb,:led_code)
+    params.require(:led_state).permit(:state,:rgb,:led_code)
   end
 end
