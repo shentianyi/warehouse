@@ -81,4 +81,18 @@ ActiveRecord::Base.transaction do
   unless SysConfig.find_by_code('LED_SEND_MSG_ACTION')
     SysConfig.create(code: 'LED_SEND_MSG_ACTION', value: '/led/message/send/', name: 'LED服务发送消息方法')
   end
+
+  #LED STATE
+  unless LedState.find_by_state(LedLightState::NORMAL)
+    LedState.create({state:LedLightState::NORMAL,rgb:"0 255 0",led_code:0})
+  end
+  unless LedState.find_by_state(LedLightState::ORDERED)
+    LedState.create({state:LedLightState::ORDERED,rgb:"255 0 0",led_code:1})
+  end
+  unless LedState.find_by_state(LedLightState::DELIVERED)
+    LedState.create({state:LedLightState::DELIVERED,rgb:"0 0 255",led_code:2})
+  end
+  unless LedState.find_by_state(LedLightState::RECEIVED)
+    LedState.create({state:LedLightState::RECEIVED,rgb:"0 255 0",led_code:0})
+  end
 end

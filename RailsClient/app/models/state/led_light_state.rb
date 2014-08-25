@@ -13,6 +13,10 @@ class LedLightState
     data
   end
 
+  def self.all
+    self.constants.collect{|c| self.const_get(c.to_s)}
+  end
+
   def self.display state
     case state.to_i
       when NORMAL
