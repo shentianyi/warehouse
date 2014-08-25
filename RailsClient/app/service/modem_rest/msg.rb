@@ -35,9 +35,9 @@ module ModemRest
 
     def get_resource(url)
       RestClient::Resource.new(url,
-                               :timeout => 5,
-                               :open_timeout => 5,
-                               'content_type' => 'application/json')
+                               timeout: 5,
+                               open_timeout: 5,
+                               content_type: 'application/json')
     end
   end
 end
