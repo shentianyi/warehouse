@@ -35,30 +35,21 @@ namespace Brilliantech.Warehouse.LEDServiceLib
             Msg<string> msg = new Msg<string>();
             try
             {
-              //  message = "ff 00 00 00 00 01";
-                //List<string> message_in_16 = new List<string>();
-                //foreach (string s in message.Split(' ')) {
-                //    string v= Convert.ToString(int.Parse(s), 16);
-                //    message_in_16.Add(v.Length == 1 ? "0" + v : v);
-                //}
-                //if (SerialPortHelper.SerialPortCom != null)
-                //{
-                //    SerialPortHelper.SerialPortCom.WriteLine(String.Join(" ",message_in_16.ToArray()));
-                //} 
-                //Byte[] m = new Byte[1];
-                //m[0] = Byte.Parse(message);
-              //  string m =    message;
-             //  Byte[] m =new Byte[6]{0xff,0x0,0x0,0x1,0x0,0x1};
-                //byte b= m[0];
-                //m[0]=Convert.ToByte(message.Split(' ')[0],16);
-                //byte c = m[0];
+                 //message = "255 0 255 4 274";
+                
                 Byte[] m = new Byte[6];
-                int i = 0;
-               foreach (string s in message.Split(' ')) {
-                 // m[i] = Convert.ToByte(s,16);
-                   m[i] =Convert.ToByte( Int32.Parse(s));
-                   i++;
-               }
+                string[] ms = message.Split(' ');
+                // RGB & Rate 4 Byte
+                for (int i = 0; i < 4; i++)
+                {
+                    //  m[i] = Convert.ToByte(string.Format("{0:X2}",int.Parse( ms[i])));
+                    m[i] = Convert.ToByte(Int32.Parse(ms[i]));
+                }
+                string ledId = string.Format("{0:X4}",int.Parse( ms[4]));
+                // LED ID
+                m[4] =Convert.ToByte( Convert.ToInt32(ledId.Substring(0, 2),16));
+                m[5] = Convert.ToByte(Convert.ToInt32(ledId.Substring(2, 2), 16));
+                
                 if (SerialPortHelper.SerialPortCom != null)
                 {
                     SerialPortHelper.SerialPortCom.Write(m,0,6);
