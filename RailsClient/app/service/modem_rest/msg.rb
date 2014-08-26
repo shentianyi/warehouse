@@ -40,10 +40,11 @@ module ModemRest
 
       #self.led_id=10
 #      if self.led_id.to_i>255
-        m="#{self.msg}  #{self.led_id}"
+        m="#{self.msg} #{self.led_id}"
  #     else
   #      m="#{self.msg} 0 #{self.led_id}"
    #   end
+        puts '--------------'
       puts m
       URI::escape(m)
     end

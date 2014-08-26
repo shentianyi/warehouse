@@ -82,6 +82,11 @@ ActiveRecord::Base.transaction do
     SysConfig.create(code: 'LED_SEND_MSG_ACTION', value: '/led/message/send/', name: 'LED服务发送消息方法')
   end
 
+  unless SysConfig.find_by_code('LED_ENABLE')
+    SysConfig.create(code: 'LED_ENABLE', value: 'false', name: '是否开启LED')
+  end
+
+
   #LED STATE
   unless LedState.find_by_state(LedLightState::NORMAL)
     LedState.create({state:LedLightState::NORMAL,rgb:"0 255 0",led_code:0})
