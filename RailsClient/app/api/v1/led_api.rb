@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 module V1
   class LedAPI<Base
     namespace :leds
@@ -31,7 +32,11 @@ module V1
         return {result:0,content:'LED灯状态错误,请重置'}
       end
 
-      {result:1,content:{position:pp.position.detail,state:led.current_state}}
+      requirement = OrderItem.where(created_at:1.day.ago.utc..Time.now.utc).count
+      received = Package.where(created_at:1.day.ago.utc..Time.now.utc,state:PackageState::RECEIVED).count
+      absent = Package.where(created_at:1.day.ago.utc..Time.now.utc,state:[PackageState::DESTINATION,PackageState::WAY]).count
+
+      {result:1,content:{position:pp.position.detail,state:led.current_state,requirement:requirement,received:received,absent:absent}}
     end
 
     get :led_state_list do
