@@ -35,14 +35,33 @@ namespace Brilliantech.Warehouse.LEDServiceLib
             Msg<string> msg = new Msg<string>();
             try
             {
-                List<string> message_in_16 = new List<string>();
-                foreach (string s in message.Split(' ')) {
-                    string v= Convert.ToString(int.Parse(s), 16);
-                    message_in_16.Add(v.Length == 1 ? "0" + v : v);
-                }
+              //  message = "ff 00 00 00 00 01";
+                //List<string> message_in_16 = new List<string>();
+                //foreach (string s in message.Split(' ')) {
+                //    string v= Convert.ToString(int.Parse(s), 16);
+                //    message_in_16.Add(v.Length == 1 ? "0" + v : v);
+                //}
+                //if (SerialPortHelper.SerialPortCom != null)
+                //{
+                //    SerialPortHelper.SerialPortCom.WriteLine(String.Join(" ",message_in_16.ToArray()));
+                //} 
+                //Byte[] m = new Byte[1];
+                //m[0] = Byte.Parse(message);
+              //  string m =    message;
+             //  Byte[] m =new Byte[6]{0xff,0x0,0x0,0x1,0x0,0x1};
+                //byte b= m[0];
+                //m[0]=Convert.ToByte(message.Split(' ')[0],16);
+                //byte c = m[0];
+                Byte[] m = new Byte[6];
+                int i = 0;
+               foreach (string s in message.Split(' ')) {
+                 // m[i] = Convert.ToByte(s,16);
+                   m[i] =Convert.ToByte( Int32.Parse(s));
+                   i++;
+               }
                 if (SerialPortHelper.SerialPortCom != null)
                 {
-                    SerialPortHelper.SerialPortCom.WriteLine(String.Join(" ",message_in_16.ToArray()));
+                    SerialPortHelper.SerialPortCom.Write(m,0,6);
                 }
                 msg.Result = true;
             }
