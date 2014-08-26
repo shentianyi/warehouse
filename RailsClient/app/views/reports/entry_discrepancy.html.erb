@@ -40,7 +40,7 @@
       <form method="get" action="<%= reports_entry_discrepancy_path %>">
           <div>
             <span>地点:
-              <%= select_tag(:location_id, options_for_select(Location.list_menu, @location_id), include_blank: false) %>
+              <%= select_tag(:location_id, options_for_select(Location.list_menu(current_user), @location_id), include_blank: false) %>
             </span>
             <span>时间范围:
               <input type="text" name="received_date_start" class="datepicker" value="<%= @received_date_start %>"/>

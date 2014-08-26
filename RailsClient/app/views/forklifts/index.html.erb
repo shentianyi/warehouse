@@ -78,7 +78,7 @@
         <td><%= forklift.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
         <td><%= forklift.remark%></td>
         <td><%= link_to '详细', forklift ,:class=> 'btn btn-default' %></td>
-        <td><%= link_to '编辑', edit_forklift_path(forklift) ,:class=> 'btn btn-default'%></td>
+        <td><%= link_to '编辑', edit_forklift_path(forklift) ,:class=> 'btn btn-default' if current_user.admin?%></td>
       </tr>
     <% end %>
   </tbody>
