@@ -13,7 +13,7 @@ class LedService
   #  if (led=Led.find_by_position(position_detail)) && (modem=led.modem)
   #    process_msg= self.send_msg(led.signal_id, msg, modem.ip)
   #  else
-  #    process_msg.content ='LED不存在 或 LED未设置解调器'
+  #    process_msg.content ='LED不存在 或 LED未设置协调器'
   #  end
   #  return process_msg
   #end

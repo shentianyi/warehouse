@@ -1,7 +1,7 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>编号(解调器自动分配的ID):</strong>
+  <strong>编号(协调器自动分配的ID):</strong>
   <%= @led.signal_id %>
 </p>
 
@@ -11,12 +11,12 @@
 </p>
 
 <p>
-  <strong>解调器ID:</strong>
+  <strong>协调器ID:</strong>
   <%= @led.modem_id %>
 </p>
 
 <p>
-  <strong>解调器IP:</strong>
+  <strong>协调器IP:</strong>
   <%= @led.modem.ip if @led.modem %>
 </p>
 
