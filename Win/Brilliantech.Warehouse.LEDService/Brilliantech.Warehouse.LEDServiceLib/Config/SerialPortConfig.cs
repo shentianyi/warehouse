@@ -14,6 +14,8 @@ namespace Brilliantech.Warehouse.LEDServiceLib.Config
         static SerialPortConfig()
         {
             config = new ConfigUtil("Base", @"Ini\serial_port.ini");
+            servicePort = config.Get("ServicePort");
+            zigBeeId = config.Get("ZigBeeId");
             portName = config.Get("PortName");
             portBaudRate = int.Parse(config.Get("BaudRate"));
             portParity = (Parity)int.Parse(config.Get("Parity"));
@@ -23,6 +25,9 @@ namespace Brilliantech.Warehouse.LEDServiceLib.Config
             readTimeout = int.Parse(config.Get("ReadTimeout"));
             writeTimeout = int.Parse(config.Get("WriteTimeout"));
         }
+        private static string servicePort;
+        private static string zigBeeId;
+
         private static string portName;
         private static int portBaudRate;
         private static Parity portParity;
@@ -31,6 +36,20 @@ namespace Brilliantech.Warehouse.LEDServiceLib.Config
         private static Handshake portHandshake;
         private static int readTimeout;
         private static int writeTimeout;
+
+
+        public static string ServicePort
+        {
+            get { return SerialPortConfig.servicePort; }
+            set { SerialPortConfig.servicePort = value; }
+        }
+
+
+        public static string ZigBeeId
+        {
+            get { return SerialPortConfig.zigBeeId; }
+            set { SerialPortConfig.zigBeeId = value; }
+        }
 
         public static string PortName
         {
@@ -86,6 +105,8 @@ namespace Brilliantech.Warehouse.LEDServiceLib.Config
 
         public static void Save()
         {
+            config.Set("ServicePort",servicePort);
+            config.Set("ZigBeeId",zigBeeId);
             config.Set("PortName", portName);
             config.Set("BaudRate", portBaudRate);
             config.Set("Parity", (int)portParity);

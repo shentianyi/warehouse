@@ -21,14 +21,18 @@
         <StackPanel Grid.Row="1">
             <StackPanel Margin="5,20,0,0" >
                 <StackPanel Orientation="Horizontal">
+                    <Label Content="协调器ID：" FontSize="15"/>
+                    <Label Content="4500" Name="ZigBeeIdLab" FontSize="16"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
                     <Label Content="服务端口：" FontSize="15"/>
-                    <Label Content="9001" FontSize="16"/>
+                    <Label Content="9001" Name="ServicePortLab" FontSize="16"/>
                 </StackPanel>
             </StackPanel>
             <StackPanel  Margin="5,200,0,0">
                 <GroupBox  Header="设 置" FontSize="14">
                     <StackPanel Orientation="Horizontal">
-                        <Button Content="串口设置" Margin="450,0,0,0"
+                        <Button Content="服务设置" Margin="450,0,0,0"
                                 Name="SerialPortBtn" Foreground="White"
                                 Height="59" Width="96" FontSize="15" Click="SerialPortBtn_Click">
                             <Button.Background>

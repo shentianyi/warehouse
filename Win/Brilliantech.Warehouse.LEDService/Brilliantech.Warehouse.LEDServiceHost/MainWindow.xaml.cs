@@ -14,6 +14,8 @@ using System.Windows.Shapes;
 using System.ServiceModel.Web;
 using Brilliantech.Warehouse.LEDServiceLib;
 using Brilliantech.Framwork.Utils.LogUtil;
+using Brilliantech.Warehouse.LEDServiceLib.Config;
+using System.ServiceModel;
 
 namespace Brilliantech.Warehouse.LEDServiceHost
 {
@@ -38,25 +40,35 @@ namespace Brilliantech.Warehouse.LEDServiceHost
         {
             try
             {
+                Uri u = new Uri("http://localhost:" + SerialPortConfig.ServicePort + "/led");
+                Uri[] baseAddresses = { new Uri("http://localhost:" + SerialPortConfig.ServicePort + "/led") };
                 if (host == null)
                 {
-                    host = new WebServiceHost(typeof(LedService));
+                    host = new WebServiceHost(typeof(LedService), baseAddresses);
                 }
                 host.Open();
                 LogUtil.Logger.Info("LED服务启动");
             }
-            catch (Exception ex)
+            catch (AddressAlreadyInUseException e)
             {
-                MessageBox.Show(ex.Message);
-                LogUtil.Logger.Error(ex.Message);
+                LogUtil.Logger.Error(e.Message);
+                MessageBox.Show("端口" + SerialPortConfig.ServicePort + "被占用，请重新配置后重启本程序", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                LogUtil.Logger.Error(e.Message);
             }
         }
         private System.Windows.Forms.NotifyIcon notifyIcon = null;
         private void initNotifyIcon()
         {
+            ZigBeeIdLab.Content = SerialPortConfig.ZigBeeId;
+            ServicePortLab.Content = SerialPortConfig.ServicePort;
+
             notifyIcon = new System.Windows.Forms.NotifyIcon();
-            notifyIcon.BalloonTipText = "Brilliantech Warehouse LED Serivce";
-            notifyIcon.Text = "Brilliantech Warehouse LED Serivce";
+            notifyIcon.BalloonTipText = "BW LED " + SerialPortConfig.ZigBeeId + "(" + SerialPortConfig.ServicePort + ") Serivce";
+            notifyIcon.Text = "BW LED " + SerialPortConfig.ZigBeeId + "(" + SerialPortConfig.ServicePort + ") LED Serivce";
             string path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "i.ico");
             notifyIcon.Icon = new System.Drawing.Icon(path);
             notifyIcon.Visible = true;
@@ -85,7 +97,7 @@ namespace Brilliantech.Warehouse.LEDServiceHost
 
         private void exit_Click(object sender, EventArgs e)
         {
-            if (System.Windows.MessageBox.Show("确定要退出吗?",
+            if (System.Windows.MessageBox.Show("确定要退出"+SerialPortConfig.ZigBeeId+"("+SerialPortConfig.ServicePort+")吗?",
                                                "退出",
                                                MessageBoxButton.YesNo,
                                                 MessageBoxImage.Question,

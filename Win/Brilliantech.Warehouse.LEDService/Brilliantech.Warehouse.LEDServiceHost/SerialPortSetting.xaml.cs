@@ -29,6 +29,10 @@ namespace Brilliantech.Warehouse.LEDServiceHost
         private void LoadDefaultSettings()
         {
             int index = 0;
+            // set service port
+            ServicePortTB.Text = SerialPortConfig.ServicePort;
+            // set zigbee id
+            ZigBeeIdTB.Text = SerialPortConfig.ZigBeeId;
             // set port name
             foreach (string s in SerialPort.GetPortNames())
             {
@@ -88,7 +92,12 @@ namespace Brilliantech.Warehouse.LEDServiceHost
 
         private void SaveBtn_Click(object sender, RoutedEventArgs e)
         {
-            SerialPortConfig.PortName = PortNameCB.SelectedItem.ToString();
+            SerialPortConfig.ServicePort = ServicePortTB.Text;
+            SerialPortConfig.ZigBeeId = ZigBeeIdTB.Text;
+            if (PortNameCB.SelectedIndex != -1)
+            {
+                SerialPortConfig.PortName = PortNameCB.SelectedItem.ToString();
+            }
             SerialPortConfig.PortBaudRate = int.Parse(BaudRateTB.Text);
             SerialPortConfig.PortParity = (Parity)Enum.Parse(typeof(Parity), ParityCB.SelectedItem.ToString(), true);
             SerialPortConfig.DataBits = int.Parse(DataBitsTB.Text);
@@ -97,7 +106,10 @@ namespace Brilliantech.Warehouse.LEDServiceHost
             SerialPortConfig.ReadTimeout = int.Parse(ReadTimeoutTB.Text);
             SerialPortConfig.WriteTimeout = int.Parse(WriteTimeoutTB.Text);
             SerialPortConfig.Save();
-            MessageBox.Show("设置成功，请退出服务重启启动！");
+
+            MessageBox.Show("设置成功，服务将自动重启....");
+            System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+            Application.Current.Shutdown();
            // App.Current.Shutdown();
         }
     }
