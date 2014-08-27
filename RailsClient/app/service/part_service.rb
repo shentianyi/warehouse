@@ -70,6 +70,13 @@ class PartService
           else
             #
           end
+
+          pp_new = nil
+
+          if p_new && pp_new = PartPosition.where({part_id: data['part_id'], position_id: p_new.id}).first
+            skip = skip + 1
+            next
+          end
           data.delete('position_new')
           if pp
             pp.update(data)
