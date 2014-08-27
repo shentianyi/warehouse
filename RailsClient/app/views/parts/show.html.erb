@@ -11,6 +11,7 @@
       <li>
         <string><%= pp.position.whouse.name %></string>
         <string><%= pp.position.detail %></string>
+        <string><<<%= pp.sourceable.name if pp.sourceable%></string>
         <button type="button" class="btn btn-default" onclick="Manage.part.del_position('<%= pp.id.to_s %>',this)">Delete</button>
       </li>
   <% end %>
