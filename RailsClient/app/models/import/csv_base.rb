@@ -35,7 +35,7 @@ module Import
               if update_marker
                 item.update(data)
               else
-                raise(ArgumentError, "行:#{line_no} 已经存在")
+                #raise(ArgumentError, "行:#{line_no} 已经存在")
               end
             else
               self.create(data)
