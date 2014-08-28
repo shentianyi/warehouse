@@ -19,6 +19,10 @@ module V1
 
     # params[:whouse,:part_id]
     get :position_state do
+
+    #  params[:whouse].sub!(/^LO/,'')
+
+     # params[:part_id].sub!(/^P/,'')
       pp = OrderItemService.verify_department(params[:whouse],params[:part_id])
       if pp.nil?
         return {result:0,content:'库位或零件不存在'}
