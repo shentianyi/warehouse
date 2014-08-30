@@ -40,7 +40,7 @@ module V1
       received = Package.where(created_at:1.day.ago.utc..Time.now.utc,state:PackageState::RECEIVED).count
       absent = Package.where(created_at:1.day.ago.utc..Time.now.utc,state:[PackageState::DESTINATION,PackageState::WAY]).count
 
-      {result:1,content:{position:pp.position.detail,state:led.current_state,requirement:requirement,received:received,absent:absent}}
+      {result:1,content:{id:led.id,position:pp.position.detail,state:led.current_state,requirement:requirement,received:received,absent:absent}}
     end
 
     get :led_state_list do
