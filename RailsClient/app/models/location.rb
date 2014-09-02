@@ -19,10 +19,10 @@ class Location < ActiveRecord::Base
   end
 
   def self.list_menu current_user
-    if current_user.employee?
-      [[current_user.location.name,current_user.location.id]]
-    else
-      self.list.collect{|l| [l.name,l.id]}
-    end
+    #if current_user.employee?
+    #  [[current_user.location.name,current_user.location.id]]
+    #else
+    self.list.collect{|l| [l.name,l.id]}
+    #end
   end
 end
