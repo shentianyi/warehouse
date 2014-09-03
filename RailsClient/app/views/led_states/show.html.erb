@@ -1,0 +1,21 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>状态:</strong>
+  <%= LedLightState.display(@led_state.state) %>
+</p>
+
+<p>
+  <strong>RGB颜色:</strong>
+  <%= @led_state.rgb %>
+  <input type="button" style='<%= "background-color: rgb(#{@led_state.R},#{@led_state.G},#{@led_state.B})" %>;width:30px'/>
+</p>
+
+<p>
+  <strong>闪烁代码:</strong>
+  <%= @led_state.led_code %>
+</p>
+
+
+<%= link_to '编辑', edit_led_state_path(@led_state) %> |
+<%= link_to '返回', led_states_path %>

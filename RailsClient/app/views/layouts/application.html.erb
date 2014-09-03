@@ -23,5 +23,6 @@
         $('#' + $('#active_li').val()).addClass('active');
     });
 </script>
+<%= yield :javascript_includes %>
 <%= render :partial => "shared/handling_msg_box", :locals => {:handlemsg => "处理中..."} %>
 </html>

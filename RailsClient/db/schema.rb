@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140808061718) do
+ActiveRecord::Schema.define(version: 20140825033530) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -98,6 +98,36 @@ ActiveRecord::Schema.define(version: 20140808061718) do
   add_index "forklifts", ["uuid"], name: "index_forklifts_on_uuid", using: :btree
   add_index "forklifts", ["whouse_id"], name: "index_forklifts_on_whouse_id", using: :btree
 
+  create_table "led_states", force: true do |t|
+    t.integer  "state"
+    t.string   "rgb"
+    t.integer  "led_code"
+    t.boolean  "is_delete",  default: false
+    t.boolean  "is_dirty",   default: true
+    t.boolean  "is_new",     default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "leds", force: true do |t|
+    t.string   "name"
+    t.string   "signal_id"
+    t.integer  "current_state"
+    t.boolean  "is_delete",     default: false
+    t.boolean  "is_dirty",      default: true
+    t.boolean  "is_new",        default: true
+    t.string   "modem_id"
+    t.string   "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "mac"
+  end
+
+  add_index "leds", ["id"], name: "index_leds_on_id", using: :btree
+  add_index "leds", ["modem_id"], name: "index_leds_on_modem_id", using: :btree
+  add_index "leds", ["position"], name: "index_leds_on_position", using: :btree
+  add_index "leds", ["signal_id"], name: "index_leds_on_signal_id", using: :btree
+
   create_table "locations", force: true do |t|
     t.string   "uuid",           limit: 36,                 null: false
     t.string   "name"
@@ -115,6 +145,18 @@ ActiveRecord::Schema.define(version: 20140808061718) do
   add_index "locations", ["destination_id"], name: "index_locations_on_destination_id", using: :btree
   add_index "locations", ["id"], name: "index_locations_on_id", using: :btree
   add_index "locations", ["uuid"], name: "index_locations_on_uuid", using: :btree
+
+  create_table "modems", force: true do |t|
+    t.string   "name"
+    t.string   "ip"
+    t.boolean  "is_delete",  default: false
+    t.boolean  "is_dirty",   default: true
+    t.boolean  "is_new",     default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "modems", ["id"], name: "index_modems_on_id", using: :btree
 
   create_table "order_items", force: true do |t|
     t.string   "uuid",                         null: false

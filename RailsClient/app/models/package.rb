@@ -5,7 +5,7 @@ class Package < ActiveRecord::Base
   #belongs_to :forklift, :throuth => :forklift_item
   #has_one :forklift_item, :dependent => :destroy
   has_one :package_position, :dependent => :destroy
-  has_one :position, :through => :package_position
+  #has_one :position, :through => :package_position
   has_many :state_logs, as: :stateable
 
   belongs_to :user
@@ -19,6 +19,7 @@ class Package < ActiveRecord::Base
   #here is code for Leoni
   before_save :set_package_position
   after_save :auto_shelved
+  after_save :led_state_change
 
   #-------------
   # Instance Methods
@@ -27,17 +28,14 @@ class Package < ActiveRecord::Base
   # add_to_forklift
   def add_to_forklift forklift
     self.forklift = forklift
-    #forklift.sum_packages = forklift.sum_packages + 1
-    #forklift.save
-#<<<<<<< HEAD
     set_position
     self.save
-    #set_position
-#=======
-    #self.save
-#    set_position
-#    self.save
-#>>>>>>> a0a32e3e27a1908ebc6397024f1e965812b73ae1
+  end
+
+  def position
+    if self.package_position
+      self.package_position.position
+    end
   end
 
   # remove_form_forklift
@@ -55,8 +53,6 @@ class Package < ActiveRecord::Base
     true
   end
 
-  #private
-  # set_position
   def set_position
     if self.forklift_id.nil?
       return true
@@ -93,7 +89,27 @@ class Package < ActiveRecord::Base
     end
   end
 
+
+  def led_state_change
+    if self.position.nil?
+      return
+    end
+    to_state = -1 #LedLightState::NORMAL
+
+    case self.state
+      when PackageState::WAY
+        to_state = LedLightState::DELIVERED
+      when PackageState::RECEIVED
+        to_state = LedLightState::RECEIVED
+    end
+
+    if to_state != -1
+      LedService.update_led_state_by_position(self.position.detail,to_state)
+    end
+  end
+
   private
+
   def auto_shelved
     #if partnum changed, reset package position
     if self.part_id_changed?

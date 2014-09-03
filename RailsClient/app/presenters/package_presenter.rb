@@ -1,5 +1,5 @@
 class PackagePresenter<Presenter
-  Delegators=[:id, :part_id, :quantity, :quantity_str, :check_in_time, :user_id, :location_id, :state, :package_position, :position]
+  Delegators=[:id, :part_id, :quantity, :quantity_str, :check_in_time, :user_id, :location_id, :state, :package_position,:position]
   def_delegators :@package, *Delegators
 
   def initialize(package)

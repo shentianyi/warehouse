@@ -74,4 +74,30 @@ ActiveRecord::Base.transaction do
   unless SysConfig.find_by_code('TRANS_WAREHOUSE')
     SysConfig.create(code: 'TRANS_WAREHOUSE', value: 'ITLZ', name: '在途库编号')
   end
+
+  unless SysConfig.find_by_code('LED_SERVICE_PORT')
+    SysConfig.create(code: 'LED_SERVICE_PORT', value: '9001', name: 'LED服务端口')
+  end
+  unless SysConfig.find_by_code('LED_SEND_MSG_ACTION')
+    SysConfig.create(code: 'LED_SEND_MSG_ACTION', value: '/led/message/send/', name: 'LED服务发送消息方法')
+  end
+
+  unless SysConfig.find_by_code('LED_ENABLE')
+    SysConfig.create(code: 'LED_ENABLE', value: 'false', name: '是否开启LED')
+  end
+
+
+  #LED STATE
+  unless LedState.find_by_state(LedLightState::NORMAL)
+    LedState.create({state:LedLightState::NORMAL,rgb:"0 255 0",led_code:0})
+  end
+  unless LedState.find_by_state(LedLightState::ORDERED)
+    LedState.create({state:LedLightState::ORDERED,rgb:"255 0 0",led_code:1})
+  end
+  unless LedState.find_by_state(LedLightState::DELIVERED)
+    LedState.create({state:LedLightState::DELIVERED,rgb:"0 0 255",led_code:2})
+  end
+  unless LedState.find_by_state(LedLightState::RECEIVED)
+    LedState.create({state:LedLightState::RECEIVED,rgb:"0 255 0",led_code:0})
+  end
 end

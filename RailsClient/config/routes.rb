@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :led_states
   resources :sys_configs
 
   resources :order_items do
@@ -79,7 +80,8 @@ Rails.application.routes.draw do
   get 'parts/download_positions', to: 'parts#download_positions'
   post 'parts/do_import_positions', to: 'parts#do_import_positions'
 
-  [:locations, :whouses, :parts, :positions, :part_positions, :users, :deliveries, :forklifts, :packages, :part_types, :pick_item_filters, :orders].each do |model|
+  [:locations, :whouses, :parts, :positions, :part_positions, :users, :deliveries, :forklifts,
+   :packages, :part_types, :pick_item_filters, :orders,:modems,:leds].each do |model|
     resources model do
       collection do
         post :do_import

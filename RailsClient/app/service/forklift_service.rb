@@ -155,7 +155,9 @@ class ForkliftService
         ActiveRecord::Base.transaction do
           #package.forklift_id = forklift.id
           package.update({forklift_id:forklift.id})
-          package.set_position()
+          package.set_position
+          puts '~~~~~~~~~~~~~~~~~~~~~~'
+          puts package.package_position.to_json
           true
         end
       rescue Exception=>ex

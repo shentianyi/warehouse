@@ -91,7 +91,7 @@ class ForkliftsController < ApplicationController
   def forklift_params
     #params[:forklift]
     params.require(:forklift).permit(:state,:remark,:whouse_id)
-    end
+  end
 
   def set_search_variable
     p= params[:forklift]

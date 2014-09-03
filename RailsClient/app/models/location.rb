@@ -18,7 +18,11 @@ class Location < ActiveRecord::Base
     self.all.select { |l| l unless l.is_base }
   end
 
-  def self.list_menu
+  def self.list_menu current_user
+    #if current_user.employee?
+    #  [[current_user.location.name,current_user.location.id]]
+    #else
     self.list.collect{|l| [l.name,l.id]}
+    #end
   end
 end

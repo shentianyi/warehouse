@@ -1,0 +1,29 @@
+<%= form_for(@modem) do |f| %>
+  <% if @modem.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@modem.errors.count, "error") %> prohibited this modem from being saved:</h2>
+
+      <ul>
+      <% @modem.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :id %><br>
+    <%= f.text_field :id %>
+  </div>
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :ip %><br>
+    <%= f.text_field :ip %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
