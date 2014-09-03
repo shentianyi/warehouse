@@ -16,7 +16,7 @@ module V1
     # optional params: created_at, user_id, state...
     get :list do
       delivery_date = Time.parse(params[:delivery_date])
-      deliveries = Delivery.where(created_at: (12.hour.ago..delivery_date.end_of_day)).all.order(created_at: :desc)
+      deliveries = Delivery.where(created_at: (12.hour.ago..delivery_date.end_of_day),source_id:current_user.location_id).all.order(created_at: :desc)
       data = []
       DeliveryPresenter.init_presenters(deliveries).each do |d|
         data << d.to_json

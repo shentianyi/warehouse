@@ -45,6 +45,10 @@ class PartService
         raise(ArgumentError, "行:#{line_no} Position 不存在对应的库位")
       end
 
+      unless Part.find_by_id(data['part_id'])
+        raise(ArgumentError, "行:#{line_no} ,#{data['part_id']} 零件不存在")
+      end
+
       # clean data
       op_code = data.delete($UPMARKER).to_i
 
@@ -64,7 +68,14 @@ class PartService
           if  p_new = Position.find_by_detail(data['position_new'])
             data['position_id'] = p_new.id
           else
-            #raise(ArgumentError, "行:#{line_no} Position New 不存在对应的库位")
+            #
+          end
+
+          pp_new = nil
+
+          if p_new && pp_new = PartPosition.where({part_id: data['part_id'], position_id: p_new.id}).first
+            skip = skip + 1
+            next
           end
           data.delete('position_new')
           if pp

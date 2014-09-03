@@ -19,6 +19,10 @@ module V1
 
     # params[:whouse,:part_id]
     get :position_state do
+
+    #  params[:whouse].sub!(/^LO/,'')
+
+     # params[:part_id].sub!(/^P/,'')
       pp = OrderItemService.verify_department(params[:whouse],params[:part_id])
       if pp.nil?
         return {result:0,content:'库位或零件不存在'}
@@ -36,7 +40,7 @@ module V1
       received = Package.where(created_at:1.day.ago.utc..Time.now.utc,state:PackageState::RECEIVED).count
       absent = Package.where(created_at:1.day.ago.utc..Time.now.utc,state:[PackageState::DESTINATION,PackageState::WAY]).count
 
-      {result:1,content:{position:pp.position.detail,state:led.current_state,requirement:requirement,received:received,absent:absent}}
+      {result:1,content:{id:led.id,position:pp.position.detail,state:led.current_state,requirement:requirement,received:received,absent:absent}}
     end
 
     get :led_state_list do

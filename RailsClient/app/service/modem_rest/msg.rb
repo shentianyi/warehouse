@@ -28,7 +28,7 @@ module ModemRest
     end
 
     def get_change_led_state_url
-      "http://#{self.ip}:#{SysConfigCache.led_service_port_value}/#{SysConfigCache.led_send_msg_action_value}#{get_change_led_state_msg}"
+      "http://#{self.ip}/#{SysConfigCache.led_send_msg_action_value}#{get_change_led_state_msg}"
     end
 
     def get_change_led_state_msg
