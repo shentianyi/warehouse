@@ -18,7 +18,6 @@ module Warehouse
       config.paths.add File.join('app', namespace), glob: File.join('**', '*.rb')
       config.autoload_paths += Dir[Rails.root.join('app', namespace, '**')]
     end
-    config.assets.precompile += %w( colpick.js )
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers

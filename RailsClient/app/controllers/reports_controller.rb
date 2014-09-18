@@ -1,5 +1,42 @@
 # encoding: utf-8
 class ReportsController < ApplicationController
+  def reports
+    @type = params[:type].nil? ? ReportType::Entry : params[:type]
+    @date_start = params[:date_start].nil? ? 1.day.ago.strftime("%Y-%m-%d 7:00") : params[:date_start]
+    @date_end = params[:date_end].nil? ? Time.now.strftime("%Y-%m-%d 7:00") : params[:date_end]
+    @location_id = params[:location_id].nil? ? current_user.location_id : params[:location_id]
+    @title = ''
+    case @type
+      when ReportType::Entry
+        @title = 'Entry Report'
+      when ReportType::Removal
+        @title = 'Removal Report'
+      when ReportType::Discrepancy
+        @title = 'Discrepancy Report'
+    end
+    #generate condition
+    condition = Package.generate_report_condition(@type,@date_start,@date_end,@location_id)
+    @packages = Package.search(condition)
+
+    filename = "#{Location.find_by_id(@location_id).name}#{@title}_#{@date_start}_#{@date_end}"
+
+    respond_to do |format|
+      format.csv do
+        send_data(entry_with_csv(@packages),
+                  :type => "text/csv;charset=utf-8; header=present",
+                  :filename => filename+".csv")
+      end
+
+      format.xlsx do
+        send_data(entry_with_xlsx(@packages),
+                  :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+                  :filename => filename+".xlsx"
+        )
+      end
+      format.html
+    end
+  end
+
   def entry_report
     @location_id = params[:location_id].nil? ? current_user.location_id : params[:location_id]
     @received_date_start = params[:received_date_start].nil? ? 1.day.ago.strftime("%Y-%m-%d 7:00") : params[:received_date_start]

@@ -147,4 +147,33 @@ class Package < ActiveRecord::Base
     .select("packages.state,packages.part_id,COUNT(packages.id) as box_count,SUM(packages.quantity_str) as total,forklifts.whouse_id as whouse_id,deliveries.delivery_date as ddate,deliveries.user_id as sender_id")
     .group("packages.part_id,whouse_id,state").order("whouse_id,ddate DESC")
   end
+
+  def self.generate_report_condition type,tstart,tend,location_id
+    time_range = Time.parse(tstart).utc..Time.parse(tend).utc
+    condition = {}
+    case type
+      when ReportType::Entry
+        condition["deliveries.destination_id"] = location_id
+        condition["deliveries.received_date"] = time_range
+        condition["deliveries.state"] = [DeliveryState::WAY,DeliveryState::DESTINATION,DeliveryState::RECEIVED]
+      when ReportType::Removal
+        condition["deliveries.source_id"] = location_id
+        condition["deliveries.delivery_date"] = time_range
+        condition["deliveries.state"] = [DeliveryState::WAY,DeliveryState::DESTINATION,DeliveryState::RECEIVED]
+      when ReportType::Discrepancy
+        condition["deliveries.destination_id"] = location_id
+        condition["deliveries.received_date"] = time_range
+        condition["packages.state"] = [PackageState::RECEIVED]
+      else
+    end
+
+    return condition
+  end
+
+  def self.search condition
+    self.joins(:part).joins(forklift: :delivery)
+    .where(condition)
+    .select("packages.state as state,packages.part_id,COUNT(packages.id) as box_count,SUM(packages.quantity_str) as total,forklifts.whouse_id as whouse_id")
+    .group("packages.part_id,whouse_id,state").order("whouse_id DESC")
+  end
 end

@@ -1,0 +1,97 @@
+<div class="panel-heading panel-warning">
+  <h2>Reports</h2>
+  Different kind of reports you want see.
+  //<%= @title %>
+</div>
+<div class="alert alert-warning">
+  <!--Go Button-->
+  <button id="go-report" type="button" class="btn btn-primary" onclick="Report.get()">Go</button>
+  <!--Go Button-->
+
+  <!--Report Type-->
+  <select id="report-type" class="selectpicker">
+    <option class="disabled">Report Type</option>
+    <option data-divider="true"></option>
+    <%ReportType.list.each do |rt|%>
+    <option type="<%= rt[1]%>"><%= rt[0] %></option>
+    <%end%>
+  </select>
+  <!--Report Button-->
+
+  <!--Location-->
+  <select id="location" class="selectpicker">
+    <option>Location</option>
+    <option data-divider="true"></option>
+    <% Location.list.each do |l| %>
+        <option location_id="<%= l.id %>"><%= l.name %></option>
+    <% end %>
+  </select>
+  <!--Location-->
+  <!--Report With-->
+  <select id="report-with" class="selectpicker">
+    <option>report with</option>
+    <option data-divider="true"></option>
+    <option format="html">Web</option>
+    <option format="xlsx">Excel File(MS 07 or later)</option>
+    <option format="csv">CSV File</option>
+  </select>
+  <!--Report With-->
+  <!--Time Range-->
+    <input id="date-start" type="text" name="received_date_start" class="datepicker" value="<%= @date_start %>"/>
+    ~ <input id="date-end" type="text" name="received_date_end" class="datepicker" value="<%= @date_end %>"/>
+    <!--Time Range-->
+  <!--Upload File-->
+  <div id="upload-file">
+    <script type="text/javascript">
+        $(function () {
+            data_upload("#item-data-uploader", false, function (data) {
+                if (data.result) {
+                    $("#file").val(JSON.stringify(data.content));
+                    $("#item-data-uploader-preview > span[info]").html("File Uploaded");
+                } else {
+                    $("#file").val('');
+                }
+            });
+        });
+        function submitForm() {
+            if ($("#file").val().length > 0)
+                document.forms[0].submit();
+            else
+                alert('Please upload your file');
+        }
+    </script>
+    <div>
+      <span>Upload File：</span>
+      <input id="item-data-uploader" type="file" name="files[]" data-url="/reports/upload_file">
+      <div class="abstractblock" id="item-data-uploader-preview" style="<%= "display:none" if @file.nil? %>;">
+        <% if @file %>
+            <span>File：<%= @file["data"]["original_filename"] %></span>
+            <br>
+            <span info>File Uploaded</span>
+        <% end%>
+      </div>
+    </div>
+  </div>
+  <!--Upload File-->
+</div>
+<div id="result">
+  <%= render "result" %>
+</div>
+
+<% content_for :javascript_includes do %>
+    <%= javascript_include_tag "bootstrap-select" %>
+    <%= javascript_include_tag "treport" %>
+<% end %>
+
+<script>
+    $(document).ready(function(){
+        $(".datepicker").datetimepicker({
+            lang: 'ch',
+            format: 'Y-m-d H:i'
+        });
+
+        $('.selectpicker').selectpicker();
+        $('.selectpicker').selectpicker('val', 'Mustard');
+        $('.selectpicker').selectpicker('render');
+    });
+</script>
