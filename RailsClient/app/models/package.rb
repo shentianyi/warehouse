@@ -151,7 +151,7 @@ class Package < ActiveRecord::Base
   def self.generate_report_condition type,tstart,tend,location_id
     time_range = Time.parse(tstart).utc..Time.parse(tend).utc
     condition = {}
-    case type
+    case type.to_i
       when ReportType::Entry
         condition["deliveries.destination_id"] = location_id
         condition["deliveries.received_date"] = time_range
@@ -175,5 +175,47 @@ class Package < ActiveRecord::Base
     .where(condition)
     .select("packages.state as state,packages.part_id,COUNT(packages.id) as box_count,SUM(packages.quantity_str) as total,forklifts.whouse_id as whouse_id")
     .group("packages.part_id,whouse_id,state").order("whouse_id DESC")
+  end
+
+  def self.export_to_csv packages
+    CSV.generate do |csv|
+
+      csv << headers
+
+      packages.each_with_index do |p,index|
+        csv << [
+            index+1,
+            p.part_id,
+            p.whouse_id,
+            p.total,
+            p.box_count,
+            PackageState.display(p.state)
+        ]
+      end
+    end
+  end
+
+  def self.export_to_xlsx packages
+    p = Axlsx::Package.new
+    wb = p.workbook
+    wb.add_worksheet(:name=>"sheet1") do |sheet|
+      sheet.add_row headers
+      packages.each_with_index {|p,index|
+        sheet.add_row [
+                       index+1,
+                       p.part_id,
+                       p.whouse_id,
+                       p.total,
+                       p.box_count,
+                       PackageState.display(p.state)
+                      ]
+      }
+    end
+    p.to_stream.read
+  end
+
+  private
+  def self.headers
+    ["No.","Part Nr.","BU","Quantity","Package Num","State"]
   end
 end
