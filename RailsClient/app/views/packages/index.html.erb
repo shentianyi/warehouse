@@ -51,12 +51,15 @@
       <th>编号</th>
       <th>零件号</th>
       <th>数量</th>
-      <th>入库时间</th>
       <th>状态</th>
       <th>备货员工</th>
       <th>所属托盘</th>
+      <th>托盘状态</th>
+      <th>备货部门</th>
+      <th>所属运单</th>
+      <th>运单状态</th>
+      <th>接收时间</th>
       <th>上架库位</th>
-      <th>创建时间</th>
       <th colspan="2"></th>
     </tr>
   </thead>
@@ -68,10 +71,14 @@
         <td><%= package.id %></td>
         <td><span class="label label-info"><%= PackageLabelRegex.part_prefix_string+ package.part_id%></span></td>
         <td><%= PackageLabelRegex.quantity_prefix_string + package.quantity_str %></td>
-        <td><%= PackageLabelRegex.date_prefix_string+ package.check_in_time %></td>
         <td><%= PackageState.display(package.state) %></td>
         <td><%= package.user.name+"|"+package.user_id if package.user%></td>
-        <td><%= link_to package.forklift_id, package.forklift  if package.forklift%></td>
+        <td><%= link_to package.forklift_id, package.forklift  if package.forklift %></td>
+        <td><%= ForkliftState.display(package.forklift.state) if package.forklift%></td>
+        <td><%= package.forklift.whouse_id if package.forklift %></td>
+        <td><%= link_to package.d.id, package.d.id  if package.d %></td>
+        <td><%= DeliveryState.display(package.d.state) if package.d%></td>
+        <td><%= package.d.received_date.localtime.strftime('%Y-%m-%d %H:%M:%S') if package.d && package.d.received_date%></td>
         <td><%= package.position.whouse.name + ' ' +package.position.detail if package.position %></td>
         <td><%= package.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') if package.created_at%></td>
         <td><%= link_to '编辑', edit_package_path(package),:class=>'btn btn-default' if current_user.admin? %></td>

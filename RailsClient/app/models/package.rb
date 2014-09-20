@@ -22,6 +22,21 @@ class Package < ActiveRecord::Base
   after_save :led_state_change
 
   #-------------
+  # Info Methods
+  #-------------
+  def f
+    self.forklift
+  end
+
+  def d
+    if self.f.nil?
+      nil
+    else
+      self.f.delivery
+    end
+  end
+
+  #-------------
   # Instance Methods
   #-------------
 
