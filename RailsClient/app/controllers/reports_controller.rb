@@ -156,8 +156,11 @@ class ReportsController < ApplicationController
     time_range = Time.parse(@received_date_start).utc..Time.parse(@received_date_end).utc
 
     condition = {}
+    #condition["packages.part_id"] = 'P00112425'
     condition["deliveries.destination_id"] = @location_id
-    condition["deliveries.received_date"] = time_range
+    #condition["deliveries.received_date"] = time_range
+    #condition["deliveries.created_at"] = time_range
+    condition["packages.created_at"] = time_range
     condition["packages.state"] = [PackageState::RECEIVED]
 
     @packages = {}
