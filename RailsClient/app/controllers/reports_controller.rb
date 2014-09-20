@@ -1,5 +1,45 @@
 # encoding: utf-8
 class ReportsController < ApplicationController
+  def reports
+    @type = params[:type].nil? ? ReportType::Entry : params[:type]
+    @date_start = params[:date_start].nil? ? 1.day.ago.strftime("%Y-%m-%d 7:00") : params[:date_start]
+    @date_end = params[:date_end].nil? ? Time.now.strftime("%Y-%m-%d 7:00") : params[:date_end]
+    @location_id = params[:location_id].nil? ? current_user.location_id : params[:location_id]
+    @title = ''
+    case @type.to_i
+      when ReportType::Entry
+        @title = 'Entry Report'
+      when ReportType::Removal
+        @title = 'Removal Report'
+      when ReportType::Discrepancy
+        @title = 'Discrepancy Report'
+    end
+    #generate condition
+    condition = Package.generate_report_condition(@type,@date_start,@date_end,@location_id)
+    @packages = Package.search(condition)
+    if @type.to_i == ReportType::Discrepancy
+
+    end
+
+    filename = "#{Location.find_by_id(@location_id).name}#{@title}_#{@date_start}_#{@date_end}"
+
+    respond_to do |format|
+      format.csv do
+        send_data(Package.export_to_csv(@packages),
+                  :type => "text/csv;charset=utf-8; header=present",
+                  :filename => filename+".csv")
+      end
+
+      format.xlsx do
+        send_data(Package.export_to_xlsx(@packages),
+                  :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+                  :filename => filename+".xlsx"
+        )
+      end
+      format.html
+    end
+  end
+
   def entry_report
     @location_id = params[:location_id].nil? ? current_user.location_id : params[:location_id]
     @received_date_start = params[:received_date_start].nil? ? 1.day.ago.strftime("%Y-%m-%d 7:00") : params[:received_date_start]
@@ -116,8 +156,11 @@ class ReportsController < ApplicationController
     time_range = Time.parse(@received_date_start).utc..Time.parse(@received_date_end).utc
 
     condition = {}
+    #condition["packages.part_id"] = 'P00112425'
     condition["deliveries.destination_id"] = @location_id
-    condition["deliveries.received_date"] = time_range
+    #condition["deliveries.received_date"] = time_range
+    #condition["deliveries.created_at"] = time_range
+    condition["packages.created_at"] = time_range
     condition["packages.state"] = [PackageState::RECEIVED]
 
     @packages = {}
@@ -130,61 +173,15 @@ class ReportsController < ApplicationController
     }
 
     @results = {}
-    res_hash = {}
-
-    @file = nil
-    @jsonfile = nil
-    unless params[:file].nil?
+    if params.has_key?(:file)
       @file = JSON.parse(params[:file])
-      @jsonfile = params[:file]
-      f = FileData.new(JSON.parse(params[:file]))
-
-      book = Roo::Excelx.new f.full_path
-
-      book.default_sheet = book.sheets.first
-      headers = []
-      book.row(1).each {|header|
-        headers << header
-      }
-
-
-
-      fors_data = []
-      2.upto(book.last_row) do |line|
-        params ={}
-        headers.each_with_index{|key,i|
-          params[key]=book.cell(line,i+1).to_s
-        }
-
-        insert = true
-        _params = {}
-        fors_keys.each{|key|
-          if insert && (params[key].nil? || params[key].to_s.blank?)
-            insert = false
-            break
-          end
-
-          if  params[key].is_number?
-            _params[key] = params[key].to_i.to_s
-          else
-            _params[key] = params[key]
-          end
-        }
-
-        if insert
-          fors_data<<_params
-        end
+      case @file["extention"]
+        when '.csv'
+          @results = ReportsHelper.csv_filter(params[:file])
+        when '.xlsx'
+          @results = ReportsHelper.xlsx_filter(params[:file])
       end
-
-      fors_data.each {|f|
-        if res_hash[f["PartNr."]+f["Warehouse"]].nil?
-          res_hash[f["PartNr."]+f["Warehouse"]] = {"PartNr."=>f["PartNr."],"Warehouse"=>f["Warehouse"],"Amount"=>0}
-        end
-        res_hash[f["PartNr."]+f["Warehouse"]]["Amount"] = res_hash[f["PartNr."]+f["Warehouse"]]["Amount"] + f["Quantity"].to_f
-      }
     end
-
-    @results = res_hash.sort_by {|key,value| value["Warehouse"]}
 
     filename = "#{Location.find_by_id(@location_id).name}收货差异报表_#{@received_date_start}_#{@received_date_end}"
 

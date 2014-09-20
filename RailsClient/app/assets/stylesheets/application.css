@@ -15,5 +15,6 @@
  *=require pagination
  *=require docs
  *=require colpick
+ *=require bootstrap-select
  *=require_tree .
  */
