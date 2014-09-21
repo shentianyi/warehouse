@@ -172,6 +172,15 @@ class ReportsController < ApplicationController
       @packages[p.part_id+p.whouse_id]["Amount"] = @packages[p.part_id+p.whouse_id]["Amount"] + p.total
     }
 
+    @uncounted_packages = {}
+    condition["packages.state"] = [PackageState::WAY,PackageState::ORIGINAL]
+    Package.entry_report(condition).each {|p|
+      if @uncounted_packages[p.part_id+p.whouse_id].nil?
+        @uncounted_packages[p.part_id+p.whouse_id] = {"PartNr."=>p.part_id,"Warehouse"=>p.whouse_id,"Amount"=>0}
+      end
+      @uncounted_packages[p.part_id+p.whouse_id]["Amount"] = @uncounted_packages[p.part_id+p.whouse_id]["Amount"] + p.total
+    }
+
     @results = {}
     if params.has_key?(:file)
       @file = JSON.parse(params[:file])
@@ -188,7 +197,7 @@ class ReportsController < ApplicationController
     respond_to do|format|
       format.html
       format.xlsx do
-        send_data(entry_discrepancy_xlsx(@packages,@results),
+        send_data(entry_discrepancy_xlsx(@packages,@results,@uncounted_packages),
                   :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
                   :filename => filename+".xlsx"
         )
@@ -271,7 +280,7 @@ class ReportsController < ApplicationController
 
   private
 
-  def entry_discrepancy_xlsx packages,results
+  def entry_discrepancy_xlsx packages,results,uncounted_packages
     p = Axlsx::Package.new
     wb = p.workbook
     wb.add_worksheet(:name=>"Basic Sheet") do |sheet|
@@ -282,7 +291,8 @@ class ReportsController < ApplicationController
                           v["Warehouse"],
                           v["Amount"],
                           packages[k].nil? ? 0 : packages[k]["Amount"],
-                          packages[k].nil? ? v["Amount"] : v["Amount"] - packages[k]["Amount"]
+                          packages[k].nil? ? v["Amount"] : v["Amount"] - packages[k]["Amount"],
+                          uncounted_packages[k].nil? ? 0: uncounted_packages[k]["Amount"]
                       ], :types => [:string]
       }
     end
@@ -379,7 +389,7 @@ class ReportsController < ApplicationController
   end
 
   def discrepancy_header
-    ["零件号","部门","报表数量","系统数量","差值"]
+    ["零件号","部门","报表数量","系统数量","差值","未记入统计（未发送或在途）"]
   end
 
   def fors_keys

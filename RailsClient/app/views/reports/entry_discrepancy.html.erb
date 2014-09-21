@@ -65,6 +65,7 @@
       <th>报表数量</th>
       <th>系统数量</th>
       <th>差异值</th>
+      <th>未记入统计（未发送或在途）</th>
     </tr>
     </thead>
     <tbody>
@@ -85,6 +86,13 @@
         <% else%>
         <span class="label label-primary"><%= d %></span>
         <% end %>
+      </td>
+      <td>
+        <% if @uncounted_packages[key].nil?%>
+            <span class="label label-primary">0</span>
+        <%else%>
+            <span class="label label-warning"><%= @uncounted_packages[key]["Amount"]%></span>
+        <%end%>
       </td>
     </tr>
     <% end %>
