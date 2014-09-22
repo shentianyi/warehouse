@@ -63,6 +63,7 @@ class OrdersController < ApplicationController
 
   def panel
     @orders=OrderService.get_orders_by_days(current_user.location.id).order(created_at: :asc).all
+    @picklists = PickList.all
   end
 
   def panel_list
@@ -90,6 +91,11 @@ class OrdersController < ApplicationController
       @order_items=PickItemService.get_order_items(params[:user_id],params[:order_ids])||[]
     end
     render partial:'item'
+  end
+
+  def pickitems
+    @pickitems = PickItem.where(pick_list_id: params[:picklist_ids])
+    render partial:'pickitems'
   end
 
   def order_items

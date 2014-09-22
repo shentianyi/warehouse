@@ -1,0 +1,26 @@
+<div>
+  <ul id="picklists">
+    <% @picklists.each do |pl|%>
+        <li>
+          <input type="checkbox" value="<%= pl.id %>" class="picklist-checkout"/>
+          <span class="label label-info"><%= pl.id %></span>
+        </li>
+    <% end %>
+  </ul>
+</div>
+<div id="picklist-items">
+
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('body').on("change",".picklist-checkout",function(){
+            var lists = [];
+            $(".picklist-checkout:checked").each(function(){
+               lists.push($(this).val());
+            });
+            $.get('/orders/pickitems', {picklist_ids:lists}, function (data) {
+                $('#picklist-items').html(data);
+            }, 'html');
+        })
+  });
+</script>

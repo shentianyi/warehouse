@@ -53,6 +53,7 @@ Rails.application.routes.draw do
       get :panel_list
       get :search
       get :items
+      get :pickitems
       post :handle
     end
     member do

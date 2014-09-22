@@ -9,6 +9,9 @@
   <div class="order-content-div">
     <h4>选择需求单预览</h4>
   </div>
+  <div id="pick-list-history" class="pick-list-history" style="float: right">
+    <%= render partial: 'picklists'%>
+  </div>
 </div>
 <script type="text/javascript">
     $('body').on('change', '.order-checkbox', function () {
