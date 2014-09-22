@@ -6,32 +6,40 @@
     <th>数量</th>
     <th>箱数</th>
     <th>是否已完成</th>
+    <th>是否缺货</th>
   </tr>
   </thead>
   <tbody>
-  <% @pickitems.each do |pi| %>
-  <tr>
-    <td><%= pi.destination_whouse.name%></td>
-    <td>
-      <% if pp = OrderItemService.verify_department(pi.destination_whouse_id, pi.part_id) %><%= pp.position.detail %>
-      <% end %></td>
-    </td>
-    <td><%= pi.quantity%></td>
-    <td><%= pi.box_quantity%></td>
-    <td>
-      <% if pi.order_item %>
-          <input type="checkbox" class="pickitem-checkbox" value="<%= pi.id %>" <%= 'checked' if pi.order_item.is_finished%> />
-      <%end%>
-    </td>
-  </tr>
+  <% if @pickitems %>
+      <% @pickitems.each do |pi| %>
+          <tr>
+            <td><%= pi.destination_whouse.name %></td>
+            <td>
+              <% if pp = OrderItemService.verify_department(pi.destination_whouse_id, pi.part_id) %><%= pp.position.detail %>
+              <% end %></td>
+            </td>
+            <td><%= pi.quantity %></td>
+            <td><%= pi.box_quantity %></td>
+            <td>
+              <% if pi.order_item %>
+                  <input type="checkbox" class="pickitem-checkbox" value="<%= pi.id %>" <%= 'checked' if pi.order_item.is_finished %> />
+              <% end %>
+            </td>
+            <td>
+              <% if pi.order_item %>
+                  <input type="checkbox" class="outofstock-checkbox" value="<%= pi.id %>" <%= 'checked' if pi.order_item.out_of_stock %> />
+              <% end %>
+            </td>
+          </tr>
+      <% end %>
   <% end %>
   </tbody>
 </table>
 
 <script type="text/javascript">
-  $(document).ready(function(){
-      $("body").on("change",".pickitem-checkbox",function(){
-          $(this)
-      })
-  });
+    $(document).ready(function () {
+        $("body").on("change", ".pickitem-checkbox", function () {
+            $(this)
+        })
+    });
 </script>
