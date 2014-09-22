@@ -12,7 +12,8 @@ class PickListService
             part_id: i.part_id,
             part_type_id: i.part_type_id,
             remark: i.remark,
-            is_emergency: i.is_emergency
+            is_emergency: i.is_emergency,
+            order_item_id: i.id
         )
       end
       pick_list.save
