@@ -8,9 +8,6 @@
     <% end %>
   </ul>
 </div>
-<div id="picklist-items">
-  <% render 'pickitems'%>
-</div>
 <script type="text/javascript">
     $(document).ready(function(){
         $('body').on("change",".picklist-checkout",function(){
@@ -19,7 +16,7 @@
                lists.push($(this).val());
             });
             $.get('/orders/pickitems', {picklist_ids:lists}, function (data) {
-                $('#picklist-items').html(data);
+                $('.order-content-div').html(data);
             }, 'html');
         })
   });
