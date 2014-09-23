@@ -1,35 +1,50 @@
+<h3>Pick items</h3>
 <table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
-    <th>备货仓库</th>
-    <th>备货库位</th>
+    <th>No.</th>
+    <th>零件号</th>
     <th>数量</th>
     <th>箱数</th>
+    <th>要货员工号</th>
+    <th>要货部门</th>
+    <th>要货库位</th>
+    <th>是否加急</th>
     <th>是否已完成</th>
     <th>是否缺货</th>
+    <th>备注</th>
   </tr>
   </thead>
   <tbody>
   <% if @pickitems %>
-      <% @pickitems.each do |pi| %>
+      <% @pickitems.each_with_index do |pi,index| %>
           <tr>
+            <td><%= index+1%></td>
+            <td><%= pi.part_id %></td>
+            <td><%= pi.quantity %></td>
+            <td><%= pi.box_quantity %></td>
+            <td><%= pi.user_id%></td>
             <td><%= pi.destination_whouse.name %></td>
             <td>
               <% if pp = OrderItemService.verify_department(pi.destination_whouse_id, pi.part_id) %><%= pp.position.detail %>
-              <% end %></td>
-            </td>
-            <td><%= pi.quantity %></td>
-            <td><%= pi.box_quantity %></td>
-            <td>
-              <% if pi.order_item %>
-                  <input type="checkbox" class="pickitem-checkbox" value="<%= pi.id %>" <%= 'checked' if pi.order_item.is_finished %> />
               <% end %>
             </td>
             <td>
               <% if pi.order_item %>
-                  <input type="checkbox" class="outofstock-checkbox" value="<%= pi.id %>" <%= 'checked' if pi.order_item.out_of_stock %> />
-              <% end %>
+              <input type="checkbox" class="pickitem-checkbox" value="<%= pi.id %>" <%= 'checked' if pi.is_emergency %> />
+                  <%end%>
             </td>
+            <td>
+              <%if pi.order_item %>
+                  <input type="checkbox" class="pickitem-checkbox" value="<%= pi.id %>" <%= 'checked' if pi.is_finished %> />
+                <% end%>
+            </td>
+            <td>
+              <%if pi.order_item%>
+                  <input type="checkbox" class="outofstock-checkbox" value="<%= pi.id %>" <%= 'checked' if pi.is_out_of_stock %> />
+                <%end %>
+            </td>
+            <td><%= pi.remark %></td>
           </tr>
       <% end %>
   <% end %>

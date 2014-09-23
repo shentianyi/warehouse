@@ -103,6 +103,8 @@ Rails.application.routes.draw do
   get 'reports/reports', to: 'reports#reports'
   post 'reports/upload_file', to: 'reports#upload_file'
 
+  get 'notifications', to: 'notifications#index'
+
   resources :labels do
     collection do
       post :upload_file

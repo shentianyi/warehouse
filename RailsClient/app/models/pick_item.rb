@@ -7,4 +7,28 @@ class PickItem < ActiveRecord::Base
   def generate_id
     "PI#{Time.now.to_milli}"
   end
+
+  def remark
+    if self.order_item
+      self.order_item.remark
+    end
+  end
+
+  def is_out_of_stock
+    if self.order_item
+      self.order_item.out_of_stock
+    end
+  end
+
+  def is_emergency
+    if self.order_item
+      self.order_item.is_emergency
+    end
+  end
+
+  def is_finished
+    if self.order_item
+      self.order_item.is_finished
+    end
+  end
 end
