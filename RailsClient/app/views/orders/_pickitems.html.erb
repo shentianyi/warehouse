@@ -31,17 +31,17 @@
             </td>
             <td>
               <% if pi.order_item %>
-              <input type="checkbox" class="pickitem-checkbox" value="<%= pi.id %>" <%= 'checked' if pi.is_emergency %> />
+              <input type="checkbox" disabled class="pickitem-checkbox" <%= 'checked' if pi.is_emergency %> />
                   <%end%>
             </td>
             <td>
               <%if pi.order_item %>
-                  <input type="checkbox" class="pickitem-checkbox" value="<%= pi.id %>" <%= 'checked' if pi.is_finished %> />
+                  <input type="checkbox" class="finishpick-checkbox" value="<%= pi.order_item_id %>" <%= 'checked' if pi.is_finished %> />
                 <% end%>
             </td>
             <td>
               <%if pi.order_item%>
-                  <input type="checkbox" class="outofstock-checkbox" value="<%= pi.id %>" <%= 'checked' if pi.is_out_of_stock %> />
+                  <input type="checkbox" class="outofstock-checkbox" value="<%= pi.order_item_id %>" <%= 'checked' if pi.is_out_of_stock %> />
                 <%end %>
             </td>
             <td><%= pi.remark %></td>
@@ -53,8 +53,34 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $("body").on("change", ".pickitem-checkbox", function () {
-            $(this)
+        $("body").on("change", ".finishpick-checkbox", function () {
+            var order_item_id = $(this).val();
+            var is_finished = $(this).attr("checked") == undefined ? false : true;
+            console.log(order_item_id);
+            $.ajax({
+                url:"/order_items/"+order_item_id,
+                type:"PUT",
+                data:{order_item:{is_finished:is_finished}},
+                dataType:'json',
+                success:function(data){
+
+                }
+            });
         })
+                .on("change",".outofstock-checkbox",function(){
+                    var order_item_id = $(this).val();
+                    var out_of_stock = $(this).attr("checked") == undefined ? false : true;
+                    console.log(order_item_id);
+                    $.ajax({
+                        url:"/order_items/"+order_item_id,
+                        type:"PUT",
+                        data:{order_item:{out_of_stock:out_of_stock}},
+                        dataType:'json',
+                        success:function(data){
+
+                        }
+                    });
+                })
+
     });
 </script>
