@@ -18,11 +18,13 @@ class OrderService
     end
   end
 
-  def self.get_orders_by_user user_id
+  def self.filt_orders user_id,order_ids = nil,filters = nil
     user = User.find_by_id(user_id)
 
-    orders_ids = self.get_orders_by_days(user.location_id).ids
-    order_items = PickItemService.get_order_items(user_id, orders_ids)
+    if order_ids.nil?
+      order_ids = self.get_orders_by_days(user.location_id).ids
+    end
+    order_items = PickItemService.get_order_items(user_id, order_ids, filters)
     ids = order_items.collect { |oi|
       oi.order_id
     }.uniq

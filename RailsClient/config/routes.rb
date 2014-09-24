@@ -54,6 +54,8 @@ Rails.application.routes.draw do
       get :search
       get :items
       get :pickitems
+      get :filters
+      get :filt
       post :handle
     end
     member do

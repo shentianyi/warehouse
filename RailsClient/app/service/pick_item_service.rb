@@ -1,7 +1,11 @@
 class PickItemService
-  def self.get_order_items user_id, order_ids
+  def self.get_order_items user_id, order_ids,filters = nil
     if user=User.find_by_id(user_id)
-      pick_item_filters=user.pick_item_filters
+      if filters
+        pick_item_filters=user.pick_item_filters.where(id:filters)
+      else
+        pick_item_filters=user.pick_item_filters
+      end
       if pick_item_filters.size >0
         query={}
         pick_item_filters.each do |pif|
@@ -15,6 +19,9 @@ class PickItemService
         end
       end
       if query
+        puts '~~~~~~~~~~~~~'
+        puts query
+        puts order_ids
         query= OrderItem.where(query)
         query=query.where(order_id: order_ids)
         return query
