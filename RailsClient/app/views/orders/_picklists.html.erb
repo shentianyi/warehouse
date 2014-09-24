@@ -1,10 +1,10 @@
 <div>
-  <h3>Pick lists</h3>
-  <ul id="picklists">
+  <ul id="picklists" class="picklists">
     <% @picklists.each do |pl|%>
         <li>
-          <input type="checkbox" value="<%= pl.id %>" class="picklist-checkout"/>
-          <span class="label label-info"><%= pl.id %></span>
+          <a class="item-a"><%= pl.id %></a>
+          <!--<input type="checkbox" value="<%= pl.id %>" class="picklist-checkout"/>-->
+          <!--<span class="label label-info"><%= pl.id %></span>-->
         </li>
     <% end %>
   </ul>

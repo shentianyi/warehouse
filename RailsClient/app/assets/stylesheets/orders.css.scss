@@ -30,37 +30,65 @@ $min-width:1024px;
     font-size:25px;
     pointer-events:none;
   }
-  .btn{
+  &>.btn{
     float:right;
     margin-right: 40px;
-    margin-top: 10px;
+    margin-top: 5px;
+    width:150px;
+    padding:6px 15px;
+    font-size:15px;
   }
 }
+$margin-top:10px;
+$normal-color:rgba(0,0,0,0.1);
+$active-color:$blue;
 .panel-content {
   min-width:$min-width;
   &:after{
     @include after-clear;
   }
+  .choose-active{
+    .panel-title{
+      background:$active-color;
+      color:rgba(255,255,255,0.8);
+    }
+      .picklists{
+        background:$active-color !important;
+        a{
+          color:#222 !important;
+        }
+
+      }
+
+  }
   .panel-title{
     @include border-radius-same(5px);
     width:250px;
     height:36px;
-    margin:10px auto 5px;
-    background:rgba(0,0,0,0.1);
+    margin:$margin-top auto 5px;
+    background:$normal-color;
     color:#777;
-    &.active{
-      background:$blue;
-      color:rgba(255,255,255,0.8);
-    }
     p{
-      margin:8px 0 0 9px;
       font-size:17px;
-      float:left;
+      &.left{
+        margin:8px 0 0 9px;
+        float:left;
+      }
+      &.right{
+        margin:8px 9px 0 0px;
+        float:right;
+      }
     }
     i{
-      float:right;
-      font-size:21px;
-      margin:6px 8px 0 0;
+        font-size:21px;
+      &.glyphicon-chevron-right{
+        float:right;
+        margin:6px 8px 0 0;
+      }
+      &.glyphicon-chevron-left{
+        float:left;
+        margin:6px 0px 0 8px;
+      }
     }
   }
   .panel-list{
@@ -80,6 +108,9 @@ $min-width:1024px;
     width:calc(100% - 600px);
     width:-moz-calc(100% - 600px);
     width:-webkit-calc(100% - 600px);
+    border:1px solid rgba(0,0,0,0.2);
+    @include border-radius-same(3px);
+    margin-top:$margin-top;
     table{
       width:95%;
     }
@@ -88,6 +119,22 @@ $min-width:1024px;
     @include box-sizing-border;
     float:left;
     width:300px;
+    .picklists{
+      padding:5px 6px;
+      margin:5px 15px;
+      background:$normal-color;
+      @include border-radius-same(2px);
+      a.item-a{
+        display:inline-block;
+        font-size:14px;
+        padding:6px 3px;
+        width:100%;
+        cursor:pointer;
+        &:hover{
+          background:rgba(0,0,0,0.3);
+        }
+      }
+    }
   }
 }
 
