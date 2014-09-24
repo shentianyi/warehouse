@@ -15,6 +15,7 @@ class PickListService
             is_emergency: i.is_emergency,
             order_item_id: i.id
         )
+        i.update(handled:true)
       end
       pick_list.save
       return pick_list
