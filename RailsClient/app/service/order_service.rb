@@ -88,4 +88,13 @@ class OrderService
   def self.exits? id
     search({id:id}).first
   end
+
+  #-------------
+  #notify whouses
+  #-------------
+  def self.notify
+    OrderItem.joins(:order).where("orders.handled = false")
+    .select("COUNT(order_items.part_id) as count,order_items.whouse_id as wid")
+    .group("order_items.whouse_id")
+  end
 end

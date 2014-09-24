@@ -104,6 +104,7 @@ Rails.application.routes.draw do
   post 'reports/upload_file', to: 'reports#upload_file'
 
   get 'notifications', to: 'notifications#index'
+  get 'notifications/orderbus', to: 'notifications#orderbus'
 
   resources :labels do
     collection do
