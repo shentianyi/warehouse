@@ -1,35 +1,94 @@
 // Place all the styles related to the Orders controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+@import "basic.css.scss";
+.notice.alert{
+  margin-bottom:0px;
+}
 .panel-input{
   display:block;
   margin-left:30px;
   width:230px;
   margin-bottom:5px;
 }
+$min-width:1024px;
+.panel-header{
+  min-width:$min-width;
+  height:50px;
+  border-top:1px solid rgba(0,0,0,0.2);
+  border-bottom:1px solid rgba(0,0,0,0.2);
+  background:rgba(0,0,0,0.1);
+  position:relative;
+  p{
+    text-align: left;
+    position:absolute;
+    left:12px;
+    right:0px;
+    top:15px;
+    color:#222;
+    font-weight:bold;
+    font-size:25px;
+    pointer-events:none;
+  }
+  .btn{
+    float:right;
+    margin-right: 40px;
+    margin-top: 10px;
+  }
+}
 .panel-content {
-  width:100%;
-}
-.panel-list{
-  -webkit-box-sizing:border-box;
-  -moz-box-sizing:border-box;
-  box-sizing:border-box;
-  float:left;
-  width:24%;
-  padding:0 30px;
-  li{
-    margin-bottom:15px;
-    padding:8px;
-    border-bottom:1px solid rgba(0,0,0,0.2);
+  min-width:$min-width;
+  &:after{
+    @include after-clear;
+  }
+  .panel-title{
+    @include border-radius-same(5px);
+    width:250px;
+    height:36px;
+    margin:10px auto 5px;
+    background:rgba(0,0,0,0.1);
+    color:#777;
+    &.active{
+      background:$blue;
+      color:rgba(255,255,255,0.8);
+    }
+    p{
+      margin:8px 0 0 9px;
+      font-size:17px;
+      float:left;
+    }
+    i{
+      float:right;
+      font-size:21px;
+      margin:6px 8px 0 0;
+    }
+  }
+  .panel-list{
+    @include box-sizing-border;
+    float:left;
+    width:300px;
+    min-height:100px;
+    li{
+      margin-bottom:15px;
+      padding:8px;
+      border-bottom:1px solid rgba(0,0,0,0.2);
+    }
+  }
+  .order-content-div{
+    @include box-sizing-border;
+    float:left;
+    width:calc(100% - 600px);
+    width:-moz-calc(100% - 600px);
+    width:-webkit-calc(100% - 600px);
+    table{
+      width:95%;
+    }
+  }
+  .pick-list-history{
+    @include box-sizing-border;
+    float:left;
+    width:300px;
   }
 }
-.order-content-div{
-  -webkit-box-sizing:border-box;
-  -moz-box-sizing:border-box;
-  box-sizing:border-box;
-  float:left;
-  width:74%;
-  table{
-    width:95%;
-  }
-}
+
+

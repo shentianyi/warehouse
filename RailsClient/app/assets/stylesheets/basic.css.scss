@@ -1,0 +1,67 @@
+$blue:#5fa9da;
+$blue-hover:#69aef5;
+$red:#f75460;
+$red-hover:#f59b9b;
+$green:#0cb156;
+$green-hover:transparentize($green,0.4);
+$nav-dark:#353a46;
+$golden-text:#f2c54a;
+@mixin transition($element){
+  transition:$element ease-out 0.25s
+}
+@mixin word-break{
+  word-break:break-all;
+  word-wrap:break-word;
+}
+@mixin border-radius-same($border){
+  border-radius:$border;
+  -moz-border-radius:$border;
+  -webkit-border-radius:$border;
+}
+@mixin border-radius($lt,$rt,$rb,$lb){
+  border-radius:$lt $rt $rb $lb;
+  -moz-border-radius:$lt $rt $rb $lb;
+  -webkit-border-radius:$lt $rt $rb $lb;
+}
+@mixin box-shadow($x,$y,$shadow,$color){
+  box-shadow:$x $y $shadow $color;
+  -moz-box-shadow:$x $y $shadow $color;
+  -webkit-box-shadow:$x $y $shadow $color;
+}
+@mixin box-shadow-inset($x,$y,$shadow,$color){
+  box-shadow:$x $y $shadow $color inset;
+  -moz-box-shadow:$x $y $shadow $color inset;
+  -webkit-box-shadow:$x $y $shadow $color inset;
+}
+@mixin text-shadow($x,$y,$shadow,$color){
+  text-shadow:$x $y $shadow $color;
+  -moz-text-shadow:$x $y $shadow $color;
+  -webkit-text-shadow:$x $y $shadow $color;
+}
+@mixin text-overflow{
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+@mixin clearFloat{
+  content:"";
+  display:block;
+  clear: both;
+}
+@mixin box-sizing-border{
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+@mixin after-clear{
+  content:"";
+  display:block;
+  clear:both;
+}
+/*************************************************************  ul
+*********************************************************************************************************/
+ul{
+  padding:0px;
+  margin:0px;
+  list-style-type:none;
+}
