@@ -54,6 +54,8 @@ Rails.application.routes.draw do
       get :search
       get :items
       get :pickitems
+      get :filters
+      get :filt
       post :handle
     end
     member do
@@ -104,6 +106,7 @@ Rails.application.routes.draw do
   post 'reports/upload_file', to: 'reports#upload_file'
 
   get 'notifications', to: 'notifications#index'
+  get 'notifications/orderbus', to: 'notifications#orderbus'
 
   resources :labels do
     collection do

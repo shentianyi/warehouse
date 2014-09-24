@@ -10,6 +10,9 @@
     <th>要货库位</th>
     <th>是否缺货</th>
     <th>是否加急</th>
+    <th>是否缺货</th>
+    <th>是否已处理</th>
+    <th>是否已完成</th>
     <th>备注</th>
   </tr>
   </thead>
@@ -25,6 +28,9 @@
         <td><%= order_item.whouse.name %></td>
         <td><%if pp = OrderItemService.verify_department(order_item.whouse_id,order_item.part_id) %><%= pp.position.detail%><%end%></td>
         <td><%=order_item.is_emergency%></td>
+        <td><%= order_item.out_of_stock %></td>
+        <td><%= order_item.handled %></td>
+        <td><%= order_item.is_finished%></td>
         <td><%=order_item.remark%></td>
       </tr>
   <% end %>

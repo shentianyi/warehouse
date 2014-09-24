@@ -8,25 +8,38 @@ class OrderService
   # @days: integer
   # @state: false
   #=============
-  def self.get_orders_by_days location_id,days=7,handled = false,user_id = nil
+  def self.get_orders_by_days location_id, days=7, handled = false, user_id = nil
     start_time = days.days.ago.at_beginning_of_day.utc
     end_time = Time.now.at_end_of_day.utc
     if user_id.nil?
-      Order.where(created_at:(start_time..end_time),handled:handled,source_id:location_id)
+      Order.where(created_at: (start_time..end_time), handled: handled, source_id: location_id)
     else
-      Order.where(created_at:(start_time..end_time),user_id:user_id,handled:handled,source_id:location_id)
+      Order.where(created_at: (start_time..end_time), user_id: user_id, handled: handled, source_id: location_id)
     end
+  end
+
+  def self.filt_orders user_id,order_ids = nil,filters = nil
+    user = User.find_by_id(user_id)
+
+    if order_ids.nil?
+      order_ids = self.get_orders_by_days(user.location_id).ids
+    end
+    order_items = PickItemService.get_order_items(user_id, order_ids, filters)
+    ids = order_items.collect { |oi|
+      oi.order_id
+    }.uniq
+    Order.where(id: ids)
   end
 
   #=============
   #handle
   #=============
-  def self.handle ids,handled = true
+  def self.handle ids, handled = true
     orders = Order.where(id: ids)
-    orders.each {|o|
+    orders.each { |o|
       #o.handled = handled
       #o.save
-      o.update({handled:handled})
+      o.update({handled: handled})
     }
   end
 
@@ -40,7 +53,7 @@ class OrderService
       args[:end_time] = Time.parse(args[:end_time]).at_end_of_day
     end
 
-    Order.where(user_id:args[:user_id],created_at:(args[:start_time]..args[:end_time])).all.order(created_at: :desc)
+    Order.where(user_id: args[:user_id], created_at: (args[:start_time]..args[:end_time])).all.order(created_at: :desc)
   end
 
   #=============
@@ -53,20 +66,20 @@ class OrderService
   #=============
   #create order with order items
   #=============
-  def self.create_with_items args,current_user
+  def self.create_with_items args, current_user
     order = Order.new(args[:order])
     order.user = current_user
     ActiveRecord::Base.transaction do
       begin
         if order.save
           #save success
-          args[:order_items].each do | item |
-            part = OrderItemService.verify_part_id(item[:part_id],current_user)
-            part_position = OrderItemService.verify_department(item[:department],item[:part_id])
+          args[:order_items].each do |item|
+            part = OrderItemService.verify_part_id(item[:part_id], current_user)
+            part_position = OrderItemService.verify_department(item[:department], item[:part_id])
             quantity = item[:quantity]
             box_quantity = item[:box_quantity]
 
-            if item = OrderItemService.new(part_position,part,quantity,item[:is_emergency],box_quantity,current_user)
+            if item = OrderItemService.new(part_position, part, quantity, item[:is_emergency], box_quantity, current_user)
               item.order = order
               item.save
             end
@@ -86,6 +99,15 @@ class OrderService
   #exits? id
   #=============
   def self.exits? id
-    search({id:id}).first
+    search({id: id}).first
+  end
+
+  #-------------
+  #notify whouses
+  #-------------
+  def self.notify
+    OrderItem.joins(:order).where("orders.handled = false")
+    .select("COUNT(order_items.part_id) as count,order_items.whouse_id as wid")
+    .group("order_items.whouse_id")
   end
 end

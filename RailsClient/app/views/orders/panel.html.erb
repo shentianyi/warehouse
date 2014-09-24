@@ -1,7 +1,11 @@
-<!--<h3>需求单处理面板</h3>-->
-<!--<p style="padding-left:30px;">择货员工号：<input type="text" id="user-id-text" class="panel-input-o" value="<%= current_user.id %>" /></p>-->
-<!--<input type="button" value="生成择货单(择货员工号必须填写)" onclick="build_pick_list();" style="margin-left:30px;margin-top:0px;">-->
-<!--<input type="button" value="完成需求单处理" onclick="finish_order_handle(true);" style="margin-left:30px;margin-top:0px;">-->
+
+<h3>需求单处理面板</h3>
+<p style="padding-left:30px;">择货员工号：<input type="text" id="user-id-text" class="panel-input-o" value="<%= current_user.id %>" /></p>
+<div id="filters">
+  <%= render partial:'filters'%>
+</div>
+<input type="button" value="生成择货单(择货员工号必须填写)" onclick="build_pick_list();" style="margin-left:30px;margin-top:0px;">
+<input type="button" value="完成需求单处理" onclick="finish_order_handle(true);" style="margin-left:30px;margin-top:0px;">
 <div class='panel-header'>
   <p>需求面板</p>
   <a class='btn btn-success btn-sm'>创建择货单</a>
@@ -31,8 +35,16 @@
     $('body').on('keydown', '#user-id-text', function (e) {
         if (e.keyCode == 13) {
             get_order_items();
+            get_user_filters();
         }
     });
+
+    function get_user_filters(){
+        $.get('/orders/filters',{user:$('#user-id-text').val()},function(data){
+            $("#filters").html(data);
+        },'html');
+    };
+
     function get_order_items() {
         var orders = [];
         $('.order-checkbox:checked').each(function () {
