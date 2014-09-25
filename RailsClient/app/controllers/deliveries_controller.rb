@@ -85,11 +85,6 @@ class DeliveriesController < ApplicationController
     json[:package_positions]= []
     json[:packages].each { |p|
       json[:package_positions]<< p.package_position }
-    json[:state_logs]=d.state_logs
-    json[:forklifts].each { |f|
-      json[:state_logs]+=f.state_logs }
-    json[:packages].each { |p|
-      json[:state_logs]+=p.state_logs }
     send_data json.to_json, :filename => "#{d.id}.json"
   end
 
@@ -172,5 +167,8 @@ class DeliveriesController < ApplicationController
     @delivery_date_end=p[:delivery_date][:end]
     @received_date_start=p[:received_date][:start]
     @received_date_end=p[:received_date][:end]
+    @created_at_start = p[:created_at_start][:start]
+    @created_at_end = p[:created_at_end][:end]
+    @source_id = p[:srouce_id]
   end
 end
