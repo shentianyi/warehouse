@@ -58,11 +58,11 @@
             <%= render partial: 'filters' %>
 
           </select>
-          <a class="btn btn-xs btn-primary active"><i class="glyphicon glyphicon-search"></i></a>
+          <a class="btn btn-xs btn-primary active" id="filter-inner"><i class="glyphicon glyphicon-search"></i></a>
         </div>
 
         <div class="filter-result">
-          <ul id='order-list-panel'>
+          <ul id='order-list-panel-inner'>
             <%= render partial: 'list_for_choose' %>
           </ul>
         </div>
@@ -104,6 +104,21 @@
                             $('#order-list-panel').html(data);
                         },'html');
                     }
+                }).on("click","#filter-inner",function(){
+                    var filters = [];
+                    $("#require-select-inner option:selected").each(function(){
+                        filters.push($(this).val());
+                    });
+
+                    if(filters.length > 0){
+                        $.get('/orders/filt',{filters:filters},function(data){
+                            $('#order-list-panel-inner').html(data);
+                        },'html');
+                    }else{
+                        $.get('/orders/filt',function(data){
+                            $('#order-list-panel-inner').html(data);
+                        },'html');
+                    }
                 })
     })
     function set_outer_scene() {
@@ -133,7 +148,15 @@
             $(".order-checkbox").prop('checked', false)
         }
         $(".order-checkbox").eq(0).trigger("change");
-    })
+    }).on('change', '#select-all-inner', function () {
+                var checked = $(this).attr('checked') == undefined ? false : true;
+                if (checked) {
+                    $(".order-checkbox-inner").prop('checked', true)
+                } else {
+                    $(".order-checkbox-inner").prop('checked', false)
+                }
+                $(".order-checkbox-inner").eq(0).trigger("change");
+            })
 
     function get_order_items() {
         var orders = [];
@@ -151,7 +174,7 @@
     function build_pick_list() {
         var user = $('#user-id-text').val();
         var orders = [];
-        $('.order-checkbox:checked').each(function () {
+        $('.order-checkbox-inner:checked').each(function () {
             orders.push($(this).val());
         });
         if (!user) {

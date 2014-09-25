@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140924051814) do
+ActiveRecord::Schema.define(version: 20140925071100) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -358,7 +358,7 @@ ActiveRecord::Schema.define(version: 20140924051814) do
     t.boolean  "is_new",     default: true
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "order_ids"
+    t.text     "order_ids"
   end
 
   add_index "pick_lists", ["id"], name: "index_pick_lists_on_id", using: :btree

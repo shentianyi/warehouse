@@ -1,8 +1,12 @@
+<li>
+  <input type="checkbox" id="select-all-inner"/>
+  <span class="label">选择全部</span>
+</li>
 <% @orders.each do |order| %>
     <li>
       <div class="order-item-div" id="<%=order.id%>">
         <div class="item-left">
-          <input type="checkbox" value="<%= order.id %>" class="order-checkbox"/>
+          <input type="checkbox" value="<%= order.id %>" class="order-checkbox-inner"/>
         </div>
         <div class="item-right">
           需求单号:<%= order.id %>
