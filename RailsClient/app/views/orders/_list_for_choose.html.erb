@@ -1,6 +1,10 @@
 <% @orders.each do |order| %>
-      <li>
-        <div class="order-item-div" id="<%=order.id%>">
+    <li>
+      <div class="order-item-div" id="<%=order.id%>">
+        <div class="item-left">
+          <input type="checkbox" value="<%= order.id %>" class="order-checkbox"/>
+        </div>
+        <div class="item-right">
           需求单号:<%= order.id %>
           <br/>
           需求部门:<%=order.order_items.group(:whouse_id).pluck(:whouse_id).join(';')%>
@@ -11,5 +15,6 @@
           <br />
           生成时间:<%= order.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %>
         </div>
-      </li>
+      </div>
+    </li>
 <% end %>

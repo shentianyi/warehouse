@@ -1,12 +1,13 @@
-<h4>filters</h4>
-<ul>
+<!--<h4>filters</h4>-->
+<!--<ul>-->
   <% @filters.each do |f| %>
-      <li>
-        <input type="checkbox" class="filter-checkbox" value="<%= f.id %>">
-        <span class="label label-primary"><%= f.filter_type_display %>:<%= f.filterable_id %></span>
-      </li>
+      <!--<li>-->
+        <!--<input type="checkbox" class="filter-checkbox" value="<%= f.id %>">-->
+        <!--<span class="label label-primary"><%= f.filter_type_display %>:<%= f.filterable_id %></span>-->
+      <!--</li>-->
+    <option value="<%= f.id %>"><%= f.filter_type_display %>:<%= f.filterable_id %></option>
   <% end %>
-</ul>
+<!--</ul>-->
 <script type="text/javascript">
   $('body').on('change','.filter-checkbox',function(){
       var filters = [];
