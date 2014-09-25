@@ -1,3 +1,10 @@
 <% @bus.each do |bu|%>
-    <h3><%= bu.wid %> <span class="label label-primary"><%= bu.count %></span></h3>
+    <div class="notification-item">
+      <div class="left">
+        <p><%= bu.wid %></p>
+      </div>
+      <div class="right">
+        <span class="label label-warning"><%= bu.count %></span>
+      </div>
+    </div>
 <% end %>
