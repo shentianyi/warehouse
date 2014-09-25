@@ -1,6 +1,5 @@
 <!--<p style="padding-left:30px;">择货员工号：<input type="text" id="user-id-text" class="panel-input-o" value="<%= current_user.id %>" /></p>-->
 <!--<div id="filters">-->
-  <!--<%= render partial:'filters'%>-->
 <!--</div>-->
 <div class='panel-header'>
   <p>需求面板</p>
@@ -29,7 +28,7 @@
   </div>
   <!--center-->
   <div class="order-content-div">
-    <h4>选择需求单预览</h4>
+    <div class="alert" role="alert"><h3>请勾选左侧需求单列表来预览</h3></div>
   </div>
   <!--right-->
   <div id="pick-list-history" class="pick-list-history" >
@@ -94,14 +93,23 @@
       })
   }
     $('body').on('change', '.order-checkbox', function () {
+        $("#panel-list").addClass("choose-active");
+        $("#pick-list-history").removeClass("choose-active");
         get_order_items();
-    });
-    $('body').on('keydown', '#user-id-text', function (e) {
+    }).on('keydown', '#user-id-text', function (e) {
         if (e.keyCode == 13) {
             get_order_items();
             get_user_filters();
         }
-    });
+    }).on('change','#select-all',function(){
+        var checked = $(this).attr('checked') == undefined ? false:true;
+        if(checked){
+            $(".order-checkbox").prop('checked',true)
+        }else{
+            $(".order-checkbox").prop('checked',false)
+        }
+        $(".order-checkbox").eq(0).trigger("change");
+    })
 
     function get_user_filters(){
         $.get('/orders/filters',{user:$('#user-id-text').val()},function(data){

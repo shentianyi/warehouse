@@ -8,11 +8,10 @@
     <th>要货员工号</th>
     <th>要货项目</th>
     <th>要货库位</th>
-    <th>是否缺货</th>
     <th>是否加急</th>
     <th>是否缺货</th>
     <th>是否已处理</th>
-    <th>是否已完成</th>
+    <th>是否已完成备货</th>
     <th>备注</th>
   </tr>
   </thead>
@@ -27,12 +26,50 @@
         <td><%= order_item.user_id %></td>
         <td><%= order_item.whouse.name %></td>
         <td><%if pp = OrderItemService.verify_department(order_item.whouse_id,order_item.part_id) %><%= pp.position.detail%><%end%></td>
-        <td><%=order_item.is_emergency%></td>
-        <td><%= order_item.out_of_stock %></td>
-        <td><%= order_item.handled %></td>
-        <td><%= order_item.is_finished%></td>
+        <td>
+          <input type="checkbox" disabled <%='checked' if order_item.is_emergency%>/>
+        </td>
+        <td>
+          <input type="checkbox" <%= 'checked' if order_item.out_of_stock %> class="itemstock-checkbox" value="<%= order_item.id %>"/>
+        </td>
+        <td>
+          <input type="checkbox" disabled <%= 'checked' if order_item.handled%>/>
+        </td>
+        <td>
+          <input type="checkbox" value="<%= order_item.id%>" <%= 'checked' if order_item.is_finished%> class="itemfinished-checkbox"/>
+        </td>
         <td><%=order_item.remark%></td>
       </tr>
   <% end %>
   </tbody>
 </table>
+<script type="text/javascript">
+  $(document).ready(function(){
+      $('body').on('change','.itemstock-checkbox',function(){
+          var id=$(this).val();
+          var checked = $(this).attr('checked') == undefined ? false : true;
+          $.ajax({
+              url:"/order_items/"+id,
+              type:"PUT",
+              data:{order_item:{out_of_stock:checked}},
+              dataType:'json',
+              success:function(data){
+
+              }
+          });
+      })
+              .on('change','.itemfinished-checkbox',function(){
+                  var id = $(this).val();
+                  var checked = $(this).attr('checked') == undefined ? false : true;
+                  $.ajax({
+                      url:"/order_items/"+id,
+                      type:"PUT",
+                      data:{order_item:{is_finished:checked}},
+                      dataType:'json',
+                      success:function(data){
+
+                      }
+                  });
+              })
+  });
+</script>
