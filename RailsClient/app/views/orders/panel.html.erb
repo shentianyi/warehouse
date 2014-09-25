@@ -11,7 +11,7 @@
   <a class='btn btn-warning btn-sm'>创建择货单</a>
 </div>
 <div class="panel-content">
-  <div class='panel-list'>
+  <div id="panel-list" class='panel-list choose-active'>
     <div class='panel-title'>
       <p class="left">需求单列表</p>
       <i class='glyphicon glyphicon-chevron-right'></i>
@@ -21,9 +21,9 @@
     </ul>
   </div>
   <div class="order-content-div">
-    <h4>选择需求单预览</h4>
+    <div class="alert" role="alert"><h3>请勾选左侧需求单列表来预览</h3></div>
   </div>
-  <div id="pick-list-history" class="pick-list-history choose-active" >
+  <div id="pick-list-history" class="pick-list-history " >
     <div class='panel-title'>
       <i class='glyphicon glyphicon-chevron-left'></i>
       <p class="right">择货单列表</p>
@@ -34,6 +34,8 @@
 
 <script type="text/javascript">
     $('body').on('change', '.order-checkbox', function () {
+        $("#panel-list").addClass("choose-active");
+        $("#pick-list-history").removeClass("choose-active");
         get_order_items();
     });
     $('body').on('keydown', '#user-id-text', function (e) {

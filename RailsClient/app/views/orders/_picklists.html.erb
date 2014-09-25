@@ -1,24 +1,22 @@
-<div>
-  <ul id="picklists" class="picklists">
-    <% @picklists.each do |pl|%>
-        <li>
-          <a class="item-a"><%= pl.id %></a>
-          <!--<input type="checkbox" value="<%= pl.id %>" class="picklist-checkout"/>-->
-          <!--<span class="label label-info"><%= pl.id %></span>-->
-        </li>
-    <% end %>
-  </ul>
-</div>
+<ul id="picklists" class="picklists">
+  <% @picklists.each do |pl| %>
+      <li>
+        <a class="item-a" picklist="<%= pl.id %>"><%= pl.id %></a>
+        <!--<input type="checkbox" value="<%= pl.id %>" class="picklist-checkout"/>-->
+        <!--<span class="label label-info"><%= pl.id %></span>-->
+      </li>
+  <% end %>
+</ul>
 <script type="text/javascript">
-    $(document).ready(function(){
-        $('body').on("change",".picklist-checkout",function(){
+    $(document).ready(function () {
+        $('body').on('click', ".item-a", function () {
             var lists = [];
-            $(".picklist-checkout:checked").each(function(){
-               lists.push($(this).val());
-            });
-            $.get('/orders/pickitems', {picklist_ids:lists}, function (data) {
+            $("#panel-list").removeClass("choose-active");
+            $("#pick-list-history").addClass("choose-active");
+            lists.push($(this).attr("picklist"));
+            $.get('/orders/pickitems', {picklist_ids: lists}, function (data) {
                 $('.order-content-div').html(data);
             }, 'html');
         })
-  });
+    });
 </script>
