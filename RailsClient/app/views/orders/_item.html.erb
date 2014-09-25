@@ -36,7 +36,7 @@
           <input type="checkbox" disabled <%= 'checked' if order_item.handled%>/>
         </td>
         <td>
-          <input type="checkbox" value="<%= order_item.id%>" <%= 'checked' if order_item.is_finished%> class="itemfinished-checkbox"/>
+          <input type="checkbox" disabled value="<%= order_item.id%>" <%= 'checked' if order_item.is_finished%> class="itemfinished-checkbox"/>
         </td>
         <td><%=order_item.remark%></td>
       </tr>
