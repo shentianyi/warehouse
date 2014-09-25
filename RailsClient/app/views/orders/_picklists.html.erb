@@ -7,16 +7,3 @@
       </li>
   <% end %>
 </ul>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('body').on('click', ".item-a", function () {
-            var lists = [];
-            $("#panel-list").removeClass("choose-active");
-            $("#pick-list-history").addClass("choose-active");
-            lists.push($(this).attr("picklist"));
-            $.get('/orders/pickitems', {picklist_ids: lists}, function (data) {
-                $('.order-content-div').html(data);
-            }, 'html');
-        })
-    });
-</script>

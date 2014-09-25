@@ -45,31 +45,6 @@
 </table>
 <script type="text/javascript">
   $(document).ready(function(){
-      $('body').on('change','.itemstock-checkbox',function(){
-          var id=$(this).val();
-          var checked = $(this).attr('checked') == undefined ? false : true;
-          $.ajax({
-              url:"/order_items/"+id,
-              type:"PUT",
-              data:{order_item:{out_of_stock:checked}},
-              dataType:'json',
-              success:function(data){
-
-              }
-          });
-      })
-              .on('change','.itemfinished-checkbox',function(){
-                  var id = $(this).val();
-                  var checked = $(this).attr('checked') == undefined ? false : true;
-                  $.ajax({
-                      url:"/order_items/"+id,
-                      type:"PUT",
-                      data:{order_item:{is_finished:checked}},
-                      dataType:'json',
-                      success:function(data){
-
-                      }
-                  });
-              })
+      $('body')
   });
 </script>

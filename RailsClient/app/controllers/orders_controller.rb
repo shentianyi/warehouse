@@ -110,6 +110,11 @@ class OrdersController < ApplicationController
     render partial:'list'
   end
 
+  def picklists
+    @picklists = PickList.where(user_id:params[:user_id]).order(created_at: :desc)
+    render partial:'picklists'
+  end
+
   def pickitems
     @picklist_id = params[:picklist_ids].first
     @pickitems = PickItem.where(pick_list_id: params[:picklist_ids])

@@ -39,7 +39,9 @@
 
       <p class="right">择货单列表</p>
     </div>
-    <%= render partial: 'picklists' %>
+    <div id="pick-list">
+      <%= render partial: 'picklists' %>
+    </div>
   </div>
 </div>
 
@@ -83,44 +85,77 @@
         $(window).resize(function () {
             set_outer_scene();
         });
-        $("body")
-                .on("click", "#close-scene", function () {
-                    $("#outer-scene").css("left", "-999em");
-                })
-                .on("click", "#create-select", function () {
-                    $("#outer-scene").css("left", "0px");
-                }).on("click","#filter-outer",function(){
-                    var filters = [];
-                    $("#require-select-outer option:selected").each(function(){
-                        filters.push($(this).val());
-                    });
+        $("body").on("click", "#close-scene", function () {
+            $("#outer-scene").css("left", "-999em");
+        }).on("click", "#create-select", function () {
+            $("#outer-scene").css("left", "0px");
+        }).on("click", "#filter-outer", function () {
+            var filters = [];
+            $("#require-select-outer option:selected").each(function () {
+                filters.push($(this).val());
+            });
 
-                    if(filters.length > 0){
-                        $.get('/orders/filt',{filters:filters},function(data){
-                            $('#order-list-panel').html(data);
-                        },'html');
-                    }else{
-                        $.get('/orders/filt',function(data){
-                            $('#order-list-panel').html(data);
-                        },'html');
-                    }
-                }).on("click","#filter-inner",function(){
-                    var filters = [];
-                    $("#require-select-inner option:selected").each(function(){
-                        filters.push($(this).val());
-                    });
+            if (filters.length > 0) {
+                $.get('/orders/filt', {filters: filters}, function (data) {
+                    $('#order-list-panel').html(data);
+                }, 'html');
+            } else {
+                $.get('/orders/filt', function (data) {
+                    $('#order-list-panel').html(data);
+                }, 'html');
+            }
+        }).on("click", "#filter-inner", function () {
+            var filters = [];
+            $("#require-select-inner option:selected").each(function () {
+                filters.push($(this).val());
+            });
 
-                    if(filters.length > 0){
-                        $.get('/orders/filt',{filters:filters},function(data){
-                            $('#order-list-panel-inner').html(data);
-                        },'html');
-                    }else{
-                        $.get('/orders/filt',function(data){
-                            $('#order-list-panel-inner').html(data);
-                        },'html');
-                    }
+            if (filters.length > 0) {
+                $.get('/orders/filt', {filters: filters}, function (data) {
+                    $('#order-list-panel-inner').html(data);
+                }, 'html');
+            } else {
+                $.get('/orders/filt', function (data) {
+                    $('#order-list-panel-inner').html(data);
+                }, 'html');
+            }
+        }).on('change','.itemstock-checkbox',function(){
+            var id=$(this).val();
+            var checked = $(this).attr('checked') == undefined ? false : true;
+            $.ajax({
+                url:"/order_items/"+id,
+                type:"PUT",
+                data:{order_item:{out_of_stock:checked}},
+                dataType:'json',
+                success:function(data){
+
+                }
+            });
+        }).on('change','.itemfinished-checkbox',function(){
+                    var id = $(this).val();
+                    var checked = $(this).attr('checked') == undefined ? false : true;
+                    $.ajax({
+                        url:"/order_items/"+id,
+                        type:"PUT",
+                        data:{order_item:{is_finished:checked}},
+                        dataType:'json',
+                        success:function(data){
+
+                        }
+                    });
                 })
+    }).on('click', ".item-a", function () {
+        var lists = [];
+        $("#panel-list").removeClass("choose-active");
+        $("#pick-list-history").addClass("choose-active");
+        lists.push($(this).attr("picklist"));
+        $.get('/orders/pickitems', {picklist_ids: lists}, function (data) {
+            $('.order-content-div').html(data);
+        }, 'html');
     })
+
+
+
     function set_outer_scene() {
 
         var screen_width = document.body.clientWidth,
@@ -133,12 +168,15 @@
     $('body').on('change', '.order-checkbox', function () {
         $("#panel-list").addClass("choose-active");
         $("#pick-list-history").removeClass("choose-active");
-        get_order_items();
+        //get_order_items();
+        pm.refresh_orders_items();
     }).on('click', '#change-user-id', function () {
-        get_order_items();
-        pm.get_filters($('#user-id-text').val(), function (data) {
-            $(".chosen-select").html(data);
-        });
+        //get_order_items();
+        //pm.refresh_orders_items();
+        //pm.get_filters($('#user-id-text').val(), function (data) {
+        //   $(".chosen-select").html(data);
+        //});
+        pm.change_user_id($('#user-id-text').val());
 
     }).on('change', '#select-all', function () {
         var checked = $(this).attr('checked') == undefined ? false : true;
@@ -149,51 +187,47 @@
         }
         $(".order-checkbox").eq(0).trigger("change");
     }).on('change', '#select-all-inner', function () {
-                var checked = $(this).attr('checked') == undefined ? false : true;
-                if (checked) {
-                    $(".order-checkbox-inner").prop('checked', true)
-                } else {
-                    $(".order-checkbox-inner").prop('checked', false)
-                }
-                $(".order-checkbox-inner").eq(0).trigger("change");
-            })
+        var checked = $(this).attr('checked') == undefined ? false : true;
+        if (checked) {
+            $(".order-checkbox-inner").prop('checked', true)
+        } else {
+            $(".order-checkbox-inner").prop('checked', false)
+        }
+        $(".order-checkbox-inner").eq(0).trigger("change");
+    }).on("change", ".finishpick-checkbox", function () {
+        var order_item_id = $(this).val();
+        var is_finished = $(this).attr("checked") == undefined ? false : true;
+        console.log(order_item_id);
+        $.ajax({
+            url: "/order_items/" + order_item_id,
+            type: "PUT",
+            data: {order_item: {is_finished: is_finished}},
+            dataType: 'json',
+            success: function (data) {
+
+            }
+        });
+    }).on("change", ".outofstock-checkbox", function () {
+        var order_item_id = $(this).val();
+        var out_of_stock = $(this).attr("checked") == undefined ? false : true;
+        console.log(order_item_id);
+        $.ajax({
+            url: "/order_items/" + order_item_id,
+            type: "PUT",
+            data: {order_item: {out_of_stock: out_of_stock}},
+            dataType: 'json',
+            success: function (data) {
+
+            }
+        });
+    })
+
 
     function get_order_items() {
-        var orders = [];
-        $('.order-checkbox:checked').each(function () {
-            orders.push($(this).val());
-        });
-        if (orders.length == 0) {
-            $('.order-content-div').html('<div class="alert" role="alert"><h3>请勾选左侧需求单列表来预览</h3></div>');
-        } else {
-            $.get('/orders/items', {user_id: $('#user-id-text').val(), order_ids: orders}, function (data) {
-                $('.order-content-div').html(data);
-            }, 'html');
-        }
+
     }
     function build_pick_list() {
-        var user = $('#user-id-text').val();
-        var orders = [];
-        $('.order-checkbox-inner:checked').each(function () {
-            orders.push($(this).val());
-        });
-        if (!user) {
-            alert('请输入择货员工号');
-            return;
-        }
-        if (orders.length == 0) {
-            alert('请选择需要处理的需求单');
-            return;
-        }
-        show_handle_dialog();
-        $.post('/pick_lists/', {user_id: user, order_ids: orders}, function (data) {
-            hide_handle_dialog();
-            if (data.result) {
-                window.location = '/pick_lists/' + data.content.id;
-            } else {
-                alert(data.content);
-            }
-        }, 'json');
+
     }
 
     function finish_order_handle(handled) {

@@ -56,6 +56,8 @@ Rails.application.routes.draw do
       get :pickitems
       get :filters
       get :filt
+      get :picklists
+
       post :handle
     end
     member do
