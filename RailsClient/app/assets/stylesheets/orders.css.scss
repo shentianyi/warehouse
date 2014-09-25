@@ -69,7 +69,10 @@ $active-color:$blue;
         a{
           color:#222 !important;
           &:hover{
-            background: lighten($blue,28%) !important;
+            background: lighten($blue,25%) !important;
+          }
+          &.active{
+            background: lighten($blue,25%) !important;
           }
         }
 
@@ -78,7 +81,10 @@ $active-color:$blue;
       background:lighten($blue,38%) !important;
       li{
         &:hover{
-          background: lighten($blue,28%) !important;
+          background: lighten($blue,25%) !important;
+        }
+        &.active{
+          background: lighten($blue,25%) !important;
         }
       }
     }
