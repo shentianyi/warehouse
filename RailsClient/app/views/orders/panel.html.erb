@@ -37,13 +37,19 @@
         $("#panel-list").addClass("choose-active");
         $("#pick-list-history").removeClass("choose-active");
         get_order_items();
-    });
-    $('body').on('keydown', '#user-id-text', function (e) {
+    }).on('keydown', '#user-id-text', function (e) {
         if (e.keyCode == 13) {
             get_order_items();
             get_user_filters();
         }
-    });
+    }).on('change','#select-all',function(){
+        var checked = $(this).attr('checked') == undefined ? false:true;
+        if(checked){
+            $(".order-checkbox").prop('checked',true).trigger("change");
+        }else{
+            $(".order-checkbox").prop('checked',false).trigger("change");
+        }
+    })
 
     function get_user_filters(){
         $.get('/orders/filters',{user:$('#user-id-text').val()},function(data){
