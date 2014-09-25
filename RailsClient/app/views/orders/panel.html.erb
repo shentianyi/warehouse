@@ -3,24 +3,26 @@
 <!--</div>-->
 <div class='panel-header'>
   <p>需求面板</p>
+
   <div class="choose-employee">
     <label>当前使用员工:</label>
-    <input type='text' id="user-id-text" value="<%= current_user.id %>"  />
-    <a class='btn btn-xs btn-primary'>更改</a>
+    <input type='text' id="user-id-text" value="<%= current_user.id %>"/>
+    <a class='btn btn-xs btn-primary' id="change-user-id">更改</a>
   </div>
   <a class='btn btn-warning btn-sm' id="create-select">创建择货单</a>
 </div>
 <div class="panel-content">
   <!--left-->
-  <div class='panel-list  choose-active'>
+  <div id="panel-list" class='panel-list  choose-active'>
     <div class='panel-title'>
       <p class="left">需求单列表</p>
       <i class='glyphicon glyphicon-chevron-right'></i>
     </div>
     <div class="filter-part">
       <select multiple class="chosen-select" style="width:210px;" data-placeholder="选择筛选条件" id="require-select-outer">
+        <%= render partial: 'filters' %>
       </select>
-      <a class="btn btn-xs btn-primary active"><i class="glyphicon glyphicon-search"></i></a>
+      <a class="btn btn-xs btn-primary active" id="filter-outer"><i class="glyphicon glyphicon-search"></i></a>
     </div>
     <ul id='order-list-panel' class="order-list-panel">
       <%= render partial: 'list' %>
@@ -31,14 +33,17 @@
     <div class="alert" role="alert"><h3>请勾选左侧需求单列表来预览</h3></div>
   </div>
   <!--right-->
-  <div id="pick-list-history" class="pick-list-history" >
+  <div id="pick-list-history" class="pick-list-history">
     <div class='panel-title'>
       <i class='glyphicon glyphicon-chevron-left'></i>
+
       <p class="right">择货单列表</p>
     </div>
-    <%= render partial: 'picklists'%>
+    <%= render partial: 'picklists' %>
   </div>
 </div>
+
+<!--Create Picklist Div-->
 <div class="outer-scene" id="outer-scene">
   <div class="inner-create">
     <div class="inner-header">
@@ -50,7 +55,7 @@
         <div class="filter-part">
           <select multiple class="chosen-select" style="width:310px;" data-placeholder="选择筛选条件" id="require-select-inner">
 
-              <%= render partial:'filters'%>
+            <%= render partial: 'filters' %>
 
           </select>
           <a class="btn btn-xs btn-primary active"><i class="glyphicon glyphicon-search"></i></a>
@@ -63,59 +68,72 @@
         </div>
       </div>
       <div class="right">
-        <input type="button" class="btn btn-primary" value="生成择货单 " onclick="build_pick_list();" />
+        <input type="button" class="btn btn-primary" value="生成择货单 " onclick="build_pick_list();"/>
       </div>
     </div>
   </div>
 </div>
+<% content_for :javascript_includes do %>
+    <%= javascript_include_tag "panel-manage" %>
+<% end %>
 <script type="text/javascript">
-  $(document).ready(function(){
-      chosen.init(["require-select-outer","require-select-inner"],[210,310]);
-      set_outer_scene();
-      $(window).resize(function(){
-          set_outer_scene();
-      });
-      $("body")
-              .on("click","#close-scene",function(){
-                   $("#outer-scene").css("left","-999em");
-              })
-              .on("click","#create-select",function(){
-                  $("#outer-scene").css("left","0px");
-              })
-  })
-  function set_outer_scene(){
+    $(document).ready(function () {
+        chosen.init(["require-select-outer", "require-select-inner"], [210, 310]);
+        set_outer_scene();
+        $(window).resize(function () {
+            set_outer_scene();
+        });
+        $("body")
+                .on("click", "#close-scene", function () {
+                    $("#outer-scene").css("left", "-999em");
+                })
+                .on("click", "#create-select", function () {
+                    $("#outer-scene").css("left", "0px");
+                }).on("click","#filter-outer",function(){
+                    var filters = [];
+                    $("#require-select-outer option:selected").each(function(){
+                        filters.push($(this).val());
+                    });
 
-      var screen_width=document.body.clientWidth,
-          screen_height=document.body.clientHeight;
-      $("#outer-scene").css({
-          width:screen_width,
-          height:screen_height
-      })
-  }
+                    if(filters.length > 0){
+                        $.get('/orders/filt',{filters:filters},function(data){
+                            $('#order-list-panel').html(data);
+                        },'html');
+                    }else{
+                        $.get('/orders/filt',function(data){
+                            $('#order-list-panel').html(data);
+                        },'html');
+                    }
+                })
+    })
+    function set_outer_scene() {
+
+        var screen_width = document.body.clientWidth,
+                screen_height = document.body.clientHeight;
+        $("#outer-scene").css({
+            width: screen_width,
+            height: screen_height
+        })
+    }
     $('body').on('change', '.order-checkbox', function () {
         $("#panel-list").addClass("choose-active");
         $("#pick-list-history").removeClass("choose-active");
         get_order_items();
-    }).on('keydown', '#user-id-text', function (e) {
-        if (e.keyCode == 13) {
-            get_order_items();
-            get_user_filters();
-        }
-    }).on('change','#select-all',function(){
-        var checked = $(this).attr('checked') == undefined ? false:true;
-        if(checked){
-            $(".order-checkbox").prop('checked',true)
-        }else{
-            $(".order-checkbox").prop('checked',false)
+    }).on('click', '#change-user-id', function () {
+        get_order_items();
+        pm.get_filters($('#user-id-text').val(), function (data) {
+            $(".chosen-select").html(data);
+        });
+
+    }).on('change', '#select-all', function () {
+        var checked = $(this).attr('checked') == undefined ? false : true;
+        if (checked) {
+            $(".order-checkbox").prop('checked', true)
+        } else {
+            $(".order-checkbox").prop('checked', false)
         }
         $(".order-checkbox").eq(0).trigger("change");
     })
-
-    function get_user_filters(){
-        $.get('/orders/filters',{user:$('#user-id-text').val()},function(data){
-            $("#filters").html(data);
-        },'html');
-    };
 
     function get_order_items() {
         var orders = [];
@@ -123,7 +141,7 @@
             orders.push($(this).val());
         });
         if (orders.length == 0) {
-            $('.order-content-div').html("<h4>选择需求单预览</h4>");
+            $('.order-content-div').html('<div class="alert" role="alert"><h3>请勾选左侧需求单列表来预览</h3></div>');
         } else {
             $.get('/orders/items', {user_id: $('#user-id-text').val(), order_ids: orders}, function (data) {
                 $('.order-content-div').html(data);
@@ -162,12 +180,12 @@
         });
         if (orders.length > 0 && confirm('确定完成处理？')) {
             $.post('/orders/handle', {orders: orders, handled: handled}, function (data) {
-             if(handled){
-                $.each(data, function (i,order) {
-                    console.log(order);
-                    $('#' + order).parent().remove();
-                });
-             }
+                if (handled) {
+                    $.each(data, function (i, order) {
+                        console.log(order);
+                        $('#' + order).parent().remove();
+                    });
+                }
             }, 'json');
         }
     }

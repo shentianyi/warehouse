@@ -97,7 +97,10 @@ class OrdersController < ApplicationController
   end
 
   def filters
-    @filters = User.find_by_id(params[:user])
+    @filters = []
+    if user = User.find_by_id(params[:user])
+      @filters = user.pick_item_filters
+    end
     render partial:'filters'
   end
 
@@ -108,6 +111,7 @@ class OrdersController < ApplicationController
   end
 
   def pickitems
+    @picklist_id = params[:picklist_ids].first
     @pickitems = PickItem.where(pick_list_id: params[:picklist_ids])
     render partial:'pickitems'
   end

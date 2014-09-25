@@ -1,22 +1,6 @@
 <!--<h4>filters</h4>-->
 <!--<ul>-->
   <% @filters.each do |f| %>
-      <!--<li>-->
-        <!--<input type="checkbox" class="filter-checkbox" value="<%= f.id %>">-->
-        <!--<span class="label label-primary"><%= f.filter_type_display %>:<%= f.filterable_id %></span>-->
-      <!--</li>-->
     <option value="<%= f.id %>"><%= f.filter_type_display %>:<%= f.filterable_id %></option>
   <% end %>
 <!--</ul>-->
-<script type="text/javascript">
-  $('body').on('change','.filter-checkbox',function(){
-      var filters = [];
-      $(".filter-checkbox:checked").each(function(){
-          filters.push($(this).val());
-      });
-
-      $.get('/orders/filt',{filters:filters},function(data){
-          $('#order-list-panel').html(data);
-      },'html');
-  })
-</script>
