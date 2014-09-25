@@ -19,9 +19,6 @@ class PickItemService
         end
       end
       if query
-        puts '~~~~~~~~~~~~~'
-        puts query
-        puts order_ids
         query= OrderItem.where(query)
         query=query.where(order_id: order_ids)
         return query
