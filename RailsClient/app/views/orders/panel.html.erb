@@ -152,6 +152,14 @@
         $.get('/orders/pickitems', {picklist_ids: lists}, function (data) {
             $('.order-content-div').html(data);
         }, 'html');
+    }).on('click',"#order-list-panel li,#order-list-panel-inner li",function(){
+        var i = $(this).find("input");
+        var checked = i.attr("checked") == undefined ? false:true;
+        if(checked){
+            i.prop("checked",false).trigger('change');
+        }else{
+            i.prop("checked",true).trigger('change');
+        }
     })
 
 

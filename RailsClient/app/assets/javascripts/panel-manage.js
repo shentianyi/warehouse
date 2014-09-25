@@ -52,6 +52,7 @@ pm.change_user_id = function(user_id){
     pm.get_filters(user_id, function (data) {
         $(".chosen-select").html(data);
         //reinit chosen selecg
+        chosen.all_update();
     });
     //un select all order
     $("#select-all,#select-all-inner").prop("checked",false).trigger("change");

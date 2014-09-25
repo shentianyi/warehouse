@@ -25,6 +25,7 @@ class OrderService
       order_ids = self.get_orders_by_days(user.location_id).ids
     end
     order_items = PickItemService.get_order_items(user_id, order_ids, filters)
+    order_items = order_items.nil? ? [] : order_items
     ids = order_items.collect { |oi|
       oi.order_id
     }.uniq
