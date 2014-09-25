@@ -25,6 +25,10 @@
       <a class="btn btn-xs btn-primary active" id="filter-outer"><i class="glyphicon glyphicon-search"></i></a>
     </div>
     <ul id='order-list-panel' class="order-list-panel">
+      <li>
+        <input type="checkbox" id="select-all"/>
+        <span class="label label-info">选择全部</span>
+      </li>
       <%= render partial: 'list' %>
     </ul>
   </div>
@@ -65,6 +69,10 @@
 
         <div class="filter-result">
           <ul id='order-list-panel-inner'>
+            <li>
+              <input type="checkbox" id="select-all-inner"/>
+              <span class="label label-info">选择全部</span>
+            </li>
             <%= render partial: 'list_for_choose' %>
           </ul>
         </div>
@@ -85,6 +93,7 @@
         $(window).resize(function () {
             set_outer_scene();
         });
+
         $("body").on("click", "#close-scene", function () {
             $("#outer-scene").css("left", "-999em");
         }).on("click", "#create-select", function () {
@@ -166,35 +175,30 @@
             $(".pickitem").each(function(){
                 $(this).find('td').eq(target.index()).find('input').prop('checked',checked).trigger('change');
             })
-        }).on('change', '.order-checkbox', function () {
+        }).on('change', '#order-panel-list .order-checkbox', function () {
             $("#panel-list").addClass("choose-active");
             $("#pick-list-history").removeClass("choose-active");
             //get_order_items();
             pm.refresh_orders_items();
         }).on('click', '#change-user-id', function () {
-            //get_order_items();
-            //pm.refresh_orders_items();
-            //pm.get_filters($('#user-id-text').val(), function (data) {
-            //   $(".chosen-select").html(data);
-            //});
             pm.change_user_id($('#user-id-text').val());
 
         }).on('change', '#select-all', function () {
             var checked = $(this).attr('checked') == undefined ? false : true;
             if (checked) {
-                $(".order-checkbox").prop('checked', true)
+                $("#order-list-panel .order-checkbox").prop('checked', true)
             } else {
-                $(".order-checkbox").prop('checked', false)
+                $("#order-list-panel .order-checkbox").prop('checked', false)
             }
-            $(".order-checkbox").eq(0).trigger("change");
+            $("#order-list-panel .order-checkbox").eq(0).trigger("change");
         }).on('change', '#select-all-inner', function () {
             var checked = $(this).attr('checked') == undefined ? false : true;
             if (checked) {
-                $(".order-checkbox-inner").prop('checked', true)
+                $("#order-list-panel-inner .order-checkbox").prop('checked', true)
             } else {
-                $(".order-checkbox-inner").prop('checked', false)
+                $("#order-list-panel-inner .order-checkbox").prop('checked', false)
             }
-            $(".order-checkbox-inner").eq(0).trigger("change");
+            $("#order-list-panel-inner .order-checkbox").eq(0).trigger("change");
         }).on("change", ".finishpick-checkbox", function () {
             var order_item_id = $(this).val();
             var is_finished = $(this).attr("checked") == undefined ? false : true;
@@ -273,6 +277,7 @@
                 success: function (data) {
                     if (data.length > 0) {
                         $('#order-list-panel').append(data);
+                        $('#order-list-panel-inner').append(data);
                     }
                     refresh_order();
                 },
@@ -283,6 +288,6 @@
                     if (xhr.status == 304) return;
                 }
             });
-        }, 30000);
+        }, 3000);
     })();
 </script>
