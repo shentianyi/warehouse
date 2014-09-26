@@ -24,11 +24,10 @@
       </select>
       <a class="btn btn-xs btn-primary active" id="filter-outer"><i class="glyphicon glyphicon-search"></i></a>
     </div>
+    <div class="btn btn-primary" id="select-all">
+      选择全部
+    </div>
     <ul id='order-list-panel' class="order-list-panel">
-      <li>
-        <input type="checkbox" id="select-all"/>
-        <span class="label label-info">选择全部</span>
-      </li>
       <%= render partial: 'list' %>
     </ul>
   </div>
@@ -68,17 +67,16 @@
         </div>
 
         <div class="filter-result">
+          <div id="select-all-inner" class="btn btn-primary" id="select-all-inner">
+            选择全部
+          </div>
           <ul id='order-list-panel-inner'>
-            <li>
-              <input type="checkbox" id="select-all-inner"/>
-              <span class="label label-info">选择全部</span>
-            </li>
             <%= render partial: 'list_for_choose' %>
           </ul>
         </div>
       </div>
       <div class="right">
-        <input type="button" class="btn btn-primary" value="生成择货单 " onclick="build_pick_list();"/>
+        <input type="button" class="btn btn-primary" value="生成择货单 " onclick="pm.build_pick_list();"/>
       </div>
     </div>
   </div>
@@ -175,7 +173,7 @@
             $(".pickitem").each(function(){
                 $(this).find('td').eq(target.index()).find('input').prop('checked',checked).trigger('change');
             })
-        }).on('change', '#order-panel-list .order-checkbox', function () {
+        }).on('change', '#order-list-panel .order-checkbox', function () {
             $("#panel-list").addClass("choose-active");
             $("#pick-list-history").removeClass("choose-active");
             //get_order_items();
@@ -183,17 +181,19 @@
         }).on('click', '#change-user-id', function () {
             pm.change_user_id($('#user-id-text').val());
 
-        }).on('change', '#select-all', function () {
+        }).on('click', '#select-all', function () {
             var checked = $(this).attr('checked') == undefined ? false : true;
-            if (checked) {
+            $(this).attr('checked',!checked);
+            if (!checked) {
                 $("#order-list-panel .order-checkbox").prop('checked', true)
             } else {
                 $("#order-list-panel .order-checkbox").prop('checked', false)
             }
             $("#order-list-panel .order-checkbox").eq(0).trigger("change");
-        }).on('change', '#select-all-inner', function () {
+        }).on('click', '#select-all-inner', function () {
             var checked = $(this).attr('checked') == undefined ? false : true;
-            if (checked) {
+            $(this).attr('checked',!checked);
+            if (!checked) {
                 $("#order-list-panel-inner .order-checkbox").prop('checked', true)
             } else {
                 $("#order-list-panel-inner .order-checkbox").prop('checked', false)
@@ -288,6 +288,6 @@
                     if (xhr.status == 304) return;
                 }
             });
-        }, 3000);
+        }, 30000);
     })();
 </script>
