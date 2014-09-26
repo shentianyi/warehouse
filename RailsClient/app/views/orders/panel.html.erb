@@ -23,9 +23,7 @@
         <%= render partial: 'filters' %>
       </select>
       <a class="btn btn-xs btn-primary active" id="filter-outer"><i class="glyphicon glyphicon-search"></i></a>
-    </div>
-    <div class="btn btn-default" id="select-all">
-      <span class="glyphicon glyphicon-ok"></span>
+      <a class="btn btn-xs btn-primary active" id="select-all"><i class="glyphicon glyphicon-ok"></i></a>
     </div>
     <ul id='order-list-panel' class="order-list-panel">
       <%= render partial: 'list' %>
@@ -58,18 +56,17 @@
     <div class="inner-body">
       <div class="left">
         <div class="filter-part">
+
           <select multiple class="chosen-select" style="width:310px;" data-placeholder="选择筛选条件" id="require-select-inner">
 
             <%= render partial: 'filters' %>
 
           </select>
           <a class="btn btn-xs btn-primary active" id="filter-inner"><i class="glyphicon glyphicon-search"></i></a>
+          <a class="btn btn-xs btn-primary active" id="select-all-inner"><i class="glyphicon glyphicon-ok"></i></a>
         </div>
 
         <div class="filter-result">
-          <div id="select-all-inner" class="btn btn-default" id="select-all-inner">
-            <span class="glyphicon glyphicon-ok"></span>
-          </div>
           <ul id='order-list-panel-inner'>
             <%= render partial: 'list_for_choose' %>
           </ul>
