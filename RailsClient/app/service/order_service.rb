@@ -58,6 +58,13 @@ class OrderService
   end
 
   #=============
+  #find
+  #=============
+  def self.find condition
+    Order.where(condition).all
+  end
+
+  #=============
   #search
   #=============
   def self.search args
