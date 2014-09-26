@@ -107,7 +107,7 @@ class OrderService
   #notify whouses
   #-------------
   def self.notify
-    OrderItem.joins(:order).where("orders.handled = false")
+    OrderItem.joins(:order).where("orders.handled = false and order_items.is_finished = false")
     .select("COUNT(order_items.part_id) as count,order_items.whouse_id as wid")
     .group("order_items.whouse_id")
   end
