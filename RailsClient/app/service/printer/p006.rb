@@ -1,8 +1,8 @@
 # print pick list
 module Printer
   class P006<Base
-    HEAD=[:id, :user_id, :created_at, :order_ids]
-    BODY=[:part_id, :quantity, :box_quantity,:whouse_id, :is_emergency, :remark, :is_out_of_stock]
+    HEAD=[:id, :user_id, :created_at]
+    BODY=[:part_id, :quantity, :box_quantity,:whouse_id, :is_emergency, :remark]
 
     def generate_data
       p=PickList.find_by_id(self.id)
@@ -20,8 +20,7 @@ module Printer
             box_quantity: i.box_quantity,
             whouse_id:i.destination_whouse_id,
             is_emergency: i.is_emergency ? '是' : ' ',
-            remark: i.remark||' ',
-            is_out_of_stock: i.is_out_of_stock ? '是' : ' '
+            remark: i.remark||' '
         }
 
         bodies=[]
