@@ -24,8 +24,8 @@
       </select>
       <a class="btn btn-xs btn-primary active" id="filter-outer"><i class="glyphicon glyphicon-search"></i></a>
     </div>
-    <div class="btn btn-primary" id="select-all">
-      选择全部
+    <div class="btn btn-default" id="select-all">
+      <span class="glyphicon glyphicon-ok"></span>
     </div>
     <ul id='order-list-panel' class="order-list-panel">
       <%= render partial: 'list' %>
@@ -67,8 +67,8 @@
         </div>
 
         <div class="filter-result">
-          <div id="select-all-inner" class="btn btn-primary" id="select-all-inner">
-            选择全部
+          <div id="select-all-inner" class="btn btn-default" id="select-all-inner">
+            <span class="glyphicon glyphicon-ok"></span>
           </div>
           <ul id='order-list-panel-inner'>
             <%= render partial: 'list_for_choose' %>
