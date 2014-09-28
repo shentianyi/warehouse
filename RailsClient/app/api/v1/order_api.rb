@@ -15,14 +15,25 @@ module V1
     #post start and end time(local time)
     #=============
     get :history do
-      args = {
-          start_time:params[:start],
-          end_time:params[:end]
-      }
-      args[:user_id] = params[:user_id].nil? ? current_user.id : params[:user_id]
+      #args = {
+      #    start_time:params[:start],
+      #    end_time:params[:end]
+      #}
+      #args[:user_id] = params[:user_id].nil? ? current_user.id : params[:user_id]
+
+      #new params
+      condition = {}
+      condition[:user_id] = params[:user_id].nil? ? current_user.id : params[:user_id]
+      starttime = params[:start]
+      endtime = params[:end]
+      unless starttime.class.name === 'Time'
+        starttime = Time.parse(starttime).at_beginning_of_day
+        endtime = Time.parse(endtime).at_end_of_day
+      end
+      condition[:created_at] = (starttime..endtime)
 
       orders = []
-      OrderPresenter.init_presenters(OrderService.history_orders_by_time(args)).each do |op|
+      OrderPresenter.init_presenters(OrderService.find(condition).all.order(created_at: :desc)).each do |op|
         orders<<op.to_json
       end
 
