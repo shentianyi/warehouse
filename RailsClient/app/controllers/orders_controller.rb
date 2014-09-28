@@ -105,8 +105,7 @@ class OrdersController < ApplicationController
   end
 
   def filt
-    order_ids=OrderService.get_orders_by_days(current_user.location_id).ids
-    @orders = OrderService.filt_orders(current_user.id,order_ids,params[:filters])
+    @orders = OrderService.orders_by_filters(params[:user_id],params[:filters])
     render partial:'list'
   end
 
