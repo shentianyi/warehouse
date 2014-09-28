@@ -12,24 +12,33 @@ class OrderService
     start_time = days.days.ago.at_beginning_of_day.utc
     end_time = Time.now.at_end_of_day.utc
     if user_id.nil?
-      Order.where(created_at: (start_time..end_time), handled: handled, source_id: location_id)
+      find({created_at:(start_time..end_time),handled: handled, source_id: location_id})
     else
-      Order.where(created_at: (start_time..end_time), user_id: user_id, handled: handled, source_id: location_id)
+      find({created_at: (start_time..end_time),user_id: user_id, handled: handled, source_id: location_id})
     end
   end
 
-  def self.filt_orders user_id,order_ids = nil,filters = nil
-    user = User.find_by_id(user_id)
-
-    if order_ids.nil?
-      order_ids = self.get_orders_by_days(user.location_id).ids
+  #-------------
+  #orders_by_fiters. get orders by filters
+  #params
+  # @user_id
+  # @order_ids
+  # @filters
+  #-------------
+  def self.orders_by_filters user_id,filters = nil
+    user = User.find_by_id user_id
+    if user.nil?
+      return []
     end
-    order_items = PickItemService.get_order_items(user_id, order_ids, filters)
-    order_items = order_items.nil? ? [] : order_items
+    order_items = PickItemService.get_order_items(user_id, get_orders_by_days(user.location_id).ids, filters)
+    if order_items.nil?
+      return []
+    end
+
     ids = order_items.collect { |oi|
       oi.order_id
     }.uniq
-    Order.where(id: ids)
+    find({id:ids})
   end
 
   #=============
@@ -63,13 +72,6 @@ class OrderService
   #=============
   def self.find condition
     Order.where(condition).all
-  end
-
-  #=============
-  #search
-  #=============
-  def self.search args
-    Order.where(args).all.order(created_at: :desc)
   end
 
   #=============
@@ -108,7 +110,8 @@ class OrderService
   #exits? id
   #=============
   def self.exits? id
-    search({id: id}).first
+    #search({id: id}).first
+    find({id:id}).first
   end
 
   #-------------
