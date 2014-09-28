@@ -98,13 +98,13 @@
             $("#require-select-outer option:selected").each(function () {
                 filters.push($(this).val());
             });
-
+            var user_id = $("#user-id-text").val();
             if (filters.length > 0) {
-                $.get('/orders/filt', {filters: filters}, function (data) {
+                $.get('/orders/filt', {filters: filters,user_id:user_id}, function (data) {
                     $('#order-list-panel').html(data);
                 }, 'html');
             } else {
-                $.get('/orders/filt', function (data) {
+                $.get('/orders/filt',{user_id:user_id}, function (data) {
                     $('#order-list-panel').html(data);
                 }, 'html');
             }
@@ -113,13 +113,14 @@
             $("#require-select-inner option:selected").each(function () {
                 filters.push($(this).val());
             });
+            var user_id = $("#user-id-text").val();
 
             if (filters.length > 0) {
-                $.get('/orders/filt', {filters: filters}, function (data) {
+                $.get('/orders/filt', {filters: filters,user_id:user_id}, function (data) {
                     $('#order-list-panel-inner').html(data);
                 }, 'html');
             } else {
-                $.get('/orders/filt', function (data) {
+                $.get('/orders/filt', {user_id:user_id},function (data) {
                     $('#order-list-panel-inner').html(data);
                 }, 'html');
             }
