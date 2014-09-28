@@ -25,7 +25,7 @@ pm.refresh_orders_items = function(){
 pm.build_pick_list = function(){
     var user = $('#user-id-text').val();
     var orders = [];
-    $('#order-list-panel-inner .order-checkbox-inner:checked').each(function () {
+    $('#order-list-panel-inner .order-checkbox:checked').each(function () {
         orders.push($(this).val());
     });
     if (!user) {

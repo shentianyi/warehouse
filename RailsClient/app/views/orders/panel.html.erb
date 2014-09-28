@@ -23,12 +23,9 @@
         <%= render partial: 'filters' %>
       </select>
       <a class="btn btn-xs btn-primary active" id="filter-outer"><i class="glyphicon glyphicon-search"></i></a>
+      <a class="btn btn-xs btn-primary active" id="select-all"><i class="glyphicon glyphicon-ok"></i></a>
     </div>
     <ul id='order-list-panel' class="order-list-panel">
-      <li>
-        <input type="checkbox" id="select-all"/>
-        <span class="label label-info">选择全部</span>
-      </li>
       <%= render partial: 'list' %>
     </ul>
   </div>
@@ -58,27 +55,13 @@
     </div>
     <div class="inner-body">
       <div class="left">
-        <div class="filter-part">
-          <select multiple class="chosen-select" style="width:310px;" data-placeholder="选择筛选条件" id="require-select-inner">
-
-            <%= render partial: 'filters' %>
-
-          </select>
-          <a class="btn btn-xs btn-primary active" id="filter-inner"><i class="glyphicon glyphicon-search"></i></a>
-        </div>
-
         <div class="filter-result">
           <ul id='order-list-panel-inner'>
-            <li>
-              <input type="checkbox" id="select-all-inner"/>
-              <span class="label label-info">选择全部</span>
-            </li>
-            <%= render partial: 'list_for_choose' %>
           </ul>
         </div>
       </div>
       <div class="right">
-        <input type="button" class="btn btn-primary" value="生成择货单 " onclick="build_pick_list();"/>
+        <input type="button" class="btn btn-primary" value="生成择货单 " onclick="pm.build_pick_list();"/>
       </div>
     </div>
   </div>
@@ -96,36 +79,26 @@
 
         $("body").on("click", "#close-scene", function () {
             $("#outer-scene").css("left", "-999em");
+            $("#order-list-panel-inner li").remove();
         }).on("click", "#create-select", function () {
             $("#outer-scene").css("left", "0px");
+            //order list inner
+            var lis = $("#order-list-panel li input:checked").parent().parent('li');
+            $("#order-list-panel-inner").append(lis.clone());
+            $("#order-list-panel-inner input").addClass('disable');
         }).on("click", "#filter-outer", function () {
             var filters = [];
             $("#require-select-outer option:selected").each(function () {
                 filters.push($(this).val());
             });
-
+            var user_id = $("#user-id-text").val();
             if (filters.length > 0) {
-                $.get('/orders/filt', {filters: filters}, function (data) {
+                $.get('/orders/filt', {filters: filters,user_id:user_id}, function (data) {
                     $('#order-list-panel').html(data);
                 }, 'html');
             } else {
-                $.get('/orders/filt', function (data) {
+                $.get('/orders/filt',{user_id:user_id}, function (data) {
                     $('#order-list-panel').html(data);
-                }, 'html');
-            }
-        }).on("click", "#filter-inner", function () {
-            var filters = [];
-            $("#require-select-inner option:selected").each(function () {
-                filters.push($(this).val());
-            });
-
-            if (filters.length > 0) {
-                $.get('/orders/filt', {filters: filters}, function (data) {
-                    $('#order-list-panel-inner').html(data);
-                }, 'html');
-            } else {
-                $.get('/orders/filt', function (data) {
-                    $('#order-list-panel-inner').html(data);
                 }, 'html');
             }
         }).on('change', '.itemstock-checkbox', function () {
@@ -160,7 +133,7 @@
             $.get('/orders/pickitems', {picklist_ids: lists}, function (data) {
                 $('.order-content-div').html(data);
             }, 'html');
-        }).on('click', "#order-list-panel li,#order-list-panel-inner li", function () {
+        }).on('click', "#order-list-panel li", function () {
             var i = $(this).find("input");
             var checked = i.attr("checked") == undefined ? false : true;
             if (checked) {
@@ -175,7 +148,7 @@
             $(".pickitem").each(function(){
                 $(this).find('td').eq(target.index()).find('input').prop('checked',checked).trigger('change');
             })
-        }).on('change', '#order-panel-list .order-checkbox', function () {
+        }).on('change', '#order-list-panel .order-checkbox', function () {
             $("#panel-list").addClass("choose-active");
             $("#pick-list-history").removeClass("choose-active");
             //get_order_items();
@@ -183,22 +156,15 @@
         }).on('click', '#change-user-id', function () {
             pm.change_user_id($('#user-id-text').val());
 
-        }).on('change', '#select-all', function () {
+        }).on('click', '#select-all', function () {
             var checked = $(this).attr('checked') == undefined ? false : true;
-            if (checked) {
+            $(this).attr('checked',!checked);
+            if (!checked) {
                 $("#order-list-panel .order-checkbox").prop('checked', true)
             } else {
                 $("#order-list-panel .order-checkbox").prop('checked', false)
             }
             $("#order-list-panel .order-checkbox").eq(0).trigger("change");
-        }).on('change', '#select-all-inner', function () {
-            var checked = $(this).attr('checked') == undefined ? false : true;
-            if (checked) {
-                $("#order-list-panel-inner .order-checkbox").prop('checked', true)
-            } else {
-                $("#order-list-panel-inner .order-checkbox").prop('checked', false)
-            }
-            $("#order-list-panel-inner .order-checkbox").eq(0).trigger("change");
         }).on("change", ".finishpick-checkbox", function () {
             var order_item_id = $(this).val();
             var is_finished = $(this).attr("checked") == undefined ? false : true;
@@ -277,7 +243,6 @@
                 success: function (data) {
                     if (data.length > 0) {
                         $('#order-list-panel').append(data);
-                        $('#order-list-panel-inner').append(data);
                     }
                     refresh_order();
                 },
@@ -288,6 +253,6 @@
                     if (xhr.status == 304) return;
                 }
             });
-        }, 3000);
+        }, 30000);
     })();
 </script>
