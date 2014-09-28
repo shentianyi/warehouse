@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class DeliveriesController < ApplicationController
   #load_and_authorize_resource
   before_action :set_delivery, only: [:show, :edit, :update, :destroy, :forklifts]
@@ -48,7 +49,7 @@ class DeliveriesController < ApplicationController
       DeliveryService.set_state(@delivery, delivery_params[:state])
     end
     respond_to do |format|
-      if @delivery.update(delivery_params.permit(:state, :remark, :source_id, :destination_id))
+      if @delivery.update(delivery_params)
         format.html { redirect_to @delivery, notice: '运单更新成功.' }
         format.json { render :show, status: :ok, location: @delivery }
       else
@@ -150,7 +151,7 @@ class DeliveriesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def delivery_params
-    params.require(:delivery)
+    params.require(:delivery).permit(:state, :remark, :source_id, :destination_id,:delivery_date,:received_date,:user_id,:receiver_id)
   end
 
   def get_states
