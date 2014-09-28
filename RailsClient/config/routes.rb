@@ -53,6 +53,11 @@ Rails.application.routes.draw do
       get :panel_list
       get :search
       get :items
+      get :pickitems
+      get :filters
+      get :filt
+      get :picklists
+
       post :handle
     end
     member do
@@ -101,6 +106,9 @@ Rails.application.routes.draw do
   get 'reports/removal_discrepancy', to: 'reports#removal_discrepancy'
   get 'reports/reports', to: 'reports#reports'
   post 'reports/upload_file', to: 'reports#upload_file'
+
+  get 'notifications', to: 'notifications#index'
+  get 'notifications/orderbus', to: 'notifications#orderbus'
 
   resources :labels do
     collection do

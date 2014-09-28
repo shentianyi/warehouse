@@ -9,6 +9,9 @@
     <th>要货项目</th>
     <th>要货库位</th>
     <th>是否加急</th>
+    <th>是否缺货</th>
+    <th>是否已处理</th>
+    <th>是否已完成备货</th>
     <th>备注</th>
   </tr>
   </thead>
@@ -23,9 +26,25 @@
         <td><%= order_item.user_id %></td>
         <td><%= order_item.whouse.name %></td>
         <td><%if pp = OrderItemService.verify_department(order_item.whouse_id,order_item.part_id) %><%= pp.position.detail%><%end%></td>
-        <td><%=order_item.is_emergency%></td>
+        <td>
+          <input type="checkbox" disabled <%='checked' if order_item.is_emergency%>/>
+        </td>
+        <td>
+          <input type="checkbox" <%= 'checked' if order_item.out_of_stock %> class="itemstock-checkbox" value="<%= order_item.id %>"/>
+        </td>
+        <td>
+          <input type="checkbox" disabled <%= 'checked' if order_item.handled%>/>
+        </td>
+        <td>
+          <input type="checkbox" disabled value="<%= order_item.id%>" <%= 'checked' if order_item.is_finished%> class="itemfinished-checkbox"/>
+        </td>
         <td><%=order_item.remark%></td>
       </tr>
   <% end %>
   </tbody>
 </table>
+<script type="text/javascript">
+  $(document).ready(function(){
+      $('body')
+  });
+</script>

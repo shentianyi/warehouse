@@ -1,0 +1,9 @@
+<ul id="picklists" class="picklists">
+  <% @picklists.each do |pl| %>
+      <li>
+        <a class="item-a" picklist="<%= pl.id %>">
+          <%= pl.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S')%>,<%= pl.id%>
+        </a>
+      </li>
+  <% end %>
+</ul>

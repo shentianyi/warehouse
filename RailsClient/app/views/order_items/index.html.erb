@@ -47,6 +47,7 @@
       <th>零件号</th>
       <th>数量</th>
       <th>是否加急</th>
+			<th>是否已完成</th>
       <th colspan="2"></th>
     </tr>
   </thead>
@@ -74,6 +75,13 @@
               <span class="label label-warning">否</span>
           <%end%>
         </td>
+				<td>
+          <% if order_item.is_finished %>
+          <span class="label label-success">是</span>
+          <%else%>
+              <span class="label label-warning">否</span>
+          <%end%>
+				</td>
         <td><%= link_to '详细', order_item ,:class=>'btn btn-default'%></td>
         <td><%= link_to '编辑', edit_order_item_path(order_item),:class=>'btn btn-default' %></td>
       </tr>

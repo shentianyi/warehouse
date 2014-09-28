@@ -81,10 +81,10 @@ sync:
       delete: true
     state_log:
       name: "状态记录"
-      get: true
-      post: true
-      put: true
-      delete: true
+      get: false
+      post: false
+      put: false
+      delete: false
     order:
       name: "需求单"
       get: true
@@ -99,13 +99,13 @@ sync:
       delete: true
     pick_list:
       name: "择货单"
-      get: true
-      post: true
-      put: true
-      delete: true
+      get: false
+      post: false
+      put: false
+      delete: false
     pick_item:
       name: "择货单项"
-      get: true
-      post: true
-      put: true
-      delete: true
+      get: false
+      post: false
+      put: false
+      delete: false

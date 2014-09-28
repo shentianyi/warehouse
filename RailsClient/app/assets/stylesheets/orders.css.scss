@@ -1,35 +1,295 @@
 // Place all the styles related to the Orders controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+@import "basic.css.scss";
+.notice.alert{
+  margin-bottom:0px;
+}
 .panel-input{
   display:block;
   margin-left:30px;
   width:230px;
   margin-bottom:5px;
 }
+$min-width:1024px;
+.panel-header{
+  min-width:$min-width;
+  height:50px;
+  border-top:1px solid rgba(0,0,0,0.2);
+  border-bottom:1px solid rgba(0,0,0,0.2);
+  background:rgba(0,0,0,0.1);
+  position:relative;
+  p{
+    text-align: left;
+    position:absolute;
+    left:12px;
+    right:0px;
+    top:15px;
+    color:#222;
+    font-weight:bold;
+    font-size:25px;
+    pointer-events:none;
+  }
+  .choose-employee{
+    margin:13px 0 0 140px;
+    label{
+      color:#777;
+    }
+    a{
+      position:relative;
+      top:-2px;
+      padding:1px 5px 2px;
+    }
+    display:inline-block;
+  }
+  &>.btn{
+    float:right;
+    margin-right: 40px;
+    margin-top: 5px;
+    width:150px;
+    padding:6px 15px;
+    font-size:15px;
+  }
+}
+$margin-top:10px;
+$normal-color:rgba(0,0,0,0.03);
+$active-color:$blue;
 .panel-content {
-  width:100%;
+  min-width:$min-width;
+  &:after{
+    @include after-clear;
+  }
+  .choose-active{
+    .panel-title{
+      background:$active-color;
+      color:rgba(255,255,255,0.8);
+    }
+      .picklists{
+        background:lighten($blue,38%) !important;
+        a{
+          color:#222 !important;
+          &:hover{
+            background: lighten($blue,25%) !important;
+          }
+          &.active{
+            background: lighten($blue,25%) !important;
+          }
+        }
+
+      }
+    .order-list-panel{
+      background:lighten($blue,38%) !important;
+      li{
+        &:hover{
+          background: lighten($blue,25%) !important;
+        }
+        &.active{
+          background: lighten($blue,25%) !important;
+        }
+      }
+    }
+
+  }
+  .panel-title{
+    @include border-radius-same(5px);
+    width:250px;
+    height:36px;
+    margin:$margin-top auto 5px;
+    background:$normal-color;
+    color:#777;
+    p{
+      font-size:17px;
+      &.left{
+        margin:8px 0 0 9px;
+        float:left;
+      }
+      &.right{
+        margin:8px 9px 0 0px;
+        float:right;
+      }
+    }
+    i{
+        font-size:21px;
+      &.glyphicon-chevron-right{
+        float:right;
+        margin:6px 8px 0 0;
+      }
+      &.glyphicon-chevron-left{
+        float:left;
+        margin:6px 0px 0 8px;
+      }
+    }
+  }
+  .panel-list{
+    @include box-sizing-border;
+    float:left;
+    width:300px;
+    min-height:100px;
+    .order-list-panel{
+      margin-top:8px;
+      background:$normal-color;
+      li{
+        cursor:pointer;
+        font-size:13px;
+        margin-bottom:8px;
+        padding:8px;
+        border-bottom:1px solid rgba(0,0,0,0.2);
+        &:hover{
+          background:$normal-color
+        }
+      }
+    }
+    .filter-part{
+      padding:4px 0 0 31px;
+    }
+  }
+  .order-content-div{
+    @include box-sizing-border;
+    float:left;
+    width:calc(100% - 600px);
+    width:-moz-calc(100% - 600px);
+    width:-webkit-calc(100% - 600px);
+    border:1px solid rgba(0,0,0,0.2);
+    @include border-radius-same(3px);
+    margin-top:$margin-top;
+    table{
+      width:95%;
+    }
+  }
+  .pick-list-history{
+    @include box-sizing-border;
+    float:left;
+    width:300px;
+    .picklists{
+      padding:5px 6px;
+      margin:5px 15px;
+      background:$normal-color;
+      @include border-radius-same(2px);
+      a.item-a{
+        display:inline-block;
+        font-size:14px;
+        padding:6px 3px;
+        width:100%;
+        cursor:pointer;
+        &:hover{
+          background:rgba(0,0,0,0.3);
+        }
+      }
+    }
+  }
 }
-.panel-list{
-  -webkit-box-sizing:border-box;
-  -moz-box-sizing:border-box;
-  box-sizing:border-box;
-  float:left;
-  width:24%;
-  padding:0 30px;
-  li{
-    margin-bottom:15px;
-    padding:8px;
+.outer-scene{
+  background:rgba(0,0,0,0.6);
+  position:absolute;
+  top:0px;
+  left:-999em;
+  right:0px;
+  bottom:0px;
+  min-width:1024px;
+  min-height:768px;
+}
+.inner-create{
+  $width:800px;
+  $height:600px;
+  position:relative;
+  width:$width;
+  height:$height;
+  left:50%;
+  top:50%;
+  margin-left:- $width / 2;
+  margin-top:- $height / 2;
+  background:#fff;
+  $header_height:45px;
+  .inner-header{
+    height:$header_height;
     border-bottom:1px solid rgba(0,0,0,0.2);
+    h3{
+      display:inline-block;
+      float:left;
+      margin:8px 0 0 10px;
+    }
+    i{
+      float:right;
+      font-size:21px;
+      color:#777;
+      cursor:pointer;
+      margin:10px 15px 0 0;
+      &:hover{
+        color:$red;
+      }
+    }
+  }
+  .inner-body{
+    height:$height - $header_height ;
+    &:after{
+      @include after-clear;
+    }
+    .left{
+      @include box-sizing-border;
+      float:left;
+      width:70%;
+      height:100%;
+      .filter-part{
+        margin:18px 0 5px 116px;
+        display: inline-block;
+      }
+      .filter-result{
+        overflow-y: scroll;
+        height:400px;
+        @include border-radius-same(3px);
+        border:1px solid rgba(0,0,0,0.2);
+        margin:5px 10px;
+        li{
+          font-size:13px;
+          margin-bottom:8px;
+          padding:8px;
+          border-bottom:1px solid rgba(0,0,0,0.2);
+          &:hover{
+            background:$normal-color
+          }
+          &:after{
+            @include after-clear;
+          }
+          &.active{
+            background:lighten($blue,38%) !important;
+          }
+          .item-left{
+            float:left;
+            @include box-sizing-border;
+            width:10%;
+            position:relative;
+            height:60px;
+            input{
+              position:relative;
+              top:50%;
+              left:50%;
+              margin-top:-2px;
+              margin-left:-8px;
+            }
+          }
+          .item-right{
+            float:left;
+            @include box-sizing-border;
+            width:90%;
+          }
+        }
+      }
+    }
+    .right{
+      @include box-sizing-border;
+      float:left;
+      width:30%;
+      position:relative;
+      height:100%;
+      .btn{
+        bottom: 40px;
+        font-size: 13px;
+        padding: 8px 12px 10px;
+        position: absolute;
+        right: 30px;
+        width: 165px;
+      }
+    }
   }
 }
-.order-content-div{
-  -webkit-box-sizing:border-box;
-  -moz-box-sizing:border-box;
-  box-sizing:border-box;
-  float:left;
-  width:74%;
-  table{
-    width:95%;
-  }
-}
+

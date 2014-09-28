@@ -45,6 +45,7 @@
 </div>
 <div>
   <input type="button" value="打印择货单" class='btn btn-primary btn-lg' onclick="print_pick_list_with_id('<%= @pick_list.id %>');"/>
+  <%= link_to '返回需求面板', panel_orders_path, :class=>'btn btn-default btn-lg' %>
 </div>
 <script type="text/javascript">
 	$(document).ready(function(){

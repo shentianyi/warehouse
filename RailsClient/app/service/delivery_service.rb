@@ -232,7 +232,7 @@ class DeliveryService
         end
 
         PackagePosition.create(data['package_positions'].select { |pp| !pp.nil? })
-        StateLog.create(data['state_logs'])
+        #StateLog.create(data['state_logs'])
       end
       msg.result=true
       msg.content='处理成功'

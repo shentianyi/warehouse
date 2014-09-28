@@ -2,14 +2,23 @@
       <li>
         <div class="order-item-div" id="<%=order.id%>">
           <input type="checkbox" value="<%= order.id %>" class="order-checkbox"/>
-          需求单号:<%= order.id %>
-          <br/>
+          <!--需求单号:<%= order.id %>
           需求部门:<%=order.order_items.group(:whouse_id).pluck(:whouse_id).join(';')%>
           <br/>
           零件类型:<%=PartType.where(id:order.order_items.group(:part_type_id).pluck(:part_type_id)).pluck(:name).join(';')%>
           <br/>
           发送员工号:<%= order.user_id %>
+          <br />
           生成时间:<%= order.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %>
+          -->
+          <%= order.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %>
+          <br/>
+          部门:<%=order.order_items.group(:whouse_id).pluck(:whouse_id).join(';')%>
+          <br/>
+          零件类型:<%=PartType.where(id:order.order_items.group(:part_type_id).pluck(:part_type_id)).pluck(:name).join(';')%>
+          <br/>
+          总箱数:<%= order.order_items.count %>
+          <br/>
         </div>
       </li>
 <% end %>

@@ -1,5 +1,5 @@
 class OrderItemPresenter<Presenter
-  Delegators=[:id,:order_id,:location_id,:whouse_id,:user_id,:part_id,:part_type_id,:quantity,:is_emergency,:box_quantity]
+  Delegators=[:id,:order_id,:location_id,:whouse_id,:user_id,:part_id,:part_type_id,:quantity,:is_emergency,:box_quantity,:is_finished,:out_of_stock,:handled]
   def_delegators :@order_item,*Delegators
 
   def initialize(order_item)
@@ -74,7 +74,10 @@ class OrderItemPresenter<Presenter
         quantity: OrderItemLabelRegex.quantity_prefix_string + self.quantity.to_s,
         position: self.position,
         uniq_id: self.uniq_id,
-        box_quantity: self.box_quantity
+        box_quantity: self.box_quantity,
+        is_finished: self.is_finished ? 1:0,
+        out_of_stock: self.out_of_stock ? 1:0,
+        handled: self.handled ? 1:0
     }
   end
 end

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class DeliveriesController < ApplicationController
   #load_and_authorize_resource
   before_action :set_delivery, only: [:show, :edit, :update, :destroy, :forklifts]
@@ -48,7 +49,7 @@ class DeliveriesController < ApplicationController
       DeliveryService.set_state(@delivery, delivery_params[:state])
     end
     respond_to do |format|
-      if @delivery.update(delivery_params.permit(:state, :remark, :source_id, :destination_id))
+      if @delivery.update(delivery_params)
         format.html { redirect_to @delivery, notice: '运单更新成功.' }
         format.json { render :show, status: :ok, location: @delivery }
       else
@@ -85,11 +86,6 @@ class DeliveriesController < ApplicationController
     json[:package_positions]= []
     json[:packages].each { |p|
       json[:package_positions]<< p.package_position }
-    json[:state_logs]=d.state_logs
-    json[:forklifts].each { |f|
-      json[:state_logs]+=f.state_logs }
-    json[:packages].each { |p|
-      json[:state_logs]+=p.state_logs }
     send_data json.to_json, :filename => "#{d.id}.json"
   end
 
@@ -155,7 +151,7 @@ class DeliveriesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def delivery_params
-    params.require(:delivery)
+    params.require(:delivery).permit(:state, :remark, :source_id, :destination_id,:delivery_date,:received_date,:user_id,:receiver_id)
   end
 
   def get_states
@@ -172,5 +168,8 @@ class DeliveriesController < ApplicationController
     @delivery_date_end=p[:delivery_date][:end]
     @received_date_start=p[:received_date][:start]
     @received_date_end=p[:received_date][:end]
+    @created_at_start = p[:created_at_start][:start]
+    @created_at_end = p[:created_at_end][:end]
+    @source_id = p[:srouce_id]
   end
 end

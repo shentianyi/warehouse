@@ -62,11 +62,15 @@ class OrdersController < ApplicationController
   end
 
   def panel
-    @orders=OrderService.get_orders_by_days(current_user.location.id).order(created_at: :asc).all
+    @orders=OrderService.get_orders_by_days(current_user.location.id).order(created_at: :desc).all
+    @filters = current_user.pick_item_filters
+    #@orders = OrderService.get_orders_by_user(current_user.id).order(created_at: :asc).all
+    @picklists = PickList.where(user_id:current_user.id).order(created_at: :desc)
   end
 
   def panel_list
     @orders=OrderService.get_orders_by_days(current_user.location.id).where.not(id:params[:orders]).order(created_at: :asc).all
+    #@orders = OrderService.get_orders_by_user(current_user.id).where.not(id:params[:orders]).order(created_at: :asc).all
     render partial:'list'
   end
 
@@ -90,6 +94,31 @@ class OrdersController < ApplicationController
       @order_items=PickItemService.get_order_items(params[:user_id],params[:order_ids])||[]
     end
     render partial:'item'
+  end
+
+  def filters
+    @filters = []
+    if user = User.find_by_id(params[:user])
+      @filters = user.pick_item_filters
+    end
+    render partial:'filters'
+  end
+
+  def filt
+    order_ids=OrderService.get_orders_by_days(current_user.location_id).ids
+    @orders = OrderService.filt_orders(current_user.id,order_ids,params[:filters])
+    render partial:'list'
+  end
+
+  def picklists
+    @picklists = PickList.where(user_id:params[:user_id]).order(created_at: :desc)
+    render partial:'picklists'
+  end
+
+  def pickitems
+    @picklist_id = params[:picklist_ids].first
+    @pickitems = PickItem.where(pick_list_id: params[:picklist_ids])
+    render partial:'pickitems'
   end
 
   def order_items

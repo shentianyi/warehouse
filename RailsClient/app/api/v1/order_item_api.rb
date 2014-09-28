@@ -26,8 +26,6 @@ module V1
         return {result:0,content:OrderItemMessage::VerifyFailed}
       end
 
-      puts part_position.to_json
-
       return {result:1,content:OrderItemPresenter.new(item).to_json}
     end
 

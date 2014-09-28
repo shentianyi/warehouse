@@ -42,6 +42,14 @@ class OrderItemsController < ApplicationController
   def update
     respond_to do |format|
       if @order_item.update(order_item_params)
+        if order_item_params.has_key? 'is_finished'
+          order = @order_item.order
+          if order.order_items.count == order.order_items.where(is_finished:true).count
+            order.update(handled:true)
+          else
+            order.update(handled:false)
+          end
+        end
         format.html { redirect_to @order_item, notice: 'Order item was successfully updated.' }
         format.json { render :show, status: :ok, location: @order_item }
       else
@@ -69,6 +77,7 @@ class OrderItemsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def order_item_params
-      params[:order_item]
+      #params[:order_item]
+      params.require(:order_item).permit(:is_finished,:out_of_stock)
     end
 end

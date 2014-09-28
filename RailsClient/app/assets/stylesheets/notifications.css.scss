@@ -1,0 +1,41 @@
+// Place all the styles related to the Notifications controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+@import "basic.css.scss";
+.notification-center{
+  &>h3{
+    border-bottom:1px solid rgba(0,0,0,0.2);
+    padding:5px 10px;
+  }
+  .notification-item{
+    background:rgba(0,0,0,0.05);
+    @include border-radius-same(4px);
+    border:1px solid rgba(0,0,0,0.08);
+    width:80%;
+    padding:15px 20px;
+    margin:10px auto;
+    &:after{
+      @include after-clear;
+    }
+    .left{
+      float:left;
+      @include box-sizing-border;
+      width:85%;
+      p{
+        width:100%;
+        word-break:break-all;
+        word-wrap: break-word;
+        margin:0px;
+        font-size:15px;
+      }
+    }
+    .right{
+      float:left;
+      @include box-sizing-border;
+      width:15%;
+      .label{
+        font-size:15px;
+      }
+    }
+  }
+}
