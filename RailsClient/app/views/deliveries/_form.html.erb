@@ -17,8 +17,8 @@
     </p>
 
     <p>
-      <%= f.label :user_id,'发送员'%>
-
+      <%= f.label :receiver_id,'接收员'%>
+      <%= f.select(:receiver_id, User.role_user('400').collect{|u| [u.name,u.id]})%>
     </p>
 
     <p>
