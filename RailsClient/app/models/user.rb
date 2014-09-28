@@ -46,6 +46,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def self.role_user role_id
+    User.where(role_id:role_id).all
+  end
+
   private
   def generate_authentication_token
     loop do
