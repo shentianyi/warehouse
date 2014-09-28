@@ -55,20 +55,8 @@
     </div>
     <div class="inner-body">
       <div class="left">
-        <div class="filter-part">
-
-          <select multiple class="chosen-select" style="width:310px;" data-placeholder="选择筛选条件" id="require-select-inner">
-
-            <%= render partial: 'filters' %>
-
-          </select>
-          <a class="btn btn-xs btn-primary active" id="filter-inner"><i class="glyphicon glyphicon-search"></i></a>
-          <a class="btn btn-xs btn-primary active" id="select-all-inner"><i class="glyphicon glyphicon-ok"></i></a>
-        </div>
-
         <div class="filter-result">
           <ul id='order-list-panel-inner'>
-            <%= render partial: 'list_for_choose' %>
           </ul>
         </div>
       </div>
@@ -91,8 +79,13 @@
 
         $("body").on("click", "#close-scene", function () {
             $("#outer-scene").css("left", "-999em");
+            $("#order-list-panel-inner li").remove();
         }).on("click", "#create-select", function () {
             $("#outer-scene").css("left", "0px");
+            //order list inner
+            var lis = $("#order-list-panel li input:checked").parent().parent('li');
+            $("#order-list-panel-inner").append(lis.clone());
+            $("#order-list-panel-inner input").addClass('disable');
         }).on("click", "#filter-outer", function () {
             var filters = [];
             $("#require-select-outer option:selected").each(function () {
@@ -106,22 +99,6 @@
             } else {
                 $.get('/orders/filt',{user_id:user_id}, function (data) {
                     $('#order-list-panel').html(data);
-                }, 'html');
-            }
-        }).on("click", "#filter-inner", function () {
-            var filters = [];
-            $("#require-select-inner option:selected").each(function () {
-                filters.push($(this).val());
-            });
-            var user_id = $("#user-id-text").val();
-
-            if (filters.length > 0) {
-                $.get('/orders/filt', {filters: filters,user_id:user_id}, function (data) {
-                    $('#order-list-panel-inner').html(data);
-                }, 'html');
-            } else {
-                $.get('/orders/filt', {user_id:user_id},function (data) {
-                    $('#order-list-panel-inner').html(data);
                 }, 'html');
             }
         }).on('change', '.itemstock-checkbox', function () {
@@ -156,7 +133,7 @@
             $.get('/orders/pickitems', {picklist_ids: lists}, function (data) {
                 $('.order-content-div').html(data);
             }, 'html');
-        }).on('click', "#order-list-panel li,#order-list-panel-inner li", function () {
+        }).on('click', "#order-list-panel li", function () {
             var i = $(this).find("input");
             var checked = i.attr("checked") == undefined ? false : true;
             if (checked) {
@@ -188,15 +165,6 @@
                 $("#order-list-panel .order-checkbox").prop('checked', false)
             }
             $("#order-list-panel .order-checkbox").eq(0).trigger("change");
-        }).on('click', '#select-all-inner', function () {
-            var checked = $(this).attr('checked') == undefined ? false : true;
-            $(this).attr('checked',!checked);
-            if (!checked) {
-                $("#order-list-panel-inner .order-checkbox").prop('checked', true)
-            } else {
-                $("#order-list-panel-inner .order-checkbox").prop('checked', false)
-            }
-            $("#order-list-panel-inner .order-checkbox").eq(0).trigger("change");
         }).on("change", ".finishpick-checkbox", function () {
             var order_item_id = $(this).val();
             var is_finished = $(this).attr("checked") == undefined ? false : true;
@@ -275,7 +243,6 @@
                 success: function (data) {
                     if (data.length > 0) {
                         $('#order-list-panel').append(data);
-                        $('#order-list-panel-inner').append(data);
                     }
                     refresh_order();
                 },
