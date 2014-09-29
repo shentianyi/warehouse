@@ -4,6 +4,7 @@
           <input type="checkbox" value="<%= order.id %>" class="order-checkbox"/>
           <% if order.status == OrderState::PRINTED%>
               <span class="label label-danger"><%= OrderState.display(order.status)%></span>
+              <br/>
           <%end%>
           <%= order.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %>
           <br/>
