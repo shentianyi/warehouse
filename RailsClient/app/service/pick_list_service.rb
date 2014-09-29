@@ -18,6 +18,9 @@ class PickListService
         i.update(handled:true)
       end
       pick_list.save
+      OrderService.find({id:order_ids}).each do |o|
+        o.update(status:OrderState::PRINTED)
+      end
       return pick_list
     end
   end
