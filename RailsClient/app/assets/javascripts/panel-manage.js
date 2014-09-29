@@ -42,6 +42,9 @@ pm.build_pick_list = function(){
         if (data.result) {
             window.location = '/pick_lists/' + data.content.id;
         } else {
+            if(data.content == undefined){
+                data.content = '创建则货单失败，您可能没有择货规则！'
+            }
             alert(data.content);
         }
     }, 'json');
