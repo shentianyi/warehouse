@@ -115,7 +115,7 @@ class OrdersController < ApplicationController
   end
 
   def pickitems
-    @picklist_id = params[:picklist_ids].first
+    @picklist= PickList.find(params[:picklist_ids].first)
     @pickitems = PickItem.where(pick_list_id: params[:picklist_ids])
     render partial:'pickitems'
   end

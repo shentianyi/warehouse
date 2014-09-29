@@ -6,6 +6,8 @@
               <span class="label label-danger"><%= OrderState.display(order.status)%></span>
               <br/>
           <%end%>
+          <span class="label-info"><%= order.id%></span>
+          <br/>
           <%= order.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %>
           <br/>
           部门:<%=order.order_items.group(:whouse_id).pluck(:whouse_id).join(';')%>
