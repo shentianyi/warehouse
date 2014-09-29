@@ -44,7 +44,7 @@ class OrderItemsController < ApplicationController
       if @order_item.update(order_item_params)
         if order_item_params.has_key? 'is_finished'
           order = @order_item.order
-          if order.order_items.count == order.order_items.where(is_finished:true).count
+          if order.order_items.where(is_finished:true).count > 0
             order.update(handled:true)
           else
             order.update(handled:false)
