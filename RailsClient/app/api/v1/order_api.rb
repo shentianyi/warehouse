@@ -36,9 +36,6 @@ module V1
       OrderPresenter.init_presenters(OrderService.find(condition).all.order(created_at: :desc)).each do |op|
         orders<<op.to_json
       end
-      puts "~~~~~~~~~~~~~~~~~~"
-      puts orders
-      puts "~~~~~~~~~~~~~~~~~~"
       return {result:1,content:{orders:orders}}
     end
 
