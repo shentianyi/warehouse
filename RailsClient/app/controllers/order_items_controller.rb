@@ -4,7 +4,7 @@ class OrderItemsController < ApplicationController
   # GET /order_items
   # GET /order_items.json
   def index
-    @order_items = OrderItem.unscoped.paginate(:page=>params[:page]).order(created_at: :desc)
+    @order_items = OrderItem.unscoped.paginate(:page => params[:page]).order(created_at: :desc)
   end
 
   # GET /order_items/1
@@ -42,13 +42,11 @@ class OrderItemsController < ApplicationController
   def update
     respond_to do |format|
       if @order_item.update(order_item_params)
-        if order_item_params.has_key? 'is_finished'
-          order = @order_item.order
-          if order.order_items.where(is_finished:true).count > 0
-            order.update(handled:true)
-          else
-            order.update(handled:false)
-          end
+        order = @order_item.order
+        if order.order_items.count == order.order_items.where("is_finished = true OR out_of_stock = true").count
+          order.update(handled: true)
+        else
+          order.update(handled: false)
         end
         format.html { redirect_to @order_item, notice: 'Order item was successfully updated.' }
         format.json { render :show, status: :ok, location: @order_item }
@@ -70,14 +68,14 @@ class OrderItemsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_order_item
-      @order_item = OrderItem.unscoped.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_order_item
+    @order_item = OrderItem.unscoped.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def order_item_params
-      #params[:order_item]
-      params.require(:order_item).permit(:is_finished,:out_of_stock)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def order_item_params
+    #params[:order_item]
+    params.require(:order_item).permit(:is_finished, :out_of_stock)
+  end
 end
