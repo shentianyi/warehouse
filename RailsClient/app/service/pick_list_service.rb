@@ -24,4 +24,20 @@ class PickListService
       return pick_list
     end
   end
+
+  #-------------
+  #find_by_days
+  #params
+  #@user
+  #@days = 3
+  #-------------
+  def self.find_by_days user,days=3
+    start_t = 3.day.ago.at_beginning_of_day
+    end_t = Time.now.at_end_of_day
+    condition = {
+        :created_at => start_t..end_t,
+        :user_id => user.id,
+    }
+    PickList.where(condition).all.order(desc: :created_at)
+  end
 end

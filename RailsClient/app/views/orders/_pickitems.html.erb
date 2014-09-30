@@ -56,3 +56,12 @@
   <% end %>
   </tbody>
 </table>
+<script type="text/javascript">
+  $(document).ready(function(){
+      if($(".pickitem").length == $(".finishpick-checkbox:checked").length){
+          $("#finish-all-pickitems").prop("checked",true);
+      }else{
+          $("#finish-all-pickitems").prop("checked",false);
+      }
+  });
+</script>
