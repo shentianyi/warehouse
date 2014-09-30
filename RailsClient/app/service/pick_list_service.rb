@@ -32,12 +32,12 @@ class PickListService
   #@days = 3
   #-------------
   def self.find_by_days user,days=3
-    start_t = 3.day.ago.at_beginning_of_day
-    end_t = Time.now.at_end_of_day
+    start_t = 3.day.ago.at_beginning_of_day.utc
+    end_t = Time.now.at_end_of_day.utc
     condition = {
         :created_at => start_t..end_t,
         :user_id => user.id,
     }
-    PickList.where(condition).all.order(desc: :created_at)
+    PickList.where(condition).all.order(created_at: :desc)
   end
 end
