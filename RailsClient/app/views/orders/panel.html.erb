@@ -160,7 +160,9 @@
                 data: {order_item: {is_finished: is_finished}},
                 dataType: 'json',
                 success: function (data) {
-
+                    if(data.order.handled){
+                        $("li div#"+data.order.id).parent().remove();
+                    }
                 }
             });
 
@@ -187,7 +189,9 @@
                 data: {order_item: {out_of_stock: out_of_stock}},
                 dataType: 'json',
                 success: function (data) {
-
+                    if(data.order.handled){
+                        $("li div#"+data.order.id).parent().remove();
+                    }
                 }
             });
         });

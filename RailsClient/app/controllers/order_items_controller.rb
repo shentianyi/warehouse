@@ -49,7 +49,7 @@ class OrderItemsController < ApplicationController
           order.update(handled: false)
         end
         format.html { redirect_to @order_item, notice: 'Order item was successfully updated.' }
-        format.json { render :show, status: :ok, location: @order_item }
+        format.json { render json: {order_item:@order_item,order:{id:order.id,handled:order.handled}} }
       else
         format.html { render :edit }
         format.json { render json: @order_item.errors, status: :unprocessable_entity }
