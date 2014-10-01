@@ -200,6 +200,12 @@
                     }
                 }
             });
+        }).on("click","#search-picklists",function(){
+            var start = $("#picklist-start").val();
+            var end = $("#picklist-end").val();
+            $.get("/orders/picklists",{start:start,end:end},function(data){
+                $("#pick-list").html(data);
+            },"html");
         });
     });
 
