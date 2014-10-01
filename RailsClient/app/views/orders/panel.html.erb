@@ -115,6 +115,9 @@
             $.get('/orders/pickitems', {picklist_ids: lists}, function (data) {
                 $('.order-content-div').html(data);
             }, 'html');
+            //
+            $(".order-checkbox").prop("checked",false);
+            
         }).on('click', "#order-list-panel li", function () {
             var i = $(this).find("input");
             var checked = i.attr("checked") == undefined ? false : true;
