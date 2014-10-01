@@ -112,7 +112,13 @@ class OrdersController < ApplicationController
   end
 
   def picklists
-    @picklists = PickListService.find_by_days(current_user)#PickList.where(user_id:params[:user_id]).order(created_at: :desc)
+    user = nil
+    if params[:user_id] && user = User.find_by_id(params[:user_id])
+
+    else
+      user = current_user
+    end
+    @picklists = PickListService.find_by_days(user)#PickList.where(user_id:params[:user_id]).order(created_at: :desc)
     render partial:'picklists'
   end
 

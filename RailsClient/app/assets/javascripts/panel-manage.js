@@ -58,7 +58,7 @@ pm.change_user_id = function(user_id){
         chosen.all_update();
     });
     //un select all order
-    $("#select-all,#select-all-inner").prop("checked",false).trigger("change");
+    $("#select-all").prop("checked",false).trigger("change");
     //refresh picklist
     $.get('/orders/picklists',{user_id:user_id},function(data){
         $("#pick-list").html(data);
