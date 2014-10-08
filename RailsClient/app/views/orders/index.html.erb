@@ -16,6 +16,9 @@
           <input type="text" name="order[user_id]" value="<%= @user_id %>"/>
           <input type="hidden" name="order[user_id_fuzzy]"/>
         </span>
+      <span>备货地：
+        <%=  select_tag('order[source_id]',options_from_collection_for_select(Location.all,'id','name',@source_id), include_blank: true)%>
+      </span>
     </div>
     <div>
         <span>

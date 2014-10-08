@@ -104,6 +104,7 @@ Rails.application.routes.draw do
   get 'reports/removal_report', to: 'reports#removal_report'
   get 'reports/entry_discrepancy', to: 'reports#entry_discrepancy'
   get 'reports/removal_discrepancy', to: 'reports#removal_discrepancy'
+  get 'reports/orders_report', to: 'reports#orders_report'
   get 'reports/reports', to: 'reports#reports'
   post 'reports/upload_file', to: 'reports#upload_file'
 

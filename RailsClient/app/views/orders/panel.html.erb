@@ -40,6 +40,12 @@
 
       <p class="right">择货单列表</p>
     </div>
+    <div>
+      开始:<input type="text" id="picklist-start" class="datepicker" value="<%= @start_t %>"/>
+      <br/>
+      结束:<input type="text" id="picklist-end" class="datepicker" value="<%= @end_t %>"/>
+      <a class="btn btn-default" id="search-picklists">查找</a>
+    </div>
     <div id="pick-list">
       <%= render partial: 'picklists' %>
     </div>
@@ -93,38 +99,14 @@
             });
             var user_id = $("#user-id-text").val();
             if (filters.length > 0) {
-                $.get('/orders/filt', {filters: filters,user_id:user_id}, function (data) {
+                $.get('/orders/filt', {filters: filters, user_id: user_id}, function (data) {
                     $('#order-list-panel').html(data);
                 }, 'html');
             } else {
-                $.get('/orders/filt',{user_id:user_id}, function (data) {
+                $.get('/orders/filt', {user_id: user_id}, function (data) {
                     $('#order-list-panel').html(data);
                 }, 'html');
             }
-        }).on('change', '.itemstock-checkbox', function () {
-            var id = $(this).val();
-            var checked = $(this).attr('checked') == undefined ? false : true;
-            $.ajax({
-                url: "/order_items/" + id,
-                type: "PUT",
-                data: {order_item: {out_of_stock: checked}},
-                dataType: 'json',
-                success: function (data) {
-
-                }
-            });
-        }).on('change', '.itemfinished-checkbox', function () {
-            var id = $(this).val();
-            var checked = $(this).attr('checked') == undefined ? false : true;
-            $.ajax({
-                url: "/order_items/" + id,
-                type: "PUT",
-                data: {order_item: {is_finished: checked}},
-                dataType: 'json',
-                success: function (data) {
-
-                }
-            });
         }).on('click', ".item-a", function () {
             var lists = [];
             $("#panel-list").removeClass("choose-active");
@@ -133,6 +115,9 @@
             $.get('/orders/pickitems', {picklist_ids: lists}, function (data) {
                 $('.order-content-div').html(data);
             }, 'html');
+            //
+            $(".order-checkbox").prop("checked",false);
+
         }).on('click', "#order-list-panel li", function () {
             var i = $(this).find("input");
             var checked = i.attr("checked") == undefined ? false : true;
@@ -141,12 +126,12 @@
             } else {
                 i.prop("checked", true).trigger('change');
             }
-        }).on("change","#finish-all-pickitems",function(){
-            //
+        }).on("change", "#finish-all-pickitems", function () {
+            //finish all pickitems
             var target = $(this).parent();
-            var checked = $(this).attr('checked') == undefined ? false:true;
-            $(".pickitem").each(function(){
-                $(this).find('td').eq(target.index()).find('input').prop('checked',checked).trigger('change');
+            var checked = $(this).attr('checked') == undefined ? false : true;
+            $(".pickitem").each(function () {
+                $(this).find('td').eq(target.index()).find('input').prop('checked', checked).trigger('change');
             })
         }).on('change', '#order-list-panel .order-checkbox', function () {
             $("#panel-list").addClass("choose-active");
@@ -158,7 +143,7 @@
 
         }).on('click', '#select-all', function () {
             var checked = $(this).attr('checked') == undefined ? false : true;
-            $(this).attr('checked',!checked);
+            $(this).attr('checked', !checked);
             if (!checked) {
                 $("#order-list-panel .order-checkbox").prop('checked', true)
             } else {
@@ -166,32 +151,70 @@
             }
             $("#order-list-panel .order-checkbox").eq(0).trigger("change");
         }).on("change", ".finishpick-checkbox", function () {
+            //finish pick checkbox
             var order_item_id = $(this).val();
             var is_finished = $(this).attr("checked") == undefined ? false : true;
-            console.log(order_item_id);
+            //if out_of_stock_checked,make is unchecked
+            var row_idx = $(this).parent().parent().index();
+            var chbx_stock = $(".pickitem").eq(row_idx).find(".outofstock-checkbox");
+            var chbox_checked = chbx_stock.attr("checked") == undefined ? false : true;
+
+            if (is_finished && chbox_checked) {
+                chbx_stock.prop("checked", !chbox_checked).trigger("change");
+            }
+
             $.ajax({
                 url: "/order_items/" + order_item_id,
                 type: "PUT",
                 data: {order_item: {is_finished: is_finished}},
                 dataType: 'json',
                 success: function (data) {
-
+                    if (data.order.handled) {
+                        $("li div#" + data.order.id).parent().remove();
+                    }
                 }
             });
+
+            //if all checked
+            if ($(".pickitem").length == $(".finishpick-checkbox:checked").length) {
+                $("#finish-all-pickitems").prop("checked", true);
+            } else {
+                $("#finish-all-pickitems").prop("checked", false);
+            }
         }).on("change", ".outofstock-checkbox", function () {
+            //out_of_stock-checkbox
             var order_item_id = $(this).val();
             var out_of_stock = $(this).attr("checked") == undefined ? false : true;
-            console.log(order_item_id);
+
+            var row_idx = $(this).parent().parent().index();
+            var chbx_finish = $(".pickitem").eq(row_idx).find(".finishpick-checkbox");
+            var chbx_checked = chbx_finish.attr("checked") == undefined ? false : true;
+            if (out_of_stock && chbx_checked) {
+                chbx_finish.prop("checked", !chbx_finish).trigger("change");
+            }
             $.ajax({
                 url: "/order_items/" + order_item_id,
                 type: "PUT",
                 data: {order_item: {out_of_stock: out_of_stock}},
                 dataType: 'json',
                 success: function (data) {
-
+                    if (data.order.handled) {
+                        $("li div#" + data.order.id).parent().remove();
+                    }
                 }
             });
+        }).on("click","#search-picklists",function(){
+            var start = $("#picklist-start").val();
+            var end = $("#picklist-end").val();
+            $.get("/orders/picklists",{start:start,end:end},function(data){
+                $("#pick-list").html(data);
+            },"html");
         });
+    });
+
+    $(".datepicker").datetimepicker({
+        lang:'ch',
+        format: 'Y-m-d H:i'
     });
 
 

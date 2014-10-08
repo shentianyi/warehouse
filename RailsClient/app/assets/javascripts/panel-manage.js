@@ -42,6 +42,9 @@ pm.build_pick_list = function(){
         if (data.result) {
             window.location = '/pick_lists/' + data.content.id;
         } else {
+            if(data.content == undefined){
+                data.content = '创建则货单失败，您可能没有择货规则！'
+            }
             alert(data.content);
         }
     }, 'json');
@@ -55,7 +58,7 @@ pm.change_user_id = function(user_id){
         chosen.all_update();
     });
     //un select all order
-    $("#select-all,#select-all-inner").prop("checked",false).trigger("change");
+    $("#select-all").prop("checked",false).trigger("change");
     //refresh picklist
     $.get('/orders/picklists',{user_id:user_id},function(data){
         $("#pick-list").html(data);
