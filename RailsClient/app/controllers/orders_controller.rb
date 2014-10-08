@@ -65,7 +65,9 @@ class OrdersController < ApplicationController
     @orders=OrderService.get_orders_by_days(current_user.location.id).order(created_at: :desc).all
     @filters = current_user.pick_item_filters
     #@orders = OrderService.get_orders_by_user(current_user.id).order(created_at: :asc).all
-    @picklists = PickList.where(user_id:current_user.id).order(created_at: :desc)
+    @start_t = 3.day.ago.localtime.at_beginning_of_day.strftime("%Y-%m-%d %H:00:00")
+    @end_t = Time.now.at_end_of_day.strftime("%Y-%m-%d %H:00:00")
+    @picklists = PickListService.find_by_days(current_user)
   end
 
   def panel_list
@@ -110,12 +112,30 @@ class OrdersController < ApplicationController
   end
 
   def picklists
-    @picklists = PickList.where(user_id:params[:user_id]).order(created_at: :desc)
+    user = nil
+    if params[:user_id] && user = User.find_by_id(params[:user_id])
+
+    else
+      user = current_user
+    end
+    #
+    if params.has_key? :start
+      start_t = Time.parse(params[:start]).at_beginning_of_day
+      end_t = Time.parse(params[:end]).at_end_of_day
+      condition = {
+          :user_id => user.id,
+          :created_at => start_t..end_t
+      }
+      @picklists = PickList.where(condition).all.order(created_at: :desc)
+    else
+      @picklists = PickListService.find_by_days(user)#PickList.where(user_id:params[:user_id]).order(created_at: :desc)
+    end
+
     render partial:'picklists'
   end
 
   def pickitems
-    @picklist_id = params[:picklist_ids].first
+    @picklist= PickList.find(params[:picklist_ids].first)
     @pickitems = PickItem.where(pick_list_id: params[:picklist_ids])
     render partial:'pickitems'
   end

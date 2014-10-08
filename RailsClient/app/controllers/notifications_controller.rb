@@ -1,10 +1,10 @@
 class NotificationsController < ApplicationController
   def index
-    @bus = OrderService.notify
+    @bus = OrderService.notify current_user
   end
 
   def orderbus
-    @bus = OrderService.notify
+    @bus = OrderService.notify current_user
     render partial:'orderbus'
   end
 end

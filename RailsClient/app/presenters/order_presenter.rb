@@ -15,12 +15,21 @@ class OrderPresenter<Presenter
     items
   end
 
+  def has_out_of_stock
+    if self.order_items.where(out_of_stock:true).count > 0
+      true
+    else
+      false
+    end
+  end
+
   def to_json
     {
         id: self.id,
         user_id: self.user_id,
         created_at: self.created_at.localtime,
-        handled: self.handled ? 1 : 0
+        handled: self.handled ? 1 : 0,
+        has_out_of_stock: self.has_out_of_stock ? 1:0
     }
   end
 
@@ -30,6 +39,7 @@ class OrderPresenter<Presenter
         user_id: self.user_id,
         created_at: self.created_at.localtime,
         handled: self.handled ? 1 : 0,
+        has_out_of_stock: self.has_out_of_stock ? 1:0,
         order_items: items
     }
   end

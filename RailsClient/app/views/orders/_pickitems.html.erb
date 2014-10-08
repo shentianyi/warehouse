@@ -1,4 +1,7 @@
-<h3>择货单:<%= @picklist_id%></h3>
+<h3>择货单:<%= @picklist.id%></h3>
+<%@picklist.order_ids.split(";").each do |order|%>
+    <span class="label label-info"><%= order %></span>
+<%end%>
 <table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
@@ -53,3 +56,12 @@
   <% end %>
   </tbody>
 </table>
+<script type="text/javascript">
+  $(document).ready(function(){
+      if($(".pickitem").length == $(".finishpick-checkbox:checked").length){
+          $("#finish-all-pickitems").prop("checked",true);
+      }else{
+          $("#finish-all-pickitems").prop("checked",false);
+      }
+  });
+</script>

@@ -32,4 +32,14 @@ class OrderItem < ActiveRecord::Base
   def generate_id
     "OI#{Time.now.to_milli}"
   end
+
+  def state
+    if self.out_of_stock
+      '缺货'
+    elsif self.is_finished
+      '完成备货'
+    else
+      '未处理'
+    end
+  end
 end
