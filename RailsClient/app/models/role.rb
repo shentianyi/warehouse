@@ -1,5 +1,5 @@
 class Role
-	RoleMethods=[:admin?,:manager?,:sender?,:receiver?]
+	RoleMethods=[:admin?,:manager?,:sender?,:receiver?,:stocker?]
 
 	@@roles={
 		:'100' => {:name => 'admin', :display => (I18n.t 'system.role.admin')},

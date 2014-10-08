@@ -15,7 +15,7 @@ class ReportsController < ApplicationController
         @title = 'Discrepancy Report'
     end
     #generate condition
-    condition = Package.generate_report_condition(@type,@date_start,@date_end,@location_id)
+    condition = Package.generate_report_condition(@type, @date_start, @date_end, @location_id)
     @packages = Package.search(condition)
     if @type.to_i == ReportType::Discrepancy
 
@@ -53,7 +53,7 @@ class ReportsController < ApplicationController
     report = ""
     case @type
       when "total"
-        condition["deliveries.state"] = [DeliveryState::WAY,DeliveryState::DESTINATION,DeliveryState::RECEIVED]
+        condition["deliveries.state"] = [DeliveryState::WAY, DeliveryState::DESTINATION, DeliveryState::RECEIVED]
         report = "收货报表"
       when "received"
         condition["packages.state"] = [PackageState::RECEIVED]
@@ -100,7 +100,7 @@ class ReportsController < ApplicationController
     report = ""
     case @type
       when "total"
-        condition["deliveries.state"] = [DeliveryState::WAY,DeliveryState::DESTINATION,DeliveryState::RECEIVED]
+        condition["deliveries.state"] = [DeliveryState::WAY, DeliveryState::DESTINATION, DeliveryState::RECEIVED]
         report="发货报表"
       when "send"
         condition["packages.state"] = [PackageState::RECEIVED]
@@ -165,18 +165,18 @@ class ReportsController < ApplicationController
 
     @packages = {}
 
-    Package.entry_report(condition).each {|p|
+    Package.entry_report(condition).each { |p|
       if @packages[p.part_id+p.whouse_id].nil?
-        @packages[p.part_id+p.whouse_id] = {"PartNr."=>p.part_id,"Warehouse"=>p.whouse_id,"Amount"=>0}
+        @packages[p.part_id+p.whouse_id] = {"PartNr." => p.part_id, "Warehouse" => p.whouse_id, "Amount" => 0}
       end
       @packages[p.part_id+p.whouse_id]["Amount"] = @packages[p.part_id+p.whouse_id]["Amount"] + p.total
     }
 
     @uncounted_packages = {}
-    condition["packages.state"] = [PackageState::WAY,PackageState::ORIGINAL]
-    Package.entry_report(condition).each {|p|
+    condition["packages.state"] = [PackageState::WAY, PackageState::ORIGINAL]
+    Package.entry_report(condition).each { |p|
       if @uncounted_packages[p.part_id+p.whouse_id].nil?
-        @uncounted_packages[p.part_id+p.whouse_id] = {"PartNr."=>p.part_id,"Warehouse"=>p.whouse_id,"Amount"=>0}
+        @uncounted_packages[p.part_id+p.whouse_id] = {"PartNr." => p.part_id, "Warehouse" => p.whouse_id, "Amount" => 0}
       end
       @uncounted_packages[p.part_id+p.whouse_id]["Amount"] = @uncounted_packages[p.part_id+p.whouse_id]["Amount"] + p.total
     }
@@ -194,10 +194,10 @@ class ReportsController < ApplicationController
 
     filename = "#{Location.find_by_id(@location_id).name}收货差异报表_#{@received_date_start}_#{@received_date_end}"
 
-    respond_to do|format|
+    respond_to do |format|
       format.html
       format.xlsx do
-        send_data(entry_discrepancy_xlsx(@packages,@results,@uncounted_packages),
+        send_data(entry_discrepancy_xlsx(@packages, @results, @uncounted_packages),
                   :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
                   :filename => filename+".xlsx"
         )
@@ -218,9 +218,9 @@ class ReportsController < ApplicationController
 
     @packages = {}
 
-    Package.entry_report(condition).each {|p|
+    Package.entry_report(condition).each { |p|
       if @packages[p.part_id+p.whouse_id].nil?
-        @packages[p.part_id+p.whouse_id] = {"PartNr."=>p.part_id,"Warehouse"=>p.whouse_id,"Amount"=>0}
+        @packages[p.part_id+p.whouse_id] = {"PartNr." => p.part_id, "Warehouse" => p.whouse_id, "Amount" => 0}
       end
       @packages[p.part_id+p.whouse_id]["Amount"] = @packages[p.part_id+p.whouse_id]["Amount"] + p.total
     }
@@ -235,19 +235,19 @@ class ReportsController < ApplicationController
 
       book.default_sheet = book.sheets.first
       headers = []
-      book.row(1).each {|header|
+      book.row(1).each { |header|
         headers << header
       }
 
       fors_data = []
       2.upto(book.last_row) do |line|
         params ={}
-        headers.each_with_index{|key,i|
-          params[key]=book.cell(line,i+1).to_s
+        headers.each_with_index { |key, i|
+          params[key]=book.cell(line, i+1).to_s
         }
 
         _params = {}
-        fors_keys.each{|key|
+        fors_keys.each { |key|
           if  params[key].is_number?
             _params[key] = params[key].to_i.to_s
           else
@@ -257,9 +257,9 @@ class ReportsController < ApplicationController
         fors_data<<_params
       end
 
-      fors_data.each {|f|
+      fors_data.each { |f|
         if @results[f["PartNr."]+f["Warehouse"]].nil?
-          @results[f["PartNr."]+f["Warehouse"]] = {"PartNr."=>f["PartNr."],"Warehouse"=>f["Warehouse"],"Amount"=>0}
+          @results[f["PartNr."]+f["Warehouse"]] = {"PartNr." => f["PartNr."], "Warehouse" => f["Warehouse"], "Amount" => 0}
         end
         @results[f["PartNr."]+f["Warehouse"]]["Amount"] = @results[f["PartNr."]+f["Warehouse"]]["Amount"] + f["Quantity"].to_f
       }
@@ -267,10 +267,10 @@ class ReportsController < ApplicationController
 
     filename = "#{Location.find_by_id(@location_id).name}收货差异报表_#{@received_date_start}_#{@received_date_end}"
 
-    respond_to do|format|
+    respond_to do |format|
       format.html
       format.xlsx do
-        send_data(entry_discrepancy_xlsx(@packages,@results),
+        send_data(entry_discrepancy_xlsx(@packages, @results),
                   :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
                   :filename => filename+".xlsx"
         )
@@ -278,21 +278,72 @@ class ReportsController < ApplicationController
     end
   end
 
+  def orders_report
+    @date_start = params[:date_start].nil? ? 1.day.ago.strftime("%Y-%m-%d 7:00") : params[:date_start]
+    @date_end = params[:date_end].nil? ? Time.now.strftime("%Y-%m-%d 7:00") : params[:date_end]
+    @source_id = params[:source_id].nil? ? current_user.location_id : params[:source_id]
+    @title = '要货报表'
+    condition = {}
+    condition['order_items.created_at']= @date_start..@date_end
+    condition['orders.source_id'] = @source_id
+    @order_items = OrderItem.joins(:order)
+    .where(condition).select('order_items.part_id,SUM(order_items.box_quantity) as box_count,SUM(order_items.quantity) as total,order_items.whouse_id as whouse_id,order_items.is_finished ,order_items.out_of_stock,order_items.user_id as user_id')
+    .group('part_id,whouse_id,is_finished,out_of_stock,user_id').order("whouse_id DESC").all
+
+    filename = "#{Location.find_by_id(@source_id).name}#{@title}_#{@date_start}_#{@date_end}"
+
+    respond_to do |format|
+      format.csv do
+        send_data(order_report_csv(@order_items),
+                  :type => "text/csv;charset=utf-8; header=present",
+                  :filename => filename+".csv")
+      end
+
+      format.xlsx do
+        send_data(order_report_xlsx(@order_items),
+                  :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+                  :filename => filename+".xlsx"
+        )
+      end
+      format.html
+    end
+  end
+
   private
 
-  def entry_discrepancy_xlsx packages,results,uncounted_packages
+  def order_report_xlsx order_items
     p = Axlsx::Package.new
     wb = p.workbook
-    wb.add_worksheet(:name=>"Basic Sheet") do |sheet|
+    wb.add_worksheet(:name => "Basic Sheet") do |sheet|
+      sheet.add_row ["No.", "零件号", "总数", "箱数", "部门", "要货人", "状态"]
+      order_items.each_with_index { |o, index|
+        sheet.add_row [
+                          index+1,
+                          o.part_id,
+                          o.total,
+                          o.box_count,
+                          o.whouse_id,
+                          o.user_id,
+                          o.state
+                      ], :types => [:string]
+      }
+    end
+    p.to_stream.read
+  end
+
+  def entry_discrepancy_xlsx packages, results, uncounted_packages
+    p = Axlsx::Package.new
+    wb = p.workbook
+    wb.add_worksheet(:name => "Basic Sheet") do |sheet|
       sheet.add_row discrepancy_header
-      results.each { |k,v|
+      results.each { |k, v|
         sheet.add_row [
                           v["PartNr."],
                           v["Warehouse"],
                           v["Amount"],
                           packages[k].nil? ? 0 : packages[k]["Amount"],
                           packages[k].nil? ? v["Amount"] : v["Amount"] - packages[k]["Amount"],
-                          uncounted_packages[k].nil? ? 0: uncounted_packages[k]["Amount"]
+                          uncounted_packages[k].nil? ? 0 : uncounted_packages[k]["Amount"]
                       ], :types => [:string]
       }
     end
@@ -302,9 +353,9 @@ class ReportsController < ApplicationController
   def entry_with_xlsx packages
     p = Axlsx::Package.new
     wb = p.workbook
-    wb.add_worksheet(:name=>"Basic Sheet") do |sheet|
+    wb.add_worksheet(:name => "Basic Sheet") do |sheet|
       sheet.add_row entry_header
-      packages.each_with_index { |p,index|
+      packages.each_with_index { |p, index|
         sheet.add_row [
                           index+1,
                           p.part_id,
@@ -313,7 +364,7 @@ class ReportsController < ApplicationController
                           p.whouse_id,
                           p.rdate.nil? ? '' : p.rdate.localtime.to_formatted_s(:db),
                           p.receover_id.nil? ? '' : User.find_by_id(p.receover_id).name,
-                          p.state == PackageState::RECEIVED ? "是":"否"
+                          p.state == PackageState::RECEIVED ? "是" : "否"
                       ], :types => [:string]
       }
     end
@@ -323,9 +374,9 @@ class ReportsController < ApplicationController
   def removal_with_xlsx packages
     p = Axlsx::Package.new
     wb = p.workbook
-    wb.add_worksheet(:name=>"Basic Sheet") do |sheet|
+    wb.add_worksheet(:name => "Basic Sheet") do |sheet|
       sheet.add_row removal_header
-      packages.each_with_index { |p,index|
+      packages.each_with_index { |p, index|
         sheet.add_row [
                           index+1,
                           p.part_id,
@@ -334,18 +385,36 @@ class ReportsController < ApplicationController
                           p.whouse_id,
                           p.ddate.nil? ? '' : p.ddate.localtime.to_formatted_s(:db),
                           p.sender_id.nil? ? '' : User.find_by_id(p.sender_id).name,
-                          p.state == PackageState::DESTINATION ? "是":"否"
+                          p.state == PackageState::DESTINATION ? "是" : "否"
                       ], :types => [:string]
       }
     end
     p.to_stream.read
   end
 
+  def order_report_csv order_items
+    CSV.generate do |csv|
+      csv << ["No.", "零件号", "总数", "箱数", "部门", "要货人", "状态"]
+
+      order_items.each_with_index { |o, index|
+        csv <<[
+            index+1,
+            o.part_id,
+            o.total,
+            o.box_count,
+            o.whouse_id,
+            o.user_id,
+            o.state
+        ]
+      }
+    end
+  end
+
   def entry_with_csv(packages)
     CSV.generate do |csv|
       csv << entry_header
 
-      packages.each_with_index do |p,index|
+      packages.each_with_index do |p, index|
         csv << [
             index+1,
             p.part_id,
@@ -354,7 +423,7 @@ class ReportsController < ApplicationController
             p.whouse_id,
             p.rdate.nil? ? '' : p.rdate.localtime.to_formatted_s(:db),
             p.receover_id.nil? ? '' : User.find_by_id(p.receover_id).name,
-            p.state == PackageState::RECEIVED ? "是":"否"
+            p.state == PackageState::RECEIVED ? "是" : "否"
         ]
       end
     end
@@ -364,7 +433,7 @@ class ReportsController < ApplicationController
     CSV.generate do |csv|
       csv << removal_header
 
-      packages.each_with_index do |p,index|
+      packages.each_with_index do |p, index|
         csv << [
             index+1,
             p.part_id,
@@ -373,7 +442,7 @@ class ReportsController < ApplicationController
             p.whouse_id,
             p.ddate.nil? ? '' : p.ddate.localtime.to_formatted_s(:db),
             p.sender_id.nil? ? '' : User.find_by_id(p.sender_id).name,
-            p.state == PackageState::DESTINATION ? "是":"否"
+            p.state == PackageState::DESTINATION ? "是" : "否"
         ]
       end
 
@@ -381,18 +450,18 @@ class ReportsController < ApplicationController
   end
 
   def entry_header
-    ["编号", "零件号","总数","箱数","部门","收货时间","收货人","已接收"]
+    ["编号", "零件号", "总数", "箱数", "部门", "收货时间", "收货人", "已接收"]
   end
 
   def removal_header
-    ["编号", "零件号","总数","箱数","部门","发货时间","发货人","是否被拒绝"]
+    ["编号", "零件号", "总数", "箱数", "部门", "发货时间", "发货人", "是否被拒绝"]
   end
 
   def discrepancy_header
-    ["零件号","部门","报表数量","系统数量","差值","未记入统计（未发送或在途）"]
+    ["零件号", "部门", "报表数量", "系统数量", "差值", "未记入统计（未发送或在途）"]
   end
 
   def fors_keys
-    ["PartNr.","Warehouse","Quantity"]
+    ["PartNr.", "Warehouse", "Quantity"]
   end
 end
