@@ -122,6 +122,7 @@ class OrderService
     condition["orders.handled"] = false
     condition[:is_finished] = false
     condition[:out_of_stock] = false
+    condition[:created_at] = Time.parse(1.day.ago.strftime("%Y-%m-%d 7:00:00")).utc..Time.now.utc
     condition["orders.source_id"] = user.location_id
     OrderItem.joins(:order).where(condition)
     .select("COUNT(order_items.part_id) as count,order_items.whouse_id as wid")
