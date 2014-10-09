@@ -281,16 +281,15 @@ class ReportsController < ApplicationController
   def orders_report
     @date_start = params[:date_start].nil? ? 1.day.ago.strftime("%Y-%m-%d 7:00") : params[:date_start]
     @date_end = params[:date_end].nil? ? Time.now.strftime("%Y-%m-%d 7:00") : params[:date_end]
-    @source_id = params[:source_id].nil? ? current_user.location_id : params[:source_id]
+    time_range = Time.parse(@date_start).utc..Time.parse(@date_end).utc
     @title = '要货报表'
     condition = {}
-    condition['order_items.created_at']= @date_start..@date_end
-    condition['orders.source_id'] = @source_id
+    condition['order_items.created_at']= time_range
     @order_items = OrderItem.joins(:order)
     .where(condition).select('order_items.part_id,SUM(order_items.box_quantity) as box_count,SUM(order_items.quantity) as total,order_items.whouse_id as whouse_id,order_items.is_finished ,order_items.out_of_stock,order_items.user_id as user_id')
     .group('part_id,whouse_id,is_finished,out_of_stock,user_id').order("whouse_id DESC").all
 
-    filename = "#{Location.find_by_id(@source_id).name}#{@title}_#{@date_start}_#{@date_end}"
+    filename = "#{@title}_#{@date_start}_#{@date_end}"
 
     respond_to do |format|
       format.csv do
