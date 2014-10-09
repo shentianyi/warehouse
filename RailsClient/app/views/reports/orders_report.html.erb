@@ -10,9 +10,6 @@
       <form method="get" action="<%= reports_orders_report_path %>">
         <div>
           <div>
-            <span>备货地:
-              <%= select_tag(:source_id, options_for_select(Location.list_menu(current_user), @source_id), include_blank: false) %>
-            </span>
             <span>时间范围:
               <input type="text" name="date_start" class="datepicker" value="<%= @date_start %>"/>
               ~ <input type="text" name="date_end" class="datepicker" value="<%= @date_end %>"/>
