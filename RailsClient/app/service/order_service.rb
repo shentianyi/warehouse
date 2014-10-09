@@ -121,6 +121,7 @@ class OrderService
     condition = {}
     condition["orders.handled"] = false
     condition[:is_finished] = false
+    condition[:out_of_stock] = false
     condition["orders.source_id"] = user.location_id
     OrderItem.joins(:order).where(condition)
     .select("COUNT(order_items.part_id) as count,order_items.whouse_id as wid")
