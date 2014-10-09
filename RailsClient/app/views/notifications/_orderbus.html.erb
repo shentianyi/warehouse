@@ -1,10 +1,14 @@
-<% @bus.each do |bu|%>
-    <div class="notification-item">
-      <div class="left">
-        <p><%= bu.wid %></p>
+
+<div class="notification-item">
+  <div class="alert alert-success" role="alert"><%= 1.day.ago.strftime("%Y-%m-%d 7:00:00")+"至"+Time.now.strftime("%Y-%m-%d %H:%M:%S")+"需求单"%></div>
+  <% @bus.each do |bu|%>
+      <div class="notification-item">
+        <div class="left">
+          <%= bu.wid %>
+        </div>
+        <div class="right">
+          <span class="label label-warning"><%= bu.count %></span>
+        </div>
       </div>
-      <div class="right">
-        <span class="label label-warning"><%= bu.count %></span>
-      </div>
-    </div>
-<% end %>
+  <% end %>
+</div>
