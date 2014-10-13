@@ -2,6 +2,7 @@
 <%@picklist.order_ids.split(";").each do |order|%>
     <span class="label label-info"><%= order %></span>
 <%end%>
+<input type="button" value="打印" class='btn btn-warning' onclick="print_pick_list();"/>
 <table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
