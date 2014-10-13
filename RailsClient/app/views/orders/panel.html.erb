@@ -111,6 +111,8 @@
             var lists = [];
             $("#panel-list").removeClass("choose-active");
             $("#pick-list-history").addClass("choose-active");
+            $("input.print-check").prop("checked",false);
+            $(this).find("input.print-check").prop("checked",true);
             lists.push($(this).attr("picklist"));
             $.get('/orders/pickitems', {picklist_ids: lists}, function (data) {
                 $('.order-content-div').html(data);
@@ -216,6 +218,8 @@
         lang:'ch',
         format: 'Y-m-d H:i'
     });
+
+    init_check();
 
 
     function set_outer_scene() {

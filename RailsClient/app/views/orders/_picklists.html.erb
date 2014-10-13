@@ -2,7 +2,8 @@
   <% @picklists.each do |pl| %>
       <li>
         <a class="item-a" picklist="<%= pl.id %>">
-          <%= pl.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %>,<%= pl.id %>
+          <input hidden type="checkbox" id="<%= pl.id %>" class='print-check'>
+          <%= pl.id %>
         </a>
       </li>
   <% end %>
