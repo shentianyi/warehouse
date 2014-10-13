@@ -3,7 +3,7 @@
       <li>
         <a class="item-a" picklist="<%= pl.id %>">
           <input hidden type="checkbox" id="<%= pl.id %>" class='print-check'>
-          <%= pl.id %>
+          <%= pl.id %>,<%= pl.created_at.localtime.strftime("%m-%d %H:%M")%>
         </a>
       </li>
   <% end %>
