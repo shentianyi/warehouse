@@ -16,5 +16,7 @@
  *=require docs
  *=require colpick
  *=require bootstrap-select
+ *=require panel
+ *=require pick_panel
  *=require_tree .
  */

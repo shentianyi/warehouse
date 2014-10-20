@@ -11,19 +11,20 @@
   </div>
   <a class='btn btn-warning btn-sm' id="create-select">创建择货单</a>
 </div>
-<div class="panel-content">
+<div class="panel-content panel">
   <!--left-->
   <div id="panel-list" class='panel-list  choose-active'>
-    <div class='panel-title'>
-      <p class="left">需求单列表</p>
-      <i class='glyphicon glyphicon-chevron-right'></i>
-    </div>
+    <!--<div class='panel-title'>-->
+      <!--<p class="left">需求单列表</p>-->
+      <!--<i class='glyphicon glyphicon-chevron-right'></i>-->
+    <!--</div>-->
     <div class="filter-part">
+      <a class="btn btn-xs btn-primary active" id="select-all"><i class="glyphicon glyphicon-ok"></i> 选择全部</a>
       <select multiple class="chosen-select" style="width:210px;" data-placeholder="选择筛选条件" id="require-select-outer">
         <%= render partial: 'filters' %>
       </select>
       <a class="btn btn-xs btn-primary active" id="filter-outer"><i class="glyphicon glyphicon-search"></i></a>
-      <a class="btn btn-xs btn-primary active" id="select-all"><i class="glyphicon glyphicon-ok"></i></a>
+
     </div>
     <ul id='order-list-panel' class="order-list-panel">
       <%= render partial: 'list' %>
@@ -33,23 +34,7 @@
   <div class="order-content-div">
     <div class="alert" role="alert"><h3>请勾选左侧需求单列表来预览</h3></div>
   </div>
-  <!--right-->
-  <div id="pick-list-history" class="pick-list-history">
-    <div class='panel-title'>
-      <i class='glyphicon glyphicon-chevron-left'></i>
 
-      <p class="right">择货单列表</p>
-    </div>
-    <div>
-      开始:<input type="text" id="picklist-start" class="datepicker" value="<%= @start_t %>"/>
-      <br/>
-      结束:<input type="text" id="picklist-end" class="datepicker" value="<%= @end_t %>"/>
-      <a class="btn btn-default" id="search-picklists">查找</a>
-    </div>
-    <div id="pick-list">
-      <%= render partial: 'picklists' %>
-    </div>
-  </div>
 </div>
 
 <!--Create Picklist Div-->
@@ -72,9 +57,11 @@
     </div>
   </div>
 </div>
+
 <% content_for :javascript_includes do %>
     <%= javascript_include_tag "panel-manage" %>
 <% end %>
+
 <script type="text/javascript">
     $(document).ready(function () {
         chosen.init(["require-select-outer", "require-select-inner"], [210, 310]);

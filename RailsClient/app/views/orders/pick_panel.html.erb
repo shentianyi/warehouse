@@ -2,76 +2,56 @@
 <!--<div id="filters">-->
 <!--</div>-->
 <div class='panel-header'>
-  <p>需求面板</p>
+  <p>择货面板</p>
 
   <div class="choose-employee">
     <label>当前使用员工:</label>
     <input type='text' id="user-id-text" value="<%= current_user.id %>"/>
     <a class='btn btn-xs btn-primary' id="change-user-id">更改</a>
   </div>
-  <a class='btn btn-warning btn-sm' id="create-select">创建择货单</a>
+  <!--<a class='btn btn-warning btn-sm' id="create-select">创建择货单</a>-->
 </div>
-<div class="panel-content">
+<div class="panel-content pick-panel">
   <!--left-->
-  <div id="panel-list" class='panel-list  choose-active'>
-    <div class='panel-title'>
-      <p class="left">需求单列表</p>
-      <i class='glyphicon glyphicon-chevron-right'></i>
-    </div>
-    <div class="filter-part">
-      <select multiple class="chosen-select" style="width:210px;" data-placeholder="选择筛选条件" id="require-select-outer">
-        <%= render partial: 'filters' %>
-      </select>
-      <a class="btn btn-xs btn-primary active" id="filter-outer"><i class="glyphicon glyphicon-search"></i></a>
-      <a class="btn btn-xs btn-primary active" id="select-all"><i class="glyphicon glyphicon-ok"></i></a>
-    </div>
-    <ul id='order-list-panel' class="order-list-panel">
-      <%= render partial: 'list' %>
-    </ul>
-  </div>
-  <!--center-->
-  <div class="order-content-div">
-    <div class="alert" role="alert"><h3>请勾选左侧需求单列表来预览</h3></div>
-  </div>
-  <!--right-->
   <div id="pick-list-history" class="pick-list-history">
-    <div class='panel-title'>
-      <i class='glyphicon glyphicon-chevron-left'></i>
 
-      <p class="right">择货单列表</p>
-    </div>
     <div>
       开始:<input type="text" id="picklist-start" class="datepicker" value="<%= @start_t %>"/>
       <br/>
       结束:<input type="text" id="picklist-end" class="datepicker" value="<%= @end_t %>"/>
-      <a class="btn btn-default" id="search-picklists">查找</a>
+      <a class="btn btn-default btn-primary" id="search-picklists">查找</a>
     </div>
     <div id="pick-list">
       <%= render partial: 'picklists' %>
     </div>
   </div>
+
+  <!--center-->
+  <div class="order-content-div">
+    <div class="alert" role="alert"><h3>请勾选左侧需求单列表来预览</h3></div>
+  </div>
 </div>
 
 <!--Create Picklist Div-->
-<div class="outer-scene" id="outer-scene">
-  <div class="inner-create">
-    <div class="inner-header">
-      <h3>创建择货单</h3>
-      <i class="glyphicon glyphicon-remove" id="close-scene"></i>
-    </div>
-    <div class="inner-body">
-      <div class="left">
-        <div class="filter-result">
-          <ul id='order-list-panel-inner'>
-          </ul>
-        </div>
-      </div>
-      <div class="right">
-        <input type="button" class="btn btn-primary" value="生成择货单 " onclick="pm.build_pick_list();"/>
-      </div>
-    </div>
-  </div>
-</div>
+<!--<div class="outer-scene" id="outer-scene">-->
+  <!--<div class="inner-create">-->
+    <!--<div class="inner-header">-->
+      <!--<h3>创建择货单</h3>-->
+      <!--<i class="glyphicon glyphicon-remove" id="close-scene"></i>-->
+    <!--</div>-->
+    <!--<div class="inner-body">-->
+      <!--<div class="left">-->
+        <!--<div class="filter-result">-->
+          <!--<ul id='order-list-panel-inner'>-->
+          <!--</ul>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="right">-->
+        <!--<input type="button" class="btn btn-primary" value="生成择货单 " onclick="pm.build_pick_list();"/>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
+<!--</div>-->
 <% content_for :javascript_includes do %>
     <%= javascript_include_tag "panel-manage" %>
 <% end %>

@@ -1,0 +1,23 @@
+@import "basic.css.scss";
+.panel-content.pick-panel{
+  &>.pick-list-history{
+    width:300px;
+    &>div:first-of-type{
+      padding:17px 0 0 15px;
+      &>a{
+        @include text-shadow(0px,0px,0px,#fff);
+        font-size:13px;
+        padding:4px 16px;
+        position:relative;
+        left:10px;
+        bottom:3px;
+      }
+      input{
+        margin-top:6px;
+      }
+    }
+  }
+  &>.order-content-div{
+    width:calc(100% - 300px);
+  }
+}

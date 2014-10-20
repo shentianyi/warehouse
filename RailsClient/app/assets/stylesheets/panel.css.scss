@@ -1,0 +1,23 @@
+@import "basic.css.scss";
+.panel-content.panel{
+  &>.panel-list{
+    width:300px;
+    .filter-part{
+      padding:25px 0 0 31px;
+      #select-all{
+        padding:5px 10px;
+        margin:0 0 15px 10px;
+        width:210px;
+      }
+      #filter-outer{
+        padding:4px 8px;
+        position:relative;
+        left:-5px;
+        @include border-radius(0px,3px,3px,0px);
+      }
+    }
+  }
+  &>.order-content-div{
+    width:calc(100% - 300px);
+  }
+}
