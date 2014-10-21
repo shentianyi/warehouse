@@ -5,9 +5,9 @@
   <p>择货面板</p>
 
   <div class="choose-employee">
-    <label>当前使用员工:</label>
+    <!--<label>当前使用员工:</label>
     <input type='text' id="user-id-text" value="<%= current_user.id %>"/>
-    <a class='btn btn-xs btn-primary' id="change-user-id">更改</a>
+    <a class='btn btn-xs btn-primary' id="change-user-id">更改</a>-->
   </div>
   <!--<a class='btn btn-warning btn-sm' id="create-select">创建择货单</a>-->
 </div>
@@ -236,30 +236,5 @@
             }, 'json');
         }
     }
-    (function refresh_order() {
-        setTimeout(function () {
-            var orders = [];
-            $('.order-checkbox').each(function () {
-                orders.push($(this).val());
-            });
-            $.ajax({
-                url: '/orders/panel_list',
-                dataType: 'html',
-                data: {orders: orders},
-                type: 'get',
-                success: function (data) {
-                    if (data.length > 0) {
-                        $('#order-list-panel').append(data);
-                    }
-                    refresh_order();
-                },
-                error: function () {
-                    refresh_order();
-                },
-                complete: function (xhr) {
-                    if (xhr.status == 304) return;
-                }
-            });
-        }, 30000);
-    })();
+
 </script>

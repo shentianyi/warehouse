@@ -249,24 +249,38 @@
             $('.order-checkbox').each(function () {
                 orders.push($(this).val());
             });
-            $.ajax({
-                url: '/orders/panel_list',
-                dataType: 'html',
-                data: {orders: orders},
-                type: 'get',
-                success: function (data) {
-                    if (data.length > 0) {
-                        $('#order-list-panel').append(data);
-                    }
-                    refresh_order();
-                },
-                error: function () {
-                    refresh_order();
-                },
-                complete: function (xhr) {
-                    if (xhr.status == 304) return;
-                }
+            // if filtered
+            var filters = [];
+            $("#require-select-outer option:selected").each(function () {
+                filters.push($(this).val());
             });
-        }, 30000);
+            var user_id = $("#user-id-text").val();
+            if (filters.length > 0) {
+                $.get('/orders/filt', {filters: filters, user_id: user_id}, function (data) {
+                    $('#order-list-panel').html(data);
+                    refresh_order();
+                }, 'html');
+            }else{
+                $.ajax({
+                    url: '/orders/panel_list',
+                    dataType: 'html',
+                    data: {orders: orders},
+                    type: 'get',
+                    success: function (data) {
+                        if (data.length > 0) {
+                            $('#order-list-panel').append(data);
+                        }
+                        refresh_order();
+                    },
+                    error: function () {
+                        refresh_order();
+                    },
+                    complete: function (xhr) {
+                        if (xhr.status == 304) return;
+                    }
+                });
+            }
+            //
+        }, 3000);
     })();
 </script>
