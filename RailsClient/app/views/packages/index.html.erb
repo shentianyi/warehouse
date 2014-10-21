@@ -67,6 +67,7 @@
 
   <tbody>
     <% @packages.each_with_index do |package,index| %>
+      <% if package.id && package.id != ""%>
       <tr>
         <td><%= index+@packages.offset+1%>
         <td><%= package.id %></td>
@@ -84,6 +85,7 @@
         <td><%= link_to '编辑', edit_package_path(package),:class=>'btn btn-default' if current_user.admin? %></td>
         <td><%= link_to '详细', package_path(package) ,:class=>'btn btn-default' %></td>
       </tr>
+      <%end %>
     <% end %>
   </tbody>
 </table>

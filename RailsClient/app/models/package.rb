@@ -235,6 +235,7 @@ class Package < ActiveRecord::Base
     wb.add_worksheet(:name=>"sheet1") do |sheet|
       sheet.add_row ["序号","编号","零件号","数量","状态","备货员工","所属托盘","托盘状态","备货部门","所属运单","运单状态","接收时间","上加库位"]
       packages.each_with_index {|package,index|
+        if package.id && package.id != ""
         sheet.add_row [
                           index+1,
                           package.id,
@@ -250,6 +251,7 @@ class Package < ActiveRecord::Base
                           (package.d && package.d.received_date) ?  package.d.received_date.localtime.strftime('%Y-%m-%d %H:%M:%S') : "",
                           package.position ? package.position.whouse.name + ' ' +package.position.detail : ""
                       ]
+        end
       }
     end
     p.to_stream.read
