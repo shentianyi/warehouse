@@ -56,7 +56,14 @@ module ApplicationHelper
       end
     end
     instance_variable_set("@#{@model.pluralize}", query.paginate(:page => params[:page]).all)
-    render :index
+    if params.has_key? "download"
+      send_data(query.to_xlsx(query),
+                :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+                :filename => @model.pluralize+".xlsx")
+      #render :json => query.to_xlsx(query)
+    else
+      render :index
+    end
   end
 
 

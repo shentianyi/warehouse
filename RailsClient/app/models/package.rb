@@ -229,6 +229,32 @@ class Package < ActiveRecord::Base
     p.to_stream.read
   end
 
+  def self.to_xlsx packages
+    p = Axlsx::Package.new
+    wb = p.workbook
+    wb.add_worksheet(:name=>"sheet1") do |sheet|
+      sheet.add_row ["序号","编号","零件号","数量","状态","备货员工","所属托盘","托盘状态","备货部门","所属运单","运单状态","接收时间","上加库位"]
+      packages.each_with_index {|package,index|
+        sheet.add_row [
+                          index+1,
+                          package.id,
+                          package.part_id,
+                          package.quantity_str,
+                          PackageState.display(package.state),
+                          package.user_id ?  package.user.name+"|"+package.user_id : "",
+                          package.forklift ? package.forklift_id : "",
+                          package.forklift ? ForkliftState.display(package.forklift.state) : "",
+                          package.forklift ? package.forklift.whouse_id : "",
+                          package.d ? package.d.id : "",
+                          package.d ? DeliveryState.display(package.d.state) : "",
+                          (package.d && package.d.received_date) ?  package.d.received_date.localtime.strftime('%Y-%m-%d %H:%M:%S') : "",
+                          package.position ? package.position.whouse.name + ' ' +package.position.detail : ""
+                      ]
+      }
+    end
+    p.to_stream.read
+  end
+
   private
   def self.headers
     ["No.","Part Nr.","BU","Quantity","Package Num","State"]

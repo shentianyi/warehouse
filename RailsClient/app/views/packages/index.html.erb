@@ -32,7 +32,8 @@
         </span>
       </div>
       <div>
-        <input type="submit" value="查 找" class="btn btn-primary"/>
+        <input type="submit" value="查找" class="btn btn-primary" name="search"/>
+        <input type="submit" value="下载为Excel" class="btn btn-primary" data-confirm="Are you sure?" name="download"/>
       </div>
     </div>
   </form>
@@ -73,7 +74,7 @@
         <td><%= PackageLabelRegex.quantity_prefix_string + package.quantity_str %></td>
         <td><%= PackageState.display(package.state) %></td>
         <td><%= package.user.name+"|"+package.user_id if package.user%></td>
-        <td><%= link_to package.forklift_id, package.forklift  if package.forklift %></td>
+        <td><%= link_to package.forklift_id, package.user.name+"|"+package.user_id if package.user %></td>
         <td><%= ForkliftState.display(package.forklift.state) if package.forklift%></td>
         <td><%= package.forklift.whouse_id if package.forklift %></td>
         <td><%= link_to package.d.id, package.d.id  if package.d %></td>
