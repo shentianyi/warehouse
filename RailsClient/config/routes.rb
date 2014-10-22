@@ -51,6 +51,7 @@ Rails.application.routes.draw do
     collection do
       get :panel
       get :panel_list
+      get :pick_panel
       get :search
       get :items
       get :pickitems

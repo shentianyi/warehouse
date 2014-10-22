@@ -32,7 +32,8 @@
         </span>
       </div>
       <div>
-        <input type="submit" value="查 找" class="btn btn-primary"/>
+        <input type="submit" value="查找" class="btn btn-primary" name="search"/>
+        <input type="submit" value="下载为Excel" class="btn btn-primary" data-confirm="Are you sure?" name="download"/>
       </div>
     </div>
   </form>
@@ -66,6 +67,7 @@
 
   <tbody>
     <% @packages.each_with_index do |package,index| %>
+      <% if package.id && package.id != ""%>
       <tr>
         <td><%= index+@packages.offset+1%>
         <td><%= package.id %></td>
@@ -73,7 +75,7 @@
         <td><%= PackageLabelRegex.quantity_prefix_string + package.quantity_str %></td>
         <td><%= PackageState.display(package.state) %></td>
         <td><%= package.user.name+"|"+package.user_id if package.user%></td>
-        <td><%= link_to package.forklift_id, package.forklift  if package.forklift %></td>
+        <td><%= link_to package.forklift_id, package.user.name+"|"+package.user_id if package.user %></td>
         <td><%= ForkliftState.display(package.forklift.state) if package.forklift%></td>
         <td><%= package.forklift.whouse_id if package.forklift %></td>
         <td><%= link_to package.d.id, package.d.id  if package.d %></td>
@@ -83,6 +85,7 @@
         <td><%= link_to '编辑', edit_package_path(package),:class=>'btn btn-default' if current_user.admin? %></td>
         <td><%= link_to '详细', package_path(package) ,:class=>'btn btn-default' %></td>
       </tr>
+      <%end %>
     <% end %>
   </tbody>
 </table>
