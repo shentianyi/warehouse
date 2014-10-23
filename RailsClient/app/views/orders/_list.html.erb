@@ -1,5 +1,5 @@
 <% @orders.each do |order| %>
-      <li>
+      <li class="order" order_id="<%= order.id%>">
         <div class="order-item-div" id="<%=order.id%>">
           <input type="checkbox" value="<%= order.id %>" class="order-checkbox"/>
           <% if order.status == OrderState::PRINTED%>

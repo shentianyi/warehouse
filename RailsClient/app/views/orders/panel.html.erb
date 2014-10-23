@@ -60,6 +60,7 @@
 
 <% content_for :javascript_includes do %>
     <%= javascript_include_tag "panel-manage" %>
+    <%= javascript_include_tag "order" %>
 <% end %>
 
 <script type="text/javascript">
@@ -207,7 +208,7 @@
     });
 
     init_check();
-
+    wms.init();
 
     function set_outer_scene() {
 
@@ -217,14 +218,6 @@
             width: screen_width,
             height: screen_height
         })
-    }
-
-
-    function get_order_items() {
-
-    }
-    function build_pick_list() {
-
     }
 
     function finish_order_handle(handled) {
@@ -245,39 +238,23 @@
     }
     (function refresh_order() {
         setTimeout(function () {
-            var orders = [];
-            $('.order-checkbox').each(function () {
-                orders.push($(this).val());
-            });
-            // if filtered
             var filters = [];
             $("#require-select-outer option:selected").each(function () {
                 filters.push($(this).val());
             });
-            var user_id = $("#user-id-text").val();
             if (filters.length > 0) {
-                $.get('/orders/filt', {filters: filters, user_id: user_id}, function (data) {
-                    $('#order-list-panel').html(data);
-                    refresh_order();
-                }, 'html');
-            }else{
-                $.ajax({
-                    url: '/orders/panel_list',
-                    dataType: 'html',
-                    data: {orders: orders},
-                    type: 'get',
-                    success: function (data) {
-                        if (data.length > 0) {
-                            $('#order-list-panel').append(data);
-                        }
-                        refresh_order();
-                    },
-                    error: function () {
-                        refresh_order();
-                    },
-                    complete: function (xhr) {
-                        if (xhr.status == 304) return;
+                wms.order.order_lists_by_filter(filters,function(data){
+                    if(data.length > 0){
+                        $('#order-list-panel').append(data);
                     }
+                    refresh_order();
+                });
+            }else{
+                wms.order.order_lists(function(data){
+                    if(data.length > 0){
+                        $("#order-list-panel").append(data);
+                    }
+                    refresh_order();
                 });
             }
             //

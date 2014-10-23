@@ -116,7 +116,7 @@ class OrdersController < ApplicationController
   end
 
   def filt
-    @orders = OrderService.orders_by_filters(params[:user_id],params[:filters])
+    @orders = OrderService.orders_by_filters(params[:user_id],params[:orders],params[:filters])
     render partial:'list'
   end
 
