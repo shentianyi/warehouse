@@ -25,7 +25,7 @@ class OrderService
   # @order_ids
   # @filters
   #-------------
-  def self.orders_by_filters user_id,filters = nil
+  def self.orders_by_filters user_id,orders,filters = nil
     user = User.find_by_id user_id
     if user.nil?
       return []
@@ -38,7 +38,7 @@ class OrderService
     ids = order_items.collect { |oi|
       oi.order_id
     }.uniq
-    find({id:ids})
+    find({id:ids},{id:orders})
   end
 
   #=============
@@ -70,8 +70,8 @@ class OrderService
   # find
   # @params{}
   #=============
-  def self.find condition
-    Order.where(condition).all
+  def self.find condition,not_condition = {}
+    Order.where(condition).where.not(not_condition).all
   end
 
   #=============

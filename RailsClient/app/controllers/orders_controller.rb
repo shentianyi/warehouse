@@ -98,11 +98,11 @@ class OrdersController < ApplicationController
 
   def items
     if params[:user_id].blank?
-      @order_items=OrderItem.where(order_id: params[:order_ids])
+      @order_items=OrderItem.where(order_id: params[:order_ids]).order(is_emergency: :desc)
       #.group(:part_id,:whouse_id)
       #.select('order_items.*,sum(order_items.quantity) as quantity')
     else
-      @order_items=PickItemService.get_order_items(params[:user_id],params[:order_ids])||[]
+      @order_items=PickItemService.get_order_items(params[:user_id],params[:order_ids]).order(is_emergency: :desc)||[]
     end
     render partial:'item'
   end
@@ -116,7 +116,7 @@ class OrdersController < ApplicationController
   end
 
   def filt
-    @orders = OrderService.orders_by_filters(params[:user_id],params[:filters])
+    @orders = OrderService.orders_by_filters(params[:user_id],params[:orders],params[:filters])
     render partial:'list'
   end
 

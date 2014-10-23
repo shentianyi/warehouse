@@ -1,1 +1,1 @@
-Rails.application.config.assets.precompile += ['bootstrap-select.js', 'colpick.js', 'treport.js','panel-manage.js']
+Rails.application.config.assets.precompile += ['bootstrap-select.js', 'colpick.js', 'treport.js','panel-manage.js','order.js']
