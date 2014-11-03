@@ -15,6 +15,9 @@ class Container
   attr_accessor :children, :parent, :ancestors
   # has many container_goods
 
+  #liqi
+  #add current action to Container
+  attr_accessor :action
   @@containers={}
 
   def initialize(args={})

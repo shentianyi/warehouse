@@ -66,4 +66,3 @@ d2.add(p8)
 p10.add(d1)
 
 p1.ancestors.values.each { |a| puts a.name }
-
