@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140929041418) do
+ActiveRecord::Schema.define(version: 20141103105230) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -127,6 +127,22 @@ ActiveRecord::Schema.define(version: 20140929041418) do
   add_index "leds", ["modem_id"], name: "index_leds_on_modem_id", using: :btree
   add_index "leds", ["position"], name: "index_leds_on_position", using: :btree
   add_index "leds", ["signal_id"], name: "index_leds_on_signal_id", using: :btree
+
+  create_table "location_containers", force: true do |t|
+    t.string   "containerable_type"
+    t.string   "containerable_id"
+    t.string   "location_id"
+    t.boolean  "is_delete",          default: false
+    t.boolean  "is_dirty",           default: true
+    t.boolean  "is_new",             default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "location_containers", ["containerable_id"], name: "index_location_containers_on_containerable_id", using: :btree
+  add_index "location_containers", ["containerable_type"], name: "index_location_containers_on_containerable_type", using: :btree
+  add_index "location_containers", ["id"], name: "index_location_containers_on_id", using: :btree
+  add_index "location_containers", ["location_id"], name: "index_location_containers_on_location_id", using: :btree
 
   create_table "locations", force: true do |t|
     t.string   "uuid",           limit: 36,                 null: false

@@ -1,6 +1,7 @@
 class Package < ActiveRecord::Base
   include Extensions::UUID
   include Extensions::STATE
+  include Container
 
   #belongs_to :forklift, :throuth => :forklift_item
   #has_one :forklift_item, :dependent => :destroy
@@ -13,6 +14,7 @@ class Package < ActiveRecord::Base
   belongs_to :part
   belongs_to :forklift
   delegate :delivery, :to => :forklift
+  has_many :location_containers, :as => :containerable
 
   # when a package is added to the forklift
   # please do this
@@ -79,7 +81,7 @@ class Package < ActiveRecord::Base
       else
         #self.package_position.position_id = pp.position_id
         #self.package_position.is_delete = false
-        self.package_position.update({position_id:pp.position_id})
+        self.package_position.update({position_id: pp.position_id})
       end
       #self.package_position.save
     elsif self.package_position
@@ -119,7 +121,7 @@ class Package < ActiveRecord::Base
     end
 
     if to_state != -1
-      LedService.update_led_state_by_position(self.position.detail,to_state)
+      LedService.update_led_state_by_position(self.position.detail, to_state)
     end
   end
 
@@ -163,18 +165,18 @@ class Package < ActiveRecord::Base
     .group("packages.part_id,whouse_id,state").order("whouse_id,ddate DESC")
   end
 
-  def self.generate_report_condition type,tstart,tend,location_id
+  def self.generate_report_condition type, tstart, tend, location_id
     time_range = Time.parse(tstart).utc..Time.parse(tend).utc
     condition = {}
     case type.to_i
       when ReportType::Entry
         condition["deliveries.destination_id"] = location_id
         condition["deliveries.received_date"] = time_range
-        condition["deliveries.state"] = [DeliveryState::WAY,DeliveryState::DESTINATION,DeliveryState::RECEIVED]
+        condition["deliveries.state"] = [DeliveryState::WAY, DeliveryState::DESTINATION, DeliveryState::RECEIVED]
       when ReportType::Removal
         condition["deliveries.source_id"] = location_id
         condition["deliveries.delivery_date"] = time_range
-        condition["deliveries.state"] = [DeliveryState::WAY,DeliveryState::DESTINATION,DeliveryState::RECEIVED]
+        condition["deliveries.state"] = [DeliveryState::WAY, DeliveryState::DESTINATION, DeliveryState::RECEIVED]
       when ReportType::Discrepancy
         condition["deliveries.destination_id"] = location_id
         condition["deliveries.received_date"] = time_range
@@ -197,7 +199,7 @@ class Package < ActiveRecord::Base
 
       csv << headers
 
-      packages.each_with_index do |p,index|
+      packages.each_with_index do |p, index|
         csv << [
             index+1,
             p.part_id,
@@ -213,16 +215,16 @@ class Package < ActiveRecord::Base
   def self.export_to_xlsx packages
     p = Axlsx::Package.new
     wb = p.workbook
-    wb.add_worksheet(:name=>"sheet1") do |sheet|
+    wb.add_worksheet(:name => "sheet1") do |sheet|
       sheet.add_row headers
-      packages.each_with_index {|p,index|
+      packages.each_with_index { |p, index|
         sheet.add_row [
-                       index+1,
-                       p.part_id,
-                       p.whouse_id,
-                       p.total,
-                       p.box_count,
-                       PackageState.display(p.state)
+                          index+1,
+                          p.part_id,
+                          p.whouse_id,
+                          p.total,
+                          p.box_count,
+                          PackageState.display(p.state)
                       ]
       }
     end
@@ -232,25 +234,25 @@ class Package < ActiveRecord::Base
   def self.to_xlsx packages
     p = Axlsx::Package.new
     wb = p.workbook
-    wb.add_worksheet(:name=>"sheet1") do |sheet|
-      sheet.add_row ["序号","编号","零件号","数量","状态","备货员工","所属托盘","托盘状态","备货部门","所属运单","运单状态","接收时间","上加库位"]
-      packages.each_with_index {|package,index|
+    wb.add_worksheet(:name => "sheet1") do |sheet|
+      sheet.add_row ["序号", "编号", "零件号", "数量", "状态", "备货员工", "所属托盘", "托盘状态", "备货部门", "所属运单", "运单状态", "接收时间", "上加库位"]
+      packages.each_with_index { |package, index|
         if package.id && package.id != ""
-        sheet.add_row [
-                          index+1,
-                          package.id,
-                          package.part_id,
-                          package.quantity_str,
-                          PackageState.display(package.state),
-                          package.user_id ?  package.user.name+"|"+package.user_id : "",
-                          package.forklift ? package.forklift_id : "",
-                          package.forklift ? ForkliftState.display(package.forklift.state) : "",
-                          package.forklift ? package.forklift.whouse_id : "",
-                          package.d ? package.d.id : "",
-                          package.d ? DeliveryState.display(package.d.state) : "",
-                          (package.d && package.d.received_date) ?  package.d.received_date.localtime.strftime('%Y-%m-%d %H:%M:%S') : "",
-                          package.position ? package.position.whouse.name + ' ' +package.position.detail : ""
-                      ]
+          sheet.add_row [
+                            index+1,
+                            package.id,
+                            package.part_id,
+                            package.quantity_str,
+                            PackageState.display(package.state),
+                            package.user_id ? package.user.name+"|"+package.user_id : "",
+                            package.forklift ? package.forklift_id : "",
+                            package.forklift ? ForkliftState.display(package.forklift.state) : "",
+                            package.forklift ? package.forklift.whouse_id : "",
+                            package.d ? package.d.id : "",
+                            package.d ? DeliveryState.display(package.d.state) : "",
+                            (package.d && package.d.received_date) ? package.d.received_date.localtime.strftime('%Y-%m-%d %H:%M:%S') : "",
+                            package.position ? package.position.whouse.name + ' ' +package.position.detail : ""
+                        ]
         end
       }
     end
@@ -259,6 +261,6 @@ class Package < ActiveRecord::Base
 
   private
   def self.headers
-    ["No.","Part Nr.","BU","Quantity","Package Num","State"]
+    ["No.", "Part Nr.", "BU", "Quantity", "Package Num", "State"]
   end
 end

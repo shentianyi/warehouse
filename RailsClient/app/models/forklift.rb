@@ -9,7 +9,8 @@ class Forklift < ActiveRecord::Base
   has_many :packages #, :through => :forklift_items
   #delegate :delivery ,:to => :packages
   belongs_to :user
-  belongs_to :stocker, class_name: "User"
+  belongs_to :stocker, class_name: 'User'
+  has_many :location_containers, :as => :containerable
 
   #add_to_delivery
   def add_to_delivery delivery_id
@@ -33,6 +34,6 @@ class Forklift < ActiveRecord::Base
   end
 
   def accepted_packages
-    self.packages.where(state:PackageState::RECEIVED).count
+    self.packages.where(state: PackageState::RECEIVED).count
   end
 end
