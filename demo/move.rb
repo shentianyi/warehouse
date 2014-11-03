@@ -1,19 +1,15 @@
-require_relative 'action.rb'
+#require_relative 'action.rb'
+=begin
 
-class Move < Action
+class Movable #< Action
 
-  def initialize(args={})
-    args[:type] = ActionType::MOVE
-    super args
-  end
-
-  def do
-    before_do
-    puts ".....do move"
+  def start
+    before_start
+    puts ".....start move"
     self.state = ActionState::PROCESSING
     self.action_record.state = ActionState::PROCESSING
     self.target.move_to self.destination_id
-    end_do
+    end_start
   end
 
   def finish
@@ -25,7 +21,7 @@ class Move < Action
     end_finish
   end
 
-  def before_do
+  def before_start
     begin
       if self.target.position_id != self.source_id
         raise "Position illegal! => current position is not in the source position for move action"
@@ -34,7 +30,7 @@ class Move < Action
     end
   end
 
-  def end_do
+  def end_start
     self.target.lock
   end
 
@@ -45,4 +41,4 @@ class Move < Action
   def end_finish
     self.target.unlock
   end
-end
+end=end

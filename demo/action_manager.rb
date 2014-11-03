@@ -1,5 +1,7 @@
+=begin
 require_relative 'move.rb'
 
+#need a much more stronger manager
 class ActionManager<CZBase
 	@@action_list = {}
 
@@ -35,4 +37,4 @@ class ActionManager<CZBase
 		}
 		nil
 	end
-end
+end=end
