@@ -17,7 +17,7 @@ class Container
 
   #liqi
   #add current action to Container
-  attr_accessor :action
+  # attr_accessor :action
   @@containers={}
 
   def initialize(args={})
@@ -42,6 +42,12 @@ class Container
     if child.is_root? && !self.has_child?(child)
       self.add_child(child)
     end
+  end
+
+  def remove
+    self.remove_children_ancestor
+    self.ancestors=nil
+    self.parent = nil
   end
 
   def is_root?
@@ -75,17 +81,25 @@ class Container
     child.parent=self
     child.ancestors={} if child.ancestors.nil?
     child.ancestors[self.id]=self
-    self.prev_children_ancestor
+    self.add_children_ancestor
   end
 
-  def prev_children_ancestor
+  def add_children_ancestor
     if self.has_children?
       self.children.values.each do |c|
-        # c.ancestors={} if c.ancestors.nil?
         self.ancestors.values.each do |a|
           c.ancestors[a.id]=a
         end unless self.ancestors.nil?
-        c.prev_children_ancestor
+        c.add_children_ancestor
+      end
+    end
+  end
+
+  def remove_children_ancestor
+    if self.has_children?
+      self.children.values.each do |c|
+        c.ancestors.delete(self.parent.id) unless c.ancestors.nil?
+        c.remove_children_ancestor
       end
     end
   end

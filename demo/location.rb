@@ -1,6 +1,6 @@
 class LocationContainer
   # parent is Container
-  attr_accessor :container,:location,:parent
+  attr_accessor :id,:container,:location
 
 end
 
