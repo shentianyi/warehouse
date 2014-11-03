@@ -19,8 +19,13 @@ class ActionType
     end
 end
 
+#Action Base class
 class Action < CZBase
-  attr_accessor :id,:type,:state,:action_record,:target,:source_id,:destination_id
+  #type define the type of this action
+  #target array of container,action should have array of target
+  #source_id where does this action start
+  #destination_id where does this action end
+  attr_accessor :id,:type,:state,:action_record,:targets,:source_id,:destination_id
 
   def initialize(args={})
     self.id = "A#{Random.new(10000)}"
@@ -37,13 +42,5 @@ class Action < CZBase
             container_id:self.target.id,
             state:self.state}
     )
-  end
-
-  def do
-
-  end
-
-  def finish
-
   end
 end

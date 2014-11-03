@@ -8,23 +8,18 @@ class Move < Action
   end
 
   def do
-    # where are they?
     self.before_do
-    puts "action start"
     self.state = ActionState::PROCESSING
     self.action_record.state = ActionState::PROCESSING
-    self.target.move_to(self.destination_id)
-    self.target.lock
+    self.targets.each{|t| t.move_to self.destination_id}
     self.end_do
   end
 
   def finish
     self.before_finish
-    puts "action end"
     self.state = ActionState::FINISHED
     self.action_record.state = ActionState::FINISHED
-    self.target.arrived
-    self.target.unlock
+    self.targets.each{|t| t.arrived}
     self.end_finish
   end
 
@@ -38,14 +33,22 @@ class Move < Action
   end
 
   def end_do
-
+    self.lock_resource
   end
 
   def before_finish
-
+    #do some check here
   end
 
   def end_finish
+    self.unlock_resource
+  end
 
+  def lock_resource
+    self.targets.each{|t| t.lock}
+  end
+
+  def unlock_resource
+    self.targets.each{|t| t.unlock}
   end
 end
