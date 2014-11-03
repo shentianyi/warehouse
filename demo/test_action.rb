@@ -15,6 +15,8 @@ package = Package.new({package_type: PackageType::Wood})
 
 mov = Move.new({target: package, source_id: source.id, destination_id: destination.id})
 
+puts mov.action_record.to_json
 mov.do
-
+puts mov.action_record.to_json
 mov.finish
+puts mov.action_record.to_json
