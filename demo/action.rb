@@ -1,4 +1,4 @@
-require_relative "action_record.rb"
+require_relative 'action_record.rb'
 
 class ActionState
   INIT=0
@@ -25,7 +25,7 @@ class Action < CZBase
   #target array of container,action should have array of target
   #source_id where does this action start
   #destination_id where does this action end
-  attr_accessor :id,:type,:state,:action_record,:targets,:source_id,:destination_id
+  attr_accessor :id,:type,:state,:action_record,:target,:source_id,:destination_id
 
   def initialize(args={})
     self.id = "A#{Random.new(10000)}"

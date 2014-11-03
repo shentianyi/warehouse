@@ -1,4 +1,4 @@
-require_relative "action.rb"
+require_relative 'action.rb'
 
 class Move < Action
 
@@ -8,19 +8,21 @@ class Move < Action
   end
 
   def do
-    self.before_do
+    before_do
+    puts ".....do move"
     self.state = ActionState::PROCESSING
     self.action_record.state = ActionState::PROCESSING
-    self.targets.each{|t| t.move_to self.destination_id}
-    self.end_do
+    self.target.move_to self.destination_id
+    end_do
   end
 
   def finish
-    self.before_finish
+    before_finish
+    puts ".....finish move"
     self.state = ActionState::FINISHED
     self.action_record.state = ActionState::FINISHED
-    self.targets.each{|t| t.arrived}
-    self.end_finish
+    self.target.arrived
+    end_finish
   end
 
   def before_do
@@ -33,7 +35,7 @@ class Move < Action
   end
 
   def end_do
-    self.lock_resource
+    self.target.lock
   end
 
   def before_finish
@@ -41,14 +43,6 @@ class Move < Action
   end
 
   def end_finish
-    self.unlock_resource
-  end
-
-  def lock_resource
-    self.targets.each{|t| t.lock}
-  end
-
-  def unlock_resource
-    self.targets.each{|t| t.unlock}
+    self.target.unlock
   end
 end

@@ -11,7 +11,9 @@ class ContainerType
 end
 
 class Container
-  attr_accessor :id, :type, :creator, :max_quantity
+  #liqi
+  #add current action to Container
+  attr_accessor :id, :type, :creator, :max_quantity,:action
   @@containers={}
 
   def initialize(args={})

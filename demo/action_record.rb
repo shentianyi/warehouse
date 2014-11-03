@@ -1,4 +1,4 @@
-require_relative "cz_base.rb"
+require_relative 'cz_base.rb'
 
 class ActionRecord < CZBase
   attr_accessor :id,:action_id,:action_type,:source_id,:destination_id,:container_id,:state
