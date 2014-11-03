@@ -12,3 +12,12 @@ class Package<Container
     super
   end
 end
+
+
+class Forklift<Container
+
+end
+
+class Delivery<Container
+
+end
