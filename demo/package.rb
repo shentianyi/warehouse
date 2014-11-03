@@ -9,7 +9,7 @@ end
 class Package<Container
   attr_accessor :package_type
 
-  include Movable
+  #include Movable
 
   def initialize(args={})
     super

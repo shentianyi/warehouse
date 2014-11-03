@@ -1,6 +1,7 @@
 #require_relative 'action.rb'
+=begin
 
-module Move #< Action
+class Movable #< Action
 
   def start
     before_start
@@ -40,4 +41,4 @@ module Move #< Action
   def end_finish
     self.target.unlock
   end
-end
+end=end
