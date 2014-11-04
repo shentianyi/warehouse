@@ -1,6 +1,6 @@
 module Movable
   #include this module to your Model,make sure you have column below
-  attr_accessor :current_position_id,:destination_id,:sender_id,:receiver_id,:delivery_date,:received_date
+  attr_accessor :current_location_id,:destination_id,:sender_id,:receiver_id,:delivery_date,:received_date
 
   def set_out(destination_id,sender_id = nil)
 
@@ -11,9 +11,9 @@ module Movable
     self.delivery_date = Time.now
   end
 
-  def arrived(receiver_id=nil)
+  def arrive(receiver_id=nil)
 
-    self.current_position_id = self.destination_id
+    self.current_location_id = self.destination_id
     if receiver_id
       self.receiver_id = receiver_id
     end
