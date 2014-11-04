@@ -2,6 +2,7 @@ class Package < ActiveRecord::Base
   include Extensions::UUID
   include Extensions::STATE
   include Container
+  include Movable
 
   #belongs_to :forklift, :throuth => :forklift_item
   #has_one :forklift_item, :dependent => :destroy
