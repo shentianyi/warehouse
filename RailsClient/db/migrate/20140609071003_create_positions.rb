@@ -15,23 +15,23 @@ class CreatePositions < ActiveRecord::Migration
       t.timestamps
     end
 
-    reversible do |dir|
-      dir.up do
-        execute <<-SQL
-        ALTER TABLE positions
-ADD CONSTRAINT fk_positions_whouses
-FOREIGN KEY (whouse_id)
-REFERENCES whouses(id)
-        SQL
-      end
-
-      dir.down do
-        execute <<-SQL
-        ALTER TABlE positions
-DROP FOREIGN KEY fk_positions_whouses
-        SQL
-      end
-    end
+#     reversible do |dir|
+#       dir.up do
+#         execute <<-SQL
+#         ALTER TABLE positions
+# ADD CONSTRAINT fk_positions_whouses
+# FOREIGN KEY (whouse_id)
+# REFERENCES whouses(id)
+#         SQL
+#       end
+#
+#       dir.down do
+#         execute <<-SQL
+#         ALTER TABlE positions
+# DROP FOREIGN KEY fk_positions_whouses
+#         SQL
+#       end
+#     end
     add_index :positions, :uuid
     add_index :positions, :id
     add_index :positions, :whouse_id

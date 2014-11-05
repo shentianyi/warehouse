@@ -13,23 +13,23 @@ class CreateWhouses < ActiveRecord::Migration
       #
       t.timestamps
     end
-    reversible do |dir|
-      dir.up do
-        execute <<-SQL
-        ALTER TABLE whouses
-ADD CONSTRAINT fk_whouses_locations
-FOREIGN KEY (location_id)
-REFERENCES locations(id)
-        SQL
-      end
-
-      dir.down do
-        execute <<-SQL
-        ALTER TABLE whouses
-DROP FOREIGN KEY fk_whouses_locations
-        SQL
-      end
-    end
+#     reversible do |dir|
+#       dir.up do
+#         execute <<-SQL
+#         ALTER TABLE whouses
+# ADD CONSTRAINT fk_whouses_locations
+# FOREIGN KEY (location_id)
+# REFERENCES locations(id)
+#         SQL
+#       end
+#
+#       dir.down do
+#         execute <<-SQL
+#         ALTER TABLE whouses
+# DROP FOREIGN KEY fk_whouses_locations
+#         SQL
+#       end
+#     end
     add_index :whouses,:uuid
     add_index :whouses,:location_id
     add_index :whouses,:id

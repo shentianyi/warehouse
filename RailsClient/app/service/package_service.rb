@@ -26,23 +26,21 @@ class PackageService
       return msg
     end
 
-    #current_user
-    unless args.has_key?(:user_id)
-      args[:user_id] = current_user.id
-      args[:location_id] = current_user.location_id if current_user.location_id
-    end
-
     #create
     args[:quantity]=args[:quantity_str]
     p = Package.new(args)
     #l=p.user.location
     #p.positionable_type=l.name
     #p.positionable_id=l.id
-    if p.save
-      msg.result = true
-      msg.object = p
-    else
-      msg.content << p.errors.full_messages
+    ActiveRecord::Base.transaction do
+      if p.save
+        lc=p.location_containers.build(location_id:p.location_id,user_id:p.user_id)
+        lc.save
+        msg.result = true
+        msg.object = p
+      else
+        msg.content << p.errors.full_messages
+      end
     end
     return msg
   end

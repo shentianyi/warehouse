@@ -16,31 +16,31 @@ class CreateForklifts < ActiveRecord::Migration
       #
       t.timestamps
     end
-    reversible do |dir|
-      dir.up do
-        execute <<-SQL
-        ALTER TABLE forklifts
-ADD CONSTRAINT fk_forklifts_deliveries
-FOREIGN KEY (delivery_id)
-REFERENCES deliveries(id),
-ADD CONSTRAINT fk_forklifts_stockers
-FOREIGN KEY (stocker_id)
-REFERENCES users(id),
-ADD CONSTRAINT fk_forklifts_users
-FOREIGN KEY (user_id)
-REFERENCES users(id)
-        SQL
-      end
-
-      dir.down do
-        execute <<-SQL
-        ALTER TAbLE forklifts
-DROP FOREIGN KEY fk_forklifts_deliveries,
-DROP FOREIGN KEY fk_forklifts_stockers,
-DROP FOREIGN KEY fk_forklifts_users
-        SQL
-      end
-    end
+#     reversible do |dir|
+#       dir.up do
+#         execute <<-SQL
+#         ALTER TABLE forklifts
+# ADD CONSTRAINT fk_forklifts_deliveries
+# FOREIGN KEY (delivery_id)
+# REFERENCES deliveries(id),
+# ADD CONSTRAINT fk_forklifts_stockers
+# FOREIGN KEY (stocker_id)
+# REFERENCES users(id),
+# ADD CONSTRAINT fk_forklifts_users
+# FOREIGN KEY (user_id)
+# REFERENCES users(id)
+#         SQL
+#       end
+#
+#       dir.down do
+#         execute <<-SQL
+#         ALTER TAbLE forklifts
+# DROP FOREIGN KEY fk_forklifts_deliveries,
+# DROP FOREIGN KEY fk_forklifts_stockers,
+# DROP FOREIGN KEY fk_forklifts_users
+#         SQL
+#       end
+#     end
 
     add_index :forklifts, :uuid
     add_index :forklifts,:delivery_id

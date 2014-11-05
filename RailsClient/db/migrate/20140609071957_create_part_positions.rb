@@ -15,27 +15,27 @@ class CreatePartPositions < ActiveRecord::Migration
       t.timestamps
     end
 
-    reversible do |dir|
-      dir.up do
-        execute <<-SQL
-        ALTER TABLE part_positions
-ADD CONSTRAINT fk_part_positions_positions
-FOREIGN KEY (position_id)
-REFERENCES positions(id),
-ADD CONSTRAINT fk_part_positions_parts
-FOREIGN KEY (part_id)
-REFERENCES parts(id)
-        SQL
-      end
-
-      dir.down do
-        execute <<-SQL
-        ALTER TABLE part_positions
-DROP FOREIGN KEY fk_part_positions_positions,
-DROP FOREIGN KEY fk_part_positions_parts
-        SQL
-      end
-    end
+    # reversible do |dir|
+      # dir.up do
+#         execute <<-SQL
+#         ALTER TABLE part_positions
+# ADD CONSTRAINT fk_part_positions_positions
+# FOREIGN KEY (position_id)
+# REFERENCES positions(id),
+# ADD CONSTRAINT fk_part_positions_parts
+# FOREIGN KEY (part_id)
+# REFERENCES parts(id)
+#         SQL
+#       end
+#
+#       dir.down do
+#         execute <<-SQL
+#         ALTER TABLE part_positions
+# DROP FOREIGN KEY fk_part_positions_positions,
+# DROP FOREIGN KEY fk_part_positions_parts
+#         SQL
+#       end
+#     end
 
     add_index :part_positions, :id
     add_index :part_positions, :position_id

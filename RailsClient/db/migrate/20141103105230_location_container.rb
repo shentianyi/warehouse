@@ -5,6 +5,7 @@ class LocationContainer < ActiveRecord::Migration
       t.string :containerable_type
       t.string :containerable_id
       t.string :location_id
+      t.string :user_id
       #
       t.boolean :is_delete, :default => false
       t.boolean :is_dirty, :default => true
