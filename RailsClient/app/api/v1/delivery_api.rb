@@ -78,21 +78,36 @@ module V1
 
     # send delivery
     post :send do
-      if (d = DeliveryService.exit?(params[:id])).nil?
-        return {result:0,content:DeliveryMessage::NotExit}
+      mgs = ApiMessage.new
+
+      unless delivery = Delivery.find_by_id(params[:id])
+        msg.set_false(DeliveryMessage::NotExit)
+        return msg.to_json
       end
+
+      #if (d = DeliveryService.exit?(params[:id])).nil?
+      #  return {result:0,content:DeliveryMessage::NotExit}
+      #end
+
+
+
       if !DeliveryState.can_update?(d.state)
-        return {result:0,content:DeliveryMessage::CannotUpdate}
+        msg.set_false(DeliveryMessage::CannotUpdate)
+        return msg.to_json
       end
+
       if DeliveryService.send(d,current_user)
         if NetService.ping()
-          {result:1,content:DeliveryMessage::SendSuccess}
+          msg.set_true(DeliveryMessage::SendSuccess)
+          return msg.to_json
         else
-          {result:1,content:DeliveryMessage::SendSuccess+DeliveryMessage::NetworkNotGood}
+          msg.set_true(DeliveryMessage::SendSuccess+DeliveryMessage::NetworkNotGood)
+          return msg.to_json
         end
 
       else
-        {result:0,content:DeliveryMessage::SendFailed}
+        msg.set_false(DeliveryMessage::SendFailed)
+        return msg.to_json
       end
     end
 
