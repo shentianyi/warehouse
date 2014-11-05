@@ -80,7 +80,7 @@ module V1
     post :send do
       mgs = ApiMessage.new
 
-      unless delivery = Delivery.find_by_id(params[:id])
+      unless d = Delivery.find_by_id(params[:id])
         msg.set_false(DeliveryMessage::NotExit)
         return msg.to_json
       end

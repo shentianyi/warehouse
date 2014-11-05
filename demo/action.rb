@@ -40,4 +40,5 @@ class Action < CZBase
             state:self.state}
     )
   end
-end=end
+end
+=end
