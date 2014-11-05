@@ -89,8 +89,6 @@ module V1
       #  return {result:0,content:DeliveryMessage::NotExit}
       #end
 
-
-
       if !DeliveryState.can_update?(d.state)
         msg.set_false(DeliveryMessage::CannotUpdate)
         return msg.to_json
