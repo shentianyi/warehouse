@@ -1,7 +1,7 @@
 class AddMovableColumnsToDeliveryForkliftAndPackages < ActiveRecord::Migration
   def change
     #add_to
-    [:deliveries,:forklifts,:packages].each do |table|
+    [:location_containers].each do |table|
       [:current_location_id,:destination_id,:sender_id,:receiver_id].each{|c|
         unless column_exists? table,c
           add_column table,c,:string
