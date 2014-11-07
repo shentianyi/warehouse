@@ -132,16 +132,9 @@ ActiveRecord::Schema.define(version: 20141105031730) do
     t.string   "containerable_type"
     t.string   "containerable_id"
     t.string   "location_id"
-<<<<<<< HEAD
-    t.string   "user_id"
-    t.boolean  "is_delete",          default: false
-    t.boolean  "is_dirty",           default: true
-    t.boolean  "is_new",             default: true
-=======
     t.boolean  "is_delete",           default: false
     t.boolean  "is_dirty",            default: true
     t.boolean  "is_new",              default: true
->>>>>>> d52934fbc605e1b1acac92715c71ad13dbc6e1dc
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "state",               default: 0
