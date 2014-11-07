@@ -14,11 +14,6 @@
 # users commonly want.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
-<<<<<<< HEAD
-RSpec.configure do |config|
-=======
->>>>>>> d52934fbc605e1b1acac92715c71ad13dbc6e1dc
-
 RSpec.configure do |config|
 # The settings below are suggested to provide a good initial experience
 # with RSpec, but feel free to customize to your heart's content.

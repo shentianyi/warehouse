@@ -1,5 +1,5 @@
 class CreateMovableRecords < ActiveRecord::Migration
-  def change
+  def up
     create_table :movable_records,:id => false do |t|
       t.string :id, :limit => 36, :primary => true, :null => false
       t.string :movable_id
@@ -21,5 +21,8 @@ class CreateMovableRecords < ActiveRecord::Migration
     add_index :movable_records, :destination_id
 
     execute 'ALTER TABLE movable_records ADD PRIMARY KEY(id)'
+  end
+  def down
+    drop_table :movable_records
   end
 end
