@@ -17,23 +17,23 @@ class CreateDeliveries < ActiveRecord::Migration
       t.timestamps
     end
 
-#     reversible do |dir|
-#       dir.up do
-#         execute <<-SQL
-#         ALTER TABLE deliveries
-# ADD CONSTRAINT fk_deliveries_users
-# FOREIGN KEY (user_id)
-# REFERENCES users(id)
-#         SQL
-#       end
-#
-#       dir.down do
-#         execute <<-SQL
-#         ALTER TABLE deliveries
-# DROP FOREIGN KEY fk_deliveries_users
-#         SQL
-#       end
-#     end
+    reversible do |dir|
+      dir.up do
+        execute <<-SQL
+        ALTER TABLE deliveries
+ADD CONSTRAINT fk_deliveries_users
+FOREIGN KEY (user_id)
+REFERENCES users(id)
+        SQL
+      end
+
+      dir.down do
+        execute <<-SQL
+        ALTER TABLE deliveries
+DROP FOREIGN KEY fk_deliveries_users
+        SQL
+      end
+    end
 
     add_index :deliveries, :uuid
     add_index :deliveries, :user_id

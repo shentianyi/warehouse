@@ -14,27 +14,27 @@ class CreatePackagePositions < ActiveRecord::Migration
       t.timestamps
     end
 
-#     reversible do |dir|
-#       dir.up do
-#         execute <<-SQL
-#         ALTER TABLE package_positions
-# ADD CONSTRAINT fk_package_positions_positions
-# FOREIGN KEY (position_id)
-# REFERENCES positions(id),
-#
-# ADD CONSTRAINT fk_package_positions_packages
-# FOREIGN KEY (package_id)
-# REFERENCES packages(id)
-#         SQL
-#       end
-#       dir.down do
-#         execute <<-SQL
-#         ALTER TABLE package_positions
-# DROP FOREIGN KEY fk_package_positions_positions,
-# DROP FOREIGN KEY fk_package_positions_packages
-#         SQL
-#       end
-#     end
+    reversible do |dir|
+      dir.up do
+        execute <<-SQL
+        ALTER TABLE package_positions
+ADD CONSTRAINT fk_package_positions_positions
+FOREIGN KEY (position_id)
+REFERENCES positions(id),
+
+ADD CONSTRAINT fk_package_positions_packages
+FOREIGN KEY (package_id)
+REFERENCES packages(id)
+        SQL
+      end
+      dir.down do
+        execute <<-SQL
+        ALTER TABLE package_positions
+DROP FOREIGN KEY fk_package_positions_positions,
+DROP FOREIGN KEY fk_package_positions_packages
+        SQL
+      end
+    end
 
     add_index :package_positions, :id
     add_index :package_positions, :position_id

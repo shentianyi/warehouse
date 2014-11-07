@@ -7,7 +7,6 @@ module V1
     # login
     # params: email, passwd
     post :login do
-      puts params[:user][:id]
       user = User.find_for_database_authentication(id: params[:user][:id])
       if user
         if user.valid_password?(params[:user][:password])
