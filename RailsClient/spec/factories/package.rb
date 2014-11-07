@@ -4,7 +4,7 @@ FactoryGirl.define do
     quantity 1000
     user_id 1
     check_in_time '23.03.14'
-    association :containable, factory: :terminator, strategy: :build
+    association :part, factory: :terminator, strategy: :build
   end
 
   factory :p2, class: Package do
@@ -12,7 +12,7 @@ FactoryGirl.define do
     quantity 1000
     user_id 1
     check_in_time '21.03.14'
-    association :containable, factory: :terminator, strategy: :build
+    association :part, factory: :terminator, strategy: :build
   end
 
   factory :p3, class: Package do
@@ -20,6 +20,6 @@ FactoryGirl.define do
     quantity 1000
     user_id 1
     check_in_time '29.03.14'
-    association :containable, factory: :wire, strategy: :build
+    association :part, factory: :wire, strategy: :build
   end
 end

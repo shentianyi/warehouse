@@ -3,6 +3,7 @@ class MovableState
   WAY = 1
   ARRIVED = 2
 
+  # get pre states of a specific state
   def self.pre_states(to)
     case to
       when INIT

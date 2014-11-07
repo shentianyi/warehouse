@@ -8,5 +8,9 @@ class Part < ActiveRecord::Base
   has_many :positions, :through => :part_positions
   has_many :packages
 
-  has_many :containers, :as => :containable
+  has_many :containers
+
+  def self.exists?(id)
+   !Part.find_by_id(id).nil?
+  end
 end

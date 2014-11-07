@@ -8,7 +8,8 @@ class Container< ActiveRecord::Base
 
   belongs_to :user
   belongs_to :location
-  belongs_to :containable, :polymorphic=>true
+  belongs_to :part
+  has_many :location_containers
 
   after_initialize :init_container_type
 
@@ -20,5 +21,4 @@ class Container< ActiveRecord::Base
     self.custom_id = self.send(:generate_id) if self.custom_id.nil? && self.respond_to?(:generate_id)
     self.id = SecureRandom.uuid
   end
-
 end

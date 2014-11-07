@@ -6,7 +6,7 @@ module V1
     #strong parameters
     helpers do
       def package_params
-        ActionController::Parameters.new(params).require(:package).permit(:id,:part_id,:quantity_str,:check_in_time,:user_id)
+        ActionController::Parameters.new(params).require(:package).permit(:id, :custom_id, :part_id, :quantity, :fifo_time, :user_id)
       end
     end
 
@@ -35,9 +35,9 @@ module V1
     post :validate do
       result = PackageService.valid_id?(params[:id])
       if result
-        {result:1, content: ''}
+        {result: 1, content: ''}
       else
-        {result:0, content: PackageMessage::IdNotValid}
+        {result: 0, content: PackageMessage::IdNotValid}
       end
     end
 
@@ -45,9 +45,9 @@ module V1
     post :validate_quantity do
       result = true #PackageService.quantity_string_valid?(params[:id])
       if result
-        {result:1, content:''}
+        {result: 1, content: ''}
       else
-        {result:0, content: PackageMessage::QuantityStringError}
+        {result: 0, content: PackageMessage::QuantityStringError}
       end
     end
 
@@ -56,22 +56,17 @@ module V1
     # else create new
     post do
       # every package has a uniq id,id should not exited
-      #puts params
-      m = PackageService.create package_params,current_user
-      if m.result
-        {result:1,content:PackagePresenter.new(m.object).to_json_simple}
-      else
-        {result:0,content:m.content}
-      end
+      m = PackageService.create package_params, (package_params.has_key?(:user_id) ? User.find_by_id(package_params[:user_id]) : current_user)
+      m.result ? {result: 1, content: PackagePresenter.new(m.object).to_json_simple} : {result: 0, content: m.content}
     end
 
     # update package
     put do
       msg = PackageService.update(package_params)
       if msg.result
-        {result:1,content:PackagePresenter.new(msg.object).to_json}
+        {result: 1, content: PackagePresenter.new(msg.object).to_json}
       else
-        {result:0,content:msg.content}
+        {result: 0, content: msg.content}
       end
     end
 
@@ -80,9 +75,9 @@ module V1
     delete do
       msg = PackageService.delete(params[:id])
       if msg.result
-        {result:1,content:PackageMessage::DeleteSuccess}
+        {result: 1, content: PackageMessage::DeleteSuccess}
       else
-        {result:0,content:msg.content}
+        {result: 0, content: msg.content}
       end
     end
 
@@ -90,9 +85,9 @@ module V1
     post :check do
       msg = PackageService.check(params[:id])
       if msg.result
-        {result:1,content:msg.content}
+        {result: 1, content: msg.content}
       else
-        {result:0,content:msg.content}
+        {result: 0, content: msg.content}
       end
     end
 
@@ -100,9 +95,9 @@ module V1
     post :uncheck do
       msg = PackageService.uncheck(params[:id])
       if msg.result
-        {result:1,content:msg.content}
+        {result: 1, content: msg.content}
       else
-        {result:0,content:msg.content}
+        {result: 0, content: msg.content}
       end
     end
   end

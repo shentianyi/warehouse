@@ -3,43 +3,41 @@ class PackageService
   #=============
   #create @args,@current_user=nil
   #=============
-  def self.create args, current_user=nil
-
-    msg = Message.new(content: [])
-    msg.result = false
-
-    unless valid_id? args[:id]
+  def self.create args, user
+    msg = Message.new
+    unless Package.custom_id_valid? args[:custom_id]
       msg.content = PackageMessage::IdNotValid
       return msg
     end
 
     #current_user
-    unless args.has_key?(:user_id)
-      args[:user_id] = current_user.id
-      args[:location_id] = current_user.location_id if current_user.location_id
+    unless user.nil?
+      args[:user_id] = user.id
+      args[:location_id] = user.location_id
+    else
+      if user=User.find_by_id(args[:user_id])
+        args[:location_id]=user.location_id
+      end
     end
 
     #part_id
-    unless part_exit?(args[:part_id])
+    unless Part.exists?(args[:part_id])
       #err_code 10001
       msg.content = PackageMessage::PartNotExit
       return msg
     end
 
     #create
-    args[:quantity]=args[:quantity_str]
     p = Package.new(args)
-    #l=p.user.location
-    #p.positionable_type=l.name
-    #p.positionable_id=l.id
+
     ActiveRecord::Base.transaction do
       if p.save
-        lc=p.location_containers.build(location_id:p.location_id,user_id:p.user_id)
+        lc=p.location_containers.build(location_id: p.location_id, user_id: p.user_id)
         lc.save
         msg.result = true
         msg.object = p
       else
-        msg.content << p.errors.full_messages
+        msg.content = p.errors.full_messages
       end
     end
     return msg
@@ -87,7 +85,7 @@ class PackageService
       return msg
     end
 
-    unless part_exit?(args[:part_id])
+    unless Part.exists?(args[:part_id])
       msg.content = PackageMessage::PartNotExit
       return msg
     end
@@ -233,27 +231,5 @@ class PackageService
     msg.content = PackageMessage::CancelCheckSuccess
     return msg
   end
-
-#=============
-#valid_id? @id
-#validate package id's format
-#=============
-  def self.valid_id?(id)
-    if id
-      Package.unscoped.where(id: id).first.nil?
-    else
-      false
-    end
-  end
-
-#=============
-#filt_quantity? @quantity_str
-#filt quantity_str
-#=============
-
-  def self.part_exit?(part_id)
-    !Part.find_by_id(part_id).nil?
-  end
-
 
 end

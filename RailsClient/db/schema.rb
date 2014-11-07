@@ -54,7 +54,7 @@ ActiveRecord::Schema.define(version: 20141107041854) do
   add_index "attachments", ["id"], name: "index_attachments_on_id", using: :btree
 
   create_table "containers", force: true do |t|
-    t.string   "custom_id",        limit: 36,                 null: false
+    t.string   "custom_id",   limit: 36,                 null: false
     t.integer  "type"
     t.float    "quantity"
     t.integer  "state"
@@ -62,21 +62,19 @@ ActiveRecord::Schema.define(version: 20141107041854) do
     t.string   "user_id"
     t.datetime "fifo_time"
     t.string   "remark"
-    t.string   "containable_id"
-    t.string   "containable_type"
-    t.boolean  "is_delete",                   default: false
-    t.boolean  "is_dirty",                    default: true
-    t.boolean  "is_new",                      default: true
+    t.string   "part_id"
+    t.boolean  "is_delete",              default: false
+    t.boolean  "is_dirty",               default: true
+    t.boolean  "is_new",                 default: true
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "containers", ["containable_id"], name: "index_containers_on_containable_id", using: :btree
-  add_index "containers", ["containable_type"], name: "index_containers_on_containable_type", using: :btree
   add_index "containers", ["custom_id"], name: "index_containers_on_custom_id", using: :btree
   add_index "containers", ["id"], name: "index_containers_on_id", using: :btree
   add_index "containers", ["is_delete"], name: "index_containers_on_is_delete", using: :btree
   add_index "containers", ["location_id"], name: "index_containers_on_location_id", using: :btree
+  add_index "containers", ["part_id"], name: "index_containers_on_part_id", using: :btree
   add_index "containers", ["type"], name: "index_containers_on_type", using: :btree
   add_index "containers", ["user_id"], name: "index_containers_on_user_id", using: :btree
 

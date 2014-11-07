@@ -11,8 +11,7 @@ class CreateContainers < ActiveRecord::Migration
       t.timestamp :fifo_time
       t.string :remark
 
-      t.string :containable_id
-      t.string :containable_type
+      t.string :part_id
       #
       t.boolean :is_delete, :default => false
       t.boolean :is_dirty, :default => true
@@ -27,8 +26,7 @@ class CreateContainers < ActiveRecord::Migration
     add_index :containers, :user_id
     add_index :containers, :type
     add_index :containers, :is_delete
-    add_index :containers, :containable_id
-    add_index :containers, :containable_type
+    add_index :containers, :part_id
 
     execute 'ALTER TABLE containers ADD PRIMARY KEY (id)'
   end

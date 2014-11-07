@@ -2,6 +2,10 @@ class Package<Container
   default_scope { where(type: ContainerType::Package) }
 
 
+  def self.custom_id_valid?(custom_id)
+    Package.unscoped.where(custom_id: custom_id, type: ContainerType::Package).first.nil?
+  end
+
   def custom_fifo_time=(value)
     @custom_fifo_time = value
     self.fifo_time=Date.strptime(self.check_in_time, '%d.%m.%y') unless @custom_fifo_time.nil?
