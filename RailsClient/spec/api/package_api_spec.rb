@@ -22,11 +22,15 @@ describe V1::PackageAPI do
     end
   end
 
-  describe "POST /api/v1/packages/validate" do
+  describe "Bind package" do
     it "should get valid id" do
       post "/api/v1/packages/validate",{id:"WI110"}
-      puts JSON.parse(response.body)
       expect(JSON.parse(response.body)).to eq({"result" => 1,"content" => ""})
+    end
+
+    it "should create package successfully" do
+      post "/api/v1/packages" ,{package:{id:"WI001",part_id:@part.id,quantity_str:"Q100.00",check_in_time:"W10 12"}}
+      expect(JSON.parse(response.body)).to eq(1)
     end
   end
 end
