@@ -6,4 +6,8 @@ module AuthHelpers
   def logout
     delete '/api/v1/users/logout'
   end
+
+  def json
+    @json ||= JSON.parse(response.body)
+  end
 end
