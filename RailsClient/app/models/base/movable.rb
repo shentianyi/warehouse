@@ -1,8 +1,8 @@
 module Movable
   #include this module to your Model,make sure you have column below
-  attr_accessor :current_location_id,:destination_id,:sender_id,:receiver_id,:delivery_date,:received_date,:state
+  # :current_location_id,:destination_id,:sender_id,:receiver_id,:delivery_date,:received_date,:state
 
-  def send(destination_id,sender_id = nil)
+  def set_out(destination_id,sender_id = nil)
     state_switch_to(MovableState::WAY)
 
     self.destination_id = destination_id

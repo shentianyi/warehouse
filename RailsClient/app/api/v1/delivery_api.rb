@@ -76,9 +76,11 @@ module V1
       end
     end
 
+    # fake_send
+
     # send delivery
     post :send do
-      mgs = ApiMessage.new
+      msg = ApiMessage.new
 
       unless d = Delivery.find_by_id(params[:id])
         msg.set_false(DeliveryMessage::NotExit)
@@ -88,6 +90,10 @@ module V1
       #if (d = DeliveryService.exit?(params[:id])).nil?
       #  return {result:0,content:DeliveryMessage::NotExit}
       #end
+
+      #需要活的当前Delivery对应的location container
+      #然后检查Delivery以及location container的状态
+
 
       if !DeliveryState.can_update?(d.state)
         msg.set_false(DeliveryMessage::CannotUpdate)
