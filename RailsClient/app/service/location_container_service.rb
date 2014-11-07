@@ -31,8 +31,8 @@ class LocationContainerService
       end
 
       lc.arrive(receiver_id)
-
 =begin
+
       lc.children.each do |c|
         arrive(c)
       end
