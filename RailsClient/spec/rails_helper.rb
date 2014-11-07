@@ -30,7 +30,7 @@ RSpec.configure do |config|
     DatabaseCleaner.clean_with(:truncation)
     begin
       DatabaseCleaner.start
-      FactoryGirl.lint
+      # FactoryGirl.lint
     ensure
       DatabaseCleaner.clean
     end
@@ -60,5 +60,4 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 
   config.include RSpec::Rails::RequestExampleGroup, type: :request, file_path: /spec\/api/
-
 end

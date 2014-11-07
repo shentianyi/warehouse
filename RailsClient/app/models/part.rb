@@ -8,15 +8,5 @@ class Part < ActiveRecord::Base
   has_many :positions, :through => :part_positions
   has_many :packages
 
-  # validate part id existance
-  # delete ,no use tesla at 2014-7-21
-=begin
-  def self.validate_id id
-    unless find_by_id(id)
-      false
-    else
-      true
-    end
-  end
-=end
+  has_many :containers, :as => :containable
 end

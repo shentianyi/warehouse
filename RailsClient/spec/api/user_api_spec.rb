@@ -5,7 +5,7 @@ describe V1::UserAPI do
     @user = create(:user)
   end
 
-  describe 'POST /api/v1/users/sign_in' do
+  describe 'sign_in' do
     it 'returns true' do
       post '/api/v1/users/login',{user:{id:@user.id,password:'1111'}}
       expect(response.status).to eq(201)

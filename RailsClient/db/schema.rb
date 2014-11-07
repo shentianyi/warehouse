@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141107024539) do
+ActiveRecord::Schema.define(version: 20141107041854) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -52,6 +52,33 @@ ActiveRecord::Schema.define(version: 20141107024539) do
   add_index "attachments", ["attachable_id"], name: "index_attachments_on_attachable_id", using: :btree
   add_index "attachments", ["attachable_type"], name: "index_attachments_on_attachable_type", using: :btree
   add_index "attachments", ["id"], name: "index_attachments_on_id", using: :btree
+
+  create_table "containers", force: true do |t|
+    t.string   "custom_id",        limit: 36,                 null: false
+    t.integer  "type"
+    t.float    "quantity"
+    t.integer  "state"
+    t.string   "location_id"
+    t.string   "user_id"
+    t.datetime "fifo_time"
+    t.string   "remark"
+    t.string   "containable_id"
+    t.string   "containable_type"
+    t.boolean  "is_delete",                   default: false
+    t.boolean  "is_dirty",                    default: true
+    t.boolean  "is_new",                      default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "containers", ["containable_id"], name: "index_containers_on_containable_id", using: :btree
+  add_index "containers", ["containable_type"], name: "index_containers_on_containable_type", using: :btree
+  add_index "containers", ["custom_id"], name: "index_containers_on_custom_id", using: :btree
+  add_index "containers", ["id"], name: "index_containers_on_id", using: :btree
+  add_index "containers", ["is_delete"], name: "index_containers_on_is_delete", using: :btree
+  add_index "containers", ["location_id"], name: "index_containers_on_location_id", using: :btree
+  add_index "containers", ["type"], name: "index_containers_on_type", using: :btree
+  add_index "containers", ["user_id"], name: "index_containers_on_user_id", using: :btree
 
   create_table "deliveries", force: true do |t|
     t.string   "uuid",           limit: 36,                 null: false
@@ -129,10 +156,9 @@ ActiveRecord::Schema.define(version: 20141107024539) do
   add_index "leds", ["signal_id"], name: "index_leds_on_signal_id", using: :btree
 
   create_table "location_containers", force: true do |t|
-    t.string   "containerable_type"
-    t.string   "containerable_id"
     t.string   "location_id"
     t.string   "user_id"
+    t.string   "container_id"
     t.boolean  "is_delete",           default: false
     t.boolean  "is_dirty",            default: true
     t.boolean  "is_new",              default: true
@@ -147,8 +173,7 @@ ActiveRecord::Schema.define(version: 20141107024539) do
     t.datetime "received_date"
   end
 
-  add_index "location_containers", ["containerable_id"], name: "index_location_containers_on_containerable_id", using: :btree
-  add_index "location_containers", ["containerable_type"], name: "index_location_containers_on_containerable_type", using: :btree
+  add_index "location_containers", ["container_id"], name: "index_location_containers_on_container_id", using: :btree
   add_index "location_containers", ["current_location_id"], name: "index_location_containers_on_current_location_id", using: :btree
   add_index "location_containers", ["destination_id"], name: "index_location_containers_on_destination_id", using: :btree
   add_index "location_containers", ["id"], name: "index_location_containers_on_id", using: :btree
