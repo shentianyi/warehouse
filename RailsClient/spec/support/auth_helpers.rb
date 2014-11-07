@@ -3,7 +3,7 @@ module AuthHelpers
     post '/api/v1/users/login',{user:{id:user.id,password:'1111'}}
   end
 
-  def logout(user)
+  def logout
     delete '/api/v1/users/logout'
   end
 end

@@ -7,7 +7,7 @@ describe V1::PackageAPI do
   end
 
   after(:each) do
-    logout(@user)
+    logout
   end
 
   describe "GET /api/v1/packages/binds " do
