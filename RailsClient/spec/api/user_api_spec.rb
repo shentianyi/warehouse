@@ -12,4 +12,5 @@ describe V1::UserAPI do
       expect(JSON.parse(response.body)['result']).to eq(1)
     end
   end
+
 end
