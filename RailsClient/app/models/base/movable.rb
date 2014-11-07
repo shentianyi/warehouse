@@ -26,11 +26,19 @@ module Movable
   end
 
   def state_switch_to state
-    if MovableState.pre_states(state).include? self.state
+    if MovableState.pre_states(state).include? self.get_state
       self.state = state
       true
     else
       false
+    end
+  end
+
+  def get_state
+    if self.respond_to?(:base_state)
+      self.base_state(self.state)
+    else
+      self.state
     end
   end
 end
