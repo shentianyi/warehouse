@@ -1,5 +1,5 @@
 class PackagePresenter<Presenter
-  Delegators=[:id, :part_id, :quantity, :custom_fifo_time, :user_id, :location_id, :state, :package_position, :position]
+  Delegators=[:id,:custom_id, :part_id, :quantity, :custom_fifo_time, :user_id, :location_id, :state, :package_position, :position]
   def_delegators :@package, *Delegators
 
   def initialize(package)
@@ -18,6 +18,7 @@ class PackagePresenter<Presenter
   def to_json
     {
         id: self.id,
+        custome_id:self.custom_id,
         quantity_str: PackageLabelRegex.quantity_prefix_string+self.quantity.to_s,
         part_id: PackageLabelRegex.part_prefix_string+self.part_id,
         quantity: self.quantity,
@@ -32,6 +33,7 @@ class PackagePresenter<Presenter
   def to_json_simple
     {
         id: self.id,
+        custome_id:self.custom_id,
         quantity_str: PackageLabelRegex.quantity_prefix_string+self.quantity.to_s,
         part_id: PackageLabelRegex.part_prefix_string+self.part_id,
         quantity: self.quantity,

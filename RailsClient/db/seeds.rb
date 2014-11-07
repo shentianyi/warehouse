@@ -15,7 +15,7 @@ ActiveRecord::Base.transaction do
   l = Location.create({id: 'Basic', name: 'Basic Location', is_base: true}) unless (l=Location.find_by_id('Basic'))
 
   whouse=Whouse.new(id: 'TransWhouse', name: '在途库')
-  whouse.location=Location.find('Basic')
+  whouse.location=Location.find_by_id('Basic')
   whouse.save
   unless user=User.find_by_id('admin')
     user = User.create({id: 'admin', name: 'Admin', location_id: l.id, password: '123456@', password_confirmation: '123456@', role_id: 100, is_sys: true})

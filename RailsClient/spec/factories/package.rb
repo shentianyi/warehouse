@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :p1, class: Package do
-    custom_id 'p1'
+    custom_id 1
     quantity 1000
     user_id 1
     check_in_time '23.03.14'
@@ -8,7 +8,7 @@ FactoryGirl.define do
   end
 
   factory :p2, class: Package do
-    custom_id 'p2'
+    custom_id 2
     quantity 1000
     user_id 1
     check_in_time '21.03.14'
@@ -16,7 +16,7 @@ FactoryGirl.define do
   end
 
   factory :p3, class: Package do
-    custom_id 'p3'
+    custom_id 3
     quantity 1000
     user_id 1
     check_in_time '29.03.14'
