@@ -5,7 +5,7 @@ class PackageService
   #=============
   def self.create args, user
     msg = Message.new
-    unless Package.custom_id_valid? args[:custom_id]
+    unless Package.id_valid? args[:custom_id]
       msg.content = PackageMessage::IdNotValid
       return msg
     end
@@ -160,9 +160,8 @@ class PackageService
 #=============
   def self.check id
     msg = Message.new
-    msg.result = false
 
-    package = exits? id
+    package = Package.find_by_id(id)
     if package.nil?
       msg.content = PackageMessage::NotExit
       return msg
@@ -196,9 +195,8 @@ class PackageService
 #=============
   def self.uncheck id
     msg = Message.new
-    msg.result = false
 
-    package = exits? id
+    package = Package.find_by_id id
     if package.nil?
       msg.content = PackageMessage::NotExit
       return msg

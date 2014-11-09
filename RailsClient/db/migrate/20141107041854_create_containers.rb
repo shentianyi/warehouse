@@ -2,7 +2,7 @@ class CreateContainers < ActiveRecord::Migration
   def up
     create_table :containers, :id => false do |t|
       t.string :id, :limit => 36, :primary => true, :null => false
-      t.string :custom_id, :limit => 36, :null => false
+      t.string :custom_id, :limit => 36#, :null => false
       t.integer :type
       t.float :quantity
       t.integer :state

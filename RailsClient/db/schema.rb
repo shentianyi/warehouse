@@ -54,7 +54,7 @@ ActiveRecord::Schema.define(version: 20141107041854) do
   add_index "attachments", ["id"], name: "index_attachments_on_id", using: :btree
 
   create_table "containers", force: true do |t|
-    t.string   "custom_id",   limit: 36,                 null: false
+    t.string   "custom_id",   limit: 36
     t.integer  "type"
     t.float    "quantity"
     t.integer  "state"

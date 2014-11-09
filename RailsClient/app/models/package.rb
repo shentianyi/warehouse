@@ -1,9 +1,12 @@
 class Package<Container
   default_scope { where(type: ContainerType::Package) }
 
+  def self.id_valid?(id)
+    Package.unscoped.where(id: id, type: ContainerType::Package).first.nil?
+  end
 
-  def self.custom_id_valid?(custom_id)
-    Package.unscoped.where(custom_id: custom_id, type: ContainerType::Package).first.nil?
+  def self.exists?(id)
+    self.find_by_id(id)
   end
 
   def custom_fifo_time=(value)
@@ -15,6 +18,18 @@ class Package<Container
     @custom_fifo_time || (self.fifo_time.strftime('%d.%m.%y') unless self.fifo_time.nil?)
   end
 
+  def custom_quantity=(value)
+    @custom_quantity=value
+    self.quantity=@custom_quantity
+  end
+
+  def custom_quantity
+    self.quantity.to_s
+  end
+
+
   alias_method :check_in_time=, :custom_fifo_time=
   alias_method :check_in_time, :custom_fifo_time
+  alias_method :quantity_str=, :custom_quantity=
+  alias_method :quantity_str, :custom_quantity
 end
