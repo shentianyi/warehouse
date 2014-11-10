@@ -11,7 +11,7 @@ class Package<Container
 
   def custom_fifo_time=(value)
     @custom_fifo_time = value
-    self.fifo_time=Date.strptime(self.check_in_time, '%d.%m.%y') unless @custom_fifo_time.nil?
+    self.fifo_time=Date.strptime(@custom_fifo_time, '%d.%m.%y') unless @custom_fifo_time.nil?
   end
 
   def custom_fifo_time

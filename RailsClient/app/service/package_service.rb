@@ -5,19 +5,9 @@ class PackageService
   #=============
   def self.create args, user
     msg = Message.new
-    unless Package.id_valid? args[:custom_id]
+    unless Package.id_valid? args[:id]
       msg.content = PackageMessage::IdNotValid
       return msg
-    end
-
-    #current_user
-    unless user.nil?
-      args[:user_id] = user.id
-      args[:location_id] = user.location_id
-    else
-      if user=User.find_by_id(args[:user_id])
-        args[:location_id]=user.location_id
-      end
     end
 
     #part_id
@@ -29,10 +19,14 @@ class PackageService
 
     #create
     p = Package.new(args)
+    p.user_id=user.id
+    p.location_id=user.location_id
 
     ActiveRecord::Base.transaction do
       if p.save
         lc=p.location_containers.build(location_id: p.location_id, user_id: p.user_id)
+        lc.current_positionable_id=lc.sourceable_id=p.location_id
+        lc.current_positionable_type=lc.sourceable_type=Location.name
         lc.save
         msg.result = true
         msg.object = p
