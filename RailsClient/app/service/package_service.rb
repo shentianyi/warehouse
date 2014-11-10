@@ -10,16 +10,6 @@ class PackageService
       return msg
     end
 
-    #current_user
-    unless user.nil?
-      args[:user_id] = user.id
-      args[:location_id] = user.location_id
-    else
-      if user=User.find_by_id(args[:user_id])
-        args[:location_id]=user.location_id
-      end
-    end
-
     #part_id
     unless Part.exists?(args[:part_id])
       #err_code 10001
@@ -29,6 +19,8 @@ class PackageService
 
     #create
     p = Package.new(args)
+    p.user_id=user.id
+    p.location_id=user.location_id
 
     ActiveRecord::Base.transaction do
       if p.save

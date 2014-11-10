@@ -157,6 +157,7 @@ ActiveRecord::Schema.define(version: 20141107041854) do
     t.string   "location_id"
     t.string   "user_id"
     t.string   "container_id"
+    t.string   "remark"
     t.boolean  "is_delete",                 default: false
     t.boolean  "is_dirty",                  default: true
     t.boolean  "is_new",                    default: true

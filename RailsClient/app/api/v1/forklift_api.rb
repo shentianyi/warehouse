@@ -28,9 +28,13 @@ module V1
 
     # create forklift
     post do
-      args=package_params
-      args[:user_id]=args[:stocker_id]
-      user=args[:user_id].blank? ?   current_user : User.find_by_id(args[:user_id])
+      args=forklift_params
+      args[:user_id]=args[:stocker_id] unless args[:stocker_id].blank?
+      args.delete(:stocker_id)
+      args[:destinationable_id] = args[:whouse_id]
+      args.delete(:whouse_id)
+
+      user=args[:user_id].blank? ?  current_user : User.find_by_id(args[:user_id])
       msg = ForkliftService.create(args, user)
       msg.result ? {result: 1, content: ForkliftPresenter.new(msg.object).to_json} : {result: 0, content: msg.content}
     end

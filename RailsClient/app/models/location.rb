@@ -8,7 +8,7 @@ class Location < ActiveRecord::Base
 
   has_many :current_containers, as: :current_positionable, class_name: 'LocationContainer'
   has_many :source_containers, as: :sourceable, class_name: 'LocationContainer'
-  has_many :destination_containers, as: :desitinationalbe, class_name: 'LocationContainer'
+  has_many :destination_containers, as: :destinationable, class_name: 'LocationContainer'
 
   def self.default_destination
     if d = Location.where(location_type: LocationType::DESTINATION).first
