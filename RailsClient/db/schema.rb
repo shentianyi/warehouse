@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141107041854) do
+ActiveRecord::Schema.define(version: 20141110110437) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -153,6 +153,15 @@ ActiveRecord::Schema.define(version: 20141107041854) do
   add_index "leds", ["position"], name: "index_leds_on_position", using: :btree
   add_index "leds", ["signal_id"], name: "index_leds_on_signal_id", using: :btree
 
+  create_table "location_container_hierarchies", id: false, force: true do |t|
+    t.string  "ancestor_id",   null: false
+    t.string  "descendant_id", null: false
+    t.integer "generations",   null: false
+  end
+
+  add_index "location_container_hierarchies", ["ancestor_id", "descendant_id", "generations"], name: "anc_desc_idx", unique: true, using: :btree
+  add_index "location_container_hierarchies", ["descendant_id"], name: "desc_idx", using: :btree
+
   create_table "location_containers", force: true do |t|
     t.string   "location_id"
     t.string   "user_id"
@@ -174,6 +183,7 @@ ActiveRecord::Schema.define(version: 20141107041854) do
     t.string   "receiver_id"
     t.datetime "delivery_date"
     t.datetime "received_date"
+    t.string   "parent_id"
   end
 
   add_index "location_containers", ["container_id"], name: "index_location_containers_on_container_id", using: :btree

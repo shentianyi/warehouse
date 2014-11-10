@@ -29,15 +29,15 @@ module V1
     # create forklift
     post do
       args=forklift_params
-      args[:user_id]=args[:stocker_id] unless args[:stocker_id].blank?
       args.delete(:stocker_id)
       args[:destinationable_id] = args[:whouse_id]
       args.delete(:whouse_id)
 
-      user=args[:user_id].blank? ?  current_user : User.find_by_id(args[:user_id])
-      msg = ForkliftService.create(args, user)
+      msg = ForkliftService.create(args, current_user)
       msg.result ? {result: 1, content: ForkliftPresenter.new(msg.object).to_json} : {result: 0, content: msg.content}
     end
+
+
 
     # check package
     post :check_package do
@@ -70,7 +70,7 @@ module V1
 
     # add package
     post :add_package do
-      unless f = ForkliftService.exits?(params[:forklift_id])
+      unless f = Forklift.exists?(params[:forklift_id])
         return {result: 0, content: {message: ForkliftMessage::NotExit}}
       end
 
@@ -85,7 +85,6 @@ module V1
           quantity_str: params[:quantity_str],
           check_in_time: params[:check_in_time]
       }
-      args[:user_id] = params[:user_id] if params.has_key?(:user_id)
 
       res = PackageService.create(args, current_user)
       if res.result

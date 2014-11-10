@@ -1,14 +1,14 @@
 class ForkliftPresenter<Presenter
-  Delegators=[:id, :destinationalbe, :created_at, :state, :user_id]
+  Delegators=[:id,:container_id, :destinationable, :created_at, :state, :user_id]
   def_delegators :@forklift, *Delegators
 
-  def initialize(forklift)
-    @forklift=forklift
+  def initialize(forklift_lc)
+    @forklift=forklift_lc
     self.delegators = Delegators
   end
 
-  def destinationalbe_name
-    @forklift.destinationalbe.blank? ? '' : @forklift.destinationalbe.name
+  def destinationable_name
+    @forklift.destinationabe.blank? ? '' : @forklift.destinationable.name
   end
 
   def created_at
@@ -38,11 +38,11 @@ class ForkliftPresenter<Presenter
 
   def to_json
     {
-        id: self.id,
+        id: self.container_id,
         created_at: self.created_at,
         user_id: self.user_id,
         stocker_id: self.user_id,
-        whouse_id: self.destinationalbe
+        whouse_id: self.destinationable.name
         # sum_packages: self.sum_packages,
         # accepted_packages: self.accepted_packages
     }
@@ -50,11 +50,11 @@ class ForkliftPresenter<Presenter
 
   def to_json_with_packages
     {
-        id: self.id.to_s,
+        id: self.container_id,
         created_at: self.created_at,
         user_id: self.user_id,
         stocker_id: self.user_id,
-        whouse_id: self.destinationalbe
+        whouse_id: self.destinationable_name
         # sum_packages: self.sum_packages.to_s,
         # accepted_packages: self.accepted_packages.to_s,
         # packages: self.all_packages
