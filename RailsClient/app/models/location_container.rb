@@ -10,5 +10,6 @@ class LocationContainer < ActiveRecord::Base
   belongs_to :location
 
   has_many :movable_records, :as => :movable
+  has_many :action_records, :as => :actionable
 
 end
