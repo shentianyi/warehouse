@@ -33,8 +33,7 @@ module V1
 
     # validate package id
     post :validate do
-      result = PackageService.valid_id?(params[:id])
-      if result
+      if Package.id_valid?(params[:id])
         {result: 1, content: ''}
       else
         {result: 0, content: PackageMessage::IdNotValid}
@@ -57,7 +56,7 @@ module V1
     post do
       args=package_params
       # every package has a uniq id,id should not exited
-      user=args.has_key?(:user_id) ? User.find_by_id(args[:user_id]) : current_user
+      user=args[:user_id].blank? ?   current_user : User.find_by_id(args[:user_id])
       m = PackageService.create args,user
       m.result ? {result: 1, content: PackagePresenter.new(m.object).to_json_simple} : {result: 0, content: m.content}
     end

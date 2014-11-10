@@ -1,24 +1,35 @@
 class ForkliftService
 
-  def self.create args, current_usr=nil
+  def self.create args, user
     msg = Message.new
-    msg.result = false
-    unless whouse_exits? args[:whouse_id]
+    unless whouse=Whouse.find_by_id(args[:whouse_id])
       msg.content = ForkliftMessage::WarehouseNotExit
       return msg
     end
 
-    if current_usr
-      args[:user_id] = current_usr.id
+    unless user.nil?
+      args[:user_id] = user.id
+      args[:location_id] = user.location_id
+    else
+      if user=User.find_by_id(args[:user_id])
+        args[:location_id]=user.location_id
+      end
     end
 
     forklift = Forklift.new(args)
+    ActiveRecord::Base.transaction do
+      if forklift.save
+        lc=forklift.location_containers.build(location_id: forklift.location_id, user_id: forklift.user_id)
+        lc.current_positionable_id=lc.sourceable_id=forklift.location_id
+        lc.current_positionable_type=lc.sourceable_type=Location.name
+        lc.desitinationalbe=whouse
+        lc.save
 
-    if forklift.save
-      msg.result = true
-      msg.object = forklift
-    else
-      msg.content = forklift.errors.full_messages
+        msg.result=true
+        msg.object = forklift
+      else
+        msg.content = forklift.errors.full_messages
+      end
     end
     return msg
   end
@@ -85,7 +96,7 @@ class ForkliftService
   #verify package
   #check if parts in this warehouse
   #=============
-  def self.parts_in_whouse? part_ids,whouse_id
+  def self.parts_in_whouse? part_ids, whouse_id
     unless whouse = Whouse.find_by_id(whouse_id)
       return false
     end
@@ -154,13 +165,13 @@ class ForkliftService
       begin
         ActiveRecord::Base.transaction do
           #package.forklift_id = forklift.id
-          package.update({forklift_id:forklift.id})
+          package.update({forklift_id: forklift.id})
           package.set_position
           puts '~~~~~~~~~~~~~~~~~~~~~~'
           puts package.package_position.to_json
           true
         end
-      rescue Exception=>ex
+      rescue Exception => ex
         msg.result = false
       end
     else
@@ -169,8 +180,8 @@ class ForkliftService
     return msg
   end
 
-  def self.check_part_position(part,whouse_id)
-    if part.positions.where(whouse_id:f.whouse_id).count > 0 || part.positions.count == 0
+  def self.check_part_position(part, whouse_id)
+    if part.positions.where(whouse_id: f.whouse_id).count > 0 || part.positions.count == 0
       true
     else
       false
@@ -229,7 +240,4 @@ class ForkliftService
     Forklift.where(args).order(id: :desc)
   end
 
-  def self.whouse_exits?(whouse_id)
-    !Whouse.find_by_id(whouse_id).nil?
-  end
 end

@@ -28,27 +28,26 @@ module V1
 
     # create forklift
     post do
-      msg = ForkliftService.create(forklift_params, current_user)
-      if msg.result
-        {result: 1, content: ForkliftPresenter.new(msg.object).to_json}
-      else
-        {result: 0, content: msg.content}
-      end
+      args=package_params
+      args[:user_id]=args[:stocker_id]
+      user=args[:user_id].blank? ?   current_user : User.find_by_id(args[:user_id])
+      msg = ForkliftService.create(args, user)
+      msg.result ? {result: 1, content: ForkliftPresenter.new(msg.object).to_json} : {result: 0, content: msg.content}
     end
 
     # check package
     post :check_package do
       unless f = ForkliftService.exits?(params[:forklift_id])
-        return {result: 0, result_code: ResultCodeEnum::Failed,content: ForkliftMessage::NotExit}
+        return {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::NotExit}
       end
       unless ForkliftState.can_update?(f.state)
-        return {result: 0, result_code: ResultCodeEnum::Failed,content: ForkliftMessage::CannotUpdate}
+        return {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::CannotUpdate}
       end
       unless p = PackageService.exits?(params[:package_id])
-        return {result: 0, result_code: ResultCodeEnum::Failed,content: PackageMessage::NotExit}
+        return {result: 0, result_code: ResultCodeEnum::Failed, content: PackageMessage::NotExit}
       end
       unless p.forklift_id.nil?
-        return {result: 0, result_code: ResultCodeEnum::Failed,content:PackageMessage::InOtherForklift}
+        return {result: 0, result_code: ResultCodeEnum::Failed, content: PackageMessage::InOtherForklift}
       end
 
       if ForkliftService.add_package(f, p)
@@ -56,23 +55,23 @@ module V1
         puts p.position
         puts "------------------------------"
         unless p.position.nil?
-          {result: 1, result_code: ResultCodeEnum::Success,content: PackagePresenter.new(p).to_json}
+          {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(p).to_json}
         else
           {result: 1, result_code: ResultCodeEnum::TargetNotInPosition, content: PackagePresenter.new(p).to_json}
         end
       else
-        {result: 0,result_code: ResultCodeEnum::Failed, content: ForkliftMessage::AddPackageFailed}
+        {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::AddPackageFailed}
       end
     end
 
     # add package
     post :add_package do
       unless f = ForkliftService.exits?(params[:forklift_id])
-        return {result: 0, content: {message:ForkliftMessage::NotExit}}
+        return {result: 0, content: {message: ForkliftMessage::NotExit}}
       end
 
       unless ForkliftState.can_update?(f.state)
-        return {result: 0, content: {message:ForkliftMessage::CannotUpdate}}
+        return {result: 0, content: {message: ForkliftMessage::CannotUpdate}}
       end
 
       #create package
@@ -89,16 +88,16 @@ module V1
         p = res.object
         if ForkliftService.add_package(f, p)
           part = Part.find_by_id(params[:part_id])
-          if part.positions.where(whouse_id:f.whouse_id).count > 0 || part.positions.count == 0
-            {result: 1, result_code:ResultCodeEnum::Success, content: PackagePresenter.new(p).to_json}
+          if part.positions.where(whouse_id: f.whouse_id).count > 0 || part.positions.count == 0
+            {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(p).to_json}
           else
-            {result: 1,result_code:ResultCodeEnum::TargetNotInPosition, content:PackagePresenter.new(p).to_json}
+            {result: 1, result_code: ResultCodeEnum::TargetNotInPosition, content: PackagePresenter.new(p).to_json}
           end
         else
-          {result: 0,result_code:ResultCodeEnum::Failed, content: ForkliftMessage::AddPackageFailed }
+          {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::AddPackageFailed}
         end
       else
-        {result: 0, result_code:ResultCodeEnum::Failed, content: res.content}
+        {result: 0, result_code: ResultCodeEnum::Failed, content: res.content}
       end
     end
 
@@ -155,8 +154,8 @@ module V1
       end
 
       if forklift_params[:whouse_id]
-        unless ForkliftService.parts_in_whouse?(f.packages.collect { |p| p.part_id },forklift_params[:whouse_id])
-          return {return:0, content: ForkliftMessage::CannotUpdatePartsNotExistInWhouse}
+        unless ForkliftService.parts_in_whouse?(f.packages.collect { |p| p.part_id }, forklift_params[:whouse_id])
+          return {return: 0, content: ForkliftMessage::CannotUpdatePartsNotExistInWhouse}
         end
       end
 

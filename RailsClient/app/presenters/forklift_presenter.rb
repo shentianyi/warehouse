@@ -8,8 +8,8 @@ class ForkliftPresenter<Presenter
   end
 
   def whouse_name
-    if self.whouse
-      self.whouse.name
+    if self.desitinationalbe
+      self.desitinationalbe.name
     else
       ''
     end
