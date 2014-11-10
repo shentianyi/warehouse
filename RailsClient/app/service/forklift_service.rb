@@ -19,7 +19,7 @@ class ForkliftService
         lc.save
 
         msg.result=true
-        msg.object = forklift
+        msg.object = lc
       else
         msg.content = forklift.errors.full_messages
       end

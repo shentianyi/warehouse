@@ -56,8 +56,8 @@ module V1
     post do
       args=package_params
       # every package has a uniq id,id should not exited
-      user=args[:user_id].blank? ?   current_user : User.find_by_id(args[:user_id])
-      m = PackageService.create args,user
+      # user=args[:user_id].blank? ?   current_user : User.find_by_id(args[:user_id])
+      m = PackageService.create args,current_user
       m.result ? {result: 1, content: PackagePresenter.new(m.object).to_json_simple} : {result: 0, content: m.content}
     end
 

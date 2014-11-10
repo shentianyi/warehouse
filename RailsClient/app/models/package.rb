@@ -5,9 +5,6 @@ class Package<Container
     Package.unscoped.where(id: id, type: ContainerType::Package).first.nil?
   end
 
-  def self.exists?(id)
-    self.find_by_id(id)
-  end
 
   def custom_fifo_time=(value)
     @custom_fifo_time = value
