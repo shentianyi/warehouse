@@ -10,6 +10,9 @@ module CZ
         self.sourceable = source
         self.destinationable = destination
         MovableRecord.update_or_create(self, {'id' => sender_id, 'type' => ImplUserType::SENDER, 'action' => __method__.to_s})
+        true
+      else
+        false
       end
     end
 
@@ -17,18 +20,27 @@ module CZ
       if state_switch_to(MovableState::ARRIVED)
         self.current_positionable = self.destinationable
         MovableRecord.update_or_create(self, {'id' => receiver_id, 'type' => ImplUserType::RECEIVER, 'action' => __method__.to_s})
+        true
+      else
+        false
       end
     end
 
     def check(examiner_id)
       if state_switch_to(MovableState::CHECKED)
         MovableRecord.update_or_create(self, {'id' => examiner_id, 'type' => ImplUserType::EXAMINER, 'action' => __method__.to_s})
+        true
+      else
+        false
       end
     end
 
     def reject(rejector_id)
       if state_switch_to(MovableState::REJECTED)
         MovableRecord.update_or_create(self, {'id' => rejector_id, 'type' => ImplUserType::REJECTOR, 'action' => __method__.to_s})
+        true
+      else
+        false
       end
     end
 
