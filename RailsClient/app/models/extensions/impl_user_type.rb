@@ -1,4 +1,4 @@
-class ImplName
+class ImplUserType
   SENDER = 0
   RECEIVER = 1
   EXAMINER = 2
