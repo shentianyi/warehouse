@@ -1,6 +1,7 @@
 class LocationContainer < ActiveRecord::Base
   include Extensions::UUID
-  include Movable
+  include CZ::Movable
+  include CZ::State
   # has_ancestry
   acts_as_tree
   belongs_to :container

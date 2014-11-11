@@ -26,9 +26,9 @@ class MovableState
   def self.base(state)
     case state
       when INIT
-        CZBase::State::INIT
+        CZ::State::INIT
       else
-        CZBase::State::LOCK
+        CZ::State::LOCK
     end
   end
 end
