@@ -11,8 +11,6 @@ module CZ
         self.destination_id = destination_id
         self.sender_id = sender_id
         self.delivery_date = Time.now
-
-        ActionRecord.update_or_create(self, {id: sender_id, name: ImplName::SENDER, action: __method__.to_s})
       end
       #self.movable_records.create({destination_id: self.destination_id, state: self.state, action: __method__.to_s})
     end
@@ -22,19 +20,16 @@ module CZ
         self.current_location_id = self.destination_id
         self.receiver_id = receiver_id
         self.received_date = Time.now
-        ActionRecord.update_or_create(self, {id: receiver_id, name: ImplName::RECEIVER, action: __method__.to_s})
       end
     end
 
     def check(examiner_id)
       if state_switch_to(MovableState::CHECKED)
-        ActionRecord.update_or_create(self, {id: examiner_id, name: ImplName::EXAMINER, action: __method__.to_s})
       end
     end
 
     def reject(rejector_id)
       if state_switch_to(MovableState::REJECTED)
-        ActionRecord.update_or_create(self, {id: rejector_id, name: ImplName::REJECTOR, action: __method__.to_s})
       end
     end
 
