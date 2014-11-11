@@ -5,7 +5,6 @@ class Package<Container
     Package.unscoped.where(id: id, type: ContainerType::Package).first.nil?
   end
 
-
   def custom_fifo_time=(value)
     @custom_fifo_time = value
     self.fifo_time=Date.strptime(@custom_fifo_time, '%d.%m.%y') unless @custom_fifo_time.nil?

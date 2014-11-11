@@ -7,7 +7,7 @@ module Extensions
       default_scope { where(is_delete: false) }
       validates_uniqueness_of :id
       after_initialize :generate_uuid
-      after_initialize :set_timestamps
+      before_create :set_timestamps
       before_update :reset_dirty_flag
 
       def generate_uuid
@@ -28,6 +28,7 @@ module Extensions
       end
 
       def destroy
+        # self.send(:destroy_dependent, self.id) if self.respond_to?(:destroy_dependent)
         self.is_delete=true
         self.is_dirty=true
         self.save

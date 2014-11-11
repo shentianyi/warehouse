@@ -27,6 +27,8 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
+    ancestry (2.1.0)
+      activerecord (>= 3.0.0)
     arel (5.0.1.20140414130214)
     attr_required (1.0.0)
     axiom-types (0.1.1)
@@ -41,9 +43,6 @@ GEM
     builder (3.2.2)
     cancan (1.6.10)
     chronic (0.10.2)
-    closure_tree (5.1.1)
-      activerecord (>= 3.2.0)
-      with_advisory_lock (>= 3.0.0)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
     coffee-rails (4.0.1)
@@ -211,9 +210,6 @@ GEM
     whenever (0.9.4)
       chronic (>= 0.6.3)
     will_paginate (3.0.5)
-    with_advisory_lock (3.0.0)
-      activerecord (>= 3.2)
-      thread_safe
     yaml_db (0.3.0)
       rails (>= 3.0, < 4.3)
       rake (>= 0.8.7)
@@ -222,9 +218,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  ancestry
   axlsx
   cancan
-  closure_tree
   coffee-rails (~> 4.0.0)
   database_cleaner
   devise

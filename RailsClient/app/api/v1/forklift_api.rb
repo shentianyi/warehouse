@@ -37,35 +37,37 @@ module V1
       msg.result ? {result: 1, content: ForkliftPresenter.new(msg.object).to_json} : {result: 0, content: msg.content}
     end
 
-
-
     # check package
     post :check_package do
-      unless f = ForkliftService.exits?(params[:forklift_id])
-        return {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::NotExit}
-      end
-      unless ForkliftState.can_update?(f.state)
-        return {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::CannotUpdate}
-      end
-      unless p = PackageService.exits?(params[:package_id])
-        return {result: 0, result_code: ResultCodeEnum::Failed, content: PackageMessage::NotExit}
-      end
-      unless p.forklift_id.nil?
-        return {result: 0, result_code: ResultCodeEnum::Failed, content: PackageMessage::InOtherForklift}
-      end
-
-      if ForkliftService.add_package(f, p)
-        puts "------------------------------"
-        puts p.position
-        puts "------------------------------"
-        unless p.position.nil?
-          {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(p).to_json}
-        else
-          {result: 1, result_code: ResultCodeEnum::TargetNotInPosition, content: PackagePresenter.new(p).to_json}
-        end
-      else
-        {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::AddPackageFailed}
-      end
+      f=LocationContainer.find_latest_by_container_id(params[:id])
+      p=LocationContainer.find_latest_by_container_id(params[:package_id])
+      f.add(p)
+      # unless f = ForkliftService.exits?(params[:forklift_id])
+      #   return {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::NotExit}
+      # end
+      # unless ForkliftState.can_update?(f.state)
+      #   return {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::CannotUpdate}
+      # end
+      # unless p = PackageService.exits?(params[:package_id])
+      #   return {result: 0, result_code: ResultCodeEnum::Failed, content: PackageMessage::NotExit}
+      # end
+      # unless p.forklift_id.nil?
+      #   return {result: 0, result_code: ResultCodeEnum::Failed, content: PackageMessage::InOtherForklift}
+      # end
+      #
+      # if ForkliftService.add_package(f, p)
+      #   puts "------------------------------"
+      #   puts p.position
+      #   puts "------------------------------"
+      #   unless p.position.nil?
+      #     {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(p).to_json}
+      #   else
+      #     {result: 1, result_code: ResultCodeEnum::TargetNotInPosition, content: PackagePresenter.new(p).to_json}
+      #   end
+      # else
+      #   {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::AddPackageFailed}
+      # end
+      true
     end
 
     # add package

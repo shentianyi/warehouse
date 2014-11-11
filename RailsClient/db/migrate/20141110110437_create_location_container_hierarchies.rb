@@ -4,6 +4,13 @@ class CreateLocationContainerHierarchies < ActiveRecord::Migration
       t.string :ancestor_id, null: false
       t.string :descendant_id, null: false
       t.integer :generations, null: false
+
+      #
+      t.boolean :is_delete, :default => false
+      t.boolean :is_dirty, :default => true
+      t.boolean :is_new, :default => true
+      #
+      t.timestamps
     end
 
     add_index :location_container_hierarchies, [:ancestor_id, :descendant_id, :generations],

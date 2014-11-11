@@ -54,10 +54,10 @@ module V1
     # if find deleted then update(take care of foreign keys)
     # else create new
     post do
-      args=package_params
+      # args=package_params
       # every package has a uniq id,id should not exited
       # user=args[:user_id].blank? ?   current_user : User.find_by_id(args[:user_id])
-      m = PackageService.create args,current_user
+      m = PackageService.create package_params,current_user
       m.result ? {result: 1, content: PackagePresenter.new(m.object).to_json_simple} : {result: 0, content: m.content}
     end
 

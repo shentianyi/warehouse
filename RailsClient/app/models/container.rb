@@ -8,16 +8,20 @@ class Container< ActiveRecord::Base
   belongs_to :user
   belongs_to :location
   belongs_to :part
-  has_many :location_containers
+  has_many :location_containers, :dependent => :destroy
 
   after_initialize :init_container_attr
 
   def init_container_attr
+    self.save
     self.type=ContainerType.get_type(self.class.name)
   end
 
-
   def self.exists?(id)
     self.find_by_id(id)
+  end
+
+  def destroy_dependent(id)
+    LocationContainer.destroy_by_container_id(id)
   end
 end

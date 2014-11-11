@@ -154,9 +154,14 @@ ActiveRecord::Schema.define(version: 20141110110437) do
   add_index "leds", ["signal_id"], name: "index_leds_on_signal_id", using: :btree
 
   create_table "location_container_hierarchies", id: false, force: true do |t|
-    t.string  "ancestor_id",   null: false
-    t.string  "descendant_id", null: false
-    t.integer "generations",   null: false
+    t.string   "ancestor_id",                   null: false
+    t.string   "descendant_id",                 null: false
+    t.integer  "generations",                   null: false
+    t.boolean  "is_delete",     default: false
+    t.boolean  "is_dirty",      default: true
+    t.boolean  "is_new",        default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "location_container_hierarchies", ["ancestor_id", "descendant_id", "generations"], name: "anc_desc_idx", unique: true, using: :btree
@@ -184,8 +189,10 @@ ActiveRecord::Schema.define(version: 20141110110437) do
     t.datetime "delivery_date"
     t.datetime "received_date"
     t.string   "parent_id"
+    t.string   "ancestry"
   end
 
+  add_index "location_containers", ["ancestry"], name: "index_location_containers_on_ancestry", using: :btree
   add_index "location_containers", ["container_id"], name: "index_location_containers_on_container_id", using: :btree
   add_index "location_containers", ["current_positionable_id"], name: "index_location_containers_on_current_positionable_id", using: :btree
   add_index "location_containers", ["current_positionable_type"], name: "index_location_containers_on_current_positionable_type", using: :btree

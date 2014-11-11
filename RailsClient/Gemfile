@@ -75,5 +75,5 @@ gem 'yaml_db'
 gem 'database_cleaner'
 
 # for container
-gem 'closure_tree'
-# gem 'ancestry'
+# gem 'closure_tree'
+gem 'ancestry'
