@@ -11,7 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141107041854) do
+ActiveRecord::Schema.define(version: 20141111065343) do
+
+  create_table "action_records", id: false, force: true do |t|
+    t.string   "id",              limit: 36,                 null: false
+    t.string   "actionable_id"
+    t.string   "actionable_type"
+    t.string   "impl_id"
+    t.string   "impl_name"
+    t.integer  "impl_action"
+    t.datetime "impl_time"
+    t.boolean  "is_delete",                  default: false
+    t.boolean  "is_dirty",                   default: false
+    t.boolean  "is_new",                     default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -153,32 +168,50 @@ ActiveRecord::Schema.define(version: 20141107041854) do
   add_index "leds", ["position"], name: "index_leds_on_position", using: :btree
   add_index "leds", ["signal_id"], name: "index_leds_on_signal_id", using: :btree
 
+  create_table "location_container_hierarchies", id: false, force: true do |t|
+    t.string  "ancestor_id",   null: false
+    t.string  "descendant_id", null: false
+    t.integer "generations",   null: false
+  end
+
+  add_index "location_container_hierarchies", ["ancestor_id", "descendant_id", "generations"], name: "anc_desc_idx", unique: true, using: :btree
+  add_index "location_container_hierarchies", ["descendant_id"], name: "desc_idx", using: :btree
+
   create_table "location_containers", force: true do |t|
-    t.string   "containerable_type"
-    t.string   "containerable_id"
     t.string   "location_id"
-    t.boolean  "is_delete",           default: false
-    t.boolean  "is_dirty",            default: true
-    t.boolean  "is_new",              default: true
+    t.string   "user_id"
+    t.string   "container_id"
+    t.string   "remark"
+    t.boolean  "is_delete",                 default: false
+    t.boolean  "is_dirty",                  default: true
+    t.boolean  "is_new",                    default: true
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "state",               default: 0
-    t.string   "current_location_id"
-    t.string   "destination_id"
+    t.integer  "state",                     default: 0
+    t.string   "current_positionable_id"
+    t.string   "current_positionable_type"
+    t.string   "sourceable_id"
+    t.string   "sourceable_type"
+    t.string   "destinationable_id"
+    t.string   "destinationable_type"
     t.string   "sender_id"
     t.string   "receiver_id"
     t.datetime "delivery_date"
     t.datetime "received_date"
+    t.string   "parent_id"
   end
 
-  add_index "location_containers", ["containerable_id"], name: "index_location_containers_on_containerable_id", using: :btree
-  add_index "location_containers", ["containerable_type"], name: "index_location_containers_on_containerable_type", using: :btree
-  add_index "location_containers", ["current_location_id"], name: "index_location_containers_on_current_location_id", using: :btree
-  add_index "location_containers", ["destination_id"], name: "index_location_containers_on_destination_id", using: :btree
+  add_index "location_containers", ["container_id"], name: "index_location_containers_on_container_id", using: :btree
+  add_index "location_containers", ["current_positionable_id"], name: "index_location_containers_on_current_positionable_id", using: :btree
+  add_index "location_containers", ["current_positionable_type"], name: "index_location_containers_on_current_positionable_type", using: :btree
+  add_index "location_containers", ["destinationable_id"], name: "index_location_containers_on_destinationable_id", using: :btree
+  add_index "location_containers", ["destinationable_type"], name: "index_location_containers_on_destinationable_type", using: :btree
   add_index "location_containers", ["id"], name: "index_location_containers_on_id", using: :btree
   add_index "location_containers", ["location_id"], name: "index_location_containers_on_location_id", using: :btree
   add_index "location_containers", ["receiver_id"], name: "index_location_containers_on_receiver_id", using: :btree
   add_index "location_containers", ["sender_id"], name: "index_location_containers_on_sender_id", using: :btree
+  add_index "location_containers", ["sourceable_id"], name: "index_location_containers_on_sourceable_id", using: :btree
+  add_index "location_containers", ["sourceable_type"], name: "index_location_containers_on_sourceable_type", using: :btree
 
   create_table "locations", force: true do |t|
     t.string   "uuid",           limit: 36,                 null: false
@@ -209,23 +242,6 @@ ActiveRecord::Schema.define(version: 20141107041854) do
   end
 
   add_index "modems", ["id"], name: "index_modems_on_id", using: :btree
-
-  create_table "movable_records", force: true do |t|
-    t.string   "movable_id"
-    t.string   "movable_type"
-    t.string   "destination_id"
-    t.string   "action"
-    t.integer  "state"
-    t.boolean  "is_delete",      default: false
-    t.boolean  "is_dirty",       default: true
-    t.boolean  "is_new",         default: true
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "movable_records", ["destination_id"], name: "index_movable_records_on_destination_id", using: :btree
-  add_index "movable_records", ["id"], name: "index_movable_records_on_id", using: :btree
-  add_index "movable_records", ["movable_id"], name: "index_movable_records_on_movable_id", using: :btree
 
   create_table "order_items", force: true do |t|
     t.string   "uuid",                         null: false
