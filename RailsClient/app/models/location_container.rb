@@ -1,16 +1,9 @@
 class LocationContainer < ActiveRecord::Base
   include Extensions::UUID
-<<<<<<< HEAD
-  include Movable
-
-  has_ancestry
-  # acts_as_tree
-=======
   include CZ::Movable
   include CZ::State
-  # has_ancestry
-  acts_as_tree
->>>>>>> 0af84876e4f04730bea622a0ce2e7f1d1d580503
+
+  has_ancestry
   belongs_to :container
   belongs_to :current_positionable, polymorphic: true
   belongs_to :sourceable, polymorphic: true
