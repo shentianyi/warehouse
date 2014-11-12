@@ -12,9 +12,7 @@ class ForkliftService
 
     ActiveRecord::Base.transaction do
       if forklift.save
-        lc=forklift.location_containers.build(location_id: forklift.location_id, user_id: forklift.user_id)
-        lc.current_positionable_id=lc.sourceable_id=forklift.location_id
-        lc.current_positionable_type=lc.sourceable_type=Location.name
+        lc=forklift.location_containers.build(source_location_id: forklift.location_id, user_id: forklift.user_id)
         lc.destinationable=whouse
         lc.save
 
