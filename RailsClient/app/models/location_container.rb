@@ -1,70 +1,58 @@
 class LocationContainer < ActiveRecord::Base
   include Extensions::UUID
-<<<<<<< HEAD
-  include Movable
-
-  has_ancestry
-  # acts_as_tree
-=======
   include CZ::Movable
   include CZ::State
-  # has_ancestry
-  acts_as_tree
->>>>>>> 0af84876e4f04730bea622a0ce2e7f1d1d580503
   belongs_to :container
   belongs_to :current_positionable, polymorphic: true
   belongs_to :sourceable, polymorphic: true
   belongs_to :destinationable, polymorphic: true
-
   belongs_to :location
-
   has_many :movable_records, :as => :movable
 
-  def add(child)
-      child.descendants.each do |c|
-        new_ancestor="#{self.child_ancestry}/#{c.ancestor_str}"
-puts new_ancestor
-        puts '-----------------------------------'
-        puts  c.instance_variable_set('@ancestry', new_ancestor)
-        puts c.ancestry=new_ancestor
-        puts c.ancestry
-       puts c.save
-        puts c.errors.full_messages
-        puts '***************************8'
+  has_ancestry
+  # acts_as_tree
 
-      # child.update_attribute :parent, self
-    end
-  end
 
-  # def add(lc)
-  #   if lc.root? && !self.descendant_ids.include?(lc.id)
-  #     # self.add_child(lc)
-  #     #lc.update_attribute :parent, self
-  #     self.add_child(lc)
-  #   end
+  # parent and child are Container
+  # def self.add_child(parent, child, user_id, container_id)
+  #   plc=self.find_latest_by_container_id(parent.id)
   # end
 
-  def self.exists?(container_id, user_id, location_id)
-    c=Container.exists?(container_id)
-    return false unless c.nil?
-    if lc=self.find_latest_by_container_id(container_id)
-      if lc.location_id.equal?(location_id)
-        # do rebuild
-      else
-        new_lc= LocationContainer.create(container_id: child.container_id, user_id: user_id, location_id: location_id, parent: parent)
-        lc.rebuild_by_location(user_id, location_id, new_lc)
-        # lc.update_attribute
+
+  def add(child)
+    if child.root?
+      child.descendants.each do |c|
+        new_ancestor="#{self.child_ancestry}/#{c.ancestor_str}"
+        c.update_attribute :ancestry, new_ancestor
       end
+      child.update_attribute :parent, self
     end
   end
 
-  def rebuild_by_location(user_id, location_id, parent)
-    self.children.each do |child|
-      if lc=LocationContainer.find_latest(child.container_id, location_id)
-        lc.update_attribute :parent, parent if lc.can_rebuild?
-      else
-        new_lc= LocationContainer.create(container_id: child.container_id, user_id: user_id, location_id: location_id, parent: parent)
-        child.rebuild_by_location(user_id, location_id, new_lc)
+  def exists?(location_id)
+    self.location_id.equal?(location_id)
+  end
+
+  def self.rebuild_exists?(container_id, user_id, location_id)
+    old_lc=self.find_latest_by_container_id(container_id)
+    unless old_lc.exists?(location_id)
+      new_lc=LocationContainer.create(container_id: container_id, user_id: user_id, location_id: location_id)
+      old_lc.rebuild_to_location(user_id, location_id, new_lc)
+      return new_lc
+    end
+    return old_lc
+  end
+
+
+  def rebuild_to_location(user_id, location_id, parent)
+    self.children.each do |lc|
+      new_lc=self.find_latest_by_container_id(container_id)
+      unless new_lc.exists?(location_id)
+        new_lc=LocationContainer.create(container_id: container_id, user_id: user_id, location_id: location_id)
+      end
+      if new_lc.root?
+        parent.add(new_lc)
+        lc.rebuild_to_location(user_id, location_id, new_lc)
       end
     end
   end
@@ -74,14 +62,16 @@ puts new_ancestor
     self.where(container_id: container_id).order(created_at: :desc).first
   end
 
+  #
   def self.find_latest(container_id, location_id)
-    self.where(container_id: container_id, location_id: location_id).order(created_at: :desc).first
+    self.where(container_id: container_id, location_id: location_id, state: INIT).order(created_at: :desc).first
   end
 
-# state can rebuild
+  # state can rebuild
   def can_rebuild?
     true
   end
+
 
   def self.destroy_by_container_id(container_id)
     self.where(container_id: container_id).update_all(is_delete: true, is_dirty: true, ancestry: nil)

@@ -13,7 +13,6 @@ class Container< ActiveRecord::Base
   after_initialize :init_container_attr
 
   def init_container_attr
-    self.save
     self.type=ContainerType.get_type(self.class.name)
   end
 
