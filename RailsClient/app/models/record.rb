@@ -1,7 +1,11 @@
-class MovableRecord < ActiveRecord::Base
+class Record < ActiveRecord::Base
   include Extensions::UUID
 
-  belongs_to :movable, polymorphic: true
+  belongs_to :recordable, polymorphic: true
+
+  def self.record(recordable,from,to)
+
+  end
 
   def self.update_or_create(movable,impl)
     puts movable

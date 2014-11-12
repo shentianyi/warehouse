@@ -5,11 +5,16 @@ module CZ
     #include this module to your Model,make sure you have column below
     # :current_location_id,:destination_id,:state
 
+    #最基本
+    def move(from,to)
+      Record.record(self,from,to)
+    end
+
     def dispatch(source, destination, sender_id)
       if state_switch_to(MovableState::WAY)
         self.sourceable = source
         self.destinationable = destination
-        MovableRecord.update_or_create(self, {'id' => sender_id, 'type' => ImplUserType::SENDER, 'action' => __method__.to_s})
+        Record.update_or_create(self, {'id' => sender_id, 'type' => ImplUserType::SENDER, 'action' => __method__.to_s})
         true
       else
         false
@@ -19,7 +24,7 @@ module CZ
     def receive(receiver_id)
       if state_switch_to(MovableState::ARRIVED)
         self.current_positionable = self.destinationable
-        MovableRecord.update_or_create(self, {'id' => receiver_id, 'type' => ImplUserType::RECEIVER, 'action' => __method__.to_s})
+        Record.update_or_create(self, {'id' => receiver_id, 'type' => ImplUserType::RECEIVER, 'action' => __method__.to_s})
         true
       else
         false
@@ -28,7 +33,7 @@ module CZ
 
     def check(examiner_id)
       if state_switch_to(MovableState::CHECKED)
-        MovableRecord.update_or_create(self, {'id' => examiner_id, 'type' => ImplUserType::EXAMINER, 'action' => __method__.to_s})
+        Record.update_or_create(self, {'id' => examiner_id, 'type' => ImplUserType::EXAMINER, 'action' => __method__.to_s})
         true
       else
         false
@@ -37,7 +42,7 @@ module CZ
 
     def reject(rejector_id)
       if state_switch_to(MovableState::REJECTED)
-        MovableRecord.update_or_create(self, {'id' => rejector_id, 'type' => ImplUserType::REJECTOR, 'action' => __method__.to_s})
+        Record.update_or_create(self, {'id' => rejector_id, 'type' => ImplUserType::REJECTOR, 'action' => __method__.to_s})
         true
       else
         false

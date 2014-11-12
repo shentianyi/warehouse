@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141111075329) do
+ActiveRecord::Schema.define(version: 20141112094835) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -184,7 +184,6 @@ ActiveRecord::Schema.define(version: 20141111075329) do
     t.string   "sourceable_type"
     t.string   "destinationable_id"
     t.string   "destinationable_type"
-    t.string   "parent_id"
     t.string   "ancestry"
   end
 
@@ -228,25 +227,6 @@ ActiveRecord::Schema.define(version: 20141111075329) do
   end
 
   add_index "modems", ["id"], name: "index_modems_on_id", using: :btree
-
-  create_table "movable_records", force: true do |t|
-    t.string   "movable_id"
-    t.string   "movable_type"
-    t.string   "impl_id"
-    t.integer  "impl_user_type"
-    t.string   "impl_user"
-    t.string   "impl_action"
-    t.datetime "impl_time"
-    t.boolean  "is_delete"
-    t.boolean  "is_new"
-    t.boolean  "is_dirty"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "movable_records", ["id"], name: "index_movable_records_on_id", using: :btree
-  add_index "movable_records", ["impl_id"], name: "index_movable_records_on_impl_id", using: :btree
-  add_index "movable_records", ["movable_id"], name: "index_movable_records_on_movable_id", using: :btree
 
   create_table "order_items", force: true do |t|
     t.string   "uuid",                         null: false
@@ -454,6 +434,29 @@ ActiveRecord::Schema.define(version: 20141111075329) do
   add_index "positions", ["id"], name: "index_positions_on_id", using: :btree
   add_index "positions", ["uuid"], name: "index_positions_on_uuid", using: :btree
   add_index "positions", ["whouse_id"], name: "index_positions_on_whouse_id", using: :btree
+
+  create_table "records", force: true do |t|
+    t.string   "recordable_id"
+    t.string   "recordable_type"
+    t.string   "impl_id"
+    t.integer  "impl_user_type"
+    t.string   "impl_user"
+    t.string   "impl_action"
+    t.datetime "impl_time"
+    t.string   "sourcable_id"
+    t.string   "sourceable_type"
+    t.string   "destinationable_id"
+    t.string   "destinationable_type"
+    t.boolean  "is_delete"
+    t.boolean  "is_new"
+    t.boolean  "is_dirty"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "records", ["id"], name: "index_records_on_id", using: :btree
+  add_index "records", ["impl_id"], name: "index_records_on_impl_id", using: :btree
+  add_index "records", ["recordable_id"], name: "index_records_on_recordable_id", using: :btree
 
   create_table "regexes", force: true do |t|
     t.string   "name",                           null: false
