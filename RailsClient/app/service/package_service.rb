@@ -24,9 +24,7 @@ class PackageService
 
     ActiveRecord::Base.transaction do
       if p.save
-        lc=p.location_containers.build(location_id: p.location_id, user_id: p.user_id)
-        lc.current_positionable_id=lc.sourceable_id=p.location_id
-        lc.current_positionable_type=lc.sourceable_type=Location.name
+        lc=p.location_containers.build(source_location_id: p.location_id, user_id: p.user_id)
         lc.save
         msg.result = true
         msg.object = p

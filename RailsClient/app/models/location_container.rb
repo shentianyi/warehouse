@@ -6,20 +6,15 @@ class LocationContainer < ActiveRecord::Base
   has_ancestry
   belongs_to :container
   belongs_to :current_positionable, polymorphic: true
-  belongs_to :sourceable, polymorphic: true
   belongs_to :destinationable, polymorphic: true
-  belongs_to :location
+
+  belongs_to :source_location, class_name: 'Location'
+  belongs_to :des_location, class_name: 'Location'
+
   has_many :movable_records, :as => :movable
 
   has_ancestry
   # acts_as_tree
-
-
-  # parent and child are Container
-  # def self.add_child(parent, child, user_id, container_id)
-  #   plc=self.find_latest_by_container_id(parent.id)
-  # end
-
 
   def add(child)
     if child.root?
@@ -32,13 +27,13 @@ class LocationContainer < ActiveRecord::Base
   end
 
   def exists?(location_id)
-    self.location_id.equal?(location_id)
+    self.source_location_id==location_id
   end
 
   def self.rebuild_exists?(container_id, user_id, location_id)
     old_lc=self.find_latest_by_container_id(container_id)
     unless old_lc.exists?(location_id)
-      new_lc=LocationContainer.create(container_id: container_id, user_id: user_id, location_id: location_id)
+      new_lc=LocationContainer.create(container_id: container_id, user_id: user_id, source_location_id: location_id)
       old_lc.rebuild_to_location(user_id, location_id, new_lc)
       return new_lc
     end
@@ -48,11 +43,11 @@ class LocationContainer < ActiveRecord::Base
 
   def rebuild_to_location(user_id, location_id, parent)
     self.children.each do |lc|
-      new_lc=self.find_latest_by_container_id(container_id)
+      new_lc=LocationContainer.find_latest_by_container_id(lc.container_id)
       unless new_lc.exists?(location_id)
-        new_lc=LocationContainer.create(container_id: container_id, user_id: user_id, location_id: location_id)
+        new_lc=LocationContainer.create(container_id: lc.container_id, user_id: user_id, source_location_id: location_id)
       end
-      if new_lc.root?
+      if new_lc.root? && new_lc.copyable
         parent.add(new_lc)
         lc.rebuild_to_location(user_id, location_id, new_lc)
       end
@@ -66,13 +61,13 @@ class LocationContainer < ActiveRecord::Base
 
   #
   def self.find_latest(container_id, location_id)
-    self.where(container_id: container_id, location_id: location_id, state: INIT).order(created_at: :desc).first
+    self.where(container_id: container_id, source_location_id: location_id, state: INIT).order(created_at: :desc).first
   end
 
   # state can rebuild
-  def can_rebuild?
-    true
-  end
+  # def can_rebuild?
+  #   true
+  # end
 
 
   def self.destroy_by_container_id(container_id)
