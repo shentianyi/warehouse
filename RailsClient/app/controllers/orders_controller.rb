@@ -99,10 +99,12 @@ class OrdersController < ApplicationController
   def items
     if params[:user_id].blank?
       @order_items=OrderItem.where(order_id: params[:order_ids]).order(is_emergency: :desc)
+      @orders = Order.where(id:params[:order_ids])
       #.group(:part_id,:whouse_id)
       #.select('order_items.*,sum(order_items.quantity) as quantity')
     else
       @order_items=PickItemService.get_order_items(params[:user_id],params[:order_ids]).order(is_emergency: :desc)||[]
+      @orders = Order.where(user_id:params[:user_id],id:params[:order_ids])
     end
     render partial:'item'
   end

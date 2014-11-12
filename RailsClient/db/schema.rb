@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140929041418) do
+ActiveRecord::Schema.define(version: 20141112030007) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -52,6 +52,31 @@ ActiveRecord::Schema.define(version: 20140929041418) do
   add_index "attachments", ["attachable_id"], name: "index_attachments_on_attachable_id", using: :btree
   add_index "attachments", ["attachable_type"], name: "index_attachments_on_attachable_type", using: :btree
   add_index "attachments", ["id"], name: "index_attachments_on_id", using: :btree
+
+  create_table "containers", force: true do |t|
+    t.string   "custom_id",   limit: 36
+    t.integer  "type"
+    t.float    "quantity"
+    t.integer  "state"
+    t.string   "location_id"
+    t.string   "user_id"
+    t.datetime "fifo_time"
+    t.string   "remark"
+    t.string   "part_id"
+    t.boolean  "is_delete",              default: false
+    t.boolean  "is_dirty",               default: true
+    t.boolean  "is_new",                 default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "containers", ["custom_id"], name: "index_containers_on_custom_id", using: :btree
+  add_index "containers", ["id"], name: "index_containers_on_id", using: :btree
+  add_index "containers", ["is_delete"], name: "index_containers_on_is_delete", using: :btree
+  add_index "containers", ["location_id"], name: "index_containers_on_location_id", using: :btree
+  add_index "containers", ["part_id"], name: "index_containers_on_part_id", using: :btree
+  add_index "containers", ["type"], name: "index_containers_on_type", using: :btree
+  add_index "containers", ["user_id"], name: "index_containers_on_user_id", using: :btree
 
   create_table "deliveries", force: true do |t|
     t.string   "uuid",           limit: 36,                 null: false
@@ -128,6 +153,45 @@ ActiveRecord::Schema.define(version: 20140929041418) do
   add_index "leds", ["position"], name: "index_leds_on_position", using: :btree
   add_index "leds", ["signal_id"], name: "index_leds_on_signal_id", using: :btree
 
+  create_table "location_container_hierarchies", id: false, force: true do |t|
+    t.string  "ancestor_id",   null: false
+    t.string  "descendant_id", null: false
+    t.integer "generations",   null: false
+  end
+
+  add_index "location_container_hierarchies", ["ancestor_id", "descendant_id", "generations"], name: "anc_desc_idx", unique: true, using: :btree
+  add_index "location_container_hierarchies", ["descendant_id"], name: "desc_idx", using: :btree
+
+  create_table "location_containers", force: true do |t|
+    t.string   "location_id"
+    t.string   "user_id"
+    t.string   "container_id"
+    t.string   "remark"
+    t.boolean  "is_delete",                 default: false
+    t.boolean  "is_dirty",                  default: true
+    t.boolean  "is_new",                    default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "state",                     default: 0
+    t.string   "current_positionable_id"
+    t.string   "current_positionable_type"
+    t.string   "sourceable_id"
+    t.string   "sourceable_type"
+    t.string   "destinationable_id"
+    t.string   "destinationable_type"
+    t.string   "parent_id"
+  end
+
+  add_index "location_containers", ["container_id"], name: "index_location_containers_on_container_id", using: :btree
+  add_index "location_containers", ["current_positionable_id"], name: "index_location_containers_on_current_positionable_id", using: :btree
+  add_index "location_containers", ["current_positionable_type"], name: "index_location_containers_on_current_positionable_type", using: :btree
+  add_index "location_containers", ["destinationable_id"], name: "index_location_containers_on_destinationable_id", using: :btree
+  add_index "location_containers", ["destinationable_type"], name: "index_location_containers_on_destinationable_type", using: :btree
+  add_index "location_containers", ["id"], name: "index_location_containers_on_id", using: :btree
+  add_index "location_containers", ["location_id"], name: "index_location_containers_on_location_id", using: :btree
+  add_index "location_containers", ["sourceable_id"], name: "index_location_containers_on_sourceable_id", using: :btree
+  add_index "location_containers", ["sourceable_type"], name: "index_location_containers_on_sourceable_type", using: :btree
+
   create_table "locations", force: true do |t|
     t.string   "uuid",           limit: 36,                 null: false
     t.string   "name"
@@ -157,6 +221,25 @@ ActiveRecord::Schema.define(version: 20140929041418) do
   end
 
   add_index "modems", ["id"], name: "index_modems_on_id", using: :btree
+
+  create_table "movable_records", force: true do |t|
+    t.string   "movable_id"
+    t.string   "movable_type"
+    t.string   "impl_id"
+    t.integer  "impl_user_type"
+    t.string   "impl_user"
+    t.string   "impl_action"
+    t.datetime "impl_time"
+    t.boolean  "is_delete"
+    t.boolean  "is_new"
+    t.boolean  "is_dirty"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "movable_records", ["id"], name: "index_movable_records_on_id", using: :btree
+  add_index "movable_records", ["impl_id"], name: "index_movable_records_on_impl_id", using: :btree
+  add_index "movable_records", ["movable_id"], name: "index_movable_records_on_movable_id", using: :btree
 
   create_table "order_items", force: true do |t|
     t.string   "uuid",                         null: false
@@ -200,6 +283,7 @@ ActiveRecord::Schema.define(version: 20140929041418) do
     t.datetime "updated_at"
     t.string   "source_id"
     t.integer  "status",                default: 0
+    t.text     "remark"
   end
 
   add_index "orders", ["id"], name: "index_orders_on_id", using: :btree
@@ -345,6 +429,7 @@ ActiveRecord::Schema.define(version: 20140929041418) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "order_ids"
+    t.text     "remark"
   end
 
   add_index "pick_lists", ["id"], name: "index_pick_lists_on_id", using: :btree
