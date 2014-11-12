@@ -17,13 +17,20 @@ class LocationContainer < ActiveRecord::Base
   # acts_as_tree
 
   def add(child)
-    if child.root?
-      child.descendants.each do |c|
-        new_ancestor="#{self.child_ancestry}/#{c.ancestor_str}"
-        c.update_attribute :ancestry, new_ancestor
+    begin
+      ActiveRecord::Base.transaction do
+        if child.root?
+          child.descendants.each do |c|
+            new_ancestor="#{self.child_ancestry}/#{c.ancestor_str}"
+            c.update_attribute :ancestry, new_ancestor
+          end
+          child.update_attribute :parent, self
+        end
       end
-      child.update_attribute :parent, self
+    rescue
+      return false
     end
+    return true
   end
 
   def exists?(location_id)
@@ -64,11 +71,9 @@ class LocationContainer < ActiveRecord::Base
     self.where(container_id: container_id, source_location_id: location_id, state: INIT).order(created_at: :desc).first
   end
 
-  # state can rebuild
-  # def can_rebuild?
-  #   true
-  # end
-
+  def can_add_to_container?
+    self.root?
+  end
 
   def self.destroy_by_container_id(container_id)
     self.where(container_id: container_id).update_all(is_delete: true, is_dirty: true, ancestry: nil)

@@ -37,33 +37,38 @@ module V1
       msg.result ? {result: 1, content: ForkliftPresenter.new(msg.object).to_json} : {result: 0, content: msg.content}
     end
 
-    post :add do
-      p1=LocationContainer.rebuild_exists?(params[:id], current_user.id, current_user.location_id)
-    end
+    # post :add do
+      # p1=LocationContainer.rebuild_exists?(params[:id], current_user.id, current_user.location_id)
+      # p1=LocationContainer.rebuild_exists?(params[:id], current_user.id, current_user.location_id)
+      # p2=LocationContainer.rebuild_exists?(params[:package_id], current_user.id, current_user.location_id)
+      #
+      # p1.add(p2)
+    # end
 
 # check package
     post :check_package do
-      p1=LocationContainer.rebuild_exists?(params[:id], current_user.id, current_user.location_id)
-      p2=LocationContainer.rebuild_exists?(params[:package_id], current_user.id, current_user.location_id)
+      unless Forklift.exists?(params[:forklift_id])
+        return {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::NotExit}
+      end
 
-      p1.add(p2)
-      # f=LocationContainer.rebuild_exists?(params[:packge]current_user.id,current_user.location_id)
-
-      # f=LocationContainer.find_latest_by_container_id(params[:id])
-      # p=LocationContainer.find_latest_by_container_id(params[:package_id])
-      # f.add(p)
-      # unless f = ForkliftService.exits?(params[:forklift_id])
-      #   return {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::NotExit}
-      # end
       # unless ForkliftState.can_update?(f.state)
       #   return {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::CannotUpdate}
       # end
-      # unless p = PackageService.exits?(params[:package_id])
-      #   return {result: 0, result_code: ResultCodeEnum::Failed, content: PackageMessage::NotExit}
-      # end
-      # unless p.forklift_id.nil?
-      #   return {result: 0, result_code: ResultCodeEnum::Failed, content: PackageMessage::InOtherForklift}
-      # end
+
+      unless pc= Package.exists?(params[:package_id])
+        return {result: 0, result_code: ResultCodeEnum::Failed, content: PackageMessage::NotExit}
+      end
+
+      p=LocationContainer.rebuild_exists?(params[:package_id], current_user.id, current_user.location_id)
+      unless p.can_add_to_container?
+        return {result: 0, result_code: ResultCodeEnum::Failed, content: PackageMessage::InOtherForklift}
+      end
+      f=LocationContainer.rebuild_exists?(params[:forklift_id], current_user.id, current_user.location_id)
+      if f.add(p)
+        {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(pc).to_json}
+      else
+        {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::AddPackageFailed}
+      end
       #
       # if ForkliftService.add_package(f, p)
       #   puts "------------------------------"
@@ -77,7 +82,6 @@ module V1
       # else
       #   {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::AddPackageFailed}
       # end
-      true
     end
 
 # add package
