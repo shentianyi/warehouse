@@ -22,6 +22,7 @@ module Import
     def user_down_block
       Proc.new { |line, item|
         line<<item.id
+        line<<item.user_name
         line<<item.name
         line<<item.role_id
         line<<item.tel
@@ -32,6 +33,7 @@ module Import
     def init_csv_cols
       csv_cols=[]
       csv_cols<< Csv::CsvCol.new(field: 'id', header: 'User Nr')
+      csv_cols<< Csv::CsvCol.new(field: 'user_name', header: 'User Name')
       csv_cols<< Csv::CsvCol.new(field: 'name', header: 'Name')
       csv_cols<< Csv::CsvCol.new(field: 'role_id', header: 'Role')
       csv_cols<< Csv::CsvCol.new(field: 'tel', header: 'Phone Nr', null:true)

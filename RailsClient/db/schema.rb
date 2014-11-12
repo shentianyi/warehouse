@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141112030007) do
+ActiveRecord::Schema.define(version: 20141112052934) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -534,6 +534,7 @@ ActiveRecord::Schema.define(version: 20141112030007) do
     t.string   "authentication_token"
     t.integer  "role_id",                           default: 100,   null: false
     t.boolean  "is_sys",                            default: false
+    t.string   "user_name"
   end
 
   add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree

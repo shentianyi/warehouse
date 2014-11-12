@@ -31,9 +31,16 @@ module Import
           # clean data
           update_marker=(data.delete($UPMARKER).to_i==1)
           if query
+            puts "============="
+            puts query
             if item=self.unscoped.where(query).first
               if update_marker
+                puts "============="
+                puts data
+                puts item.to_json
+                puts "~~~~~~~~~~~~~"
                 item.update(data)
+                puts "~~~~~~~~~~~~~"
               else
                 #raise(ArgumentError, "行:#{line_no} 已经存在")
               end
