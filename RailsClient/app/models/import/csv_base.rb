@@ -65,6 +65,15 @@ module Import
             line=[]
             proc=self.send("#{self.to_s.underscore}_down_block".to_sym)
             proc.call(line, item)
+            #补齐不足的分号
+            count = line.count
+            header_count = self.csv_headers.count
+
+            if header_count > count
+              (header_count-count).times.each{|i| line[count+1+i] = ""}
+              line[header_count-1]=1
+            end
+            #
             f.puts line.join($CSVSP)
           end
         end
