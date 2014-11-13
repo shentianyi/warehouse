@@ -18,16 +18,16 @@ class PackageService
     end
 
     #create
-    p = Package.new(args)
-    p.user_id=user.id
-    p.location_id=user.location_id
-
     ActiveRecord::Base.transaction do
+      p = Package.new(args)
+      p.user_id=user.id
+      p.location_id=user.location_id
+
       if p.save
         lc=p.location_containers.build(source_location_id: p.location_id, user_id: p.user_id)
         lc.save
         msg.result = true
-        msg.object = p
+        msg.object = lc
       else
         msg.content = p.errors.full_messages
       end

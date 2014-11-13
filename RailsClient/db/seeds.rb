@@ -23,7 +23,7 @@ ActiveRecord::Base.transaction do
 
   # init package label regex
   unless Regex.where(code: 'UNIQ', type: RegexType::PACKAGE_LABEL).first
-    Regex.create(name: '唯一码', code: 'UNIQ', prefix_string: 'WI', regex_string: '^WI\d*$', type: RegexType::PACKAGE_LABEL)
+    Regex.create(name: '唯一码', code: 'UNIQ', prefix_string: 'WI', regex_string: '^WI\w+', type: RegexType::PACKAGE_LABEL)
   end
   unless Regex.where(code: 'PART', type: RegexType::PACKAGE_LABEL).first
     Regex.create(name: '零件号', code: 'PART', prefix_string: 'P', regex_string: '^P\w+', type: RegexType::PACKAGE_LABEL)

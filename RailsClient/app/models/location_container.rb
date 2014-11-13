@@ -16,13 +16,13 @@ class LocationContainer < ActiveRecord::Base
   has_ancestry
   # acts_as_tree
 
+  # add child
   def add(child)
     begin
       ActiveRecord::Base.transaction do
         if child.root?
           child.descendants.each do |c|
-            new_ancestor="#{self.child_ancestry}/#{c.ancestor_str}"
-            c.update_attribute :ancestry, new_ancestor
+            c.update_attribute :ancestry, "#{self.child_ancestry}/#{c.ancestor_str}"
           end
           child.update_attribute :parent, self
         end
@@ -33,11 +33,43 @@ class LocationContainer < ActiveRecord::Base
     return true
   end
 
+  # # remove from parent
+  def remove
+    begin
+      ActiveRecord::Base.transaction do
+        unless self.root?
+          regex=Regexp.new("#{self.ancestor_str}/")
+          self.descendants.each do |c|
+            c.update_attribute :ancestry, c.ancestor_str.sub(regex, '')
+          end
+          self.update_attribute :parent, nil
+        end
+      end
+    rescue
+      return false
+    end
+    return true
+  end
+
+  def add_by_ids(ids)
+    begin
+      ActiveRecord::Base.transaction do
+        ids.each do |id|
+          add(LocationContainer.build(id, self.user_id, self.source_location_id))
+        end
+      end
+    rescue
+      return false
+    end
+    return true
+  end
+
+
   def exists?(location_id)
     self.source_location_id==location_id
   end
 
-  def self.rebuild_exists?(container_id, user_id, location_id)
+  def self.build(container_id, user_id, location_id)
     old_lc=self.find_latest_by_container_id(container_id)
     unless old_lc.exists?(location_id)
       new_lc=LocationContainer.create(container_id: container_id, user_id: user_id, source_location_id: location_id)
@@ -63,20 +95,23 @@ class LocationContainer < ActiveRecord::Base
 
 
   def self.find_latest_by_container_id(container_id)
-    self.where(container_id: container_id).order(created_at: :desc).first
+    where(container_id: container_id).order(created_at: :desc).first
   end
 
-  #
   def self.find_latest(container_id, location_id)
-    self.where(container_id: container_id, source_location_id: location_id, state: INIT).order(created_at: :desc).first
+    where(container_id: container_id, source_location_id: location_id, state: INIT).order(created_at: :desc).first
+  end
+
+  def self.are_roots?(container_ids, location_id)
+    where(container_id: container_ids, source_location_id: location_id, ancestry: nil).count==container_ids.length
   end
 
   def can_add_to_container?
-    self.root?
+    root?
   end
 
   def self.destroy_by_container_id(container_id)
-    self.where(container_id: container_id).update_all(is_delete: true, is_dirty: true, ancestry: nil)
+    where(container_id: container_id).update_all(is_delete: true, is_dirty: true, ancestry: nil)
   end
 
 end
