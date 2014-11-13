@@ -5,11 +5,6 @@ module CZ
     #include this module to your Model,make sure you have column below
     # :current_location_id,:destination_id,:state
 
-    #最基本
-    def move(from,to)
-      Record.record(self,from,to)
-    end
-
     def dispatch(source, destination, sender_id)
       if state_switch_to(MovableState::WAY)
         self.sourceable = source
