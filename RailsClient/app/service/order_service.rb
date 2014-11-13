@@ -118,7 +118,7 @@ class OrderService
   def self.no_parts_to_string items
     remark = ""
     items.each {|item|
-      remark += "零件:"+item[:part_id]+",数量:"+item[:quantity]+",箱数:"+item[:box_quantity]+",部门:"+item[:department]+",是否加急:"+item[:is_emergency]+"\n"
+      remark += "零件:"+item[:part_id]+",数量:"+item[:quantity].to_s+",箱数:"+item[:box_quantity].to_s+",部门:"+item[:department]+",是否加急:"+item[:is_emergency].to_s+"\n"
     }
     remark
   end
