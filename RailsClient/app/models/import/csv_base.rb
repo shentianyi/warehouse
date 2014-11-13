@@ -30,10 +30,10 @@ module Import
           end
           # clean data
           update_marker=(data.delete($UPMARKER).to_i==1)
+
           if query
             if item=self.unscoped.where(query).first
               if update_marker
-                puts data
                 item.update(data)
               else
                 #raise(ArgumentError, "行:#{line_no} 已经存在")
