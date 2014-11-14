@@ -9,7 +9,10 @@ class CreateMovableRecords < ActiveRecord::Migration
       t.string :impl_user #描述执行者类型
       t.string :impl_action #执行的action
       t.datetime :impl_time #执行的时间
-
+      t.string :sourcable_id
+      t.string :sourceable_type
+      t.string :destinationable_id
+      t.string :destinationable_type
       #
       t.boolean :is_delete
       t.boolean :is_new

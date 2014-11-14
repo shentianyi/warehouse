@@ -82,9 +82,14 @@ module V1
     post :send do
       msg = ApiMessage.new
 
+=begin
       unless d = Delivery.find_by_id(params[:id])
         msg.set_false(DeliveryMessage::NotExit)
         return msg.to_json
+      end
+=end
+      unless d = Delivery.exist?(params[:id])
+        return {result:0,content:DeliveryMessage::NotExist}
       end
 
       #if (d = DeliveryService.exit?(params[:id])).nil?
@@ -94,11 +99,16 @@ module V1
       #需要活的当前Delivery对应的location container
       #然后检查Delivery以及location container的状态
 
+      #check state if can be sent
+      d.state_for("send")
 
+=begin
       if !DeliveryState.can_update?(d.state)
         msg.set_false(DeliveryMessage::CannotUpdate)
         return msg.to_json
       end
+=end
+
 
       if DeliveryService.send(d, current_user)
         if NetService.ping()
