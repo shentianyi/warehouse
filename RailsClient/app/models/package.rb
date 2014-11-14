@@ -1,5 +1,5 @@
 class Package<Container
-  default_scope { where(type: ContainerType::Package) }
+  default_scope { where(type: ContainerType::PACKAGE) }
 
   def self.id_valid?(id)
     Package.unscoped.where(id: id, type: ContainerType::Package).first.nil?

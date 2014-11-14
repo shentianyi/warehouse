@@ -5,7 +5,7 @@ class DeliveryService
     ActiveRecord::Base.transaction do
       delivery=Delivery.new(remark: args[:remark], user_id: user.id, location_id: user.location_id)
       if delivery.save
-        lc=delivery.location_containers.build(source_location_id: user.location_id, user_id: user.id)
+        lc=delivery.logistics_containers.build(source_location_id: user.location_id, user_id: user.id)
         lc.destinationable=user.location.destination
         lc.des_location_id=user.location.destination.id
 

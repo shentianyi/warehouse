@@ -120,7 +120,7 @@ module V1
         unless Forklift.where(id:params[:forklifts]).count == params[:forklifts].length
           return {result: 0, content: DeliveryMessage::ForkliftHasNotExist}
         end
-        unless LocationContainer.are_roots?(params[:forklifts], current_user.location_id)
+        unless LogisticsContainer.are_roots?(params[:forklifts], current_user.location_id)
           return {result: 0, content: DeliveryMessage::ForkliftExistInOthers}
         end
       end

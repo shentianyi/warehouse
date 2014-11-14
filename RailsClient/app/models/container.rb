@@ -3,14 +3,13 @@ class Container< ActiveRecord::Base
 
   include Extensions::UUID
   include Extensions::STATE
-  attr_accessor :children, :parent, :ancestors
 
   belongs_to :user
   belongs_to :location
   belongs_to :part
-  has_many :location_containers, :dependent => :destroy
+  has_many :logistics_containers, :dependent => :destroy
 
-  after_initialize :init_container_attr
+  before_create :init_container_attr
 
   def init_container_attr
     self.type=ContainerType.get_type(self.class.name)
