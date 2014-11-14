@@ -1,4 +1,24 @@
 class DeliveryService
+
+  def self.create args, user
+    msg=Message.new
+    ActiveRecord::Base.transaction do
+      delivery=Delivery.new(remark: args[:remark], user_id: user.id, location_id: user.location_id)
+      if delivery.save
+        lc=delivery.location_containers.build(source_location_id: user.location_id, user_id: user.id)
+        lc.destinationable=user.location.destination
+        lc.des_location_id=user.location.destination.id
+
+        lc.save
+        msg.result=true
+        msg.object = lc
+      else
+        msg.content = delivery.errors.full_messages
+      end
+    end
+    msg
+  end
+
   #=============
   #check add forklift
   #=============
@@ -96,7 +116,7 @@ class DeliveryService
         #delivery.receiver = current_user
         #delivery.received_date = Time.now
         #delivery.save
-        delivery.update({receiver: current_user,received_date:Time.now})
+        delivery.update({receiver: current_user, received_date: Time.now})
       else
         false
       end
@@ -276,18 +296,18 @@ class DeliveryService
         return nil if book.cell(2, 1).nil?
         2.upto(book.last_row) do |row|
           if package=Package.find_by_id(book.cell(row, 2))
- forklifts[book.cell(row, 1)].packages<<package
-else
-          forklifts[book.cell(row, 1)].packages<<Package.new(id: book.cell(row, 2),
-                                                             location_id: delivery.source_id,
-                                                             user_id: delivery.user_id,
-                                                             part_id: book.cell(row, 3).sub(/P/, ''),
-                                                             quantity: book.cell(row, 4).sub(/Q/, ''),
-                                                             quantity_str: book.cell(row, 4).sub(/Q/, ''),
-                                                             check_in_time: book.cell(row, 5).sub(/W\s*/, ''),
-                                                             state: PackageState::WAY
-          )
-end
+            forklifts[book.cell(row, 1)].packages<<package
+          else
+            forklifts[book.cell(row, 1)].packages<<Package.new(id: book.cell(row, 2),
+                                                               location_id: delivery.source_id,
+                                                               user_id: delivery.user_id,
+                                                               part_id: book.cell(row, 3).sub(/P/, ''),
+                                                               quantity: book.cell(row, 4).sub(/Q/, ''),
+                                                               quantity_str: book.cell(row, 4).sub(/Q/, ''),
+                                                               check_in_time: book.cell(row, 5).sub(/W\s*/, ''),
+                                                               state: PackageState::WAY
+            )
+          end
         end
 
         delivery.save
@@ -315,11 +335,11 @@ end
         return nil if book.cell(2, 1).nil?
         2.upto(book.last_row) do |row|
           if package=Package.find_by_id(book.cell(row, 1))
-            package.update(state: PackageState::RECEIVED,is_dirty:true)
+            package.update(state: PackageState::RECEIVED, is_dirty: true)
             if  forklift=package.forklift
-              forklift.update(state: ForkliftState::RECEIVED,is_dirty:true)
+              forklift.update(state: ForkliftState::RECEIVED, is_dirty: true)
               if delivery= forklift.delivery
-                delivery.update(state: DeliveryState::RECEIVED,is_dirty:true)
+                delivery.update(state: DeliveryState::RECEIVED, is_dirty: true)
               end
             end
           end

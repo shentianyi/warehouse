@@ -2,17 +2,16 @@ class ForkliftService
 
   def self.create args, user
     msg = Message.new
-    puts user
     unless whouse=Whouse.find_by_id(args[:destinationable_id])
       msg.content = ForkliftMessage::WarehouseNotExit
       return msg
     end
 
-    forklift = Forklift.new(user_id: user.id, location_id: user.location_id)
-
     ActiveRecord::Base.transaction do
+      forklift = Forklift.new(user_id: user.id, location_id: user.location_id)
+
       if forklift.save
-        lc=forklift.location_containers.build(source_location_id: forklift.location_id, user_id: forklift.user_id)
+        lc=forklift.location_containers.build(source_location_id: user.location_id, user_id: user.id)
         lc.destinationable=whouse
         lc.save
 
