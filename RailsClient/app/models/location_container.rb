@@ -1,8 +1,6 @@
 class LocationContainer < ActiveRecord::Base
   self.inheritance_column = nil
   include Extensions::UUID
-  #include CZ::Movable
-  #include CZ::State
 
   has_ancestry
   belongs_to :container

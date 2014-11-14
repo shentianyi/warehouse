@@ -12,28 +12,70 @@ module V1
     end
 
     post :dispatch do
-      lc = LocationContainerService.search({id:params[:id]})
-      source = current_user.location
+      lc = LogisticsContainer.where({id:params[:id]}).first
+      unless lc
+
+      end
+
+      unless lc.state_for("dispatch")
+
+      end
+
       destination = LocationService.search({id:params[:destination_id]})
-      LocationContainerService.dispatch(lc,source,destination,current_user)
+
+      unless destination
+
+      end
+
+      LogisticsContainerService.dispatch(lc,destination,current_user)
       {result:1,content:"SUCCESS"}
     end
 
     post :receive do
-      lc = LocationContainerService.search({id:params[:id]})
-      lc.receive(current_user.id)
+      lc = LogisticsContainer.where({id:params[:id]}).first
+
+      unless lc
+
+      end
+
+      unless lc.state_fro("receive")
+
+      end
+
+      LogisticsContainerService.receive(lc,current_user)
+
       {result:1,content:"SUCCESS"}
     end
 
     post :check do
-      lc = LocationContainer.find_by_id(params[:id])
-      lc.check(current_user.id)
+      lc = LogisticsContainer.where({id:params[:id]}).first
+
+      unless lc
+
+      end
+
+      unless lc.state_fro("check")
+
+      end
+
+      LogisticsContainerService.check(lc,current_user)
+
       {result:1,content:"SUCCESS"}
     end
 
-    post :rejected do
-      lc = LocationContainer.find_by_id(params[:id])
-      lc.reject(current_user.id)
+    post :reject do
+      lc = LogisticsContainer.where({id:params[:id]}).first
+
+      unless lc
+
+      end
+
+      unless lc.state_fro("reject")
+
+      end
+
+      LogisticsContainerService.reject(lc,current_user)
+
       {result:1,content:"SUCCESS"}
     end
   end
