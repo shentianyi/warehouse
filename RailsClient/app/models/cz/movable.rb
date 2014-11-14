@@ -4,6 +4,12 @@ module CZ
   module Movable
     #include this module to your Model,make sure you have column below
     # :current_location_id,:destination_id,:state
+    @@actions = {
+        "dispatch" => MovableState::WAY,
+        "receive" => MovableState::ARRIVED,
+        "check" => MovableState::CHECKED,
+        "reject" => MovableState::REJECTED
+    }
 
     def dispatch(source, destination, sender_id)
       if state_switch_to(MovableState::WAY)
@@ -60,6 +66,18 @@ module CZ
 
     def get_state
       self.state
+    end
+
+    def state_for(action)
+      check_action_state(action)
+    end
+
+    def check_action_state(action)
+      MovableState.before(get_state_by_action(action)).include? get_state
+    end
+
+    def get_state_by_action(action)
+      return @@actions[action]
     end
   end
 end
