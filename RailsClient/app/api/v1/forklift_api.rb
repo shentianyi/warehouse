@@ -38,8 +38,8 @@ module V1
     end
 
     post :add do
-      p1=LocationContainer.build(params[:id], current_user.id, current_user.location_id)
-      p2=LocationContainer.build(params[:pid], current_user.id, current_user.location_id)
+      p1=LogisticsContainer.build(params[:id], current_user.id, current_user.location_id)
+      p2=LogisticsContainer.build(params[:pid], current_user.id, current_user.location_id)
 
       p1.add(p2)
     end
@@ -58,13 +58,13 @@ module V1
         return {result: 0, result_code: ResultCodeEnum::Failed, content: PackageMessage::NotExit}
       end
 
-      p=LocationContainer.build(params[:package_id], current_user.id, current_user.location_id)
+      p=LogisticsContainer.build(params[:package_id], current_user.id, current_user.location_id)
 
       unless p.can_add_to_container?
         return {result: 0, result_code: ResultCodeEnum::Failed, content: PackageMessage::InOtherForklift}
       end
 
-      f=LocationContainer.build(params[:forklift_id], current_user.id, current_user.location_id)
+      f=LogisticsContainer.build(params[:forklift_id], current_user.id, current_user.location_id)
       if f.add(p)
         {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(pc).to_json}
       else
@@ -106,7 +106,7 @@ module V1
       res = PackageService.create(args, current_user)
       if res.result
         lc_p = res.object
-        f=LocationContainer.build(params[:forklift_id], current_user.id, current_user.location_id)
+        f=LogisticsContainer.build(params[:forklift_id], current_user.id, current_user.location_id)
         if f.add(lc_p)
           {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(lc_p.container).to_json}
 
@@ -128,7 +128,7 @@ module V1
 # id is forklift_item_id
     delete :remove_package do
 
-      unless (p=Package.exists?(params[:package_id])) && (pl=LocationContainer.find_latest(p.id, current_user.location_id))
+      unless (p=Package.exists?(params[:package_id])) && (pl=LogisticsContainer.find_latest(p.id, current_user.location_id))
         return {result: 0, content: PackageMessage::NotExit}
       end
 

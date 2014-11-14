@@ -11,7 +11,7 @@ class ForkliftService
       forklift = Forklift.new(user_id: user.id, location_id: user.location_id)
 
       if forklift.save
-        lc=forklift.location_containers.build(source_location_id: user.location_id, user_id: user.id)
+        lc=forklift.logistics_containers.build(source_location_id: user.location_id, user_id: user.id)
         lc.destinationable=whouse
         lc.save
 

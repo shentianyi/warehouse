@@ -1,9 +1,9 @@
 class ContainerType
-  Package=1
-  Forklift=2
-  Delivery=3
+  PACKAGE=1
+  FORKLIFT=2
+  DELIVERY=3
 
   def self.get_type(type)
-    self.const_get(type)
+    self.const_get(type.upcase)
   end
 end
