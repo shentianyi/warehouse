@@ -69,11 +69,11 @@ module CZ
     end
 
     def state_for(action)
-      check_action_state(action)
+      check_action_state(action,get_state)
     end
 
-    def check_action_state(action)
-      MovableState.before(get_state_by_action(action)).include? get_state
+    def check_action_state(action,state)
+      MovableState.before(get_state_by_action(action)).include? state
     end
 
     def get_state_by_action(action)

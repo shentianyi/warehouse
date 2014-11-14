@@ -100,7 +100,10 @@ module V1
       #然后检查Delivery以及location container的状态
 
       #check state if can be sent
-      d.state_for("send")
+      unless d.state_for("dispatch")
+        msg.set_false(DeliveryMessage::CannotUpdate)
+        return msg.to_json
+      end
 
 =begin
       if !DeliveryState.can_update?(d.state)
@@ -108,7 +111,6 @@ module V1
         return msg.to_json
       end
 =end
-
 
       if DeliveryService.send(d, current_user)
         if NetService.ping()
