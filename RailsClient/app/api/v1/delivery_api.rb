@@ -65,7 +65,6 @@ module V1
       else
         {result: 0, content: ''}
       end
-
     end
 
     # remove forklift
