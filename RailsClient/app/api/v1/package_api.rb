@@ -6,7 +6,7 @@ module V1
     #strong parameters
     helpers do
       def package_params
-        ActionController::Parameters.new(params).require(:package).permit(:id, :part_id, :quantity_str, :check_in_time, :user_id)
+        ActionController::Parameters.new(params).require(:package).permit(:id, :part_id, :quantity_str, :check_in_time)
       end
     end
 
@@ -54,7 +54,6 @@ module V1
     # if find deleted then update(take care of foreign keys)
     # else create new
     post do
-      # every package has a uniq id,id should not exited
       m = PackageService.create package_params, current_user
       m.result ? {result: 1, content: PackagePresenter.new(m.object).to_json_simple} : {result: 0, content: m.content}
     end

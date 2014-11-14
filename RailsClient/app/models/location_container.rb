@@ -67,6 +67,9 @@ class LocationContainer < ActiveRecord::Base
     true
   end
 
+  def self.exists?(id)
+    self.find_by_id(id)
+  end
 
   def self.destroy_by_container_id(container_id)
     where(container_id: container_id).update_all(is_delete: true, is_dirty: true, ancestry: nil)
