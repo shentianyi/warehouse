@@ -1,7 +1,7 @@
 class LocationContainer < ActiveRecord::Base
   include Extensions::UUID
-  include CZ::Movable
-  include CZ::State
+  #include CZ::Movable
+  #include CZ::State
 
   has_ancestry
   belongs_to :container
