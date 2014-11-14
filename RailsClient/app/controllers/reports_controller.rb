@@ -49,7 +49,7 @@ class ReportsController < ApplicationController
 
     condition = {}
     condition["deliveries.destination_id"] = @location_id
-    condition["deliveries.received_date"] = time_range
+    condition["deliveries.created_at"] = time_range
     report = ""
     case @type
       when "total"
@@ -95,7 +95,7 @@ class ReportsController < ApplicationController
 
     condition = {}
     condition["deliveries.source_id"] = @location_id
-    condition["deliveries.delivery_date"] = time_range
+    condition["deliveries.created_at"] = time_range
 
     report = ""
     case @type
@@ -213,7 +213,7 @@ class ReportsController < ApplicationController
 
     condition = {}
     condition["deliveries.destination_id"] = @location_id
-    condition["deliveries.received_date"] = time_range
+    condition["deliveries.created_at"] = time_range
     condition["packages.state"] = [PackageState::RECEIVED]
 
     @packages = {}
@@ -449,11 +449,11 @@ class ReportsController < ApplicationController
   end
 
   def entry_header
-    ["编号", "零件号", "总数", "箱数", "部门", "收货时间", "收货人", "已接收"]
+    ["编号", "零件号", "总数", "箱数", "部门", "创建时间", "收货人", "已接收"]
   end
 
   def removal_header
-    ["编号", "零件号", "总数", "箱数", "部门", "发货时间", "发货人", "是否被拒绝"]
+    ["编号", "零件号", "总数", "箱数", "部门", "创建时间", "发货人", "是否被拒绝"]
   end
 
   def discrepancy_header
