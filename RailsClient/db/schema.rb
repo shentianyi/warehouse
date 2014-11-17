@@ -171,12 +171,13 @@ ActiveRecord::Schema.define(version: 20141112094835) do
   add_index "location_container_hierarchies", ["ancestor_id", "descendant_id", "generations"], name: "anc_desc_idx", unique: true, using: :btree
   add_index "location_container_hierarchies", ["descendant_id"], name: "desc_idx", using: :btree
 
-  create_table "location_containerslocation_containers", force: true do |t|
+  create_table "location_containers", force: true do |t|
     t.string   "source_location_id"
     t.string   "des_location_id"
     t.string   "user_id"
     t.string   "container_id"
     t.string   "remark"
+    t.integer  "type"
     t.boolean  "is_delete",            default: false
     t.boolean  "is_dirty",             default: true
     t.boolean  "is_new",               default: true
@@ -268,7 +269,6 @@ ActiveRecord::Schema.define(version: 20141112094835) do
     t.datetime "updated_at"
     t.string   "source_id"
     t.integer  "status",                default: 0
-    t.text     "remark"
   end
 
   add_index "orders", ["id"], name: "index_orders_on_id", using: :btree
@@ -414,7 +414,6 @@ ActiveRecord::Schema.define(version: 20141112094835) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "order_ids"
-    t.text     "remark"
   end
 
   add_index "pick_lists", ["id"], name: "index_pick_lists_on_id", using: :btree
@@ -542,7 +541,6 @@ ActiveRecord::Schema.define(version: 20141112094835) do
     t.string   "authentication_token"
     t.integer  "role_id",                           default: 100,   null: false
     t.boolean  "is_sys",                            default: false
-    t.string   "user_name"
   end
 
   add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree

@@ -2,7 +2,9 @@ class LogisticsContainerService
   def self.dispatch lc, destination, user
     begin
       ActiveRecord::Base.transaction do
-        lc.source_location_id = user.location_id
+        unless lc.source_location_id == user.location_id
+          raise
+        end
         lc.des_location_id = destination.id
         #
         unless lc.state_for("dispatch")
@@ -12,8 +14,9 @@ class LogisticsContainerService
         unless lc.dispatch(destination, user.id)
           raise
         end
+        lc.save
 
-        lc.child.each do |c|
+        lc.children.each do |c|
           c.source_location_id = user.location_id
           c.des_location_id = destination.id
           unless c.state_for("dispatch")
@@ -31,13 +34,18 @@ class LogisticsContainerService
   def self.receive lc, user
     begin
       ActiveRecord::Base.transaction do
+        unless lc.des_location_id == user.location_id
+          raise
+        end
 
         unless lc.state_for("receive")
           raise
         end
-        lc.container.current_positionable = lc.destinationable
+        lc.des_location_id = user.location_id
+        lc.container.update(current_positionable: user.location)
         lc.receive(user.id)
-        lc.child.each do |c|
+        lc.save
+        lc.children.each do |c|
           unless c.state_for("receive")
             raise
           end
@@ -53,11 +61,16 @@ class LogisticsContainerService
   def self.check(lc, user)
     begin
       ActiveRecord::Base.transaction do
+        unless lc.des_location_id == user.location_id
+          raise
+        end
+
         unless lc.state_for("check")
           raise
         end
         lc.check(user.id)
-        lc.child.each do |c|
+        lc.save
+        lc.children.each do |c|
           unless c.state_for("check")
             raise
           end
@@ -72,11 +85,16 @@ class LogisticsContainerService
   def self.reject(lc, user)
     begin
       ActiveRecord::Base.transaction do
+        unless lc.des_location_id == user.location_id
+          raise
+        end
+
         unless lc.state_for("reject")
           raise
         end
         lc.reject(user.id)
-        lc.child.each do |c|
+        lc.save
+        lc.children.each do |c|
           unless c.state_for("reject")
             raise
           end

@@ -23,7 +23,7 @@ module CZ
 
     def receive(receiver_id)
       if state_switch_to(MovableState::ARRIVED)
-        self.current_positionable = self.destinationable
+        #self.current_positionable = self.destinationable
         Record.update_or_create(self, {'id' => receiver_id, 'type' => ImplUserType::RECEIVER, 'action' => __method__.to_s})
         true
       else

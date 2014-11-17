@@ -2,7 +2,7 @@
 module V1
   class MovableAPI<Base
     namespace :movables
-    gurad_all!
+    guard_all!
 
     #
     helpers do
@@ -15,13 +15,12 @@ module V1
       msg = ApiMessage.new
       lc = LogisticsContainer.where({id:params[:id]}).first
       unless lc
-        return msg.set_false(MovableMessage::TargetNotExst).to_json
+        return msg.set_false(MovableMessage::TargetNotExist).to_json
       end
 
       destination = LocationService.search({id:params[:destination_id]})
 
       unless destination
-
         return msg.set_false(MovableMessage::DestinationNotExist).to_json
       end
 
@@ -36,7 +35,7 @@ module V1
       lc = LogisticsContainer.where({id:params[:id]}).first
 
       unless lc
-        return msg.set_false(MovableMessage::TargetNotExst).to_json
+        return msg.set_false(MovableMessage::TargetNotExist).to_json
       end
 
       unless LogisticsContainerService.receive(lc,current_user)
@@ -47,10 +46,11 @@ module V1
     end
 
     post :check do
+      msg = ApiMessage.new
       lc = LogisticsContainer.where({id:params[:id]}).first
 
       unless lc
-        return msg.set_false(MovableMessage::TargetNotExst).to_json
+        return msg.set_false(MovableMessage::TargetNotExist).to_json
       end
 
       unless LogisticsContainerService.check(lc,current_user)
@@ -61,10 +61,12 @@ module V1
     end
 
     post :reject do
+      msg = ApiMessage.new
+
       lc = LogisticsContainer.where({id:params[:id]}).first
 
       unless lc
-        return msg.set_false(MovableMessage::TargetNotExst).to_json
+        return msg.set_false(MovableMessage::TargetNotExist).to_json
       end
 
       unless LogisticsContainerService.reject(lc,current_user)
