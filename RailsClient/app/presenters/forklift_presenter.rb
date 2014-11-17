@@ -38,7 +38,8 @@ class ForkliftPresenter<Presenter
 
   def to_json
     {
-        id: self.container_id,
+        id:self.id,
+        container_id: self.container_id,
         created_at: self.created_at,
         user_id: self.user_id,
         stocker_id: self.user_id,
@@ -50,7 +51,8 @@ class ForkliftPresenter<Presenter
 
   def to_json_with_packages
     {
-        id: self.container_id,
+        id:self.id,
+        container_id: self.container_id,
         created_at: self.created_at,
         user_id: self.user_id,
         stocker_id: self.user_id,

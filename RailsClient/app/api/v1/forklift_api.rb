@@ -44,9 +44,9 @@ module V1
       p1.add(p2)
     end
 
-    # check package
+    # add package
     post :check_package do
-      unless Forklift.exists?(params[:forklift_id])
+      unless f=LogisticsContainer.exists?(params[:forklift_id])
         return {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::NotExit}
       end
 
@@ -64,7 +64,7 @@ module V1
         return {result: 0, result_code: ResultCodeEnum::Failed, content: PackageMessage::InOtherForklift}
       end
 
-      f=LogisticsContainer.build(params[:forklift_id], current_user.id, current_user.location_id)
+      # f=LogisticsContainer.build(params[:forklift_id], current_user.id, current_user.location_id)
       if f.add(p)
         {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(pc).to_json}
       else
@@ -87,7 +87,7 @@ module V1
 
 # add package
     post :add_package do
-      unless Forklift.exists?(params[:forklift_id])
+      unless f=LogisticsContainer.exists?(params[:forklift_id])
         return {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::NotExit}
       end
       #
@@ -106,10 +106,9 @@ module V1
       res = PackageService.create(args, current_user)
       if res.result
         lc_p = res.object
-        f=LogisticsContainer.build(params[:forklift_id], current_user.id, current_user.location_id)
+        # f=LogisticsContainer.build(params[:forklift_id], current_user.id, current_user.location_id)
         if f.add(lc_p)
           {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(lc_p.container).to_json}
-
           # part = Part.find_by_id(params[:part_id])
           # if part.positions.where(whouse_id: f.whouse_id).count > 0 || part.positions.count == 0
           #   {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(p).to_json}
@@ -127,8 +126,7 @@ module V1
 # remove package
 # id is forklift_item_id
     delete :remove_package do
-
-      unless (p=Package.exists?(params[:package_id])) && (pl=LogisticsContainer.find_latest(p.id, current_user.location_id))
+      unless (p=LogisticsContainer.exists?(params[:package_id]))
         return {result: 0, content: PackageMessage::NotExit}
       end
 
@@ -137,8 +135,7 @@ module V1
       #   return {result: 0, content: PackageMessage::CannotUpdate}
       # end
 
-
-      {result: pl.remove ? 1 : 0, content: ''}
+      {result: p.remove ? 1 : 0, content: ''}
     end
 
 #delete forklift

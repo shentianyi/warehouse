@@ -28,10 +28,12 @@ module V1
     # check forklift
     # forklift id
     post :check_forklift do
-      #d = Delivery.find_by_id(params[:id])
-      f = ForkliftService.exits?(params[:forklift_id])
-      #puts f.to_json
-      if f && f.delivery.nil?
+      unless Forklift.exists?(params[:forklift_id])
+        return {result: 0, content: DeliveryMessage::CheckForkliftFailed}
+      end
+      f=LogisticsContainer.build(params[:package_id], current_user.id, current_user.location_id)
+
+      if f.root?
         {result: 1, content: ForkliftPresenter.new(f).to_json}
       else
         {result: 0, content: DeliveryMessage::CheckForkliftFailed}
@@ -42,33 +44,41 @@ module V1
     # id: delivery id
     # forklift: forklift ids
     post :add_forklift do
-      if (d = DeliveryService.exit?(params[:id])).nil?
+      unless d = LogisticsContainer.exists?(params[:id]
         return {result: 0, content: DeliveryMessage::NotExit}
       end
 
-      if !DeliveryState.can_update?(d.state)
-        return {result: 0, content: DeliveryMessage::CannotUpdate}
+      unless Forklift.where(id: params[:forklifts]).count == params[:forklifts].length
+        return {result: 0, content: DeliveryMessage::ForkliftHasNotExist}
       end
 
-      if DeliveryService.add_forklifts(d, params[:forklifts])
+      unless LogisticsContainer.are_roots?(params[:forklifts], current_user.location_id)
+        return {result: 0, content: DeliveryMessage::ForkliftExistInOthers}
+      end
+
+      # if !DeliveryState.can_update?(d.state)
+      #   return {result: 0, content: DeliveryMessage::CannotUpdate}
+      # end
+
+      if d.add_by_ids(params[:forklifts])
         {result: 1, content: DeliveryMessage::AddForkliftSuccess}
       else
         {result: 0, content: ''}
       end
-
     end
 
     # remove forklift
     # id is forklift_id
     delete :remove_forklift do
-      if (f = ForkliftService.exits?(params[:forklift_id])).nil?
+       unless f = LogisticsContainer.exists?(params[:forklift_id])
         return {result: 0, content: ForkliftMessage::NotExit}
       end
-      if !ForkliftState.can_update?(f.state)
-        return {result: 0, content: ForkliftMessage::CannotUpdate}
-      end
 
-      result = DeliveryService.remove_forklifk(f)
+      # if !ForkliftState.can_update?(f.state)
+      #   return {result: 0, content: ForkliftMessage::CannotUpdate}
+      # end
+
+      result =f.remove
       if result
         {result: 1, content: DeliveryMessage::DeleteForkliftSuccess}
       else
@@ -89,7 +99,7 @@ module V1
       end
 =end
       unless d = Delivery.exist?(params[:id])
-        return {result:0,content:DeliveryMessage::NotExist}
+        return {result: 0, content: DeliveryMessage::NotExist}
       end
 
       #if (d = DeliveryService.exit?(params[:id])).nil?
@@ -129,7 +139,7 @@ module V1
 
     post do
       if params[:forklifts] && params[:forklifts].length>0
-        unless Forklift.where(id:params[:forklifts]).count == params[:forklifts].length
+        unless Forklift.where(id: params[:forklifts]).count == params[:forklifts].length
           return {result: 0, content: DeliveryMessage::ForkliftHasNotExist}
         end
         unless LogisticsContainer.are_roots?(params[:forklifts], current_user.location_id)
@@ -142,13 +152,12 @@ module V1
       if params.has_key?(:forklifts)
         msg.object.add_by_ids(params[:forklifts])
       end
-      true
       #
-      # if msg.result
-      #   {result: 1, content: DeliveryPresenter.new(msg.object).to_json}
-      # else
-      #   {result: 0, content: msg.content}
-      # end
+      if msg.result
+        {result: 1, content: DeliveryPresenter.new(msg.object).to_json}
+      else
+        {result: 0, content: msg.content}
+      end
 
     end
 

@@ -26,8 +26,9 @@ class PackageService
       if p.save
         lc=p.logistics_containers.build(source_location_id: p.location_id, user_id: p.user_id)
         lc.save
+        lc.container=p
         msg.result = true
-        msg.object = p
+        msg.object = lc
       else
         msg.content = p.errors.full_messages
       end
