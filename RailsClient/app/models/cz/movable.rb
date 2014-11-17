@@ -14,7 +14,7 @@ module CZ
     def dispatch(destination, sender_id)
       if state_switch_to(MovableState::WAY)
         self.destinationable = destination
-        Record.update_or_create(self, {'id' => sender_id, 'type' => ImplUserType::SENDER, 'action' => __method__.to_s})
+        Record.update_or_create(self, {'id' => sender_id, 'type' => ImplUserType::SENDER, 'action' => __method__.to_s},destination)
         true
       else
         false

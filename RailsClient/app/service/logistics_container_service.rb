@@ -2,12 +2,16 @@ class LogisticsContainerService
   def self.dispatch lc, destination, user
     begin
       ActiveRecord::Base.transaction do
+        puts "11111"
         unless lc.source_location_id == user.location_id
+          puts "11111"
           raise
         end
         lc.des_location_id = destination.id
         #
+        puts "11111"
         unless lc.state_for("dispatch")
+          puts "11111"
           raise
         end
 
