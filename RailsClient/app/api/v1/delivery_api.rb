@@ -12,8 +12,9 @@ module V1
       end
     end
 
-    # get deliveries
-    # optional params: created_at, user_id, state...
+    # list
+    # @params: delivery_date
+    # *get all deliveries sent from current_user's location*
     get :list do
       delivery_date = Time.parse(params[:delivery_date])
       deliveries = Delivery.where(created_at: (12.hour.ago..delivery_date.end_of_day), source_id: current_user.location_id).all.order(created_at: :desc)
@@ -31,7 +32,14 @@ module V1
       unless Forklift.exists?(params[:forklift_id])
         return {result: 0, content: DeliveryMessage::CheckForkliftFailed}
       end
-      f=LogisticsContainer.build(params[:package_id], current_user.id, current_user.location_id)
+
+      #
+      lc = LogisticsContainer.find_latest_by_container_id(params[:forklift_id])
+      unless lc.copyable?
+        return {resule: 0, content: ForkliftMessage::CheckForkliftFailed}
+      end
+
+      f=LogisticsContainer.build(params[:forklift_id], current_user.id, current_user.location_id)
 
       if f.root?
         {result: 1, content: ForkliftPresenter.new(f).to_json}
@@ -44,7 +52,7 @@ module V1
     # id: delivery id
     # forklift: forklift ids
     post :add_forklift do
-      unless d = LogisticsContainer.exists?(params[:id]
+      unless d = LogisticsContainer.exists?(params[:id])
         return {result: 0, content: DeliveryMessage::NotExit}
       end
 
@@ -70,13 +78,16 @@ module V1
     # remove forklift
     # id is forklift_id
     delete :remove_forklift do
-       unless f = LogisticsContainer.exists?(params[:forklift_id])
+      unless f = LogisticsContainer.exists?(params[:forklift_id])
         return {result: 0, content: ForkliftMessage::NotExit}
       end
 
       # if !ForkliftState.can_update?(f.state)
       #   return {result: 0, content: ForkliftMessage::CannotUpdate}
       # end
+      unless f.deletable?
+        return {result: 0, content: DeliveryMessage::DeleteForkliftFailed}
+      end
 
       result =f.remove
       if result
@@ -86,18 +97,13 @@ module V1
       end
     end
 
-    # fake_send
-
     # send delivery
+    #**
+    #@deprecated
+    #**
     post :send do
       msg = ApiMessage.new
 
-=begin
-      unless d = Delivery.find_by_id(params[:id])
-        msg.set_false(DeliveryMessage::NotExit)
-        return msg.to_json
-      end
-=end
       unless d = Delivery.exist?(params[:id])
         return {result: 0, content: DeliveryMessage::NotExist}
       end
@@ -110,7 +116,10 @@ module V1
       #然后检查Delivery以及location container的状态
 
       #check state if can be sent
-      d.state_for("send")
+      unless d.state_for("dispatch")
+        msg.set_false(DeliveryMessage::CannotUpdate)
+        return msg.to_json
+      end
 
 =begin
       if !DeliveryState.can_update?(d.state)
@@ -118,7 +127,6 @@ module V1
         return msg.to_json
       end
 =end
-
 
       if DeliveryService.send(d, current_user)
         if NetService.ping()
@@ -156,7 +164,6 @@ module V1
       else
         {result: 0, content: msg.content}
       end
-
     end
 
     # delete delivery
@@ -165,9 +172,11 @@ module V1
         return {result: 0, content: DeliveryMessage::NotExit}
       end
 
+=begin
       if !DeliveryState.can_delete?(d.state)
         return {result: 0, content: DeliveryMessage::CannotDelete}
       end
+=end
 
       if  DeliveryService.delete(d)
         {result: 1, content: DeliveryMessage::DeleteSuccess}
@@ -201,6 +210,9 @@ module V1
       end
     end
 
+    #**
+    #@deprecated
+    #**
     # receive delivery
     post :receive do
       if (d = DeliveryService.exit?(params[:id])).nil?
@@ -232,6 +244,9 @@ module V1
       {result: 1, content: data}
     end
 
+    #**
+    #@deprecated
+    #**
     # confirm_receive
     post :confirm_receive do
       if (d = DeliveryService.exit?(params[:id])).nil?

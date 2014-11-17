@@ -12,5 +12,6 @@ module V1
     mount OrderItemAPI
     mount IosUpdateAPI
     mount LedAPI
+    mount MovableAPI
   end
 end

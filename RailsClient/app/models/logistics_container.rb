@@ -1,4 +1,7 @@
 class LogisticsContainer<LocationContainer
+  include CZ::Movable
+  include CZ::State
+
   default_scope { where(type: LocationContainerType::LOGISTICS) }
   has_ancestry
   belongs_to :destinationable, polymorphic: true
@@ -29,7 +32,7 @@ class LogisticsContainer<LocationContainer
       unless new_lc.exists?(location_id)
         new_lc=self.class.create(container_id: lc.container_id, user_id: user_id, source_location_id: location_id)
       end
-      if new_lc.root? && new_lc.copyable
+      if new_lc.root?
         parent.add(new_lc)
         lc.rebuild_to_location(user_id, location_id, new_lc)
       end

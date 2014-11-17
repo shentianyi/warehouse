@@ -2,7 +2,7 @@
 module V1
   class MovableAPI<Base
     namespace :movables
-    gurad_all!
+    guard_all!
 
     #
     helpers do
@@ -12,29 +12,68 @@ module V1
     end
 
     post :dispatch do
-      lc = LocationContainerService.search({id:params[:id]})
-      source = current_user.location
+      msg = ApiMessage.new
+      lc = LogisticsContainer.where({id:params[:id]}).first
+      unless lc
+        return msg.set_false(MovableMessage::TargetNotExist).to_json
+      end
+
       destination = LocationService.search({id:params[:destination_id]})
-      LocationContainerService.dispatch(lc,source,destination,current_user)
-      {result:1,content:"SUCCESS"}
+
+      unless destination
+        return msg.set_false(MovableMessage::DestinationNotExist).to_json
+      end
+
+      unless LogisticsContainerService.dispatch(lc,destination,current_user)
+        return msg.set_false(MovableMessage::DispatchFailed).to_json
+      end
+      msg.set_true(MovableMessage::Success).to_json
     end
 
     post :receive do
-      lc = LocationContainerService.search({id:params[:id]})
-      lc.receive(current_user.id)
-      {result:1,content:"SUCCESS"}
+      msg = ApiMessage.new
+      lc = LogisticsContainer.where({id:params[:id]}).first
+
+      unless lc
+        return msg.set_false(MovableMessage::TargetNotExist).to_json
+      end
+
+      unless LogisticsContainerService.receive(lc,current_user)
+        return msg.set_false(MovableMessage::ReceiveFailed).to_json
+      end
+
+      return msg.set_true(MovableMessage::Success).to_json
     end
 
     post :check do
-      lc = LocationContainer.find_by_id(params[:id])
-      lc.check(current_user.id)
-      {result:1,content:"SUCCESS"}
+      msg = ApiMessage.new
+      lc = LogisticsContainer.where({id:params[:id]}).first
+
+      unless lc
+        return msg.set_false(MovableMessage::TargetNotExist).to_json
+      end
+
+      unless LogisticsContainerService.check(lc,current_user)
+        return msg.set_false(MovableMessage::CheckFailed).to_json
+      end
+
+      return msg.set_true(MovableMessage::Success).to_json
     end
 
-    post :rejected do
-      lc = LocationContainer.find_by_id(params[:id])
-      lc.reject(current_user.id)
-      {result:1,content:"SUCCESS"}
+    post :reject do
+      msg = ApiMessage.new
+
+      lc = LogisticsContainer.where({id:params[:id]}).first
+
+      unless lc
+        return msg.set_false(MovableMessage::TargetNotExist).to_json
+      end
+
+      unless LogisticsContainerService.reject(lc,current_user)
+        return msg.set_false(MovableMessage::RejectFailed).to_json
+      end
+
+      return msg.set_true(MovableMessage::Success).to_json
     end
   end
 end

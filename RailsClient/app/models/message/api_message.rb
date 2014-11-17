@@ -10,10 +10,12 @@ class ApiMessage < CZ::BaseClass
   def set_true(msg=nil)
     self.result = 1
     self.content = msg if msg
+    self
   end
 
   def set_false(msg=nil)
     self.result = 0
     self.content = msg if msg
+    self
   end
 end
