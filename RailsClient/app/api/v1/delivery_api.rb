@@ -44,7 +44,7 @@ module V1
     # id: delivery id
     # forklift: forklift ids
     post :add_forklift do
-      unless d = LogisticsContainer.exists?(params[:id]
+      unless d = LogisticsContainer.exists?(params[:id])
         return {result: 0, content: DeliveryMessage::NotExit}
       end
 

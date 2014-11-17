@@ -12,71 +12,66 @@ module V1
     end
 
     post :dispatch do
+      msg = ApiMessage.new
       lc = LogisticsContainer.where({id:params[:id]}).first
       unless lc
-
-      end
-
-      unless lc.state_for("dispatch")
-
+        return msg.set_false(MovableMessage::TargetNotExst).to_json
       end
 
       destination = LocationService.search({id:params[:destination_id]})
 
       unless destination
 
+        return msg.set_false(MovableMessage::DestinationNotExist).to_json
       end
 
-      LogisticsContainerService.dispatch(lc,destination,current_user)
-      {result:1,content:"SUCCESS"}
+      unless LogisticsContainerService.dispatch(lc,destination,current_user)
+        return msg.set_false(MovableMessage::DispatchFailed).to_json
+      end
+      msg.set_true(MovableMessage::Success).to_json
     end
 
     post :receive do
+      msg = ApiMessage.new
       lc = LogisticsContainer.where({id:params[:id]}).first
 
       unless lc
-
+        return msg.set_false(MovableMessage::TargetNotExst).to_json
       end
 
-      unless lc.state_fro("receive")
-
+      unless LogisticsContainerService.receive(lc,current_user)
+        return msg.set_false(MovableMessage::ReceiveFailed).to_json
       end
 
-      LogisticsContainerService.receive(lc,current_user)
-
-      {result:1,content:"SUCCESS"}
+      return msg.set_true(MovableMessage::Success).to_json
     end
 
     post :check do
       lc = LogisticsContainer.where({id:params[:id]}).first
 
       unless lc
-
+        return msg.set_false(MovableMessage::TargetNotExst).to_json
       end
 
-      unless lc.state_fro("check")
-
+      unless LogisticsContainerService.check(lc,current_user)
+        return msg.set_false(MovableMessage::CheckFailed).to_json
       end
 
-      LogisticsContainerService.check(lc,current_user)
-
-      {result:1,content:"SUCCESS"}
+      return msg.set_true(MovableMessage::Success).to_json
     end
 
     post :reject do
       lc = LogisticsContainer.where({id:params[:id]}).first
 
       unless lc
-
+        return msg.set_false(MovableMessage::TargetNotExst).to_json
       end
 
-      unless lc.state_fro("reject")
-
+      unless LogisticsContainerService.reject(lc,current_user)
+        return msg.set_false(MovableMessage::RejectFailed).to_json
       end
 
-      LogisticsContainerService.reject(lc,current_user)
-
-      {result:1,content:"SUCCESS"}
+      return msg.set_true(MovableMessage::Success).to_json
     end
   end
 end
