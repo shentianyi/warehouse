@@ -177,7 +177,6 @@ ActiveRecord::Schema.define(version: 20141117062022) do
     t.string   "user_id"
     t.string   "container_id"
     t.string   "remark"
-    t.integer  "type"
     t.boolean  "is_delete",            default: false
     t.boolean  "is_dirty",             default: true
     t.boolean  "is_new",               default: true
@@ -187,6 +186,7 @@ ActiveRecord::Schema.define(version: 20141117062022) do
     t.string   "destinationable_id"
     t.string   "destinationable_type"
     t.string   "ancestry"
+    t.integer  "type"
   end
 
   add_index "location_containers", ["ancestry"], name: "index_location_containers_on_ancestry", using: :btree
@@ -442,8 +442,6 @@ ActiveRecord::Schema.define(version: 20141117062022) do
     t.string   "impl_user"
     t.string   "impl_action"
     t.datetime "impl_time"
-    t.string   "destinationable_id"
-    t.string   "destinationable_type"
     t.boolean  "is_delete"
     t.boolean  "is_new"
     t.boolean  "is_dirty"

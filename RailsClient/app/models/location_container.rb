@@ -45,7 +45,6 @@ class LocationContainer < ActiveRecord::Base
         end
       end
     rescue Exception => e
-      puts e.message
       return false
     end
     true

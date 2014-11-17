@@ -1,4 +1,5 @@
 class Package<Container
+
   default_scope { where(type: ContainerType::PACKAGE) }
 
   def self.id_valid?(id)
