@@ -19,4 +19,5 @@ module DeliveryMessage
   ReceiveSuccess='接收成功'
   ReceiveFailed='接收失败'
   NotSend=',运单未发送,请联系发货人员发货'
+  DestinationNotExist = '目的地不存在'
 end

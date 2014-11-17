@@ -64,6 +64,10 @@ module V1
         return {result: 0, content: DeliveryMessage::ForkliftExistInOthers}
       end
 
+      unless d.updateable?
+        return {result: 0, content: DeliveryMessage::CannotUpdate}
+      end
+
       # if !DeliveryState.can_update?(d.state)
       #   return {result: 0, content: DeliveryMessage::CannotUpdate}
       # end
@@ -85,7 +89,7 @@ module V1
       # if !ForkliftState.can_update?(f.state)
       #   return {result: 0, content: ForkliftMessage::CannotUpdate}
       # end
-      unless f.deletable?
+      unless f.updateable?
         return {result: 0, content: DeliveryMessage::DeleteForkliftFailed}
       end
 
@@ -104,43 +108,21 @@ module V1
     post :send do
       msg = ApiMessage.new
 
-      unless d = Delivery.exist?(params[:id])
-        return {result: 0, content: DeliveryMessage::NotExist}
+      unless lc = LogisticsContainer.exists?(params[:id])
+        return msg.set_false(DeliveryMessage::NotExist).to_json
       end
 
-      #if (d = DeliveryService.exit?(params[:id])).nil?
-      #  return {result:0,content:DeliveryMessage::NotExit}
-      #end
-
-      #需要活的当前Delivery对应的location container
-      #然后检查Delivery以及location container的状态
-
-      #check state if can be sent
-      unless d.state_for("dispatch")
-        msg.set_false(DeliveryMessage::CannotUpdate)
-        return msg.to_json
+      unless lc.updateable?
+        return msg.set_false(DeliveryMessage::CannotUpdate).to_json
       end
 
-=begin
-      if !DeliveryState.can_update?(d.state)
-        msg.set_false(DeliveryMessage::CannotUpdate)
-        return msg.to_json
+      unless destination = Location.find_by_id(params[:destination_id])
+        return msg.set_false(DeliveryMessage::DestinationNotExist).to_json
       end
-=end
-
-      if DeliveryService.send(d, current_user)
-        if NetService.ping()
-          msg.set_true(DeliveryMessage::SendSuccess)
-          return msg.to_json
-        else
-          msg.set_true(DeliveryMessage::SendSuccess+DeliveryMessage::NetworkNotGood)
-          return msg.to_json
-        end
-
-      else
-        msg.set_false(DeliveryMessage::SendFailed)
-        return msg.to_json
+      unless LogisticsContainerService.dispatch(lc,destination,current_user)
+        return msg.set_false(DeliveryMessage::SendFailed).to_json
       end
+      return msg.set_true(DeliveryMessage::SendSuccess).to_json
     end
 
     post do

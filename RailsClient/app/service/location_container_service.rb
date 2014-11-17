@@ -3,7 +3,7 @@ class LocationContainerService
     msg=Message.new
     if lc=LogisticsContainer.exists?(id)
       # lee to rewrite
-      if BaseState.can_delete?(lc.state)
+      if lc.updateable?
         ActiveRecord::Base.transaction do
           lc.children.each do |c|
             c.remove

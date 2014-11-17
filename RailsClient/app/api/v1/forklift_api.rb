@@ -53,6 +53,9 @@ module V1
       # unless ForkliftState.can_update?(f.state)
       #   return {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::CannotUpdate}
       # end
+      unless f.updateable?
+        return {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::CannotUpdate}
+      end
 
       unless pc= Package.exists?(params[:package_id])
         return {result: 0, result_code: ResultCodeEnum::Failed, content: PackageMessage::NotExit}
@@ -89,6 +92,10 @@ module V1
     post :add_package do
       unless f=LogisticsContainer.exists?(params[:forklift_id])
         return {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::NotExit}
+      end
+
+      unless f.updateable?
+        return {result: 0, content: {message: ForkliftMessage::CannotUpdate}}
       end
       #
       # unless ForkliftState.can_update?(f.state)
@@ -130,6 +137,9 @@ module V1
         return {result: 0, content: PackageMessage::NotExit}
       end
 
+      unless p.updateable?
+        return {result: 0, content: PackageMessage::CannotUpdate}
+      end
       #
       # if !PackageState.can_update?(p.state)
       #   return {result: 0, content: PackageMessage::CannotUpdate}
@@ -143,9 +153,10 @@ module V1
       unless f = ForkliftService.exits?(params[:id])
         return {result: 0, content: ForkliftMessage::NotExit}
       end
-      unless ForkliftState.can_delete?(f.state)
-        return {result: 0, content: ForkliftMessage::CannotUpdate}
-      end
+      #unless ForkliftState.can_delete?(f.state)
+      #  return {result: 0, content: ForkliftMessage::CannotUpdate}
+      #end
+
       ForkliftService.delete(f)
       {result: 1, content: ''}
     end
@@ -167,9 +178,9 @@ module V1
         return {result: 0, content: ForkliftMessage::NotExit}
       end
 
-      if !ForkliftState.can_update?(f.state)
-        return {result: 0, content: ForkliftMessage::CannotUpdate}
-      end
+      #if !ForkliftState.can_update?(f.state)
+      #  return {result: 0, content: ForkliftMessage::CannotUpdate}
+      #end
 
       if forklift_params[:whouse_id]
         unless ForkliftService.parts_in_whouse?(f.packages.collect { |p| p.part_id }, forklift_params[:whouse_id])

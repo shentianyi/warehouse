@@ -13,11 +13,11 @@ module CZ
       end
     end
 
-    def deletable?
-      if self.base_state == 0
-        true
-      else
+    def updateable?
+      if self.base_state == LOCK
         false
+      else
+        true
       end
     end
   end

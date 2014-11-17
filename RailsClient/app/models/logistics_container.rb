@@ -1,6 +1,6 @@
 class LogisticsContainer<LocationContainer
   include CZ::Movable
-  include CZ::State
+
 
   default_scope { where(type: LocationContainerType::LOGISTICS) }
   has_ancestry

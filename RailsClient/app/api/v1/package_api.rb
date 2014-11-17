@@ -79,6 +79,9 @@ module V1
       end
     end
 
+    #**
+    #@deprecated
+    #**
     # check package
     post :check do
       msg = PackageService.check(params[:id])
@@ -89,6 +92,9 @@ module V1
       end
     end
 
+    #**
+    #@deprecated
+    #**
     # uncheck package
     post :uncheck do
       msg = PackageService.uncheck(params[:id])
