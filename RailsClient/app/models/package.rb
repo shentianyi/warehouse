@@ -152,7 +152,7 @@ class Package < ActiveRecord::Base
   def self.entry_report condition
     self.joins(:part).joins(forklift: :delivery)
     .where(condition)
-    .select("packages.state as state,packages.part_id,COUNT(packages.id) as box_count,SUM(packages.quantity_str) as total,forklifts.whouse_id as whouse_id,deliveries.created_date as rdate,deliveries.receiver_id as receover_id")
+    .select("packages.state as state,packages.part_id,COUNT(packages.id) as box_count,SUM(packages.quantity_str) as total,forklifts.whouse_id as whouse_id,deliveries.created_at as rdate,deliveries.receiver_id as receover_id")
     .group("packages.part_id,whouse_id,state").order("whouse_id,rdate DESC")
   end
 
