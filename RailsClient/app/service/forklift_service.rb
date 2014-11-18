@@ -23,7 +23,6 @@ class ForkliftService
     return msg
   end
 
-
   def self.get_packages(forklift_lc)
     forklift_lc.descendants.joins(:package).all
   end
@@ -31,8 +30,6 @@ class ForkliftService
   def self.get_part_ids(forklift_lc)
     get_packages(forklift_lc).pluck('distinct(containers.part_id)')
   end
-
-
 
 
   def self.search(args)

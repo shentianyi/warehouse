@@ -10,7 +10,7 @@ module V1
       end
     end
 
-    # get binded but not add to delivery forklifts
+    #get all forklifts not in delivery
     get :binds do
       args={
           delivery_id: nil
@@ -90,7 +90,6 @@ module V1
         return {result: 0, content: {message: ForkliftMessage::CannotUpdate}}
       end
 
-      #create package
       args = {
           id: params[:package_id],
           part_id: params[:part_id],
@@ -159,7 +158,7 @@ module V1
         return {result: 0, content: ForkliftMessage::NotExit}
       end
 
-      unless f.updateable?
+      unless f.can? 'update'
         return {result: 0, content: ForkliftMessage::CannotUpdate}
       end
 

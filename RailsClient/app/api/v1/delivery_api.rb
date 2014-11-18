@@ -16,8 +16,13 @@ module V1
     # @params: delivery_date
     # *get all deliveries sent from current_user's location*
     get :list do
-      delivery_date = Time.parse(params[:delivery_date])
-      deliveries = Delivery.where(created_at: (12.hour.ago..delivery_date.end_of_day), source_id: current_user.location_id).all.order(created_at: :desc)
+      created_at = Time.parse(params[:delivery_date])
+      args = {
+          created_at: (12.hour.ago..created_at.end_of_day),
+          source_location_id: current_user.location_id
+      }
+      deliveries = LogisticsContainerService.find_by_container_type(ContainerType::DELIVERY,args).all.order(created_at: :desc)
+      #Delivery.where(created_at: (12.hour.ago..delivery_date.end_of_day), source_id: current_user.location_id).all.order(created_at: :desc)
       data = []
       DeliveryPresenter.init_presenters(deliveries).each do |d|
         data << d.to_json
@@ -119,6 +124,8 @@ module V1
       return msg.set_true(DeliveryMessage::SendSuccess).to_json
     end
 
+    #create delivery
+    #@forklifts : forklift ids
     post do
       if params[:forklifts] && params[:forklifts].length>0
         unless Forklift.where(id: params[:forklifts]).count == params[:forklifts].length
@@ -143,6 +150,7 @@ module V1
     end
 
     # delete delivery
+    #@id
     delete do
       msg = LogisticsContainerService.destroy_by_id(params[:id])
       if msg.result
@@ -154,26 +162,30 @@ module V1
 
     # get delivery detail
     get :detail do
-      if (d = DeliveryService.exit?(params[:id])).nil?
-        return {result: 0, content: DeliveryMessage::NotExit}
+      msg = Message.new
+      unless lc = LogisticsContainer.exists?(params[:id])
+        return msg.set_false(DeliveryMessage::NotExist).to_json
       end
       content = DeliveryPresenter.new(d).to_json_with_forklifts(false)
-      {result: 1, content: content}
+      #{result: 1, content: content}
+      msg.set_true(content).to_json
     end
 
+    # update delivery
     put do
+      msg = Message.new
       if (d = DeliveryService.exit?(delivery_params[:id])).nil?
-        return {result: 0, content: DeliveryMessage::NotExit}
+        return msg.set_false(DeliveryMessage::NotExist).to_json
       end
 
-      if !DeliveryState.can_delete?(d.state)
-        return {result: 0, content: DeliveryMessage::CannotUpdate}
+      unless d.can? 'update'
+        return msg.set_false(DeliveryMessage::CannotUpdate).to_json
       end
 
       if DeliveryService.update(d, delivery_params)
-        {result: 1, content: DeliveryMessage::UpdateSuccess}
+        return msg.set_true(DeliveryMessage::UpdateSuccess).to_json
       else
-        {result: 0, contnet: DeliveryMessage::UpdateFailed}
+        return msg.set_false(DeliveryMessage::UpdateFailed).to_json
       end
     end
 

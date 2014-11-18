@@ -4,7 +4,7 @@ class ApiMessage < CZ::BaseClass
   attr_accessor :result,:content
 
   def default
-    {result:0}
+    {result:1}
   end
 
   def set_true(msg=nil)

@@ -26,7 +26,6 @@ class DeliveryService
     Forklift.where(id: forklift_ids).where.not(delivery_id: nil).count > 0
   end
 
-
   #=============
   #update @args
   #update a delivery
@@ -106,76 +105,6 @@ class DeliveryService
     end
   end
 
-  #=============
-  #receive @delivery
-  #set state to DESTINATION
-  #=============
-  def self.receive(delivery)
-    if delivery.nil?
-      return false
-    end
-
-    if (delivery.state == DeliveryState::RECEIVED)
-      return true
-    end
-
-    ActiveRecord::Base.transaction do
-      if !delivery.set_state(DeliveryState::DESTINATION)
-        return false
-      end
-      delivery.forklifts.each do |f|
-        ForkliftService.receive(f)
-      end
-    end
-    true
-  end
-
-  #=============
-  #semd @delivery
-  #set state to WAY
-  #=============
-  def self.send(delivery, current_user)
-    if delivery.nil?
-      return false
-    end
-
-    if delivery.forklifts.count == 0
-      return false
-    end
-
-    ActiveRecord::Base.transaction do
-      delivery.delivery_date = Time.now
-      delivery.set_state(DeliveryState::WAY)
-      delivery.forklifts.each do |f|
-        ForkliftService.send(f)
-      end
-    end
-    true
-  end
-
-  #=============
-  #set_state @delivery,@state
-  #set delivery to a specific state
-  #=============
-  def self.set_state(delivery, state)
-    if delivery.nil?
-      return false
-    end
-    ActiveRecord::Base.transaction do
-      if delivery.set_state(state)
-        delivery.forklifts.each do |f|
-          ForkliftService.set_state(f, state)
-        end
-      end
-    end
-  end
-
-  #=============
-  #exit? @id
-  #=============
-  def self.exit? id
-    Delivery.includes(forklifts: :packages).find_by_id(id)
-  end
 
   #=============
   #import_by_file

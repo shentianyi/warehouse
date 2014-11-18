@@ -4,16 +4,21 @@ module CZ
   module Movable
     #include this module to your Model,make sure you have column below
     #:current_posotionable_id,:current_positionable_type,:destinationable_id,:destinationable_type,:state
+    DISPATCH = "dispatch"
+    RECEIVE = "receive"
+    CHECK = "check"
+    REJECT = "reject"
+
     @@actions = {
-        "dispatch" => MovableState::WAY,
-        "receive" => MovableState::ARRIVED,
-        "check" => MovableState::CHECKED,
-        "reject" => MovableState::REJECTED
+        DISPATCH => MovableState::WAY,
+        RECEIVE => MovableState::ARRIVED,
+        CHECK => MovableState::CHECKED,
+        REJECT => MovableState::REJECTED
     }
 
     def dispatch(destination, sender_id)
       if state_switch_to(MovableState::WAY)
-        self.destinationable = destination
+        #self.destinationable = destination
         Record.update_or_create(self, {'id' => sender_id, 'type' => ImplUserType::SENDER, 'action' => __method__.to_s},destination)
         true
       else
@@ -47,6 +52,10 @@ module CZ
       else
         false
       end
+    end
+
+    def get_record(action)
+      Record.where({impl_action: action,recordable:self}).first
     end
 
     #for CZ::State

@@ -9,7 +9,7 @@ class LogisticsContainer<LocationContainer
   belongs_to :package, foreign_key: :container_id
   belongs_to :forklift, foreign_key: :container_id
   belongs_to :delivery, foreign_key: :container_id
-  has_many :movable_records, :as => :movable
+  has_many :records, :as => :recordable
 
   def exists?(location_id)
     self.source_location_id==location_id
