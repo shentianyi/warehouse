@@ -29,9 +29,9 @@ class LogisticsContainerService
         end
       end
     rescue Exception => e
-     msg.set_false(e.to_s)
+     return msg.set_false(e.to_s)
     end
-    return msg
+    return msg.set_true()
   end
 
   def self.receive(lc, user)
@@ -58,9 +58,9 @@ class LogisticsContainerService
         end
       end
     rescue Exception => e
-     msg.set_false(e.to_s)
+      return  msg.set_false(e.to_s)
     end
-    return msg
+    return msg.set_true()
   end
 
   def self.check(lc, user)
@@ -84,12 +84,13 @@ class LogisticsContainerService
         end
       end
     rescue Exception => e
-      msg.set_false(e.to_s)
+      return msg.set_false(e.to_s)
     end
-    return  msg
+    return  msg.set_true()
   end
 
   def self.reject(lc, user)
+    msg = Message.new
     begin
       ActiveRecord::Base.transaction do
         unless lc.des_location_id == user.location_id
@@ -109,9 +110,9 @@ class LogisticsContainerService
         end
       end
     rescue Exception => e
-      msg.set_false(e.to_s)
+      return msg.set_false(e.to_s)
     end
-    return msg
+    return msg.set_true()
   end
 
   def self.find_by_container_type(type,args)
