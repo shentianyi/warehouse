@@ -1,4 +1,7 @@
 class LocationContainerService
+<<<<<<< HEAD
+
+=======
   def self.destroy_by_id(id)
     msg=Message.new
     if lc=LogisticsContainer.exists?(id)
@@ -19,4 +22,5 @@ class LocationContainerService
     end
     msg
   end
+>>>>>>> df86f4d836f543dbb4a7c10b38af1fbad56fe78a
 end

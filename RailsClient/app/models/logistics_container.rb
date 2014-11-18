@@ -11,7 +11,6 @@ class LogisticsContainer<LocationContainer
   belongs_to :delivery, foreign_key: :container_id
   has_many :movable_records, :as => :movable
 
-
   def exists?(location_id)
     self.source_location_id==location_id
   end

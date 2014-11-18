@@ -50,9 +50,7 @@ module V1
         return {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::NotExit}
       end
 
-      # unless ForkliftState.can_update?(f.state)
-      #   return {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::CannotUpdate}
-      # end
+
       unless f.can? 'update'
         return {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::CannotUpdate}
       end
@@ -65,13 +63,12 @@ module V1
         p=pc.logistics_containers.build(source_location_id: current_user.location_id, user_id: current_user.id)
         p.save
       end
-      p.container=pc
+      p.package=pc
 
       unless p.can_add_to_container?
         return {result: 0, result_code: ResultCodeEnum::Failed, content: PackageMessage::InOtherForklift}
       end
 
-      # f=LogisticsContainer.build(params[:forklift_id], current_user.id, current_user.location_id)
       if f.add(p)
         {result: 1, result_code: ResultCodeEnum::Success, content: PackageLazyPresenter.new(p).to_json}
       else
@@ -101,11 +98,7 @@ module V1
       unless f.can? 'update'
         return {result: 0, content: {message: ForkliftMessage::CannotUpdate}}
       end
-      #
-      # unless ForkliftState.can_update?(f.state)
-      #   return {result: 0, content: {message: ForkliftMessage::CannotUpdate}}
-      # end
-      #
+
       #create package
       args = {
           id: params[:package_id],
@@ -135,7 +128,6 @@ module V1
     end
 
 # remove package
-# id is forklift_item_id
     delete :remove_package do
       unless (p=LogisticsContainer.exists?(params[:package_id]))
         return {result: 0, content: PackageMessage::NotExit}
@@ -144,25 +136,17 @@ module V1
       unless p.can? 'update'
         return {result: 0, content: PackageMessage::CannotUpdate}
       end
-      #
-      # if !PackageState.can_update?(p.state)
-      #   return {result: 0, content: PackageMessage::CannotUpdate}
-      # end
-
       {result: p.remove ? 1 : 0, content: ''}
     end
 
 #delete forklift
     delete do
-      unless f = ForkliftService.exits?(params[:id])
-        return {result: 0, content: ForkliftMessage::NotExit}
+      msg = LogisticsContainerService.destroy_by_id(params[:id])
+      if msg.result
+        {result: 1, content: BaseMessage::DESTROYED}
+      else
+        {result: 0, content: msg.content}
       end
-      #unless ForkliftState.can_delete?(f.state)
-      #  return {result: 0, content: ForkliftMessage::CannotUpdate}
-      #end
-
-      ForkliftService.delete(f)
-      {result: 1, content: ''}
     end
 
 # get forklift detail
@@ -178,25 +162,30 @@ module V1
 
 # update forklift
     put do
-      if (f = ForkliftService.exits?(forklift_params[:id])).nil?
+      args=forklift_params
+      args.delete(:stocker_id)
+      args[:destinationable_id] = args[:whouse_id]
+      args.delete(:whouse_id)
+
+      unless f=LogisticsContainer.exists?(args[:id])
         return {result: 0, content: ForkliftMessage::NotExit}
       end
 
-      #if !ForkliftState.can_update?(f.state)
-      #  return {result: 0, content: ForkliftMessage::CannotUpdate}
-      #end
+      unless f.updateable?
+        return {result: 0, content: ForkliftMessage::CannotUpdate}
+      end
 
-      if forklift_params[:whouse_id]
-        unless ForkliftService.parts_in_whouse?(f.packages.collect { |p| p.part_id }, forklift_params[:whouse_id])
+      unless args[:destinationable_id].blank?
+        unless ForkliftService.parts_in_whouse?(ForkliftService.get_part_ids(f), args[:destinationable_id])
           return {return: 0, content: ForkliftMessage::CannotUpdatePartsNotExistInWhouse}
         end
       end
 
-      result = ForkliftService.update(f, forklift_params)
-      if result
-        if forklift_params[:whouse_id]
-          packages = PackagePresenter.init_presenters(f.packages).collect { |p| p.to_json }
-          {result: 1, content: {packages: packages}}
+      if f.update_attributes(args)
+        if args[:destinationable_id]
+          # packages = PackagePresenter.init_presenters(f.packages).collect { |p| p.to_json }
+          # {result: 1, content: {packages: packages}}
+          true
         else
           {result: 1, content: ForkliftMessage::UpdateSuccess}
         end

@@ -62,7 +62,7 @@ module V1
     put do
       msg = PackageService.update(package_params)
       if msg.result
-        {result: 1, content: PackagePresenter.new(msg.object).to_json}
+        {result: 1, content: PackageLazyPresenter.new(msg.object).to_json}
       else
         {result: 0, content: msg.content}
       end
@@ -71,9 +71,9 @@ module V1
     # delete package
     # update is_delete to true
     delete do
-      msg = PackageService.delete(params[:id])
+      msg = LogisticsContainerService.destroy_by_id(params[:id])
       if msg.result
-        {result: 1, content: PackageMessage::DeleteSuccess}
+        {result: 1, content: BaseMessage::DESTROYED}
       else
         {result: 0, content: msg.content}
       end

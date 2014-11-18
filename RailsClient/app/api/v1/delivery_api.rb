@@ -33,7 +33,6 @@ module V1
         return {result: 0, content: DeliveryMessage::CheckForkliftFailed}
       end
 
-      #
       lc = LogisticsContainer.find_latest_by_container_id(params[:forklift_id])
       unless lc.copyable?
         return {resule: 0, content: ForkliftMessage::CheckForkliftFailed}
@@ -68,10 +67,6 @@ module V1
         return {result: 0, content: DeliveryMessage::CannotUpdate}
       end
 
-      # if !DeliveryState.can_update?(d.state)
-      #   return {result: 0, content: DeliveryMessage::CannotUpdate}
-      # end
-
       if d.add_by_ids(params[:forklifts])
         {result: 1, content: DeliveryMessage::AddForkliftSuccess}
       else
@@ -86,9 +81,6 @@ module V1
         return {result: 0, content: ForkliftMessage::NotExit}
       end
 
-      # if !ForkliftState.can_update?(f.state)
-      #   return {result: 0, content: ForkliftMessage::CannotUpdate}
-      # end
       unless f.can? 'delete'
         return {result: 0, content: DeliveryMessage::DeleteForkliftFailed}
       end
@@ -152,14 +144,11 @@ module V1
 
     # delete delivery
     delete do
-      if (d = DeliveryService.exit?(params[:id])).nil?
-        return {result: 0, content: DeliveryMessage::NotExit}
-      end
-
-      if  DeliveryService.delete(d)
-        {result: 1, content: DeliveryMessage::DeleteSuccess}
+      msg = LogisticsContainerService.destroy_by_id(params[:id])
+      if msg.result
+        {result: 1, content: BaseMessage::DESTROYED}
       else
-        {result: 0, content: DeliveryMessage::DeleteFailed}
+        {result: 0, content: msg.content}
       end
     end
 

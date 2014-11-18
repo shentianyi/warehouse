@@ -20,20 +20,10 @@ class DeliveryService
   end
 
   #=============
-  #delete @delivery
-  #delete a delivery
+  #check add forklift
   #=============
-  def self.delete delivery
-    if delivery
-      ActiveRecord::Base.transaction do
-        delivery.forklifts.each do |f|
-          f.remove_from_delivery
-        end
-        delivery.destroy
-      end
-    else
-      false
-    end
+  def self.check_add_forklifts forklift_ids
+    Forklift.where(id: forklift_ids).where.not(delivery_id: nil).count > 0
   end
 
   #=============
