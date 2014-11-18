@@ -16,11 +16,6 @@ module CZ
     def can?(action)
       case action
         when 'delete'
-          if self.base_state == LOCK
-            return false
-          else
-            return true
-          end
         when 'update'
           if self.base_state == LOCK
             return false

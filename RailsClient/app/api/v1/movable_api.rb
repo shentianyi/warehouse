@@ -13,7 +13,7 @@ module V1
 
     post :dispatch do
       msg = ApiMessage.new
-      lc = LogisticsContainer.where({id:params[:id]}).first
+      lc = LogisticsContainer.exists?(id:params[:id])
       unless lc
         return msg.set_false(MovableMessage::TargetNotExist).to_json
       end
@@ -32,7 +32,7 @@ module V1
 
     post :receive do
       msg = ApiMessage.new
-      lc = LogisticsContainer.where({id:params[:id]}).first
+      lc = LogisticsContainer.exists?(id:params[:id])
 
       unless lc
         return msg.set_false(MovableMessage::TargetNotExist).to_json
@@ -47,7 +47,7 @@ module V1
 
     post :check do
       msg = ApiMessage.new
-      lc = LogisticsContainer.where({id:params[:id]}).first
+      lc = LogisticsContainer.exists?(id:params[:id])
 
       unless lc
         return msg.set_false(MovableMessage::TargetNotExist).to_json
@@ -63,7 +63,7 @@ module V1
     post :reject do
       msg = ApiMessage.new
 
-      lc = LogisticsContainer.where({id:params[:id]}).first
+      lc = LogisticsContainer.exists?(id:params[:id])
 
       unless lc
         return msg.set_false(MovableMessage::TargetNotExist).to_json

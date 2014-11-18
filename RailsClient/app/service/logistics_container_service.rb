@@ -105,4 +105,8 @@ class LogisticsContainerService
 
     end
   end
+
+  def self.find_by_container_type(type,args)
+    LogisticsContainer.joins(:container).where("containers.type = ?",type).where(args).all
+  end
 end

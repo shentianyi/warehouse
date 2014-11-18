@@ -117,7 +117,7 @@ class DeliveryService
         #delivery.received_date = Time.now
         #delivery.save
         delivery.update({receiver: current_user, received_date: Time.now})
-      else
+        else
         false
       end
     end
