@@ -30,5 +30,9 @@ module CZ
       end
       false
     end
+
+    def updateable?
+      true
+    end
   end
 end
