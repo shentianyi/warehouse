@@ -120,8 +120,8 @@ module V1
         return msg.set_false(DeliveryMessage::DestinationNotExist).to_json
       end
 
-      unless LogisticsContainerService.dispatch(lc,destination,current_user)
-        return msg.set_false(DeliveryMessage::SendFailed).to_json
+      unless (r = LogisticsContainerService.dispatch(lc,destination,current_user)).result
+        return msg.set_false(r.content).to_json
       end
 
       return msg.set_true(DeliveryMessage::SendSuccess).to_json
@@ -197,10 +197,10 @@ module V1
         return {return: 0, content: DeliveryMessage::NotExist}
       end
 
-      if LogisticsContainerService.receive(d,current_user)
+      if (r = LogisticsContainerService.receive(d,current_user)).result
         {result: 1, content: DeliveryPresenter.new(d).to_json_with_forklifts(true)}
       else
-        {result: 0, content: DeliveryMessage::AlreadyReceived}
+        {result: 0, content: r.content}
       end
     end
 

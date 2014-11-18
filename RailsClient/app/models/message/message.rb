@@ -8,11 +8,13 @@ class Message<CZ::BaseClass
 
   def set_false msg=nil
     self.result=false
-    self.content<<msg if msg
+    self.content = msg if msg
+    self
   end
 
   def set_true msg=nil
     self.result=true
-    self.content<<msg if msg
+    self.content = msg if msg
+    self
   end
 end

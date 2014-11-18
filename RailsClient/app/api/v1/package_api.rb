@@ -85,6 +85,7 @@ module V1
     # check package
     post :check do
       msg = PackageService.check(params[:id])
+
       if msg.result
         {result: 1, content: msg.content}
       else
