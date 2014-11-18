@@ -5,7 +5,6 @@ class LogisticsContainerService
       if lc.updateable?
         ActiveRecord::Base.transaction do
           lc.children.each do |c|
-            puts '****************'
             c.remove
           end
           lc.parent=nil

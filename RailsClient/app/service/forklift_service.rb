@@ -32,13 +32,7 @@ class ForkliftService
     get_packages(forklift_lc).pluck('distinct(containers.part_id)')
   end
 
-  #=============
-  #verify package
-  #check if parts in this warehouse
-  #=============
-  def self.parts_in_whouse? part_ids, whouse_id
-    Whouse.joins(:parts).where(id: whouse_id, parts: {id: part_ids}).count==part_ids.count
-  end
+
 
 
   def self.search(args)

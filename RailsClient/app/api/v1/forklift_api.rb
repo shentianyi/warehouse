@@ -70,23 +70,14 @@ module V1
       end
 
       if f.add(p)
-        {result: 1, result_code: ResultCodeEnum::Success, content: PackageLazyPresenter.new(p).to_json}
+        if PartService.get_part_by_id_whouse_id(pc.part_id, f.destinationable_id)
+          {result: 1, result_code: ResultCodeEnum::Success, content: PackageLazyPresenter.new(p).to_json}
+        else
+          {result: 1, result_code: ResultCodeEnum::TargetNotInPosition, content: PackageLazyPresenter.new(p).to_json}
+        end
       else
         {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::AddPackageFailed}
       end
-      #
-      # if ForkliftService.add_package(f, p)
-      #   puts "------------------------------"
-      #   puts p.position
-      #   puts "------------------------------"
-      #   unless p.position.nil?
-      #     {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(p).to_json}
-      #   else
-      #     {result: 1, result_code: ResultCodeEnum::TargetNotInPosition, content: PackagePresenter.new(p).to_json}
-      #   end
-      # else
-      #   {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::AddPackageFailed}
-      # end
     end
 
 # add package
@@ -110,15 +101,12 @@ module V1
       res = PackageService.create(args, current_user)
       if res.result
         lc_p = res.object
-        # f=LogisticsContainer.build(params[:forklift_id], current_user.id, current_user.location_id)
         if f.add(lc_p)
-          {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(lc_p.container).to_json}
-          # part = Part.find_by_id(params[:part_id])
-          # if part.positions.where(whouse_id: f.whouse_id).count > 0 || part.positions.count == 0
-          #   {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(p).to_json}
-          # else
-          #   {result: 1, result_code: ResultCodeEnum::TargetNotInPosition, content: PackagePresenter.new(p).to_json}
-          # end
+          if PartService.get_part_by_id_whouse_id(pararms[:part_id], f.destinationable_id)
+            {result: 1, result_code: ResultCodeEnum::Success, content: PackageLazyPresenter.new(lc_p).to_json}
+          else
+            {result: 1, result_code: ResultCodeEnum::TargetNotInPosition, content: PackageLazyPresenter.new(lc_p).to_json}
+          end
         else
           {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::AddPackageFailed}
         end
@@ -176,7 +164,7 @@ module V1
       end
 
       unless args[:destinationable_id].blank?
-        unless ForkliftService.parts_in_whouse?(ForkliftService.get_part_ids(f), args[:destinationable_id])
+        unless PartService.parts_in_whouse?(ForkliftService.get_part_ids(f), args[:destinationable_id])
           return {return: 0, content: ForkliftMessage::CannotUpdatePartsNotExistInWhouse}
         end
       end
