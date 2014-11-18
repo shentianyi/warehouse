@@ -119,9 +119,11 @@ module V1
       unless destination = Location.find_by_id(params[:destination_id])
         return msg.set_false(DeliveryMessage::DestinationNotExist).to_json
       end
+
       unless LogisticsContainerService.dispatch(lc,destination,current_user)
         return msg.set_false(DeliveryMessage::SendFailed).to_json
       end
+
       return msg.set_true(DeliveryMessage::SendSuccess).to_json
     end
 
