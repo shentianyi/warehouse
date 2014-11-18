@@ -166,7 +166,7 @@ module V1
       unless lc = LogisticsContainer.exists?(params[:id])
         return msg.set_false(DeliveryMessage::NotExist).to_json
       end
-      content = DeliveryPresenter.new(d).to_json_with_forklifts(false)
+      content = DeliveryPresenter.new(d).to_json
       #{result: 1, content: content}
       msg.set_true(content).to_json
     end
@@ -200,7 +200,7 @@ module V1
       end
 
       if (r = LogisticsContainerService.receive(d,current_user)).result
-        {result: 1, content: DeliveryPresenter.new(d).to_json_with_forklifts(true)}
+        {result: 1, content: DeliveryPresenter.new(d).to_json}
       else
         {result: 0, content: r.content}
       end
@@ -214,11 +214,10 @@ module V1
           created_at: params[:receive_date]
       }
       args[:des_location_id]= current_user.location_id
-      LogisticsContainerService.find_by_container_type(ContainerType::DELIVERY,args)
       data = []
-      #DeliveryPresenter.init_presenters(DeliveryService.search(arg, false)).each do |dp|
-      #  data<<dp.to_json
-      #end
+      DeliveryPresenter.init_presenters(LogisticsContainerService.find_by_container_type(ContainerType::DELIVERY,args)).each do |dp|
+        data<<dp.to_json
+      end
       {result: 1, content: data}
     end
 
@@ -229,6 +228,7 @@ module V1
     # end the process of logistics
     # 统一状态之后，原来的状态不能使用了，目前通过confirm_receive接口来统一设置状态
     # 目前这个接口不做任何事情
+    # -->2014-11-19需要重新修改
     post :confirm_receive do
       unless d = LogisticsContainer.exists?(params[:id])
         return {result: 0, content: DeliveryMessage::NotExit}

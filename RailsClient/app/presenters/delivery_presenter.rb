@@ -1,5 +1,5 @@
 class DeliveryPresenter<Presenter
-  Delegators=[:id,:container_id,:destinationable,:created_at,:state,:user_id,:source_location_id,:des_location_id]
+  Delegators=[:id,:container_id,:destinationable,:created_at,:state,:user_id,:source_location_id,:des_location_id,:remark]
   def_delegators :@delivery, *Delegators
 
   def initialize(delivery_lc)
@@ -27,13 +27,7 @@ class DeliveryPresenter<Presenter
         can_delete: false, #notice
         user_id: self.user_id,
         destination_id: self.des_location_id,
-        remark:''
-    }
-  end
-
-  def to_json_with_forklifts with_package
-    {
-        
+        remark:self.remark
     }
   end
 end
