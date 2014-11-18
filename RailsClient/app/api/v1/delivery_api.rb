@@ -64,7 +64,7 @@ module V1
         return {result: 0, content: DeliveryMessage::ForkliftExistInOthers}
       end
 
-      unless d.updateable?
+      unless d.can? 'update'
         return {result: 0, content: DeliveryMessage::CannotUpdate}
       end
 
@@ -89,7 +89,7 @@ module V1
       # if !ForkliftState.can_update?(f.state)
       #   return {result: 0, content: ForkliftMessage::CannotUpdate}
       # end
-      unless f.updateable?
+      unless f.can? 'delete'
         return {result: 0, content: DeliveryMessage::DeleteForkliftFailed}
       end
 
@@ -112,7 +112,7 @@ module V1
         return msg.set_false(DeliveryMessage::NotExist).to_json
       end
 
-      unless lc.updateable?
+      unless lc.can? 'update'
         return msg.set_false(DeliveryMessage::CannotUpdate).to_json
       end
 
