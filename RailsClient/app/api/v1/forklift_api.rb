@@ -171,7 +171,7 @@ module V1
         return {result: 0, content: ForkliftMessage::NotExit}
       end
 
-      unless f.updateable?
+      unless f.can? 'update'
         return {result: 0, content: ForkliftMessage::CannotUpdate}
       end
 

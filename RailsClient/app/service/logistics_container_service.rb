@@ -2,7 +2,7 @@ class LogisticsContainerService
   def self.destroy_by_id(id)
     msg=Message.new
     if lc=LogisticsContainer.exists?(id)
-      if lc.updateable?
+      if lc.can? 'update'
         ActiveRecord::Base.transaction do
           lc.children.each do |c|
             puts '****************'
