@@ -84,11 +84,15 @@ module V1
     #**
     # check package
     post :check do
-      msg = PackageService.check(params[:id])
-      if msg.result
-        {result: 1, content: msg.content}
+      #msg = PackageService.check(params[:id])
+      msg = ApiMessage.new
+      unless  p = LogisticsContainer.exists?(params[:id])
+        return msg.set_false(MovableMessage::TargetNotExist).to_json
+      end
+      if (r = LogisticsContainerService.check(p,current_user)).result
+        return msg.set_true(r.content).to_json
       else
-        {result: 0, content: msg.content}
+        return msg.set_false(r.content).to_json
       end
     end
 
@@ -96,12 +100,17 @@ module V1
     #@deprecated
     #**
     # uncheck package
+    # as reject a package
     post :uncheck do
-      msg = PackageService.uncheck(params[:id])
-      if msg.result
-        {result: 1, content: msg.content}
+      #msg = PackageService.uncheck(params[:id])
+      msg = ApiMessage.new
+      unless  p = LogisticsContainer.exists?(params[:id])
+        return msg.set_false(MovableMessage::TargetNotExist).to_json
+      end
+      if (r = LogisticsContainerService.reject(p,current_user)).result
+        return msg.set_true(r.content).to_json
       else
-        {result: 0, content: msg.content}
+        return msg.set_false(r.content).to_json
       end
     end
   end

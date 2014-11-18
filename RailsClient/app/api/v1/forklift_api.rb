@@ -50,7 +50,8 @@ module V1
         return {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::NotExit}
       end
 
-      unless f.updateable?
+
+      unless f.can? 'update'
         return {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::CannotUpdate}
       end
 
@@ -94,7 +95,7 @@ module V1
         return {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::NotExit}
       end
 
-      unless f.updateable?
+      unless f.can? 'update'
         return {result: 0, content: {message: ForkliftMessage::CannotUpdate}}
       end
 
@@ -132,7 +133,7 @@ module V1
         return {result: 0, content: PackageMessage::NotExit}
       end
 
-      unless p.updateable?
+      unless p.can? 'update'
         return {result: 0, content: PackageMessage::CannotUpdate}
       end
       {result: p.remove ? 1 : 0, content: ''}

@@ -63,7 +63,7 @@ module V1
         return {result: 0, content: DeliveryMessage::ForkliftExistInOthers}
       end
 
-      unless d.updateable?
+      unless d.can? 'update'
         return {result: 0, content: DeliveryMessage::CannotUpdate}
       end
 
@@ -81,7 +81,7 @@ module V1
         return {result: 0, content: ForkliftMessage::NotExit}
       end
 
-      unless f.updateable?
+      unless f.can? 'delete'
         return {result: 0, content: DeliveryMessage::DeleteForkliftFailed}
       end
 
@@ -104,16 +104,18 @@ module V1
         return msg.set_false(DeliveryMessage::NotExist).to_json
       end
 
-      unless lc.updateable?
+      unless lc.can? 'update'
         return msg.set_false(DeliveryMessage::CannotUpdate).to_json
       end
 
       unless destination = Location.find_by_id(params[:destination_id])
         return msg.set_false(DeliveryMessage::DestinationNotExist).to_json
       end
-      unless LogisticsContainerService.dispatch(lc,destination,current_user)
-        return msg.set_false(DeliveryMessage::SendFailed).to_json
+
+      unless (r = LogisticsContainerService.dispatch(lc,destination,current_user)).result
+        return msg.set_false(r.content).to_json
       end
+
       return msg.set_true(DeliveryMessage::SendSuccess).to_json
     end
 
@@ -180,32 +182,30 @@ module V1
     #**
     # receive delivery
     post :receive do
-      if (d = DeliveryService.exit?(params[:id])).nil?
-        return {result: 0, content: DeliveryMessage::NotExit}
+      unless d = LogisticsContainer.exists?(params[:id])
+        return {return: 0, content: DeliveryMessage::NotExist}
       end
 
-      if !DeliveryState.before_state?(DeliveryState::DESTINATION, d.state)
-        return {result: 0, content: DeliveryMessage::ReceiveFailed+DeliveryMessage::NotSend}
-      end
-
-      if DeliveryService.receive(d)
+      if (r = LogisticsContainerService.receive(d,current_user)).result
         {result: 1, content: DeliveryPresenter.new(d).to_json_with_forklifts(true)}
       else
-        {result: 0, content: DeliveryMessage::AlreadyReceived}
+        {result: 0, content: r.content}
       end
     end
 
     # received deliveries
+    # get all received deliveries by time and location
     get :received do
-      arg={
-          state: DeliveryState::RECEIVED,
-          received_date: params[:receive_date]
+      args={
+          state: [MovableState::ARRIVED,MovableState::CHECKED,MovableState::REJECTED],
+          created_at: params[:receive_date]
       }
-      arg[:user_id]=params[:user_id] unless params[:user_id].blank?
+      args[:des_location_id]= current_user.location_id
+      LogisticsContainerService.find_by_container_type(ContainerType::DELIVERY,args)
       data = []
-      DeliveryPresenter.init_presenters(DeliveryService.search(arg, false)).each do |dp|
-        data<<dp.to_json
-      end
+      #DeliveryPresenter.init_presenters(DeliveryService.search(arg, false)).each do |dp|
+      #  data<<dp.to_json
+      #end
       {result: 1, content: data}
     end
 
@@ -213,17 +213,20 @@ module V1
     #@deprecated
     #**
     # confirm_receive
+    # end the process of logistics
+    # 统一状态之后，原来的状态不能使用了，目前通过confirm_receive接口来统一设置状态
+    # 目前这个接口不做任何事情
     post :confirm_receive do
-      if (d = DeliveryService.exit?(params[:id])).nil?
+      unless d = LogisticsContainer.exists?(params[:id])
         return {result: 0, content: DeliveryMessage::NotExit}
       end
 
-      if DeliveryService.confirm_received(d, current_user)
-        {result: 1, content: DeliveryMessage::ReceiveSuccess}
-      else
-        {result: 0, content: DeliveryMessage::ReceiveFailed}
-      end
+      #if LogisticsContainerService.end_receive(d, current_user)
+      {result: 1, content: DeliveryMessage::ReceiveSuccess}
+      #else
 
+      # {result: 0, content: DeliveryMessage::ReceiveFailed}
+      #end
     end
   end
 end

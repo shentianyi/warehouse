@@ -13,7 +13,7 @@ module V1
 
     post :dispatch do
       msg = ApiMessage.new
-      lc = LogisticsContainer.where({id:params[:id]}).first
+      lc = LogisticsContainer.exists?(params[:id])
       unless lc
         return msg.set_false(MovableMessage::TargetNotExist).to_json
       end
@@ -24,22 +24,22 @@ module V1
         return msg.set_false(MovableMessage::DestinationNotExist).to_json
       end
 
-      unless LogisticsContainerService.dispatch(lc,destination,current_user)
-        return msg.set_false(MovableMessage::DispatchFailed).to_json
+      unless (r = LogisticsContainerService.dispatch(lc,destination,current_user)).result
+        return msg.set_false(r.content).to_json
       end
       msg.set_true(MovableMessage::Success).to_json
     end
 
     post :receive do
       msg = ApiMessage.new
-      lc = LogisticsContainer.where({id:params[:id]}).first
+      lc = LogisticsContainer.exists?(params[:id])
 
       unless lc
         return msg.set_false(MovableMessage::TargetNotExist).to_json
       end
 
-      unless LogisticsContainerService.receive(lc,current_user)
-        return msg.set_false(MovableMessage::ReceiveFailed).to_json
+      unless (r = LogisticsContainerService.receive(lc,current_user)).result
+        return msg.set_false(r.content).to_json
       end
 
       return msg.set_true(MovableMessage::Success).to_json
@@ -47,14 +47,14 @@ module V1
 
     post :check do
       msg = ApiMessage.new
-      lc = LogisticsContainer.where({id:params[:id]}).first
+      lc = LogisticsContainer.exists?(params[:id])
 
       unless lc
         return msg.set_false(MovableMessage::TargetNotExist).to_json
       end
 
-      unless LogisticsContainerService.check(lc,current_user)
-        return msg.set_false(MovableMessage::CheckFailed).to_json
+      unless (r = LogisticsContainerService.check(lc,current_user)).result
+        return msg.set_false(r.content).to_json
       end
 
       return msg.set_true(MovableMessage::Success).to_json
@@ -63,14 +63,14 @@ module V1
     post :reject do
       msg = ApiMessage.new
 
-      lc = LogisticsContainer.where({id:params[:id]}).first
+      lc = LogisticsContainer.exists?(params[:id])
 
       unless lc
         return msg.set_false(MovableMessage::TargetNotExist).to_json
       end
 
-      unless LogisticsContainerService.reject(lc,current_user)
-        return msg.set_false(MovableMessage::RejectFailed).to_json
+      unless (r = LogisticsContainerService.reject(lc,current_user)).result
+        return msg.set_false(r.content).to_json
       end
 
       return msg.set_true(MovableMessage::Success).to_json
