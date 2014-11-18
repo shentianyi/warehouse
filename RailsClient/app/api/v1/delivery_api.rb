@@ -174,7 +174,8 @@ module V1
     # update delivery
     put do
       msg = Message.new
-      if (d = DeliveryService.exit?(delivery_params[:id])).nil?
+      args=delivery_params
+      if (d = LogisticsContainer.exists?(args[:id])).nil?
         return msg.set_false(DeliveryMessage::NotExist).to_json
       end
 
@@ -182,7 +183,7 @@ module V1
         return msg.set_false(DeliveryMessage::CannotUpdate).to_json
       end
 
-      if DeliveryService.update(d, delivery_params)
+      if d.update_attributes(remark:args[:remark])
         return msg.set_true(DeliveryMessage::UpdateSuccess).to_json
       else
         return msg.set_false(DeliveryMessage::UpdateFailed).to_json
