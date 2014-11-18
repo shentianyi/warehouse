@@ -28,23 +28,6 @@ class DeliveryService
 
 
   #=============
-  #delete @delivery
-  #delete a delivery
-  #=============
-  def self.delete delivery
-    if delivery
-      ActiveRecord::Base.transaction do
-        delivery.forklifts.each do |f|
-          f.remove_from_delivery
-        end
-        delivery.destroy
-      end
-    else
-      false
-    end
-  end
-
-  #=============
   #update @args
   #update a delivery
   #=============

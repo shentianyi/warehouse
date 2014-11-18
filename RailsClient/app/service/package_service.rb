@@ -26,7 +26,7 @@ class PackageService
       if p.save
         lc=p.logistics_containers.build(source_location_id: p.location_id, user_id: p.user_id)
         lc.save
-        lc.container=p
+        lc.package=p
         msg.result = true
         msg.object = lc
       else
@@ -36,44 +36,19 @@ class PackageService
     return msg
   end
 
-#=============
-#delete @package
-#=============
-  def self.delete id
-    msg = Message.new(content: [])
-    msg.result = false
-    package = exits? id
-    if package.nil?
-      msg.content = PackageMessage::NotExit
-      return msg
-    end
-
-    unless PackageState.can_delete?(package.state)
-      msg.content = PackageMessage::DeleteError
-      return msg
-    end
-
-    ActiveRecord::Base.transaction do
-      package.remove_from_forklift
-      package.destroy
-      msg.result = true
-      return msg
-    end
-  end
 
 #=============
 #update @package
 #=============
   def self.update args
     msg = Message.new
-    msg.result = false
-    package = PackageService.exits?(args[:id])
-    if package.nil?
+    unless lc= LogisticsContainer.exists?(args[:id])
       msg.content = PackageMessage::NotExit
       return msg
     end
+    package=lc.package
 
-    unless PackageState.can_update?(package.state)
+    unless lc.updateable?
       msg.content = PackageMessage::CannotUpdate
       return msg
     end
@@ -83,22 +58,9 @@ class PackageService
       return msg
     end
 
-
-    need_set_position = false
-    if args[:part_id] && package.part_id != args[:part_id]
-      need_set_position = true
-    end
-
-    #if part_id changed,reset position
-    ActiveRecord::Base.transaction do
-      msg.result = package.update_attributes(args)
-      if need_set_position
-        package.set_position
-      end
-
-      if msg.result
-        msg.object = package
-      end
+    if msg.result=package.update_attributes(args)
+      lc.package=package
+      msg.object = lc
     end
     return msg
   end

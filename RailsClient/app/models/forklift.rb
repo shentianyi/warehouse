@@ -4,4 +4,5 @@ class Forklift<Container
   def generate_id
     "F#{Time.now.to_milli}"
   end
+
 end

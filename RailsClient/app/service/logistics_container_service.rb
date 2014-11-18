@@ -1,4 +1,26 @@
 class LogisticsContainerService
+  def self.destroy_by_id(id)
+    msg=Message.new
+    if lc=LogisticsContainer.exists?(id)
+      if lc.updateable?
+        ActiveRecord::Base.transaction do
+          lc.children.each do |c|
+            puts '****************'
+            c.remove
+          end
+          lc.parent=nil
+          lc.destroy
+        end
+        msg.result = true
+      else
+        msg.content =BaseMessage::STATE_CANNOT_DESTROY
+      end
+    else
+      msg.content =BaseMessage::NOT_EXISTS
+    end
+    msg
+  end
+
   def self.dispatch(lc, destination, user)
     begin
       ActiveRecord::Base.transaction do
