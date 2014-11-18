@@ -30,4 +30,10 @@ class DeliveryPresenter<Presenter
         remark:''
     }
   end
+
+  def to_json_with_forklifts with_package
+    {
+        
+    }
+  end
 end
