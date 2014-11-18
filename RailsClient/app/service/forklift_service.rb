@@ -23,7 +23,6 @@ class ForkliftService
     return msg
   end
 
-
   def self.get_packages(forklift_lc)
     forklift_lc.descendants.joins(:package).all
   end
@@ -37,6 +36,7 @@ class ForkliftService
   #check if parts in this warehouse
   #=============
   def self.parts_in_whouse? part_ids, whouse_id
+    #只比较count可能会出现错误
     Whouse.joins(:parts).where(id: whouse_id, parts: {id: part_ids}).count==part_ids.count
   end
 

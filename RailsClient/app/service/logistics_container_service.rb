@@ -32,7 +32,7 @@ class LogisticsContainerService
         end
         lc.des_location_id = destination.id
         #
-        unless lc.state_for("dispatch")
+        unless lc.state_for(Movable::DISPATCH)
           raise MovableMessage::StateError
         end
 
@@ -44,7 +44,7 @@ class LogisticsContainerService
         lc.children.each do |c|
           c.source_location_id = user.location_id
           c.des_location_id = destination.id
-          unless c.state_for("dispatch")
+          unless c.state_for(Movable::DISPATCH)
             raise MovableMessage::StateError
           end
           dispatch(c, destination, user)
@@ -64,7 +64,7 @@ class LogisticsContainerService
           raise MovableMessage::CurrentLocationNotDestination
         end
 
-        unless lc.state_for("receive")
+        unless lc.state_for(Movable::RECEIVE)
           raise MovableMessage::StateError
         end
         lc.des_location_id = user.location_id
@@ -72,7 +72,7 @@ class LogisticsContainerService
         lc.receive(user.id)
         lc.save
         lc.children.each do |c|
-          unless c.state_for("receive")
+          unless c.state_for(Movable::RECEIVE)
             raise MovableMessage::StateError
           end
           c.container.current_positionable = c.destinationable
@@ -93,13 +93,13 @@ class LogisticsContainerService
           raise MovableMessage::CurrentLocationNotDestination
         end
 
-        unless lc.state_for("check")
+        unless lc.state_for(Movable::CHECK)
           raise MovableMessage::StateError
         end
         lc.check(user.id)
         lc.save
         lc.children.each do |c|
-          unless c.state_for("check")
+          unless c.state_for(Movable::CHECK)
             raise MovableMessage::StateError
           end
           check(lc, user)
@@ -119,13 +119,13 @@ class LogisticsContainerService
           raise MovableMessage::CurrentLocationNotDestination
         end
 
-        unless lc.state_for("reject")
+        unless lc.state_for(Movable::REJECT)
           raise MovableMessage::StateError
         end
         lc.reject(user.id)
         lc.save
         lc.children.each do |c|
-          unless c.state_for("reject")
+          unless c.state_for(Movable::REJECT)
             raise MovableMessage::StateError
           end
           reject(lc, user)

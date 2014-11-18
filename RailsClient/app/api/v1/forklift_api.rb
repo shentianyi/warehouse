@@ -10,7 +10,7 @@ module V1
       end
     end
 
-    # get binded but not add to delivery forklifts
+    #get all forklifts not in delivery
     get :binds do
       args={
           delivery_id: nil
@@ -74,19 +74,6 @@ module V1
       else
         {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::AddPackageFailed}
       end
-      #
-      # if ForkliftService.add_package(f, p)
-      #   puts "------------------------------"
-      #   puts p.position
-      #   puts "------------------------------"
-      #   unless p.position.nil?
-      #     {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(p).to_json}
-      #   else
-      #     {result: 1, result_code: ResultCodeEnum::TargetNotInPosition, content: PackagePresenter.new(p).to_json}
-      #   end
-      # else
-      #   {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::AddPackageFailed}
-      # end
     end
 
 # add package
@@ -99,7 +86,6 @@ module V1
         return {result: 0, content: {message: ForkliftMessage::CannotUpdate}}
       end
 
-      #create package
       args = {
           id: params[:package_id],
           part_id: params[:part_id],
@@ -110,15 +96,8 @@ module V1
       res = PackageService.create(args, current_user)
       if res.result
         lc_p = res.object
-        # f=LogisticsContainer.build(params[:forklift_id], current_user.id, current_user.location_id)
         if f.add(lc_p)
           {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(lc_p.container).to_json}
-          # part = Part.find_by_id(params[:part_id])
-          # if part.positions.where(whouse_id: f.whouse_id).count > 0 || part.positions.count == 0
-          #   {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(p).to_json}
-          # else
-          #   {result: 1, result_code: ResultCodeEnum::TargetNotInPosition, content: PackagePresenter.new(p).to_json}
-          # end
         else
           {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::AddPackageFailed}
         end
