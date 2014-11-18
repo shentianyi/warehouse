@@ -100,6 +100,7 @@ module V1
     #@deprecated
     #**
     # uncheck package
+    # as reject a package
     post :uncheck do
       #msg = PackageService.uncheck(params[:id])
       msg = ApiMessage.new
