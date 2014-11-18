@@ -1,15 +1,14 @@
 class LogisticsContainer<LocationContainer
   include CZ::Movable
 
-
   default_scope { where(type: LocationContainerType::LOGISTICS) }
   has_ancestry
   belongs_to :destinationable, polymorphic: true
   belongs_to :source_location, class_name: 'Location'
   belongs_to :des_location, class_name: 'Location'
-  belongs_to :package,foreign_key: :container_id
-  belongs_to :forklift,foreign_key: :container_id
-  belongs_to :delivery,foreign_key: :container_id
+  belongs_to :package, foreign_key: :container_id
+  belongs_to :forklift, foreign_key: :container_id
+  belongs_to :delivery, foreign_key: :container_id
   has_many :movable_records, :as => :movable
 
 
@@ -19,14 +18,13 @@ class LogisticsContainer<LocationContainer
 
   def self.build(container_id, user_id, location_id)
     old_lc=self.find_latest_by_container_id(container_id)
-    unless old_lc.exists?(location_id)
+    unless old_lc.nil? || old_lc.exists?(location_id)
       new_lc=self.create(container_id: container_id, user_id: user_id, source_location_id: location_id)
       old_lc.rebuild_to_location(user_id, location_id, new_lc)
       return new_lc
     end
     return old_lc
   end
-
 
   def rebuild_to_location(user_id, location_id, parent)
     self.children.each do |lc|

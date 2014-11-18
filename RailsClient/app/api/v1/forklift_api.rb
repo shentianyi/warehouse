@@ -61,7 +61,11 @@ module V1
         return {result: 0, result_code: ResultCodeEnum::Failed, content: PackageMessage::NotExit}
       end
 
-      p=LogisticsContainer.build(params[:package_id], current_user.id, current_user.location_id)
+      unless p=LogisticsContainer.build(params[:package_id], current_user.id, current_user.location_id)
+        p=pc.logistics_containers.build(source_location_id: current_user.location_id, user_id: current_user.id)
+        p.save
+      end
+      p.container=pc
 
       unless p.can_add_to_container?
         return {result: 0, result_code: ResultCodeEnum::Failed, content: PackageMessage::InOtherForklift}
@@ -69,7 +73,7 @@ module V1
 
       # f=LogisticsContainer.build(params[:forklift_id], current_user.id, current_user.location_id)
       if f.add(p)
-        {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(pc).to_json}
+        {result: 1, result_code: ResultCodeEnum::Success, content: PackageLazyPresenter.new(p).to_json}
       else
         {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::AddPackageFailed}
       end

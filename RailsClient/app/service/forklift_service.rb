@@ -1,5 +1,4 @@
 class ForkliftService
-
   def self.create args, user
     msg = Message.new
     unless whouse=Whouse.find_by_id(args[:destinationable_id])
