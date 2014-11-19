@@ -70,11 +70,4 @@ class PackageService
     query=query.where(location_containers: {user_id: user_id}) if user_id
     query.select('containers.*,location_containers.*')
   end
-
-#=============
-#search @args
-#=============
-  def self.search(args)
-    Package.where(args).all.order(created_at: :desc)
-  end
 end

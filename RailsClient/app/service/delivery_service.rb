@@ -19,44 +19,8 @@ class DeliveryService
     msg
   end
 
+  def self.get_list_by
 
-  #=============
-  #serarch args,all=false
-  #search delivery if all is true,return all packages' detail information
-  #=============
-  def self.search(args, all=false)
-    if all
-      Delivery.where(args).order(created_at: :desc)
-    elsif args[:received_date].empty?
-      []
-    else
-      received_date = Time.parse(args[:received_date])
-      Delivery.where(state: args[:state], received_date: (received_date.beginning_of_day..received_date.end_of_day)).all.order(created_at: :desc)
-    end
-  end
-
-  #=============
-  #confirm_received @delivery,@current_user
-  #set the delivery state to RECEIVED
-  #=============
-  def self.confirm_received(delivery, current_user)
-    if delivery.nil?
-      return false
-    end
-    ActiveRecord::Base.transaction do
-      if delivery.set_state(DeliveryState::RECEIVED)
-        delivery.forklifts.each do |f|
-          ForkliftService.confirm_received(f)
-        end
-        #delivery.receiver = current_user
-        #delivery.received_date = Time.now
-        #delivery.save
-        delivery.update({receiver: current_user, received_date: Time.now})
-        else
-        false
-      end
-    end
-  end
 
   def self.import_by_file path
     msg=Message.new

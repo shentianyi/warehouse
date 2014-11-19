@@ -51,5 +51,4 @@ class ForkliftService
   def self.search(args)
     Forklift.where(args).order(id: :desc)
   end
-
 end
