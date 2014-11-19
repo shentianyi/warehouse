@@ -15,6 +15,10 @@ class PartService
     Part.joins(:whouses).where(id: id, whouses: {id: whouse_id}).first
   end
 
+  def self.get_position_by_whouse_id id,whouse_id
+    Position.joins(:whouse).joins(:part_positions).where(part_positions:{part_id:id},whouses:{id:whouse_id}).first
+  end
+
   def self.import_part_position csv
     headers = [{field: 'part_id', header: 'PartNr'},
                {field: 'position', header: 'Position'},

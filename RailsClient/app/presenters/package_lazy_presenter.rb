@@ -9,6 +9,11 @@ class PackageLazyPresenter<Presenter
   end
 
   def position_nr
+    if f=@logistics_container.parent
+      if position=PartService.get_position_by_whouse_id(@package.part_id,f.destinationable_id)
+       return position.detail
+      end
+    end
     ''
   end
 
@@ -27,18 +32,18 @@ class PackageLazyPresenter<Presenter
     }
   end
 
-  def to_json_simple
-    {
-        id: self.id,
-        container_id:self.container_id,
-        quantity_str: PackageLabelRegex.quantity_prefix_string+@package.custom_quantity,
-        part_id: PackageLabelRegex.part_prefix_string+@package.part_id,
-        quantity: @package.quantity,
-        check_in_time: PackageLabelRegex.date_prefix_string+@package.custom_fifo_time,
-        user_id: self.user_id,
-        state: self.state,
-        state_display: '',
-        position_nr: ''
-    }
-  end
+  # def to_json_simple
+  #   {
+  #       id: self.id,
+  #       container_id:self.container_id,
+  #       quantity_str: PackageLabelRegex.quantity_prefix_string+@package.custom_quantity,
+  #       part_id: PackageLabelRegex.part_prefix_string+@package.part_id,
+  #       quantity: @package.quantity,
+  #       check_in_time: PackageLabelRegex.date_prefix_string+@package.custom_fifo_time,
+  #       user_id: self.user_id,
+  #       state: self.state,
+  #       state_display: '',
+  #       position_nr: ''
+  #   }
+  # end
 end

@@ -55,7 +55,7 @@ module V1
     # else create new
     post do
       m = PackageService.create package_params, current_user
-      m.result ? {result: 1, content: PackageLazyPresenter.new(m.object).to_json_simple} : {result: 0, content: m.content}
+      m.result ? {result: 1, content: PackageLazyPresenter.new(m.object).to_json} : {result: 0, content: m.content}
     end
 
     # update package
