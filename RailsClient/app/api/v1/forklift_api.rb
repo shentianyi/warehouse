@@ -138,10 +138,10 @@ module V1
 
 # get forklift detail
     get :detail do
-      f = Forklift.find_by_id params[:id]
+      f = LogisticsContainer.exists?(params[:id])#Forklift.find_by_id params[:id]
       if f
         fp = ForkliftPresenter.new(f)
-        {result: 1, content: fp.to_json_with_packages}
+        {result: 1, content: fp.to_json}
       else
         {reuslt: 0, content: ForkliftMessage::NotExit}
       end

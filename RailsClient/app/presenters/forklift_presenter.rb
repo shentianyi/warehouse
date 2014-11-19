@@ -20,16 +20,18 @@ class ForkliftPresenter<Presenter
   end
 
   def sum_packages
-    @forklift.sum_packages
+    #@forklift.sum_packages
+    @forklift.children.count
   end
 
   def accepted_packages
-    @forklift.accepted_packages
+    #@forklift.accepted_packages
+    @forklift.children.select{|c| c.state == MovableState::CHECKED}.count
   end
 
-  def all_packages
+  def packages
     packages = []
-    pp = PackagePresenter.init_presenters(self.packages)
+    pp = PackagePresenter.init_presenters(self.children)
     pp.each do |p|
       packages << p.to_json
     end
@@ -43,12 +45,14 @@ class ForkliftPresenter<Presenter
         created_at: self.created_at,
         user_id: self.user_id,
         stocker_id: self.user_id,
-        whouse_id: self.destinationable.name
-        # sum_packages: self.sum_packages,
-        # accepted_packages: self.accepted_packages
+        whouse_id: self.destinationable.name,
+        sum_packages: self.sum_packages,
+        accepted_packages: self.accepted_packages,
+        packages: self.packages
     }
   end
 
+=begin
   def to_json_with_packages
     {
         id:self.id,
@@ -62,4 +66,5 @@ class ForkliftPresenter<Presenter
         # packages: self.all_packages
     }
   end
+=end
 end
