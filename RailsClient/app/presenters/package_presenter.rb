@@ -1,5 +1,5 @@
 class PackagePresenter<Presenter
-  Delegators=[:id, :container_id, :user_id, :destinationable_id, :state, :part_id, :quantity, :fifo_time, :custom_quantity, :custom_fifo_time]
+  Delegators=[:id, :container_id, :user_id, :whouse_id, :state, :part_id, :quantity, :fifo_time, :custom_quantity, :custom_fifo_time]
   def_delegators :@package, *Delegators
 
   def initialize(package)
@@ -9,7 +9,7 @@ class PackagePresenter<Presenter
 
 
   def position_nr
-    if position=PartService.get_position_by_whouse_id(self.part_id, self.destinationable_id)
+    if position=PartService.get_position_by_whouse_id(self.part_id, self.whouse_id)
       position.detail
     else
       ''
