@@ -65,6 +65,12 @@ class PackageService
     return msg
   end
 
+  def self.get_bind_packages_by_location(location_id, user_id=nil)
+    query=Package.joins(:logistics_containers).where(location_containers: {source_location_id: location_id, ancestry: nil})
+    query=query.where(location_containers: {user_id: user_id}) if user_id
+    query.select('containers.*,location_containers.*')
+  end
+
 #=============
 #search @args
 #=============

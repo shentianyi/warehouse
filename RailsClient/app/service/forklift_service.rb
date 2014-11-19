@@ -8,7 +8,6 @@ class ForkliftService
 
     ActiveRecord::Base.transaction do
       forklift = Forklift.new(user_id: user.id, location_id: user.location_id)
-
       if forklift.save
         lc=forklift.logistics_containers.build(source_location_id: user.location_id, user_id: user.id)
         lc.destinationable=whouse
@@ -24,7 +23,7 @@ class ForkliftService
   end
 
   def self.get_packages(forklift_lc)
-    forklift_lc.descendants.joins(:package)
+    forklift_lc.children.joins(:package)
   end
 
   def self.get_part_ids(forklift_lc)

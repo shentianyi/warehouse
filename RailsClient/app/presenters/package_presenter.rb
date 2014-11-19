@@ -8,6 +8,10 @@ class PackagePresenter<Presenter
   end
 
 
+  def self.init_json_presenters params,with_position=true
+    params.map{|param| self.new(param).to_json(with_position)}
+  end
+
   def position_nr
     if position=PartService.get_position_by_whouse_id(self.part_id, self.whouse_id)
       position.detail
@@ -16,7 +20,7 @@ class PackagePresenter<Presenter
     end
   end
 
-  def to_json
+  def to_json(with_position=true)
     {
         id: self.id,
         container_id: self.container_id,
@@ -27,7 +31,7 @@ class PackagePresenter<Presenter
         user_id: self.user_id,
         state: self.state,
         state_display: PackageState.display(self.state),
-        position_nr: self.position_nr
+        position_nr: with_position ? self.position_nr : ''
     }
   end
 end

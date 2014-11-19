@@ -22,13 +22,9 @@ module V1
       unless params.has_key?(:all)
         args[:user_id]=current_user.id
       end
-      packages = PackageService.search(args)
-      data = []
-      presenters = PackagePresenter.init_presenters(packages)
-      presenters.each do |p|
-        data<<p.to_json_simple
-      end
-      data
+      packages = PackageService.get_bind_packages_by_location(current_user.location_id,(current_user.id if params.has_key?(:all)))
+
+      PackagePresenter.init_json_presenters(packages,false)
     end
 
     # validate package id
