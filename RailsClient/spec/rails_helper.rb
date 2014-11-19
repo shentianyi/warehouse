@@ -38,6 +38,13 @@ RSpec.configure do |config|
 
   config.before(:each) do
     # DatabaseCleaner.start
+    @source = create(:source)
+    @destination = create(:destination)
+    @another = create(:another_dest)
+    @sender = create(:sender)
+    @receiver = create(:receiver)
+    @order = create(:order)
+    @admin = create(:admin)
   end
 
   config.after(:each) do
