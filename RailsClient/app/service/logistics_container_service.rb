@@ -22,7 +22,7 @@ class LogisticsContainerService
 
   def self.dispatch(lc, destination, user)
     msg = Message.new
-    begin
+    # begin
       ActiveRecord::Base.transaction do
 
         #以后可能不需要检查
@@ -31,7 +31,7 @@ class LogisticsContainerService
         end
         lc.des_location_id = destination.id
         #
-        unless lc.state_for(Movable::DISPATCH)
+        unless lc.state_for(CZ::Movable::DISPATCH)
           raise MovableMessage::StateError
         end
 
@@ -43,15 +43,15 @@ class LogisticsContainerService
         lc.children.each do |c|
           c.source_location_id = user.location_id
           c.des_location_id = destination.id
-          unless c.state_for(Movable::DISPATCH)
+          unless c.state_for(CZ::Movable::DISPATCH)
             raise MovableMessage::StateError
           end
           dispatch(c, destination, user)
         end
       end
-    rescue Exception => e
-     return msg.set_false(e.to_s)
-    end
+    # rescue Exception => e
+    #  return msg.set_false(e.to_s)
+    # end
     return msg.set_true()
   end
 

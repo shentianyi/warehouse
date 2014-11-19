@@ -19,7 +19,9 @@ class DeliveryService
     msg
   end
 
-  def self.get_list_by
+  def self.get_list(conditions)
+    LogisticsContainer.joins(:delivery).where(conditions).order(created_at: :desc)
+  end
 
 
   def self.import_by_file path

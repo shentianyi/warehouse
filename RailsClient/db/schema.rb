@@ -442,9 +442,11 @@ ActiveRecord::Schema.define(version: 20141117062022) do
     t.string   "impl_user"
     t.string   "impl_action"
     t.datetime "impl_time"
-    t.boolean  "is_delete"
-    t.boolean  "is_new"
-    t.boolean  "is_dirty"
+    t.string   "destinationable_id"
+    t.string   "destinationable_type"
+    t.boolean  "is_delete",            default: false
+    t.boolean  "is_dirty",             default: true
+    t.boolean  "is_new",               default: true
     t.datetime "created_at"
     t.datetime "updated_at"
   end

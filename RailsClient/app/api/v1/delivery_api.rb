@@ -21,14 +21,7 @@ module V1
           created_at: (12.hour.ago..created_at.end_of_day),
           source_location_id: current_user.location_id
       }
-      deliveries = LogisticsContainerService.find_by_container_type(ContainerType::DELIVERY,args).all.order(created_at: :desc)
-      #Delivery.where(created_at: (12.hour.ago..delivery_date.end_of_day), source_id: current_user.location_id).all.order(created_at: :desc)
-      data = []
-      DeliveryPresenter.init_presenters(deliveries).each do |d|
-        data << d.to_json
-      end
-      #puts data
-      {result: 1, content: data}
+      {result: 1, content: DeliveryPresenter.init_json_presenters(DeliveryService.get_list(args).all)}
     end
 
     # check forklift
