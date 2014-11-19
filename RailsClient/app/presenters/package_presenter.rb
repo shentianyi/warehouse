@@ -1,44 +1,37 @@
 class PackagePresenter<Presenter
-  Delegators=[:id,:container_id,:user_id,:state, :container]
+  Delegators=[:id, :container_id, :user_id, :whouse_id, :state, :part_id, :quantity, :fifo_time, :custom_quantity, :custom_fifo_time]
   def_delegators :@package, *Delegators
 
   def initialize(package)
     @package=package
-    @container=package.container
     self.delegators = Delegators
   end
 
-  def position_nr
-    ''
+
+  def self.init_json_presenters params,with_position=true
+    params.map{|param| self.new(param).to_json(with_position)}
   end
 
-  def to_json
+  def position_nr
+    if position=PartService.get_position_by_whouse_id(self.part_id, self.whouse_id)
+      position.detail
+    else
+      ''
+    end
+  end
+
+  def to_json(with_position=true)
     {
         id: self.id,
-        container_id:self.container_id,
-        quantity_str: PackageLabelRegex.quantity_prefix_string+@container.custom_quantity,
-        part_id: PackageLabelRegex.part_prefix_string+@container.part_id,
-        quantity: @container.quantity,
-        check_in_time: PackageLabelRegex.date_prefix_string+@container.custom_fifo_time,
+        container_id: self.container_id,
+        quantity_str: PackageLabelRegex.quantity_prefix_string+self.custom_quantity,
+        part_id: PackageLabelRegex.part_prefix_string+self.part_id,
+        quantity: self.quantity,
+        check_in_time: PackageLabelRegex.date_prefix_string+self.custom_fifo_time,
         user_id: self.user_id,
         state: self.state,
         state_display: PackageState.display(self.state),
-        position_nr: self.position_nr
-    }
-  end
-
-  def to_json_simple
-    {
-        id: self.id,
-        container_id:self.container_id,
-        quantity_str: PackageLabelRegex.quantity_prefix_string+@container.custom_quantity,
-        part_id: PackageLabelRegex.part_prefix_string+@container.part_id,
-        quantity: @container.quantity,
-        check_in_time: PackageLabelRegex.date_prefix_string+@container.custom_fifo_time,
-        user_id: self.user_id,
-        state: self.state,
-        state_display: '',
-        position_nr: ''
+        position_nr: with_position ? self.position_nr : ''
     }
   end
 end

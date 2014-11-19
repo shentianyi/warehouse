@@ -1,6 +1,6 @@
 module AuthHelpers
   def method_missing(method_name,*args,&block)
-    if /^login_as_[a-z]*/ =~ 
+    if /^login_as_[a-z]*/ =~
   end
 
   def login_as_sender

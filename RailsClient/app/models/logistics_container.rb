@@ -6,6 +6,7 @@ class LogisticsContainer<LocationContainer
   belongs_to :destinationable, polymorphic: true
   belongs_to :source_location, class_name: 'Location'
   belongs_to :des_location, class_name: 'Location'
+
   belongs_to :package, foreign_key: :container_id
   has_many :positions,through: :package
   belongs_to :forklift, foreign_key: :container_id

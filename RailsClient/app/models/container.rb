@@ -2,7 +2,6 @@ class Container< ActiveRecord::Base
   self.inheritance_column = nil
 
   include Extensions::UUID
-  include Extensions::STATE
 
   belongs_to :user
   belongs_to :location
