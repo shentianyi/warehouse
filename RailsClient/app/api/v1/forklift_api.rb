@@ -101,7 +101,7 @@ module V1
       if res.result
         lc_p = res.object
         if f.add(lc_p)
-          if PartService.get_part_by_id_whouse_id(pararms[:part_id], f.destinationable_id)
+          if PartService.get_part_by_id_whouse_id(params[:part_id], f.destinationable_id)
             {result: 1, result_code: ResultCodeEnum::Success, content: PackageLazyPresenter.new(lc_p).to_json}
           else
             {result: 1, result_code: ResultCodeEnum::TargetNotInPosition, content: PackageLazyPresenter.new(lc_p).to_json}
