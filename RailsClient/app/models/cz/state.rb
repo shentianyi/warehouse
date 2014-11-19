@@ -4,19 +4,22 @@ module CZ
     INIT = 0
     LOCK = 1
 
-    #who include this should have base_state function
-    def copyable?
-      if self.base_state == LOCK
-        false
-      else
-        true
-      end
+    @@action = {
+        :delete => 'delete',
+        :copy => 'copy',
+        :update => 'update'
+    }
+
+    def method_missing(method_name,*args,&block)
+
+      super(method_name,args,block)
     end
 
     def can?(action)
       case action
-        when 'delete'
-        when 'update'
+        when @@action[:delete]
+        when @@action[:copy]
+        when @@action[:update]
           if self.base_state == LOCK
             return false
           else
@@ -24,10 +27,6 @@ module CZ
           end
       end
       false
-    end
-
-    def updateable?
-      true
     end
   end
 end

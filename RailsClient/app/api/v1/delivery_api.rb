@@ -39,7 +39,7 @@ module V1
       end
 
       lc = LogisticsContainer.find_latest_by_container_id(params[:forklift_id])
-      unless lc.copyable?
+      unless lc.can_copy?
         return {resule: 0, content: ForkliftMessage::CheckForkliftFailed}
       end
 
