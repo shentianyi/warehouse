@@ -2,13 +2,12 @@ class Container< ActiveRecord::Base
   self.inheritance_column = nil
 
   include Extensions::UUID
-  include Extensions::STATE
 
   belongs_to :user
   belongs_to :location
   belongs_to :part
   belongs_to :current_positionable, polymorphic: true
-   has_many :logistics_containers, :dependent => :destroy
+  has_many :logistics_containers, :dependent => :destroy
 
   before_create :init_container_attr
 

@@ -1,5 +1,5 @@
 class ForkliftPresenter<Presenter
-  Delegators=[:id,:container_id, :destinationable, :created_at, :state, :user_id]
+  Delegators=[:id, :container_id, :destinationable_id, :destinationable, :created_at, :state, :user_id, :children]
   def_delegators :@forklift, *Delegators
 
   def initialize(forklift_lc)
@@ -8,7 +8,7 @@ class ForkliftPresenter<Presenter
   end
 
   def destinationable_name
-    @forklift.destinationabe.blank? ? '' : @forklift.destinationable.name
+    @forklift.destinationable.nil? ? '' : @forklift.destinationable.name
   end
 
   def created_at
@@ -28,38 +28,33 @@ class ForkliftPresenter<Presenter
   end
 
   def all_packages
-    packages = []
-    pp = PackagePresenter.init_presenters(self.packages)
-    pp.each do |p|
-      packages << p.to_json
-    end
-    packages
+    PackagePresenter.init_json_presenters(ForkliftService.get_packages_with_detail(self))
   end
 
   def to_json
     {
-        id:self.id,
+        id: self.id,
         container_id: self.container_id,
         created_at: self.created_at,
         user_id: self.user_id,
         stocker_id: self.user_id,
-        whouse_id: self.destinationable.name
-        # sum_packages: self.sum_packages,
-        # accepted_packages: self.accepted_packages
+        whouse_id: self.destinationable_name,
+        sum_packages: ForkliftService.count_all_packages(self),
+        accepted_packages: ForkliftService.count_accepted_packages(self)
     }
   end
 
   def to_json_with_packages
     {
-        id:self.id,
+        id: self.id,
         container_id: self.container_id,
         created_at: self.created_at,
         user_id: self.user_id,
         stocker_id: self.user_id,
-        whouse_id: self.destinationable_name
-        # sum_packages: self.sum_packages.to_s,
-        # accepted_packages: self.accepted_packages.to_s,
-        # packages: self.all_packages
+        whouse_id: self.destinationable_name,
+        sum_packages: ForkliftService.count_all_packages(self),
+        accepted_packages: ForkliftService.count_accepted_packages(self),
+        packages: self.all_packages
     }
   end
 end

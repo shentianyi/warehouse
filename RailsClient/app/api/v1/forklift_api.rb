@@ -12,18 +12,8 @@ module V1
 
     #get all forklifts not in delivery
     get :binds do
-      args={
-          delivery_id: nil
-      }
-      unless params.has_key?(:all)
-        args[:user_id]=current_user.id
-      end
-      forklifts = ForkliftService.search(args)
-      data = []
-      ForkliftPresenter.init_presenters(forklifts).each do |fp|
-        data<<fp.to_json
-      end
-      data
+      forklifts=ForkliftService.get_bind_forklifts_by_location(current_user.location_id, (current_user.id if params.has_key?(:all)))
+      ForkliftPresenter.init_json_presenters(forklifts)
     end
 
     # create forklift
@@ -138,8 +128,7 @@ module V1
 
 # get forklift detail
     get :detail do
-      f = Forklift.find_by_id params[:id]
-      if f
+      if f= LogisticsContainer.find_by_id(params[:id])
         fp = ForkliftPresenter.new(f)
         {result: 1, content: fp.to_json_with_packages}
       else
