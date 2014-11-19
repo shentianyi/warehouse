@@ -1,12 +1,9 @@
 class LocationContainerService
-<<<<<<< HEAD
-
-=======
   def self.destroy_by_id(id)
     msg=Message.new
     if lc=LogisticsContainer.exists?(id)
       # lee to rewrite
-      if lc.can? 'delete'
+      if lc.can_delete?
         ActiveRecord::Base.transaction do
           lc.children.each do |c|
             c.remove
@@ -22,5 +19,4 @@ class LocationContainerService
     end
     msg
   end
->>>>>>> df86f4d836f543dbb4a7c10b38af1fbad56fe78a
 end
