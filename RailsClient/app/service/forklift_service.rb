@@ -24,11 +24,15 @@ class ForkliftService
   end
 
   def self.get_packages(forklift_lc)
-    forklift_lc.descendants.joins(:package).all
+    forklift_lc.descendants.joins(:package)
   end
 
   def self.get_part_ids(forklift_lc)
     get_packages(forklift_lc).pluck('distinct(containers.part_id)')
+  end
+
+  def self.get_packages_with_position(forklift_lc)
+    
   end
 
 

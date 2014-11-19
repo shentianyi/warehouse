@@ -16,7 +16,11 @@ class PartService
   end
 
   def self.get_position_by_whouse_id id,whouse_id
-    Position.joins(:whouse).joins(:part_positions).where(part_positions:{part_id:id},whouses:{id:whouse_id}).first
+    Position.joins(:part_positions).where(part_positions:{part_id:id},whouse_id:whouse_id).first
+  end
+
+  def self.get_position_by_package package,whouse_id
+    package.positions.where(positions:{whouse_id:whouse_id}).first
   end
 
   def self.import_part_position csv
