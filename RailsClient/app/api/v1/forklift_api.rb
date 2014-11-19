@@ -41,7 +41,7 @@ module V1
       end
 
 
-      unless f.can? 'update'
+      unless f.can_update?
         return {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::CannotUpdate}
       end
 
@@ -76,7 +76,7 @@ module V1
         return {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::NotExit}
       end
 
-      unless f.can? 'update'
+      unless f.can_update?
         return {result: 0, content: {message: ForkliftMessage::CannotUpdate}}
       end
 
@@ -110,7 +110,7 @@ module V1
         return {result: 0, content: PackageMessage::NotExit}
       end
 
-      unless p.can? 'update'
+      unless p.can_update?
         return {result: 0, content: PackageMessage::CannotUpdate}
       end
       {result: p.remove ? 1 : 0, content: ''}
@@ -130,7 +130,7 @@ module V1
     get :detail do
       if f= LogisticsContainer.find_by_id(params[:id])
         fp = ForkliftPresenter.new(f)
-        {result: 1, content: fp.to_json_with_packages}
+        {result: 1, content: fp.to_json}
       else
         {reuslt: 0, content: ForkliftMessage::NotExit}
       end
@@ -147,7 +147,7 @@ module V1
         return {result: 0, content: ForkliftMessage::NotExit}
       end
 
-      unless f.can? 'update'
+      unless f.can_update?
         return {result: 0, content: ForkliftMessage::CannotUpdate}
       end
 

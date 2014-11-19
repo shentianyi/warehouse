@@ -1,3 +1,4 @@
+#在任何时候都创建
 FactoryGirl.define do
   factory :terminator, class: Part do
     id 1
@@ -8,6 +9,6 @@ FactoryGirl.define do
   end
 
   factory :part do
-    id 311908953
+    id 3
   end
 end

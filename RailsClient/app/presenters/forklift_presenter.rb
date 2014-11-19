@@ -20,11 +20,13 @@ class ForkliftPresenter<Presenter
   end
 
   def sum_packages
-    @forklift.sum_packages
+    #@forklift.sum_packages
+    @forklift.children.count
   end
 
   def accepted_packages
-    @forklift.accepted_packages
+    #@forklift.accepted_packages
+    @forklift.children.select{|c| c.state == MovableState::CHECKED}.count
   end
 
   def all_packages
@@ -44,6 +46,7 @@ class ForkliftPresenter<Presenter
     }
   end
 
+=begin
   def to_json_with_packages
     {
         id: self.id,
@@ -57,4 +60,5 @@ class ForkliftPresenter<Presenter
         packages: self.all_packages
     }
   end
+=end
 end

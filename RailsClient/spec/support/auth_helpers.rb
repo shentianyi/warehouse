@@ -1,7 +1,10 @@
 module AuthHelpers
-  def login
-    @user = build(:user)
-    post '/api/v1/users/login',{user:{id:@user.id,password:'1111'}}
+  def method_missing(method_name,*args,&block)
+    if /^login_as_[a-z]*/ =~
+  end
+
+  def login_as_sender
+    post '/api/v1/users/login',{user:{id:@sender.id,password:'1111'}}
   end
 
   def logout

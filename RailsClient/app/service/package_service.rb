@@ -48,7 +48,7 @@ class PackageService
     end
     package=lc.package
 
-    unless lc.can? 'update'
+    unless lc.can_update?
       msg.content = PackageMessage::CannotUpdate
       return msg
     end
