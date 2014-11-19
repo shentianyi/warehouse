@@ -10,7 +10,7 @@ class PackageLazyPresenter<Presenter
 
   def position_nr
     if f=@logistics_container.parent
-      if position=PartService.get_position_.by_whouse_id(@package.part_id,f.destinationable_id)
+      if position=PartService.get_position_by_whouse_id(@package.part_id,f.destinationable_id)
        return position.detail
       end
     end

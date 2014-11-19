@@ -31,8 +31,8 @@ class ForkliftService
     get_packages(forklift_lc).pluck('distinct(containers.part_id)')
   end
 
-  def self.get_packages_with_position(forklift_lc)
-    
+  def self.get_packages_with_detail(forklift_lc)
+    get_packages(forklift_lc).select("containers.*,location_containers.*,'#{forklift_lc.destinationable_id}' as destinationable_id").collect.each{|p| p.becomes(Package)}
   end
 
 
