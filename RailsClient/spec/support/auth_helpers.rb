@@ -1,16 +1,14 @@
 module AuthHelpers
-  Roles = ['sender','receiver','admin']
-
   def login_as_receiver
-    post '/api/v1/users/login', {user:{id:@receiver,password:'1111'}}
+    post '/api/v1/users/login', {user:{id:@receiver.id,password:'1111'}}
   end
 
   def login_as_sender
-    post '/api/v1/users/login',{user:{id:@sender,password:'1111'}}
+    post '/api/v1/users/login',{user:{id:@sender.id,password:'1111'}}
   end
 
   def login_as_admin
-    post '/api/v1/users/login',{user:{id:@admin,password:'1111'}}
+    post '/api/v1/users/login',{user:{id:@admin.id,password:'1111'}}
   end
 
   #Roles.each do |r|

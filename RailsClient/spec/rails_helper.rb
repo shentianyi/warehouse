@@ -30,14 +30,13 @@ RSpec.configure do |config|
     DatabaseCleaner.clean_with(:truncation)
     begin
       DatabaseCleaner.start
-      # FactoryGirl.lint
+      FactoryGirl.lint
     ensure
-      # DatabaseCleaner.clean
+      DatabaseCleaner.clean
     end
   end
 
   config.before(:each) do
-    # DatabaseCleaner.start
     @source = create(:source)
     @destination = create(:destination)
     @another = create(:another_dest)
@@ -48,7 +47,7 @@ RSpec.configure do |config|
   end
 
   config.after(:each) do
-    # DatabaseCleaner.clean
+    DatabaseCleaner.clean
   end
 
   # RSpec Rails can automatically mix in different behaviours to your tests
