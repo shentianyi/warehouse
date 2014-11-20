@@ -1,11 +1,23 @@
 module AuthHelpers
-  def method_missing(method_name,*args,&block)
-    if /^login_as_[a-z]*/ =~
+  Roles = ['sender','receiver','admin']
+
+  def login_as_receiver
+    post '/api/v1/users/login', {user:{id:@receiver,password:'1111'}}
   end
 
   def login_as_sender
-    post '/api/v1/users/login',{user:{id:@sender.id,password:'1111'}}
+    post '/api/v1/users/login',{user:{id:@sender,password:'1111'}}
   end
+
+  def login_as_admin
+    post '/api/v1/users/login',{user:{id:@admin,password:'1111'}}
+  end
+
+  #Roles.each do |r|
+  #  define_method(('login_as'+r).to_sym){
+  #    post '/api/v1/users/login',{user:{id:instance_variable_get("@"+r).id,password:'1111'}}
+  #  }
+  #end
 
   def logout
     delete '/api/v1/users/logout'
