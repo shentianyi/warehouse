@@ -127,11 +127,17 @@ class LogisticsContainerService
         end
         lc.check(user.id)
         lc.save
-        lc.children.each do |c|
+        lc.descendants.each do |c|
+          unless c.des_location_id == user.location_id
+            raise MovableMessage::CurrentLocationNotDestination
+          end
+
           unless c.state_for(Movable::CHECK)
             raise MovableMessage::StateError
           end
-          check(lc, user)
+
+          c.chcek(user.id)
+          c.save
         end
       end
     rescue Exception => e
@@ -153,11 +159,17 @@ class LogisticsContainerService
         end
         lc.reject(user.id)
         lc.save
-        lc.children.each do |c|
+        lc.descendants.each do |c|
+          unless c.des_location_id == user.location_id
+            raise MovableMessage::CurrentLocationNotDestination
+          end
+
           unless c.state_for(Movable::REJECT)
             raise MovableMessage::StateError
           end
-          reject(lc, user)
+
+          c.reject(user.id)
+          c.save
         end
       end
     rescue Exception => e
