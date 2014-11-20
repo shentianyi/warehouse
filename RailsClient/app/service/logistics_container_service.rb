@@ -39,22 +39,29 @@ class LogisticsContainerService
         end
         lc.save
 
-        lc.children.each do |c|
-          c.source_location_id = user.location_id
+        #lc.children.each do |c|
+        #  c.source_location_id = user.location_id
+        #  c.des_location_id = destination.id
+        #  unless c.state_for(CZ::Movable::DISPATCH)
+        #    raise MovableMessage::StateError
+        #  end
+        #  dispatch(c, destination, user)
+        #end
+        lc.descendants.each do |c|
+          unless c.source_location_id == user.location_id
+            raise MovableMessage::SourceLocationError
+          end
           c.des_location_id = destination.id
+
           unless c.state_for(CZ::Movable::DISPATCH)
             raise MovableMessage::StateError
           end
-          dispatch(c, destination, user)
+
+          unless c.dispatch(destination,user.id)
+            raise MovableMessage::DispatchFailed
+          end
+          c.save
         end
-        # lc.descendants.each do |c|
-        #   c.source_location_id = user.location_id
-        #   c.des_location_id = destination.id
-        #   unless c.state_for(CZ::Movable::DISPATCH)
-        #     raise MovableMessage::StateError
-        #   end
-        #   dispatch(c, destination, user)
-        # end
       end
     rescue Exception => e
       return msg.set_false(e.to_s)
@@ -74,16 +81,31 @@ class LogisticsContainerService
         unless lc.state_for(CZ::Movable::RECEIVE)
           raise MovableMessage::StateError
         end
-        lc.des_location_id = user.location_id
+        #lc.des_location_id = user.location_id
         lc.container.update(current_positionable: user.location)
         lc.receive(user.id)
         lc.save
-        lc.children.each do |c|
+        #lc.children.each do |c|
+        #  unless c.state_for(CZ::Movable::RECEIVE)
+        #    raise MovableMessage::StateError
+        #  end
+        #  c.container.current_positionable = c.destinationable
+        #  receive(lc, user)
+        #end
+        
+        lc.descendants.each do |c|
+          unless c.des_location_id == user.location_id
+            raise MovableMessage::CurrentLocationNotDestination
+          end
+
           unless c.state_for(CZ::Movable::RECEIVE)
             raise MovableMessage::StateError
           end
-          c.container.current_positionable = c.destinationable
-          receive(lc, user)
+          #不调用
+          #c.container.update(current_positionable: user.location)
+          #的原因是因为，forklift的current_positionable是whouse_id，不需要更新为用户的location
+          c.receive(user.id)
+          c.save
         end
       end
     rescue Exception => e
@@ -105,11 +127,17 @@ class LogisticsContainerService
         end
         lc.check(user.id)
         lc.save
-        lc.children.each do |c|
+        lc.descendants.each do |c|
+          unless c.des_location_id == user.location_id
+            raise MovableMessage::CurrentLocationNotDestination
+          end
+
           unless c.state_for(Movable::CHECK)
             raise MovableMessage::StateError
           end
-          check(lc, user)
+
+          c.chcek(user.id)
+          c.save
         end
       end
     rescue Exception => e
@@ -131,11 +159,17 @@ class LogisticsContainerService
         end
         lc.reject(user.id)
         lc.save
-        lc.children.each do |c|
+        lc.descendants.each do |c|
+          unless c.des_location_id == user.location_id
+            raise MovableMessage::CurrentLocationNotDestination
+          end
+
           unless c.state_for(Movable::REJECT)
             raise MovableMessage::StateError
           end
-          reject(lc, user)
+
+          c.reject(user.id)
+          c.save
         end
       end
     rescue Exception => e
