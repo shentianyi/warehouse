@@ -99,22 +99,22 @@ module V1
       msg = ApiMessage.new
 
       unless lc = LogisticsContainer.exists?(params[:id])
-        return msg.set_false(DeliveryMessage::NotExist).to_json
+        return msg.set_false(DeliveryMessage::NotExist)
       end
 
       unless lc.can_update?
-        return msg.set_false(DeliveryMessage::CannotUpdate).to_json
+        return msg.set_false(DeliveryMessage::CannotUpdate)
       end
 
       unless destination = Location.find_by_id(params[:destination_id])
-        return msg.set_false(DeliveryMessage::DestinationNotExist).to_json
+        return msg.set_false(DeliveryMessage::DestinationNotExist)
       end
 
       unless (r = LogisticsContainerService.dispatch(lc,destination,current_user)).result
-        return msg.set_false(r.content).to_json
+        return msg.set_false(r.content)
       end
 
-      return msg.set_true(DeliveryMessage::SendSuccess).to_json
+      return msg.set_true(DeliveryMessage::SendSuccess)
     end
 
     #create delivery
@@ -157,11 +157,10 @@ module V1
     get :detail do
       msg = Message.new
       unless lc = LogisticsContainer.exists?(params[:id])
-        return msg.set_false(DeliveryMessage::NotExist).to_json
+        return msg.set_false(DeliveryMessage::NotExist)
       end
-      content = DeliveryPresenter.new(d).to_json
-      #{result: 1, content: content}
-      msg.set_true(content).to_json
+      content = DeliveryPresenter.new(lc).to_json
+      msg.set_true(content)
     end
 
     # update delivery
@@ -169,17 +168,17 @@ module V1
       msg = Message.new
       args=delivery_params
       if (d = LogisticsContainer.exists?(args[:id])).nil?
-        return msg.set_false(DeliveryMessage::NotExist).to_json
+        return msg.set_false(DeliveryMessage::NotExist)
       end
 
       unless d.can_update?
-        return msg.set_false(DeliveryMessage::CannotUpdate).to_json
+        return msg.set_false(DeliveryMessage::CannotUpdate)
       end
 
       if d.update_attributes(remark:args[:remark])
-        return msg.set_true(DeliveryMessage::UpdateSuccess).to_json
+        return msg.set_true(DeliveryMessage::UpdateSuccess)
       else
-        return msg.set_false(DeliveryMessage::UpdateFailed).to_json
+        return msg.set_false(DeliveryMessage::UpdateFailed)
       end
     end
 
@@ -207,11 +206,7 @@ module V1
           created_at: params[:receive_date]
       }
       args[:des_location_id]= current_user.location_id
-      data = []
-      DeliveryPresenter.init_presenters(LogisticsContainerService.find_by_container_type(ContainerType::DELIVERY,args)).each do |dp|
-        data<<dp.to_json
-      end
-      {result: 1, content: data}
+      {result: 1, content: DeliveryPresenter.init_json_presenters(DeliveryService.get_list(args).all)}
     end
 
     #**

@@ -2,7 +2,6 @@ class LocationContainer < ActiveRecord::Base
   self.inheritance_column = nil
   include Extensions::UUID
   include CZ::State
-
   has_ancestry
   belongs_to :container
   belongs_to :current_positionable, polymorphic: true

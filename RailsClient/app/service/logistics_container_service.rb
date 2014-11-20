@@ -22,9 +22,8 @@ class LogisticsContainerService
 
   def self.dispatch(lc, destination, user)
     msg = Message.new
-    # begin
+    begin
       ActiveRecord::Base.transaction do
-
         #以后可能不需要检查
         unless lc.source_location_id == user.location_id
           raise MovableMessage::SourceLocationError
@@ -48,10 +47,18 @@ class LogisticsContainerService
           end
           dispatch(c, destination, user)
         end
+        # lc.descendants.each do |c|
+        #   c.source_location_id = user.location_id
+        #   c.des_location_id = destination.id
+        #   unless c.state_for(CZ::Movable::DISPATCH)
+        #     raise MovableMessage::StateError
+        #   end
+        #   dispatch(c, destination, user)
+        # end
       end
-    # rescue Exception => e
-    #  return msg.set_false(e.to_s)
-    # end
+    rescue Exception => e
+      return msg.set_false(e.to_s)
+    end
     return msg.set_true()
   end
 
@@ -63,7 +70,8 @@ class LogisticsContainerService
           raise MovableMessage::CurrentLocationNotDestination
         end
 
-        unless lc.state_for(Movable::RECEIVE)
+        puts "-#################{lc.state}"
+        unless lc.state_for(CZ::Movable::RECEIVE)
           raise MovableMessage::StateError
         end
         lc.des_location_id = user.location_id
@@ -71,7 +79,7 @@ class LogisticsContainerService
         lc.receive(user.id)
         lc.save
         lc.children.each do |c|
-          unless c.state_for(Movable::RECEIVE)
+          unless c.state_for(CZ::Movable::RECEIVE)
             raise MovableMessage::StateError
           end
           c.container.current_positionable = c.destinationable
@@ -79,7 +87,7 @@ class LogisticsContainerService
         end
       end
     rescue Exception => e
-      return  msg.set_false(e.to_s)
+      return msg.set_false(e.to_s)
     end
     return msg.set_true()
   end
@@ -107,7 +115,7 @@ class LogisticsContainerService
     rescue Exception => e
       return msg.set_false(e.to_s)
     end
-    return  msg.set_true()
+    return msg.set_true()
   end
 
   def self.reject(lc, user)
