@@ -6,7 +6,8 @@ module Printer
 
 
     def generate_data
-      d=Delivery.find(self.id)
+      d=LogisticsContainer.find(self.id)
+
       head={id: d.id,
             total_packages: d.packages.count,
             send_addr: d.source.nil? ? '' : d.source.address,
@@ -18,7 +19,6 @@ module Printer
       end
       forklifts=d.forklifts
       forklifts.each do |f|
-        #puts f.sum_packages
         body={forklift_id: f.id, quantity: f.sum_packages, whouse: f.whouse_id}
         bodies=[]
         BODY.each do |k|
