@@ -39,14 +39,6 @@ class LogisticsContainerService
         end
         lc.save
 
-        #lc.children.each do |c|
-        #  c.source_location_id = user.location_id
-        #  c.des_location_id = destination.id
-        #  unless c.state_for(CZ::Movable::DISPATCH)
-        #    raise MovableMessage::StateError
-        #  end
-        #  dispatch(c, destination, user)
-        #end
         lc.descendants.each do |c|
           unless c.source_location_id == user.location_id
             raise MovableMessage::SourceLocationError
@@ -85,13 +77,6 @@ class LogisticsContainerService
         lc.container.update(current_positionable: user.location)
         lc.receive(user.id)
         lc.save
-        #lc.children.each do |c|
-        #  unless c.state_for(CZ::Movable::RECEIVE)
-        #    raise MovableMessage::StateError
-        #  end
-        #  c.container.current_positionable = c.destinationable
-        #  receive(lc, user)
-        #end
 
         lc.descendants.each do |c|
           unless c.des_location_id == user.location_id

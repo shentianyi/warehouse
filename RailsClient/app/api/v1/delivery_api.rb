@@ -13,6 +13,7 @@ module V1
     end
 
     # list
+    # @deprecated!
     # @params: delivery_date
     # *get all deliveries sent from current_user's location*
     get :list do
@@ -20,6 +21,36 @@ module V1
       args = {
           created_at: (12.hour.ago..created_at.end_of_day),
           source_location_id: current_user.location_id
+      }
+      {result: 1, content: DeliveryPresenter.init_json_presenters(DeliveryService.get_list(args).all)}
+    end
+
+    #get_sent_by_time_and_state
+    #get deliveries by created_at time and state,sent from here
+    #and created by current_user
+    #only mine
+    # @time: date
+    # @state: Array[integer]
+    get :get_sent_by_time_and_state do
+      args = {
+        created_at: (Time.parse(params[:start_time])..Time.parse(params[:end_time])),
+        state: params[:state],
+        source_location_id: current_user.location_id,
+        user_id: current_user.user_id
+      }
+      {result: 1, content: DeliveryPresenter.init_json_presenters(DeliveryService.get_list(args).all)}
+    end
+
+    #get_received_by_time_state
+    #get deliveries sent to current_user.lcoation
+    #by created_at time and state
+    #@time: date
+    #@state: Array[integer]
+    get :get_received_by_time_and_state do
+      args = {
+        created_at: (Time.parse(params[:start_time])..Time.parse(params[:end_time])),
+        state: params[:state],
+        des_location_id: current_user.location_id
       }
       {result: 1, content: DeliveryPresenter.init_json_presenters(DeliveryService.get_list(args).all)}
     end
