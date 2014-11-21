@@ -80,9 +80,9 @@ module V1
         return msg.set_false(MovableMessage::TargetNotExist).to_json
       end
       if (r = LogisticsContainerService.check(p,current_user)).result
-        return msg.set_true(r.content).to_json
+        return msg.set_true(r.content)
       else
-        return msg.set_false(r.content).to_json
+        return msg.set_false(r.content)
       end
     end
 
@@ -98,9 +98,9 @@ module V1
         return msg.set_false(MovableMessage::TargetNotExist).to_json
       end
       if (r = LogisticsContainerService.reject(p,current_user)).result
-        return msg.set_true(r.content).to_json
+        return msg.set_true(r.content)
       else
-        return msg.set_false(r.content).to_json
+        return msg.set_false(r.content)
       end
     end
   end

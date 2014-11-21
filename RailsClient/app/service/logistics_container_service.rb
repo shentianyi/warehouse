@@ -107,7 +107,7 @@ class LogisticsContainerService
           raise MovableMessage::CurrentLocationNotDestination
         end
 
-        unless lc.state_for(Movable::CHECK)
+        unless lc.state_for(CZ::Movable::CHECK)
           raise MovableMessage::StateError
         end
         lc.check(user.id)
@@ -117,7 +117,7 @@ class LogisticsContainerService
             raise MovableMessage::CurrentLocationNotDestination
           end
 
-          unless c.state_for(Movable::CHECK)
+          unless c.state_for(CZ::Movable::CHECK)
             raise MovableMessage::StateError
           end
 
@@ -139,7 +139,7 @@ class LogisticsContainerService
           raise MovableMessage::CurrentLocationNotDestination
         end
 
-        unless lc.state_for(Movable::REJECT)
+        unless lc.state_for(CZ::Movable::REJECT)
           raise MovableMessage::StateError
         end
         lc.reject(user.id)
@@ -149,7 +149,7 @@ class LogisticsContainerService
             raise MovableMessage::CurrentLocationNotDestination
           end
 
-          unless c.state_for(Movable::REJECT)
+          unless c.state_for(CZ::Movable::REJECT)
             raise MovableMessage::StateError
           end
 
@@ -193,8 +193,12 @@ class LogisticsContainerService
     lc.descendants.joins(:package).count
   end
 
+  def self.get_accepted_packages(lc)
+    get_packages_by_state(lc, MovableState::CHECKED)
+  end
+
   def self.count_accepted_packages(lc)
-    get_packages_by_state(lc, MovableState::CHECKED).count
+    get_accepted_packages(lc).count
   end
 
   def self.get_rejected_packages(lc)
