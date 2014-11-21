@@ -57,7 +57,7 @@ class LogisticsContainerService
             raise MovableMessage::StateError
           end
 
-          unless c.dispatch(destination,user.id)
+          unless c.dispatch(destination, user.id)
             raise MovableMessage::DispatchFailed
           end
           c.save
@@ -92,7 +92,7 @@ class LogisticsContainerService
         #  c.container.current_positionable = c.destinationable
         #  receive(lc, user)
         #end
-        
+
         lc.descendants.each do |c|
           unless c.des_location_id == user.location_id
             raise MovableMessage::CurrentLocationNotDestination
@@ -176,5 +176,35 @@ class LogisticsContainerService
       return msg.set_false(e.to_s)
     end
     return msg.set_true()
+  end
+
+
+  def self.get_packages(lc)
+    lc.descendants.joins(:package)
+  end
+
+  def self.get_part_ids(lc)
+    get_packages(lc).pluck('distinct(containers.part_id)')
+  end
+
+  def self.get_packages_with_detail(lc, orders=nil)
+    query=get_packages(lc).select("containers.*,location_containers.*,'#{lc.destinationable_id}' as whouse_id")
+    query=query.order(orders) if orders
+    query.collect.each { |p| p.becomes(Package) }
+  end
+
+
+  def self.get_bind_forklifts_by_location(location_id, user_id=nil)
+    query=LogisticsContainer.joins(:forklift).where(source_location_id: location_id)
+    query=query.where(user_id: user_id) if user_id
+    query
+  end
+
+  def self.count_all_packages(lc)
+    lc.descendants.joins(:package).count
+  end
+
+  def self.count_accepted_packages(lc)
+    lc.descendants.joins(:package).where(state: MovableState::CHECKED).count
   end
 end

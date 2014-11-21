@@ -12,7 +12,7 @@ module V1
 
     #get all forklifts not in delivery
     get :binds do
-      forklifts=ForkliftService.get_bind_forklifts_by_location(current_user.location_id, (current_user.id if params.has_key?(:all)))
+      forklifts=LogisticsContainerService.get_bind_forklifts_by_location(current_user.location_id, (current_user.id if params.has_key?(:all)))
       ForkliftPresenter.init_json_presenters(forklifts)
     end
 
@@ -152,14 +152,14 @@ module V1
       end
 
       unless args[:destinationable_id].blank?
-        unless PartService.parts_in_whouse?(ForkliftService.get_part_ids(f), args[:destinationable_id])
+        unless PartService.parts_in_whouse?(LogisticsContainerService.get_part_ids(f), args[:destinationable_id])
           return {return: 0, content: ForkliftMessage::CannotUpdatePartsNotExistInWhouse}
         end
       end
 
       if f.update_attributes(args)
         if args[:destinationable_id]
-          packages = PackagePresenter.init_presenters(ForkliftService.get_packages_with_detail(f)).collect { |p| p.to_json }
+          packages = PackagePresenter.init_presenters(LogisticsContainerService.get_packages_with_detail(f)).collect { |p| p.to_json }
           {result: 1, content: {packages: packages}}
         else
           {result: 1, content: ForkliftMessage::UpdateSuccess}

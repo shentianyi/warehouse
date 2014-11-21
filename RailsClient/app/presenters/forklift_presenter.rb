@@ -1,5 +1,5 @@
 class ForkliftPresenter<Presenter
-  Delegators=[:id, :container_id, :destinationable_id, :destinationable, :created_at, :state, :user_id, :children]
+  Delegators=[:id, :container_id, :destinationable_id, :destinationable, :created_at, :state, :user_id, :children,:descendants]
   def_delegators :@forklift, *Delegators
 
   def initialize(forklift_lc)
@@ -20,16 +20,15 @@ class ForkliftPresenter<Presenter
   end
 
   def sum_packages
-    @forklift.children.count
+    LogisticsContainerService.count_all_packages(self)
   end
 
   def accepted_packages
-    #@forklift.accepted_packages
-    @forklift.children.select{|c| c.state == MovableState::CHECKED}.count
+    LogisticsContainerService.count_accepted_packages(self)
   end
 
   def all_packages
-    PackagePresenter.init_json_presenters(ForkliftService.get_packages_with_detail(self))
+    PackagePresenter.init_json_presenters(LogisticsContainerService.get_packages_with_detail(self))
   end
 
   def to_json
@@ -40,8 +39,8 @@ class ForkliftPresenter<Presenter
         user_id: self.user_id,
         stocker_id: self.user_id,
         whouse_id: self.destinationable_name,
-        sum_packages: ForkliftService.count_all_packages(self),
-        accepted_packages: ForkliftService.count_accepted_packages(self)
+        sum_packages: self.sum_packages,
+        accepted_packages: self.accepted_packages
     }
   end
 
@@ -54,8 +53,8 @@ class ForkliftPresenter<Presenter
         user_id: self.user_id,
         stocker_id: self.user_id,
         whouse_id: self.destinationable_name,
-        sum_packages: ForkliftService.count_all_packages(self),
-        accepted_packages: ForkliftService.count_accepted_packages(self),
+        sum_packages: LogisticsContainerService.count_all_packages(self),
+        accepted_packages: LogisticsContainerService.count_accepted_packages(self),
         packages: self.all_packages
     }
   end
