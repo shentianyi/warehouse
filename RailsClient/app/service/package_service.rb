@@ -10,6 +10,7 @@ class PackageService
   #create @args,@current_user=nil
   #=============
   def self.create args, user
+    puts "#{args}"
     msg = Message.new
     unless Package.id_valid? args[:id]
       msg.content = PackageMessage::IdNotValid
