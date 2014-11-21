@@ -7,10 +7,10 @@ describe "PackageAPIV1" do
     @t = create(:terminator)
 
     #create packages
-    1.times.each do |i|
-      package_id = "WI00#{i+1}"
-      PackageService.create({package:{id:package_id,quantity_str:"Q100.0",check_in_time:"10.10.14",part_id:1}},@sender)
-    end
+    #1.times.each do |i|
+    #  package_id = "WI00#{i+1}"
+    #  PackageService.create({package:{id:package_id,quantity_str:"Q100.0",check_in_time:"10.10.14",part_id:1}},@sender)
+    #end
   end
 
   it "validate package id should get result 1" do
@@ -29,13 +29,11 @@ describe "PackageAPIV1" do
 
   it "should get packages" do
   	post @package_url+'/binds',{}
-  	puts "======="
-  	#expect(JSON.parse(response.body))
   	expect(response.status).to eq(201)
   end
 
   it "create 1 package" do
-  	post '/api/v1/packages',{package:{id:'W001',part_id:@t.id,quantity_str:'Q100',check_in_time:"1.10.14"}}
+  	post '/api/v1/packages',{package:{id:'W001',part_id:@t.id,quantity_str:'100.0',check_in_time:"10.11.12"}}
   	expect(JSON.parse(response.body)['result']).to eq(1)
   end
 
