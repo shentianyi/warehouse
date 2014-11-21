@@ -1,7 +1,7 @@
 module V1
   module Sync
     class ContainerSyncAPI<SyncBase
-      namespace 'container'
+      namespace 'containers'
       rescue_from :all do |e|
         ContainerSyncAPI.error_unlock_sync_pool('containers')
         Rack::Response.new([e.message], 500).finish

@@ -1,14 +1,14 @@
 module V1
   module Sync
     class LocationContainerSyncAPI<SyncBase
-      namespace 'location_container'
+      namespace 'location_containers'
       rescue_from :all do |e|
-        ContainerSyncAPI.error_unlock_sync_pool('location_containers')
+        LocationContainerSyncAPI.error_unlock_sync_pool('location_containers')
         Rack::Response.new([e.message], 500).finish
       end
       
       get do
-        Container.unscoped.where('updated_at>=?', params[:last_time]).all
+        LocationContainer.unscoped.where('updated_at>=?', params[:last_time]).all
       end
 
       post do
@@ -17,7 +17,7 @@ module V1
           ActiveRecord::Base.transaction do
             location_containers=JSON.parse(params[:location_container])
             location_containers.each do |location_container|
-              location_container=Container.new(location_container)
+              location_container=LocationContainer.new(location_container)
               location_container.save
             end
           end

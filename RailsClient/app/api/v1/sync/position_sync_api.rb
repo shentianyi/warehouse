@@ -11,29 +11,56 @@ module V1
       end
 
       post do
-        positions=JSON.parse(params[:position])
-        positions.each do |position|
-          position=Position.new(position)
-          position.save
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            positions=JSON.parse(params[:position])
+            positions.each do |position|
+              position=Position.new(position)
+              position.save
+            end
+          end
+          msg.result =true
+        rescue => e
+          msg.content = "delete:#{e.message}"
         end
+        return msg
       end
 
       put '/:id' do
-        positions=JSON.parse(params[:position])
-        positions.each do |position|
-          if u=Position.unscoped.find_by_id(position['id'])
-            u.update(position.except('id'))
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            positions=JSON.parse(params[:position])
+            positions.each do |position|
+              if u=Position.unscoped.find_by_id(position['id'])
+                u.update(position.except('id'))
+              end
+            end
           end
+          msg.result =true
+        rescue => e
+          msg.content = "delete:#{e.message}"
         end
+        return msg
       end
 
       post :delete do
-        positions=JSON.parse(params[:position])
-        positions.each do |id|
-          if position=Position.unscoped.find_by_id(id)
-            position.update(is_delete: true)
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            positions=JSON.parse(params[:position])
+            positions.each do |id|
+              if position=Position.unscoped.find_by_id(id)
+                position.update(is_delete: true)
+              end
+            end
           end
+          msg.result =true
+        rescue => e
+          msg.content = "delete:#{e.message}"
         end
+        return msg
       end
     end
   end

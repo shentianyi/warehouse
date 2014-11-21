@@ -1,7 +1,7 @@
 module V1
   module Sync
     class RecordSyncAPI<SyncBase
-      namespace 'record'
+      namespace 'records'
       rescue_from :all do |e|
         RecordSyncAPI.error_unlock_sync_pool('records')
         Rack::Response.new([e.message], 500).finish

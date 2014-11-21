@@ -2,53 +2,53 @@
 sync:
   host: http://localhost:3000
   token: 3dcba17f596969a676bfdd90b5425c703f983acf7306760e1057c95afe9f17b1d
-  sync_lock: false
+  sync_lock: true
   enabled: true
   advance_second: 1800
   per_request_size: 1000
   executor:
     location:
       name: "地点"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true
     hacker:
       name: "员工"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true
     whouse:
       name: "仓库"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true
     part_type:
       name: "零件类型"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true
     part:
       name: "零件"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true
     position:
       name: "库位"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true
     part_position:
       name: "零件库位"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true
     container:
       name: "容器"
       get: true
@@ -69,10 +69,10 @@ sync:
       delete: true
     pick_item_filter:
       name: "员工择货规则"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true
     order:
       name: "需求单"
       get: true
@@ -87,13 +87,13 @@ sync:
       delete: true
     pick_list:
       name: "择货单"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true
     pick_item:
       name: "择货单项"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true

@@ -11,29 +11,56 @@ module V1
       end
 
       post do
-        parts=JSON.parse(params[:part])
-        parts.each do |part|
-          part=Part.new(part)
-          part.save
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            parts=JSON.parse(params[:part])
+            parts.each do |part|
+              part=Part.new(part)
+              part.save
+            end
+          end
+          msg.result =true
+        rescue => e
+          msg.content = "delete:#{e.message}"
         end
+        return msg
       end
 
       put '/:id' do
-        parts=JSON.parse(params[:part])
-        parts.each do |part|
-          if u=Part.unscoped.find_by_id(part['id'])
-            u.update(part.except('id'))
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            parts=JSON.parse(params[:part])
+            parts.each do |part|
+              if u=Part.unscoped.find_by_id(part['id'])
+                u.update(part.except('id'))
+              end
+            end
           end
+          msg.result =true
+        rescue => e
+          msg.content = "delete:#{e.message}"
         end
+        return msg
       end
 
       post :delete do
-        parts=JSON.parse(params[:part])
-        parts.each do |id|
-          if part=Part.unscoped.find_by_id(id)
-            part.update(is_delete: true)
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            parts=JSON.parse(params[:part])
+            parts.each do |id|
+              if part=Part.unscoped.find_by_id(id)
+                part.update(is_delete: true)
+              end
+            end
           end
+          msg.result =true
+        rescue => e
+          msg.content = "delete:#{e.message}"
         end
+        return msg
       end
     end
   end
