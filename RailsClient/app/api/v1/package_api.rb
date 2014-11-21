@@ -118,7 +118,7 @@ module V1
         return msg.set_false(r.content)
       end
     end
-    
+
     # uncheck package
     # as reject a package
     post :uncheck do
