@@ -53,7 +53,7 @@ class ReportsController < ApplicationController
     report = ""
     case @type
       when "total"
-        condition["deliveries.state"] = [DeliveryState::WAY, DeliveryState::DESTINATION, DeliveryState::RECEIVED]
+        condition["deliveries.state"] = [MovableState::WAY, DeliveryState::DESTINATION, DeliveryState::RECEIVED]
         report = "收货报表"
       when "received"
         condition["packages.state"] = [PackageState::RECEIVED]

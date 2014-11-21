@@ -155,7 +155,7 @@ class DeliveriesController < ApplicationController
   end
 
   def get_states
-    @states=DeliveryState.state #.insert(0, %w())
+    @states=MovableState.state
   end
 
   def set_search_variable

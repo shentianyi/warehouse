@@ -33,6 +33,28 @@ class MovableState
   end
 
   def self.display(state)
-    'OK'
+    case state
+      when INIT
+        'Init'
+      when WAY
+        'On Way'
+      when ARRIVED
+        'Arrived'
+      when CHECKED
+        'Checked'
+      when REJECTED
+        'Rejected'
+      else
+        'Nil'
+    end
+  end
+
+  def self.state
+    data = []
+    self.constants.each do |c|
+      v = self.const_get(c.to_s)
+      data << [self.display(v),v]
+    end
+    data
   end
 end

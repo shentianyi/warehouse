@@ -23,6 +23,10 @@ class DeliveryService
     LogisticsContainer.joins(:delivery).where(conditions).order(created_at: :desc)
   end
 
+  def self.search(conditions)
+    LogisticsContainer.joins(:delivery).where(conditions)
+  end
+
 
   def self.import_by_file path
     msg=Message.new
