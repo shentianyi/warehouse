@@ -107,7 +107,7 @@ class LogisticsContainerService
           raise MovableMessage::CurrentLocationNotDestination
         end
 
-        unless lc.state_for(Movable::CHECK)
+        unless lc.state_for(CZ::Movable::CHECK)
           raise MovableMessage::StateError
         end
         lc.check(user.id)
@@ -117,7 +117,7 @@ class LogisticsContainerService
             raise MovableMessage::CurrentLocationNotDestination
           end
 
-          unless c.state_for(Movable::CHECK)
+          unless c.state_for(CZ::Movable::CHECK)
             raise MovableMessage::StateError
           end
 
@@ -139,7 +139,7 @@ class LogisticsContainerService
           raise MovableMessage::CurrentLocationNotDestination
         end
 
-        unless lc.state_for(Movable::REJECT)
+        unless lc.state_for(CZ::Movable::REJECT)
           raise MovableMessage::StateError
         end
         lc.reject(user.id)
@@ -149,7 +149,7 @@ class LogisticsContainerService
             raise MovableMessage::CurrentLocationNotDestination
           end
 
-          unless c.state_for(Movable::REJECT)
+          unless c.state_for(CZ::Movable::REJECT)
             raise MovableMessage::StateError
           end
 
