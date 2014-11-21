@@ -5,15 +5,16 @@ module Printer
     BODY=[:part_id,:to_whouse_code,:to_whouse_position,:quantity,:transfer_data]
 
     def generate_data
-      f = Forklift.find_by_id(self.id)
-      whosue = f.whouse.nil? ? '' : f.whouse.name
-      stocker = f.stocker.nil? ? '': f.stocker.name
+      f = LogisticsContainer.find_by_id(self.id)
+      packages=PackagePresenter.init_presenters(LogisticsContainerService.get_packages_with_detail(f))
+      whouse_name = f.destinationable.nil? ? '' : f.destinationable.name
+      user = f.user.nil? ? '': f.user.name
       head = {
           id:f.id,
           delivery_date: f.created_at.nil? ? '' : f.created_at.localtime.strftime('%Y.%m.%d %H:%M'),
-          whouse: whosue,
-          user: stocker,
-          total_package_num: f.sum_packages,
+          whouse: whouse_name,
+          user: user,
+          total_package_num: packages.count,
           from_whouse_code: SysConfigCache.trans_warehouse_value,
           from_whouse_position: Position.trans_position
       }
@@ -23,17 +24,14 @@ module Printer
         heads<<{Key: k, Value: head[k]}
       end
 
-      packages = f.packages
-
       packages.each do |p|
-        position = p.position.nil? ? '' : p.position.detail
 
         body = {
             part_id: p.part_id,
-            quantity: p.quantity_str,
-            to_whouse_code: whosue,
-            to_whouse_position:  position,
-            transfer_data: "\r\r\r#{whosue}\r#{position}\r#{p.quantity_str}\r#{p.part_id}"
+            quantity: p.quantity,
+            to_whouse_code: whouse_name,
+            to_whouse_position:  p.position_nr,
+            transfer_data: "\r\r\r#{whouse_name}\r#{p.position_nr}\r#{p.quantity}\r#{p.part_id}"
         }
 
         bodies=[]
