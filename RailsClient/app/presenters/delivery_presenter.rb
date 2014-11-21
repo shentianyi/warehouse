@@ -9,12 +9,12 @@ class DeliveryPresenter<Presenter
 
   def delivery_date
     dispatch = @delivery.get_record('dispatch')
-    dispatch.nil? ? '' :dispatch.impl_time.localtime
+    dispatch.nil? ? '' :dispatch.impl_time.localtime.strftime('%Y.%m.%d %H:%M')
   end
 
   def received_date
     receive = @delivery.get_record('receive')
-    receive.nil? ? '' : receive.impl_time.localtime
+    receive.nil? ? '' : receive.impl_time.localtime.strftime('%Y.%m.%d %H:%M')
   end
 
   def to_json

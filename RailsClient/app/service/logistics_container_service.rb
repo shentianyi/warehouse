@@ -183,6 +183,10 @@ class LogisticsContainerService
     lc.descendants.joins(:package)
   end
 
+  def self.get_forklifts(lc)
+    lc.descendants.joins(:forklift)
+  end
+
   def self.get_part_ids(lc)
     get_packages(lc).pluck('distinct(containers.part_id)')
   end

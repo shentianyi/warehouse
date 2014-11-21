@@ -22,6 +22,7 @@ class ForkliftService
     return msg
   end
 
+
   def self.search(args)
     Forklift.where(args).order(id: :desc)
   end
