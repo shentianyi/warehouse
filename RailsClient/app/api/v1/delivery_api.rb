@@ -19,7 +19,7 @@ module V1
     #@type 0=> sent from my location
     #1 => sent to my location
     get :get_by_time_and_state do
-      start_time = params[:start_time].nil? ? 12.hours.ago : params[:start_time]
+      start_time = params[:start_time].nil? ? 12.hour.ago : params[:start_time]
       end_time = params[:end_time].nil? ? Time.now : params[:end_time]
       args = {
         created_at: (start_time..end_time),

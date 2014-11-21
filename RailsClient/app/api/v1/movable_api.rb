@@ -11,6 +11,8 @@ module V1
       end
     end
 
+    #not a good api set remove
+=begin
     post :dispatch do
       msg = ApiMessage.new
       lc = LogisticsContainer.exists?(params[:id])
@@ -75,5 +77,6 @@ module V1
 
       return msg.set_true(MovableMessage::Success).to_json
     end
+=end
   end
 end
