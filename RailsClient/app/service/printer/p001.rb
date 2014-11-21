@@ -18,7 +18,7 @@ module Printer
       HEAD.each do |k|
         heads<<{Key: k, Value: head[k]}
       end
-      packages=PackagePresenter.init_presenters(ForkliftService.get_packages_with_detail(f, 'part_id,container_id'))
+      packages=PackagePresenter.init_presenters(LogisticsContainerService.get_packages_with_detail(f, 'part_id,container_id'))
       packages.each do |p|
         body={package_id: p.container_id,
               part_id: p.part_id,
