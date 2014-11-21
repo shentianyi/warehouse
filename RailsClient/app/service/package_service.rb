@@ -1,4 +1,10 @@
 class PackageService
+  #=============
+  #search packages
+  #=============
+  def self.search condition
+    LogisticsContainer.joins(:package).where(condition)
+  end
 
   #=============
   #create @args,@current_user=nil

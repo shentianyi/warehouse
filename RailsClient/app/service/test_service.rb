@@ -1,6 +1,6 @@
 class TestService
 	def self.create
-		Package.destroy_all
+		#Package.destroy_all
 		@packages = []
 		50.times.each do |i|
 			id = "WI00#{i+1}"

@@ -15,13 +15,40 @@ module V1
     #******
     # binded but not add to forklift packages
     # no need to show position
+    #@deprecated
+    #use api get_by_time_and_state instead
     get :binds do
       packages = PackageService.get_bind_packages_by_location(current_user.location_id,(current_user.id if params.has_key?(:all)))
 
       PackagePresenter.init_json_presenters(packages,false)
     end
 
+    #get packages by created_at time and state
+    #@start_time
+    #@end_time
+    #@state
+    #@type
+    get :get_by_time_and_state do
+      start_time = params[:start_time].nil? ? 12.hour.ago : params[:start_time]
+      end_time = params[:end_time].nil? ? Time.now : params[:end_time]
+      args = {
+          created_at: (start_time..end_time),
+          state: params[:state]
+      }
+
+      if params[:type].nil? || params[:type] == 0
+        args[:source_location_id] = current_user.location_id
+        args[:user_id] = current_user.id
+      else
+        args[:des_location_id] = current_user.location_id
+      end
+
+      PackagePresenter.init_json_presenters(PackageService.search(arg).order(created_at: :desc).all)
+    end
+
     # validate package id
+    # @deprecated
+    # use validate_id instead
     post :validate do
       if Package.id_valid?(params[:id])
         {result: 1, content: ''}
@@ -30,7 +57,17 @@ module V1
       end
     end
 
+    #validate package id
+    get :validate_id do
+      if Package.id_valid?(params[:id])
+        {result: 1,content: ''}
+      else
+        {result: 0,content: PackageMessage::IdNotValid}
+      end
+    end
+
     # validate quantity string
+    # @deprecated
     post :validate_quantity do
       result = true #PackageService.quantity_string_valid?(params[:id])
       if result
@@ -69,12 +106,8 @@ module V1
       end
     end
 
-    #**
-    #@deprecated
-    #**
     # check package
     post :check do
-      #msg = PackageService.check(params[:id])
       msg = ApiMessage.new
       unless  p = LogisticsContainer.exists?(params[:id])
         return msg.set_false(MovableMessage::TargetNotExist).to_json
@@ -86,9 +119,6 @@ module V1
       end
     end
 
-    #**
-    #@deprecated
-    #**
     # uncheck package
     # as reject a package
     post :uncheck do

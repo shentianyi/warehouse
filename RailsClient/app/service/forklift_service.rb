@@ -23,7 +23,7 @@ class ForkliftService
   end
 
 
-  def self.search(args)
-    Forklift.where(args).order(id: :desc)
+  def self.search(conditions)
+    LogisticsContainer.joins(:forklift).where(conditions)
   end
 end

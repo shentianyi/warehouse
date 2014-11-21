@@ -11,9 +11,33 @@ module V1
     end
 
     #get all forklifts not in delivery
+    #@deprecated!
     get :binds do
       forklifts=LogisticsContainerService.get_bind_forklifts_by_location(current_user.location_id, (current_user.id if params.has_key?(:all)))
       ForkliftPresenter.init_json_presenters(forklifts)
+    end
+
+    #get forklifts by create_at time and state
+    #@start_time
+    #@end_time
+    #@state
+    #@type
+    get :get_by_time_and_state do
+      start_time = params[:start_time].nil? ? 12.hour.ago : params[:start_time]
+      end_time = params[:end_time].nil? ? Time.now : params[:end_time]
+      args = {
+          created_at: (start_time..end_time),
+          state: params[:state]
+      }
+
+      if params[:type].nil? || params[:type] == 0
+        args[:source_location_id] = current_user.location_id
+        args[:user_id] = current_user.id
+      else
+        args[:des_location_id] = current_user.location_id
+      end
+
+      ForkliftPresenter.init_json_presenters(ForkliftService.search(args).order(created_at: :desc).all)
     end
 
     # create forklift
@@ -27,12 +51,18 @@ module V1
       msg.result ? {result: 1, content: ForkliftPresenter.new(msg.object).to_json} : {result: 0, content: msg.content}
     end
 
+    #@deparecated
+    #*test api*
     post :add do
       p1=LogisticsContainer.build(params[:id], current_user.id, current_user.location_id)
       p2=LogisticsContainer.build(params[:pid], current_user.id, current_user.location_id)
 
       p1.add(p2)
     end
+
+    #check if a package can be add to a forklift
+    #if can,add to the forklift
+    #if not,return
 
     # add package
     post :check_package do
@@ -70,7 +100,10 @@ module V1
       end
     end
 
-# add package
+    # add package
+    # create package and add it to forklift
+    # @deprecated
+    # * use api create package and add it forklift
     post :add_package do
       unless f=LogisticsContainer.exists?(params[:forklift_id])
         return {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::NotExit}
@@ -104,7 +137,8 @@ module V1
       end
     end
 
-# remove package
+    # remove package
+    # remove a package from forklift
     delete :remove_package do
       unless (p=LogisticsContainer.exists?(params[:package_id]))
         return {result: 0, content: PackageMessage::NotExit}
@@ -116,7 +150,7 @@ module V1
       {result: p.remove ? 1 : 0, content: ''}
     end
 
-#delete forklift
+    #delete forklift
     delete do
       msg = LogisticsContainerService.destroy_by_id(params[:id])
       if msg.result
@@ -126,7 +160,8 @@ module V1
       end
     end
 
-# get forklift detail
+    # get forklift detail
+    # get the detail of a forklift,including the package
     get :detail do
       if f= LogisticsContainer.find_by_id(params[:id])
         fp = ForkliftPresenter.new(f)

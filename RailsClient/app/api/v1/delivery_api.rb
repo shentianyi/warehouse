@@ -12,51 +12,34 @@ module V1
       end
     end
 
-    # list
-    # @deprecated!
-    # @params: delivery_date
-    # *get all deliveries sent from current_user's location*
-    get :list do
-      created_at = Time.parse(params[:delivery_date])
+    #get by create at time and state
+    #@start_time
+    #@end_time
+    #@state
+    #@type 0=> sent from my location
+    #1 => sent to my location
+    get :get_by_time_and_state do
+      start_time = params[:start_time].nil? ? 12.hour.ago : params[:start_time]
+      end_time = params[:end_time].nil? ? Time.now : params[:end_time]
       args = {
-          created_at: (12.hour.ago..created_at.end_of_day),
-          source_location_id: current_user.location_id
+        created_at: (start_time..end_time),
+        state: params[:state]
       }
-      {result: 1, content: DeliveryPresenter.init_json_presenters(DeliveryService.get_list(args).all)}
-    end
 
-    #get_sent_by_time_and_state
-    #get deliveries by created_at time and state,sent from here
-    #and created by current_user
-    #only mine
-    # @time: date
-    # @state: Array[integer]
-    get :get_sent_by_time_and_state do
-      args = {
-        created_at: (Time.parse(params[:start_time])..Time.parse(params[:end_time])),
-        state: params[:state],
-        source_location_id: current_user.location_id,
-        user_id: current_user.user_id
-      }
-      {result: 1, content: DeliveryPresenter.init_json_presenters(DeliveryService.get_list(args).all)}
-    end
+      if params[:type].nil? || params[:type] == 0
+        args[:source_location_id] = current_user.location_id
+        args[:user_id] = current_user.id
+      else
+        args[:des_location_id] = current_user.location_id
+      end
 
-    #get_received_by_time_state
-    #get deliveries sent to current_user.lcoation
-    #by created_at time and state
-    #@time: date
-    #@state: Array[integer]
-    get :get_received_by_time_and_state do
-      args = {
-        created_at: (Time.parse(params[:start_time])..Time.parse(params[:end_time])),
-        state: params[:state],
-        des_location_id: current_user.location_id
-      }
-      {result: 1, content: DeliveryPresenter.init_json_presenters(DeliveryService.get_list(args).all)}
+      #
+      {result: 1, content: DeliveryPresenter.init_json_presenters(DeliveryService.search(args).order(created_at: :desc).all)}
     end
 
     # check forklift
     # forklift id
+    # *need to move this api to forklift*
     post :check_forklift do
       unless Forklift.exists?(params[:forklift_id])
         return {result: 0, content: DeliveryMessage::CheckForkliftFailed}
@@ -76,9 +59,10 @@ module V1
       end
     end
 
-    # add forklift
+    # add forklift to delivery
     # id: delivery id
     # forklift: forklift ids
+    #
     post :add_forklift do
       unless d = LogisticsContainer.exists?(params[:id])
         return {result: 0, content: DeliveryMessage::NotExit}
@@ -141,6 +125,8 @@ module V1
         return msg.set_false(DeliveryMessage::DestinationNotExist)
       end
 
+      #lc.dispatch
+      #*different type of logistics_container should have its own implementation of dispatch*
       unless (r = LogisticsContainerService.dispatch(lc,destination,current_user)).result
         return msg.set_false(r.content)
       end
@@ -222,6 +208,7 @@ module V1
         return {return: 0, content: DeliveryMessage::NotExist}
       end
 
+      #*own implementation of receive
       if (r = LogisticsContainerService.receive(d,current_user)).result
         {result: 1, content: DeliveryPresenter.new(d).to_json}
       else
@@ -231,6 +218,8 @@ module V1
 
     # received deliveries
     # get all received deliveries by time and location
+    # @deprecated
+    # *use get_by_time_and_state api*
     get :received do
       args={
           state: [MovableState::ARRIVED,MovableState::CHECKED,MovableState::REJECTED],
@@ -259,6 +248,19 @@ module V1
 
       # {result: 0, content: DeliveryMessage::ReceiveFailed}
       #end
+    end
+
+    # list
+    # @deprecated!
+    # @params: delivery_date
+    # *get all deliveries sent from current_user's location*
+    get :list do
+      created_at = Time.parse(params[:delivery_date])
+      args = {
+          created_at: (12.hour.ago..created_at.end_of_day),
+          source_location_id: current_user.location_id
+      }
+      {result: 1, content: DeliveryPresenter.init_json_presenters(DeliveryService.get_list(args).all)}
     end
   end
 end
