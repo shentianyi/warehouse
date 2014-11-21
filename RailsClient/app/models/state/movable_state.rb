@@ -31,4 +31,8 @@ class MovableState
         CZ::State::LOCK
     end
   end
+
+  def self.display(state)
+    'OK'
+  end
 end

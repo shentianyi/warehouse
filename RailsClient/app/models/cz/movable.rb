@@ -87,5 +87,9 @@ module CZ
     def get_state_by_action(action)
       return @@actions[action]
     end
+
+    def state_display
+      MovableState.display(self.state)
+    end
   end
 end

@@ -1,4 +1,4 @@
-# print rejected packages detail
+# print received packages detail
 module Printer
   class P005<Base
     HEAD=[:id, :receive_addr, :user, :receive_date]
@@ -6,18 +6,24 @@ module Printer
 
 
     def generate_data
-      d=Delivery.find(self.id)
-      head={id: d.id,
-            receive_addr:  d.destination.nil? ? '' : d.destination.address,
-            user: d.receiver_id,
-            receive_date: d.received_date.nil? ? '' : d.received_date.localtime.strftime('%Y.%m.%d %H:%M')}
+      d=LogisticsContainer.find(self.id)
+      dp=DeliveryPresenter.new(d)
+
+      head={id: d.container_id,
+            receive_addr: d.des_location.nil? ? '' : d.des_location.address,
+            user: dp.received_user,
+            receive_date: dp.received_date}
+
+
       heads=[]
       HEAD.each do |k|
         heads<<{Key: k, Value: head[k]}
       end
-      packages=d.received_packages
+      packages=LogisticsContainerService.get_accepted_packages(d)
+
       packages.each do |p|
-        body={forklift_id: p.forklift_id, package_id: p.id, whouse: p.whouse_id}
+        f=p.parent
+        body={forklift_id: f.container_id, package_id: p.container_id, whouse: f.destinationable.nil? ? '' : f.destinationable.name}
         bodies=[]
         BODY.each do |k|
           bodies<<{Key: k, Value: body[k]}

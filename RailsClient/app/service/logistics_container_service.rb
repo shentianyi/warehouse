@@ -193,7 +193,23 @@ class LogisticsContainerService
     lc.descendants.joins(:package).count
   end
 
+  def self.get_accepted_packages(lc)
+    get_packages_by_state(lc, MovableState::CHECKED)
+  end
+
   def self.count_accepted_packages(lc)
-    lc.descendants.joins(:package).where(state: MovableState::CHECKED).count
+    get_accepted_packages(lc).count
+  end
+
+  def self.get_rejected_packages(lc)
+    get_packages_by_state(lc, MovableState::REJECTED)
+  end
+
+  def self.count_rejected_packages(lc)
+    get_rejected_packages(lc).count
+  end
+
+  def self.get_packages_by_state(lc, state)
+    lc.descendants.joins(:package).where(state: state)
   end
 end
