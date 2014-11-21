@@ -44,12 +44,6 @@ RSpec.configure do |config|
     @receiver = create(:receiver)
     @order = create(:order)
     @admin = create(:admin)
-
-    #create packages
-    1.times.each do |i|
-      package_id = "WI00#{i+1}"
-      PackageService.create({package:{id:package_id,quantity_str:"Q100.0",check_in_time:"10.10.14",part_id:1}},@sender)
-    end
   end
 
   config.after(:each) do
