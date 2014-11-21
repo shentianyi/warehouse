@@ -19,11 +19,9 @@ module V1
       mount PartPositionSyncAPI
       mount PickItemFilterSyncAPI
 
-      mount DeliverySyncAPI
-      mount ForkliftSyncAPI
-      mount PackageSyncAPI
-      mount PackagePositionSyncAPI
-      mount StateLogSyncAPI
+      mount ContainerSyncAPI
+      mount LocationContainerSyncAPI
+      mount RecordSyncAPI
 
       mount OrderSyncAPI
       mount OrderItemSyncAPI

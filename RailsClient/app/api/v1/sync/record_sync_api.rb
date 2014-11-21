@@ -1,23 +1,24 @@
 module V1
   module Sync
-    class StateLogSyncAPI<SyncBase
-      namespace 'state_logs'
+    class RecordSyncAPI<SyncBase
+      namespace 'record'
       rescue_from :all do |e|
-        StateLogSyncAPI.error_unlock_sync_pool('state_logs')
+        RecordSyncAPI.error_unlock_sync_pool('records')
         Rack::Response.new([e.message], 500).finish
       end
+      
       get do
-        StateLog.unscoped.where('updated_at>=?', params[:last_time]).all
+        Record.unscoped.where('updated_at>=?', params[:last_time]).all
       end
 
       post do
         msg=Message.new
         begin
           ActiveRecord::Base.transaction do
-            state_logs=JSON.parse(params[:state_log])
-            state_logs.each do |state_log|
-              state_log=StateLog.new(state_log)
-              state_log.save
+            records=JSON.parse(params[:record])
+            records.each do |record|
+              record=Record.new(record)
+              record.save
             end
           end
           msg.result =true
@@ -31,10 +32,11 @@ module V1
         msg=Message.new
         begin
           ActiveRecord::Base.transaction do
-            state_logs=JSON.parse(params[:state_log])
-            state_logs.each do |state_log|
-              if u=StateLog.unscoped.find_by_id(state_log['id'])
-                u.update(state_log.except('id'))
+            records=JSON.parse(params[:record])
+            puts records.count
+            records.each do |record|
+              if u=Record.unscoped.find_by_id(record['id'])
+                u.update(record.except('id'))
               end
             end
           end
@@ -49,16 +51,16 @@ module V1
         msg=Message.new
         begin
           ActiveRecord::Base.transaction do
-            state_logs=JSON.parse(params[:state_log])
-            state_logs.each do |id|
-              if state_log=StateLog.find_by_id(id)
-                state_log.update(is_delete: true)
+            records=JSON.parse(params[:record])
+            records.each do |id|
+              if record=Record.unscoped.find_by_id(id)
+                record.update(is_delete: true)
               end
             end
           end
           msg.result =true
         rescue => e
-          msg.content = "delete:#{e.message}"
+          msg.content = "post:#{e.message}"
         end
         return msg
       end
