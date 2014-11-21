@@ -1,4 +1,4 @@
-# print rejected packages detail
+# print received packages detail
 module Printer
   class P005<Base
     HEAD=[:id, :receive_addr, :user, :receive_date]
