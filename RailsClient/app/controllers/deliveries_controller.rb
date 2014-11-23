@@ -75,32 +75,31 @@ class DeliveriesController < ApplicationController
 
   def export
     json={}
-    # delivery,forklift,package,package_position
-    d=Delivery.find(params[:id])
-    json[:delivery]=d
-    json[:forklifts]=d.forklifts
-    json[:packages]=[]
-    json[:forklifts].each { |f|
-      json[:packages] += f.packages }
-    json[:package_positions]= []
-    json[:packages].each { |p|
-      json[:package_positions]<< p.package_position }
-    send_data json.to_json, :filename => "#{d.id}.json"
+    delivery=LogisticsContainer.find(params[:id])
+    lcs=delivery.subtree
+    json[:logistics_containers]=lcs
+    json[:records]=[]
+    json[:containers]=[]
+    lcs.each do |lc|
+      json[:containers]<<lc.container
+      json[:records]<<lc.records
+    end
+    send_data json.to_json, :filename => "#{delivery.container_id}.json"
   end
 
   def import
     if request.post?
       msg=Message.new
       #begin
-        if params[:files].size==1
-          file=params[:files][0]
-          data=FileData.new(data: file, oriName: file.original_filename, path: $DELIVERYPATH, pathName: "#{Time.now.strftime('%Y%m%d%H%M%S')}-#{file.original_filename}")
-          data.saveFile
-          msg=DeliveryService.import_by_file(data.full_path)
-          #msg.content= msg.result ? '运单导入成功' : msg.content
-        else
-          msg.content='未选择文件或只能上传一个文件'
-        end
+      if params[:files].size==1
+        file=params[:files][0]
+        data=FileData.new(data: file, oriName: file.original_filename, path: $DELIVERYPATH, pathName: "#{Time.now.strftime('%Y%m%d%H%M%S')}-#{file.original_filename}")
+        data.saveFile
+        msg=DeliveryService.import_by_file(data.full_path)
+        #msg.content= msg.result ? '运单导入成功' : msg.content
+      else
+        msg.content='未选择文件或只能上传一个文件'
+      end
       #rescue => e
       #  msg.content = e.message
       #end
@@ -150,7 +149,7 @@ class DeliveriesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def delivery_params
-    params.require(:delivery).permit(:state, :remark, :source_id, :destination_id,:delivery_date,:received_date,:user_id,:receiver_id)
+    params.require(:delivery).permit(:state, :remark, :source_id, :destination_id, :delivery_date, :received_date, :user_id, :receiver_id)
   end
 
   def get_states
