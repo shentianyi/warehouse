@@ -8,8 +8,7 @@ class DeliveriesController < ApplicationController
   # GET /deliveries
   # GET /deliveries.json
   def index
-    @deliveries = Delivery.paginate(:page => params[:page]).order(created_at: :desc) #all
-    #@deliveries = @deliveries.paginate(:page => params[:page])
+    @deliveries= DeliveryService.get_list(nil).paginate(:page => params[:page])
   end
 
   # GET /deliveries/1
