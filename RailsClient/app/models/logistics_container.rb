@@ -40,7 +40,6 @@ class LogisticsContainer<LocationContainer
     end
   end
 
-
   def self.find_latest_by_container_id(container_id)
     where(container_id: container_id).order(created_at: :desc).first
   end

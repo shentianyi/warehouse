@@ -3,6 +3,11 @@
 #transfer all old packages,forklifts,deliveries to containers.
 #than build location_containers
 #than add records
+
+# *Delivery,*Forklift的所有状态都转化为到达，
+# *Package中所有的状态，如果是Destination的并且Forklift也是Destination的，则修改为拒收，Rejected
+# *同时，需要产生多少条Record，需要留意创建。
+# *注意那些空的Package,Forklift,Delivery
 class OPackage < ActiveRecord::Base
   include Extensions::UUID
   self.table_name = "packages"
@@ -22,9 +27,12 @@ class ODelivery < ActiveRecord::Base
   has_many :forklifts, class_name: "OForklift", foreign_key: 'delivery_id'
 end
 
-puts OPackage.count
-puts OForklift.count
-puts ODelivery.count
+#*先创建Delivery
+ODelivery.all.each do |od|
+  #create Delivery Container
+  #create Delivery Location_Container =>
+  #
+end
 
 #transfer Old deliveries
 =begin

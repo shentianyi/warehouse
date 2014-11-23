@@ -69,11 +69,9 @@ class LogisticsContainerService
           raise MovableMessage::CurrentLocationNotDestination
         end
 
-        puts "-#################{lc.state}"
         unless lc.state_for(CZ::Movable::RECEIVE)
           raise MovableMessage::StateError
         end
-        #lc.des_location_id = user.location_id
         lc.container.update(current_positionable: user.location)
         lc.receive(user.id)
         lc.save
@@ -86,9 +84,6 @@ class LogisticsContainerService
           unless c.state_for(CZ::Movable::RECEIVE)
             raise MovableMessage::StateError
           end
-          #不调用
-          #c.container.update(current_positionable: user.location)
-          #的原因是因为，forklift的current_positionable是whouse_id，不需要更新为用户的location
           c.receive(user.id)
           c.save
         end
