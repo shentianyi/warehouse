@@ -9,6 +9,10 @@
 # *同时，需要产生多少条Record，需要留意创建。
 # *注意那些空的Package,Forklift,Delivery
 class OPackage < ActiveRecord::Base
+
+  belongs_to :user
+  belongs_to :forklift
+
   include Extensions::UUID
   self.table_name = "packages"
 end
@@ -17,6 +21,8 @@ class OForklift < ActiveRecord::Base
   include Extensions::UUID
   self.table_name = "forklifts"
 
+  belongs_to :user
+  belongs_to :delivery
   has_many :packages, class_name: "OPackage", foreign_key: 'forklift_id'
 end
 
@@ -24,14 +30,51 @@ class ODelivery < ActiveRecord::Base
   include Extensions::UUID
   self.table_name = "deliveries"
 
+  belongs_to :user
   has_many :forklifts, class_name: "OForklift", foreign_key: 'delivery_id'
 end
 
 #*先创建Delivery
 ODelivery.all.each do |od|
-  #create Delivery Container
-  #create Delivery Location_Container =>
-  #
+  ActiveRecrod::Base.transaction do
+    #create Delivery Container
+    d = Delivery.create(remark: od.remark,user_id: od.user_id, location_id: od.user.location_id,created_at: od.created_at,updated_at: od.updated_at)
+    #create Delivery Location_Container =>
+    lc = d.logistics_containers.build(source_location_id: od.user.location_id,user_id: od.user_id,remark: od.remark)
+    lc.destinationable = od.user.location_id
+    lc.des_location_id = od.user.location_id
+    lc.created_at = od.created_at
+    lc.updated_at = od.updated_at
+    lc.save
+    #change state
+    #注意每一个record的时间，应该和od的时间一致，或者尽量保持一致
+    case od.state
+      when DeliveryState::ORIGINAL
+        lc.state = MovableState::INIT
+      when DeliveryState::WAY
+        lc.state = MovableState::WAY
+        #*record dispatch
+
+      when DeliveryState::DESTINATION
+        lc.state = MovableState::ARRIVED
+        #*record dispatch
+        #*record receive
+      when DeliveryState::RECEIVED
+        lc.state = MovableState::CHECKED
+        #*record dispatch
+        #*record receive
+        #*record check
+      when DeliveryState::REJECTED
+        lc.state = MovableState::REJECTED
+        #*record dispatch
+        #*record receive
+        #*record rejected
+    end
+    #get all forklift and added to delivery
+    od.forklifts.each do |of|
+
+    end
+  end
 end
 
 #transfer Old deliveries
