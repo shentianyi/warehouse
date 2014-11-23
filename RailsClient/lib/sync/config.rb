@@ -82,10 +82,7 @@ module Sync
     def self.skip_callbacks model
       model.record_timestamps=false
       model.skip_callback(:update, :before, :reset_dirty_flag)
-      model.skip_callback(:save, :after, :log_state)
-      model.skip_callback(:save, :before, :set_package_position)
-      model.skip_callback(:update, :after, :set_update_flag)
-      model.skip_callback(:save, :after, :auto_shelved)
+      model.skip_callback(:create,:before,:init_container_attr)
     end
 
     def self.reload

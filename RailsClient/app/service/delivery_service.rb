@@ -5,7 +5,7 @@ class DeliveryService
     ActiveRecord::Base.transaction do
       delivery=Delivery.new(remark: args[:remark], user_id: user.id, location_id: user.location_id)
       if delivery.save
-        lc=delivery.logistics_containers.build(source_location_id: user.location_id, user_id: user.id,remark:args[:remark])
+        lc=delivery.logistics_containers.build(source_location_id: user.location_id, user_id: user.id, remark: args[:remark])
         lc.destinationable=user.location.destination
         lc.des_location_id=user.location.destination.id
 
@@ -30,53 +30,32 @@ class DeliveryService
 
   def self.import_by_file path
     msg=Message.new
-    begin
+    # begin
       ActiveRecord::Base.transaction do
-        Sync::Config.skip_muti_callbacks([Delivery, Forklift, Package, PackagePosition, StateLog])
+        Sync::Config.skip_muti_callbacks([Container, LogisticsContainer,Record])
         data=JSON.parse(IO.read(path))
-        msg.result =true # unless Delivery.find_by_id(data['delivery']['id'])
-        if dori=Delivery.find_by_id(data['delivery']['id'])
-          dtmp=Delivery.new(data['delivery'])
-          if dori.updated_at<=dtmp.updated_at
-            attr=dori.gen_sync_attr(dtmp)
-            dori.update(attr)
-          end
-        else
-          Delivery.create(data['delivery'])
-        end
-        data['forklifts'].each do |forklift|
-          if fori=Forklift.find_by_id(forklift['id'])
-            ftmp=Forklift.new(forklift)
-            if fori.updated_at<=ftmp.updated_at
-              attr=fori.gen_sync_attr(ftmp)
-              fori.update(attr)
-            end
-          else
-            Forklift.create(forklift)
-          end
-        end
 
-        data['packages'].each do |package|
-          if pori=Package.find_by_id(package['id'])
-            ptmp=Package.new(package)
-            if pori.updated_at<=ptmp.updated_at
-              attr=pori.gen_sync_attr(ptmp)
-              pori.update(attr)
+        msg.result =true
+        [Container, LogisticsContainer, Record].each do |m|
+          data[m.name.tableize].each do |c|
+            citmp=m.new(c)
+            if ci=m.find_by_id(c['id'])
+              if ci.updated_at<=citmp.updated_at
+                attr=ci.gen_sync_attr(citmp)
+                ci.update(attr)
+              end
+            else
+              citmp.save
             end
-          else
-            Package.create(package)
           end
         end
-
-        PackagePosition.create(data['package_positions'].select { |pp| !pp.nil? })
-        #StateLog.create(data['state_logs'])
       end
       msg.result=true
       msg.content='处理成功'
-    rescue => e
-      msg.result =false
-      msg.content=e.message
-    end
+    # rescue => e
+    #   msg.result =false
+    #   msg.content=e.message
+    # end
     return msg
   end
 

@@ -1,5 +1,6 @@
 class DeliveryPresenter<Presenter
-  Delegators=[:id, :container_id, :destinationable, :created_at, :state, :user_id, :source_location_id, :des_location_id, :remark]
+  Delegators=[:id, :container_id, :destinationable,
+              :created_at, :state, :user_id, :source_location_id, :des_location_id, :remark]
   def_delegators :@delivery, *Delegators
 
   def initialize(delivery_lc)
@@ -20,6 +21,14 @@ class DeliveryPresenter<Presenter
   def received_user
     receive = @delivery.get_record('receive')
     receive.nil? ? '' : receive.impl_id
+  end
+
+  def created_at
+    @delivery.created_at.nil? ? '' : @delivery.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S')
+  end
+
+  def forklifts
+    LogisticsContainerService.get_forklifts(@delivery)
   end
 
   def to_json
