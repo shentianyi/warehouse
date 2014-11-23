@@ -82,7 +82,7 @@ class DeliveriesController < ApplicationController
     json[:containers]=[]
     lcs.each do |lc|
       json[:containers]<<lc.container
-      json[:records]<<lc.records
+      json[:records]+lc.records
     end
     send_data json.to_json, :filename => "#{delivery.container_id}.json"
   end
@@ -90,19 +90,15 @@ class DeliveriesController < ApplicationController
   def import
     if request.post?
       msg=Message.new
-      #begin
       if params[:files].size==1
         file=params[:files][0]
         data=FileData.new(data: file, oriName: file.original_filename, path: $DELIVERYPATH, pathName: "#{Time.now.strftime('%Y%m%d%H%M%S')}-#{file.original_filename}")
         data.saveFile
         msg=DeliveryService.import_by_file(data.full_path)
-        #msg.content= msg.result ? '运单导入成功' : msg.content
+        msg.content= msg.result ? '运单导入成功' : msg.content
       else
         msg.content='未选择文件或只能上传一个文件'
       end
-      #rescue => e
-      #  msg.content = e.message
-      #end
       render json: msg
     end
   end
