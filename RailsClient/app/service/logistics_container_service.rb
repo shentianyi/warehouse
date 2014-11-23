@@ -1,4 +1,7 @@
 class LogisticsContainerService
+  #目前这个Service有问题，应该通过调用各自的dispath来进行分发，
+  #以实现各自的逻辑，但是目前没有时间了。
+
   def self.destroy_by_id(id)
     msg=Message.new
     if lc=LogisticsContainer.exists?(id)
