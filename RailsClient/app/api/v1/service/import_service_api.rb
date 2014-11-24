@@ -4,7 +4,7 @@ module V1
       namespace 'import'
       guard_all!
 
-      post :store_location_container do
+      post :store_container do
 
       end
     end
