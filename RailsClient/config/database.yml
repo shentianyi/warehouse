@@ -35,6 +35,14 @@ production:
   <<: *default
   database: whousedb
 
-server:
+server :
   <<: *default
-  database: whouse_server_db
+
+sync1:
+  <<: *default
+  database: whouse_sync_1_db
+
+sync2:
+  <<: *default
+  database: whouse_sync_2_db
+

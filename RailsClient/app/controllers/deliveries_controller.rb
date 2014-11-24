@@ -82,7 +82,7 @@ class DeliveriesController < ApplicationController
     json[:containers]=[]
     lcs.each do |lc|
       json[:containers]<<lc.container
-      json[:records]+lc.records
+      json[:records]+=lc.records
     end
     send_data json.to_json, :filename => "#{delivery.container_id}.json"
   end

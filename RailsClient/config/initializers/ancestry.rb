@@ -1,4 +1,5 @@
 Ancestry.module_eval do
+  remove_const(:ANCESTRY_PATTERN) if defined?(:ANCESTRY_PATTERN)
   const_set :ANCESTRY_PATTERN, /\A\w+(-?\w+)*/
 end
 

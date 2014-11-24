@@ -30,7 +30,7 @@ class DeliveryService
 
   def self.import_by_file path
     msg=Message.new
-    # begin
+    begin
       ActiveRecord::Base.transaction do
         Sync::Config.skip_muti_callbacks([Container, LogisticsContainer,Record])
         data=JSON.parse(IO.read(path))
@@ -52,10 +52,10 @@ class DeliveryService
       end
       msg.result=true
       msg.content='处理成功'
-    # rescue => e
-    #   msg.result =false
-    #   msg.content=e.message
-    # end
+    rescue => e
+      msg.result =false
+      msg.content=e.message
+    end
     return msg
   end
 

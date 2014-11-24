@@ -11,29 +11,56 @@ module V1
       end
 
       post do
-        pick_item_filters=JSON.parse(params[:pick_item_filter])
-        pick_item_filters.each do |pick_item_filter|
-          pick_item_filter=PickItemFilter.new(pick_item_filter)
-          pick_item_filter.save
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            pick_item_filters=JSON.parse(params[:pick_item_filter])
+            pick_item_filters.each do |pick_item_filter|
+              pick_item_filter=PickItemFilter.new(pick_item_filter)
+              pick_item_filter.save
+            end
+          end
+          msg.result =true
+        rescue => e
+          msg.content = "delete:#{e.message}"
         end
+        return msg
       end
 
       put '/:id' do
-        pick_item_filters=JSON.parse(params[:pick_item_filter])
-        pick_item_filters.each do |pick_item_filter|
-          if u=PickItemFilter.unscoped.find_by_id(pick_item_filter['id'])
-            u.update(pick_item_filter.except('id'))
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            pick_item_filters=JSON.parse(params[:pick_item_filter])
+            pick_item_filters.each do |pick_item_filter|
+              if u=PickItemFilter.unscoped.find_by_id(pick_item_filter['id'])
+                u.update(pick_item_filter.except('id'))
+              end
+            end
           end
+          msg.result =true
+        rescue => e
+          msg.content = "delete:#{e.message}"
         end
+        return msg
       end
 
       post :delete do
-        pick_item_filters=JSON.parse(params[:pick_item_filter])
-        pick_item_filters.each do |id|
-          if pick_item_filter=PickItemFilter.unscoped.find_by_id(id)
-            pick_item_filter.update(is_delete: true)
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            pick_item_filters=JSON.parse(params[:pick_item_filter])
+            pick_item_filters.each do |id|
+              if pick_item_filter=PickItemFilter.unscoped.find_by_id(id)
+                pick_item_filter.update(is_delete: true)
+              end
+            end
           end
+          msg.result =true
+        rescue => e
+          msg.content = "delete:#{e.message}"
         end
+        return msg
       end
     end
   end
