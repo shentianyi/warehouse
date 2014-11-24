@@ -1,0 +1,56 @@
+API接口修改
+所有旧的接口都可以使用，会有少部分需要修改参数和返回结果
+
+1.运单接口
+
+修改
+@修改了返回
+@参数只支持一个delivery_date
+url: /api/v1/deliveries/list
+type: GET
+param: {delivery_date:date_string}
+return: {result:1,content:[
+{
+id:string,
+container_id:string,
+delivery_date:string,
+received_date:string,
+state:integer,
+state_display:string,
+user_id:string,
+source_id:string,
+source:string,
+destination_id:string,
+destination:string,
+remark:string,
+can_delete:bools
+}]}
+
+*新增
+url:/api/v1/deliveries/get_by_time_and_state
+type:GET
+param:{start_time:string,end_time:string,state:[integer],type:integer(0表示从本地发出，1表示发往本地)}
+#返回结果根据时间排序，最多只支持50个运单
+return: {result:1,content:[
+{
+id:string,
+container_id:string,
+delivery_date:string,
+received_date:string,
+state:integer,
+state_display:string,
+user_id:string,
+source_id:string,
+source:string,
+destination_id:string,
+destination:string,
+remark:string,
+can_delete:bools
+}]}
+
+2.检察托清单是否能被加入到运单中,如果可以，则新建lc
+url:/api/v1/deliveries/check_forklift
+type:POST
+param:{forklift_id:string（container_id）}
+return:{}
+

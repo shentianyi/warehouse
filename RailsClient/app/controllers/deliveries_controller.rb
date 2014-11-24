@@ -44,6 +44,7 @@ class DeliveriesController < ApplicationController
   # PATCH/PUT /deliveries/1
   # PATCH/PUT /deliveries/1.json
   def update
+    #need to update
     if delivery_params.has_key?(:state)
       DeliveryService.set_state(@delivery, delivery_params[:state])
     end

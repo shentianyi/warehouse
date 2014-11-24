@@ -2,5 +2,5 @@
 
 <%= render 'form' %>
 
-<%= link_to '详细', @delivery ,:class=>'btn btn-default'%> |
-<%= link_to '返回', deliveries_path ,:class=>'btn btn-default'%>
+<td><%= link_to '详细',{ controller:'deliveries',action: 'show',id:@delivery.id },class:'btn btn-default' %></td> |
+<%= link_to '返回', { controller:'deliveries',action: 'index' } ,:class=>'btn btn-default'%>
