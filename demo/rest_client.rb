@@ -1,6 +1,6 @@
 require 'rest-client'
 require 'json'
-site = RestClient::Resource.new('http://localhost:3000')
+site = RestClient::Resource.new('http://localhost:4000')
 
 res=site['/api/v1/users/login'].post({user:{id:'admin',password:'123456@'}})
 
