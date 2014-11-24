@@ -97,5 +97,15 @@ module CZ
     def state_display
       MovableState.display(self.state)
     end
+
+    def source
+      l = Location.find_by_id(self.source_location_id)
+      l.nil? ? Location.new : l
+    end
+
+    def destination
+      l = Location.find_by_id(self.des_location_id)
+      l.nil? ? Location.new : l
+    end
   end
 end

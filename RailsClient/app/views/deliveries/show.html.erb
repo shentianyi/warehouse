@@ -17,7 +17,7 @@
 </ul>
 <h2>操作记录</h2>
 <ul>
-<% @delivery.records.order(impl_user_type: :asc).each do |r| %>
+<% @delivery.get_records.each do |r| %>
   <li><h4><small><%= r.display %></small></h4></li>
 <%end%>
 </ul>

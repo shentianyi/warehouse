@@ -31,6 +31,10 @@ class ForkliftPresenter<Presenter
     PackagePresenter.init_json_presenters(LogisticsContainerService.get_packages_with_detail(self))
   end
 
+  def packages
+    LogisticsContainerService.get_packages(self)
+  end
+
   def state_display
   end
 

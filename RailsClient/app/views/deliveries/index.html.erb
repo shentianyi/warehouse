@@ -74,15 +74,15 @@
         <td><input type="checkbox" id="<%= delivery.id %>" class='print-check'></td>
         <td><%= index+@deliveries.offset+1 %></td>
         <td><%= delivery.container_id %></td>
-        <td><%= delivery_presenter.state_display%></td>
-        <td><%= "#{delivery.user.name }|#{delivery.user.id} 在 #{delivery_presenter.created_at} 创建于 #{delivery_presenter.source.name}" %></td>
-        <td><%= delivery_presenter.destination.name%></td>
+        <td><%= delivery.state_display%></td>
+        <td><%= "#{delivery.user.name }|#{delivery.user.id} 在 #{delivery_presenter.created_at} 创建于 #{delivery.source.name}" %></td>
+        <td><%= delivery.destination.name%></td>
         <td><%= delivery.remark%></td>
         <td>
           <%= link_to delivery_presenter.forklifts.count,forklifts_delivery_path(delivery), class:'btn btn-default' %>
         </td>
         <td>
-          <%= delivery.records.order(impl_user_type: :desc).first.display%>
+          <%= delivery.get_records.last.display%>
         </td>
         <td><%= link_to '详细',{ controller:'deliveries',action: 'show',id:delivery.id },class:'btn btn-default' %></td>
         <td><%= link_to '编辑', { controller:'deliveries',action: 'edit',id:delivery.id },class:'btn btn-default' %></td>

@@ -42,42 +42,45 @@
     <tr>
       <th></th>
       <th>序号</th>
-      <th>编号</th>
+      <th>拖清单号</th>
       <th>状态</th>
       <th>所属运单</th>
+      <th>创建信息</th>
+      <th>目标仓库</th>
+      <th>备注</th>
       <th>包装箱列表</th>
-      <th>备货员工</th>
-      <th>备货仓库</th>
       <th>包装箱总数</th>
       <th>已接收包装箱数</th>
-      <th>创建时间</th>
-      <th>备注</th>
+      <th>最新记录</th>
       <th colspan="2"></th>
     </tr>
   </thead>
 
   <tbody>
     <% @forklifts.each_with_index do |forklift,index| %>
+      <% fpresenter = ForkliftPresenter.new(forklift)%>
       <tr>
         <td><input type="checkbox" id="<%= forklift.id %>" class='print-check'></td>
         <td><%= index+@forklifts.offset+1%>
-        <td><%= forklift.id%></td>
-        <td><%= ForkliftState.display(forklift.state)%></td>
+        <td><%= forklift.container_id%></td>
+        <td><%= forklift.state_display %></td>
         <td>
-        <% if forklift.delivery %>
-        <%= link_to forklift.delivery do%>
-        <span class="label label-info"><%= forklift.delivery.id %></span>
-        <% end %>
-        <% end %>
+          <% if forklift.parent %>
+              <%= link_to delivery_path(forklift.parent) do%>
+                  <span class="label label-info"><%= forklift.parent.container_id %></span>
+              <% end %>
+          <% end %>
         </td>
-        <td><%= link_to '包装箱列表', packages_forklift_path(forklift) %><span class='badge pull-right'><%= forklift.packages.count %></span></td>
-        <td><%= forklift.stocker.name if forklift.stocker%></td>
-        <td><%= forklift.whouse.name%></td>
-        <td><%= forklift.sum_packages%></td>
-        <td><%= forklift.accepted_packages%></td>
-        <td><%= forklift.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
-        <td><%= forklift.remark%></td>
-        <td><%= link_to '详细', forklift ,:class=> 'btn btn-default' %></td>
+        <td><%= "#{forklift.user.name }|#{forklift.user.id} 在 #{fpresenter.created_at} 创建" %></td>
+        <td><%= forklift.destinationable.name%></td>
+        <td><%= forklift.remark %></td>
+        <td>
+          <%= link_to fpresenter.packages.count, packages_forklift_path(forklift) %>
+        </td>
+        <td><%= fpresenter.sum_packages %></td>
+        <td><%= fpresenter.accepted_packages%></td>
+        <td><%= forklift.get_records.last.display %></td>
+        <td><%= link_to '详细', forklift_path(forklift) ,:class=> 'btn btn-default' %></td>
         <td><%= link_to '编辑', edit_forklift_path(forklift) ,:class=> 'btn btn-default' if current_user.admin?%></td>
       </tr>
     <% end %>

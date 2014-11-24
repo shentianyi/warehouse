@@ -5,7 +5,7 @@ class ForkliftsController < ApplicationController
   # GET /forklifts
   # GET /forklifts.json
   def index
-    @forklifts = Forklift.paginate(:page=>params[:page]).order(created_at: :desc)#all
+    @forklifts = ForkliftService.search(nil).order(created_at: :desc).paginate(:page=>params[:page])#all
     #@forklifts = @forklifts.paginate(:page=>params[:page])
   end
 
@@ -25,6 +25,7 @@ class ForkliftsController < ApplicationController
 
   # POST /forklifts
   # POST /forklifts.json
+=begin
   def create
     @forklift = Forklift.new(forklift_params)
 
@@ -38,6 +39,7 @@ class ForkliftsController < ApplicationController
       end
     end
   end
+=end
 
   # PATCH/PUT /forklifts/1
   # PATCH/PUT /forklifts/1.json
@@ -84,13 +86,13 @@ class ForkliftsController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_forklift
-    @forklift = Forklift.find(params[:id])
+    @forklift = ForkliftService.search({id:params[:id]}).first
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def forklift_params
     #params[:forklift]
-    params.require(:forklift).permit(:state,:remark,:whouse_id)
+    params.require(:logistics_container).permit(:state,:remark,:destinationable)
   end
 
   def set_search_variable

@@ -31,14 +31,6 @@ class DeliveryPresenter<Presenter
     LogisticsContainerService.get_forklifts(@delivery)
   end
 
-  def source
-    Location.find_by_id(self.source_location_id)
-  end
-
-  def destination
-    Location.find_by_id(self.des_location_id)
-  end
-
   def user
     User.find_by_id(self.user_id)
   end
@@ -58,10 +50,10 @@ class DeliveryPresenter<Presenter
         can_delete: false, #notice
         user_id: self.user.id,
         user_name: self.user.name,
-        source_id:self.source.id,
-        source: self.source.name,
-        destination_id: self.destination.id,
-        destination: self.destination.name,
+        source_id:self.source_location_id,
+        source: @delivery.source.name,
+        destination_id: self.des_location_id,
+        destination: @delivery.destination.name,
         remark: self.remark
     }
   end
