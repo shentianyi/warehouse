@@ -89,15 +89,27 @@ ActiveRecord::Base.transaction do
 
   #LED STATE
   unless LedState.find_by_state(LedLightState::NORMAL)
-    LedState.create({state:LedLightState::NORMAL,rgb:"0 255 0",led_code:0})
+    LedState.create({state: LedLightState::NORMAL, rgb: "0 255 0", led_code: 0})
   end
   unless LedState.find_by_state(LedLightState::ORDERED)
-    LedState.create({state:LedLightState::ORDERED,rgb:"255 0 0",led_code:1})
+    LedState.create({state: LedLightState::ORDERED, rgb: "255 0 0", led_code: 1})
   end
   unless LedState.find_by_state(LedLightState::DELIVERED)
-    LedState.create({state:LedLightState::DELIVERED,rgb:"0 0 255",led_code:2})
+    LedState.create({state: LedLightState::DELIVERED, rgb: "0 0 255", led_code: 2})
   end
   unless LedState.find_by_state(LedLightState::RECEIVED)
-    LedState.create({state:LedLightState::RECEIVED,rgb:"0 255 0",led_code:0})
+    LedState.create({state: LedLightState::RECEIVED, rgb: "0 255 0", led_code: 0})
+  end
+
+  l = Location.create({id: 'FG', name: '成品仓库', is_base: false}) unless (l=Location.find_by_id('FG'))
+  unless whouse=Whouse.find_by_id('FW')
+    whouse=Whouse.new(id: 'FW', name: '成品在途库')
+    whouse.location=l
+    whouse.save
+  end
+  unless  User.find_by_id('PACK_SYS_USER')
+    User.create({id: 'PACK_SYS_USER', name: 'PACK_SYS_USER',
+                 location_id: l.id, password: '123456@',
+                 password_confirmation: '123456@', role_id: 100, is_sys: true})
   end
 end
