@@ -31,21 +31,24 @@ class ODelivery < ActiveRecord::Base
   self.table_name = "deliveries"
 
   belongs_to :user
+  belongs_to :destination, class_name: 'Location'
+  belongs_to :receiver, class_name: 'User'
   has_many :forklifts, class_name: "OForklift", foreign_key: 'delivery_id'
 end
 
 #*先创建Delivery
 ODelivery.all.each do |od|
-  ActiveRecrod::Base.transaction do
+  ActiveRecord::Base.transaction do
     #create Delivery Container
-    d = Delivery.create(remark: od.remark,user_id: od.user_id, location_id: od.user.location_id,created_at: od.created_at,updated_at: od.updated_at)
+    d = Delivery.create(id:od.id,remark: od.remark,user_id: od.user_id, location_id: od.user.location_id,created_at: od.created_at,updated_at: od.updated_at)
     #create Delivery Location_Container =>
     lc = d.logistics_containers.build(source_location_id: od.user.location_id,user_id: od.user_id,remark: od.remark)
-    lc.destinationable = od.user.location_id
-    lc.des_location_id = od.user.location_id
-    lc.created_at = od.created_at
-    lc.updated_at = od.updated_at
-    lc.save
+    lc.destinationable = od.destination
+    lc.des_location_id = od.destination_id
+
+    default_sender = User.where({role_id:Role.sender}).first
+    default_receiver = User.where({role_id:Role.receiver}).first
+
     #change state
     #注意每一个record的时间，应该和od的时间一致，或者尽量保持一致
     case od.state
@@ -54,24 +57,53 @@ ODelivery.all.each do |od|
       when DeliveryState::WAY
         lc.state = MovableState::WAY
         #*record dispatch
-
+        impl_time = od.delivery_date.nil? ? od.created_at : od.delivery_date
+        Record.create({recordable:lc,destinationable:lc.destinationable,impl_id:od.user_id,impl_user_type:ImplUserType::SENDER,impl_action:'dispatch',impl_time:impl_time})
       when DeliveryState::DESTINATION
         lc.state = MovableState::ARRIVED
         #*record dispatch
+        impl_time = od.delivery_date.nil? ? od.created_at : od.delivery_date
+        Record.create({recordable:lc,destinationable:lc.destinationable,impl_id:od.user_id,impl_user_type:ImplUserType::SENDER,impl_action:'dispatch',impl_time:impl_time})
         #*record receive
+        impl_time = od.received_date.nil? ? od.updated_at : od.received_date
+        user_id = od.receiver_id.nil? ? default_receiver : od.receiver_id
+        Record.create({recordable:lc,destinationable:lc.destinationable,impl_id:user_id,impl_user_type:ImplUserType::RECEIVER,impl_action:'receive',impl_time:impl_time})
       when DeliveryState::RECEIVED
         lc.state = MovableState::CHECKED
         #*record dispatch
+        impl_time = od.delivery_date.nil? ? od.created_at : od.delivery_date
+        Record.create({recordable:lc,destinationable:lc.destinationable,impl_id:od.user_id,impl_user_type:ImplUserType::SENDER,impl_action:'dispatch',impl_time:impl_time})
         #*record receive
+        impl_time = od.received_date.nil? ? od.updated_at : od.received_date
+        user_id = od.receiver_id.nil? ? default_receiver : od.receiver_id
+        Record.create({recordable:lc,destinationable:lc.destinationable,impl_id:user_id,impl_user_type:ImplUserType::RECEIVER,impl_action:'receive',impl_time:impl_time})
         #*record check
+        impl_time = od.received_date.nil? ? od.updated_at : od.received_date
+        user_id = od.receiver_id.nil? ? default_receiver : od.receiver_id
+        Record.create({recordable:lc,destinationable:lc.destinationable,impl_id:user_id,impl_user_type:ImplUserType::EXAMINER,impl_action:'check',impl_time:impl_time})
       when DeliveryState::REJECTED
         lc.state = MovableState::REJECTED
         #*record dispatch
+        impl_time = od.delivery_date.nil? ? od.created_at : od.delivery_date
+        Record.create({recordable:lc,destinationable:lc.destinationable,impl_id:od.user_id,impl_user_type:ImplUserType::SENDER,impl_action:'dispatch',impl_time:impl_time})
         #*record receive
+        impl_time = od.received_date.nil? ? od.updated_at : od.received_date
+        user_id = od.receiver_id.nil? ? default_receiver : od.receiver_id
+        Record.create({recordable:lc,destinationable:lc.destinationable,impl_id:user_id,impl_user_type:ImplUserType::RECEIVER,impl_action:'receive',impl_time:impl_time})
         #*record rejected
+        impl_time = od.received_date.nil? ? od.updated_at : od.received_date
+        user_id = od.receiver_id.nil? ? default_receiver : od.receiver_id
+        Record.create({recordable:lc,destinationable:lc.destinationable,impl_id:user_id,impl_user_type:ImplUserType::REJECTOR,impl_action:'reject',impl_time:impl_time})
     end
     #get all forklift and added to delivery
+    lc.created_at = od.created_at
+    lc.updated_at = od.updated_at
+    lc.save
+    puts "#{d.id} => Delivery Container"
+    puts "#{lc.id} => Delivery Location Container"
+    puts "#{lc.records.count} => Logistics Container Records created!"
     od.forklifts.each do |of|
+      #注意，这里只统计到了运单中的Forklift，但是没有统计到不存在晕但中的forklift
 
     end
   end

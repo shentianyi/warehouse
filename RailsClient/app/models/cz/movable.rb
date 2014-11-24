@@ -18,6 +18,7 @@ module CZ
 
     def dispatch(destination, sender_id)
       if state_switch_to(MovableState::WAY)
+        self.update({state:MovableState::WAY})
         #self.destinationable = destination
         Record.update_or_create(self, {'id' => sender_id, 'type' => ImplUserType::SENDER, 'action' => __method__.to_s},destination)
         true
@@ -26,9 +27,12 @@ module CZ
       end
     end
 
+
+
     def receive(receiver_id)
       if state_switch_to(MovableState::ARRIVED)
         #self.current_positionable = self.destinationable
+        self.update({state:MovableState::ARRIVED})
         Record.update_or_create(self, {'id' => receiver_id, 'type' => ImplUserType::RECEIVER, 'action' => __method__.to_s})
         true
       else
@@ -38,6 +42,7 @@ module CZ
 
     def check(examiner_id)
       if state_switch_to(MovableState::CHECKED)
+        self.update({state:MovableState::CHECKED})
         Record.update_or_create(self, {'id' => examiner_id, 'type' => ImplUserType::EXAMINER, 'action' => __method__.to_s})
         true
       else
@@ -47,6 +52,7 @@ module CZ
 
     def reject(rejector_id)
       if state_switch_to(MovableState::REJECTED)
+        self.update({state:MovableState::REJECTED})
         Record.update_or_create(self, {'id' => rejector_id, 'type' => ImplUserType::REJECTOR, 'action' => __method__.to_s})
         true
       else
@@ -65,7 +71,7 @@ module CZ
 
     def state_switch_to state
       if MovableState.before(state).include? self.get_state
-        self.state = state
+        #self.state = state
         true
       else
         false
