@@ -15,6 +15,7 @@
       <%= f.label :state,'状 态'%>
       <%=  f.select(:state,MovableState.state,{include_blank: false})%>
     </p>
+    <p>*状态可以被修改，但是依然需要使用移动设备进行接收，否则不会产生操作记录</p>
 
     <p>
       <%= f.label :remark,'备 注'%>

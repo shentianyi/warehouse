@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 class DeliveriesController < ApplicationController
+  #2014-12-24 *no delivery model exists
   #load_and_authorize_resource
   before_action :set_delivery, only: [:show, :edit, :update, :destroy, :forklifts]
   skip_before_filter :delivery_params
@@ -45,12 +46,10 @@ class DeliveriesController < ApplicationController
   # PATCH/PUT /deliveries/1.json
   def update
     #need to update
-    if delivery_params.has_key?(:state)
-      DeliveryService.set_state(@delivery, delivery_params[:state])
-    end
     respond_to do |format|
       if @delivery.update(delivery_params)
-        format.html { redirect_to @delivery, notice: '运单更新成功.' }
+        # 注意修改了状态的后果
+        format.html { redirect_to delivery_url(@delivery), notice: '运单更新成功.' }
         format.json { render :show, status: :ok, location: @delivery }
       else
         format.html { render :edit }
@@ -61,17 +60,20 @@ class DeliveriesController < ApplicationController
 
   # DELETE /deliveries/1
   # DELETE /deliveries/1.json
+=begin
   def destroy
     @delivery.destroy
     respond_to do |format|
-      format.html { redirect_to deliveries_url, notice: 'Delivery was successfully destroyed.' }
+      format.html { redirect_to deliveries_url, notice: '运单成功删除.' }
       format.json { head :no_content }
     end
   end
+=end
 
   # GET /deliveries/1/forklifts
   def forklifts
-    @forklifts = @delivery.forklifts.paginate(:page => params[:page]).order(created_at: :desc)
+    dp = DeliveryPresenter.new(@delivery)
+    @forklifts = dp.forklifts.paginate(:page => params[:page]).order(created_at: :desc)
   end
 
   def export
@@ -146,7 +148,7 @@ class DeliveriesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def delivery_params
-    params.require(:delivery).permit(:state, :remark, :source_id, :destination_id, :delivery_date, :received_date, :user_id, :receiver_id)
+    params.require(:logistics_container).permit(:state, :remark)
   end
 
   def get_states

@@ -2,6 +2,7 @@ Rails.application.routes.draw do
 
   resources :led_states
   resources :sys_configs
+  resources :logistics_containers
 
   resources :order_items do
     collection do

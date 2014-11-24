@@ -11,10 +11,6 @@
           <input type="text" name="delivery[user_id]" value="<%= @user_id %>"/>
           <input type="hidden" name="delivery[user_id_fuzzy]"/>
         </span>
-        <span>接收员工工号：
-          <input type="text" name="delivery[receiver_id]" value="<%= @receiver_id %>"/>
-          <input type="hidden" name="delivery[receiver_id_fuzzy]"/>
-        </span>
         </span>
         <span>运单状态：
           <%= select 'delivery', 'state', @states, selected: @state, include_blank: true %>
@@ -24,16 +20,6 @@
         </span>
       </div>
       <div>
-        <span>
-        发运日期：
-          <input type="text" name="delivery[delivery_date][start]" class="datepicker" value="<%= @delivery_date_start %>"/>
-          ~  <input type="text" name="delivery[delivery_date][end]" class="datepicker" value="<%= @delivery_date_end %>"/>
-        </span>
-        <span>
-          接收日期：
-          <input type="text" name="delivery[received_date][start]" class="datepicker" value="<%= @received_date_start %>"/>
-          ~  <input type="text" name="delivery[received_date][end]" class="datepicker" value="<%= @received_date_end %>"/>
-        </span>
         <span>
           创建日期：
           <input type="text" name="delivery[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
@@ -92,7 +78,9 @@
         <td><%= "#{delivery.user.name }|#{delivery.user.id} 在 #{delivery_presenter.created_at} 创建于 #{delivery_presenter.source.name}" %></td>
         <td><%= delivery_presenter.destination.name%></td>
         <td><%= delivery.remark%></td>
-        <td><%= delivery_presenter.forklifts.count %></td>
+        <td>
+          <%= link_to delivery_presenter.forklifts.count,forklifts_delivery_path(delivery), class:'btn btn-default' %>
+        </td>
         <td>
           <%= delivery.records.order(impl_user_type: :desc).first.display%>
         </td>
