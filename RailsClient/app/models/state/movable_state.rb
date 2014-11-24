@@ -57,4 +57,13 @@ class MovableState
     end
     data
   end
+
+  def self.state_value
+    data = []
+    self.constants.each do |c|
+      v = self.const_get(c.to_s)
+      data << v
+    end
+    data
+  end
 end

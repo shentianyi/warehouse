@@ -18,23 +18,25 @@ module V1
     #@state
     #@type 0=> sent from my location
     #1 => sent to my location
+    # 2014-11-24 => 搜索结果很慢，参数 start_time:2014-8-10 end_time:2014-10-1 type:0 结果760条左右运单，消耗75秒！！！
     get :get_by_time_and_state do
-      start_time = params[:start_time].nil? ? 12.hour.ago : params[:start_time]
-      end_time = params[:end_time].nil? ? Time.now : params[:end_time]
+      start_time = params[:start_time].nil? ? 12.hour.ago : Time.parse(params[:start_time])
+      end_time = params[:end_time].nil? ? Time.now : Time.parse(params[:end_time])
       args = {
-        created_at: (start_time..end_time),
-        state: params[:state]
+        created_at: (start_time..end_time)
       }
 
-      if params[:type].nil? || params[:type] == 0
+      args[:state] = params[:state] if params[:state]
+
+      if params[:type].nil? || params[:type].to_i == 0
         args[:source_location_id] = current_user.location_id
-        args[:user_id] = current_user.id
+        #args[:user_id] = current_user.id
       else
         args[:des_location_id] = current_user.location_id
       end
 
-      #
-      {result: 1, content: DeliveryPresenter.init_json_presenters(DeliveryService.search(args).order(created_at: :desc).all)}
+      #数据量太大，最多只支持50个运单
+      {result: 1, content: DeliveryPresenter.init_json_presenters(DeliveryService.search(args).order(created_at: :desc).limit(50))}
     end
 
     # check forklift
@@ -258,7 +260,7 @@ module V1
     get :list do
       created_at = Time.parse(params[:delivery_date])
       args = {
-          created_at: (12.hour.ago..created_at.end_of_day),
+          created_at: (created_at.beginning_of_day..created_at.end_of_day),
           source_location_id: current_user.location_id
       }
       {result: 1, content: DeliveryPresenter.init_json_presenters(DeliveryService.get_list(args).all)}

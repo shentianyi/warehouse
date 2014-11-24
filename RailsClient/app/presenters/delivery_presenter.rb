@@ -31,16 +31,33 @@ class DeliveryPresenter<Presenter
     LogisticsContainerService.get_forklifts(@delivery)
   end
 
+  def source
+    Location.find_by_id(self.source_location_id)
+  end
+
+  def destination
+    Location.find_by_id(self.des_location_id)
+  end
+
+  def user
+    User.find_by_id(self.user_id)
+  end
+
   def to_json
     {
         id: self.id,
+        cotainer_id:self.container_id,
         delivery_date: self.delivery_date,
         received_date: self.received_date,
         state: self.state,
-        state_display: self.state, #notice
+        state_display: MovableState.display(self.state), #notice
         can_delete: false, #notice
-        user_id: self.user_id,
-        destination_id: self.des_location_id,
+        user_id: self.user.id,
+        user_name: self.user.name,
+        source_id:self.source.id,
+        source: self.source.name,
+        destination_id: self.destination.id,
+        destination: self.destination.name,
         remark: self.remark
     }
   end
