@@ -5,6 +5,7 @@ module V1
       version 'v1', :using => :path
       namespace 'service'
       mount PrintServiceAPI
+      mount ImportServiceAPI
     end
   end
 end
