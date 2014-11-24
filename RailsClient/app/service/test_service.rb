@@ -1,6 +1,7 @@
 class TestService
 	def self.create
 		#Package.destroy_all
+=begin
 		@packages = []
 		1.times.each do |i|
 			id = "WI00#{i+1}"
@@ -10,5 +11,6 @@ class TestService
 			user = User.find_by_id("504435")
 			puts PackageService.create({package:{id:id,part_id:part_id,check_in_time:check_in_time,quantity:quantity}},user).to_json
 		end
+=end
 	end
 end

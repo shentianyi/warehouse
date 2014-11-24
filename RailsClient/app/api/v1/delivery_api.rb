@@ -237,6 +237,7 @@ module V1
     # 统一状态之后，原来的状态不能使用了，目前通过confirm_receive接口来统一设置状态
     # 目前这个接口不做任何事情
     # -->2014-11-19需要重新修改
+    # -->2014-11-23：运单下的拖清单被接收了，运单本身的状态如何处理？如果这个运单并没有被调用接收？
     post :confirm_receive do
       unless d = LogisticsContainer.exists?(params[:id])
         return {result: 0, content: DeliveryMessage::NotExit}
