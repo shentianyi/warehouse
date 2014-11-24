@@ -16,6 +16,8 @@ module CZ
         REJECT => MovableState::REJECTED
     }
 
+    #要加入一个can_dispatch？的方法
+
     def dispatch(destination, sender_id)
       if state_switch_to(MovableState::WAY)
         self.update({state:MovableState::WAY})

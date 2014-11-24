@@ -174,7 +174,7 @@ module V1
 
     # get delivery detail
     get :detail do
-      msg = Message.new
+      msg = ApiMessage.new
       unless lc = LogisticsContainer.exists?(params[:id])
         return msg.set_false(DeliveryMessage::NotExist)
       end
@@ -184,7 +184,7 @@ module V1
 
     # update delivery
     put do
-      msg = Message.new
+      msg = ApiMessage.new
       args=delivery_params
       if (d = LogisticsContainer.exists?(args[:id])).nil?
         return msg.set_false(DeliveryMessage::NotExist)
@@ -206,9 +206,14 @@ module V1
     #**
     # receive delivery
     post :receive do
-      unless d = LogisticsContainer.exists?(params[:id])
+      #这里的id其实是container_id，因为扫描的是运单号
+      unless d = LogisticsContainer.find_latest_by_container_id(params[:id])
         return {return: 0, content: DeliveryMessage::NotExist}
       end
+
+      #unless d.can_receive?
+      #  return {return: 0, content: DeliveryMessage::ReceiveFailed}
+      #end
 
       #*own implementation of receive
       if (r = LogisticsContainerService.receive(d,current_user)).result
