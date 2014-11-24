@@ -17,10 +17,10 @@
         </span>
         </span>
         <span>运单状态：
-          <%= select 'delivery', 'state', @states, selected: @state,include_blank: true %>
+          <%= select 'delivery', 'state', @states, selected: @state, include_blank: true %>
         </span>
         <span>发送地：
-          <%=  select_tag('delivery[source_id]',options_from_collection_for_select(Location.all,'id','name',@source_id), include_blank: true)%>
+          <%= select_tag('delivery[source_id]', options_from_collection_for_select(Location.all, 'id', 'name', @source_id), include_blank: true) %>
         </span>
       </div>
       <div>
@@ -51,7 +51,7 @@
 <input type="button" value="打印接收确认单" class='btn btn-info' onclick="print_delivery_confirm_list();"/>
 <input type="button" value="打印未接收清单" class='btn btn-success' onclick="print_delivery_unrece_list();"/>
 <input type="button" value="打印接收清单" class='btn btn-primary' onclick="print_delivery_reve_list();"/>
-<h3><%= link_to '导入离线运单', import_deliveries_path, :class=>"btn btn-warning" %></h3>
+<h3><%= link_to '导入离线运单', import_deliveries_path, :class => "btn btn-warning" %></h3>
 <div class="digg_pagination">
   <div class="page_info">
     <%= page_entries_info @deliveries %>
@@ -78,23 +78,27 @@
   </thead>
 
   <tbody>
-  <% @deliveries.each_with_index do |delivery, index| %>
+  <% @deliveries.each_with_index do |delivery, index|
+    delivery_presenter=DeliveryPresenter.new(delivery)
+  %>
       <tr>
         <td><input type="checkbox" id="<%= delivery.id %>" class='print-check'></td>
         <td><%= index+@deliveries.offset+1 %></td>
-        <td><%= delivery.id %></td>
+        <td><%= delivery.container_id %></td>
         <td><%= DeliveryState.display(delivery.state) %></td>
-        <td><%= link_to '托清单列表',forklifts_delivery_path(delivery) %><span class="badge pull-right"><%= delivery.forklifts.count%></span></td>
-        <td><%= delivery.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') if delivery.created_at%></td>
+        <td><%= link_to '托清单列表', { controller:'deliveries',action: 'forklifts',id:delivery.id } %>
+          <span class="badge pull-right"><%= delivery_presenter.forklifts.count %></span>
+        </td>
+        <td><%= delivery_presenter.created_at %></td>
         <td><%= delivery.user.name if delivery.user %></td>
-        <td><%= delivery.delivery_date.localtime.strftime('%Y-%m-%d %H:%M:%S') if delivery.delivery_date %></td>
-        <td><%= delivery.received_date.localtime.strftime('%Y-%m-%d %H:%M:%S') if delivery.received_date %></td>
-        <td><%= delivery.receiver.name if delivery.receiver %></td>
-        <td><%= delivery.source.name if delivery.source %></td>
+        <td><%= delivery_presenter.delivery_date %></td>
+        <td><%= delivery_presenter.received_date %></td>
+        <td><%= delivery_presenter.received_user %></td>
+        <td><%= delivery.source_location.name if delivery.source_location %></td>
         <td><%= delivery.remark %></td>
-        <td><%= link_to '详细', delivery ,:class=>'btn btn-default'%></td>
-        <td><%= link_to '编辑', edit_delivery_path(delivery)  ,:class=>'btn btn-default' %></td>
-        <td><%= link_to '导出数据', export_delivery_path(delivery)  ,:class=>'btn btn-default' %></td>
+        <td><%= link_to '详细',{ controller:'deliveries',action: 'show',id:delivery.id },class:'btn btn-default' %></td>
+        <td><%= link_to '编辑', { controller:'deliveries',action: 'edit',id:delivery.id },class:'btn btn-default' %></td>
+        <td><%= link_to '导出数据',{ controller:'deliveries',action: 'export',id:delivery.id },class:'btn btn-default'  %></td>
       </tr>
   <% end %>
   </tbody>
@@ -106,7 +110,7 @@
 <script>
     $(function () {
         $(".datepicker").datetimepicker({
-            lang:'ch',
+            lang: 'ch',
             format: 'Y-m-d H:i'
         });
     });
