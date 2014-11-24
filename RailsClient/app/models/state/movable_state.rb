@@ -35,17 +35,17 @@ class MovableState
   def self.display(state)
     case state
       when INIT
-        'Init'
+        '备货'
       when WAY
-        'On Way'
+        '在途'
       when ARRIVED
-        'Arrived'
+        '到达'
       when CHECKED
-        'Checked'
+        '已接收'
       when REJECTED
-        'Rejected'
+        '被拒收'
       else
-        'Nil'
+        '未知'
     end
   end
 

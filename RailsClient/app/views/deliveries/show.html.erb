@@ -1,17 +1,24 @@
-<h1><%= @delivery.id%></h1>
-<span class="label label-primary"><%= @delivery.id%></span>
-
-<h4>状态: <small><%= DeliveryState.display(@delivery.state) %></small></h4>
-<h4>创建时间: <small><%= @delivery.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></small></h4>
+<% dp = DeliveryPresenter.new(@delivery) %>
+<!--基础-->
+<h2>基础</h2>
+<h1><%= @delivery.container_id %></h1>
+<span class="label label-primary"><%= @delivery.container_id%></span>
+<h4>状态: <small><%= dp.state_display %></small></h4>
+<h4>创建时间: <small><%= dp.created_at %></small></h4>
 <h4>创建员工号: <small><%= @delivery.user_id%></small></h4>
 <h4>创建员工: <small><%= @delivery.user.name%></small></h4>
-<h4>发送时间: <small><%= @delivery.delivery_date.localtime.strftime('%Y-%m-%d %H:%M:%S') if @delivery.delivery_date %></small></h4>
-<h4>接收时间: <small><%= @delivery.received_date.localtime.strftime('%Y-%m-%d %H:%M:%S') if @delivery.received_date %></small></h4>
-<h4>接收员工号: <small><%= @delivery.receiver_id if @delivery.receiver_id %></small></h4>
-<h4>接收员工: <small><%= @delivery.receiver.name if @delivery.receiver %></small></h4>
-<h4>发送地: <small><%= @delivery.source.name if @delivery.source %></small></h4>
-<h4>目的地: <small><%= @delivery.destination.name if @delivery.destination %></small></h4>
-<h4>托清单数: <small><%= @delivery.forklifts.count %></small></h4>
+<h4>创建地: <small><%= dp.source.name %></small></h4>
 <h4>备注: <small><%= @delivery.remark %></small></h4>
-
+<h2>托清单列表</h2>
+<ul>
+  <% dp.forklifts.each do |f|%>
+  <li><h4><small><%= f.container_id %></small></h4></li>
+  <% end %>
+</ul>
+<h2>操作记录</h2>
+<ul>
+<% @delivery.records.order(impl_user_type: :asc).each do |r| %>
+  <li><h4><small><%= r.display %></small></h4></li>
+<%end%>
+</ul>
 <%= link_to '返回', deliveries_path ,:class=>'btn btn-default' %>

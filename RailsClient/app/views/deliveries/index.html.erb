@@ -62,17 +62,20 @@
   <thead>
   <tr>
     <th></th>
+    <!--基础-->
     <th>NO.</th>
     <th>运单号</th>
     <th>状态</th>
-    <th>托清单列表</th>
-    <th>创建日期</th>
-    <th>创建员工</th>
-    <th>发运日期</th>
-    <th>接收日期</th>
-    <th>接收员工</th>
-    <th>发送地</th>
+    <th>创建信息</th><!--创建地，创建时间，创建者-->
+    <th>目的地</th>
     <th>备注</th>
+    <!--基础-->
+    <!--包含-->
+    <th>托清单数</th>
+    <!--包含-->
+    <!--操作-->
+    <th>最新记录</th>
+    <!--操作-->
     <th colspan="3">&nbsp;</th>
   </tr>
   </thead>
@@ -85,17 +88,14 @@
         <td><input type="checkbox" id="<%= delivery.id %>" class='print-check'></td>
         <td><%= index+@deliveries.offset+1 %></td>
         <td><%= delivery.container_id %></td>
-        <td><%= DeliveryState.display(delivery.state) %></td>
-        <td><%= link_to '托清单列表', { controller:'deliveries',action: 'forklifts',id:delivery.id } %>
-          <span class="badge pull-right"><%= delivery_presenter.forklifts.count %></span>
+        <td><%= delivery_presenter.state_display%></td>
+        <td><%= "#{delivery.user.name }|#{delivery.user.id} 在 #{delivery_presenter.created_at} 创建于 #{delivery_presenter.source.name}" %></td>
+        <td><%= delivery_presenter.destination.name%></td>
+        <td><%= delivery.remark%></td>
+        <td><%= delivery_presenter.forklifts.count %></td>
+        <td>
+          <%= delivery.records.order(impl_user_type: :desc).first.display%>
         </td>
-        <td><%= delivery_presenter.created_at %></td>
-        <td><%= delivery.user.name if delivery.user %></td>
-        <td><%= delivery_presenter.delivery_date %></td>
-        <td><%= delivery_presenter.received_date %></td>
-        <td><%= delivery_presenter.received_user %></td>
-        <td><%= delivery.source_location.name if delivery.source_location %></td>
-        <td><%= delivery.remark %></td>
         <td><%= link_to '详细',{ controller:'deliveries',action: 'show',id:delivery.id },class:'btn btn-default' %></td>
         <td><%= link_to '编辑', { controller:'deliveries',action: 'edit',id:delivery.id },class:'btn btn-default' %></td>
         <td><%= link_to '导出数据',{ controller:'deliveries',action: 'export',id:delivery.id },class:'btn btn-default'  %></td>

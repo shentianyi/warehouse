@@ -67,7 +67,6 @@ ds.each_with_index do |od,index|
     case od.state
       when DeliveryState::ORIGINAL
         dlc.state = MovableState::INIT
-
       when DeliveryState::WAY
         dlc.state = MovableState::WAY
         #*record dispatch

@@ -13,14 +13,14 @@
 
     <p>
       <%= f.label :state,'状 态'%>
-      <%=  f.select(:state,DeliveryState.state,{include_blank: false})%>
+      <%=  f.select(:state,MovableState.state,{include_blank: false})%>
     </p>
 
     <p>
       <%= f.label :receiver_id,'接收员'%>
       <%= f.select(:receiver_id, User.role_user('400').collect{|u| [u.name,u.id]})%>
     </p>
-
+<!--
     <p>
       <%= f.label :delivery_date, '发送日期' %>
       <%= f.text_field :delivery_date, :value=>(@delivery.delivery_date.localtime.strftime('%Y-%m-%d %H:%M') if @delivery.delivery_date),class:'datepicker'%>
@@ -30,6 +30,7 @@
       <%= f.label :received_date, '接收时间' %>
       <%= f.text_field :received_date, :value=>(@delivery.received_date.localtime.strftime('%Y-%m-%d %H:%M') if @delivery.received_date),class:'datepicker'%>
     </p>
+-->
 
     <p>
       <%= f.label :remark,'备 注'%>

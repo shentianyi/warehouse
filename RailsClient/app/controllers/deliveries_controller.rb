@@ -8,7 +8,7 @@ class DeliveriesController < ApplicationController
   # GET /deliveries
   # GET /deliveries.json
   def index
-    @deliveries= DeliveryService.get_list(nil).paginate(:page => params[:page])
+    @deliveries= DeliveryService.search(nil).order(created_at: :desc).paginate(:page => params[:page])
   end
 
   # GET /deliveries/1
@@ -140,7 +140,7 @@ class DeliveriesController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_delivery
-    @delivery = Delivery.find(params[:id])
+    @delivery = DeliveryService.search({id:params[:id]}).first
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

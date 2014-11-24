@@ -43,6 +43,10 @@ class DeliveryPresenter<Presenter
     User.find_by_id(self.user_id)
   end
 
+  def state_display
+    MovableState.display(self.state)
+  end
+
   def to_json
     {
         id: self.id,
@@ -50,7 +54,7 @@ class DeliveryPresenter<Presenter
         delivery_date: self.delivery_date,
         received_date: self.received_date,
         state: self.state,
-        state_display: MovableState.display(self.state), #notice
+        state_display: self.state_display,
         can_delete: false, #notice
         user_id: self.user.id,
         user_name: self.user.name,
