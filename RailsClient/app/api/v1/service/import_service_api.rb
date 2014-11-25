@@ -6,19 +6,19 @@ module V1
 
       post :store_container do
         user=User.find('PACK_SYS_USER')
-
+        data=params[:data]
         ActiveRecord::Base.transaction do
           # build forklift
-          if forklift=Forklift.exists?(params[:id])
+          if forklift=Forklift.exists?(data[:id])
             fsc=forklift.store_containers.first
           else
-            forklift = Forklift.new(id: params[:id], user_id: user.id, location_id: user.location_id)
+            forklift = Forklift.new(id: data[:id], user_id: user.id, location_id: user.location_id)
             if forklift.save
               fsc=forklift.store_containers.create(source_location_id: user.location_id, user_id: user.id)
             end
           end
 
-          params[:packages].each do |p|
+          data[:packages].each do |p|
             if package=Package.exists?(p[:id])
               psc=package.store_containers.first
             else
