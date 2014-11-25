@@ -25,6 +25,7 @@ class PackagesController < ApplicationController
 
   # POST /packages
   # POST /packages.json
+=begin
   def create
     @package = Package.new(package_params)
 
@@ -38,13 +39,14 @@ class PackagesController < ApplicationController
       end
     end
   end
+=end
 
   # PATCH/PUT /packages/1
   # PATCH/PUT /packages/1.json
   def update
     respond_to do |format|
       if @package.update(package_params)
-        format.html { redirect_to @package, notice: 'Package was successfully updated.' }
+        format.html { redirect_to package_url(@package), notice: '包装箱修改成功.' }
         format.json { render :show, status: :ok, location: @package }
       else
         format.html { render :edit }
@@ -66,13 +68,13 @@ class PackagesController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_package
-    @package = Package.find(params[:id])
+    @package = PackageService.search(id:params[:id]).first
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def package_params
     #params[:package]
-    params.require(:package).permit(:state)
+    params.require(:logistics_container).permit(:state,:remark)
   end
 
   def set_search_variable

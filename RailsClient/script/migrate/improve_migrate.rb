@@ -59,6 +59,8 @@ ds.each_with_index do |od,index|
     dlc.destinationable = od.destination
     dlc.des_location_id = od.destination_id
 
+    destination = od.destination
+
     default_sender = User.where({role_id:Role.sender}).first
     default_receiver = User.where({role_id:Role.receiver}).first
     user_id = nil
@@ -119,6 +121,7 @@ ds.each_with_index do |od,index|
       #注意，这里只统计到了运单中的Forklift，但是没有统计到不存在晕但中的forklift
       f = Forklift.create(id:of.id,user_id:of.user_id,location_id:of.user.location_id,created_at:of.created_at,updated_at:of.updated_at,remark:of.remark)
       flc = f.logistics_containers.build(source_location_id: of.user.location_id,user_id:of.user_id,destinationable:of.whouse)
+      flc.des_location_id = destination.id
 
       #set state
       #create records
@@ -163,6 +166,7 @@ ds.each_with_index do |od,index|
       of.packages.each do |op|
         p = Package.create({id:op.id,quantity:op.quantity,user_id:op.user_id,location_id:op.location_id,fifo_time:op.check_in_time,part_id:op.part_id,created_at:op.created_at,updated_at:op.updated_at})
         plc = p.logistics_containers.build({source_location_id:op.location_id,user_id:op.user_id})
+        plc.des_location_id = destination.id
 
         case op.state
           when PackageState::ORIGINAL

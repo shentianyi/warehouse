@@ -1,14 +1,21 @@
-<h1><%= @package.id%></h1>
-<span class="label label-primary"><%= @package.id%></span>
+<h1><%= @package.container_id%></h1>
+<% ppresenter = PackageLazyPresenter.new(@package) %>
+<span class="label label-primary"><%= @package.container_id%></span>
+<h2>基础</h2>
+<h4>零件号: <small><%= PackageLabelRegex.part_prefix_string + @package.package.part_id %></small></h4>
+<h4>数量: <small><%= PackageLabelRegex.quantity_prefix_string + @package.package.quantity_str %></small></h4>
+<h4>入库时间: <small><%= PackageLabelRegex.date_prefix_string + @package.package.check_in_time %></small></h4>
+<h4>上架库位: <small><%= "#{@package.parent.destinationable.name} => #{ppresenter.position_nr}" %></small></h4>
+<h4>备注: <small><%= @package.remark %></small></h4>
+<h4>状态: <small><%= @package.state_display %></small></h4>
+<h4>所属托盘: <small><%= @package.parent.container_id if @package.parent %></small></h4>
+<h4>创建信息: <small><%= "#{@package.user.name} 在 #{ppresenter.created_at} 创建于 #{@package.destination.name} "%></small></h4>
 
-<h4>状态: <small><%= PackageState.display(@package.state) %></small></h4>
-<h4>零件号: <small><%= PackageLabelRegex.part_prefix_string + @package.part_id %></small></h4>
-<h4>数量: <small><%= PackageLabelRegex.quantity_prefix_string+@package.quantity_str %></small></h4>
-<h4>入库时间: <small><%= @package.check_in_time %></small></h4>
-<h4>发货地: <small><%= @package.location.name %></small></h4>
-<h4>备货员工: <small><%=  @package.user.name if @package.user_id %></small></h4>
-<h4>备货员工号: <small><%= @package.user_id if @package.user_id %></small></h4>
-<h4>所属托清单: <small><%=  @package.forklift_id if @package.forklift_id %></small></h4>
-<h4>上架库位: <small><%= @package.position.whouse.name + ' '+@package.position.detail if @package.position %></small></h4>
+<h2>操作记录</h2>
+<ul>
+  <% @package.get_records.each do |r|%>
+  <li><%= r.display %></li>
+  <% end %>
+</ul>
 
 <%= link_to '返回', packages_path,:class=>'btn btn-default' %>
