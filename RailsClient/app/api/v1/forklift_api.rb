@@ -101,6 +101,16 @@ module V1
       end
     end
 
+    get :packages do
+      unless f=LogisticsContainer.exists?(params[:id])
+        return {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::NotExit}
+      end
+
+      fpresenter = ForkliftPresenter.new(f)
+
+      {result:1,content:PackageLazyPresenter.init_json_presenters(fpresenter.packages)}
+    end
+
     # add package
     # create package and add it to forklift
     # @deprecated

@@ -44,22 +44,18 @@ class ForkliftsController < ApplicationController
   # PATCH/PUT /forklifts/1
   # PATCH/PUT /forklifts/1.json
   def update
-    if forklift_params.has_key?(:state)
-      ForkliftService.set_state(@forklift,forklift_params[:state])
-    end
+    #if forklift_params.has_key?(:state)
+    #  ForkliftService.set_state(@forklift,forklift_params[:state])
+    #end
 
-    if forklift_params.has_key?(:whouse_id)
-      whouse_change = @forklift.whouse_id != forklift_params[:whouse_id]
-    end
+    #if forklift_params.has_key?(:whouse_id)
+    #  whouse_change = @forklift.whouse_id != forklift_params[:whouse_id]
+    #end
 
+    #现在不能修改备货仓库了。
     respond_to do |format|
       if @forklift.update(forklift_params)
-        if whouse_change
-          @forklift.packages.each do |p|
-            p.set_position
-          end
-        end
-        format.html { redirect_to @forklift, notice: '托盘更新成功' }
+        format.html { redirect_to forklift_url(@forklift), notice: '托盘更新成功' }
         format.json { render :show, status: :ok, location: @forklift }
       else
         format.html { render :edit }
@@ -92,7 +88,7 @@ class ForkliftsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def forklift_params
     #params[:forklift]
-    params.require(:logistics_container).permit(:state,:remark,:destinationable)
+    params.require(:logistics_container).permit(:state,:remark)
   end
 
   def set_search_variable

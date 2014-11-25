@@ -17,6 +17,10 @@ class PackageLazyPresenter<Presenter
     ''
   end
 
+  def created_at
+    @logistics_container.created_at.blank? ? '' : @logistics_container.created_at.strftime('%Y-%m-%d %H:%M')
+  end
+
   def to_json
     {
         id: self.id,

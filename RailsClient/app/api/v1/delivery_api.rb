@@ -39,6 +39,18 @@ module V1
       {result: 1, content: DeliveryPresenter.init_json_presenters(DeliveryService.search(args).order(created_at: :desc).limit(50))}
     end
 
+    get :forklifts do
+      msg = ApiMessage.new
+
+      unless lc = LogisticsContainer.exists?(params[:id])
+        return msg.set_false(DeliveryMessage::NotExist)
+      end
+
+      dpresenger = DeliveryPresenter.new(lc)
+
+      {result:1,content: ForkliftPresenter.init_json_presenters(dpresenger.forklifts)}
+    end
+
     # check forklift
     # forklift id
     # *need to move this api to forklift*

@@ -35,9 +35,6 @@ class ForkliftPresenter<Presenter
     LogisticsContainerService.get_packages(self)
   end
 
-  def state_display
-  end
-
   def to_json
     {
         id: self.id,

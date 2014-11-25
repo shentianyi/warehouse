@@ -13,5 +13,6 @@ module V1
     mount IosUpdateAPI
     mount LedAPI
     mount MovableAPI
+    mount LocationAPI
   end
 end
