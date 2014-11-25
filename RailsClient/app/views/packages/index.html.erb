@@ -1,39 +1,24 @@
 <h2>包装箱列表</h2>
 <br/>
 <div>
-  <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+  <form method="get" action="<%= send("search_logistics_containers_path") %>">
     <div>
       <div>
         <span>包装箱号：
-          <input type="text" name="package[id]" value="<%= @id %>"/>
-          <input type="hidden" name="package[id_fuzzy]"/>
-        </span>
-        <span>托盘清单号：
-          <input type="text" name="package[forklift_id]" value="<%= @forklift_id %>"/>
-          <input type="hidden" name="package[forklift_id_fuzzy]"/>
-        </span>
-        <span>零件号：
-          <input type="text" name="package[part_id]" value="<%= @part_id %>"/>
-          <input type="hidden" name="package[part_id_fuzzy]"/>
-        </span>
-        <span>备货员工号：
-          <input type="text" name="package[user_id]" value="<%= @user_id %>"/>
-          <input type="hidden" name="package[user_id_fuzzy]"/>
-        </span>
-        <span>状态：
-          <%= select 'package', 'state', PackageState.state, selected: @state, include_blank: true %>
+          <input type="text" name="logistics_container[container_id]" value="<%= @container_id %>"/>
+          <input type="hidden" name="logistics_container[container_id_fuzzy]"/>
         </span>
       </div>
       <div>
         <span>
         创建日期：
-          <input type="text" name="package[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
-          ~  <input type="text" name="package[created_at][end]" class="datepicker" value="<%= @created_at_end %>"/>
+          <input type="text" name="logistics_container[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
+          ~  <input type="text" name="logistics_container[created_at][end]" class="datepicker" value="<%= @created_at_end %>"/>
         </span>
       </div>
       <div>
         <input type="submit" value="查找" class="btn btn-primary" name="search"/>
-        <input type="submit" value="下载为Excel" class="btn btn-primary" data-confirm="Are you sure?" name="download"/>
+        <!--<input type="submit" value="下载为Excel" class="btn btn-primary" data-confirm="Are you sure?" name="download"/>-->
       </div>
     </div>
   </form>

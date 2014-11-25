@@ -76,7 +76,7 @@ class ForkliftsController < ApplicationController
 
   # GET /forklifts/1/packages
   def packages
-    @packages = @forklift.packages.paginate(:page=>params[:page]).order(created_at: :desc)
+    @packages = ForkliftPresenter.new(@forklift).packages.paginate(:page=>params[:page]).order(created_at: :desc)
   end
 
   private
@@ -91,6 +91,7 @@ class ForkliftsController < ApplicationController
     params.require(:logistics_container).permit(:state,:remark)
   end
 
+=begin
   def set_search_variable
     p= params[:forklift]
     @id=p[:id]
@@ -99,4 +100,5 @@ class ForkliftsController < ApplicationController
     @created_at_start=p[:created_at][:start]
     @created_at_end=p[:created_at][:end]
   end
+=end
 end

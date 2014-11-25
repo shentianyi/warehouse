@@ -75,7 +75,7 @@
         <td><%= forklift.destinationable.name%></td>
         <td><%= forklift.remark %></td>
         <td>
-          <%= link_to fpresenter.packages.count, packages_forklift_path(forklift) %>
+          <%= link_to fpresenter.packages.count, packages_forklift_path(forklift), :class=>'btn btn-default' %>
         </td>
         <td><%= fpresenter.sum_packages %></td>
         <td><%= fpresenter.accepted_packages%></td>

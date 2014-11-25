@@ -155,6 +155,7 @@ class DeliveriesController < ApplicationController
     @states=MovableState.state
   end
 
+=begin
   def set_search_variable
     p= params[:delivery]
     @id=p[:id]
@@ -169,4 +170,5 @@ class DeliveriesController < ApplicationController
     @created_at_end = p[:created_at_end][:end]
     @source_id = p[:srouce_id]
   end
+=end
 end

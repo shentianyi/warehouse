@@ -77,6 +77,7 @@ class PackagesController < ApplicationController
     params.require(:logistics_container).permit(:state,:remark)
   end
 
+=begin
   def set_search_variable
     p= params[:package]
     @id=p[:id]
@@ -85,4 +86,5 @@ class PackagesController < ApplicationController
     @created_at_start=p[:created_at][:start]
     @created_at_end=p[:created_at][:end]
   end
+=end
 end
