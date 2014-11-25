@@ -48,7 +48,7 @@ module V1
 
       dpresenger = DeliveryPresenter.new(lc)
 
-      
+      {result:1,content: ForkliftPresenter.init_json_presenters(dpresenger.forklifts)}
     end
 
     # check forklift

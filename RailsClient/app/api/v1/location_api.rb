@@ -1,6 +1,6 @@
 module V1
   class LocationAPI<Base
-    name :locations
+    namespace :locations
     guard_all!
 
     get :get_all do

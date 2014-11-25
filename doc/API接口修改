@@ -446,4 +446,4 @@ return:{result:integer,content:string}
 url:/api/v1/locations/get_all
 type:GET
 params:{}
-return:[{name:string,id:string,is_default:bool}]
+return:[{name:string,id:string,is_default:0|1}]
