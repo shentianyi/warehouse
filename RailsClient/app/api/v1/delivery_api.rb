@@ -20,7 +20,7 @@ module V1
     #1 => sent to my location
     # 2014-11-24 => 搜索结果很慢，参数 start_time:2014-8-10 end_time:2014-10-1 type:0 结果760条左右运单，消耗75秒！！！
     get :get_by_time_and_state do
-      start_time = params[:start_time].nil? ? 12.hour.ago : Time.parse(params[:start_time])
+      start_time = params[:start_time].nil? ? 24.hour.ago : Time.parse(params[:start_time])
       end_time = params[:end_time].nil? ? Time.now : Time.parse(params[:end_time])
       args = {
         created_at: (start_time..end_time)

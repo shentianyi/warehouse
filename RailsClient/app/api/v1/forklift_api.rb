@@ -23,12 +23,13 @@ module V1
     #@state
     #@type
     get :get_by_time_and_state do
-      start_time = params[:start_time].nil? ? 12.hour.ago : params[:start_time]
+      start_time = params[:start_time].nil? ? 24.hour.ago : params[:start_time]
       end_time = params[:end_time].nil? ? Time.now : params[:end_time]
       args = {
-          created_at: (start_time..end_time),
-          state: params[:state]
+          created_at: (start_time..end_time)
       }
+
+      args[:state] = params[:state] if params[:state]
 
       if params[:type].nil? || params[:type] == 0
         args[:source_location_id] = current_user.location_id
@@ -66,7 +67,7 @@ module V1
 
     # add package
     post :check_package do
-      unless f=LogisticsContainer.exists?(params[:forklift_id])
+      unless f=LogisticsContainer.exists?(params[:id])
         return {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::NotExit}
       end
 
@@ -105,7 +106,7 @@ module V1
     # @deprecated
     # * use api create package and add it forklift
     post :add_package do
-      unless f=LogisticsContainer.exists?(params[:forklift_id])
+      unless f=LogisticsContainer.exists?(params[:id])
         return {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::NotExit}
       end
 

@@ -27,7 +27,7 @@ class PackageLazyPresenter<Presenter
         check_in_time: PackageLabelRegex.date_prefix_string+@package.custom_fifo_time,
         user_id: self.user_id,
         state: self.state,
-        state_display: PackageState.display(self.state),
+        state_display: @logistics_container.state_display,
         position_nr: self.position_nr
     }
   end
