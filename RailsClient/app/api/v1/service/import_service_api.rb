@@ -25,7 +25,7 @@ module V1
               package=Package.new(id: p[:id], part_id: p[:part_id], quantity: p[:quantity], custom_fifo_time: p[:custom_fifo_time],
                                   user_id: user.id, location_id: user.location_id)
               if package.save
-                psc=package.store_containers.create(source_location_id: user.location_id, user_id : user.id)
+                psc=package.store_containers.create(source_location_id: user.location_id, user_id: user.id)
               end
             end
             if psc.root?
