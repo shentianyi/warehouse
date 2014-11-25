@@ -28,13 +28,14 @@ module V1
     #@end_time
     #@state
     #@type
+    #@parent
     get :get_by_time_and_state do
       start_time = params[:start_time].nil? ? 12.hour.ago : params[:start_time]
       end_time = params[:end_time].nil? ? Time.now : params[:end_time]
       args = {
           created_at: (start_time..end_time),
-          state: params[:state]
       }
+      args[:state] =  params[:state] if params[:state]
 
       if params[:type].nil? || params[:type] == 0
         args[:source_location_id] = current_user.location_id
@@ -68,6 +69,7 @@ module V1
 
     # validate quantity string
     # @deprecated
+=begin
     post :validate_quantity do
       result = true #PackageService.quantity_string_valid?(params[:id])
       if result
@@ -76,6 +78,7 @@ module V1
         {result: 0, content: PackageMessage::QuantityStringError}
       end
     end
+=end
 
     # create package
     # if find deleted then update(take care of foreign keys)
@@ -110,7 +113,7 @@ module V1
     post :check do
       msg = ApiMessage.new
       unless  p = LogisticsContainer.exists?(params[:id])
-        return msg.set_false(MovableMessage::TargetNotExist).to_json
+        return msg.set_false(MovableMessage::TargetNotExist)
       end
       if (r = LogisticsContainerService.check(p,current_user)).result
         return msg.set_true(r.content)
@@ -125,12 +128,25 @@ module V1
       #msg = PackageService.uncheck(params[:id])
       msg = ApiMessage.new
       unless  p = LogisticsContainer.exists?(params[:id])
-        return msg.set_false(MovableMessage::TargetNotExist).to_json
+        return msg.set_false(MovableMessage::TargetNotExist)
       end
       if (r = LogisticsContainerService.reject(p,current_user)).result
         return msg.set_true(r.content)
       else
         return msg.set_false(r.content)
+      end
+    end
+
+    post :reject do
+      msg = ApiMessage.new
+      unless p = LogisticsContainer.exists?(params[:id])
+        return msg.set_false(MovableMessage::TargetNotExist)
+      end
+
+      if(r = LogisticsContainerService.reject(p,current_user)).result
+        msg.set_true(r.content)
+      else
+        msg.set_false(r.content)
       end
     end
   end
