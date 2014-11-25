@@ -7,8 +7,9 @@
 <h4>创建时间: <small><%= dp.created_at %></small></h4>
 <h4>创建员工号: <small><%= @delivery.user_id%></small></h4>
 <h4>创建员工: <small><%= @delivery.user.name%></small></h4>
-<h4>创建地: <small><%= dp.source.name %></small></h4>
+<h4>创建地: <small><%= @delivery.source.name %></small></h4>
 <h4>备注: <small><%= @delivery.remark %></small></h4>
+<h4>目的地:<small><%= @delivery.destination.name %></small></h4>
 <h2>托清单列表</h2>
 <ul>
   <% dp.forklifts.each do |f|%>

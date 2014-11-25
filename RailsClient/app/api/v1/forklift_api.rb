@@ -101,6 +101,10 @@ module V1
       end
     end
 
+    get :packages do
+
+    end
+
     # add package
     # create package and add it to forklift
     # @deprecated
