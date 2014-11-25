@@ -22,7 +22,7 @@ module V1
             if package=Package.exists?(p[:id])
               psc=package.store_containers.first
             else
-              package=Package.new(id: p[:id], part_id: p[:part_id], quantity: p[:quantity], custom_fifo_time: p[:custom_fifo_time],
+              package=Package.new(id: p[:id], part_id: p[:part_id], quantity: p[:quantity], fifo_time: p[:fifo_time],
                                   user_id: user.id, location_id: user.location_id)
               if package.save
                 psc=package.store_containers.create(source_location_id: user.location_id, user_id: user.id)
