@@ -13,7 +13,7 @@ module V1
         ActiveRecord::Base.transaction do
           # build forklift
           if forklift=Forklift.exists?(data['id'])
-            fsc=forklift.store_containers.where(location_id: user.location_id).first
+            fsc=forklift.store_containers.where(source_location_id: user.location_id).first
           else
             forklift = Forklift.new(id: data['id'], user_id: user.id, location_id: user.location_id)
             if forklift.save
@@ -22,16 +22,16 @@ module V1
           end
 
           data['packages'].each do |p|
-            if package=Package.exists?(p['id'])
-              psc=package.store_containers.where(location_id: user.location_id).first
-            else
+            unless package=Package.exists?(p['id'])
               package=Package.new(id: p['id'], part_id: p['part_id'], quantity: p['quantity'], fifo_time: p['fifo_time'],
                                   user_id: user.id, location_id: user.location_id)
-              psc=package.store_containers.build(source_location_id: user.location_id, user_id: user.id, destinationable_id: p['project'], destinationable_type: 'Whouse')
-              psc.in_store(whouse)
               package.save
+            end
+            unless psc=package.store_containers.where(source_location_id: user.location_id).first
+              psc=package.store_containers.build(source_location_id: user.location_id, user_id: user.id, destinationable_id: p['project'], destinationable_type: 'Whouse')
               psc.save
             end
+            psc.in_store(whouse)
             unless psc.root?
               psc.update_attribute :parent, nil
             end
@@ -43,13 +43,15 @@ module V1
       end
 
       post :unstore_container do
-        if forklift=Forklift.exists?(data['id'])
-          fsc=forklift.store_containers.where(location_id: user.location_id).first
-          fsc.descendants.join(:packages).where(packages: {current_positionable_id: data['whouse'], current_positionable_type: 'Whouse'}).all.each do |psc|
+        user=User.find('PACK_SYS_USER')
+        if forklift=Forklift.exists?(params[:id])
+          fsc=forklift.store_containers.where(source_location_id: user.location_id).first
+          fsc.descendants.joins(:package).where(containers: {current_positionable_id: params[:whouse], current_positionable_type: 'Whouse'}).all.each do |psc|
             psc.cancel_store
             psc.destroy
           end
         end
+        {Result: true, Code: 1, Content: 'Success'}
       end
     end
   end
