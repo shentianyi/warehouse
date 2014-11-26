@@ -102,8 +102,8 @@ ActiveRecord::Base.transaction do
   end
 
   l = Location.create({id: 'FG', name: '成品仓库', is_base: false}) unless (l=Location.find_by_id('FG'))
-  unless Whouse.find_by_id('FW')
-    whouse=Whouse.new(id: 'FW', name: '成品在途库')
+  unless Whouse.find_by_id('FW87')
+    whouse=Whouse.new(id: 'FW87', name: '成品在途库')
     whouse.location=l
     whouse.save
   end
