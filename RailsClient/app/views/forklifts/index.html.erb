@@ -5,22 +5,22 @@
     <div>
       <div>
         <span>拖清单号：
-          <input type="text" name="logistics_container[container_id]" value="<%= @container_id %>"/>
-          <input type="hidden" name="logistics_container[container_id_fuzzy]"/>
+          <input type="text" name="forklift[container_id]" value="<%= @forklift_container_id %>"/>
+          <input type="hidden" name="forklift[container_id_fuzzy]"/>
         </span>
         <span>备货员工号：
-          <input type="text" name="logistics_container[user_id]" value="<%= @user_id %>"/>
-          <input type="hidden" name="logistics_container[user_id_fuzzy]"/>
+          <input type="text" name="forklift[user_id]" value="<%= @forklift_user_id %>"/>
+          <input type="hidden" name="forklift[user_id_fuzzy]"/>
         </span>
         <span>状态：
-          <%= select 'logistics_container', 'state', MovableState.state, selected: @state, include_blank: true %>
+          <%= select 'forklift', 'state', MovableState.state, selected: @forklift_state, include_blank: true %>
         </span>
       </div>
       <div>
         <span>
         创建日期：
-          <input type="text" name="logistics_container[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
-          ~  <input type="text" name="logistics_container[created_at][end]" class="datepicker" value="<%= @created_at_end %>"/>
+          <input type="text" name="forklift[created_at][start]" class="datepicker" value="<%= @forklift_created_at_start %>"/>
+          ~  <input type="text" name="forklift[created_at][end]" class="datepicker" value="<%= @forklift_created_at_end %>"/>
         </span>
       </div>
       <div>
@@ -69,7 +69,7 @@
         <td>
               <%= link_to forklift.parent.container_id,delivery_path(forklift.parent),:class=>'btn btn-default' if forklift.parent%>
         </td>
-        <td><%= "#{forklift.user.name }|#{forklift.user.id} 在 #{fpresenter.created_at} 创建" %></td>
+        <td><%= forklift.create_info %></td>
         <td><%= forklift.destinationable.name%></td>
         <td><%= forklift.remark %></td>
         <td>

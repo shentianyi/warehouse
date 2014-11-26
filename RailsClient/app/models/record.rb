@@ -14,6 +14,6 @@ class Record < ActiveRecord::Base
   end
 
   def display
-    "#{ImplUserType.display(self.impl_user_type)} #{self.impl.name}|#{self.impl_id} 在 #{self.impl_time.localtime.strftime('%Y.%m.%d %H:%M')} #{self.impl_action}"
+    "#{self.impl_time.localtime.strftime('%Y-%m-%d %H:%M:%S')}  #{self.impl.name}[#{self.impl_id}] #{ImplUserType.display_action(self.impl_user_type)}"
   end
 end
