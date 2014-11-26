@@ -62,6 +62,10 @@ module CZ
       end
     end
 
+    def create_info
+      "#{self.created_at.localtime.strftime('%y-%m-%d %H:%M:%S')} #{self.user.name}[#{self.user_id}] 创建于 #{self.source.name}"
+    end
+
     def get_record(action)
       Record.where({impl_action: action,recordable:self}).first
     end

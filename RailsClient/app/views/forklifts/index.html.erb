@@ -1,30 +1,32 @@
 <h2>托盘列表</h2>
 <br/>
 <div>
-  <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+  <form method="get" action="<%= send("search_logistics_containers_path") %>">
     <div>
       <div>
-        <span>托清单号：
-          <input type="text" name="forklift[id]" value="<%= @id %>"/>
-          <input type="hidden" name="forklift[id_fuzzy]"/>
+        <span>拖清单号：
+          <input type="text" name="forklift[container_id]" value="<%= @forklift_container_id %>"/>
+          <input type="hidden" name="forklift[container_id_fuzzy]"/>
         </span>
         <span>备货员工号：
-          <input type="text" name="forklift[stocker_id]" value="<%= @stocker_id %>"/>
-          <input type="hidden" name="forklift[stocker_id_fuzzy]"/>
+          <input type="text" name="forklift[user_id]" value="<%= @forklift_user_id %>"/>
+          <input type="hidden" name="forklift[user_id_fuzzy]"/>
         </span>
-        <span>托清单：
-          <%= select 'forklift', 'state', ForkliftState.state, selected: @state ,include_blank: true %>
+        <span>状态：
+          <%= select 'forklift', 'state', MovableState.state, selected: @forklift_state, include_blank: true %>
         </span>
       </div>
       <div>
         <span>
         创建日期：
-          <input type="text" name="forklift[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
-          ~  <input type="text" name="forklift[created_at][end]" class="datepicker" value="<%= @created_at_end %>"/>
+          <input type="text" name="forklift[created_at][start]" class="datepicker" value="<%= @forklift_created_at_start %>"/>
+          ~  <input type="text" name="forklift[created_at][end]" class="datepicker" value="<%= @forklift_created_at_end %>"/>
         </span>
       </div>
       <div>
-        <input type="submit" value="查 找" class="btn btn-primary"/>
+        <input type="hidden" name="model" value="forklift"/>
+        <input type="submit" value="查找" class="btn btn-primary" name="search"/>
+        <!--<input type="submit" value="下载为Excel" class="btn btn-primary" data-confirm="Are you sure?" name="download"/>-->
       </div>
     </div>
   </form>
@@ -65,13 +67,9 @@
         <td><%= forklift.container_id%></td>
         <td><%= forklift.state_display %></td>
         <td>
-          <% if forklift.parent %>
-              <%= link_to delivery_path(forklift.parent) do%>
-                  <span class="label label-info"><%= forklift.parent.container_id %></span>
-              <% end %>
-          <% end %>
+              <%= link_to forklift.parent.container_id,delivery_path(forklift.parent),:class=>'btn btn-default' if forklift.parent%>
         </td>
-        <td><%= "#{forklift.user.name }|#{forklift.user.id} 在 #{fpresenter.created_at} 创建" %></td>
+        <td><%= forklift.create_info %></td>
         <td><%= forklift.destinationable.name%></td>
         <td><%= forklift.remark %></td>
         <td>

@@ -8,7 +8,8 @@
 <h4>上架库位: <small><%= "#{@package.parent.destinationable.name} => #{ppresenter.position_nr}" %></small></h4>
 <h4>备注: <small><%= @package.remark %></small></h4>
 <h4>状态: <small><%= @package.state_display %></small></h4>
-<h4>所属托盘: <small><%= @package.parent.container_id if @package.parent %></small></h4>
+<h4>所属托盘: <small><%= link_to @package.parent.container_id,forklift_path(@package.parent),:class => 'btn btn-default' if @package.parent %></small></h4>
+<h4>所属运单: <small><%= link_to @package.parent.parent.container_id,delivery_path(@package.parent.parent),:class => 'btn btn-default' if @package.parent && @package.parent.parent %></small></h4>
 <h4>创建信息: <small><%= "#{@package.user.name} 在 #{ppresenter.created_at} 创建于 #{@package.destination.name} "%></small></h4>
 
 <h2>操作记录</h2>

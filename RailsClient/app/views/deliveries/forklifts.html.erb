@@ -22,7 +22,7 @@
   <% fpresenter = ForkliftPresenter.new(f) %>
       <tr>
         <td><%= index+@forklifts.offset+1%></td>
-        <td><%= f.container_id %></td>
+        <td><%= link_to f.container_id,forklift_path(f), :class => "btn btn-default"%></td>
         <td><%= f.state_display %></td>
         <td><%= f.destinationable.name %></td>
         <td><%= fpresenter.sum_packages %></td>

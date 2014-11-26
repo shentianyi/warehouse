@@ -3,7 +3,7 @@ module V1
     namespace :locations
     guard_all!
 
-    get :get_all do
+    get :get_destinations do
       msg = ApiMessage.new
       data = []
       Location.list.each do |l|

@@ -5,18 +5,31 @@
     <div>
       <div>
         <span>包装箱号：
-          <input type="text" name="logistics_container[container_id]" value="<%= @container_id %>"/>
-          <input type="hidden" name="logistics_container[container_id_fuzzy]"/>
+          <input type="text" name="package[container_id]" value="<%= @package_container_id %>"/>
+          <input type="hidden" name="package[container_id_fuzzy]"/>
+        </span>
+        <span>零件号：
+          <input type="text" name="container[part_id]" value="<%= @container_part_id %>"/>
+          <input type="hidden" name="container[part_id_fuzzy]"/>
+        </span>
+        <span>备货员工号：
+          <input type="text" name="package[user_id]" value="<%= @package_user_id %>"/>
+          <input type="hidden" name="package[user_id_fuzzy]"/>
+        </span>
+        <span>状态：
+          <%= select 'package', 'state', MovableState.state, selected: @package_state, include_blank: true %>
         </span>
       </div>
       <div>
         <span>
         创建日期：
-          <input type="text" name="logistics_container[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
-          ~  <input type="text" name="logistics_container[created_at][end]" class="datepicker" value="<%= @created_at_end %>"/>
+          <input type="text" name="package[created_at][start]" class="datepicker" value="<%= @package_created_at_start %>"/>
+          ~  <input type="text" name="package[created_at][end]" class="datepicker" value="<%= @package_created_at_end %>"/>
         </span>
       </div>
       <div>
+        <input type="hidden" name="model" value="package"/>
+        <input type="hidden" value="container" name="tables"/>
         <input type="submit" value="查找" class="btn btn-primary" name="search"/>
         <!--<input type="submit" value="下载为Excel" class="btn btn-primary" data-confirm="Are you sure?" name="download"/>-->
       </div>
@@ -42,6 +55,7 @@
     <th>状态</th>
     <th>上架库位</th>
     <th>所属托盘</th>
+    <th>所属运单</th>
     <th>创建信息</th>
     <th>最新记录</th>
     <th colspan="2"></th>
@@ -56,13 +70,18 @@
             <td><%= index+@packages.offset+1 %></td>
             <td><%= package.container_id%></td>
             <td><%= PackageLabelRegex.part_prefix_string + package.package.part_id%></td>
-            <td><%= PackageLabelRegex.quantity_prefix_string + package.package.quantity_str%></td>
-            <td><%= PackageLabelRegex.date_prefix_string + package.package.check_in_time%></td>
+            <td><%= PackageLabelRegex.quantity_prefix_string + package.package.quantity_str %></td>
+            <td><%= PackageLabelRegex.date_prefix_string + package.package.check_in_time %></td>
             <td><%= package.remark %></td>
             <td><%= package.state_display%></td>
-            <td><%= "#{package.parent.destinationable.name} => #{ppresenter.position_nr}"%></td>
-            <td><%= package.parent.container_id if package.parent %></td>
-            <td><%= "#{package.user.name} 在 #{ppresenter.created_at} 创建于 #{package.destination.name} "%></td>
+            <td><%= "#{package.parent.destinationable.name} => #{ppresenter.position_nr}" %></td>
+            <td>
+              <%= link_to package.parent.container_id,forklift_path(package.parent),:class => 'btn btn-default' if package.parent %>
+            </td>
+            <td>
+              <%= link_to package.parent.parent.container_id,delivery_path(package.parent.parent),:class => 'btn btn-default' if package.parent && package.parent.parent %>
+            </td>
+            <td><%= package.create_info %></td>
             <td><%= package.get_records.last.display %></td>
             <td><%= link_to '详细' ,package_path(package), :class=>'btn btn-default'%></td>
             <td><%= link_to '编辑', edit_package_path(package), :class=> 'btn btn-default'%></td>
