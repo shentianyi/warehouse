@@ -22,7 +22,7 @@
       <% ppresenter = PackageLazyPresenter.new(package)%>
       <tr>
         <td><%= index+@packages.offset+1%></td>
-        <td><%= package.container_id %></td>
+        <td><%= link_to package.container_id,package_path(package),:class=>'btn btn-default' %></td>
         <td><%= PackageLabelRegex.part_prefix_string+package.package.part_id %></td>
         <td><%= PackageLabelRegex.quantity_prefix_string + package.package.quantity_str %></td>
         <td><%= "#{package.parent.destinationable.name} => #{ppresenter.position_nr}" %></td>

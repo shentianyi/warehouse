@@ -11,11 +11,32 @@
 <h4>备注: <small><%= @delivery.remark %></small></h4>
 <h4>目的地:<small><%= @delivery.destination.name %></small></h4>
 <h2>托清单列表</h2>
-<ul>
-  <% dp.forklifts.each do |f|%>
-  <li><h4><small><%= f.container_id %></small></h4></li>
+<% @forklifts = dp.forklifts%>
+<table class="table table-bordered table-striped globle-table table-hover">
+  <thead>
+  <tr>
+    <td>NO.</td>
+    <td>托清单号</td>
+    <td>状态</td>
+    <td>备货仓库</td>
+    <td>包装箱总数</td>
+    <td>已接收箱数</td>
+  </tr>
+  </thead>
+  <tbody>
+  <% @forklifts.each_with_index do |f, index| %>
+      <% fpresenter = ForkliftPresenter.new(f) %>
+      <tr>
+        <td><%= index+1%></td>
+        <td><%= link_to f.container_id,forklift_path(f), :class => "btn btn-default"%></td>
+        <td><%= f.state_display %></td>
+        <td><%= f.destinationable.name %></td>
+        <td><%= fpresenter.sum_packages %></td>
+        <td><%= fpresenter.accepted_packages %></td>
+      </tr>
   <% end %>
-</ul>
+  </tbody>
+</table>
 <h2>操作记录</h2>
 <ul>
 <% @delivery.get_records.each do |r| %>
