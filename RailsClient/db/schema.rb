@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141124025806) do
+ActiveRecord::Schema.define(version: 20141126082819) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -177,7 +177,6 @@ ActiveRecord::Schema.define(version: 20141124025806) do
     t.string   "user_id"
     t.string   "container_id"
     t.string   "remark"
-    t.integer  "type"
     t.boolean  "is_delete",            default: false
     t.boolean  "is_dirty",             default: true
     t.boolean  "is_new",               default: true
@@ -187,6 +186,7 @@ ActiveRecord::Schema.define(version: 20141124025806) do
     t.string   "destinationable_id"
     t.string   "destinationable_type"
     t.string   "ancestry"
+    t.integer  "type"
   end
 
   add_index "location_containers", ["ancestry"], name: "index_location_containers_on_ancestry", using: :btree
@@ -269,7 +269,6 @@ ActiveRecord::Schema.define(version: 20141124025806) do
     t.datetime "updated_at"
     t.string   "source_id"
     t.integer  "status",                default: 0
-    t.text     "remark"
   end
 
   add_index "orders", ["id"], name: "index_orders_on_id", using: :btree
@@ -415,7 +414,6 @@ ActiveRecord::Schema.define(version: 20141124025806) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "order_ids"
-    t.text     "remark"
   end
 
   add_index "pick_lists", ["id"], name: "index_pick_lists_on_id", using: :btree
@@ -494,6 +492,26 @@ ActiveRecord::Schema.define(version: 20141124025806) do
 
   add_index "state_logs", ["id"], name: "index_state_logs_on_id", using: :btree
 
+  create_table "storages", force: true do |t|
+    t.string   "location_id"
+    t.string   "part_id"
+    t.float    "quantity"
+    t.datetime "fifo_time"
+    t.string   "storable_id"
+    t.string   "storable_type"
+    t.boolean  "is_delete",     default: false
+    t.boolean  "is_dirty",      default: true
+    t.boolean  "is_new",        default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "storages", ["id"], name: "index_storages_on_id", using: :btree
+  add_index "storages", ["location_id"], name: "index_storages_on_location_id", using: :btree
+  add_index "storages", ["part_id"], name: "index_storages_on_part_id", using: :btree
+  add_index "storages", ["storable_id"], name: "index_storages_on_storable_id", using: :btree
+  add_index "storages", ["storable_type"], name: "index_storages_on_storable_type", using: :btree
+
   create_table "sync_pools", force: true do |t|
     t.string   "table_name"
     t.boolean  "locked",     default: true
@@ -540,7 +558,6 @@ ActiveRecord::Schema.define(version: 20141124025806) do
     t.string   "authentication_token"
     t.integer  "role_id",                           default: 100,   null: false
     t.boolean  "is_sys",                            default: false
-    t.string   "user_name"
   end
 
   add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree
