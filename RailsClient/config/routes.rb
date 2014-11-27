@@ -130,6 +130,9 @@ Rails.application.routes.draw do
     member do
       get 'users'
       get 'whouses'
+      get 'destinations'
+      post :add_destination
+      delete 'remove_destination/:destination_id', to: :remove_destination, as: 'remove_destination'
     end
   end
 

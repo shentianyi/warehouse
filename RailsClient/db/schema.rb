@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141126082819) do
+ActiveRecord::Schema.define(version: 20141127075539) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -196,6 +196,21 @@ ActiveRecord::Schema.define(version: 20141126082819) do
   add_index "location_containers", ["destinationable_type"], name: "index_location_containers_on_destinationable_type", using: :btree
   add_index "location_containers", ["id"], name: "index_location_containers_on_id", using: :btree
   add_index "location_containers", ["source_location_id"], name: "index_location_containers_on_source_location_id", using: :btree
+
+  create_table "location_destinations", force: true do |t|
+    t.string   "location_id"
+    t.string   "destination_id"
+    t.boolean  "is_default",     default: false
+    t.boolean  "is_delete",      default: false
+    t.boolean  "is_dirty",       default: true
+    t.boolean  "is_new",         default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "location_destinations", ["destination_id"], name: "index_location_destinations_on_destination_id", using: :btree
+  add_index "location_destinations", ["id"], name: "index_location_destinations_on_id", using: :btree
+  add_index "location_destinations", ["location_id"], name: "index_location_destinations_on_location_id", using: :btree
 
   create_table "locations", force: true do |t|
     t.string   "uuid",           limit: 36,                 null: false

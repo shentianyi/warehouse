@@ -1,6 +1,6 @@
 class LocationsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_location, only: [:show, :edit, :update, :destroy, :users, :whouses]
+  before_action :set_location, only: [:show, :edit, :update, :destroy, :users, :whouses,:destinations,:add_destination,:remove_destination]
 
   # GET /locations
   # GET /locations.json
@@ -38,6 +38,30 @@ class LocationsController < ApplicationController
         format.json { render json: @location.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def destinations
+
+  end
+
+  def add_destination
+    if @location.destinations.include?(Location.find_by_id(location_params[:destination_id]))
+      render :destinations
+    elsif @location.location_destinations.build({destination_id:location_params[:destination_id]}).save
+      redirect_to destinations_location_path(@location), notice: '添加目的地成功'
+    else
+      render :destinations
+    end
+  end
+
+  def remove_destination
+      d = @location.location_destinations.where({destination_id:params[:destination_id]}).first
+      puts d.to_json
+      if d.destroy
+        render :destinations ,notice: '删除成功'
+      else
+        render :destinations
+      end
   end
 
   # GET /locations/1/users
@@ -93,6 +117,6 @@ class LocationsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def location_params
       #params[:location]
-      params.require(:location).permit(:name,:address,:tel,:destination_id,:id,:prefix,:suffix)
+      params.require(:location).permit(:name,:address,:tel,:id,:prefix,:suffix,:destination_id)
     end
 end

@@ -1,5 +1,46 @@
 class DeliveryService
 
+  def self.dispatch(movable,destination,user)
+    unless (m = d.get_movable_service.dispatch(movable,destination,user)).result
+      return m
+    end
+
+    m.descendants.each {|d|
+      unless (m = d.get_movable_service.dispatch(d,destination,user)).result
+        return m
+      end
+    }
+    return Message.new.set_true
+  end
+
+  def self.receive(movable,user)
+    unless (m = d.get_movable_service.receive(movable,user)).result
+      return m
+    end
+
+    m.descendants.each {|d|
+      unless (m = d.get_movable_service.receive(d,user)).result
+        return m
+      end
+    }
+    return Message.new.set_true
+  end
+
+  #兼容以前的接口
+  def self.confirm_receive movable,user
+    unless (m = d.get_movable_service.check(movable,user)).result
+      return m
+    end
+
+    #设置forklift的状态
+    d.children.each {|c|
+      unless (m = c.get_movable_service.check(c,user)).result
+        return m
+      end
+    }
+    return Message.new.set_true
+  end
+
   def self.create args, user
     msg=Message.new
     ActiveRecord::Base.transaction do
@@ -26,7 +67,6 @@ class DeliveryService
   def self.search(conditions)
     LogisticsContainer.joins(:delivery).where(conditions)
   end
-
 
   def self.import_by_file path
     msg=Message.new

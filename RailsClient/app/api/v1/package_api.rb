@@ -115,7 +115,7 @@ module V1
       unless  p = LogisticsContainer.exists?(params[:id])
         return msg.set_false(MovableMessage::TargetNotExist)
       end
-      if (r = LogisticsContainerService.check(p,current_user)).result
+      if (r = p.get_movable_service.check(p,current_user)).result
         return msg.set_true(r.content)
       else
         return msg.set_false(r.content)
@@ -130,7 +130,7 @@ module V1
       unless  p = LogisticsContainer.exists?(params[:id])
         return msg.set_false(MovableMessage::TargetNotExist)
       end
-      if (r = LogisticsContainerService.reject(p,current_user)).result
+      if (r = p.get_movable_service.reject(p,current_user)).result
         return msg.set_true(r.content)
       else
         return msg.set_false(r.content)
@@ -143,7 +143,7 @@ module V1
         return msg.set_false(MovableMessage::TargetNotExist)
       end
 
-      if(r = LogisticsContainerService.reject(p,current_user)).result
+      if(r = p.get_movable_service.reject(p,current_user)).result
         msg.set_true(r.content)
       else
         msg.set_false(r.content)
