@@ -7,6 +7,11 @@ class LocationContainer < ActiveRecord::Base
   belongs_to :container
   belongs_to :current_positionable, polymorphic: true
 
+
+  belongs_to :destinationable, polymorphic: true
+  belongs_to :source_location, class_name: 'Location'
+  belongs_to :des_location, class_name: 'Location'
+
   # has_ancestry
   # acts_as_tree
   before_create :init_container_attr

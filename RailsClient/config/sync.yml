@@ -67,6 +67,12 @@ sync:
       post: true
       put: true
       delete: true
+    storage:
+      name: "库存"
+      get: true
+      post: true
+      put: true
+      delete: true
     pick_item_filter:
       name: "员工择货规则"
       get: true

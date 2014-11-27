@@ -39,6 +39,17 @@ module Sync
       end
 
       begin
+        Sync::Execute::StorageSync.sync
+      rescue => e
+        no_error=false
+        puts "[#{Time.now.localtime}][ERROR]"
+        puts e.class
+        puts e.to_s
+        puts e.backtrace
+      end
+
+
+      begin
         # sync order data
         Sync::Execute::OrderSync.sync
         Sync::Execute::OrderItemSync.sync
