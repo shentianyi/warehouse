@@ -1,10 +1,11 @@
 class ForkliftService
   def self.create args, user
     msg = Message.new
+    whouse=nil
     unless whouse=Whouse.find_by_id(args[:destinationable_id])
       msg.content = ForkliftMessage::WarehouseNotExit
       return msg
-    end
+    end unless args[:destinationable_id].blank?
 
     ActiveRecord::Base.transaction do
       forklift = Forklift.new(user_id: user.id, location_id: user.location_id)

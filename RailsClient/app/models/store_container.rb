@@ -62,6 +62,17 @@ class StoreContainer<LocationContainer
     end
   end
 
+  def self.out_store_by_container(container, location_id)
+    if (sc=container.store_containers.where(source_location_id: location_id).first) && (part=container.part)
+      if s=part.storages.where(storable: container.current_positionable).first
+        s.quantity-=container.quantity
+        s.save
+        sc.update(state: StorableState::OUTSTORE)
+        container.current_positionable=nil
+      end if sc.can_out_store?
+    end
+  end
+
   def can_in_store?
     self.state==StorableState::INIT
   end
@@ -71,6 +82,10 @@ class StoreContainer<LocationContainer
   end
 
   def can_move_store?(destination)
-    self.container.current_positionable !=destination  && self.state== StorableState::INSTORE
+    self.container.current_positionable !=destination && self.state== StorableState::INSTORE
+  end
+
+  def can_out_store?
+    self.state==StorableState::INSTORE
   end
 end

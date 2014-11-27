@@ -6,10 +6,12 @@ class LogisticsContainer<LocationContainer
   has_ancestry
 
   belongs_to :package, foreign_key: :container_id
-  has_many :positions,through: :package
+  has_many :positions, through: :package
   belongs_to :forklift, foreign_key: :container_id
   belongs_to :delivery, foreign_key: :container_id
   has_many :records, :as => :recordable
+
+  after_update :out_store
 
   def exists?(location_id)
     self.source_location_id==location_id
@@ -52,5 +54,17 @@ class LogisticsContainer<LocationContainer
 
   def can_add_to_container?
     root?
+  end
+
+  def out_store
+    begin
+      puts '-------------------------'
+      if self.state==MovableState::WAY && self.container.is_package?
+        StoreContainer.out_store_by_container(container,self.source_location_id)
+      end
+    # rescue Exception=>e
+    #   puts e.message
+    #   false
+    end
   end
 end

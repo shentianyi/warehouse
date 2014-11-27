@@ -23,4 +23,10 @@ class Container< ActiveRecord::Base
   def destroy_dependent(id)
     LocationContainer.destroy_by_container_id(id)
   end
+
+
+  def is_package?
+    self.type==ContainerType::PACKAGE
+  end
+
 end
