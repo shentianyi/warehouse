@@ -42,7 +42,7 @@ class PackagePresenter<Presenter
         check_in_time: fifo_time_str,
         user_id: self.user_id,
         state: self.state,
-        state_display: PackageState.display(self.state),
+        state_display: '',#PackageState.display(self.state),
         position_nr: with_position ? self.position_nr : ''
     }
   end

@@ -67,3 +67,25 @@ class MovableState
     data
   end
 end
+
+class FMovableState<MovableState
+  PART_CHECKED=5
+
+  def self.display(state)
+    case state
+      when PART_CHECKED
+        '部分接收'
+      else
+        super
+    end
+  end
+
+  def self.before(state)
+    case state
+      when PART_CHECKED
+        [CHECKED,REJECTED,ARRIVED]
+      else
+        super
+    end
+  end
+end

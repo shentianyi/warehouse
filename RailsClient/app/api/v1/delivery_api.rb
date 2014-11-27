@@ -141,7 +141,7 @@ module V1
 
       #lc.dispatch
       #*different type of logistics_container should have its own implementation of dispatch*
-      unless (r = LogisticsContainerService.dispatch(lc,destination,current_user)).result
+      unless (r = DeliveryService.dispatch(lc,destination,current_user)).result
         return msg.set_false(r.content)
       end
 
@@ -228,7 +228,7 @@ module V1
       #end
 
       #*own implementation of receive
-      if (r = LogisticsContainerService.receive(d,current_user)).result
+      if (r = DeliveryService.receive(d,current_user)).result
         {result: 1, content: DeliveryPresenter.new(d).to_json}
       else
         {result: 0, content: r.content}
@@ -262,8 +262,14 @@ module V1
         return {result: 0, content: DeliveryMessage::NotExit}
       end
 
+      unless (m = DeliveryService.confirm_receive(d,current_user)).result
+        return {result:0,content: DeliveryMessage::ReceiveFailed}
+      end
+
+      return {result:1,content: DeliveryMessage::ReceiveSuccess}
+
       #if LogisticsContainerService.end_receive(d, current_user)
-      {result: 1, content: DeliveryMessage::ReceiveSuccess}
+      #{result: 1, content: DeliveryMessage::ReceiveSuccess}
       #else
 
       # {result: 0, content: DeliveryMessage::ReceiveFailed}

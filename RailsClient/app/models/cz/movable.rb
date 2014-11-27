@@ -29,7 +29,16 @@ module CZ
       end
     end
 
-
+    def get_movable_service
+      case self.container.type
+        when ContainerType::PACKAGE
+          return PMovableService
+        when ContainerType::FORKLIFT
+          return FMovableService
+        when ContainerType::DELIVERY
+          return DMovableService
+      end
+    end
 
     def receive(receiver_id)
       if state_switch_to(MovableState::ARRIVED)

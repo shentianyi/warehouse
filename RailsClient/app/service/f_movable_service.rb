@@ -1,5 +1,5 @@
 class FMovableService < MovableService
-  def self.receive(movable,use)
+  def self.check(movable,use)
     msg = Message.new
     begin
       ActiveRecord::Base.transaction do
@@ -7,11 +7,20 @@ class FMovableService < MovableService
           raise MovableMessage::CurrentLocationNotDestination
         end
 
-        unless movable.state_for(CZ::Movable::RECEIVE)
-          raise MovableMessage::StateError
+        sum = LogisticsContainerService.get_packages(movable).count
+        acceptes = LogisticsContainerService.get_packages_by_state(movable,MovableState::CHECKED).count
+
+        if sum==acceptes
+          unless movable.state_for(CZ::Movable::CHECK)
+            raise MovableMessage::StateError
+          end
+        elsif sum > acceptes
+          unless movable.state_for(CZ::Movable::CHECK)
+            raise MovableMessage::StateError
+          end
         end
 
-        unless movable.receive(user.id)
+        unless movable.check(user.id)
           raise MovableMessage::ReceiveFailed
         end
 

@@ -4,7 +4,9 @@ class Location < ActiveRecord::Base
 
   has_many :users
   has_many :whouses, :dependent => :destroy
-  belongs_to :destination, class_name: 'Location'
+  has_many :location_destinations
+  has_many :destinations, :through => :location_destinations
+  #belongs_to :destination, class_name: 'Location'
 
   has_many :current_containers, as: :current_positionable, class_name: 'Container'
   has_many :des_containers, class_name: 'LocationContainer'
