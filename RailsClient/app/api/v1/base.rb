@@ -14,5 +14,6 @@ module V1
     mount LedAPI
     mount MovableAPI
     mount LocationAPI
+    mount StorageAPI
   end
 end

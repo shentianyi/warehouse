@@ -12,14 +12,17 @@ module V1
 
         ActiveRecord::Base.transaction do
           # build forklift
-          if forklift=Forklift.exists?(data['id'])
-            fsc=forklift.store_containers.where(source_location_id: user.location_id).first
-          else
+          unless forklift=Forklift.exists?(data['id'])
             forklift = Forklift.new(id: data['id'], user_id: user.id, location_id: user.location_id)
-            if forklift.save
-              fsc=forklift.store_containers.create(source_location_id: user.location_id, user_id: user.id)
-            end
+            forklift.save
           end
+
+          unless fsc=forklift.store_containers.where(source_location_id: user.location_id).first
+            fsc=forklift.store_containers.create(source_location_id: user.location_id, user_id: user.id)
+            fsc.save
+          end
+
+          fsc.in_store(whouse)
 
           data['packages'].each do |p|
             unless package=Package.exists?(p['id'])
@@ -43,12 +46,16 @@ module V1
       end
 
       post :unstore_container do
-        user=User.find('PACK_SYS_USER')
-        if forklift=Forklift.exists?(params[:id])
-          fsc=forklift.store_containers.where(source_location_id: user.location_id).first
-          fsc.descendants.joins(:package).where(containers: {current_positionable_id: params[:whouse], current_positionable_type: 'Whouse'}).all.each do |psc|
-            psc.cancel_store
-            psc.destroy
+        ActiveRecord::Base.transaction do
+          user=User.find('PACK_SYS_USER')
+          if forklift=Forklift.exists?(params[:id])
+            fsc=forklift.store_containers.where(source_location_id: user.location_id).first
+            fsc.descendants.joins(:package).where(containers: {current_positionable_id: params[:whouse], current_positionable_type: 'Whouse'}).each do |psc|
+              psc.cancel_store
+              psc.destroy
+            end
+            fsc.cancel_store
+            fsc.destroy
           end
         end
         {Result: true, Code: 1, Content: 'Success'}
