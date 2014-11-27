@@ -22,6 +22,7 @@ module V1
       mount ContainerSyncAPI
       mount LocationContainerSyncAPI
       mount RecordSyncAPI
+      mount StorageSyncAPI
 
       mount OrderSyncAPI
       mount OrderItemSyncAPI
