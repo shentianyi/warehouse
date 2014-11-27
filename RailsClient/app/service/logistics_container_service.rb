@@ -25,139 +25,21 @@ class LogisticsContainerService
 
   def self.dispatch(lc, destination, user)
     msg = Message.new
-    begin
-      ActiveRecord::Base.transaction do
-        #以后可能不需要检查
-        unless lc.source_location_id == user.location_id
-          raise MovableMessage::SourceLocationError
-        end
-        lc.des_location_id = destination.id
-        #
-        unless lc.state_for(CZ::Movable::DISPATCH)
-          raise MovableMessage::StateError
-        end
-
-        unless lc.dispatch(destination, user.id)
-          raise MovableMessage::DispatchFailed
-        end
-        lc.save
-
-        lc.descendants.each do |c|
-          unless c.source_location_id == user.location_id
-            raise MovableMessage::SourceLocationError
-          end
-          c.des_location_id = destination.id
-
-          unless c.state_for(CZ::Movable::DISPATCH)
-            raise MovableMessage::StateError
-          end
-
-          unless c.dispatch(destination, user.id)
-            raise MovableMessage::DispatchFailed
-          end
-          c.save
-        end
-      end
-    rescue Exception => e
-      return msg.set_false(e.to_s)
-    end
     return msg.set_true()
   end
 
   def self.receive(lc, user)
     msg = Message.new
-    begin
-      ActiveRecord::Base.transaction do
-        unless lc.des_location_id == user.location_id
-          raise MovableMessage::CurrentLocationNotDestination
-        end
-
-        unless lc.state_for(CZ::Movable::RECEIVE)
-          raise MovableMessage::StateError
-        end
-        lc.container.update(current_positionable: user.location)
-        lc.receive(user.id)
-        lc.save
-
-        lc.descendants.each do |c|
-          unless c.des_location_id == user.location_id
-            raise MovableMessage::CurrentLocationNotDestination
-          end
-
-          unless c.state_for(CZ::Movable::RECEIVE)
-            raise MovableMessage::StateError
-          end
-          c.receive(user.id)
-          c.save
-        end
-      end
-    rescue Exception => e
-      return msg.set_false(e.to_s)
-    end
     return msg.set_true()
   end
 
   def self.check(lc, user)
     msg = Message.new
-    begin
-      ActiveRecord::Base.transaction do
-        unless lc.des_location_id == user.location_id
-          raise MovableMessage::CurrentLocationNotDestination
-        end
-
-        unless lc.state_for(CZ::Movable::CHECK)
-          raise MovableMessage::StateError
-        end
-        lc.check(user.id)
-        lc.save
-        lc.descendants.each do |c|
-          unless c.des_location_id == user.location_id
-            raise MovableMessage::CurrentLocationNotDestination
-          end
-
-          unless c.state_for(CZ::Movable::CHECK)
-            raise MovableMessage::StateError
-          end
-
-          c.chcek(user.id)
-          c.save
-        end
-      end
-    rescue Exception => e
-      return msg.set_false(e.to_s)
-    end
     return msg.set_true()
   end
 
   def self.reject(lc, user)
     msg = Message.new
-    begin
-      ActiveRecord::Base.transaction do
-        unless lc.des_location_id == user.location_id
-          raise MovableMessage::CurrentLocationNotDestination
-        end
-
-        unless lc.state_for(CZ::Movable::REJECT)
-          raise MovableMessage::StateError
-        end
-        lc.reject(user.id)
-        lc.save
-        lc.descendants.each do |c|
-          unless c.des_location_id == user.location_id
-            raise MovableMessage::CurrentLocationNotDestination
-          end
-
-          unless c.state_for(CZ::Movable::REJECT)
-            raise MovableMessage::StateError
-          end
-
-          c.reject(user.id)
-          c.save
-        end
-      end
-    rescue Exception => e
-      return msg.set_false(e.to_s)
-    end
     return msg.set_true()
   end
 

@@ -27,7 +27,6 @@ class DeliveryService
     LogisticsContainer.joins(:delivery).where(conditions)
   end
 
-
   def self.import_by_file path
     msg=Message.new
     begin

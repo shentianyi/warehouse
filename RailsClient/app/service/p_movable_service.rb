@@ -1,0 +1,2 @@
+class PMovableService < MovableService
+end
