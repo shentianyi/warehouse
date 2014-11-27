@@ -14,7 +14,9 @@ class LogisticsContainersController < ApplicationController
 
     if params[:tables]
       tables = params[:tables].split(';')
-      tables.each{|t| query = query.joins(t.to_sym)}
+      (tables - ["container"] + ["#{model}"]).each{|t|
+        query = query.joins(t.to_sym)
+      }
       joins = joins + tables
       args = args + tables
     end
@@ -43,8 +45,8 @@ class LogisticsContainersController < ApplicationController
         end
       end
     end
-    puts "==============="
-    puts hash_conditions
+    #puts "=================="
+    #puts hash_conditions
 
     query=query.where(hash_conditions)
 

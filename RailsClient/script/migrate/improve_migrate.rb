@@ -46,20 +46,30 @@ end
 start_time = Time.now
 
 #*先创建Delivery
-ds = ODelivery.all.order(created_at: :desc).limit(500)
+ds = ODelivery.all.order(created_at: :desc)#.limit(500)
 
 all = ds.count
 begin
   ds.each_with_index do |od, index|
     ActiveRecord::Base.transaction do
       #create Delivery Container
-      d = Delivery.create(id: od.id, remark: od.remark, user_id: od.user_id, location_id: od.user.location_id, created_at: od.created_at, updated_at: od.updated_at)
+      d = Delivery.create({
+                              id: od.id,
+                              remark: od.remark,
+                              user_id: od.user_id,
+                              location_id: od.user.location_id,
+                              created_at: od.created_at,
+                              updated_at: od.updated_at,
+                              is_delete:od.is_delete,
+                              is_new:od.is_new,
+                              is_dirty:od.is_dirty
+                          })
       processed = ((index+1).to_f/all)
       time_processed = Time.now - start_time
 
       time_need = time_processed/processed
 
-      puts "--------------------已处理#{(processed*100).round(4)}%,耗时#{distance_of_time_in_words(time_processed)},还需#{distance_of_time_in_words(time_need)}----------------"
+      puts "--------------------共#{all}，已处理#{index+1},进度#{(processed*100).round(4)}%,耗时#{distance_of_time_in_words(time_processed)},还需#{distance_of_time_in_words(time_need)}----------------"
       #create Delivery Location_Container =>
       dlc = d.logistics_containers.build(source_location_id: od.user.location_id, user_id: od.user_id, remark: od.remark)
       dlc.destinationable = od.destination
@@ -79,53 +89,66 @@ begin
           dlc.state = MovableState::WAY
           #*record dispatch
           impl_time = od.delivery_date.nil? ? od.created_at : od.delivery_date
-          Record.create({recordable: dlc, destinationable: dlc.destinationable, impl_id: od.user_id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
+          Record.create({recordable: dlc, destinationable: dlc.destinationable, impl_id: od.user_id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time,is_new:od.is_new,is_delete:od.is_delete,is_dirty:od.is_dirty})
         when DeliveryState::DESTINATION
           dlc.state = MovableState::ARRIVED
           #*record dispatch
           impl_time = od.delivery_date.nil? ? od.created_at : od.delivery_date
-          Record.create({recordable: dlc, destinationable: dlc.destinationable, impl_id: od.user_id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
+          Record.create({recordable: dlc, destinationable: dlc.destinationable, impl_id: od.user_id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time,is_new:od.is_new,is_delete:od.is_delete,is_dirty:od.is_dirty})
           #*record receive
           impl_time = od.received_date.nil? ? od.updated_at : od.received_date
           user_id = od.receiver_id.nil? ? default_receiver : od.receiver_id
-          Record.create({recordable: dlc, destinationable: dlc.destinationable, impl_id: user_id, impl_user_type: ImplUserType::RECEIVER, impl_action: 'receive', impl_time: impl_time})
+          Record.create({recordable: dlc, destinationable: dlc.destinationable, impl_id: user_id, impl_user_type: ImplUserType::RECEIVER, impl_action: 'receive', impl_time: impl_time,is_new:od.is_new,is_delete:od.is_delete,is_dirty:od.is_dirty})
         when DeliveryState::RECEIVED
           dlc.state = MovableState::CHECKED
           #*record dispatch
           impl_time = od.delivery_date.nil? ? od.created_at : od.delivery_date
-          Record.create({recordable: dlc, destinationable: dlc.destinationable, impl_id: od.user_id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
+          Record.create({recordable: dlc, destinationable: dlc.destinationable, impl_id: od.user_id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time,is_new:od.is_new,is_delete:od.is_delete,is_dirty:od.is_dirty})
           #*record receive
           impl_time = od.received_date.nil? ? od.updated_at : od.received_date
           user_id = od.receiver_id.nil? ? default_receiver : od.receiver_id
-          Record.create({recordable: dlc, destinationable: dlc.destinationable, impl_id: user_id, impl_user_type: ImplUserType::RECEIVER, impl_action: 'receive', impl_time: impl_time})
+          Record.create({recordable: dlc, destinationable: dlc.destinationable, impl_id: user_id, impl_user_type: ImplUserType::RECEIVER, impl_action: 'receive', impl_time: impl_time,is_new:od.is_new,is_delete:od.is_delete,is_dirty:od.is_dirty})
           #*record check
           impl_time = od.received_date.nil? ? od.updated_at : od.received_date
           user_id = od.receiver_id.nil? ? default_receiver : od.receiver_id
-          Record.create({recordable: dlc, destinationable: dlc.destinationable, impl_id: user_id, impl_user_type: ImplUserType::EXAMINER, impl_action: 'check', impl_time: impl_time})
+          Record.create({recordable: dlc, destinationable: dlc.destinationable, impl_id: user_id, impl_user_type: ImplUserType::EXAMINER, impl_action: 'check', impl_time: impl_time,is_new:od.is_new,is_delete:od.is_delete,is_dirty:od.is_dirty})
         when DeliveryState::REJECTED
           dlc.state = MovableState::REJECTED
           #*record dispatch
           impl_time = od.delivery_date.nil? ? od.created_at : od.delivery_date
-          Record.create({recordable: dlc, destinationable: dlc.destinationable, impl_id: od.user_id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
+          Record.create({recordable: dlc, destinationable: dlc.destinationable, impl_id: od.user_id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time,is_new:od.is_new,is_delete:od.is_delete,is_dirty:od.is_dirty})
           #*record receive
           impl_time = od.received_date.nil? ? od.updated_at : od.received_date
           user_id = od.receiver_id.nil? ? default_receiver : od.receiver_id
-          Record.create({recordable: dlc, destinationable: dlc.destinationable, impl_id: user_id, impl_user_type: ImplUserType::RECEIVER, impl_action: 'receive', impl_time: impl_time})
+          Record.create({recordable: dlc, destinationable: dlc.destinationable, impl_id: user_id, impl_user_type: ImplUserType::RECEIVER, impl_action: 'receive', impl_time: impl_time,is_new:od.is_new,is_delete:od.is_delete,is_dirty:od.is_dirty})
           #*record rejected
           impl_time = od.received_date.nil? ? od.updated_at : od.received_date
           user_id = od.receiver_id.nil? ? default_receiver : od.receiver_id
-          Record.create({recordable: dlc, destinationable: dlc.destinationable, impl_id: user_id, impl_user_type: ImplUserType::REJECTOR, impl_action: 'reject', impl_time: impl_time})
+          Record.create({recordable: dlc, destinationable: dlc.destinationable, impl_id: user_id, impl_user_type: ImplUserType::REJECTOR, impl_action: 'reject', impl_time: impl_time,is_new:od.is_new,is_delete:od.is_delete,is_dirty:od.is_dirty})
       end
       #get all forklift and added to delivery
       dlc.created_at = od.created_at
       dlc.updated_at = od.updated_at
+      dlc.is_new = od.is_new
+      dlc.is_delete = od.is_delete
+      dlc.is_dirty = od.is_dirty
       dlc.save
       #puts "#{d.id} => DC \n"
       #puts "#{dlc.id} => DLC \n"
       #puts "#{dlc.records.count} => DLC Records created! \n"
       od.forklifts.each do |of|
         #注意，这里只统计到了运单中的Forklift，但是没有统计到不存在晕但中的forklift
-        f = Forklift.create(id: of.id, user_id: of.user_id, location_id: of.user.location_id, created_at: of.created_at, updated_at: of.updated_at, remark: of.remark)
+        f = Forklift.create({
+                                id: of.id,
+                                user_id: of.user_id,
+                                location_id: of.user.location_id,
+                                created_at: of.created_at,
+                                updated_at: of.updated_at,
+                                remark: of.remark,
+                                is_delete:of.is_delete,
+                                is_new:of.is_new,
+                                is_dirty:of.is_dirty
+                            })
         flc = f.logistics_containers.build(source_location_id: of.user.location_id, user_id: of.user_id, destinationable: of.whouse)
         flc.des_location_id = destination.id if destination
 
@@ -138,30 +161,33 @@ begin
             flc.state = MovableState::WAY
             #record dispatch
             impl_time = of.created_at
-            Record.create({recordable: flc, destinationable: flc.destinationable, impl_id: of.user_id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
+            Record.create({recordable: flc, destinationable: flc.destinationable, impl_id: of.user_id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time,is_new:of.is_new,is_delete:of.is_delete,is_dirty:of.is_dirty})
           when ForkliftState::DESTINATION
             flc.state = MovableState::ARRIVED
             #record dispatch
             impl_time = of.created_at
-            Record.create({recordable: flc, destinationable: flc.destinationable, impl_id: of.user_id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
+            Record.create({recordable: flc, destinationable: flc.destinationable, impl_id: of.user_id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time,is_new:of.is_new,is_delete:of.is_delete,is_dirty:of.is_dirty})
             #record receive
             impl_time = of.updated_at
-            Record.create({recordable: flc, destinationable: flc.destinationable, impl_id: user_id, impl_user_type: ImplUserType::RECEIVER, impl_action: 'receive', impl_time: impl_time})
+            Record.create({recordable: flc, destinationable: flc.destinationable, impl_id: user_id, impl_user_type: ImplUserType::RECEIVER, impl_action: 'receive', impl_time: impl_time,is_new:of.is_new,is_delete:of.is_delete,is_dirty:of.is_dirty})
           when ForkliftState::RECEIVED, ForkliftState::PART_RECEIVED
             flc.state = MovableState::CHECKED
             #record dispatch
             impl_time = of.created_at
-            Record.create({recordable: flc, destinationable: flc.destinationable, impl_id: of.user_id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
+            Record.create({recordable: flc, destinationable: flc.destinationable, impl_id: of.user_id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time,is_new:of.is_new,is_delete:of.is_delete,is_dirty:of.is_dirty})
             #record receive
             impl_time = of.updated_at
-            Record.create({recordable: flc, destinationable: flc.destinationable, impl_id: user_id, impl_user_type: ImplUserType::RECEIVER, impl_action: 'receive', impl_time: impl_time})
+            Record.create({recordable: flc, destinationable: flc.destinationable, impl_id: user_id, impl_user_type: ImplUserType::RECEIVER, impl_action: 'receive', impl_time: impl_time,is_new:of.is_new,is_delete:of.is_delete,is_dirty:of.is_dirty})
             #record check
-            Record.create({recordable: flc, destinationable: flc.destinationable, impl_id: user_id, impl_user_type: ImplUserType::EXAMINER, impl_action: 'check', impl_time: impl_time})
+            Record.create({recordable: flc, destinationable: flc.destinationable, impl_id: user_id, impl_user_type: ImplUserType::EXAMINER, impl_action: 'check', impl_time: impl_time,is_new:of.is_new,is_delete:of.is_delete,is_dirty:of.is_dirty})
         end
 
         dlc.add(flc)
         flc.created_at = of.created_at
         flc.updated_at = of.updated_at
+        flc.is_new = of.is_new
+        flc.is_delete = of.is_delete
+        flc.is_dirty = of.is_dirty
         flc.save
 
         #puts "#{f.id} => FC \n"
@@ -170,9 +196,25 @@ begin
 
         #packages
         of.packages.each do |op|
-          puts "--------------"
-          puts op.to_json
-          p = Package.create({id: op.id, quantity: op.quantity, user_id: op.user_id, location_id: op.location_id, fifo_time: op.check_in_time, part_id: op.part_id, created_at: op.created_at, updated_at: op.updated_at})
+          fifo_time = nil
+          begin
+            fifo_time = Time.parse(op.check_in_time)
+          rescue
+            fifo_time = Time.now
+          end
+          p = Package.create({
+                                 id: op.id,
+                                 quantity: op.quantity,
+                                 user_id: op.user_id,
+                                 location_id: op.location_id,
+                                 fifo_time: fifo_time,
+                                 part_id: op.part_id,
+                                 created_at: op.created_at,
+                                 updated_at: op.updated_at,
+                                 is_delete:op.is_delete,
+                                 is_new:op.is_new,
+                                 is_dirty:op.is_dirty
+                             })
           plc = p.logistics_containers.build({source_location_id: op.location_id, user_id: op.user_id})
           plc.des_location_id = destination.id if destination
 
@@ -184,40 +226,40 @@ begin
 
               #record dispatch
               impl_time = op.created_at
-              Record.create({recordable: plc, destinationable: plc.destinationable, impl_id: op.user_id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
+              Record.create({recordable: plc, destinationable: plc.destinationable, impl_id: op.user_id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time,is_new:op.is_new,is_delete:op.is_delete,is_dirty:op.is_dirty})
             when PackageState::DESTINATION
               if of.state != PackageState::ORIGINAL && of.state != PackageState::WAY
                 plc.state = MovableState::REJECTED
                 #record dispatch
                 impl_time = op.created_at
-                Record.create({recordable: plc, destinationable: plc.destinationable, impl_id: op.user_id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
+                Record.create({recordable: plc, destinationable: plc.destinationable, impl_id: op.user_id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time,is_new:op.is_new,is_delete:op.is_delete,is_dirty:op.is_dirty})
                 #record receive
                 impl_time = op.updated_at
-                Record.create({recordable: plc, destinationable: plc.destinationable, impl_id: user_id, impl_user_type: ImplUserType::RECEIVER, impl_action: 'receive', impl_time: impl_time})
+                Record.create({recordable: plc, destinationable: plc.destinationable, impl_id: user_id, impl_user_type: ImplUserType::RECEIVER, impl_action: 'receive', impl_time: impl_time,is_new:op.is_new,is_delete:op.is_delete,is_dirty:op.is_dirty})
                 #record rejected
                 impl_time = op.updated_at
-                Record.create({recordable: plc, destinationable: plc.destinationable, impl_id: user_id, impl_user_type: ImplUserType::REJECTOR, impl_action: 'reject', impl_time: impl_time})
+                Record.create({recordable: plc, destinationable: plc.destinationable, impl_id: user_id, impl_user_type: ImplUserType::REJECTOR, impl_action: 'reject', impl_time: impl_time,is_new:op.is_new,is_delete:op.is_delete,is_dirty:op.is_dirty})
               else
                 plc.state = MovableState::ARRIVED
 
                 #record dispatch
                 impl_time = op.created_at
-                Record.create({recordable: plc, destinationable: plc.destinationable, impl_id: op.user_id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
+                Record.create({recordable: plc, destinationable: plc.destinationable, impl_id: op.user_id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time,is_new:op.is_new,is_delete:op.is_delete,is_dirty:op.is_dirty})
                 #record receive
                 impl_time = op.updated_at
-                Record.create({recordable: plc, destinationable: plc.destinationable, impl_id: user_id, impl_user_type: ImplUserType::RECEIVER, impl_action: 'receive', impl_time: impl_time})
+                Record.create({recordable: plc, destinationable: plc.destinationable, impl_id: user_id, impl_user_type: ImplUserType::RECEIVER, impl_action: 'receive', impl_time: impl_time,is_new:op.is_new,is_delete:op.is_delete,is_dirty:op.is_dirty})
               end
             when PackageState::RECEIVED
               plc.state = MovableState::CHECKED
               #record dispatch
               impl_time = op.created_at
-              Record.create({recordable: plc, destinationable: plc.destinationable, impl_id: op.user_id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
+              Record.create({recordable: plc, destinationable: plc.destinationable, impl_id: op.user_id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time,is_new:op.is_new,is_delete:op.is_delete,is_dirty:op.is_dirty})
               #record receive
               impl_time = op.updated_at
-              Record.create({recordable: plc, destinationable: plc.destinationable, impl_id: user_id, impl_user_type: ImplUserType::RECEIVER, impl_action: 'receive', impl_time: impl_time})
+              Record.create({recordable: plc, destinationable: plc.destinationable, impl_id: user_id, impl_user_type: ImplUserType::RECEIVER, impl_action: 'receive', impl_time: impl_time,is_new:op.is_new,is_delete:op.is_delete,is_dirty:op.is_dirty})
               #record rejected
               impl_time = op.updated_at
-              Record.create({recordable: plc, destinationable: plc.destinationable, impl_id: user_id, impl_user_type: ImplUserType::EXAMINER, impl_action: 'check', impl_time: impl_time})
+              Record.create({recordable: plc, destinationable: plc.destinationable, impl_id: user_id, impl_user_type: ImplUserType::EXAMINER, impl_action: 'check', impl_time: impl_time,is_new:op.is_new,is_delete:op.is_delete,is_dirty:op.is_dirty})
             when PackageState::REJECTED
               plc.state = MovableState::REJECTED
 
@@ -225,6 +267,9 @@ begin
           flc.add(plc)
           plc.created_at = op.created_at
           plc.updated_at = op.updated_at
+          plc.is_new = op.is_new
+          plc.is_delete = op.is_delete
+          plc.is_dirty = op.is_dirty
           plc.save
 
           #puts "#{p.id} => PC \n"
