@@ -1,12 +1,12 @@
 # print pick list
 module Printer
   class P006<Base
-    HEAD=[:id, :user_id, :created_at]
+    HEAD=[:id, :user_id, :created_at,:remark]
     BODY=[:part_id, :quantity, :box_quantity,:whouse_id, :is_emergency, :remark]
 
     def generate_data
       p=PickList.find_by_id(self.id)
-      head={id: p.id, user_id: p.user_id, created_at: p.created_at.localtime.strftime('%Y.%m.%d %H:%M:%S'),order_ids: p.order_ids}
+      head={id: p.id, user_id: p.user_id, created_at: p.created_at.localtime.strftime('%Y.%m.%d %H:%M:%S'),remark: p.remark}
       heads=[]
       HEAD.each do |k|
         heads<<{Key: k, Value: head[k]}

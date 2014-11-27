@@ -1,5 +1,5 @@
 class OrderPresenter<Presenter
-  Delegators=[:id,:user_id,:created_at,:order_items,:handled]
+  Delegators=[:id,:user_id,:created_at,:order_items,:handled,:remark]
   def_delegators :@order,*Delegators
 
   def initialize(order)
@@ -28,6 +28,7 @@ class OrderPresenter<Presenter
         id: self.id,
         user_id: self.user_id,
         created_at: self.created_at.localtime,
+        remark: self.remark,
         handled: self.handled ? 1 : 0,
         has_out_of_stock: self.has_out_of_stock ? 1:0
     }
@@ -39,6 +40,7 @@ class OrderPresenter<Presenter
         user_id: self.user_id,
         created_at: self.created_at.localtime,
         handled: self.handled ? 1 : 0,
+        remark: self.remark,
         has_out_of_stock: self.has_out_of_stock ? 1:0,
         order_items: items
     }

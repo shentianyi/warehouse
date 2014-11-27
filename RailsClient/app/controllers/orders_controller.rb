@@ -103,7 +103,11 @@ class OrdersController < ApplicationController
       #.select('order_items.*,sum(order_items.quantity) as quantity')
     else
       @order_items=PickItemService.get_order_items(params[:user_id],params[:order_ids]).order(is_emergency: :desc)||[]
+
     end
+
+    @orders = Order.where(id:params[:order_ids])
+
     render partial:'item'
   end
 
