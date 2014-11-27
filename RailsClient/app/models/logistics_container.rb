@@ -4,9 +4,6 @@ class LogisticsContainer<LocationContainer
 
   default_scope { where(type: LocationContainerType::LOGISTICS) }
   has_ancestry
-  belongs_to :destinationable, polymorphic: true
-  belongs_to :source_location, class_name: 'Location'
-  belongs_to :des_location, class_name: 'Location'
 
   belongs_to :package, foreign_key: :container_id
   has_many :positions,through: :package

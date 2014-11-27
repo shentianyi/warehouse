@@ -30,31 +30,29 @@ class StoreContainer<LocationContainer
   end
 
   def move_store(destination)
-    if self.can_move_store?
-      c=self.container
-      if part=c.part
-        if ss=part.storages.where(storable: p.current_positionable).first
-          ss.quantity-=c.quantity
-          ss.save
-        end
-        if ds=part.storages.where(storable: destination).first
-          ds.quantity+=c.quantity
-        else
-          ds=part.storages.build(quantity: c.quantity)
-          ds.storable=destination
-        end
-        ds.save
+    c=self.container
+    if part=c.part
+      if ss=part.storages.where(storable: c.current_positionable).first
+        ss.quantity-=c.quantity
+        ss.save
       end
-      c.current_positionable=destination
-      c.save
+      if ds=part.storages.where(storable: destination).first
+        ds.quantity+=c.quantity
+      else
+        ds=part.storages.build(quantity: c.quantity)
+        ds.storable=destination
+      end
+      ds.save
     end
+    c.current_positionable=destination
+    c.save
   end
 
   def cancel_store
     if self.can_cancel_store?
       c=self.container
-      if  c=p.part
-        if s=part.storages.where(storable: p.current_positionable).first
+      if  part=c.part
+        if s=part.storages.where(storable: c.current_positionable).first
           s.quantity=0
           s.save
         end
@@ -69,10 +67,10 @@ class StoreContainer<LocationContainer
   end
 
   def can_cancel_store?
-    self.state==StorableState::INIT
+    self.state==StorableState::INSTORE
   end
 
-  def can_move_store?
-    self.state==StorableState::INSTORE
+  def can_move_store?(destination)
+    self.container.current_positionable !=destination  && self.state== StorableState::INSTORE
   end
 end
