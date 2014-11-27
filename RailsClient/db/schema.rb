@@ -269,6 +269,7 @@ ActiveRecord::Schema.define(version: 20141126082819) do
     t.datetime "updated_at"
     t.string   "source_id"
     t.integer  "status",                default: 0
+    t.text     "remark"
   end
 
   add_index "orders", ["id"], name: "index_orders_on_id", using: :btree
@@ -414,6 +415,7 @@ ActiveRecord::Schema.define(version: 20141126082819) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "order_ids"
+    t.text     "remark"
   end
 
   add_index "pick_lists", ["id"], name: "index_pick_lists_on_id", using: :btree
@@ -558,6 +560,7 @@ ActiveRecord::Schema.define(version: 20141126082819) do
     t.string   "authentication_token"
     t.integer  "role_id",                           default: 100,   null: false
     t.boolean  "is_sys",                            default: false
+    t.string   "user_name"
   end
 
   add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree

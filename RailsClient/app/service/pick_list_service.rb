@@ -17,10 +17,13 @@ class PickListService
         )
         i.update(handled:true)
       end
-      pick_list.save
+      remark = ""
       OrderService.find({id:order_ids}).each do |o|
         o.update(status:OrderState::PRINTED)
+        remark+= o.remark
       end
+      pick_list.remark = remark
+      pick_list.save
       return pick_list
     end
   end

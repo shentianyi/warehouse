@@ -10,6 +10,7 @@ class Package<Container
   end
 
   def custom_fifo_time=(value)
+    #*2014-11-27 value有可能不是14.10.12的时间格式
     @custom_fifo_time = value
     self.fifo_time=Date.strptime(@custom_fifo_time, '%d.%m.%y') unless @custom_fifo_time.nil?
   end
