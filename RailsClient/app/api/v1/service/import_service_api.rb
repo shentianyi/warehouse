@@ -10,7 +10,10 @@ module V1
           data=JSON.parse(params[:data])
           raise('仓库:'+data['whouse']+'不存在') unless whouse=Whouse.find_by_id(data['whouse'])
           fd=data['packages'].first['project']
-
+          raise('仓库:'+fd+'不存在') unless Whouse.find_by_id(fd)
+          
+          data['packages'].each{|p| raise('零件:'+p['part_id']+'不存在') unless Part.find_by_id(p['part_id'])}
+          
           ActiveRecord::Base.transaction do
             # build forklift
             unless forklift=Forklift.exists?(data['id'])
@@ -26,14 +29,10 @@ module V1
             fsc.in_store(whouse)
 
             data['packages'].each do |p|
-              unless package=Package.exists?(p['id'])
-                if Part.find_by_id(p['part_id'])
+              unless package=Package.exists?(p['id']) 
                   package=Package.new(id: p['id'], part_id: p['part_id'], quantity: p['quantity'], fifo_time: p['fifo_time'],
                                       user_id: user.id, location_id: user.location_id)
                   package.save
-                else
-                  raise('零件：'+p['part_id']+'不存在')
-                end
               end
               unless psc=package.store_containers.where(source_location_id: user.location_id).first
                 psc=package.store_containers.build(source_location_id: user.location_id, user_id: user.id, destinationable_id: p['project'], destinationable_type: 'Whouse')
