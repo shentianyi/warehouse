@@ -12,7 +12,7 @@ module V1
           fd=data['packages'].first['project']
           raise('仓库:'+fd+'不存在') unless Whouse.find_by_id(fd)
           
-          data['packages'].each{|p| raise('零件:'+p['part_id']+'不存在') if Part.find_by_id(p['part_id'])}
+          data['packages'].each{|p| raise('零件:'+p['part_id']+'不存在') unless Part.find_by_id(p['part_id'])}
           
           ActiveRecord::Base.transaction do
             # build forklift
