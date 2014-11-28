@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141127075539) do
+ActiveRecord::Schema.define(version: 20141128031440) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -471,27 +471,42 @@ ActiveRecord::Schema.define(version: 20141127075539) do
   add_index "records", ["impl_id"], name: "index_records_on_impl_id", using: :btree
   add_index "records", ["recordable_id"], name: "index_records_on_recordable_id", using: :btree
 
-  create_table "regexes", force: true do |t|
-    t.string   "name",                           null: false
-    t.string   "code",                           null: false
-    t.integer  "prefix_length",  default: 0
-    t.string   "prefix_string"
-    t.integer  "type",                           null: false
-    t.integer  "suffix_length",  default: 0
-    t.integer  "suffix_string"
-    t.string   "regex_string",   default: ""
-    t.string   "regexable_id"
-    t.string   "regexable_type"
-    t.string   "remark"
-    t.boolean  "is_sys_default", default: false
-    t.boolean  "is_delete",      default: false
-    t.boolean  "is_dirty",       default: true
-    t.boolean  "is_new",         default: true
+  create_table "regex_categories", force: true do |t|
+    t.string   "name"
+    t.string   "desc"
+    t.integer  "type"
+    t.boolean  "is_delete",  default: false
+    t.boolean  "is_dirty",   default: true
+    t.boolean  "is_new",     default: true
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "regex_categories", ["id"], name: "index_regex_categories_on_id", using: :btree
+
+  create_table "regexes", force: true do |t|
+    t.string   "name",                              null: false
+    t.string   "code",                              null: false
+    t.integer  "prefix_length",     default: 0
+    t.string   "prefix_string"
+    t.integer  "type"
+    t.integer  "suffix_length",     default: 0
+    t.integer  "suffix_string"
+    t.string   "regex_string",      default: ""
+    t.string   "regexable_id"
+    t.string   "regexable_type"
+    t.string   "remark"
+    t.boolean  "is_sys_default",    default: false
+    t.boolean  "is_delete",         default: false
+    t.boolean  "is_dirty",          default: true
+    t.boolean  "is_new",            default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "regex_category_id"
+  end
+
   add_index "regexes", ["id"], name: "index_regexes_on_id", using: :btree
+  add_index "regexes", ["regex_category_id"], name: "index_regexes_on_regex_category_id", using: :btree
   add_index "regexes", ["regexable_id"], name: "index_regexes_on_regexable_id", using: :btree
   add_index "regexes", ["regexable_type"], name: "index_regexes_on_regexable_type", using: :btree
 

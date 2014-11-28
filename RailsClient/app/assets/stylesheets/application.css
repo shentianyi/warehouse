@@ -20,3 +20,8 @@
  *=require pick_panel
  *=require_tree .
  */
+
+input[readonly]
+{
+    background-color:lightgrey;
+}

@@ -1,0 +1,70 @@
+<h1>编辑正则规范</h1>
+
+<%= form_for(@regex_category) do |f| %>
+    <% if @regex_category.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@regex_category.errors.count, "error") %> prohibited this regex_category from being
+            saved:</h2>
+
+          <ul>
+            <% @regex_category.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+    <div class="field">
+      <p>
+        <%= f.label :type, '类型：' %>
+        <%= f.label :type, RegexType.display(@regex_category.type) %>
+      </p>
+    </div>
+    <div class="field">
+      <%= f.label :name, '名称：' %>
+      <%= f.text_field :name %>
+    </div>
+    <div class="field">
+      <%= f.label :desc, '描述：' %>
+      <%= f.text_field :desc %>
+    </div>
+    <div id="regex-template">
+      <table class="table table-striped globle-table table-hover">
+        <tr>
+          <td>规范名称</td>
+          <td>规范代码</td>
+          <td>前缀字符串</td>
+          <td>前缀长度</td>
+          <td>后缀字符串</td>
+          <td>后缀长度</td>
+          <td>正则表达式</td>
+          <td>备注</td>
+        </tr>
+        <% @regexes.each_with_index do |regex, i| %>
+            <tr id='<%= regex.id %>' class='package-label-regex'>
+              <input type="hidden" class="id" value="<%= regex.id %>" name="regex[<%= i %>][id]" readonly/>
+              <td><input type="text" class="name" value="<%= regex.name %>" name="regex[<%= i %>][name]" readonly/></td>
+              <td><input type="text" class="code" value="<%= regex.code %>" name="regex[<%= i %>][code]" readonly/></td>
+              <td>
+                <input type="text" class="prefix_string" value="<%= regex.prefix_string %>" name="regex[<%= i %>][prefix_string]"/>
+              </td>
+              <td><span><%= regex.prefix_length %></span></td>
+              <td>
+                <input type="text" class="suffix_string" value="<%= regex.suffix_string %>" name="regex[<%= i %>][suffix_string]"/>
+              </td>
+              <td><span><%= regex.suffix_length %></span></td>
+              <td>
+                <input type="text" class="regex_string" value="<%= regex.regex_string %>" name="regex[<%= i %>][regex_string]"/>
+              </td>
+              <td>
+                <input type="text" class="remark" value="<%= regex.remark %>" width="300px" name="regex[<%= i %>][remark]"/>
+              </td>
+            </tr>
+        <% end %>
+      </table>
+    </div>
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+<% end %>
+
+<%= link_to '返回', regex_categories_path %>

@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
 
+  resources :regex_categories do
+    collection do
+      get :regex_template
+    end
+  end
   resources :led_states
   resources :sys_configs
   resources :logistics_containers do
@@ -92,7 +97,7 @@ Rails.application.routes.draw do
   post 'parts/do_import_positions', to: 'parts#do_import_positions'
 
   [:locations, :whouses, :parts, :positions, :part_positions, :users, :deliveries, :forklifts,
-   :packages, :part_types, :pick_item_filters, :orders,:modems,:leds].each do |model|
+   :packages, :part_types, :pick_item_filters, :orders, :modems, :leds].each do |model|
     resources model do
       collection do
         post :do_import
