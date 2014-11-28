@@ -138,6 +138,7 @@ Rails.application.routes.draw do
       get 'destinations'
       post :add_destination
       delete 'remove_destination/:destination_id', to: :remove_destination, as: 'remove_destination'
+      post 'set_default_destination/:destination_id', to: :set_default_destination, as: 'set_default_destination'
     end
   end
 
