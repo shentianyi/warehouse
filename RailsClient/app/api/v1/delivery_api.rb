@@ -54,17 +54,25 @@ module V1
     # check forklift
     # forklift id
     # *need to move this api to forklift*
+    # *2014-11-28 这里有个问题，can_copy?有问题，需要修改
     post :check_forklift do
       unless Forklift.exists?(params[:forklift_id])
         return {result: 0, content: DeliveryMessage::CheckForkliftFailed}
       end
 
       lc = LogisticsContainer.find_latest_by_container_id(params[:forklift_id])
+
       unless lc.can_copy?
         return {resule: 0, content: ForkliftMessage::CheckForkliftFailed}
       end
 
-      f=LogisticsContainer.build(params[:forklift_id], current_user.id, current_user.location_id)
+      f = nil
+
+      if lc.get_base == CZ::State::INIT
+        f = lc
+      else
+        f=LogisticsContainer.build(params[:forklift_id], current_user.id, current_user.location_id)
+      end
 
       if f.root?
         {result: 1, content: ForkliftPresenter.new(f).to_json}

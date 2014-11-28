@@ -107,30 +107,100 @@ class DeliveryService
         book.default_sheet=book.sheets.first
         return nil if book.cell(2, 1).nil?
         # generate delivery
-        delivery=Delivery.new(state: DeliveryState::WAY,
-                              user_id: book.cell(2, 1),
-                              source_id: book.cell(2, 2),
-                              destination_id: book.cell(2, 3),
-                              delivery_date: book.cell(2, 4),
-                              remark: book.cell(2, 5))
-        # generate forklifts
+        user = User.find_by_id(book.cell(2,1))
+
+        unless user
+          raise 'User not found!'
+        end
+        # generate delivery container
+        source = Location.find_by_id(book.cell(2,2))
+
+        unless source
+          raise 'Destination not found!'
+        end
+
+        delivery = Delivery.create({
+                                       remark: book.cell(2,5),
+                                       user_id: user.id,
+                                       location_id: source.id
+                                   })
+
+        # generate delivery location_container
+        destination = Location.find_by_id(book.cell(2, 3))
+
+        unless destination
+          raise 'Destination not found!'
+        end
+        dlc = delivery.logistic_containers.build(source_location_id:source.id,des_location_id:destination.id,user_id:user.id,remark:book.cell(2,5),state:MovableState::WAY)
+        dlc.destinationable = destination
+        dlc.save
+        # send dlc,create record for dlc
+        impl_time = Time.parse(book.cell(2, 4))
+        Record.create({recordable:dlc,destiationable:dlc.destinationable,impl_id:user.id,impl_user_type: ImplUserType::SENDER,impl_action:'dispatch',impl_time:impl_time})
+        # generate forklifts containers
         forklifts={}
         book.default_sheet=book.sheets[1]
         return nil if book.cell(2, 1).nil?
 
         2.upto(book.last_row) do |row|
-          whouse=book.cell(row, 1)
+          whouse= Whouse.find_by_id(book.cell(row, 1))
+          unless whouse
+            raise 'Warehouse not found!'
+          end
+=begin
           forklift=Forklift.new(state: ForkliftState::WAY,
                                 user_id: delivery.user_id,
                                 stocker_id: delivery.user_id,
                                 whouse_id: Whouse.find_by_id(whouse).id)
           delivery.forklifts<<forklift
-          forklifts[whouse]=forklift
+=end
+          forklift = Forklift.create({
+                                         user_id:user.id,
+                                         location_id:source.id
+                                     })
+          #create forklift lc
+          flc = forklift.logistics_containers.build({source_location_id:source.id,des_location_id:destination.id,user_id:user.id,state: MovableState::WAY})
+          flc.destinationable = whouse
+          flc.save
+          #impl_time = Time.parse(book.cell(2, 4))
+          Record.create({recordable:flc,destiationable:flc.destinationable,impl_id:user.id,impl_user_type: ImplUserType::SENDER,impl_action:'dispatch',impl_time:impl_time})
+
+          dlc.add(flc)
+
+          forklifts[whouse.id]=flc
         end
         # generate packages
         book.default_sheet=book.sheets[2]
         return nil if book.cell(2, 1).nil?
         2.upto(book.last_row) do |row|
+          if plc = LogisticsContainer.find_latest_by_container_id(book.cell(row, 2))
+            #if found and can copy
+            forklifts[book.cell(row, 1)].add(plc)
+          else
+            #create container
+            package = Package.create({
+                                         user_id:user.id,
+                                         location_id:source.id
+                                     })
+            #create lc
+            #*王松修改了package check_in_time之后，需要重新写
+            plc = package.logistics_containers.build({
+                                                         source_location_id:source.id,
+                                                         des_location_id:destination.id,
+                                                         user_id:user.id,
+                                                         state: MovableState::WAY,
+                                                         part_id:bool.cell(row,3).sub(/P/,''),
+                                                         quantity: bool.cell(row,4).sub(/Q/,''),
+                                                         check_in_time: book.cell(row,5).sub(/W\s*/,'')
+                                                     })
+            plc.destinationable = PartService.get_position_by_whouse_id(op.part_id,flc.destinationable_id)
+            plc.save
+            #impl_time = Time.parse(book.cell(2, 4))
+            Record.create({recordable:plc,destiationable:plc.destinationable,impl_id:user.id,impl_user_type: ImplUserType::SENDER,impl_action:'dispatch',impl_time:impl_time})
+            forklifts[book.cell(row, 1)].add(plc)
+          end
+
+=begin
           if package=Package.find_by_id(book.cell(row, 2))
             forklifts[book.cell(row, 1)].packages<<package
           else
@@ -144,9 +214,10 @@ class DeliveryService
                                                                state: PackageState::WAY
             )
           end
+=end
         end
 
-        delivery.save
+        #delivery.save
 =begin
         forklifts.values.each do |forklift|
           forklift.update(sum_packages: forklift.packages.count)
@@ -169,16 +240,22 @@ class DeliveryService
         book=Roo::Excelx.new file
         book.default_sheet=book.sheets.first
         return nil if book.cell(2, 1).nil?
+
+        default_receiver = User.where({role_id:Role.sender}).first
+
         2.upto(book.last_row) do |row|
-          if package=Package.find_by_id(book.cell(row, 1))
-            package.update(state: PackageState::RECEIVED, is_dirty: true)
-            if  forklift=package.forklift
-              forklift.update(state: ForkliftState::RECEIVED, is_dirty: true)
-              if delivery= forklift.delivery
-                delivery.update(state: DeliveryState::RECEIVED, is_dirty: true)
+          if plc = LogisticsContainer.find_latest_by_container_id(book.cell(2,1))
+            plc.get_movable_service.receive(plc,default_receiver)
+
+            if  flc = plc.parent
+              flc.get_movable_service.receive(flc,default_receiver)
+
+              if dlc = flc.parent
+                dlc.get_movable_service.receive(dlc,default_receiver)
               end
             end
           end
+
         end
       end
       msg.result =true
