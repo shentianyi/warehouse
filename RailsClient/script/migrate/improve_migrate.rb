@@ -205,10 +205,13 @@ begin
           p = Package.create({
                                  id: op.id,
                                  quantity: op.quantity,
+                                 quantity_dispaly: "Q#{op.quantity}",
                                  user_id: op.user_id,
                                  location_id: op.location_id,
                                  fifo_time: fifo_time,
+                                 fifo_time_display: "W  #{op.check_in_time}",
                                  part_id: op.part_id,
+                                 part_id_display: "P#{op.part_id}",
                                  created_at: op.created_at,
                                  updated_at: op.updated_at,
                                  is_delete:op.is_delete,

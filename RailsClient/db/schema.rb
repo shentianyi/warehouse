@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141128031440) do
+ActiveRecord::Schema.define(version: 20141128090900) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -70,6 +70,9 @@ ActiveRecord::Schema.define(version: 20141128031440) do
     t.boolean  "is_new",                               default: true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "part_id_display"
+    t.string   "quantity_display"
+    t.string   "fifo_time_display"
   end
 
   add_index "containers", ["current_positionable_id"], name: "index_containers_on_current_positionable_id", using: :btree
