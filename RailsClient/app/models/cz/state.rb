@@ -29,7 +29,7 @@ module CZ
             return true
           end
       end
-      false
+      return false
     end
   end
 end

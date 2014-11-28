@@ -215,7 +215,9 @@ begin
                                  is_new:op.is_new,
                                  is_dirty:op.is_dirty
                              })
+          #
           plc = p.logistics_containers.build({source_location_id: op.location_id, user_id: op.user_id})
+          plc.destinationable = PartService.get_position_by_whouse_id(op.part_id,flc.destinationable_id)
           plc.des_location_id = destination.id if destination
 
           case op.state
