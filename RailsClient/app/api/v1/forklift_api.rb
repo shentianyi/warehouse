@@ -127,8 +127,11 @@ module V1
       args = {
           id: params[:package_id],
           part_id: params[:part_id],
-          quantity_str: params[:quantity_str],
-          check_in_time: params[:check_in_time]
+          part_id_display: params[:part_id_display],
+          quantity: params[:quantity],
+          quantity_display: params[:quantity_display],
+          custom_fifo_time: params[:fifo_time],
+          fifo_time_display: params[:fifo_time_display]
       }
       #
       res = PackageService.create(args, current_user)

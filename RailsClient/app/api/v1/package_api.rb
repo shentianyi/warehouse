@@ -6,8 +6,8 @@ module V1
     #strong parameters
     helpers do
       def package_params
-        ActionController::Parameters.new(params).require(:package).permit(:id, :part_id, :part_id_display, :quantity_str, :quantity_str_display,
-                                                                          :check_in_time, :check_in_time_display)
+        ActionController::Parameters.new(params).require(:package).permit(:id, :part_id, :part_id_display, :quantity, :quantity_display,
+                                                                          :custom_fifo_time, :fifo_time_display)
       end
     end
 

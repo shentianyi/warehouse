@@ -20,26 +20,26 @@ class PackagePresenter<Presenter
     end
   end
 
-  def quantity_str
-    PackageLabelRegex.quantity_prefix_string+self.custom_quantity
+  def self.part_id_display
+    @package.part_id_display || ''
   end
 
-  def part_id_str
-    PackageLabelRegex.part_prefix_string+self.part_id
+  def self.quantity_display
+    @package.quantity_display || ''
   end
 
-  def fifo_time_str
-    PackageLabelRegex.date_prefix_string+self.custom_fifo_time
+  def self.fifo_time_display
+    @package.fifo_time_display || ''
   end
 
   def to_json(with_position=true)
     {
         id: self.id,
         container_id: self.container_id,
-        quantity_str: self.quantity_str,
-        part_id: self.part_id_str,
-        quantity: self.quantity,
-        check_in_time: fifo_time_str,
+        quantity_dispaly: self.quantity_display,
+        part_id_display: self.part_id_display,
+        quantity: @package.quantity,
+        fifo_time_display: self.fifo_time_display,
         user_id: self.user_id,
         state: self.state,
         state_display: '',#PackageState.display(self.state),

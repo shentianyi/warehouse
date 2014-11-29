@@ -1,5 +1,5 @@
 class PackageLazyPresenter<Presenter
-  Delegators=[:id,:container_id,:user_id,:state, :container]
+  Delegators=[:id, :container_id, :user_id, :state, :container]
   def_delegators :@logistics_container, *Delegators
 
   def initialize(logistics_container)
@@ -10,11 +10,23 @@ class PackageLazyPresenter<Presenter
 
   def position_nr
     if f=@logistics_container.parent
-      if position=PartService.get_position_by_whouse_id(@package.part_id,f.destinationable_id)
-       return position.detail
+      if position=PartService.get_position_by_whouse_id(@package.part_id, f.destinationable_id)
+        return position.detail
       end
     end
     ''
+  end
+
+  def self.part_id_display
+    @package.part_id_display || ''
+  end
+
+  def self.quantity_display
+    @package.quantity_display || ''
+  end
+
+  def self.fifo_time_display
+    @package.fifo_time_display || ''
   end
 
   def created_at
@@ -24,11 +36,11 @@ class PackageLazyPresenter<Presenter
   def to_json
     {
         id: self.id,
-        container_id:self.container_id,
-        quantity_str: PackageLabelRegex.quantity_prefix_string+@package.custom_quantity,
-        part_id: PackageLabelRegex.part_prefix_string+@package.part_id,
+        container_id: self.container_id,
+        quantity_dispaly: self.quantity_display,
+        part_id_display: self.part_id_display,
         quantity: @package.quantity,
-        check_in_time: PackageLabelRegex.date_prefix_string+@package.custom_fifo_time,
+        fifo_time_display: self.fifo_time_display,
         user_id: self.user_id,
         state: self.state,
         state_display: @logistics_container.state_display,

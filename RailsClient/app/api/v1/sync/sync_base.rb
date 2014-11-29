@@ -19,9 +19,13 @@ module V1
       mount PartPositionSyncAPI
       mount PickItemFilterSyncAPI
 
+      mount RegexCategorySyncAPI
+      mount RegexSyncAPI
+
       mount ContainerSyncAPI
       mount LocationContainerSyncAPI
       mount RecordSyncAPI
+
       mount StorageSyncAPI
 
       mount OrderSyncAPI
