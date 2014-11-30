@@ -6,11 +6,11 @@ class ReportType
   def self.display type
     case type
       when Entry
-        'Entry'
+        '收货'
       when Removal
-        'Removal'
+        '发货'
       when Discrepancy
-        'Discrepancy'
+        '差异'
       else
         '错误报表类型'
     end
