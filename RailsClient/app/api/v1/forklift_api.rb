@@ -219,5 +219,18 @@ module V1
         {result: 0, content: ForkliftMessage::UpdateFailed}
       end
     end
+
+    post :send do
+
+    end
+
+    post :receive do
+
+    end
+
+    #结束接收
+    post :end_receive do
+
+    end
   end
 end

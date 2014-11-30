@@ -1,5 +1,24 @@
 class PackageService
   #=============
+  #dispatch
+  #=============
+  def self.dispatch lc,destination,user
+    unless (m = lc.get_movable_service.dispatch(lc,destination,user)).result
+      return m
+    end
+
+    return Message.new.set_true
+  end
+
+  def self.receive lc,user
+    unless (m = lc.get_movable_service.receive(lc,destination,user)).result
+      return m
+    end
+
+    return Message.new.set_true
+  end
+
+  #=============
   #search packages
   #=============
   def self.search condition

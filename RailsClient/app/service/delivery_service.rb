@@ -1,7 +1,7 @@
 class DeliveryService
 
   def self.dispatch(movable,destination,user)
-    unless (m = d.get_movable_service.dispatch(movable,destination,user)).result
+    unless (m = movable.get_movable_service.dispatch(movable,destination,user)).result
       return m
     end
 

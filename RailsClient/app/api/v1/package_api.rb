@@ -151,5 +151,27 @@ module V1
         msg.set_false(r.content)
       end
     end
+
+    post :send do
+      msg = ApiMessage.new
+
+      unless lc = LogisticsContainer.exists?(params[:id])
+        return msg.set_false(PackageMessage::NotExit)
+      end
+
+      unless lc.can_update?
+        return msg.set_false(PackageMessage::CannotUpdate)
+      end
+
+      unless destination = Location.find_by_id(params[:destination_id])
+        return msg.set_false(MovableMessage::DestinationNotExist)
+      end
+
+      unless (r = PackageService.dispatch(lc,destination)).result
+        return msg.set_false(r.content)
+      end
+
+      return msg.set_true(MovableMessage::Success)
+    end
   end
 end
