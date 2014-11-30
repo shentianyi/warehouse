@@ -27,6 +27,7 @@ module V1
       }
 
       args[:state] = params[:state] if params[:state]
+      args[:user_id] = current_user.id if params[:all].nil?
 
       if params[:type].nil? || params[:type].to_i == 0
         args[:source_location_id] = current_user.location_id
@@ -294,6 +295,9 @@ module V1
           created_at: (created_at.beginning_of_day..created_at.end_of_day),
           source_location_id: current_user.location_id
       }
+
+      args[:user_id] = current_user.id if params[:all].nil?
+
       {result: 1, content: DeliveryPresenter.init_json_presenters(DeliveryService.get_list(args).all)}
     end
   end
