@@ -1,17 +1,18 @@
 <div class="panel-heading panel-warning">
-  <h2>Reports</h2>
-  Different kind of reports you want see.
+  <h2>报表</h2>
+ 不同类型的统计报表.
 </div>
 <!--Form-->
 <form method="get" path="<%= reports_reports_path%>">
 <input type="hidden" id="file" name="file" value="<%=@jsonfile%>">
-<input type="submit" value="Go" class="btn btn-warning" name="commit" onclick="submitForm()"/>
-<span class="label label-info">Report Type:</span>
+<input type="submit" value="生成" class="btn btn-warning" name="commit" onclick="submitForm()"/>
+<span class="label label-info">报表类型:</span>
 <%= select_tag(:type,options_for_select(ReportType.list,@type),include_blank: false)%>
-<span class="label label-info">Location:</span>
+<span class="label label-info">地点:</span>
 <%= select_tag(:location_id, options_for_select(Location.list_menu(current_user), @location_id), include_blank: false) %>
-<span class="label label-info">Report With:</span>
-<%= select_tag :format, options_for_select([["Web", "html"],["Excel File(MS 07 or later)", "xlsx"],["CSV File", "csv"]], "html") %>
+<span class="label label-info">显示方式:</span>
+<%= select_tag :format, options_for_select([["Web", "html"],["Excel File(MS 07 or later)", "xlsx"]], "html") %>
+  <span class="label label-info">创建时间:</span>
 <input id="date-start" type="text" name="date_start" class="datepicker" value="<%= @date_start %>"/>
 ~ <input id="date-end" type="text" name="date_end" class="datepicker" value="<%= @date_end %>"/>
 </form>
