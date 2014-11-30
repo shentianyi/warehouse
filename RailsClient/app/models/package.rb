@@ -44,11 +44,14 @@ class Package<Container
     return condition
   end
 
-  def self.generate_report_date(condition)
+  def self.generate_report_data(condition)
     #零件号，总数，箱数，部门(部门如何获得？)
-    joins({logistics_containers: :records}).where(condition)
-    .select("containers.part_id as pid,SUM(containers.quantity) as count, COUNT(containers.id) as box")
-    .group("pid")
+    a = LogisticsContainer.joins(:records,:package)
+        .where(condition)
+        .select("containers.part_id as part_id,SUM(containers.quantity) as count, COUNT(containers.id) as box")
+        .group("part_id")
+    puts a.first.to_json
+    a
   end
 
   def self.to_xlsx packages
