@@ -49,6 +49,8 @@ class LogisticsContainerService
   end
 
   def self.get_forklifts(lc)
+    #puts "======"
+    #puts lc.class
     lc.descendants.joins(:forklift)
   end
 

@@ -23,7 +23,9 @@ class LogisticsContainersController < ApplicationController
 
     hash_conditions = {}
 
-    joins.zip(args).each do |table,arg|
+    res = joins.zip(args)
+
+    res.each do |table,arg|
       condition = params[arg.to_sym]
       condition.each do |k,v|
         if (v.is_a?(Fixnum) || v.is_a?(String)) && !v.blank?

@@ -24,7 +24,8 @@
         </span>
       </div>
       <div>
-        <input type="hidden" name="model" value="forklift"/>
+        <input type="hidden" value="forklift" name="model"/>
+        <input type="hidden" value="records" name="tables"/><!--使用分号隔开，这里的表应该与上面的参数一致-->
         <input type="submit" value="查找" class="btn btn-primary" name="search"/>
         <!--<input type="submit" value="下载为Excel" class="btn btn-primary" data-confirm="Are you sure?" name="download"/>-->
       </div>
@@ -70,7 +71,7 @@
               <%= link_to forklift.parent.container_id,delivery_path(forklift.parent),:class=>'btn btn-default' if forklift.parent%>
         </td>
         <td><%= forklift.create_info %></td>
-        <td><%= forklift.destinationable.name%></td>
+        <td><%= forklift.destinationable.name if forklift.destinationable%></td>
         <td><%= forklift.remark %></td>
         <td>
           <%= link_to fpresenter.packages.count, packages_forklift_path(forklift), :class=>'btn btn-default' %>

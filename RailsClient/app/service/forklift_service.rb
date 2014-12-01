@@ -13,6 +13,20 @@ class ForkliftService
     return Message.new.set_true
   end
 
+  def self.receive(lc,user)
+    unless (m = lc.get_movable_service.receive(lc,user)).result
+      return m
+    end
+
+    lc.descendants.each {|d|
+      unless (m = d.get_movable_service.receive(d,user)).result
+        return m
+      end
+    }
+
+    return Message.new.set_true
+  end
+
   def self.create args, user
     msg = Message.new
     whouse=nil
