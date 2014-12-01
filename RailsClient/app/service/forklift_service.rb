@@ -23,6 +23,14 @@ class ForkliftService
     return msg
   end
 
+  def self.confirm_receive(lc,current_user)
+    unless (m = lc.get_movable_service.check(lc,user)).result
+      return m
+    end
+
+    return Message.new.set_true
+  end
+
 
   def self.search(conditions)
     LogisticsContainer.joins(:forklift).where(conditions)
