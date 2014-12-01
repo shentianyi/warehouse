@@ -46,7 +46,7 @@ module V1
         args[:des_location_id] = current_user.location_id
       end
 
-      PackagePresenter.init_json_presenters(PackageService.search(arg).order(created_at: :desc).all)
+      PackagePresenter.init_json_presenters(PackageService.search(args).order(created_at: :desc).all)
     end
 
     # validate package id
