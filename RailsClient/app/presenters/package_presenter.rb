@@ -1,5 +1,5 @@
 class PackagePresenter<Presenter
-  Delegators=[:id, :container_id, :user_id, :whouse_id, :state, :part_id, :quantity, :fifo_time, :custom_quantity, :custom_fifo_time]
+    Delegators=[:id, :container_id, :user_id, :whouse_id, :state, :part_id,:part_id_display, :quantity,:quantity_display, :fifo_time,:fifo_time_display, :custom_quantity, :custom_fifo_time]
   def_delegators :@package, *Delegators
 
   def initialize(package)
@@ -20,15 +20,15 @@ class PackagePresenter<Presenter
     end
   end
 
-  def self.part_id_display
+  def part_id_display
     @package.part_id_display || ''
   end
 
-  def self.quantity_display
+  def quantity_display
     @package.quantity_display || ''
   end
 
-  def self.fifo_time_display
+  def fifo_time_display
     @package.fifo_time_display || ''
   end
 
