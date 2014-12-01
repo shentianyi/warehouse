@@ -21,7 +21,7 @@ module V1
     get :binds do
       packages = PackageService.get_bind_packages_by_location(current_user.location_id, (current_user.id if params.has_key?(:all)))
 
-      PackagePresenter.init_json_presenters(packages, false)
+      PackageLazyPresenter.init_json_presenters(packages)
     end
 
     #get packages by created_at time and state
@@ -31,7 +31,7 @@ module V1
     #@type
     #@parent
     get :get_by_time_and_state do
-      start_time = params[:start_time].nil? ? 12.hour.ago : params[:start_time]
+      start_time = params[:start_time].nil? ? 24.hour.ago : params[:start_time]
       end_time = params[:end_time].nil? ? Time.now : params[:end_time]
       args = {
           created_at: (start_time..end_time),
@@ -39,14 +39,14 @@ module V1
       args[:state] = params[:state] if params[:state]
       args[:user_id] = current_user.id if params[:all].nil?
 
-      if params[:type].nil? || params[:type] == 0
-        args[:source_location_id] = current_user.location_id
+      if params[:type].nil? || params[:type].to_i == 0
+        args[:source_location_id] = [current_user.location_id,nil]
         args[:user_id] = current_user.id
       else
         args[:des_location_id] = current_user.location_id
       end
 
-      PackagePresenter.init_json_presenters(PackageService.search(args).order(created_at: :desc).all)
+      PackageLazyPresenter.init_json_presenters(PackageService.search(args).order(created_at: :desc).all)
     end
 
     # validate package id

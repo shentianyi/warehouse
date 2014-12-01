@@ -1,4 +1,18 @@
 class ForkliftService
+  def self.dispatch(lc,destination,user)
+    unless (m = lc.get_movable_service.dispatch(lc,destination,user)).result
+      return m
+    end
+
+    lc.descendants.each {|d|
+      unless (m = d.get_movable_service.dispatch(d,destination,user)).result
+        return m
+      end
+    }
+
+    return Message.new.set_true
+  end
+
   def self.create args, user
     msg = Message.new
     whouse=nil

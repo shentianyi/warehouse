@@ -30,7 +30,7 @@ module V1
       args[:user_id] = current_user.id if params[:all].nil?
 
       if params[:type].nil? || params[:type].to_i == 0
-        args[:source_location_id] = current_user.location_id
+        args[:source_location_id] = [current_user.location_id,nil]
         #args[:user_id] = current_user.id
       else
         args[:des_location_id] = current_user.location_id

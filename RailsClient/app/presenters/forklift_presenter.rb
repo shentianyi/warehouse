@@ -20,11 +20,11 @@ class ForkliftPresenter<Presenter
   end
 
   def sum_packages
-    LogisticsContainerService.count_all_packages(self)
+    LogisticsContainerService.count_all_packages(@forklift)
   end
 
   def accepted_packages
-    LogisticsContainerService.count_accepted_packages(self)
+    LogisticsContainerService.count_accepted_packages(@forklift)
   end
 
   def all_packages
@@ -32,7 +32,7 @@ class ForkliftPresenter<Presenter
   end
 
   def packages
-    LogisticsContainerService.get_packages(self)
+    LogisticsContainerService.get_packages(@forklift)
   end
 
   def to_json

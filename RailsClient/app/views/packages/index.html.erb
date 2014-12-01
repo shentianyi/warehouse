@@ -71,10 +71,10 @@
             <td><%= package.container_id%></td>
             <td><%= PackageLabelRegex.part_prefix_string + package.package.part_id%></td>
             <td><%= PackageLabelRegex.quantity_prefix_string + package.package.quantity_str %></td>
-            <td><%= PackageLabelRegex.date_prefix_string + package.package.check_in_time %></td>
+            <td><%= package.package.fifo_time_display %></td>
             <td><%= package.remark %></td>
             <td><%= package.state_display%></td>
-            <td><%= "#{package.parent.destinationable.name} => #{ppresenter.position_nr}" %></td>
+            <td><%= "#{package.parent.destinationable.name} => #{ppresenter.position_nr}" if package.parent%></td>
             <td>
               <%= link_to package.parent.container_id,forklift_path(package.parent),:class => 'btn btn-default' if package.parent %>
             </td>
