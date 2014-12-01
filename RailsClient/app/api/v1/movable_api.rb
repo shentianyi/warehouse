@@ -13,11 +13,11 @@ module V1
 
     get :get_type do
       msg = ApiMessage.new
-      unless lc = LogisticsContainer.exists?(params[:id])
+      unless lc = LogisticsContainer.find_latest_by_container_id(params[:id])
         return msg.set_false(MovableMessage::TargetNotExist)
       end
 
-      msg.set_true({type:lc.container.type,type_display:ContainerType.get_type(lc.container.type)})
+      msg.set_true({type:lc.container.type,type_display:ContainerType.display(lc.container.type)})
     end
 
     #not a good api set remove

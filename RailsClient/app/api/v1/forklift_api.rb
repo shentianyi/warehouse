@@ -221,16 +221,52 @@ module V1
     end
 
     post :send do
+      msg = ApiMessage.new
 
+      unless lc = LogisticsContainer.exists?(params[:id])
+        return msg.set_false(MovableMessage::TargetNotExist)
+      end
+
+      unless lc.can_update?
+        return msg.set_false(ForkliftMessage::CannotUpdate)
+      end
+
+      unless destination = Location.find_by_id(params[:destination_id])
+        return msg.set_false(MovableMessage::DestinationNotExist)
+      end
+
+      unless (r = ForkliftService.dispatch(lc,destination,current_user)).result
+        return msg.set_false(r.content)
+      end
+
+      return msg.set_true(MovableMessage::Success)
     end
 
     post :receive do
+      #这里的id其实是container_id，因为扫描的是运单号
+      unless f = LogisticsContainer.find_latest_by_container_id(params[:id])
+        return {return: 0, content: MovableMessage::TargetNotExist}
+      end
 
+      #*own implementation of receive
+      if (r = ForkliftService.receive(f,current_user)).result
+        {result: 1, content: ForkliftPresenter.new(f).to_json}
+      else
+        {result: 0, content: r.content}
+      end
     end
 
-    #结束接收
-    post :end_receive do
+    #确认接收
+    post :confirm_receive do
+      unless lc = LogisticsContainer.exists?(params[:id])
+        return {result: 0, content: DeliveryMessage::NotExit}
+      end
 
+      unless (m = ForkliftService.confirm_receive(d,current_user)).result
+        return {result:0,content: DeliveryMessage::ReceiveFailed}
+      end
+
+      return {result:1,content: DeliveryMessage::ReceiveSuccess}
     end
   end
 end

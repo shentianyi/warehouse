@@ -22,6 +22,8 @@ class RegexCategoryPresenter<Presenter
   def to_json(with_regex=false)
     {
         id: self.id,
+        type: self.type,
+        type_name: RegexType.display(self.type),
         name: self.name,
         desc: self.desc,
         regexes: with_regex ? RegexPresenter.init_json_presenters(self.regexes) : []

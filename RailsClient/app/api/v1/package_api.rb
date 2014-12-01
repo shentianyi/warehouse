@@ -152,6 +152,20 @@ module V1
       end
     end
 
+    post :receive do
+      msg = ApiMessage.new
+      unless p = LogisticsContainer.find_latest_by_container_id(params[:id])
+        return msg.set_false(MovableMessage::TargetNotExist)
+      end
+
+      if(r = PackageService.receive(p,current_user)).result
+        return msg.set_true(PackageLazyPresenter.new(p).to_json)
+      else
+        msg.set_false(r.content)
+      end
+
+    end
+
     post :send do
       msg = ApiMessage.new
 
@@ -167,11 +181,20 @@ module V1
         return msg.set_false(MovableMessage::DestinationNotExist)
       end
 
-      unless (r = PackageService.dispatch(lc,destination)).result
+      unless (r = PackageService.dispatch(lc,destination,current_user)).result
         return msg.set_false(r.content)
       end
 
       return msg.set_true(MovableMessage::Success)
+    end
+
+    #确认接收
+    post :confirm_receive do
+      unless lc = LogisticsContainer.exists?(params[:id])
+        return {result: 0, content: DeliveryMessage::NotExit}
+      end
+
+      return {result:1,content: DeliveryMessage::ReceiveSuccess}
     end
   end
 end
