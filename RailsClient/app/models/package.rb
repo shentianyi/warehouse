@@ -28,6 +28,32 @@ class Package<Container
     self.quantity.to_s
   end
 
+  def self.generate_report_condition(type,start_t,end_t,location_id)
+    #joins({logistics_containers: :records})
+    condition = {}
+    condition["records.impl_time"] = start_t..end_t
+    case type.to_i
+      when ReportType::Entry
+        condition["records.impl_user_type"] = ImplUserType::RECEIVER
+        condition["location_containers.des_location_id"] = location_id
+      when ReportType::Removal
+        condition["records.impl_user_type"] = ImplUserType::SENDER
+        condition["location_containers.source_location_id"] = location_id
+      when ReportType::Discrepancy
+    end
+    return condition
+  end
+
+  def self.generate_report_data(condition)
+    #零件号，总数，箱数，部门(部门如何获得？)
+    a = LogisticsContainer.joins(:records,:package)
+        .where(condition)
+        .select("containers.part_id as part_id,SUM(containers.quantity) as count, COUNT(containers.id) as box")
+        .group("part_id")
+    puts a.first.to_json
+    a
+  end
+
   def self.to_xlsx packages
     p = Axlsx::Package.new
     wb = p.workbook

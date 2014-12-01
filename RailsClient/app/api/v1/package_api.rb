@@ -37,6 +37,7 @@ module V1
           created_at: (start_time..end_time),
       }
       args[:state] = params[:state] if params[:state]
+      args[:user_id] = current_user.id if params[:all].nil?
 
       if params[:type].nil? || params[:type] == 0
         args[:source_location_id] = current_user.location_id
@@ -149,6 +150,28 @@ module V1
       else
         msg.set_false(r.content)
       end
+    end
+
+    post :send do
+      msg = ApiMessage.new
+
+      unless lc = LogisticsContainer.exists?(params[:id])
+        return msg.set_false(PackageMessage::NotExit)
+      end
+
+      unless lc.can_update?
+        return msg.set_false(PackageMessage::CannotUpdate)
+      end
+
+      unless destination = Location.find_by_id(params[:destination_id])
+        return msg.set_false(MovableMessage::DestinationNotExist)
+      end
+
+      unless (r = PackageService.dispatch(lc,destination)).result
+        return msg.set_false(r.content)
+      end
+
+      return msg.set_true(MovableMessage::Success)
     end
   end
 end

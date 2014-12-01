@@ -6,38 +6,21 @@ class ReportsController < ApplicationController
     @date_end = params[:date_end].nil? ? Time.now.strftime("%Y-%m-%d 7:00") : params[:date_end]
     @location_id = params[:location_id].nil? ? current_user.location_id : params[:location_id]
     @title = ''
-    case @type.to_i
-      when ReportType::Entry
-        @title = 'Entry Report'
-      when ReportType::Removal
-        @title = 'Removal Report'
-      when ReportType::Discrepancy
-        @title = 'Discrepancy Report'
-    end
-    #generate condition
-    condition = Package.generate_report_condition(@type, @date_start, @date_end, @location_id)
-    @packages = Package.search(condition)
-    if @type.to_i == ReportType::Discrepancy
 
-    end
+    condition = Package.generate_report_condition(@type,@date_start,@date_end,@location_id)
+    @packages = Package.generate_report_data(condition)
+    render :json=> @packages
 
-    filename = "#{Location.find_by_id(@location_id).name}#{@title}_#{@date_start}_#{@date_end}"
-
+=begin
     respond_to do |format|
-      format.csv do
-        send_data(Package.export_to_csv(@packages),
-                  :type => "text/csv;charset=utf-8; header=present",
-                  :filename => filename+".csv")
-      end
-
       format.xlsx do
-        send_data(Package.export_to_xlsx(@packages),
-                  :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
-                  :filename => filename+".xlsx"
-        )
+        send_data(entry_with_xlsx(@packages),
+            :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+            :filename => "测试报表.xlsx")
       end
       format.html
     end
+=end
   end
 
   def entry_report
@@ -350,6 +333,7 @@ class ReportsController < ApplicationController
   end
 
   def entry_with_xlsx packages
+=begin
     p = Axlsx::Package.new
     wb = p.workbook
     wb.add_worksheet(:name => "Basic Sheet") do |sheet|
@@ -364,6 +348,21 @@ class ReportsController < ApplicationController
                           p.rdate.nil? ? '' : p.rdate.localtime.to_formatted_s(:db),
                           p.receover_id.nil? ? '' : User.find_by_id(p.receover_id).name,
                           p.state == PackageState::RECEIVED ? "是" : "否"
+                      ], :types => [:string]
+      }
+    end
+=end
+
+    p = Axlsx::Package.new
+    wb = p.workbook
+    wb.add_worksheet(:name => "Basic Sheet") do |sheet|
+      sheet.add_row entry_header
+      packages.each_with_index { |p, index|
+        sheet.add_row [
+                          index+1,
+                          p.pid,
+                          p.count,
+                          p.box
                       ], :types => [:string]
       }
     end
@@ -449,7 +448,7 @@ class ReportsController < ApplicationController
   end
 
   def entry_header
-    ["编号", "零件号", "总数", "箱数", "部门", "创建时间", "收货人", "已接收"]
+    ["编号", "零件号", "总数", "箱数"]
   end
 
   def removal_header

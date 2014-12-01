@@ -46,7 +46,7 @@ end
 start_time = Time.now
 
 #*先创建Delivery
-ds = ODelivery.all.order(created_at: :desc)#.limit(500)
+ds = ODelivery.all.order(created_at: :desc).limit(500)
 
 all = ds.count
 begin
@@ -205,7 +205,7 @@ begin
           p = Package.create({
                                  id: op.id,
                                  quantity: op.quantity,
-                                 quantity_dispaly: "Q#{op.quantity}",
+                                 quantity_display: "Q#{op.quantity}",
                                  user_id: op.user_id,
                                  location_id: op.location_id,
                                  fifo_time: fifo_time,

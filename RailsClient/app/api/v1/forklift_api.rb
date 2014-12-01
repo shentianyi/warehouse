@@ -30,6 +30,7 @@ module V1
       }
 
       args[:state] = params[:state] if params[:state]
+      args[:user_id] = current_user.id if params[:all].nil?
 
       if params[:type].nil? || params[:type] == 0
         args[:source_location_id] = current_user.location_id
@@ -217,6 +218,19 @@ module V1
       else
         {result: 0, content: ForkliftMessage::UpdateFailed}
       end
+    end
+
+    post :send do
+
+    end
+
+    post :receive do
+
+    end
+
+    #结束接收
+    post :end_receive do
+
     end
   end
 end

@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
 
+  resources :storages do
+    collection do
+      get :search
+    end
+  end
+
   resources :regex_categories do
     collection do
       get :regex_template

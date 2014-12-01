@@ -11,6 +11,15 @@ module V1
       end
     end
 
+    get :get_type do
+      msg = ApiMessage.new
+      unless lc = LogisticsContainer.exists?(params[:id])
+        return msg.set_false(MovableMessage::TargetNotExist)
+      end
+
+      msg.set_true({type:lc.container.type,type_display:ContainerType.get_type(lc.container.type)})
+    end
+
     #not a good api set remove
 =begin
     post :dispatch do
