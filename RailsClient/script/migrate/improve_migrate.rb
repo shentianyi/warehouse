@@ -46,7 +46,7 @@ end
 start_time = Time.now
 
 #*先创建Delivery
-ds = ODelivery.all.order(created_at: :desc)#.limit(500)
+ds = ODelivery.all.order(created_at: :desc).limit(500)
 
 all = ds.count
 begin
@@ -205,17 +205,22 @@ begin
           p = Package.create({
                                  id: op.id,
                                  quantity: op.quantity,
+                                 quantity_display: "Q#{op.quantity}",
                                  user_id: op.user_id,
                                  location_id: op.location_id,
                                  fifo_time: fifo_time,
+                                 fifo_time_display: "W  #{op.check_in_time}",
                                  part_id: op.part_id,
+                                 part_id_display: "P#{op.part_id}",
                                  created_at: op.created_at,
                                  updated_at: op.updated_at,
                                  is_delete:op.is_delete,
                                  is_new:op.is_new,
                                  is_dirty:op.is_dirty
                              })
+          #
           plc = p.logistics_containers.build({source_location_id: op.location_id, user_id: op.user_id})
+          plc.destinationable = PartService.get_position_by_whouse_id(op.part_id,flc.destinationable_id)
           plc.des_location_id = destination.id if destination
 
           case op.state

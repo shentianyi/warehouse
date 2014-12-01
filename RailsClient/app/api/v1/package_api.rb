@@ -6,7 +6,8 @@ module V1
     #strong parameters
     helpers do
       def package_params
-        ActionController::Parameters.new(params).require(:package).permit(:id, :part_id, :quantity_str, :check_in_time)
+        ActionController::Parameters.new(params).require(:package).permit(:id, :part_id, :part_id_display, :quantity, :quantity_display,
+                                                                          :custom_fifo_time, :fifo_time_display)
       end
     end
 
@@ -18,9 +19,9 @@ module V1
     #@deprecated
     #use api get_by_time_and_state instead
     get :binds do
-      packages = PackageService.get_bind_packages_by_location(current_user.location_id,(current_user.id if params.has_key?(:all)))
+      packages = PackageService.get_bind_packages_by_location(current_user.location_id, (current_user.id if params.has_key?(:all)))
 
-      PackagePresenter.init_json_presenters(packages,false)
+      PackagePresenter.init_json_presenters(packages, false)
     end
 
     #get packages by created_at time and state
@@ -35,7 +36,8 @@ module V1
       args = {
           created_at: (start_time..end_time),
       }
-      args[:state] =  params[:state] if params[:state]
+      args[:state] = params[:state] if params[:state]
+      args[:user_id] = current_user.id if params[:all].nil?
 
       if params[:type].nil? || params[:type] == 0
         args[:source_location_id] = current_user.location_id
@@ -61,9 +63,9 @@ module V1
     #validate package id
     get :validate_id do
       if Package.id_valid?(params[:id])
-        {result: 1,content: ''}
+        {result: 1, content: ''}
       else
-        {result: 0,content: PackageMessage::IdNotValid}
+        {result: 0, content: PackageMessage::IdNotValid}
       end
     end
 
@@ -115,7 +117,7 @@ module V1
       unless  p = LogisticsContainer.exists?(params[:id])
         return msg.set_false(MovableMessage::TargetNotExist)
       end
-      if (r = p.get_movable_service.check(p,current_user)).result
+      if (r = p.get_movable_service.check(p, current_user)).result
         return msg.set_true(r.content)
       else
         return msg.set_false(r.content)
@@ -130,7 +132,7 @@ module V1
       unless  p = LogisticsContainer.exists?(params[:id])
         return msg.set_false(MovableMessage::TargetNotExist)
       end
-      if (r = p.get_movable_service.reject(p,current_user)).result
+      if (r = p.get_movable_service.reject(p, current_user)).result
         return msg.set_true(r.content)
       else
         return msg.set_false(r.content)
@@ -143,11 +145,33 @@ module V1
         return msg.set_false(MovableMessage::TargetNotExist)
       end
 
-      if(r = p.get_movable_service.reject(p,current_user)).result
+      if (r = p.get_movable_service.reject(p, current_user)).result
         msg.set_true(r.content)
       else
         msg.set_false(r.content)
       end
+    end
+
+    post :send do
+      msg = ApiMessage.new
+
+      unless lc = LogisticsContainer.exists?(params[:id])
+        return msg.set_false(PackageMessage::NotExit)
+      end
+
+      unless lc.can_update?
+        return msg.set_false(PackageMessage::CannotUpdate)
+      end
+
+      unless destination = Location.find_by_id(params[:destination_id])
+        return msg.set_false(MovableMessage::DestinationNotExist)
+      end
+
+      unless (r = PackageService.dispatch(lc,destination)).result
+        return msg.set_false(r.content)
+      end
+
+      return msg.set_true(MovableMessage::Success)
     end
   end
 end

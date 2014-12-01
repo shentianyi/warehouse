@@ -8,7 +8,7 @@ module V1
     end
 
     get :labels do
-      RegexPresenter.init_json_presenters(Regex.all)
+      RegexCategoryPresenter.init_json_presenters(RegexCategory.all)
     end
   end
 end

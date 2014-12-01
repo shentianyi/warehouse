@@ -3,11 +3,11 @@ module V1
     namespace :locations
     guard_all!
 
-    get :get_destinations do
+    get :get_all do
       msg = ApiMessage.new
       data = []
-      Location.list.each do |l|
-        data<<{name:l.name,id:l.id,is_default:(l.id == current_user.location_id ? 1 : 0)}
+      current_user.location.location_destinations.each do |l|
+        data<<{name:l.destination.name,id:l.destination_id,is_default:l.is_default? ? 1:0}
       end
       data
     end

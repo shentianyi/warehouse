@@ -30,6 +30,7 @@ module V1
       }
 
       args[:state] = params[:state] if params[:state]
+      args[:user_id] = current_user.id if params[:all].nil?
 
       if params[:type].nil? || params[:type] == 0
         args[:source_location_id] = current_user.location_id
@@ -127,8 +128,11 @@ module V1
       args = {
           id: params[:package_id],
           part_id: params[:part_id],
-          quantity_str: params[:quantity_str],
-          check_in_time: params[:check_in_time]
+          part_id_display: params[:part_id_display],
+          quantity: params[:quantity],
+          quantity_display: params[:quantity_display],
+          custom_fifo_time: params[:fifo_time],
+          fifo_time_display: params[:fifo_time_display]
       }
       #
       res = PackageService.create(args, current_user)
@@ -214,6 +218,19 @@ module V1
       else
         {result: 0, content: ForkliftMessage::UpdateFailed}
       end
+    end
+
+    post :send do
+
+    end
+
+    post :receive do
+
+    end
+
+    #结束接收
+    post :end_receive do
+
     end
   end
 end

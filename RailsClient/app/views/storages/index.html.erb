@@ -1,0 +1,56 @@
+<h2>库存查询</h2>
+<div>
+  <form method="get" action="<%= send('search_storages_path') %>">
+    <div>
+      <div>
+        <span>
+          仓库：
+          <%= select_tag('storage[storable_id]', options_from_collection_for_select(Whouse.all, 'id', 'name', @storable_id), include_blank: true) %>
+        </span>
+        <span>零件号：
+          <input type="text" name="storage[part_id]" value="<%= @part_id %>"/>
+          <input type="hidden" name="storage[part_id_fuzzy]"/>
+        </span>
+         <span>
+          库存量：
+          <input type="text" name="storage[quantity][start]" value="<%= @quantity_start %>"/>
+          ~  <input type="text" name="storage[quantity][end]" value="<%= @quantity_end %>"/>
+        </span>
+
+        <input type="submit" value="查 找" class="btn btn-primary"/>
+
+      </div>
+      <input type="hidden" value="storage" name="model"/>
+    </div>
+  </form>
+</div>
+
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @storages %>
+  </div>
+  <%= will_paginate @storages, :container => false %>
+</div>
+<table class="table table-striped table-condensed table-hover">
+  <thead>
+  <tr>
+    <th>NO.</th>
+    <th>零件号</th>
+    <th>库存量</th>
+    <th>仓库</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @storages.each_with_index do |storage, i| %>
+      <tr>
+        <td><%= i+@storages.offset+1 %></td>
+        <td><%= storage.part_id %></td>
+        <td><%= storage.quantity %></td>
+        <td><%= storage.storable_id %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+<div class="digg_pagination">
+  <%= will_paginate @storages, :container => false %>
+</div>

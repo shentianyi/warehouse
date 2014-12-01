@@ -10,6 +10,7 @@ module Sync
       current=Time.now
       begin
         Sync::Execute::LocationSync.sync
+        Sync::Execute::LocationContainerSync.sync
         Sync::Execute::HackerSync.sync
         Sync::Execute::WhouseSync.sync
         Sync::Execute::PartTypeSync.sync
@@ -40,6 +41,17 @@ module Sync
 
       begin
         Sync::Execute::StorageSync.sync
+      rescue => e
+        no_error=false
+        puts "[#{Time.now.localtime}][ERROR]"
+        puts e.class
+        puts e.to_s
+        puts e.backtrace
+      end
+
+      begin
+        Sync::Execute::RegexCategorySync.sync
+        Sync::Execute::RegexSync.sync
       rescue => e
         no_error=false
         puts "[#{Time.now.localtime}][ERROR]"

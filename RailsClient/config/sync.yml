@@ -49,6 +49,18 @@ sync:
       post: true
       put: true
       delete: true
+    regex_category:
+      name: "正则类别"
+      get: true
+      post: true
+      put: true
+      delete: true
+    regex:
+      name: "正则项"
+      get: true
+      post: true
+      put: true
+      delete: true
     container:
       name: "容器"
       get: true

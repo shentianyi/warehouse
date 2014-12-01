@@ -21,9 +21,9 @@ module Printer
       packages=PackagePresenter.init_presenters(LogisticsContainerService.get_packages_with_detail(f, 'part_id,container_id'))
       packages.each do |p|
         body={package_id: p.container_id,
-              part_id: p.part_id,
-              quantity: p.quantity_str,
-              w_date: p.fifo_time_str,
+              part_id: p.part_id_display,
+              quantity: p.quantity_display,
+              w_date: p.fifo_time_display,
               receive_position: p.position_nr}
         bodies=[]
         BODY.each do |k|
