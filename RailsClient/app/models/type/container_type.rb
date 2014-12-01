@@ -6,4 +6,15 @@ class ContainerType
   def self.get_type(type)
     self.const_get(type.upcase)
   end
+
+  def self.display(type)
+    case type
+      when PACKAGE
+        'package'
+      when FORKLIFT
+        'forklift'
+      when DELIVERY
+        'delivery'
+    end
+  end
 end

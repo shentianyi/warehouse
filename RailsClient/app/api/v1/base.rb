@@ -15,5 +15,6 @@ module V1
     mount MovableAPI
     mount LocationAPI
     mount StorageAPI
+    mount MovableAPI
   end
 end
