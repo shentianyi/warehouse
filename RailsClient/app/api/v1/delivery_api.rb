@@ -27,15 +27,16 @@ module V1
       }
 
       args[:state] = params[:state] if params[:state]
-      args[:user_id] = current_user.id if params[:all].nil?
+
 
       if params[:type].nil? || params[:type].to_i == 0
         args[:source_location_id] = [current_user.location_id,nil]
         #args[:user_id] = current_user.id
+        args[:user_id] = current_user.id if params[:all].nil?
       else
         args[:des_location_id] = current_user.location_id
       end
-
+      args[:ancestry]= nil unless params.has_key? :all
       #数据量太大，最多只支持50个运单
       {result: 1, content: DeliveryPresenter.init_json_presenters(DeliveryService.search(args).order(created_at: :desc).limit(50))}
     end

@@ -30,16 +30,17 @@ module V1
       }
 
       args[:state] = params[:state] if params[:state]
-      args[:user_id] = current_user.id if params[:all].nil?
 
       if params[:type].nil? || params[:type].to_i == 0
         args[:source_location_id] = [current_user.location_id,nil]
-        args[:user_id] = current_user.id
+        args[:user_id] = current_user.id if params[:all].nil?
       else
         args[:des_location_id] = current_user.location_id
       end
 
-      ForkliftPresenter.init_json_presenters(ForkliftService.search(args).order(created_at: :desc).all)
+      args[:ancestry]= nil unless params.has_key? :all
+
+      {result:1,content:ForkliftPresenter.init_json_presenters(ForkliftService.search(args).order(created_at: :desc).all)}
     end
 
     # create forklift
