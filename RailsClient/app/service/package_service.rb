@@ -2,7 +2,7 @@ class PackageService
   #=============
   #dispatch
   #=============
-  def self.dispatch lc,destination,user
+    ActiveRecord::Base.transaction do
     unless (m = lc.get_movable_service.dispatch(lc,destination,user)).result
       return m
     end

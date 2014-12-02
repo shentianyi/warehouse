@@ -1,44 +1,51 @@
 class DeliveryService
 
-  def self.dispatch(movable,destination,user)
-    unless (m = movable.get_movable_service.dispatch(movable,destination,user)).result
-      return m
-    end
-
-    movable.descendants.each {|d|
-      unless (m = d.get_movable_service.dispatch(d,destination,user)).result
+  def self.dispatch(movable, destination, user)
+    ActiveRecord::Base.transaction do
+      unless (m = movable.get_movable_service.dispatch(movable, destination, user)).result
         return m
       end
-    }
-    return Message.new.set_true
+
+      movable.descendants.each { |d|
+        unless (m = d.get_movable_service.dispatch(d, destination, user)).result
+          return m
+        end
+      }
+
+      return Message.new.set_true
+    end
   end
 
-  def self.receive(movable,user)
-    unless (m = movable.get_movable_service.receive(movable,user)).result
-      return m
-    end
-
-    movable.descendants.each {|d|
-      unless (m = d.get_movable_service.receive(d,user)).result
+  def self.receive(movable, user)
+    ActiveRecord::Base.transaction do
+      unless (m = movable.get_movable_service.receive(movable, user)).result
         return m
       end
-    }
-    return Message.new.set_true
+
+      movable.descendants.each { |d|
+        unless (m = d.get_movable_service.receive(d, user)).result
+          return m
+        end
+      }
+      return Message.new.set_true
+    end
   end
 
   #兼容以前的接口
-  def self.confirm_receive movable,user
-    unless (m = movable.get_movable_service.check(movable,user)).result
-      return m
-    end
-
-    #设置forklift的状态
-    movable.children.each {|c|
-      unless (m = c.get_movable_service.check(c,user)).result
+  def self.confirm_receive movable, user
+    ActiveRecord::Base.transaction do
+      unless (m = movable.get_movable_service.check(movable, user)).result
         return m
       end
-    }
-    return Message.new.set_true
+
+      #设置forklift的状态
+      movable.children.each { |c|
+        unless (m = ForkliftService.confirm_receive(c,user)).result
+          return m
+        end
+      }
+      return Message.new.set_true
+    end
   end
 
   def self.create args, user
@@ -47,8 +54,8 @@ class DeliveryService
       delivery=Delivery.new(remark: args[:remark], user_id: user.id, location_id: user.location_id)
       if delivery.save
         lc=delivery.logistics_containers.build(source_location_id: user.location_id, user_id: user.id, remark: args[:remark])
-       # lc.destinationable=user.location.destination
-       # lc.des_location_id=user.location.destination.id
+        # lc.destinationable=user.location.destination
+        # lc.des_location_id=user.location.destination.id
 
         lc.save
         msg.result=true
@@ -72,7 +79,7 @@ class DeliveryService
     msg=Message.new
     begin
       ActiveRecord::Base.transaction do
-        Sync::Config.skip_muti_callbacks([Container, LogisticsContainer,Record])
+        Sync::Config.skip_muti_callbacks([Container, LogisticsContainer, Record])
         data=JSON.parse(IO.read(path))
 
         msg.result =true
@@ -107,20 +114,20 @@ class DeliveryService
         book.default_sheet=book.sheets.first
         return nil if book.cell(2, 1).nil?
         # generate delivery
-        user = User.find_by_id(book.cell(2,1))
+        user = User.find_by_id(book.cell(2, 1))
 
         unless user
           raise 'User not found!'
         end
         # generate delivery container
-        source = Location.find_by_id(book.cell(2,2))
+        source = Location.find_by_id(book.cell(2, 2))
 
         unless source
           raise 'Destination not found!'
         end
 
         delivery = Delivery.create({
-                                       remark: book.cell(2,5),
+                                       remark: book.cell(2, 5),
                                        user_id: user.id,
                                        location_id: source.id
                                    })
@@ -131,12 +138,12 @@ class DeliveryService
         unless destination
           raise 'Destination not found!'
         end
-        dlc = delivery.logistic_containers.build(source_location_id:source.id,des_location_id:destination.id,user_id:user.id,remark:book.cell(2,5),state:MovableState::WAY)
+        dlc = delivery.logistic_containers.build(source_location_id: source.id, des_location_id: destination.id, user_id: user.id, remark: book.cell(2, 5), state: MovableState::WAY)
         dlc.destinationable = destination
         dlc.save
         # send dlc,create record for dlc
         impl_time = Time.parse(book.cell(2, 4))
-        Record.create({recordable:dlc,destiationable:dlc.destinationable,impl_id:user.id,impl_user_type: ImplUserType::SENDER,impl_action:'dispatch',impl_time:impl_time})
+        Record.create({recordable: dlc, destiationable: dlc.destinationable, impl_id: user.id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
         # generate forklifts containers
         forklifts={}
         book.default_sheet=book.sheets[1]
@@ -155,15 +162,15 @@ class DeliveryService
           delivery.forklifts<<forklift
 =end
           forklift = Forklift.create({
-                                         user_id:user.id,
-                                         location_id:source.id
+                                         user_id: user.id,
+                                         location_id: source.id
                                      })
           #create forklift lc
-          flc = forklift.logistics_containers.build({source_location_id:source.id,des_location_id:destination.id,user_id:user.id,state: MovableState::WAY})
+          flc = forklift.logistics_containers.build({source_location_id: source.id, des_location_id: destination.id, user_id: user.id, state: MovableState::WAY})
           flc.destinationable = whouse
           flc.save
           #impl_time = Time.parse(book.cell(2, 4))
-          Record.create({recordable:flc,destiationable:flc.destinationable,impl_id:user.id,impl_user_type: ImplUserType::SENDER,impl_action:'dispatch',impl_time:impl_time})
+          Record.create({recordable: flc, destiationable: flc.destinationable, impl_id: user.id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
 
           dlc.add(flc)
 
@@ -179,24 +186,24 @@ class DeliveryService
           else
             #create container
             package = Package.create({
-                                         user_id:user.id,
-                                         location_id:source.id
+                                         user_id: user.id,
+                                         location_id: source.id
                                      })
             #create lc
             #*王松修改了package check_in_time之后，需要重新写
             plc = package.logistics_containers.build({
-                                                         source_location_id:source.id,
-                                                         des_location_id:destination.id,
-                                                         user_id:user.id,
+                                                         source_location_id: source.id,
+                                                         des_location_id: destination.id,
+                                                         user_id: user.id,
                                                          state: MovableState::WAY,
-                                                         part_id:bool.cell(row,3).sub(/P/,''),
-                                                         quantity: bool.cell(row,4).sub(/Q/,''),
-                                                         check_in_time: book.cell(row,5).sub(/W\s*/,'')
+                                                         part_id: bool.cell(row, 3).sub(/P/, ''),
+                                                         quantity: bool.cell(row, 4).sub(/Q/, ''),
+                                                         check_in_time: book.cell(row, 5).sub(/W\s*/, '')
                                                      })
-            plc.destinationable = PartService.get_position_by_whouse_id(op.part_id,flc.destinationable_id)
+            plc.destinationable = PartService.get_position_by_whouse_id(op.part_id, flc.destinationable_id)
             plc.save
             #impl_time = Time.parse(book.cell(2, 4))
-            Record.create({recordable:plc,destiationable:plc.destinationable,impl_id:user.id,impl_user_type: ImplUserType::SENDER,impl_action:'dispatch',impl_time:impl_time})
+            Record.create({recordable: plc, destiationable: plc.destinationable, impl_id: user.id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
             forklifts[book.cell(row, 1)].add(plc)
           end
 
@@ -241,17 +248,17 @@ class DeliveryService
         book.default_sheet=book.sheets.first
         return nil if book.cell(2, 1).nil?
 
-        default_receiver = User.where({role_id:Role.sender}).first
+        default_receiver = User.where({role_id: Role.sender}).first
 
         2.upto(book.last_row) do |row|
-          if plc = LogisticsContainer.find_latest_by_container_id(book.cell(2,1))
-            plc.get_movable_service.receive(plc,default_receiver)
+          if plc = LogisticsContainer.find_latest_by_container_id(book.cell(2, 1))
+            plc.get_movable_service.receive(plc, default_receiver)
 
             if  flc = plc.parent
-              flc.get_movable_service.receive(flc,default_receiver)
+              flc.get_movable_service.receive(flc, default_receiver)
 
               if dlc = flc.parent
-                dlc.get_movable_service.receive(dlc,default_receiver)
+                dlc.get_movable_service.receive(dlc, default_receiver)
               end
             end
           end

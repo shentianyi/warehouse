@@ -1,30 +1,52 @@
 class ForkliftService
-  def self.dispatch(lc,destination,user)
-    unless (m = lc.get_movable_service.dispatch(lc,destination,user)).result
-      return m
-    end
-
-    lc.descendants.each {|d|
-      unless (m = d.get_movable_service.dispatch(d,destination,user)).result
+  def self.dispatch(lc, destination, user)
+    ActiveRecord::Base.transaction do
+      unless (m = lc.get_movable_service.dispatch(lc, destination, user)).result
         return m
       end
-    }
 
-    return Message.new.set_true
+      lc.descendants.each { |d|
+        unless (m = d.get_movable_service.dispatch(d, destination, user)).result
+          return m
+        end
+      }
+
+      return Message.new.set_true
+    end
   end
 
-  def self.receive(lc,user)
-    unless (m = lc.get_movable_service.receive(lc,user)).result
-      return m
-    end
-
-    lc.descendants.each {|d|
-      unless (m = d.get_movable_service.receive(d,user)).result
+  def self.receive(lc, user)
+    ActiveRecord::Base.transaction do
+      unless (m = lc.get_movable_service.receive(lc, user)).result
         return m
       end
-    }
 
-    return Message.new.set_true
+      lc.descendants.each { |d|
+        unless (m = d.get_movable_service.receive(d, user)).result
+          return m
+        end
+      }
+
+      return Message.new.set_true
+    end
+  end
+
+  def self.confirm_receive(lc, user)
+    ActiveRecord::Base.transaction do
+      unless (m = lc.get_movable_service.check(lc, user)).result
+        return m
+      end
+
+      lc.descendants.each{|d|
+        if d.state == MovableState::WAY
+          unless (m = d.get_movable_service.reject(d,user)).result
+            return m
+          end
+        end
+      }
+
+      return Message.new.set_true
+    end
   end
 
   def self.create args, user
@@ -51,13 +73,7 @@ class ForkliftService
     return msg
   end
 
-  def self.confirm_receive(lc,user)
-    unless (m = lc.get_movable_service.check(lc,user)).result
-      return m
-    end
 
-    return Message.new.set_true
-  end
 
 
   def self.search(conditions)
