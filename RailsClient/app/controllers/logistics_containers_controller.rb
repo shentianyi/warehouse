@@ -12,14 +12,15 @@ class LogisticsContainersController < ApplicationController
     joins = ["location_containers"]
     args  = [model]
 
-    if params[:tables]
-      tables = params[:tables].split(';')
+    #if params[:tables]
+      tables = params[:tables].nil? ? []:params[:tables].split(';')
       (tables - ["container"] + ["#{model}"]).each{|t|
         query = query.joins(t.to_sym)
       }
       joins = joins + tables
       args = args + tables
-    end
+  #end
+
 
     hash_conditions = {}
 
@@ -52,7 +53,7 @@ class LogisticsContainersController < ApplicationController
 
     query=query.where(hash_conditions)
 
-    instance_variable_set("@#{model.pluralize}", query.paginate(:page => params[:page]).all)
+    instance_variable_set("@#{model.pluralize}", query.paginate(:page => params[:page]).all.order(created_at: :desc))
     render "#{model.pluralize}/index"
     #render :json => 1
   end
