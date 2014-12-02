@@ -10,6 +10,7 @@ class DeliveriesController < ApplicationController
   # GET /deliveries.json
   def index
     @deliveries= DeliveryService.search(nil).order(created_at: :desc).paginate(:page => params[:page])
+    puts "===================#{@deliveries.first.class}"
   end
 
   # GET /deliveries/1
@@ -48,6 +49,11 @@ class DeliveriesController < ApplicationController
     #need to update
     respond_to do |format|
       if @delivery.update(delivery_params)
+
+        if delivery_params.has_key? :state
+          @delivery.descendants.each{|d| d.update({state: delivery_params[:state]})}
+        end
+
         # 注意修改了状态的后果
         format.html { redirect_to delivery_url(@delivery), notice: '运单更新成功.' }
         format.json { render :show, status: :ok, location: @delivery }

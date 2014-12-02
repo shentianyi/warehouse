@@ -51,7 +51,7 @@ class ForkliftService
     return msg
   end
 
-  def self.confirm_receive(lc,current_user)
+  def self.confirm_receive(lc,user)
     unless (m = lc.get_movable_service.check(lc,user)).result
       return m
     end

@@ -262,7 +262,7 @@ module V1
         return {result: 0, content: DeliveryMessage::NotExit}
       end
 
-      unless (m = ForkliftService.confirm_receive(d,current_user)).result
+      unless (m = ForkliftService.confirm_receive(lc,current_user)).result
         return {result:0,content: DeliveryMessage::ReceiveFailed}
       end
 

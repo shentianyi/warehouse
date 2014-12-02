@@ -3,6 +3,7 @@ class MovableService
   #dispatch
   def self.dispatch movable,destination,user
     msg = Message.new
+
     begin
       ActiveRecord::Base.transaction do
         movable.des_location_id = destination.id
@@ -24,6 +25,11 @@ class MovableService
   #receive
   def self.receive movable,user
     msg = Message.new
+
+    if movable.state != MovableState.before(MovableState::ARRIVED)
+      return msg.set_true
+    end
+
     begin
       ActiveRecord::Base.transaction do
         unless movable.des_location_id == user.location_id
@@ -47,6 +53,7 @@ class MovableService
   #check
   def self.check movable,user
     msg = Message.new
+
     begin
       ActiveRecord::Base.transaction do
         unless movable.des_location_id == user.location_id
@@ -70,6 +77,7 @@ class MovableService
   #reject
   def self.reject movable,user
     msg = Message.new
+
     begin
       ActiveRecord::Base.transaction do
         unless movable.des_location_id == user.location_id

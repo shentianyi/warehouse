@@ -1,6 +1,7 @@
 class FMovableService < MovableService
-  def self.check(movable,use)
+  def self.check(movable,user)
     msg = Message.new
+
     begin
       ActiveRecord::Base.transaction do
         unless movable.des_location_id == user.location_id
@@ -24,7 +25,8 @@ class FMovableService < MovableService
           raise MovableMessage::ReceiveFailed
         end
 
-        movable.update(current_positionable: movable.destinationable)
+        #movable.update(current_positionable: movable.destinationable)
+        movable.container.update(current_positionable: movable.destinationable)
       end
     rescue Exception => e
       return msg.set_false(e.to_s)

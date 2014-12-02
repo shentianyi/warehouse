@@ -14,7 +14,7 @@ class DeliveryService
   end
 
   def self.receive(movable,user)
-    unless (m = d.get_movable_service.receive(movable,user)).result
+    unless (m = movable.get_movable_service.receive(movable,user)).result
       return m
     end
 
@@ -28,12 +28,12 @@ class DeliveryService
 
   #兼容以前的接口
   def self.confirm_receive movable,user
-    unless (m = d.get_movable_service.check(movable,user)).result
+    unless (m = movable.get_movable_service.check(movable,user)).result
       return m
     end
 
     #设置forklift的状态
-    d.children.each {|c|
+    movable.children.each {|c|
       unless (m = c.get_movable_service.check(c,user)).result
         return m
       end
