@@ -11,13 +11,17 @@ module V1
       end
     end
 
-    get :get_type do
+    post :get_type do
       msg = ApiMessage.new
       unless lc = LogisticsContainer.find_latest_by_container_id(params[:id])
         return msg.set_false(MovableMessage::TargetNotExist)
       end
 
-      msg.set_true({type:lc.container.type,type_display:ContainerType.display(lc.container.type)})
+      if (r = lc.get_service.receive(lc,current_user)).result
+        msg.set_true({type:lc.container.type,type_display:ContainerType.display(lc.container.type),object:lc.presenter.to_json})
+      else
+        msg.set_false(MovableMessage::ReceiveFailed)
+      end
     end
 
     #not a good api set remove

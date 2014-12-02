@@ -1,5 +1,5 @@
 <h1><%= @package.container_id%></h1>
-<% ppresenter = PackageLazyPresenter.new(@package) %>
+<% ppresenter = PackagePresenter.new(@package) %>
 <span class="label label-primary"><%= @package.container_id%></span>
 <h2>基础</h2>
 <h4>零件号: <small><%= PackageLabelRegex.part_prefix_string + @package.package.part_id %></small></h4>

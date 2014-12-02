@@ -160,11 +160,15 @@ module V1
     #create delivery
     #@forklifts : forklift ids
     post do
+      container_ids = []
       if params[:forklifts] && params[:forklifts].length>0
-        unless Forklift.where(id: params[:forklifts]).count == params[:forklifts].length
+        unless (fs = LogisticsContainerService.search({id: params[:forklifts]}).all).count == params[:forklifts].length
           return {result: 0, content: DeliveryMessage::ForkliftHasNotExist}
         end
-        unless LogisticsContainer.are_roots?(params[:forklifts], current_user.location_id)
+
+        container_ids = fs.collect{|f|f.container_id}
+
+        unless LogisticsContainer.are_roots?(container_ids, current_user.location_id)
           return {result: 0, content: DeliveryMessage::ForkliftExistInOthers}
         end
       end
@@ -172,7 +176,7 @@ module V1
       msg = DeliveryService.create(delivery_params, current_user)
 
       if params.has_key?(:forklifts)
-        msg.object.add_by_ids(params[:forklifts])
+        msg.object.add_by_ids(container_ids)
       end
       #
       if msg.result

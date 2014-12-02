@@ -93,9 +93,9 @@ module V1
 
       if f.add(p)
         if PartService.get_part_by_id_whouse_id(pc.part_id, f.destinationable_id)
-          {result: 1, result_code: ResultCodeEnum::Success, content: PackageLazyPresenter.new(p).to_json}
+          {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(p).to_json}
         else
-          {result: 1, result_code: ResultCodeEnum::TargetNotInPosition, content: PackageLazyPresenter.new(p).to_json}
+          {result: 1, result_code: ResultCodeEnum::TargetNotInPosition, content: PackagePresenter.new(p).to_json}
         end
       else
         {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::AddPackageFailed}
@@ -109,7 +109,7 @@ module V1
 
       fpresenter = ForkliftPresenter.new(f)
 
-      {result:1,content:PackageLazyPresenter.init_json_presenters(fpresenter.packages)}
+      {result:1,content:PackagePresenter.init_json_presenters(fpresenter.packages)}
     end
 
     # add package
@@ -140,9 +140,9 @@ module V1
         lc_p = res.object
         if f.add(lc_p)
           if PartService.get_part_by_id_whouse_id(params[:part_id], f.destinationable_id)
-            {result: 1, result_code: ResultCodeEnum::Success, content: PackageLazyPresenter.new(lc_p).to_json}
+            {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(lc_p).to_json}
           else
-            {result: 1, result_code: ResultCodeEnum::TargetNotInPosition, content: PackageLazyPresenter.new(lc_p).to_json}
+            {result: 1, result_code: ResultCodeEnum::TargetNotInPosition, content: PackagePresenter.new(lc_p).to_json}
           end
         else
           {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::AddPackageFailed}
@@ -209,7 +209,7 @@ module V1
 
       if f.update_attributes(args)
         if args[:destinationable_id]
-          packages = PackageLazyPresenter.init_presenters(LogisticsContainerService.get_packages_with_detail(f)).collect { |p| p.to_json }
+          packages = PackagePresenter.init_presenters(LogisticsContainerService.get_packages_with_detail(f)).collect { |p| p.to_json }
           {result: 1, content: {packages: packages}}
         else
           {result: 1, content: ForkliftMessage::UpdateSuccess}

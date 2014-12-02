@@ -19,7 +19,7 @@
   </thead>
   <tbody>
   <% @packages.each_with_index do |package,index|%>
-      <% ppresenter = PackageLazyPresenter.new(package)%>
+      <% ppresenter = PackagePresenter.new(package)%>
       <tr>
         <td><%= index+@packages.offset+1%></td>
         <td><%= link_to package.container_id,package_path(package),:class=>'btn btn-default' %></td>

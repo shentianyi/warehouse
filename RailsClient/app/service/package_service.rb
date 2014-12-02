@@ -11,7 +11,7 @@ class PackageService
   end
 
   def self.receive lc,user
-    unless (m = lc.get_movable_service.receive(lc,destination,user)).result
+    unless (m = lc.get_movable_service.receive(lc,user)).result
       return m
     end
 

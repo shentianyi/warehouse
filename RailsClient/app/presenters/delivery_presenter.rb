@@ -42,7 +42,7 @@ class DeliveryPresenter<Presenter
   def to_json
     {
         id: self.id,
-        cotainer_id:self.container_id,
+        container_id:self.container_id,
         delivery_date: self.delivery_date,
         received_date: self.received_date,
         state: self.state,

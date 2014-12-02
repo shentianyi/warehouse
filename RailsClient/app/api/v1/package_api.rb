@@ -21,7 +21,7 @@ module V1
     get :binds do
       packages = PackageService.get_bind_packages_by_location(current_user.location_id, (current_user.id if params.has_key?(:all)))
 
-      PackageLazyPresenter.init_json_presenters(packages)
+      PackagePresenter.init_json_presenters(packages)
     end
 
     #get packages by created_at time and state
@@ -46,7 +46,7 @@ module V1
         args[:des_location_id] = current_user.location_id
       end
 
-      PackageLazyPresenter.init_json_presenters(PackageService.search(args).order(created_at: :desc).all)
+      PackagePresenter.init_json_presenters(PackageService.search(args).order(created_at: :desc).all)
     end
 
     # validate package id
@@ -87,14 +87,14 @@ module V1
     # else create new
     post do
       m = PackageService.create package_params, current_user
-      m.result ? {result: 1, content: PackageLazyPresenter.new(m.object).to_json} : {result: 0, content: m.content}
+      m.result ? {result: 1, content: PackagePresenter.new(m.object).to_json} : {result: 0, content: m.content}
     end
 
     # update package
     put do
       msg = PackageService.update(package_params)
       if msg.result
-        {result: 1, content: PackageLazyPresenter.new(msg.object).to_json}
+        {result: 1, content: PackagePresenter.new(msg.object).to_json}
       else
         {result: 0, content: msg.content}
       end
@@ -159,7 +159,7 @@ module V1
       end
 
       if(r = PackageService.receive(p,current_user)).result
-        return msg.set_true(PackageLazyPresenter.new(p).to_json)
+        return msg.set_true(PackagePresenter.new(p).to_json)
       else
         msg.set_false(r.content)
       end

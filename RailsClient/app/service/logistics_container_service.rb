@@ -23,6 +23,10 @@ class LogisticsContainerService
     msg
   end
 
+  def self.search(condition)
+    LogisticsContainer.where(condition)
+  end
+
   def self.dispatch(lc, destination, user)
     msg = Message.new
     return msg.set_true()

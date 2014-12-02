@@ -1,6 +1,7 @@
 class LogisticsContainer<LocationContainer
   include CZ::Movable
   include CZ::Recordable
+  include CZ::Service
 
   default_scope { where(type: LocationContainerType::LOGISTICS) }
   has_ancestry
@@ -15,6 +16,32 @@ class LogisticsContainer<LocationContainer
 
   def exists?(location_id)
     self.source_location_id==location_id
+  end
+
+  def get_service
+    case self.container.type
+      when ContainerType::PACKAGE
+        self.get_package_service
+      when ContainerType::FORKLIFT
+        self.get_forklift_service
+      when ContainerType::DELIVERY
+        self.get_delivery_service
+    end
+  end
+
+  def presenter
+    get_presenter.new(self)
+  end
+
+  def get_presenter
+    case self.container.type
+      when ContainerType::PACKAGE
+        self.get_package_presenter
+      when ContainerType::FORKLIFT
+        self.get_forklift_presenter
+      when ContainerType::DELIVERY
+        self.get_delivery_presenter
+    end
   end
 
   def self.build(container_id, user_id, location_id)
@@ -58,7 +85,7 @@ class LogisticsContainer<LocationContainer
 
   def out_store
     begin
-      puts '-------------------------'
+      puts 'out_store-------------------------'
       if self.state==MovableState::WAY && self.container.is_package?
         StoreContainer.out_store_by_container(container,self.source_location_id)
       end

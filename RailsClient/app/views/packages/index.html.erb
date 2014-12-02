@@ -63,7 +63,7 @@
 
   <tbody>
   <% @packages.each_with_index do |package, index| %>
-      <% ppresenter = PackageLazyPresenter.new(package) %>
+      <% ppresenter = PackagePresenter.new(package) %>
       <% if package.id && package.id != "" %>
           <tr>
             <td><%= index+@packages.offset+1 %></td>

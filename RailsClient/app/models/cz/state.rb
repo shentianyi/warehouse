@@ -11,8 +11,6 @@ module CZ
     }
 
     def method_missing(method_name, *args, &block)
-      puts "======"
-      puts method_name
       if /^can_[a-z]*[?]$/.match(method_name)
         action = method_name.to_s.gsub("?", "").split("_").last
         if @@action.values.include?(action)

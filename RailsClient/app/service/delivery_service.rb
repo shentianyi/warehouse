@@ -5,7 +5,7 @@ class DeliveryService
       return m
     end
 
-    m.descendants.each {|d|
+    movable.descendants.each {|d|
       unless (m = d.get_movable_service.dispatch(d,destination,user)).result
         return m
       end
@@ -18,7 +18,7 @@ class DeliveryService
       return m
     end
 
-    m.descendants.each {|d|
+    movable.descendants.each {|d|
       unless (m = d.get_movable_service.receive(d,user)).result
         return m
       end
