@@ -47,14 +47,15 @@ class LogisticsContainerService
     return msg.set_true()
   end
 
-
   def self.get_packages(lc)
     lc.descendants.joins(:package)
   end
 
   def self.get_forklifts(lc)
-    #puts "======"
-    #puts lc.class
+    puts lc.id
+    puts "=================="
+    puts lc.type
+    lc.descendants.each{|d| puts d.class}
     lc.descendants.joins(:forklift)
   end
 
