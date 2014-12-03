@@ -81,6 +81,8 @@ class OrderService
     order = Order.new(args[:order])
     order.user = current_user
     order.remark = no_parts_to_string(args[:nopart_items])
+    puts "============"
+    puts args
     ActiveRecord::Base.transaction do
       begin
         if order.save
