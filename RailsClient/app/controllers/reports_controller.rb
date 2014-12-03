@@ -9,9 +9,8 @@ class ReportsController < ApplicationController
 
     condition = Package.generate_report_condition(@type,@date_start,@date_end,@location_id)
     @packages = Package.generate_report_data(condition)
-    render :json=> @packages
+    #render :json=> @packages
 
-=begin
     respond_to do |format|
       format.xlsx do
         send_data(entry_with_xlsx(@packages),
@@ -20,7 +19,6 @@ class ReportsController < ApplicationController
       end
       format.html
     end
-=end
   end
 
   def entry_report
