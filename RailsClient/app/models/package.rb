@@ -50,7 +50,6 @@ class Package<Container
         .where(condition)
         .select("containers.part_id as part_id,SUM(containers.quantity) as count, COUNT(containers.id) as box")
         .group("part_id")
-    puts a.first.to_json
     a
   end
 
