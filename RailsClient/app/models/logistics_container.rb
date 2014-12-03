@@ -4,7 +4,7 @@ class LogisticsContainer<LocationContainer
   include CZ::Service
 
   default_scope { where(type: LocationContainerType::LOGISTICS) }
-  has_ancestry
+  #has_ancestry
 
   belongs_to :package, foreign_key: :container_id
   has_many :positions, through: :package
@@ -85,7 +85,6 @@ class LogisticsContainer<LocationContainer
 
   def out_store
     begin
-      puts 'out_store-------------------------'
       if self.state==MovableState::WAY && self.container.is_package?
         StoreContainer.out_store_by_container(container,self.source_location_id)
       end

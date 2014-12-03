@@ -1,6 +1,6 @@
 class StoreContainer<LocationContainer
   default_scope { where(type: LocationContainerType::STORE) }
-  has_ancestry
+  #has_ancestry
   belongs_to :package, foreign_key: :container_id
 
   before_create :init_container_state

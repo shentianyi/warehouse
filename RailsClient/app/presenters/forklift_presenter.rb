@@ -44,7 +44,9 @@ class ForkliftPresenter<Presenter
         stocker_id: self.user_id,
         whouse_id: self.destinationable_name,
         sum_packages: self.sum_packages,
-        accepted_packages: self.accepted_packages
+        accepted_packages: self.accepted_packages,
+        state: self.state,
+        state_dsiplay: @forklift.state_display
     }
   end
 
