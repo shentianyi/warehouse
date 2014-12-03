@@ -6,7 +6,7 @@ class LogisticsContainer<LocationContainer
 
 
   default_scope { where(type: LocationContainerType::LOGISTICS) }
-  #has_ancestry
+  has_ancestry
 
   belongs_to :package, foreign_key: :container_id
   has_many :positions, through: :package
