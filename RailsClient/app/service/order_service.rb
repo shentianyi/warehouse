@@ -81,8 +81,6 @@ class OrderService
     order = Order.new(args[:order])
     order.user = current_user
     order.remark = no_parts_to_string(args[:nopart_items])
-    puts "============"
-    puts args
     ActiveRecord::Base.transaction do
       begin
         if order.save
@@ -121,7 +119,7 @@ class OrderService
     remark = ""
     items.each {|item|
       remark += "零件:"+item[:part_id]+",数量:"+item[:quantity].to_s+",箱数:"+item[:box_quantity].to_s+",部门:"+item[:department]+",是否加急:"+item[:is_emergency].to_s+"\n"
-    }
+    } if items
     remark
   end
 
