@@ -1,7 +1,9 @@
 class LogisticsContainer<LocationContainer
+  include CZ::Containable
   include CZ::Movable
   include CZ::Recordable
   include CZ::Service
+
 
   default_scope { where(type: LocationContainerType::LOGISTICS) }
   has_ancestry
@@ -42,6 +44,22 @@ class LogisticsContainer<LocationContainer
       when ContainerType::DELIVERY
         self.get_delivery_presenter
     end
+  end
+
+
+
+  def add_by_ids(ids)
+    begin
+      ActiveRecord::Base.transaction do
+        ids.each do |id|
+          add(self.class.build(id, self.user_id, self.source_location_id))
+        end
+      end
+    rescue Exception => e
+      puts e.message
+      return false
+    end
+    true
   end
 
   def self.build(container_id, user_id, location_id)
@@ -85,7 +103,6 @@ class LogisticsContainer<LocationContainer
 
   def out_store
     begin
-      puts 'out_store-------------------------'
       if self.state==MovableState::WAY && self.container.is_package?
         StoreContainer.out_store_by_container(container,self.source_location_id)
       end

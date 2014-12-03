@@ -11,8 +11,6 @@ class ReportType
         '发货'
       when Discrepancy
         '差异'
-      else
-        '错误报表类型'
     end
   end
 

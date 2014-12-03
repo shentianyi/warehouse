@@ -9,18 +9,16 @@ class ReportsController < ApplicationController
 
     condition = Package.generate_report_condition(@type,@date_start,@date_end,@location_id)
     @packages = Package.generate_report_data(condition)
-    render :json=> @packages
-
-=begin
+    #render :json=> @packages
+    @title = "#{Time.parse(@date_start).strftime("%Y%m%d")}-#{Time.parse(@date_end).strftime("%Y%m%d")}#{ReportType.display(@type.to_i)}报表"
     respond_to do |format|
       format.xlsx do
         send_data(entry_with_xlsx(@packages),
             :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
-            :filename => "测试报表.xlsx")
+            :filename => "#{@title}.xlsx")
       end
       format.html
     end
-=end
   end
 
   def entry_report
@@ -360,9 +358,9 @@ class ReportsController < ApplicationController
       packages.each_with_index { |p, index|
         sheet.add_row [
                           index+1,
-                          p.pid,
-                          p.count,
-                          p.box
+                          p['part_id'],
+                          p['count'],
+                          p['box']
                       ], :types => [:string]
       }
     end

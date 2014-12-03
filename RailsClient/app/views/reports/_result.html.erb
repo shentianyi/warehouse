@@ -11,9 +11,9 @@
   <%@packages.each_with_index do |p,index|%>
   <tr>
     <td><%= index+1%></td>
-    <td><%= p.pid%></td>
-    <td><%= p.count%></td>
-    <td><%= p.box%></td>
+    <td><%= p['part_id']%></td>
+    <td><%= p['count']%></td>
+    <td><%= p['box']%></td>
   </tr>
   <%end%>
   </tbody>
