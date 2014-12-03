@@ -10,7 +10,6 @@ class DeliveriesController < ApplicationController
   # GET /deliveries.json
   def index
     @deliveries= DeliveryService.search(nil).order(created_at: :desc).paginate(:page => params[:page])
-    puts "===================#{@deliveries.first.class}"
   end
 
   # GET /deliveries/1

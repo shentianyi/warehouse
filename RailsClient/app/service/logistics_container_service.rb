@@ -52,10 +52,6 @@ class LogisticsContainerService
   end
 
   def self.get_forklifts(lc)
-    puts lc.id
-    puts "=================="
-    puts lc.type
-    lc.descendants.each{|d| puts d.class}
     lc.descendants.joins(:forklift)
   end
 
