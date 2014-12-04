@@ -35,7 +35,7 @@ class Package<Container
     condition["records.impl_time"] = start_t..end_t
     case type.to_i
       when ReportType::Entry
-        condition["records.impl_user_type"] = ImplUserType::RECEIVER
+        condition["records.impl_user_type"] = [ImplUserType::RECEIVER,ImplUserType::EXAMINER,ImplUserType::REJECTOR]
         condition["location_containers.des_location_id"] = location_id
       when ReportType::Removal
         condition["records.impl_user_type"] = ImplUserType::SENDER
@@ -49,8 +49,8 @@ class Package<Container
     #零件号，总数，箱数，部门(部门如何获得？)
     a = LogisticsContainer.joins(:records,:package)
         .where(condition)
-        .select("containers.part_id as part_id,SUM(containers.quantity) as count, COUNT(containers.id) as box,location_containers.destinationable_id as whouse")
-        .group("whouse,part_id")
+        .select("containers.part_id as part_id,SUM(containers.quantity) as count, COUNT(containers.id) as box,location_containers.destinationable_id as whouse,location_containers.state as state")
+        .group("state,whouse,part_id").order(state: :desc)
     a
   end
 

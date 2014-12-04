@@ -16,7 +16,8 @@ module V1
       msg = ApiMessage.new
       data = []
       unless l = Location.find_by_id(params[:id])
-        return msg.set_false(LocationMessage::NotFound)
+        #return msg.set_false(LocationMessage::NotFound)
+        return []
       end
 
       l.whouses.each{|w|

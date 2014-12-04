@@ -164,26 +164,6 @@ class ReportsController < ApplicationController
   end
 
   def entry_with_xlsx packages
-=begin
-    p = Axlsx::Package.new
-    wb = p.workbook
-    wb.add_worksheet(:name => "Basic Sheet") do |sheet|
-      sheet.add_row entry_header
-      packages.each_with_index { |p, index|
-        sheet.add_row [
-                          index+1,
-                          p.part_id,
-                          p.total,
-                          p.box_count,
-                          p.whouse_id,
-                          p.rdate.nil? ? '' : p.rdate.localtime.to_formatted_s(:db),
-                          p.receover_id.nil? ? '' : User.find_by_id(p.receover_id).name,
-                          p.state == PackageState::RECEIVED ? "是" : "否"
-                      ], :types => [:string]
-      }
-    end
-=end
-
     p = Axlsx::Package.new
     wb = p.workbook
     wb.add_worksheet(:name => "Basic Sheet") do |sheet|
@@ -194,7 +174,8 @@ class ReportsController < ApplicationController
                           p['part_id'],
                           p['count'],
                           p['box'],
-                          p['whouse']
+                          p['whouse'],
+                          p.state_display
                       ], :types => [:string]
       }
     end
@@ -259,7 +240,7 @@ class ReportsController < ApplicationController
   end
 
   def entry_header
-    ["编号", "零件号", "总数", "箱数","部门"]
+    ["编号", "零件号", "总数", "箱数","部门","状态"]
   end
 
   def removal_header
