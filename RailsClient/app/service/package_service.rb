@@ -22,7 +22,11 @@ class PackageService
   #search packages
   #=============
   def self.search condition
-    LogisticsContainer.joins(:package).joins(:records).where(condition)
+    if condition && condition['records.impl_time']
+      LogisticsContainer.joins(:package).joins(:records).where(condition)
+    else
+      LogisticsContainer.joins(:package).where(condition)
+    end
   end
 
   #=============
@@ -45,6 +49,10 @@ class PackageService
 
     #create
     ActiveRecord::Base.transaction do
+      if args[:id].nil?
+        msg.content = 'Id not valid'
+        return msg
+      end
       p = Package.new(args)
       p.user_id=user.id
       p.location_id=user.location_id
@@ -83,6 +91,9 @@ class PackageService
       msg.content = PackageMessage::PartNotExit
       return msg
     end
+
+    #
+    args[:id] = lc.container_id
 
     if msg.result=package.update_attributes(args)
       lc.package=package

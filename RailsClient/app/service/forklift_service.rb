@@ -73,10 +73,11 @@ class ForkliftService
     return msg
   end
 
-
-
-
-  def self.search(conditions)
-    LogisticsContainer.joins(:forklift).joins(:records).where(conditions)
+  def self.search(condition)
+    if condition && condition['records.impl_time']
+      LogisticsContainer.joins(:forklift).joins(:records).where(condition)
+    else
+      LogisticsContainer.joins(:forklift).where(condition)
+    end
   end
 end
