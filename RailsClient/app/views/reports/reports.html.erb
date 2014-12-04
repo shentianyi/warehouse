@@ -4,56 +4,17 @@
 </div>
 <!--Form-->
 <form method="get" path="<%= reports_reports_path%>">
-<input type="hidden" id="file" name="file" value="<%=@jsonfile%>">
-<input type="submit" value="生成" class="btn btn-warning" name="commit" onclick="submitForm()"/>
 <span class="label label-info">报表类型:</span>
 <%= select_tag(:type,options_for_select(ReportType.list,@type),include_blank: false)%>
 <span class="label label-info">地点:</span>
 <%= select_tag(:location_id, options_for_select(Location.list_menu(current_user), @location_id), include_blank: false) %>
-<span class="label label-info">显示方式:</span>
-<%= select_tag :format, options_for_select([["Web", "html"],["Excel File(MS 07 or later)", "xlsx"]], "html") %>
   <span class="label label-info">创建时间:</span>
 <input id="date-start" type="text" name="date_start" class="datepicker" value="<%= @date_start %>"/>
 ~ <input id="date-end" type="text" name="date_end" class="datepicker" value="<%= @date_end %>"/>
+  <span class="label label-info">显示方式:</span>
+  <%= select_tag :format, options_for_select([["Web", "html"],["Excel File(MS 07 or later)", "xlsx"]], "html") %>
+  <input type="submit" value="生成" class="btn btn-warning" name="commit" onclick="submitForm()"/>
 </form>
-<!--Upload File-->
-<div id="upload-file">
-  <script type="text/javascript">
-    $(function () {
-      data_upload("#item-data-uploader", false, function (data) {
-        if (data.result) {
-          $("#file").val(JSON.stringify(data.content));
-          $("#item-data-uploader-preview > span[info]").html("File Uploaded");
-        } else {
-          $("#file").val('');
-        }
-      });
-    });
-    function submitForm() {
-      if($("#type option:selected").val() == "2"){
-        if ($("#file").val().length > 0)
-        document.forms[0].submit();
-      else
-        alert('Please upload your file');
-      }
-      else{
-        document.forms[0].submit();
-      }
-    }
-  </script>
-  <div>
-    <span>Upload File：</span>
-    <input id="item-data-uploader" type="file" name="files[]" data-url="/reports/upload_file">
-    <div class="abstractblock" id="item-data-uploader-preview" style="<%= "display:none" if @file.nil? %>;">
-      <% if @file %>
-        <span>File：<%= @file["data"]["original_filename"] %></span>
-        <br>
-        <span info>File Uploaded</span>
-        <% end%>
-    </div>
-  </div>
-</div>
-<!--Upload File-->
 
 <!--Form-->
 <h3>

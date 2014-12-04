@@ -10,16 +10,15 @@
       <form method="get" action="<%= reports_orders_report_path %>">
         <div>
           <div>
-            <span>时间范围:
+            <span class="label label-info">要货时间:</span>
               <input type="text" name="date_start" class="datepicker" value="<%= @date_start %>"/>
               ~ <input type="text" name="date_end" class="datepicker" value="<%= @date_end %>"/>
-            </span>
-            <span>查看类型：
-              <%= select_tag :format, options_for_select([["查找", "html"],["导出xlsx", "xlsx"],["导出CSV", "csv"]], "html") %>
-            </span>
-            <input type="submit" value="确定" class="btn btn-warning" name="commit"/>
+            <span class="label label-info">显示方式:</span>
+              <%= select_tag :format, options_for_select([["Web", "html"],["Excel File(MS 07 or later)", "xlsx"]], "html") %>
+            <input type="submit" value="生成" class="btn btn-warning" name="commit"/>
           </div>
         </div>
+
       </form>
     </div>
     <br/>
