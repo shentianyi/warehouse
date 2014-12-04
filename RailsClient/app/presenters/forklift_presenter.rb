@@ -46,7 +46,7 @@ class ForkliftPresenter<Presenter
         sum_packages: self.sum_packages,
         accepted_packages: self.accepted_packages,
         state: self.state,
-        state_dsiplay: @forklift.state_display
+        state_display: @forklift.state_display
     }
   end
 

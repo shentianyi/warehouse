@@ -123,7 +123,7 @@ module V1
       end
 
       unless f.can_update?
-        return {result: 0, content: {message: ForkliftMessage::CannotUpdate}}
+        return {result: 0, content: ForkliftMessage::CannotUpdate}
       end
 
       args = {
