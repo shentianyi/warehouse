@@ -11,5 +11,18 @@ module V1
       end
       data
     end
+
+    get :warehouses do
+      msg = ApiMessage.new
+      data = []
+      unless l = Location.find_by_id(params[:id])
+        return msg.set_false(LocationMessage::NotFound)
+      end
+
+      l.whouses.each{|w|
+        data<<{id:w.id,name:w.name}
+      }
+      data
+    end
   end
 end

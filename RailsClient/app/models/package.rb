@@ -49,8 +49,8 @@ class Package<Container
     #零件号，总数，箱数，部门(部门如何获得？)
     a = LogisticsContainer.joins(:records,:package)
         .where(condition)
-        .select("containers.part_id as part_id,SUM(containers.quantity) as count, COUNT(containers.id) as box")
-        .group("part_id")
+        .select("containers.part_id as part_id,SUM(containers.quantity) as count, COUNT(containers.id) as box,location_containers.destinationable_id as whouse")
+        .group("whouse,part_id")
     a
   end
 

@@ -74,7 +74,6 @@ module V1
         return {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::NotExit}
       end
 
-
       unless f.can_update?
         return {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::CannotUpdate}
       end
@@ -85,6 +84,7 @@ module V1
 
       unless p=LogisticsContainer.build(params[:package_id], current_user.id, current_user.location_id)
         p=pc.logistics_containers.build(source_location_id: current_user.location_id, user_id: current_user.id)
+        p.destinationable = f.destinationable
         p.save
       end
       p.package=pc
@@ -141,6 +141,7 @@ module V1
       if res.result
         lc_p = res.object
         if f.add(lc_p)
+          lc_p.update({destinationable:f.destinationable})
           if PartService.get_part_by_id_whouse_id(params[:part_id], f.destinationable_id)
             {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(lc_p).to_json}
           else

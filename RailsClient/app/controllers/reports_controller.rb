@@ -360,7 +360,8 @@ class ReportsController < ApplicationController
                           index+1,
                           p['part_id'],
                           p['count'],
-                          p['box']
+                          p['box'],
+                          p['whouse']
                       ], :types => [:string]
       }
     end
@@ -446,7 +447,7 @@ class ReportsController < ApplicationController
   end
 
   def entry_header
-    ["编号", "零件号", "总数", "箱数"]
+    ["编号", "零件号", "总数", "箱数","部门"]
   end
 
   def removal_header

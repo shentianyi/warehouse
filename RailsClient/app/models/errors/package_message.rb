@@ -15,5 +15,6 @@ module PackageMessage
   InOtherForklift='已存在于其他托清单中'
   IdNotValid='唯一号不可用'
   StateError='状态错误'
+  WarehouseNotInLocation='仓库不在目的地中'
 
 end

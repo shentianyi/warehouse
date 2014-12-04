@@ -185,7 +185,13 @@ module V1
         return msg.set_false(MovableMessage::DestinationNotExist)
       end
 
+      #发送包装箱时，需要指定目标仓库
+      unless warehouse = destination.whouses.where(id:params[:whouse_id])
+        return msg.set_false(PackageMessage::WarehouseNotInLocation)
+      end
+
       unless (r = PackageService.dispatch(lc,destination,current_user)).result
+        lc.update(destinationable:warehouse)
         return msg.set_false(r.content)
       end
 
