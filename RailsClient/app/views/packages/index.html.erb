@@ -74,7 +74,6 @@
     <th>上架库位</th>
     <th>所属托盘</th>
     <th>所属运单</th>
-    <th>创建信息</th>
     <th>最新记录</th>
     <th colspan="2"></th>
   </tr>
@@ -99,7 +98,6 @@
             <td>
               <%= link_to package.parent.parent.container_id,delivery_path(package.parent.parent),:class => 'btn btn-default' if package.parent && package.parent.parent %>
             </td>
-            <td><%= package.create_info %></td>
             <td><%= package.get_records.last.display %></td>
             <td><%= link_to '详细' ,package_path(package), :class=>'btn btn-default'%></td>
             <td><%= link_to '编辑', edit_package_path(package), :class=> 'btn btn-default'%></td>

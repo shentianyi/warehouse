@@ -75,7 +75,6 @@
     <th>NO.</th>
     <th>运单号</th>
     <th>状态</th>
-    <th>创建信息</th><!--创建地，创建时间，创建者-->
     <th>目的地</th>
     <th>备注</th>
     <!--基础-->
@@ -98,7 +97,6 @@
         <td><%= index+@deliveries.offset+1 %></td>
         <td><%= delivery.container_id %></td>
         <td><%= delivery.state_display%></td>
-        <td><%= delivery.create_info %></td>
         <td><%= delivery.destination.name%></td>
         <td><%= delivery.remark%></td>
         <td>

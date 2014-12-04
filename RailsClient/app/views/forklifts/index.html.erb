@@ -67,7 +67,6 @@
       <th>拖清单号</th>
       <th>状态</th>
       <th>所属运单</th>
-      <th>创建信息</th>
       <th>目标仓库</th>
       <th>备注</th>
       <th>包装箱列表</th>
@@ -89,7 +88,6 @@
         <td>
               <%= link_to forklift.parent.container_id,delivery_path(forklift.parent),:class=>'btn btn-default' if forklift.parent%>
         </td>
-        <td><%= forklift.create_info %></td>
         <td><%= forklift.destinationable.name if forklift.destinationable%></td>
         <td><%= forklift.remark %></td>
         <td>
