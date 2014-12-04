@@ -22,7 +22,7 @@ class PackageService
   #search packages
   #=============
   def self.search condition
-    LogisticsContainer.joins(:package).where(condition)
+    LogisticsContainer.joins(:package).joins(:records).where(condition)
   end
 
   #=============

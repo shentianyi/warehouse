@@ -77,6 +77,6 @@ class ForkliftService
 
 
   def self.search(conditions)
-    LogisticsContainer.joins(:forklift).where(conditions)
+    LogisticsContainer.joins(:forklift).joins(:records).where(conditions)
   end
 end

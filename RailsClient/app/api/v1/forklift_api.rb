@@ -23,18 +23,19 @@ module V1
     #@state
     #@type
     get :get_by_time_and_state do
+      args= {}
       start_time = params[:start_time].nil? ? 24.hour.ago : params[:start_time]
       end_time = params[:end_time].nil? ? Time.now : params[:end_time]
-      args = {
-          created_at: (start_time..end_time)
-      }
 
       args[:state] = params[:state] if params[:state]
 
       if params[:type].nil? || params[:type].to_i == 0
+        args[:created_at] = start_time..end_time
         args[:source_location_id] = [current_user.location_id,nil]
         args[:user_id] = current_user.id if params[:all].nil?
       else
+        args['records.impl_time'] = start_time..end_time
+        args['records.impl_user_type'] = ImplUserType::RECEIVER
         args[:des_location_id] = current_user.location_id
       end
 

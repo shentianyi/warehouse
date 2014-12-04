@@ -20,20 +20,20 @@ module V1
     #1 => sent to my location
     # 2014-11-24 => 搜索结果很慢，参数 start_time:2014-8-10 end_time:2014-10-1 type:0 结果760条左右运单，消耗75秒！！！
     get :get_by_time_and_state do
+      args = {}
       start_time = params[:start_time].nil? ? 24.hour.ago : Time.parse(params[:start_time])
       end_time = params[:end_time].nil? ? Time.now : Time.parse(params[:end_time])
-      args = {
-        created_at: (start_time..end_time)
-      }
 
       args[:state] = params[:state] if params[:state]
 
-
       if params[:type].nil? || params[:type].to_i == 0
+        args[:created_at] = start_time..end_time
         args[:source_location_id] = [current_user.location_id,nil]
         #args[:user_id] = current_user.id
         args[:user_id] = current_user.id if params[:all].nil?
       else
+        args['records.impl_time'] = start_time..end_time
+        args['records.impl_user_type'] = ImplUserType::RECEIVER
         args[:des_location_id] = current_user.location_id
       end
       args[:ancestry]= nil unless params.has_key? :all
