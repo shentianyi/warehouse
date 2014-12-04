@@ -9,8 +9,8 @@ class PackagePresenter<Presenter
   end
 
   def position_nr
-    if f=@logistics_container.parent
-      if position=PartService.get_position_by_whouse_id(@package.part_id, f.destinationable_id)
+    if @logistics_container.destinationable#f=@logistics_container.parent
+      if position=PartService.get_position_by_whouse_id(@package.part_id, @logistics_container.destinationable_id)
         return position.detail
       end
     end
