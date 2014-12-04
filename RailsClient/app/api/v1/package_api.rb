@@ -198,6 +198,10 @@ module V1
         return {result: 0, content: DeliveryMessage::NotExit}
       end
 
+      unless (m=lc.get_movable_service.check(lc,current_user)).result
+        return m.set_false(m.content)
+      end
+
       return {result:1,content: DeliveryMessage::ReceiveSuccess}
     end
   end

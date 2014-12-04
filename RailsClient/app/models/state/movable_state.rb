@@ -9,15 +9,15 @@ class MovableState
   def self.before(state)
     case state
       when INIT
-        []
-      when WAY
         [INIT]
+      when WAY
+        [INIT,WAY]
       when ARRIVED
-        [WAY]
+        [ARRIVED,WAY]
       when CHECKED
-        [ARRIVED,REJECTED]
+        [ARRIVED,REJECTED,CHECKED]
       when REJECTED
-        [ARRIVED,CHECKED]
+        [ARRIVED,CHECKED,REJECTED]
       else
         []
     end
