@@ -37,7 +37,7 @@ class PackagePresenter<Presenter
     {
         id: self.id,
         container_id: self.container_id,
-        quantity_dispaly: self.quantity_display,
+        quantity_display: self.quantity_display,
         part_id_display: self.part_id_display,
         quantity: @package.quantity,
         fifo_time_display: self.fifo_time_display,
