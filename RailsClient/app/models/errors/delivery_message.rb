@@ -4,7 +4,7 @@ module DeliveryMessage
   CheckForkliftFailed='托清单不存在或已经加入都其他运单中'
   DeleteForkliftSuccess='删除清单成功'
   DeleteForkliftFailed='删除清单失败'
-  CannotUpdate='不能修改'
+  CannotUpdate='运单不能被修改'
   CannotDelete='不能删除'
   ForkliftHasNotExist='不是所有的托清单都存在'
   ForkliftExistInOthers = '托清单已经存在运单中,不能创建'

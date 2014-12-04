@@ -9,12 +9,13 @@ module PackageMessage
   QuantityStringError='数量格式错误'
   PartNotExit='零件号不存在'
   CannotDelete='不能删除'
-  CannotUpdate='不能修改'
+  CannotUpdate='包装箱不能被修改'
   CannotCheck='已被接收或未发送'
   CannotCancelCheck='不能取消接收'
-  InOtherForklift='已存在于其他托清单中'
+  InOtherForklift='包装箱已存在于其他托清单中'
   IdNotValid='唯一号不可用'
   StateError='状态错误'
   WarehouseNotInLocation='仓库不在目的地中'
+  Sent = '包装箱已发送'
 
 end

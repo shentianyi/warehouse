@@ -50,7 +50,7 @@ class PackageService
     #create
     ActiveRecord::Base.transaction do
       if args[:id].nil?
-        msg.content = 'Id not valid'
+        msg.content = '唯一码为空'
         return msg
       end
       p = Package.new(args)

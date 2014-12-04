@@ -6,7 +6,7 @@ class Package<Container
   default_scope { where(type: ContainerType::PACKAGE) }
 
   def self.id_valid?(id)
-    Package.unscoped.where(id: id, type: ContainerType::Package).first.nil?
+    Package.unscoped.where(id: id, type: ContainerType::PACKAGE).first.nil?
   end
 
   def custom_fifo_time=(value)

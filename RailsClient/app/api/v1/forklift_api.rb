@@ -87,6 +87,11 @@ module V1
         p.destinationable = f.destinationable
         p.save
       end
+
+      unless p.can_update?
+        return {result:0,result_code: ResultCodeEnum::Failed,content: PackageMessage::Sent}
+      end
+
       p.package=pc
 
       unless p.can_add_to_container?
