@@ -18,6 +18,26 @@ module CZ
 
     #要加入一个can_dispatch？的方法
 
+    def method_missing(method_name, *args, &block)
+      if /^get_[a-z]*_time$/.match(method_name)
+        name = method_name.to_s.split("_")[1]
+        if @@actions.keys.include? name
+          r = get_record(name)
+          return r.impl_time.localtime.strftime("%Y-%m-%d %H:%M:%S") if r
+        else
+          return " "
+        end
+      end
+
+      if /^get_[a-z]*_record$/.match(method_name)
+        name = method_name.to_s.split("_")[1]
+        if @@actions.keys.include? name
+          return get_record(name)
+        end
+      end
+      super(method_name, args, block)
+    end
+
     def dispatch(destination, sender_id)
       if state_switch_to(MovableState::WAY)
         self.update({state:MovableState::WAY})

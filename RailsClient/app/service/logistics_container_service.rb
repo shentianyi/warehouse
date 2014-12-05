@@ -47,6 +47,16 @@ class LogisticsContainerService
     return msg.set_true()
   end
 
+  def self.get_all_packages(lc)
+    lc.scope.joins(:package)
+  end
+
+  def self.get_all_packages_with_detail(lc,orders=nil)
+    query=get_all_packages(lc).select("containers.*,location_containers.*,'#{lc.destinationable_id}' as whouse_id")
+    query=query.order(orders) if orders
+    query.collect.each { |p| p.becomes(Package) }
+  end
+
   def self.get_packages(lc)
     lc.descendants.joins(:package)
   end
@@ -76,23 +86,42 @@ class LogisticsContainerService
     lc.descendants.joins(:package).count
   end
 
+  #---------------------------
+  def self.get_all_accepted_package(lc)
+    get_all_packages_by_state(lc,MovableState::CHECKED)
+  end
+
   def self.get_accepted_packages(lc)
     get_packages_by_state(lc, MovableState::CHECKED)
   end
+  #---------------------------
 
   def self.count_accepted_packages(lc)
     get_accepted_packages(lc).count
   end
 
+  #---------------------------
+  def self.get_all_rejected_packages(lc,state)
+    get_all_packages_by_state(lc,MovableState::REJECTED)
+  end
+
   def self.get_rejected_packages(lc)
     get_packages_by_state(lc, MovableState::REJECTED)
   end
+  #---------------------------
 
   def self.count_rejected_packages(lc)
     get_rejected_packages(lc).count
   end
 
+
+  #---------------------------
+  def self.get_all_packages_by_state(lc,state)
+    lc.scope.joins(:package).where(state:state)
+  end
+
   def self.get_packages_by_state(lc, state)
     lc.descendants.joins(:package).where(state: state)
   end
+  #---------------------------
 end

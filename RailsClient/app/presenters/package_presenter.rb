@@ -35,6 +35,10 @@ class PackagePresenter<Presenter
     @logistics_container.created_at.blank? ? '' : @logistics_container.created_at.strftime('%Y-%m-%d %H:%M')
   end
 
+  def total_packages
+    1
+  end
+
   def to_json
     {
         id: self.id,
