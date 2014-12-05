@@ -9,4 +9,5 @@ module MovableMessage
   SourceLocationError = "物品不在本地"
   CurrentLocationNotDestination = "当前不是目的地"
   StateError = "状态错误"
+  CannotReceiveSingle = "不能单独接收，该物品不是被单独发送的"
 end

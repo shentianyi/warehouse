@@ -256,6 +256,10 @@ module V1
         return {return: 0, content: MovableMessage::TargetNotExist}
       end
 
+      unless f.root?
+        return {return: 0, content: ForkliftMessage::InDeliveryCannotReceive}
+      end
+
       #*own implementation of receive
       if (r = ForkliftService.receive(f,current_user)).result
         {result: 1, content: ForkliftPresenter.new(f).to_json}

@@ -17,5 +17,6 @@ module PackageMessage
   StateError='状态错误'
   WarehouseNotInLocation='仓库不在目的地中'
   Sent = '包装箱已发送'
+  InForkliftCannotReceive = '包装箱在拖清单中，不能单独接收'
 
 end

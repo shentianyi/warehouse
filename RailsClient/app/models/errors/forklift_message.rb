@@ -11,4 +11,5 @@ module ForkliftMessage
   AddPackageSuccess='添加成功'
   NotExitInWarehouse='零件不存在于该仓库中,请检查'
   CannotAdd='无法添加到运单中，拖清单已经被单独发送'
+  InDeliveryCannotReceive = '拖清单在运单中，不能单独接收'
 end

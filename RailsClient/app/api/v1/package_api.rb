@@ -162,6 +162,10 @@ module V1
         return msg.set_false(MovableMessage::TargetNotExist)
       end
 
+      unless p.root?
+        return msg.set_false(PackageMessage::InForkliftCannotReceive)
+      end
+
       if(r = PackageService.receive(p,current_user)).result
         return msg.set_true(PackagePresenter.new(p).to_json)
       else

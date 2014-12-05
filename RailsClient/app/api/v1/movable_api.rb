@@ -17,6 +17,10 @@ module V1
         return msg.set_false(MovableMessage::TargetNotExist)
       end
 
+      unless lc.root?
+        return msg.set_false(MovableMessage::CannotReceiveSingle)
+      end
+
       if (r = lc.get_service.receive(lc,current_user)).result
         msg.set_true({type:lc.container.type,type_display:ContainerType.display(lc.container.type),object:lc.presenter.to_json})
       else
