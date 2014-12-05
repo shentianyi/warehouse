@@ -39,7 +39,7 @@ module V1
         args[:des_location_id] = current_user.location_id
       end
 
-      args[:ancestry]= nil unless params.has_key? :all
+      args[:ancestry]= nil
 
       {result:1,content:ForkliftPresenter.init_json_presenters(ForkliftService.search(args).order(created_at: :desc).all)}
     end

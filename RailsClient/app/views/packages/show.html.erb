@@ -5,7 +5,7 @@
 <h4>零件号: <small><%= PackageLabelRegex.part_prefix_string + @package.package.part_id %></small></h4>
 <h4>数量: <small><%= PackageLabelRegex.quantity_prefix_string + @package.package.quantity_str %></small></h4>
 <h4>入库时间: <small><%= @package.package.fifo_time_display %></small></h4>
-<h4>上架库位: <small><%= "#{@package.parent.destinationable.name} => #{ppresenter.position_nr}" if @package.parent%></small></h4>
+<h4>上架库位: <small><%= ppresenter.position_nr%></small></h4>
 <h4>备注: <small><%= @package.remark %></small></h4>
 <h4>状态: <small><%= @package.state_display %></small></h4>
 <h4>所属托盘: <small><%= link_to @package.parent.container_id,forklift_path(@package.parent),:class => 'btn btn-default' if @package.parent %></small></h4>

@@ -10,4 +10,5 @@ module ForkliftMessage
   DestinationNotExist = '目的地不存在'
   AddPackageSuccess='添加成功'
   NotExitInWarehouse='零件不存在于该仓库中,请检查'
+  CannotAdd='无法添加到运单中，拖清单已经被单独发送'
 end

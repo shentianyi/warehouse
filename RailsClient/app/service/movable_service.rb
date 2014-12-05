@@ -26,11 +26,9 @@ class MovableService
   def self.receive movable,user
     msg = Message.new
 
-=begin
     unless MovableState.before(MovableState::ARRIVED).include?(movable.state)
       return msg.set_true
     end
-=end
 
     begin
       ActiveRecord::Base.transaction do

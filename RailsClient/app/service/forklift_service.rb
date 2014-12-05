@@ -38,7 +38,7 @@ class ForkliftService
       end
 
       lc.descendants.each{|d|
-        if d.state == MovableState::WAY
+        if d.state == MovableState::ARRIVED
           unless (m = d.get_movable_service.reject(d,user)).result
             return m
           end

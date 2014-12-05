@@ -91,7 +91,7 @@
             <td><%= package.package.fifo_time_display if package.package%></td>
             <td><%= package.remark %></td>
             <td><%= package.state_display%></td>
-            <td><%= "#{package.parent.destinationable.name} => #{ppresenter.position_nr}" if package.parent%></td>
+            <td><%= ppresenter.position_nr%></td>
             <td>
               <%= link_to package.parent.container_id,forklift_path(package.parent),:class => 'btn btn-default' if package.parent %>
             </td>

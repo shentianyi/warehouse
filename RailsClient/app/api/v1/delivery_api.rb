@@ -36,7 +36,9 @@ module V1
         args['records.impl_user_type'] = ImplUserType::RECEIVER
         args[:des_location_id] = current_user.location_id
       end
-      args[:ancestry]= nil unless params.has_key? :all
+
+      args[:ancestry]= nil
+
       #数据量太大，最多只支持50个运单
       {result: 1, content: DeliveryPresenter.init_json_presenters(DeliveryService.search(args).order(created_at: :desc).limit(50))}
     end
@@ -65,12 +67,12 @@ module V1
       lc = LogisticsContainer.find_latest_by_container_id(params[:forklift_id])
 
       unless lc.can_copy?
-        return {resule: 0, content: ForkliftMessage::CheckForkliftFailed}
+        return {resule: 0, content: ForkliftMessage::CannotAdd}
       end
 
       f = nil
 
-      if lc.get_base == CZ::State::INIT
+      if lc.base_state == CZ::State::INIT
         f = lc
       else
         f=LogisticsContainer.build(params[:forklift_id], current_user.id, current_user.location_id)

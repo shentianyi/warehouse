@@ -11,7 +11,9 @@ class PackagePresenter<Presenter
   def position_nr
     if @logistics_container.destinationable#f=@logistics_container.parent
       if position=PartService.get_position_by_whouse_id(@package.part_id, @logistics_container.destinationable_id)
-        return position.detail
+        return @logistics_container.destinationable.name+" => "+position.detail
+      else
+        return @logistics_container.destinationable.name
       end
     end
     ''
