@@ -24,7 +24,7 @@ module V1
     #@type
     get :get_by_time_and_state do
       args= {}
-      start_time = params[:start_time].nil? ? 24.hour.ago : params[:start_time]
+      start_time = params[:start_time].nil? ? 48.hour.ago : params[:start_time]
       end_time = params[:end_time].nil? ? Time.now : params[:end_time]
 
       args[:state] = params[:state] if params[:state]
@@ -70,6 +70,8 @@ module V1
 
     # add package
     post :check_package do
+      m = ApiMessage.new
+
       unless f=LogisticsContainer.exists?(params[:id])
         return {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::NotExit}
       end
@@ -80,6 +82,12 @@ module V1
 
       unless pc= Package.exists?(params[:package_id])
         return {result: 0, result_code: ResultCodeEnum::Failed, content: PackageMessage::NotExit}
+      end
+
+      # 在当前的逻辑中，不会存在一个container没有任何的location_container
+      # 如果一个Package 没有任何container，则不能添加到拖清单中
+      if pc.logistics_containers.count == 0
+        return m.set_false("不能添加包装箱，包装箱已被删除!")
       end
 
       unless p=LogisticsContainer.build(params[:package_id], current_user.id, current_user.location_id)

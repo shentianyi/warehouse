@@ -1,6 +1,10 @@
 class ForkliftService
   def self.dispatch(lc, destination, user)
     ActiveRecord::Base.transaction do
+      if lc.descendants.count == 0
+        return Message.new.set_false("无法发运空拖清单")
+      end
+
       unless (m = lc.get_movable_service.dispatch(lc, destination, user)).result
         return m
       end

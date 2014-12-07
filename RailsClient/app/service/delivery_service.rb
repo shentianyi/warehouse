@@ -1,6 +1,10 @@
 class DeliveryService
 
   def self.dispatch(movable, destination, user)
+    if movable.descendants.count == 0
+      return Message.new.set_false("无法发运空运单")
+    end
+
     ActiveRecord::Base.transaction do
       unless (m = movable.get_movable_service.dispatch(movable, destination, user)).result
         return m
