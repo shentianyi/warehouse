@@ -8,12 +8,13 @@ class PackagePresenter<Presenter
     self.delegators = Delegators
   end
 
+  #需要明确，logistics_container的package的destination应该是warehouse而不是position
   def position_nr
-    if @logistics_container.destinationable#f=@logistics_container.parent
+    if @logistics_container.destinationable && @logistics_container.destinationable_type == Whouse.to_s
       if position=PartService.get_position_by_whouse_id(@package.part_id, @logistics_container.destinationable_id)
-        return ""#@logistics_container.destinationable.name+" => "+position.detail
+        return @logistics_container.destinationable.name+" => "+position.detail
       else
-        return ""#@logistics_container.destinationable.name
+        return @logistics_container.destinationable.name
       end
     end
     ''
