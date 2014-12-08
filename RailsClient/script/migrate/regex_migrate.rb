@@ -3,7 +3,7 @@ Regex.all.each{|reg|
 }
 
 RegexType.types.each do |type|
-  if RegexCategory.where(name: RegexType.display(type), type:type).count == 0
+  if RegexCategory.where(id:type,name: RegexType.display(type), type:type).count == 0
     rc=RegexCategory.new(id:type,name: RegexType.display(type), type: type)
     Regex.where(type: type).each do |r|
       rc.regexes<<r
