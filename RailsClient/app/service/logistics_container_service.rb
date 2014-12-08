@@ -48,13 +48,13 @@ class LogisticsContainerService
   end
 
   def self.get_all_packages(lc)
-    lc.scope.joins(:package)
+    lc.subtree.joins(:package)
   end
 
   def self.get_all_packages_with_detail(lc,orders=nil)
-    query=get_all_packages(lc).select("containers.*,location_containers.*,'#{lc.destinationable_id}' as whouse_id")
+    query=get_all_packages(lc).select("location_containers.*,'#{lc.destinationable_id}' as whouse_id")
     query=query.order(orders) if orders
-    query.collect.each { |p| p.becomes(Package) }
+    #query.collect.each { |p| p.becomes(Package) }
   end
 
   def self.get_packages(lc)
@@ -70,7 +70,7 @@ class LogisticsContainerService
   end
 
   def self.get_packages_with_detail(lc, orders=nil)
-    query=get_packages(lc).select("containers.*,location_containers.*,'#{lc.destinationable_id}' as whouse_id")
+    query=get_packages(lc).select("location_containers.*,containers.*,'#{lc.destinationable_id}' as whouse_id")
     query=query.order(orders) if orders
     query.collect.each { |p| p.becomes(Package) }
   end

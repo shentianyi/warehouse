@@ -12,7 +12,7 @@ module Printer
 
       head={id: p.container_id,
             total_packages: p.sum_packages,
-            whouse: f.destinationable_name,
+            whouse: p.destinationable_name,
             delivery_date: f.get_dispatch_time,
             user: f.user_id}
       heads=[]

@@ -36,7 +36,11 @@ class PackagePresenter<Presenter
     @logistics_container.created_at.blank? ? '' : @logistics_container.created_at.strftime('%Y-%m-%d %H:%M')
   end
 
-  def total_packages
+  def destinationable_name
+    @logistics_container.destinationable.nil? ? "":@logistics_container.destinationable.name
+  end
+
+  def sum_packages
     1
   end
 
