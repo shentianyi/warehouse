@@ -1,7 +1,6 @@
 class ReportType
   Entry = 0
   Removal = 1
-  Discrepancy = 2
 
   def self.display type
     case type
@@ -9,8 +8,6 @@ class ReportType
         '收货'
       when Removal
         '发货'
-      when Discrepancy
-        '差异'
     end
   end
 

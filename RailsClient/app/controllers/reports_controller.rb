@@ -10,7 +10,7 @@ class ReportsController < ApplicationController
     condition = Package.generate_report_condition(@type,@date_start,@date_end,@location_id)
     @packages = Package.generate_report_data(condition)
     #render :json=> @packages
-    @title = "#{Time.parse(@date_start).strftime("%Y%m%d")}-#{Time.parse(@date_end).strftime("%Y%m%d")}#{ReportType.display(@type.to_i)}报表"
+    @title = ReportsHelper.gen_title(@type,@date_start,@date_end,@location_id)
     respond_to do |format|
       format.xlsx do
         send_data(entry_with_xlsx(@packages),
@@ -36,29 +36,27 @@ class ReportsController < ApplicationController
     render json: msg
   end
 
-  def entry_discrepancy
+  def discrepancy
+    @type = params[:type].nil? ? ReportType::Entry : params[:type]
     @location_id = params[:location_id].nil? ? current_user.location_id : params[:location_id]
-    @received_date_start = params[:received_date_start].nil? ? 1.day.ago.strftime("%Y-%m-%d 7:00") : params[:received_date_start]
-    @received_date_end = params[:received_date_end].nil? ? Time.now.strftime("%Y-%m-%d 7:00") : params[:received_date_end]
-    time_range = Time.parse(@received_date_start).utc..Time.parse(@received_date_end).utc
+    @date_start = params[:received_date_start].nil? ? 1.day.ago.strftime("%Y-%m-%d 7:00") : params[:received_date_start]
+    @date_end = params[:received_date_end].nil? ? Time.now.strftime("%Y-%m-%d 7:00") : params[:received_date_end]
+    @title = ''
 
-    condition = {}
-    #condition["packages.part_id"] = 'P00112425'
-    condition["deliveries.destination_id"] = @location_id
-    #condition["deliveries.received_date"] = time_range
-    #condition["deliveries.created_at"] = time_range
-    condition["packages.created_at"] = time_range
-    condition["packages.state"] = [PackageState::RECEIVED]
+    condition = Package.generate_report_condition(@type,@date_start,@date_end,@location_id)
 
     @packages = {}
 
-    Package.entry_report(condition).each { |p|
-      if @packages[p.part_id+p.whouse_id].nil?
-        @packages[p.part_id+p.whouse_id] = {"PartNr." => p.part_id, "Warehouse" => p.whouse_id, "Amount" => 0}
+    Package.generate_report_data(condition).each { |p|
+      if @packages[p['part_id']+p['whouse']].nil?
+        @packages[p['part_id']+p['whouse']] = {"PartNr." => p['part_id'], "Warehouse" => p['whouse'], "Amount" => 0}
       end
-      @packages[p.part_id+p.whouse_id]["Amount"] = @packages[p.part_id+p.whouse_id]["Amount"] + p.total
+      @packages[p['part_id']+p['whouse']]["Amount"] = @packages[p['part_id']+p['whouse']]["Amount"] + p['count']
     }
 
+    # ===>2014/12/08 李其：写这个是因为之前出现同步错误，现在不允许出现同步覆盖状态的问题
+    #     现在不允许出现，故注释代码
+=begin
     @uncounted_packages = {}
     condition["packages.state"] = [PackageState::WAY, PackageState::ORIGINAL]
     Package.entry_report(condition).each { |p|
@@ -67,6 +65,7 @@ class ReportsController < ApplicationController
       end
       @uncounted_packages[p.part_id+p.whouse_id]["Amount"] = @uncounted_packages[p.part_id+p.whouse_id]["Amount"] + p.total
     }
+=end
 
     @results = {}
     if params.has_key?(:file)
@@ -79,12 +78,12 @@ class ReportsController < ApplicationController
       end
     end
 
-    filename = "#{Location.find_by_id(@location_id).name}收货差异报表_#{@received_date_start}_#{@received_date_end}"
+    @title = ReportsHelper.gen_title(@type,@date_start,@date_end,@location_id,"差异")
 
     respond_to do |format|
       format.html
       format.xlsx do
-        send_data(entry_discrepancy_xlsx(@packages, @results, @uncounted_packages),
+        send_data(entry_discrepancy_xlsx(@packages, @results),
                   :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
                   :filename => filename+".xlsx"
         )
@@ -144,7 +143,7 @@ class ReportsController < ApplicationController
     p.to_stream.read
   end
 
-  def entry_discrepancy_xlsx packages, results, uncounted_packages
+  def entry_discrepancy_xlsx packages, results
     p = Axlsx::Package.new
     wb = p.workbook
     wb.add_worksheet(:name => "Basic Sheet") do |sheet|
@@ -155,8 +154,7 @@ class ReportsController < ApplicationController
                           v["Warehouse"],
                           v["Amount"],
                           packages[k].nil? ? 0 : packages[k]["Amount"],
-                          packages[k].nil? ? v["Amount"] : v["Amount"] - packages[k]["Amount"],
-                          uncounted_packages[k].nil? ? 0 : uncounted_packages[k]["Amount"]
+                          packages[k].nil? ? v["Amount"] : v["Amount"] - packages[k]["Amount"]
                       ], :types => [:string]
       }
     end
@@ -248,7 +246,7 @@ class ReportsController < ApplicationController
   end
 
   def discrepancy_header
-    ["零件号", "部门", "报表数量", "系统数量", "差值", "未记入统计（未发送或在途）"]
+    ["零件号", "部门", "报表数量", "系统数量", "差值"]
   end
 
   def fors_keys

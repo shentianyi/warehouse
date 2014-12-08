@@ -1,7 +1,11 @@
-<div class="panel-heading panel-warning">
-  <h2>报表</h2>
- 不同类型的统计报表.
+<div class="panel panel-warning">
+  <div class="panel-heading">
+    <h2>收发货报表</h2>
+    收货与发货的统计报表.
+  </div>
 </div>
+<div class="panel-body">
+  <br/>
 <!--Form-->
 <form method="get" path="<%= reports_reports_path%>">
 <span class="label label-info">报表类型:</span>
@@ -15,11 +19,11 @@
   <%= select_tag :format, options_for_select([["Web", "html"],["Excel File(MS 07 or later)", "xlsx"]], "html") %>
   <input type="submit" value="生成" class="btn btn-warning" name="commit" onclick="submitForm()"/>
 </form>
-
+</div>
 <!--Form-->
-<h3>
-  <%= @title%>
-</h3>
+<div class="alert alert-success" role="alert">
+  <p><%= @title%></p>
+</div>
 <div id="result">
   <%= render "result" %>
 </div>
