@@ -23,9 +23,7 @@ module CZ
         name = method_name.to_s.split("_")[1]
         if @@actions.keys.include? name
           r = get_record(name)
-          return r.impl_time.localtime.strftime("%Y-%m-%d %H:%M:%S") if r
-        else
-          return " "
+          return  r.nil? ? " ": r.impl_time.localtime.strftime("%Y-%m-%d %H:%M:%S")
         end
       end
 
