@@ -94,19 +94,28 @@ module V1
         return {result: 0, content: DeliveryMessage::NotExit}
       end
 
-      unless Forklift.where(id: params[:forklifts]).count == params[:forklifts].length
+      #unless Forklift.where(id: params[:forklifts]).count == params[:forklifts].length
+      #  return {result: 0, content: DeliveryMessage::ForkliftHasNotExist}
+      #end
+      unless (lcs = LogisticsContainer.where(id: params[:forklifts])).count == params[:forklifts].length
         return {result: 0, content: DeliveryMessage::ForkliftHasNotExist}
       end
 
-      unless LogisticsContainer.are_roots?(params[:forklifts], current_user.location_id)
+      container_ids = lcs.collect{|l|l.container_id}
+
+      unless LogisticsContainer.are_roots?(container_ids,current_user.location_id)
         return {result: 0, content: DeliveryMessage::ForkliftExistInOthers}
       end
+
+      #unless LogisticsContainer.are_roots?(params[:forklifts], current_user.location_id)
+      #  return {result: 0, content: DeliveryMessage::ForkliftExistInOthers}
+      #end
 
       unless d.can_update?
         return {result: 0, content: DeliveryMessage::CannotUpdate}
       end
 
-      if d.add_by_ids(params[:forklifts])
+      if d.add_by_ids(container_ids)
         {result: 1, content: DeliveryMessage::AddForkliftSuccess}
       else
         {result: 0, content: ''}
