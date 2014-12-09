@@ -87,7 +87,7 @@ class LogisticsContainerService
   end
 
   #---------------------------
-  def self.get_all_accepted_package(lc)
+  def self.get_all_accepted_packages(lc)
     get_all_packages_by_state(lc,MovableState::CHECKED)
   end
 
@@ -101,7 +101,7 @@ class LogisticsContainerService
   end
 
   #---------------------------
-  def self.get_all_rejected_packages(lc,state)
+  def self.get_all_rejected_packages(lc)
     get_all_packages_by_state(lc,MovableState::REJECTED)
   end
 
@@ -117,7 +117,7 @@ class LogisticsContainerService
 
   #---------------------------
   def self.get_all_packages_by_state(lc,state)
-    lc.scope.joins(:package).where(state:state)
+    lc.subtree.joins(:package).where(state:state)
   end
 
   def self.get_packages_by_state(lc, state)

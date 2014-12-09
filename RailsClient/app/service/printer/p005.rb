@@ -22,7 +22,7 @@ module Printer
         heads<<{Key: k, Value: head[k]}
       end
 
-      packages=LogisticsContainerService.get_all_accepted_package(d)
+      packages=LogisticsContainerService.get_all_accepted_packages(d)
 
       packages.each do |p|
         f=p.parent

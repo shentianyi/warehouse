@@ -4,6 +4,8 @@ class LogisticsContainer<LocationContainer
   include CZ::Recordable
   include CZ::Service
 
+  alias_method :movable_state_display,:state_display
+
 
   default_scope { where(type: LocationContainerType::LOGISTICS) }
   has_ancestry
@@ -99,6 +101,14 @@ class LogisticsContainer<LocationContainer
 
   def can_add_to_container?
     root?
+  end
+
+  def state_display
+    if self.state == MovableState::CHECKED && (LogisticsContainerService.get_all_packages(self).count > LogisticsContainerService.get_all_accepted_packages(self).count)
+      "部分接收"
+    else
+      movable_state_display
+    end
   end
 
   def out_store
