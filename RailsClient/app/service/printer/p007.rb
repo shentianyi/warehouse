@@ -6,7 +6,7 @@ module Printer
 
     def generate_data
       f = LogisticsContainer.find_by_id(self.id)
-      packages=PackagePresenter.init_presenters(LogisticsContainerService.get_packages_with_detail(f))
+      packages=PackagePresenter.init_presenters(LogisticsContainerService.get_all_packages_with_detail(f))
       whouse_name = f.destinationable.nil? ? '' : f.destinationable.name
       user = f.user.nil? ? '': f.user.name
       head = {
