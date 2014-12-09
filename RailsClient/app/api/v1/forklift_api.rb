@@ -227,7 +227,7 @@ module V1
         if args[:destinationable_id]
           ps = LogisticsContainerService.get_all_packages(f)
           ps.each{|p|p.update({destinationable:f.destinationable})}
-          packages = PackagePresenter.init_presenters(ps.collect { |p| p.to_json })
+          packages = PackagePresenter.init_presenters(ps).collect { |p| p.to_json }
           {result: 1, content: {packages: packages}}
         else
           {result: 1, content: ForkliftMessage::UpdateSuccess}
