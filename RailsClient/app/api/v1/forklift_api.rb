@@ -225,7 +225,7 @@ module V1
 
       if f.update_attributes(args)
         if args[:destinationable_id]
-          packages = PackagePresenter.init_presenters(LogisticsContainerService.get_packages_with_detail(f)).collect { |p| p.to_json }
+          packages = PackagePresenter.init_presenters(LogisticsContainerService.get_all_packages_with_detail(f)).collect { |p| p.to_json }
           {result: 1, content: {packages: packages}}
         else
           {result: 1, content: ForkliftMessage::UpdateSuccess}
