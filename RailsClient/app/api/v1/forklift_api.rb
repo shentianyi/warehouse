@@ -67,7 +67,6 @@ module V1
     #check if a package can be add to a forklift
     #if can,add to the forklift
     #if not,return
-
     # add package
     post :check_package do
       m = ApiMessage.new
@@ -86,9 +85,11 @@ module V1
 
       # 在当前的逻辑中，不会存在一个container没有任何的location_container
       # 如果一个Package 没有任何container，则不能添加到拖清单中
+=begin
       if pc.logistics_containers.count == 0
         return m.set_false("不能添加包装箱，包装箱已被删除!")
       end
+=end
 
       unless p=LogisticsContainer.build(params[:package_id], current_user.id, current_user.location_id)
         p=pc.logistics_containers.build(source_location_id: current_user.location_id, user_id: current_user.id)
