@@ -21,13 +21,16 @@ class LogisticsContainersController < ApplicationController
       args = args + tables
   #end
 
-
     hash_conditions = {}
 
     res = joins.zip(args)
 
+    puts "====#{res}"
+
     res.each do |table,arg|
+      puts "#{table},#{arg}"
       condition = params[arg.to_sym]
+      puts condition
       condition.each do |k,v|
         if (v.is_a?(Fixnum) || v.is_a?(String)) && !v.blank?
           if condition.has_key?(k+'_fuzzy')
@@ -35,6 +38,7 @@ class LogisticsContainersController < ApplicationController
           else
             hash_conditions[table.to_sym] = Hash[k,v]
           end
+          puts "--#{arg}_#{k}"
           instance_variable_set("@#{arg}_#{k}", v)
         end
         if v.is_a?(Hash) && v.values.count==2 && v.values.uniq!=['']
@@ -43,6 +47,7 @@ class LogisticsContainersController < ApplicationController
           values[1]=Time.parse(values[1]).utc.to_s if values[1].is_date?
           hash_conditions[table.to_sym] = Hash[k,(values[0]..values[1])]
           v.each do |kk, vv|
+            puts "--#{arg}_#{k}_#{kk}"
             instance_variable_set("@#{arg}_#{k}_#{kk}", vv)
           end
         end
@@ -52,6 +57,8 @@ class LogisticsContainersController < ApplicationController
     #puts hash_conditions
 
     query=query.where(hash_conditions)
+
+    query.first
 
     instance_variable_set("@#{model.pluralize}", query.paginate(:page => params[:page]).all.order(created_at: :desc))
     render "#{model.pluralize}/index"
