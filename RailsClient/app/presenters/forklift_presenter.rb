@@ -28,7 +28,7 @@ class ForkliftPresenter<Presenter
   end
 
   def all_packages
-    PackagePresenter.init_json_presenters(LogisticsContainerService.get_all_packages_with_detail(self))
+    #PackagePresenter.init_json_presenters(LogisticsContainerService.get_all_packages_with_detail(self))
   end
 
   def packages
