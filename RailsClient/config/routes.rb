@@ -19,6 +19,11 @@ Rails.application.routes.draw do
     end
   end
 
+  require 'sidekiq/web'
+  authenticate :user, lambda { |u| u.is_sys } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
+
   resources :order_items do
     collection do
       get :search

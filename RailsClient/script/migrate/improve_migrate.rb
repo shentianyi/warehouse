@@ -12,41 +12,13 @@ include ActionView::Helpers::DateHelper
 # *Package中所有的状态，如果是Destination的并且Forklift也是Destination的，则修改为拒收，Rejected
 # *同时，需要产生多少条Record，需要留意创建。
 # *注意那些空的Package,Forklift,Delivery
-class OPackage < ActiveRecord::Base
-
-  belongs_to :user
-  belongs_to :forklift
-
-  include Extensions::UUID
-  self.table_name = "packages"
-end
-
-class OForklift < ActiveRecord::Base
-  include Extensions::UUID
-  self.table_name = "forklifts"
-
-  belongs_to :user
-  belongs_to :delivery
-  belongs_to :whouse
-  has_many :packages, class_name: "OPackage", foreign_key: 'forklift_id'
-end
-
-class ODelivery < ActiveRecord::Base
-  include Extensions::UUID
-  self.table_name = "deliveries"
-
-  belongs_to :user
-  belongs_to :destination, class_name: 'Location'
-  belongs_to :receiver, class_name: 'User'
-  has_many :forklifts, class_name: "OForklift", foreign_key: 'delivery_id'
-end
 
 #*2014-11-26 迁移速度太慢了，需要使用多任务
 
 start_time = Time.now
 
 #*先创建Delivery
-ds = ODelivery.all.order(created_at: :desc).limit(500)
+ds = Old::ODelivery.all.order(created_at: :desc).limit(500)
 
 all = ds.count
 begin

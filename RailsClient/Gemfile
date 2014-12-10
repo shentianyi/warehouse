@@ -52,6 +52,13 @@ group :development, :test do
   gem 'factory_girl_rails', '~> 4.0'
 end
 
+#sidekiq
+gem 'sidekiq'
+gem 'sinatra',require: false
+gem 'slim'
+gem 'sidekiq-benchmark'
+gem 'redis'
+
 # For sync
 gem 'whenever'
 gem 'rest_client'

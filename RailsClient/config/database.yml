@@ -11,7 +11,7 @@
 
 default: &default
   adapter: mysql2
-  pool: 5
+  pool: 30
   timeout: 5000
   socket: /var/run/mysqld/mysqld.sock
   username: whouser
