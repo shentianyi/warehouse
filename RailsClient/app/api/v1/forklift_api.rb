@@ -108,11 +108,15 @@ module V1
       end
 
       if f.add(p)
+       if (params[:check_whouse].nil? || params[:check_whouse].to_i==1)
         if PartService.get_part_by_id_whouse_id(pc.part_id, f.destinationable_id)
           {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(p).to_json}
         else
           {result: 1, result_code: ResultCodeEnum::TargetNotInPosition, content: PackagePresenter.new(p).to_json}
         end
+      else
+         {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(p).to_json}
+       end
       else
         {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::AddPackageFailed}
       end
