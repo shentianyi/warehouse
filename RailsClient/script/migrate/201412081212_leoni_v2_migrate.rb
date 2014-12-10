@@ -1,11 +1,11 @@
-count = 0
+user_count = 0
 User.all.each do |u|
   if u.user_name.nil?
     u.update({user_name: u.id})
-    count+=1
+    user_count+=1
   end
 end
-puts count.to_s+"个User被更新"
+puts user_count.to_s+"个User被更新"
 
 Location.all.each do |l|
   if l.destination_id && (l.location_destinations.where(destination_id:l.destination_id).count == 0)
@@ -29,3 +29,20 @@ RegexType.types.each do |type|
     rc.save
   end
 end
+
+dump_pos_count = 0
+update_pos_count = 0
+Position.all.each do |p|
+  id = "PS#{p.whouse_id}#{p.detail.gsub(/\s+/,'')}"
+  if old = Position.find_by_id(id)
+    dump_pos_count += 1
+    old.destroy
+  end
+
+  if id != p.id
+    p.update({id:id})
+    update_pos_count += 1
+  end
+end
+
+puts "删除了#{dump_pos_count}个重复库位!更新了#{update_pos_count}个库位!"

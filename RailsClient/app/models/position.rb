@@ -13,7 +13,7 @@ class Position < ActiveRecord::Base
   end
 
   def generate_id
-    "PS#{Time.now.to_milli}"
+    "PS#{p.whouse_id}#{p.detail.gsub(/\s+/,'')}"
   end
 
   def self.trans_position
