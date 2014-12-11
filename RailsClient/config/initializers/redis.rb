@@ -1,3 +1,4 @@
+=begin
 require 'redis'
 require 'redis-namespace'
 
@@ -18,3 +19,4 @@ if defined?(PhusionPassenger)
     end
   end
 end
+=end

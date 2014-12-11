@@ -10,6 +10,7 @@ module Sync
       current=Time.now
       begin
         Sync::Execute::LocationSync.sync
+        Sync::Execute::LocationDestinationSync.sync
         Sync::Execute::LocationContainerSync.sync
         Sync::Execute::HackerSync.sync
         Sync::Execute::WhouseSync.sync

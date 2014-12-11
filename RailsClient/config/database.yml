@@ -35,7 +35,7 @@ production:
   <<: *default
   database: whousedb
 
-server :
+server:
   <<: *default
 
 sync1:

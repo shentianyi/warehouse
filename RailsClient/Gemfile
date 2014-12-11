@@ -53,11 +53,11 @@ group :development, :test do
 end
 
 #sidekiq
-gem 'sidekiq'
-gem 'sinatra',require: false
-gem 'slim'
-gem 'sidekiq-benchmark'
-gem 'redis'
+#gem 'sidekiq'
+#gem 'sinatra',require: false
+#gem 'slim'
+#gem 'sidekiq-benchmark'
+#gem 'redis'
 
 # For sync
 gem 'whenever'

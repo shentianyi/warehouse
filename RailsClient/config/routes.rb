@@ -18,11 +18,13 @@ Rails.application.routes.draw do
       get :search
     end
   end
+=begin
 
   require 'sidekiq/web'
   authenticate :user, lambda { |u| u.is_sys } do
     mount Sidekiq::Web => '/sidekiq'
   end
+=end
 
   resources :order_items do
     collection do

@@ -1,3 +1,4 @@
+=begin
 sidekqi_redis_conn =proc {
   Redis::Namespace.new("whouse_sidekiqworker", :redis => $redis)
 }
@@ -16,3 +17,4 @@ end
 Sidekiq.configure_client do |config|
   config.redis = ConnectionPool.new(size: 5, &sidekqi_redis_conn)
 end
+=end

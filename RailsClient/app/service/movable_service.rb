@@ -6,7 +6,8 @@ class MovableService
 
     begin
       ActiveRecord::Base.transaction do
-        movable.des_location_id = destination.id
+        #movable.des_location_id = destination.id
+        movable.update({des_location_id:destination.id})
 
         unless movable.state_for(CZ::Movable::DISPATCH)
           raise MovableMessage::StateError
