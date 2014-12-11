@@ -30,8 +30,10 @@ module SyncAPIGuard
       end
 
       after do
+        tb= get_table_name
+        model = tb.singularize.classify.constantize
+        Sync::Config.reset_callbacks(model)
         if Sync::Config.sync_lock
-          tb= get_table_name
           if table=SyncPool.find_by_table_name(tb)
             table.update(locked: false)
           end

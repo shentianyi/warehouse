@@ -85,6 +85,10 @@ module Sync
       model.skip_callback(:create,:before,:init_container_attr)
     end
 
+    def self.reset_callbacks model
+      model.record_timestamps=true
+    end
+
     def self.reload
       @@config=nil
     end

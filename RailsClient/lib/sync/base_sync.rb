@@ -202,6 +202,7 @@ module Sync
         items.each do |item|
           item.save if item.can_reset_sync_dirty_flag
         end
+        model.record_timestamps=true
       end
     end
 
@@ -211,6 +212,7 @@ module Sync
         items.each do |item|
           item.save if item.can_reset_sync_dirty_flag
         end
+        model.record_timestamps=true
       end
     end
 
@@ -220,6 +222,7 @@ module Sync
         items.each do |item|
           item.save
         end
+        model.record_timestamps=true
       end
     end
 
