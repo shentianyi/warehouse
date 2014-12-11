@@ -11,6 +11,7 @@ module V1
 
 
       mount LocationSyncAPI
+      mount LocationDestinationSyncAPI
       mount UserSyncAPI
       mount WhouseSyncAPI
       mount PartTypeSyncAPI
