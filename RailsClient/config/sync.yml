@@ -13,6 +13,12 @@ sync:
       post: false
       put: false
       delete: false
+    location_destination:
+      name: "目的地"
+      get: true
+      post: true
+      put: true
+      delete: true
     hacker:
       name: "员工"
       get: false
