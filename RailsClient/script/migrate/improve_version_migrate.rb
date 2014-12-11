@@ -18,10 +18,10 @@ piece = 5
 
 count = 0
 all_old_deliveries.each_slice(piece).to_a.each do |old_deliveries|
-  count+=1
-  puts "#{count}个Worker已被建立!"
-  ids = old_deliveries.collect { |od| od.id }
-  TransContainerWorker.perform_async(ids)
+  #count+=1
+  #puts "#{count}个Worker已被建立!"
+  #ids = old_deliveries.collect { |od| od.id }
+  #TransContainerWorker.perform_async(ids)
 end
 
 #TransContainerWorker.perform_async(all_old_deliveries.first.id)

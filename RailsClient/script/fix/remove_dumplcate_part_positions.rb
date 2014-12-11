@@ -4,7 +4,7 @@ grouped = PartPosition.all.group_by{|pp|
 
 i = 0
 grouped.values.each do |duplicates|
-	first_one = duplicates.shift
+	duplicates.shift
 	duplicates.each{|double|
     i = i + 1
     double.destroy

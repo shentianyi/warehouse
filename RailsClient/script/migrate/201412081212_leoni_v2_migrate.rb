@@ -34,14 +34,17 @@ dump_pos_count = 0
 update_pos_count = 0
 Position.all.each do |p|
   id = "PS#{p.whouse_id}#{p.detail.gsub(/\s+/,'')}"
-  if old = Position.find_by_id(id)
-    dump_pos_count += 1
-    old.destroy
-  end
 
-  if id != p.id
-    p.update({id:id})
+  olds = Position.where(id:id)
+  #puts "#{olds.count},#{id}"
+
+  if olds.count > 1
+    olds.shift
+    dump_pos_count += olds.count
+    olds.each{|o| o.destroy}
+  elsif olds.count == 0
     update_pos_count += 1
+    p.update({id:id})
   end
 end
 
