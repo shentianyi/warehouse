@@ -17,6 +17,8 @@ module V1
           ActiveRecord::Base.transaction do
             location_destinations=JSON.parse(params[:location_destinations])
             location_destinations.each do |ld|
+              puts "=========="
+              puts ld
               l = LocationDestination.new(ld)
               l.save
             end
