@@ -15,10 +15,8 @@ module V1
         msg = Message.new
         begin
           ActiveRecord::Base.transaction do
-            location_destinations=JSON.parse(params[:location_destinations])
+            location_destinations=JSON.parse(params[:location_destination])
             location_destinations.each do |ld|
-              puts "=========="
-              puts ld
               l = LocationDestination.new(ld)
               l.save
             end
@@ -34,7 +32,7 @@ module V1
         msg = Message.new
         begin
           ActiveRecord::Base.transaction do
-            location_destinations = JSON.parse(params[:location_destinations])
+            location_destinations = JSON.parse(params[:location_destination])
             location_destinations.each do |ld|
               if l = LocationDestination.unscoped.find_by_id(ld['id'])
                 l.update(ld.except('id'))
@@ -52,7 +50,7 @@ module V1
         msg = Message.new
         begin
           ActiveRecord::Base.transaction do
-            location_destinations = JSON.parse(params[:location_destinations])
+            location_destinations = JSON.parse(params[:location_destination])
             location_destinations.each do |id|
               if l = LocationDestination.unscoped.find_by_id(id)
                 l.update(is_delete: true)
