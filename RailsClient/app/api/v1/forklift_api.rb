@@ -31,7 +31,7 @@ module V1
 
       if params[:type].nil? || params[:type].to_i == 0
         args[:created_at] = start_time..end_time
-        args[:source_location_id] = [current_user.location_id,nil]
+        args[:source_location_id] = [current_user.location_id, nil]
         args[:user_id] = current_user.id if params[:all].nil?
       else
         args['records.impl_time'] = start_time..end_time
@@ -41,7 +41,7 @@ module V1
 
       args[:ancestry]= nil
 
-      {result:1,content:ForkliftPresenter.init_json_presenters(ForkliftService.search(args).order(created_at: :desc).all)}
+      {result: 1, content: ForkliftPresenter.init_json_presenters(ForkliftService.search(args).order(created_at: :desc).all)}
     end
 
     # create forklift
@@ -83,14 +83,6 @@ module V1
         return {result: 0, result_code: ResultCodeEnum::Failed, content: PackageMessage::NotExit}
       end
 
-      # 在当前的逻辑中，不会存在一个container没有任何的location_container
-      # 如果一个Package 没有任何container，则不能添加到拖清单中
-=begin
-      if pc.logistics_containers.count == 0
-        return m.set_false("不能添加包装箱，包装箱已被删除!")
-      end
-=end
-
       unless p=LogisticsContainer.build(params[:package_id], current_user.id, current_user.location_id)
         p=pc.logistics_containers.build(source_location_id: current_user.location_id, user_id: current_user.id)
         p.destinationable = f.destinationable
@@ -98,7 +90,7 @@ module V1
       end
 
       unless p.can_update?
-        return {result:0,result_code: ResultCodeEnum::Failed,content: PackageMessage::Sent}
+        return {result: 0, result_code: ResultCodeEnum::Failed, content: PackageMessage::Sent}
       end
 
       p.package=pc
@@ -108,15 +100,15 @@ module V1
       end
 
       if f.add(p)
-       if (params[:check_whouse].nil? || params[:check_whouse].to_i==1)
-        if PartService.get_part_by_id_whouse_id(pc.part_id, f.destinationable_id)
-          {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(p).to_json}
+        if (params[:check_whouse].nil? || params[:check_whouse].to_i==1)
+          if PartService.get_part_by_id_whouse_id(pc.part_id, f.destinationable_id)
+            {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(p).to_json}
+          else
+            {result: 1, result_code: ResultCodeEnum::TargetNotInPosition, content: PackagePresenter.new(p).to_json}
+          end
         else
-          {result: 1, result_code: ResultCodeEnum::TargetNotInPosition, content: PackagePresenter.new(p).to_json}
+          {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(p).to_json}
         end
-      else
-         {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(p).to_json}
-       end
       else
         {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::AddPackageFailed}
       end
@@ -129,7 +121,7 @@ module V1
 
       fpresenter = ForkliftPresenter.new(f)
 
-      {result:1,content:PackagePresenter.init_json_presenters(fpresenter.packages)}
+      {result: 1, content: PackagePresenter.init_json_presenters(fpresenter.packages)}
     end
 
     # add package
@@ -159,16 +151,16 @@ module V1
       if res.result
         lc_p = res.object
         if f.add(lc_p)
-          lc_p.update({destinationable:f.destinationable})
-           if (params[:check_whouse].nil? || params[:check_whouse].to_i==1)
-          if PartService.get_part_by_id_whouse_id(params[:part_id], f.destinationable_id)
-            {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(lc_p).to_json}
+          lc_p.update({destinationable: f.destinationable})
+          if (params[:check_whouse].nil? || params[:check_whouse].to_i==1)
+            if PartService.get_part_by_id_whouse_id(params[:part_id], f.destinationable_id)
+              {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(lc_p).to_json}
+            else
+              {result: 1, result_code: ResultCodeEnum::TargetNotInPosition, content: PackagePresenter.new(lc_p).to_json}
+            end
           else
-            {result: 1, result_code: ResultCodeEnum::TargetNotInPosition, content: PackagePresenter.new(lc_p).to_json}
+            {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(lc_p).to_json}
           end
-        else 
-          {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(lc_p).to_json}
-        end
         else
           {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::AddPackageFailed}
         end
@@ -211,7 +203,7 @@ module V1
       end
     end
 
-# update forklift
+    # update forklift
     put do
       args=forklift_params
       args.delete(:stocker_id)
@@ -235,7 +227,7 @@ module V1
       if f.update_attributes(args)
         if args[:destinationable_id]
           ps = LogisticsContainerService.get_all_packages(f)
-          ps.each{|p|p.update({destinationable:f.destinationable})}
+          ps.each { |p| p.update({destinationable: f.destinationable}) }
           packages = PackagePresenter.init_presenters(ps).collect { |p| p.to_json }
           {result: 1, content: {packages: packages}}
         else
@@ -262,7 +254,7 @@ module V1
         return msg.set_false(MovableMessage::DestinationNotExist)
       end
 
-      unless (r = ForkliftService.dispatch(lc,destination,current_user)).result
+      unless (r = ForkliftService.dispatch(lc, destination, current_user)).result
         return msg.set_false(r.content)
       end
 
@@ -280,7 +272,7 @@ module V1
       end
 
       #*own implementation of receive
-      if (r = ForkliftService.receive(f,current_user)).result
+      if (r = ForkliftService.receive(f, current_user)).result
         {result: 1, content: ForkliftPresenter.new(f).to_json}
       else
         {result: 0, content: r.content}
@@ -293,11 +285,11 @@ module V1
         return {result: 0, content: DeliveryMessage::NotExit}
       end
 
-      unless (m = ForkliftService.confirm_receive(lc,current_user)).result
-        return {result:0,content: DeliveryMessage::ReceiveFailed}
+      unless (m = ForkliftService.confirm_receive(lc, current_user)).result
+        return {result: 0, content: DeliveryMessage::ReceiveFailed}
       end
 
-      return {result:1,content: DeliveryMessage::ReceiveSuccess}
+      return {result: 1, content: DeliveryMessage::ReceiveSuccess}
     end
   end
 end
