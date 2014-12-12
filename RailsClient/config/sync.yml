@@ -1,6 +1,6 @@
 ---
 sync:
-  host: http://112.124.28.10:9000
+  host: http://192.168.0.116:3000
   token: 3dcba17f596969a676bfdd90b5425c703f983acf7306760e1057c95afe9f17b1d
   sync_lock: false
   enabled: true
@@ -69,22 +69,22 @@ sync:
       delete: false
     container:
       name: "容器"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true
     location_container:
       name: "容器层次"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true
     record:
       name: "操作记录"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true
     storage:
       name: "库存"
       get: false
