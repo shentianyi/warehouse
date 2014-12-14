@@ -1,3 +1,4 @@
+puts "开始更新用户......"
 user_count = 0
 User.all.each do |u|
   if u.user_name.nil?
@@ -15,7 +16,9 @@ Location.all.each do |l|
     puts ld.destination.name
   end
 end
+puts "结束更新用户......"
 
+puts "开始更新正则......"
 Regex.all.each{|reg|
   reg.update({id:reg.code})
 }
@@ -29,7 +32,9 @@ RegexType.types.each do |type|
     rc.save
   end
 end
+puts "结束更新正则......"
 
+puts "开始更新零件......"
 dump_pos_count = 0
 update_pos_count = 0
 Position.all.each do |p|
@@ -44,8 +49,36 @@ Position.all.each do |p|
     olds.each{|o| o.destroy}
   elsif olds.count == 0
     update_pos_count += 1
-    p.update({id:id})
+    ActiveRecord::Base.transaction do
+      p.part_positions.each {|pp| pp.update({position_id:id})}
+      p.update({id:id})
+    end
   end
 end
 
 puts "删除了#{dump_pos_count}个重复库位!更新了#{update_pos_count}个库位!"
+puts "结束更新零件......"
+
+#update part_position
+dump_pos_count = 0
+update_pos_count = 0
+puts "开始更新零件库位......"
+PartPosition.all.each do |pp|
+  id = "#{pp.part_id}#{pp.position_id}"
+
+  olds = PartPosition.where(id:id)
+  #puts "#{olds.count},#{id}"
+
+  if olds.count > 1
+    puts "#{id}"
+    puts old.to_json
+    olds.shift
+    dump_pos_count += olds.count
+    olds.each{|o| o.destroy}
+  elsif olds.count == 0
+    update_pos_count += 1
+    pp.update({id:id})
+  end
+end
+puts "删除了#{dump_pos_count}个重复零件库位!更新了#{update_pos_count}个零件库位!"
+puts "零件库位结束更新......"
