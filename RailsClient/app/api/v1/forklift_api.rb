@@ -48,7 +48,7 @@ module V1
     post do
       args=forklift_params
       args.delete(:stocker_id)
-      args[:destinationable_id] = args[:whouse_id]
+      args[:destinationable_id] = args[:whouse_id] if args[:whouse_id]
       args.delete(:whouse_id)
 
       msg = ForkliftService.create(args, current_user)
@@ -207,7 +207,7 @@ module V1
     put do
       args=forklift_params
       args.delete(:stocker_id)
-      args[:destinationable_id] = args[:whouse_id]
+      args[:destinationable_id] = args[:whouse_id] if args[:whouse_id]
       args.delete(:whouse_id)
 
       unless f=LogisticsContainer.exists?(args[:id])
