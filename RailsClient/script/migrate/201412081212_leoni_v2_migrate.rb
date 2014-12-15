@@ -40,14 +40,15 @@ update_pos_count = 0
 Position.all.each do |p|
   id = "PS#{p.whouse_id}#{p.detail.gsub(/\s+/,'')}"
 
-  olds = Position.where(id:id)
+  olds = Position.unscoped.where(id:id)
   #puts "#{olds.count},#{id}"
 
-  if olds.count > 1
-    olds.shift
+  if olds.count > 0
     dump_pos_count += olds.count
-    olds.each{|o| o.destroy}
-  elsif olds.count == 0
+    olds.each do |o|
+      o.update({id:SecureRandom.uuid,is_delete:true})
+    end
+  else
     update_pos_count += 1
     ActiveRecord::Base.transaction do
       p.part_positions.each {|pp| pp.update({position_id:id})}
@@ -66,16 +67,15 @@ puts "开始更新零件库位......"
 PartPosition.all.each do |pp|
   id = "#{pp.part_id}#{pp.position_id}"
 
-  olds = PartPosition.where(id:id)
+  olds = PartPosition.unscoped.where(id:id)
   #puts "#{olds.count},#{id}"
 
   if olds.count > 1
-    puts "#{id}"
-    puts old.to_json
-    olds.shift
     dump_pos_count += olds.count
-    olds.each{|o| o.destroy}
-  elsif olds.count == 0
+    olds.each{|o|
+      o.update({id:SecureRandom.uuid,is_delete:true})
+    }
+  else
     update_pos_count += 1
     pp.update({id:id})
   end
