@@ -17,7 +17,7 @@
     <td><%= p['count']%></td>
     <td><%= p['box']%></td>
     <td><%= p['whouse']%></td>
-    <td><%= p.state_display%></td>
+    <td><%= MovableState.display(p['state'])%></td>
   </tr>
   <%end%>
   </tbody>
