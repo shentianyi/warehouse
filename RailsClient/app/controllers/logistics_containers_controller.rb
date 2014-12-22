@@ -69,7 +69,7 @@ class LogisticsContainersController < ApplicationController
     json={}
     parent=LogisticsContainer.find(params[:id])
     if !parent.is_root?
-      redirect_to send("#{ContainerType.display(parent.container.type).pluralize}_path"),notice: "该#{ContainerType.display(parent.container.type)}不能被导出，因为不是单独发运的。"
+      redirect_to send("#{ContainerType.get_type_name(parent.container.type).pluralize}_path"),notice: "该#{ContainerType.get_type_name(parent.container.type)}不能被导出，因为不是单独发运的。"
     else
       lcs=parent.subtree
       json[:logistics_containers]=lcs
