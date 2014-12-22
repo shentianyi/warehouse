@@ -16,6 +16,11 @@ Rails.application.routes.draw do
   resources :logistics_containers do
     collection do
       get :search
+      match :import, to: :import, via: [:get, :post]
+    end
+
+    member do
+      get :export
     end
   end
 =begin
@@ -52,13 +57,12 @@ Rails.application.routes.draw do
 
   resources :deliveries do
     collection do
-      match :import, to: :import, via: [:get, :post]
+      #match :import, to: :import, via: [:get, :post]
       match :generate, to: :generate, via: [:get, :post]
       match :receive, to: :receive, via: [:get, :post]
       get :search
     end
     member do
-      get :export
       get :forklifts
     end
   end

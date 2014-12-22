@@ -81,36 +81,6 @@ class DeliveriesController < ApplicationController
     @forklifts = dp.forklifts.paginate(:page => params[:page]).order(created_at: :desc)
   end
 
-  def export
-    json={}
-    delivery=LogisticsContainer.find(params[:id])
-    lcs=delivery.subtree
-    json[:logistics_containers]=lcs
-    json[:records]=[]
-    json[:containers]=[]
-    lcs.each do |lc|
-      json[:containers]<<lc.container
-      json[:records]+=lc.records
-    end
-    send_data json.to_json, :filename => "#{delivery.container_id}.json"
-  end
-
-  def import
-    if request.post?
-      msg=Message.new
-      if params[:files].size==1
-        file=params[:files][0]
-        data=FileData.new(data: file, oriName: file.original_filename, path: $DELIVERYPATH, pathName: "#{Time.now.strftime('%Y%m%d%H%M%S')}-#{file.original_filename}")
-        data.saveFile
-        msg=DeliveryService.import_by_file(data.full_path)
-        msg.content= msg.result ? '运单导入成功' : msg.content
-      else
-        msg.content='未选择文件或只能上传一个文件'
-      end
-      render json: msg
-    end
-  end
-
   def generate
     if request.post?
       msg=Message.new

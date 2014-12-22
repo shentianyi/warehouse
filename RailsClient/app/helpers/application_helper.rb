@@ -66,7 +66,6 @@ module ApplicationHelper
     end
   end
 
-
   def download
     query=nil
     file_name= @model+'_'+Time.now.strftime('%Y%m%d%H%M%S')+'.csv'

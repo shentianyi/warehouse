@@ -51,8 +51,9 @@
     </div>
   </form>
 </div>
-<br/>
 <input type="button" value="打印托清单" class='btn btn-warning' onclick="print_forklift_list();"/>
+<h3><%= link_to '导入离线拖清单', import_logistics_containers_path, :class => "btn btn-warning" %></h3>
+<br/>
 <div class="digg_pagination">
   <div class="page_info">
     <%= page_entries_info @forklifts %>
@@ -73,7 +74,7 @@
       <th>包装箱总数</th>
       <th>已接收包装箱数</th>
       <th>最新记录</th>
-      <th colspan="2"></th>
+      <th colspan="3"></th>
     </tr>
   </thead>
 
@@ -98,6 +99,7 @@
         <td><%= forklift.get_records.last.display %></td>
         <td><%= link_to '详细', forklift_path(forklift) ,:class=> 'btn btn-default' %></td>
         <td><%= link_to '编辑', edit_forklift_path(forklift) ,:class=> 'btn btn-default' if current_user.admin?%></td>
+        <td><%= link_to '导出数据',{ controller:'logistics_containers',action: 'export',id:forklift.id },class:'btn btn-default'  %></td>
       </tr>
     <% end %>
   </tbody>
