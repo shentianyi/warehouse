@@ -6,7 +6,7 @@ module Extensions
       #self.primary_key='id' # rails 4
       default_scope { where(is_delete: false) }
       validates_uniqueness_of :id
-      after_save :generate_uuid
+      after_initialize :generate_uuid
       before_create :set_timestamps
       before_update :reset_dirty_flag
 

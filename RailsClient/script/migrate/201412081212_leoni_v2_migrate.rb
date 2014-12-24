@@ -34,6 +34,7 @@ RegexType.types.each do |type|
 end
 puts "结束更新正则......"
 
+=begin
 puts "开始更新零件......"
 dump_pos_count = 0
 update_pos_count = 0
@@ -85,3 +86,4 @@ PartPosition.all.each do |pp|
 end
 puts "删除了#{dump_pos_count}个重复零件库位!更新了#{update_pos_count}个零件库位!"
 puts "零件库位结束更新......"
+=end
