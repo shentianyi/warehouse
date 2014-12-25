@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141128090900) do
+ActiveRecord::Schema.define(version: 20141225122324) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -417,6 +417,7 @@ ActiveRecord::Schema.define(version: 20141128090900) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "order_item_id"
+    t.integer  "state",                 default: 0
   end
 
   add_index "pick_items", ["destination_whouse_id"], name: "index_pick_items_on_destination_whouse_id", using: :btree

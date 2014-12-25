@@ -1,6 +1,6 @@
 var printer = {
     url: function (code) {
-        return $('#print-server-hidden').val() + code + '/' + this.id();
+        return $('#print-server-hidden').val() + code + '/' + this.id() + '/'+this.targets();
     },
     print: function (code) {
         if (this.id() && confirm('确认打印？')) {
@@ -52,8 +52,9 @@ function print_delivery_reve_list() {
 function print_pick_list() {
     printer.print('P006');
 }
-function print_pick_list_with_id(id){
+function print_pick_list_with_id(id,targets){
     printer.id=function(){return id};
+    printer.targets = function(){return targets};
     printer.print('P006');
 }
 function init_check() {

@@ -1,8 +1,6 @@
-<div>
-  <a href="<%=@back_url%>" class="btn btn-success">返回</a>
-</div>
+
 <div class="header">
-  <p>择货单号：<%= @pick_list.id %></p>
+  <p id="pick-list" pick_id = "<%= @pick_list.id %>">择货单号：<%= @pick_list.id %></p>
 
   <p>择货员工号：<%= @pick_list.user_id %></p>
 
@@ -12,9 +10,17 @@
 </div>
 
 <div class="body">
+  <div>
+    <input type="button" value="打印择货单" class='btn btn-primary btn-lg' id="print-pick-list"/>
+    <%= link_to '返回需求面板', panel_orders_path, :class=>'btn btn-default btn-lg' %>
+    <a href="<%=@back_url%>" class="btn btn-default btn-lg">返回择货单列表</a>
+  </div>
   <table class="table table-bpicked table-striped globle-table">
     <thead>
     <tr>
+      <th>
+        <input type="checkbox" id="check-all-unprinted"/><label class="label label-info">全选未打印</label>
+      </th>
       <th>NO.</th>
       <th>零件号</th>
       <th>数量</th>
@@ -29,6 +35,11 @@
     <tbody>
     <% @pick_items.each_with_index do |pick_item, index| %>
         <tr>
+          <td><input type="checkbox" <%= "printed" if pick_item.state == PickItemState::PRINTED%> class="pick-item" id="<%= pick_item.id %>"/>
+            <% if pick_item.state == PickItemState::PRINTED%>
+            <label class="label label-danger">已打印</label>
+            <% end %>
+          </td>
           <td><%= index+1 %></td>
           <td><%= pick_item.part_id %></td>
           <td><%= pick_item.quantity %></td>
@@ -45,12 +56,24 @@
     </tbody>
   </table>
 </div>
-<div>
-  <input type="button" value="打印择货单" class='btn btn-primary btn-lg' onclick="print_pick_list_with_id('<%= @pick_list.id %>');"/>
-  <%= link_to '返回需求面板', panel_orders_path, :class=>'btn btn-default btn-lg' %>
-</div>
+
 <script type="text/javascript">
 	$(document).ready(function(){
-	init_check();
-})
-	</script>
+        init_check();
+        $("body").on("change","#check-all-unprinted",function(){
+            var checked = $(this).attr('checked') == undefined ? false : true
+            $(".pick-item").not("[printed]").each(function () {
+                $(this).attr('checked',checked);
+            })
+        }).on('click',"#print-pick-list",function(){
+            var id = $("#pick-list").attr("pick_id");
+            var targets = [];
+            $(".pick-item[checked]").each(function(){
+                targets.push($(this).attr("id"))
+            });
+            //console.log(id);
+            //console.log(targets);
+            print_pick_list_with_id(id,targets);
+        })
+    })
+</script>

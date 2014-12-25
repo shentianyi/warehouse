@@ -12,7 +12,12 @@ module Printer
         heads<<{Key: k, Value: head[k]}
       end
 
-      pick_items=p.pick_items.order(is_emergency: :desc)
+      if self.target_ids
+        pick_items=p.pick_items.where({id:self.target_ids}).order(is_emergency: :desc)
+      else
+        pick_items=p.pick_items.order(is_emergency: :desc)
+      end
+
       pick_items.each do |i|
         body= {
             part_id: i.part_id,
