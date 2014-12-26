@@ -54,7 +54,7 @@ class DeliveryPresenter<Presenter
         source: @delivery.source.name,
         destination_id: self.des_location_id,
         destination: @delivery.destination.name,
-        remark: self.remark
+        remark: self.remark.nil? ? " " : self.remark
     }
   end
 end

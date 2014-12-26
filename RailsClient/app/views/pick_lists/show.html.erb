@@ -38,6 +38,8 @@
           <td><input type="checkbox" <%= "printed" if pick_item.state == PickItemState::PRINTED%> class="pick-item" id="<%= pick_item.id %>" state="<%= pick_item.state%>"/>
             <% if pick_item.state == PickItemState::PRINTED%>
                 <label class="label label-danger">已打印</label>
+                <% elsif pick_item.state == PickItemState::PRINTING%>
+            <label class="label label-success">aaa</label>
             <% end %>
           </td>
           <td><%= index+1 %></td>

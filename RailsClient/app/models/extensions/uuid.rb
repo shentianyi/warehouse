@@ -34,6 +34,14 @@ module Extensions
         self.save
       end
 
+      def update_info
+        if self.is_dirty
+          '未同步'
+        else
+          '已同步'
+        end
+      end
+
       # for sync
       def self.fk_condition(arg)
         c={}

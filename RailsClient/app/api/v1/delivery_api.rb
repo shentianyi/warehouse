@@ -97,9 +97,12 @@ module V1
       #unless Forklift.where(id: params[:forklifts]).count == params[:forklifts].length
       #  return {result: 0, content: DeliveryMessage::ForkliftHasNotExist}
       #end
+
+      lcs = []
+
       unless (lcs = LogisticsContainer.where(id: params[:forklifts])).count == params[:forklifts].length
         return {result: 0, content: DeliveryMessage::ForkliftHasNotExist}
-      end
+      end if params[:forklifts]
 
       container_ids = lcs.collect{|l|l.container_id}
 
