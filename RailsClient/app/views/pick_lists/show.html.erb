@@ -11,7 +11,7 @@
 
 <div class="body">
   <div>
-    <input type="button" value="打印择货单" class='btn btn-primary btn-lg' id="print-pick-list"/>
+    <input type="button" value="打印择货单" class='btn btn-primary btn-lg' id="print-pick-list" onclick="print_pick_list_with_id(<%= @pick_list.id %>);"/>
     <%= link_to '返回需求面板', panel_orders_path, :class=>'btn btn-default btn-lg' %>
     <a href="<%=@back_url%>" class="btn btn-default btn-lg">返回择货单列表</a>
   </div>
@@ -35,7 +35,7 @@
     <tbody>
     <% @pick_items.each_with_index do |pick_item, index| %>
         <tr>
-          <td><input type="checkbox" <%= "printed" if pick_item.state == PickItemState::PRINTED%> class="pick-item" id="<%= pick_item.id %>"/>
+          <td><input type="checkbox" <%= "printed" if pick_item.state == PickItemState::PRINTED%> class="pick-item" id="<%= pick_item.id %>" state="<%= pick_item.state%>"/>
             <% if pick_item.state == PickItemState::PRINTED%>
             <label class="label label-danger">已打印</label>
             <% end %>
@@ -57,23 +57,37 @@
   </table>
 </div>
 
+<% content_for :javascript_includes do %>
+    <%= javascript_include_tag "pickitem-manage" %>
+<%end%>
+
 <script type="text/javascript">
 	$(document).ready(function(){
         init_check();
         $("body").on("change","#check-all-unprinted",function(){
-            var checked = $(this).attr('checked') == undefined ? false : true
+            var checked = $(this).attr('checked') == undefined ? false : true;
             $(".pick-item").not("[printed]").each(function () {
-                $(this).attr('checked',checked);
+                $(this).prop("checked",checked).trigger("change");
             })
-        }).on('click',"#print-pick-list",function(){
-            var id = $("#pick-list").attr("pick_id");
-            var targets = [];
-            $(".pick-item[checked]").each(function(){
-                targets.push($(this).attr("id"))
+        }).on("change",".pick-item",function(){
+            var target = $(this);
+            var checked = $(this).attr('checked') == undefined ? false : true;
+            var id = $(this).attr("id");
+            var state = $(this).attr("state");
+            if(state == 0 && checked == true){
+                state = 1
+            }
+            else if(state == 1 && checked == false){
+                state = 0
+            }
+            else if(state == 2 && checked == true){
+                state = 1
+            }
+            console.log(state);
+            console.log(id);
+            Manage.pick_item.update(id,{pick_item:{state:state}},function(data){
+                target.prop("checked",checked);
             });
-            //console.log(id);
-            //console.log(targets);
-            print_pick_list_with_id(id,targets);
         })
     })
 </script>

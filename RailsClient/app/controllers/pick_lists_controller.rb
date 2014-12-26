@@ -11,7 +11,7 @@ class PickListsController < ApplicationController
   # GET /pick_lists/1.json
   def show
     @back_url = params.has_key?(:show) ? '/pick_lists' : '/orders/panel'
-    @pick_items=@pick_list.pick_items
+    @pick_items=@pick_list.pick_items.order(state: :desc, is_emergency: :desc)
   end
 
   # GET /pick_lists/new

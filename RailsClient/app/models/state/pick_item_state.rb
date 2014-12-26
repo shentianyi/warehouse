@@ -1,4 +1,5 @@
 class PickItemState
   INIT=0
-  PRINTED=1
+  PRINTING=1
+  PRINTED=2
 end

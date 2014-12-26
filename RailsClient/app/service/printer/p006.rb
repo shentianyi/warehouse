@@ -12,11 +12,7 @@ module Printer
         heads<<{Key: k, Value: head[k]}
       end
 
-      if self.target_ids
-        pick_items=p.pick_items.where({id:self.target_ids}).order(is_emergency: :desc)
-      else
-        pick_items=p.pick_items.order(is_emergency: :desc)
-      end
+      pick_items=p.pick_items.where(state:PickItemState::PRINTING).order(is_emergency: :desc)
 
       pick_items.each do |i|
         body= {
@@ -33,6 +29,7 @@ module Printer
           bodies<<{Key: k, Value: body[k]}
         end
         self.data_set <<(heads+bodies)
+        i.update(state:PickItemState::PRINTED)
       end
     end
   end
