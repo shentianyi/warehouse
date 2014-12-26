@@ -11,7 +11,7 @@
 
 <div class="body">
   <div>
-    <input type="button" value="打印择货单" class='btn btn-primary btn-lg' id="print-pick-list" onclick="print_pick_list_with_id(<%= @pick_list.id %>);"/>
+    <input type="button" value="打印择货单" class='btn btn-primary btn-lg' id="print-pick-list" onclick="print_pick_list_with_id('<%= @pick_list.id %>');"/>
     <%= link_to '返回需求面板', panel_orders_path, :class=>'btn btn-default btn-lg' %>
     <a href="<%=@back_url%>" class="btn btn-default btn-lg">返回择货单列表</a>
   </div>
@@ -37,7 +37,7 @@
         <tr>
           <td><input type="checkbox" <%= "printed" if pick_item.state == PickItemState::PRINTED%> class="pick-item" id="<%= pick_item.id %>" state="<%= pick_item.state%>"/>
             <% if pick_item.state == PickItemState::PRINTED%>
-            <label class="label label-danger">已打印</label>
+                <label class="label label-danger">已打印</label>
             <% end %>
           </td>
           <td><%= index+1 %></td>
