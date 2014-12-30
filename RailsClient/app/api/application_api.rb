@@ -6,4 +6,5 @@ class ApplicationAPI < Grape::API
   mount V1::Base
   mount V1::Service::ServiceBase
   mount V1::Sync::SyncBase
+  mount V2::Base
 end

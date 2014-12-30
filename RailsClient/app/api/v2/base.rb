@@ -3,5 +3,6 @@ module V2
     include APIGuard
     version 'v2', :using => :path
     mount UserSessionsAPI
+    mount PackagesAPI
   end
 end

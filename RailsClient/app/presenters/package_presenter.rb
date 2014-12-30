@@ -8,14 +8,20 @@ class PackagePresenter<Presenter
     self.delegators = Delegators
   end
 
-  #需要明确，logistics_container的package的destination应该是warehouse而不是position
-  def position_nr
+  def position
     if @logistics_container.destinationable && @logistics_container.destinationable_type == Whouse.to_s
       if position=PartService.get_position_by_whouse_id(@package.part_id, @logistics_container.destinationable_id)
-        return @logistics_container.destinationable.name+" => "+position.detail
-      else
-        return @logistics_container.destinationable.name
+        return position
       end
+    end
+    nil
+  end
+  #需要明确，logistics_container的package的destination应该是warehouse而不是position
+  def position_nr
+    if self.position
+      return self.position.display
+    elsif @logistics_container.destinationable
+      return @logistics_container.destinationable.name
     end
     ''
   end
@@ -44,6 +50,14 @@ class PackagePresenter<Presenter
     1
   end
 
+  def possible_position
+    pos = []
+    self.container.part.positions.each do |ps|
+      pos << {id:ps.id,display:ps.display}
+    end
+    pos
+  end
+
   def to_json
     {
         id: self.id,
@@ -55,7 +69,9 @@ class PackagePresenter<Presenter
         user_id: self.user_id,
         state: self.state,
         state_display: @logistics_container.state_display,
-        position_nr: self.position_nr
+        position_nr: self.position_nr,
+        possible_position:self.possible_position,
+        position:self.position.nil? ? {}:{id:self.position.id,display:self.position.display}
     }
   end
 

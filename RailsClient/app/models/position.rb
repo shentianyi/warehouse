@@ -8,6 +8,10 @@ class Position < ActiveRecord::Base
 
   validate :validate_save
 
+  def display
+    "#{self.whouse.name} => #{self.detail}"
+  end
+
   def validate_save
     errors.add(:id, '编号不可为空') if self.id.blank?
   end
