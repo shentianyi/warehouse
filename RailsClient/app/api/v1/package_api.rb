@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 module V1
   class PackageAPI<Base
     namespace :packages
@@ -9,19 +10,6 @@ module V1
         ActionController::Parameters.new(params).require(:package).permit(:id, :part_id, :part_id_display, :quantity, :quantity_display,
                                                                           :custom_fifo_time, :fifo_time_display)
       end
-    end
-
-    #******
-    #need to add conditions for search
-    #******
-    # binded but not add to forklift packages
-    # no need to show position
-    #@deprecated
-    #use api get_by_time_and_state instead
-    get :binds do
-      packages = PackageService.get_bind_packages_by_location(current_user.location_id, (current_user.id if params.has_key?(:all)))
-
-      PackagePresenter.init_json_presenters(packages)
     end
 
     #get packages by created_at time and state
@@ -73,28 +61,18 @@ module V1
       end
     end
 
-    # validate quantity string
-    # @deprecated
-=begin
-    post :validate_quantity do
-      result = true #PackageService.quantity_string_valid?(params[:id])
-      if result
-        {result: 1, content: ''}
-      else
-        {result: 0, content: PackageMessage::QuantityStringError}
-      end
-    end
-=end
-
-    # create package
-    # if find deleted then update(take care of foreign keys)
-    # else create new
+    #=============
+    # url: POST packages/
+    # params
+    #=============
     post do
       m = PackageService.create package_params, current_user
       m.result ? {result: 1, content: PackagePresenter.new(m.object).to_json} : {result: 0, content: m.content}
     end
 
-    # update package
+    #=============
+    # url: PUT packages/:id
+    #=============
     put do
       msg = PackageService.update(package_params)
       if msg.result
@@ -104,8 +82,9 @@ module V1
       end
     end
 
-    # delete package
-    # update is_delete to true
+    #=============
+    # url: DELETE packages/:id
+    #=============
     delete do
       msg = LogisticsContainerService.destroy_by_id(params[:id])
       if msg.result
@@ -115,7 +94,7 @@ module V1
       end
     end
 
-    # check package
+
     post :check do
       msg = ApiMessage.new
       unless  p = LogisticsContainer.exists?(params[:id])
