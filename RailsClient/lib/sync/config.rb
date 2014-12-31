@@ -88,9 +88,9 @@ module Sync
 
     def self.reset_callbacks model
       #puts "-----------#{model} reset_callbacks"
-      #model.record_timestamps=true
-      #model.set_callback(:update, :before, :reset_dirty_flag)
-      #model.set_callback(:create,:before,:init_container_attr)
+      model.record_timestamps=true
+      model.set_callback(:update, :before, :reset_dirty_flag)
+      model.set_callback(:create,:before,:init_container_attr)
     end
 
     def self.reload

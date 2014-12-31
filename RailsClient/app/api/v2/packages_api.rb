@@ -8,7 +8,6 @@ module V2
     #=============
     get do
       pa = ParamsService.parse_to_search(params)
-
       PackagePresenter.init_json_presenters(PackageService.where(pa[:args]).order(pa[:sort]).all)
     end
 
