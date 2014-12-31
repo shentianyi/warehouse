@@ -10,7 +10,7 @@ module V2
       if user
         if user.valid_password?(params[:user][:password])
           warden.set_user user
-          {result: 1, content: {role_id:current_user.role_id,location_id:current_user.location_id,location_name:current_user.location.name}}
+          {result: 1, content: {user:{role_id:current_user.role_id,location_id:current_user.location_id,location_name:current_user.location.name}}}
         else
           error!({result: 0, content: '密码错误'}, 401)
         end

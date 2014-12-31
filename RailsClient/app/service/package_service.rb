@@ -30,6 +30,13 @@ class PackageService
   end
 
   #=============
+  #where wrapper
+  #=============
+  def self.where condition
+    LogisticsContainer.joins(:package).where(condition)
+  end
+
+  #=============
   #create @args,@current_user=nil
   #=============
   def self.create args, user

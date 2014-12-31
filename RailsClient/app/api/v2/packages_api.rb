@@ -4,9 +4,11 @@ module V2
 
     #=============
     # url: GET /packages
+    # params: state=[],created_at=start..end,user_id=user_id,destination_id=user.location_id,sort
     #=============
     get do
-
+      pa = ParamsService.parse_to_search(params)
+      PackagePresenter.init_json_presenters(PackageService.where(pa[:args]).order(pa[:sort]).all)
     end
 
     #=============

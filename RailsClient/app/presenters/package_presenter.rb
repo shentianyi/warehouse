@@ -50,10 +50,10 @@ class PackagePresenter<Presenter
     1
   end
 
-  def possible_position
+  def possible_departments
     pos = []
-    self.container.part.positions.each do |ps|
-      pos << {id:ps.id,display:ps.display}
+    self.container.part.whouses.each do |ps|
+      pos << {id:ps.id,name:ps.name}
     end
     pos
   end
@@ -70,8 +70,7 @@ class PackagePresenter<Presenter
         state: self.state,
         state_display: @logistics_container.state_display,
         position_nr: self.position_nr,
-        possible_position:self.possible_position,
-        position:self.position.nil? ? {}:{id:self.position.id,display:self.position.display}
+        possible_department: self.possible_departments
     }
   end
 
