@@ -8,11 +8,11 @@
 <h4>创建员工号: <small><%= @forklift.user_id%></small></h4>
 <h4>创建员工: <small><%= @forklift.user.name %></small></h4>
 <h4>创建地: <small><%= @forklift.source.name %></small></h4>
-<h4>目的地:<small><%= @forklift.destination.name %></small></h4>
+<h4>目的地:<small><%= @forklift.destination.name if @forklift.destination%></small></h4>
 <h4>所属运单:<small><%= link_to @forklift.parent.container_id,delivery_path(@forklift.parent), :class=>"btn btn-default" if @forklift.parent %></small></h4>
 <h4>备注: <small><%=  @forklift.remark%></small></h4>
 
-<h4>备货仓库: <small><%= @forklift.destinationable.name %></small></h4>
+<h4>备货仓库: <small><%= @forklift.destinationable.name if @forklift.destinationable%></small></h4>
 <h4>包装箱总数: <small><%= fpresenter.sum_packages%></small></h4>
 <h4>已接收包装箱书: <small><%= fpresenter.accepted_packages %></small></h4>
 <h2>包装箱列表</h2>
