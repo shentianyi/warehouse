@@ -31,7 +31,7 @@ module V1
             data['packages'].each do |p|
               unless package=Package.exists?(p['id']) 
                   package=Package.new(id: p['id'], part_id: p['part_id'], quantity: p['quantity'], fifo_time: p['fifo_time'],
-                                      user_id: user.id, location_id: user.location_id)
+                                      user_id: user.id, location_id: user.location_id,part_id_display:p['part_id'],quantity_display:p['quantity'],fifo_time_display:p['fifo_time'])
                   package.save
               end
               unless psc=package.store_containers.where(source_location_id: user.location_id).first
