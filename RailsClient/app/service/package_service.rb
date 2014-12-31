@@ -23,9 +23,9 @@ class PackageService
   #=============
   def self.search condition
     if condition && condition['records.impl_time']
-      LogisticsContainer.joins(:package).joins(:records).where(condition)
+      LogisticsContainer.joins(:package).joins(:records).where(condition).distinct
     else
-      LogisticsContainer.joins(:package).where(condition)
+      LogisticsContainer.joins(:package).where(condition).distinct
     end
   end
 
