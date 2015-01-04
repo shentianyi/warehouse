@@ -35,12 +35,17 @@
     <tbody>
     <% @pick_items.each_with_index do |pick_item, index| %>
         <tr>
-          <td><input type="checkbox" <%= "printed" if pick_item.state == PickItemState::PRINTED%> class="pick-item" id="<%= pick_item.id %>" state="<%= pick_item.state%>"/>
-            <% if pick_item.state == PickItemState::PRINTED%>
-                <label class="label label-danger">已打印</label>
-                <% elsif pick_item.state == PickItemState::PRINTING%>
-            <label class="label label-success">aaa</label>
-            <% end %>
+          <td>
+            <div id="<%= pick_item.id %>">
+              <input type="checkbox" <%= "printed" if pick_item.state == PickItemState::PRINTED%> class="pick-item" id="<%= pick_item.id %>" state="<%= pick_item.state%>"/>
+              <% if pick_item.state == PickItemState::PRINTED%>
+                  <label>已打印</label>
+              <% elsif pick_item.state == PickItemState::PRINTING%>
+                  <label>正在打印</label>
+              <% else %>
+                  <label>未打印</label>
+               <% end %>
+            </div>
           </td>
           <td><%= index+1 %></td>
           <td><%= pick_item.part_id %></td>
@@ -89,6 +94,13 @@
             console.log(id);
             Manage.pick_item.update(id,{pick_item:{state:state}},function(data){
                 target.prop("checked",checked);
+                target.removeAttr("printed");
+                $("div#"+id+" label").remove();
+                if(checked){
+                    $("div#"+id).append($("<label>").text("正在打印"));
+                }else{
+                    $("div#"+id).append($("<label>").text("未打印"));
+                }
             });
         })
     })
