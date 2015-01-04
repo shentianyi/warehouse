@@ -9,7 +9,7 @@
 <h4>创建员工: <small><%= @delivery.user.name%></small></h4>
 <h4>创建地: <small><%= @delivery.source.name %></small></h4>
 <h4>备注: <small><%= @delivery.remark %></small></h4>
-<h4>目的地:<small><%= @delivery.destination.name %></small></h4>
+<h4>目的地:<small><%= @delivery.destination.name if @delivery.destination%></small></h4>
 <h2>托清单列表</h2>
 <% @forklifts = dp.forklifts%>
 <table class="table table-bordered table-striped globle-table table-hover">
@@ -30,7 +30,7 @@
         <td><%= index+1%></td>
         <td><%= link_to f.container_id,forklift_path(f), :class => "btn btn-default"%></td>
         <td><%= f.state_display %></td>
-        <td><%= f.destinationable.name %></td>
+        <td><%= f.destinationable.name  if f.destinationable %></td>
         <td><%= fpresenter.sum_packages %></td>
         <td><%= fpresenter.accepted_packages %></td>
       </tr>
