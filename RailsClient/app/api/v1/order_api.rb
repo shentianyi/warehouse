@@ -15,12 +15,6 @@ module V1
     #post start and end time(local time)
     #=============
     get :history do
-      #args = {
-      #    start_time:params[:start],
-      #    end_time:params[:end]
-      #}
-      #args[:user_id] = params[:user_id].nil? ? current_user.id : params[:user_id]
-
       #new params
       condition = {}
       condition[:user_id] = params[:user_id].nil? ? current_user.id : params[:user_id]

@@ -3,8 +3,10 @@ class ParamsService
     sort = parse_sort(params[:sort])
     params.delete(:route_info)
     params.delete(:sort) if params[:sort]
+    limit = params[:limit].nil? ? nil : params[:limit]
+    params.delete(:limit)
     args = params
-    {args:args,sort:sort}
+    {args:args,sort:sort,limit:limit}
   end
 
   def self.parse_sort sort

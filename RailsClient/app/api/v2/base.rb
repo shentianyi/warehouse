@@ -4,5 +4,6 @@ module V2
     version 'v2', :using => :path
     mount UserSessionsAPI
     mount PackagesAPI
+    mount OrdersApi
   end
 end

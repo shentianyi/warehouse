@@ -15,56 +15,56 @@ module V2
     # url: POST /packages
     #=============
     post do
-
+      #Todo
     end
 
     #=============
     # url: GET /packages/:id
     #=============
     get ':id' do
-
+      #Todo
     end
 
     #=============
     # url: PUT /packages/:id
     #=============
     put ':id' do
-
+      #Todo
     end
 
     #=============
     # url: DELETE /packages/:id
     #=============
     delete ':id' do
-
+      #Todo
     end
 
     #=============
     # url: PUT /packages/:id/check
     #=============
     put ':id/check' do
-
+      #Todo
     end
 
     #=============
     # url: DELETE /packages/:id/check
     #=============
     delete ':id/check' do
-
+      #Todo
     end
 
     #=============
     # url: PUT /packages/:id/reject
     #=============
     put ':id/reject' do
-
+      #Todo
     end
 
     #=============
     # url: DELETE /packages/:id/reject
     #=============
     delete ':id/reject' do
-
+      #Todo
     end
   end
 end

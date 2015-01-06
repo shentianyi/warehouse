@@ -1,6 +1,13 @@
 class OrderService
 
   #=============
+  #
+  #=============
+  def self.where condition
+    Order.where(condition)
+  end
+
+  #=============
   #get last n days order
   #params
   # @user_id:current_user.id,
