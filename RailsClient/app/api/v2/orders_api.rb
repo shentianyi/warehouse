@@ -16,13 +16,5 @@ module V2
       pa = ParamsService.parse_to_search(params)
       OrderPresenter.init_json_presenters(OrderService.where(pa[:args]).order(pa[:sort]).limit(pa[:limit]))
     end
-
-    #=============
-    # url: POST /orders
-    #=============
-    post do
-      #Todo
-      
-    end
   end
 end
