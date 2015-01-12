@@ -36,6 +36,11 @@
     </p>
 
     <p>
+      <%= f.label :operation_mode, '操作模式' %>
+      <%= f.select(:operation_mode, OperationMode.list_menu, {include_blank: false})%>
+    </p>
+
+    <p>
       <%= f.label :role_id, '角 色' %>
       <%= f.select(:role_id, Role.menu, {include_blank: false}) %>
     </p>
