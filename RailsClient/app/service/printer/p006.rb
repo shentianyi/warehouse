@@ -12,9 +12,9 @@ module Printer
         heads<<{Key: k, Value: head[k]}
       end
 
-      pick_items=p.pick_items.where(state:PickItemState::PRINTING).order(is_emergency: :desc)
+      pick_items=p.pick_items.where(state:PickItemState::PRINTING).order(state: :asc, is_emergency: :desc)
       if pick_items.count == 0
-        pick_items = p.pick_items.order(is_emergency: :desc)
+        pick_items = p.pick_items.order(state: :asc, is_emergency: :desc)
       end
 
       pick_items.each do |i|
