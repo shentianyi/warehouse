@@ -7,8 +7,7 @@ class ReportsController < ApplicationController
     @location_id = params[:location_id].nil? ? current_user.location_id : params[:location_id]
     @title = ''
 
-    condition = Package.generate_report_condition(@type,@date_start,@date_end,@location_id)
-    @packages = Package.generate_report_data(condition)
+    @packages = Package.generate_report_data(@type,@date_start,@date_end,@location_id)
     #render :json=> @packages
     @title = ReportsHelper.gen_title(@type,@date_start,@date_end,@location_id)
     respond_to do |format|
@@ -43,11 +42,9 @@ class ReportsController < ApplicationController
     @date_end = params[:received_date_end].nil? ? Time.now.strftime("%Y-%m-%d 7:00") : params[:received_date_end]
     @title = ''
 
-    condition = Package.generate_report_condition(@type,@date_start,@date_end,@location_id)
-
     @packages = {}
 
-    Package.generate_report_data(condition).each { |p|
+    Package.generate_report_data(@type,@date_start,@date_end,@location_id).each { |p|
       if @packages[p['part_id']+p['whouse']].nil?
         @packages[p['part_id']+p['whouse']] = {"PartNr." => p['part_id'], "Warehouse" => p['whouse'], "Amount" => 0}
       end
@@ -94,25 +91,44 @@ class ReportsController < ApplicationController
   def orders_report
     @date_start = params[:date_start].nil? ? 1.day.ago.strftime("%Y-%m-%d 7:00") : params[:date_start]
     @date_end = params[:date_end].nil? ? Time.now.strftime("%Y-%m-%d 7:00") : params[:date_end]
-    time_range = Time.parse(@date_start).utc..Time.parse(@date_end).utc
+    @source_location_id = params[:source_location_id].nil? ? current_user.location_id : params[:source_location_id]
     @title = '要货报表'
-    condition = {}
-    condition['order_items.created_at']= time_range
-    @order_items = OrderItem.joins(:order)
-    .where(condition).select('order_items.part_id,SUM(order_items.box_quantity) as box_count,SUM(order_items.quantity) as total,order_items.whouse_id as whouse_id,order_items.is_finished ,order_items.out_of_stock,order_items.user_id as user_id')
-    .group('part_id,whouse_id,is_finished,out_of_stock,user_id').order("whouse_id DESC").all
 
-    filename = "#{@title}_#{@date_start}_#{@date_end}"
+    @order_items = OrderItem.generate_report_data(@date_start,@date_end,@source_location_id)
+
+    #获得发货数据，注：包括外库和工厂库
+    packages = Package.generate_report_data(ReportType::Entry,@date_start,@date_end,@source_location_id)
+    @removal_packages = {}
+    @all_orders = {}
+
+    @order_items.inject(@all_orders) { |h, oi|
+      if h["#{oi.part_id}#{oi.whouse_id}"].nil?
+        h["#{oi.part_id}#{oi.whouse_id}"] = 0
+      end
+      h["#{oi.part_id}#{oi.whouse_id}"] += oi.total
+      h
+    }
+
+    packages.inject(@removal_packages) { |h, p|
+      if h["#{p['part_id']}#{p['whouse']}"].nil?
+        h["#{p['part_id']}#{p['whouse']}"] = {'count'=>0,'box'=>0}
+      end
+      h["#{p['part_id']}#{p['whouse']}"]['count'] += p['count']
+      h["#{p['part_id']}#{p['whouse']}"]['box'] += p['box']
+      h
+    }
+
+    filename = "#{Location.find_by_id(@source_location_id).name}的#{@title}_#{@date_start}_#{@date_end}"
 
     respond_to do |format|
       format.csv do
-        send_data(order_report_csv(@order_items),
+        send_data(order_report_csv(@order_items,@removal_packages,@all_orders),
                   :type => "text/csv;charset=utf-8; header=present",
                   :filename => filename+".csv")
       end
 
       format.xlsx do
-        send_data(order_report_xlsx(@order_items),
+        send_data(order_report_xlsx(@order_items,@removal_packages,@all_orders),
                   :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
                   :filename => filename+".xlsx"
         )
@@ -123,11 +139,11 @@ class ReportsController < ApplicationController
 
   private
 
-  def order_report_xlsx order_items
+  def order_report_xlsx order_items,removal_packages,all_orders
     p = Axlsx::Package.new
     wb = p.workbook
     wb.add_worksheet(:name => "Basic Sheet") do |sheet|
-      sheet.add_row ["No.", "零件号", "总数", "箱数", "部门", "要货人", "状态"]
+      sheet.add_row ["No.", "零件号", "总数", "箱数", "部门", "要货人", "状态","已发货总数","已发货箱数","差异数（要货总数-已发运总数）"]
       order_items.each_with_index { |o, index|
         sheet.add_row [
                           index+1,
@@ -136,8 +152,12 @@ class ReportsController < ApplicationController
                           o.box_count,
                           o.whouse_id,
                           o.user_id,
-                          o.state
-                      ], :types => [:string]
+                          OrderItemState.display(o.state),
+                          removal_packages["#{o.part_id}#{o.whouse_id}"].nil? ? "" : removal_packages["#{o.part_id}#{o.whouse_id}"]['count'],
+                          removal_packages["#{o.part_id}#{o.whouse_id}"].nil? ? "" : removal_packages["#{o.part_id}#{o.whouse_id}"]['box'],
+                          removal_packages["#{o.part_id}#{o.whouse_id}"].nil? ? "" : all_orders["#{o.part_id}#{o.whouse_id}"] - removal_packages["#{o.part_id}#{o.whouse_id}"]['count']
+                         ], :types => [:string]
+        removal_packages["#{o.part_id}#{o.whouse_id}"] = nil
       }
     end
     p.to_stream.read
@@ -180,9 +200,9 @@ class ReportsController < ApplicationController
     p.to_stream.read
   end
 
-  def order_report_csv order_items
+  def order_report_csv order_items,removal_packages,all_orders
     CSV.generate do |csv|
-      csv << ["No.", "零件号", "总数", "箱数", "部门", "要货人", "状态"]
+      csv << ["No.", "零件号", "总数", "箱数", "部门", "要货人", "状态","已发货总数","已发货箱数","差异数（要货总数-已发运总数）"]
 
       order_items.each_with_index { |o, index|
         csv <<[
@@ -192,8 +212,13 @@ class ReportsController < ApplicationController
             o.box_count,
             o.whouse_id,
             o.user_id,
-            o.state
+            OrderItemState.display(o.state),
+            removal_packages["#{o.part_id}#{o.whouse_id}"].nil? ? "" : removal_packages["#{o.part_id}#{o.whouse_id}"]['count'],
+            removal_packages["#{o.part_id}#{o.whouse_id}"].nil? ? "" : removal_packages["#{o.part_id}#{o.whouse_id}"]['box'],
+            removal_packages["#{o.part_id}#{o.whouse_id}"].nil? ? "" : all_orders["#{o.part_id}#{o.whouse_id}"] - removal_packages["#{o.part_id}#{o.whouse_id}"]['count']
+
         ]
+        removal_packages["#{o.part_id}#{o.whouse_id}"] = nil
       }
     end
   end

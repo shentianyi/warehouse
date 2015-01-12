@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150112024343) do
+ActiveRecord::Schema.define(version: 20150112055758) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -265,6 +265,7 @@ ActiveRecord::Schema.define(version: 20150112024343) do
     t.boolean  "is_finished",  default: false
     t.boolean  "out_of_stock", default: false
     t.boolean  "handled",      default: false
+    t.integer  "state",        default: 0
   end
 
   add_index "order_items", ["id"], name: "index_order_items_on_id", using: :btree
@@ -277,17 +278,18 @@ ActiveRecord::Schema.define(version: 20150112024343) do
   add_index "order_items", ["whouse_id"], name: "index_order_items_on_whouse_id", using: :btree
 
   create_table "orders", force: true do |t|
-    t.string   "uuid",       limit: 36,                 null: false
-    t.boolean  "handled",               default: false
-    t.boolean  "is_delete",             default: false
-    t.boolean  "is_dirty",              default: true
-    t.boolean  "is_new",                default: true
+    t.string   "uuid",               limit: 36,                 null: false
+    t.boolean  "handled",                       default: false
+    t.boolean  "is_delete",                     default: false
+    t.boolean  "is_dirty",                      default: true
+    t.boolean  "is_new",                        default: true
     t.string   "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "source_id"
-    t.integer  "status",                default: 0
+    t.integer  "status",                        default: 0
     t.text     "remark"
+    t.string   "source_location_id"
   end
 
   add_index "orders", ["id"], name: "index_orders_on_id", using: :btree

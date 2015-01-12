@@ -156,7 +156,7 @@
             $.ajax({
                 url: "/order_items/" + order_item_id,
                 type: "PUT",
-                data: {order_item: {is_finished: is_finished}},
+                data: {order_item: {is_finished: is_finished,state:2}},
                 dataType: 'json',
                 success: function (data) {
                     if (data.order.handled) {
@@ -185,7 +185,7 @@
             $.ajax({
                 url: "/order_items/" + order_item_id,
                 type: "PUT",
-                data: {order_item: {out_of_stock: out_of_stock}},
+                data: {order_item: {out_of_stock: out_of_stock,state:1}},
                 dataType: 'json',
                 success: function (data) {
                     if (data.order.handled) {

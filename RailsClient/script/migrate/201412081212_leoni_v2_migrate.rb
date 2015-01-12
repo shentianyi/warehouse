@@ -34,6 +34,21 @@ RegexType.types.each do |type|
 end
 puts "结束更新正则......"
 
+puts "开始迁移要货单......"
+Order.all.each do |o|
+  o.update(source_location_id: o.user.location_id)
+end
+OrderItem.all.each do |oi|
+  if oi.is_finished
+    oi.update(state: OrderItemState::FINISHED)
+  elsif oi.out_of_stock
+    oi.update(state: OrderItemState::OUT_OF_STOCK)
+  else
+    oi.update(state: OrderItemState::INIT)
+  end
+end
+puts "结束迁移要货单......"
+
 =begin
 puts "开始更新零件......"
 dump_pos_count = 0

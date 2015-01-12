@@ -76,6 +76,6 @@ class OrderItemsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def order_item_params
     #params[:order_item]
-    params.require(:order_item).permit(:is_finished, :out_of_stock)
+    params.require(:order_item).permit(:is_finished, :out_of_stock,:state)
   end
 end

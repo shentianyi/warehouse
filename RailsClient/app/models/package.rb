@@ -45,7 +45,8 @@ class Package<Container
     return condition
   end
 
-  def self.generate_report_data(condition)
+  def self.generate_report_data(type,start_t,end_t,location_id)
+    condition = generate_report_condition(type,start_t,end_t,location_id)
     #零件号，总数，箱数，部门(部门如何获得？)
     a = LogisticsContainer.joins(:records,:package)
         .where(condition)

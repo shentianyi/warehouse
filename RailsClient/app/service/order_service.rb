@@ -87,6 +87,7 @@ class OrderService
   def self.create_with_items args, current_user
     order = Order.new(args[:order])
     order.user = current_user
+    order.source_location_id = current_user.location_id
     order.remark = no_parts_to_string(args[:nopart_items])
     ActiveRecord::Base.transaction do
       begin
