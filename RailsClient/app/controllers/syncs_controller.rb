@@ -13,6 +13,7 @@ class SyncsController < ApplicationController
     @per_request_size=Sync::Config.per_request_size
     @last_time=Sync::Config.last_time
     @executors=Sync::Executor.all
+    @sync_logs = SyncLog.all
   end
 
   def update
