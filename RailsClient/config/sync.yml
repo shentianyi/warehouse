@@ -6,7 +6,7 @@ sync:
   enabled: false
   advance_second: 1800
   per_request_size: 0
-  lock: true
+  lock: false
   executor:
     location:
       name: "地点"

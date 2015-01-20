@@ -27,6 +27,17 @@ module Extensions
         end
       end
 
+      def self.skip_callbacks
+        self.skip_callback(:update, :before, :reset_dirty_flag)
+      end
+
+      def self.reset_callbacks
+        self.set_callback(:update, :before, :reset_dirty_flag)
+        if self.methods.include? :tricky_reset
+          self.tricky_reset
+        end
+      end
+
       def destroy
         # self.send(:destroy_dependent, self.id) if self.respond_to?(:destroy_dependent)
         self.is_delete=true
