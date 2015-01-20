@@ -25,6 +25,11 @@
         <td><span>用于限制同一时间只有一个客户端进行同步(只有总同步服务需要设置)</span></td>
       </tr>
       <tr>
+        <td><span>是否锁定同步</span></td>
+        <td><span><%= check_box_tag :lock, @lock, @lock %></span></td>
+        <td><span>用于控制在服务器端进行基础数据修改时，客户端无法同步数据</span></td>
+      </tr>
+      <tr>
         <td><span>是否开启同步</span></td>
         <td><span>
           <%= check_box_tag :enabled, @enabled, @enabled %>

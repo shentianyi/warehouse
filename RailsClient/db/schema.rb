@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150112055758) do
+ActiveRecord::Schema.define(version: 20150120071344) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -549,6 +549,13 @@ ActiveRecord::Schema.define(version: 20150112055758) do
   add_index "storages", ["part_id"], name: "index_storages_on_part_id", using: :btree
   add_index "storages", ["storable_id"], name: "index_storages_on_storable_id", using: :btree
   add_index "storages", ["storable_type"], name: "index_storages_on_storable_type", using: :btree
+
+  create_table "sync_logs", force: true do |t|
+    t.string   "table_name"
+    t.boolean  "sync",       default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "sync_pools", force: true do |t|
     t.string   "table_name"

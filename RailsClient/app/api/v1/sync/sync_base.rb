@@ -7,8 +7,8 @@ module V1
       version 'v1', :using => :path
       namespace 'sync'
       guard_all!
+      lock_sync
       lock_sync_pool
-
 
       mount LocationSyncAPI
       mount LocationDestinationSyncAPI
