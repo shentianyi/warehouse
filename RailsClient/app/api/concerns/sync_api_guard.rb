@@ -15,6 +15,7 @@ module SyncAPIGuard
       before do
         if Sync::Config.lock
           #if lock sync return false
+          puts "###Sync Locked"
           return error!('Sync Locked',423)
         end
         tb= get_table_name
