@@ -13,6 +13,10 @@ module SyncAPIGuard
   module ClassMethods
     def lock_sync
       before do
+        if Sync::Config.lock
+          #if lock sync return false
+          return error!('Sync Locked',423)
+        end
         tb= get_table_name
         if table = SyncLog.find_by_table_name(tb)
           if !table.sync
@@ -20,10 +24,6 @@ module SyncAPIGuard
           end
         else
           SyncLog.create(table_name:tb,sync:true)
-        end
-        if Sync::Config.lock
-          #if lock sync return false
-          return error!('Sync Locked',423)
         end
       end
 
