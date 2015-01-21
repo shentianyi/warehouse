@@ -18,7 +18,7 @@ include ActionView::Helpers::DateHelper
 start_time = Time.now
 
 #*先创建Delivery
-ds = Old::ODelivery.all.order(created_at: :desc).limit(500)
+ds = Old::ODelivery.all.order(created_at: :desc).limit(1000)
 
 all = ds.count
 begin
