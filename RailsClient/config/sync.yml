@@ -10,64 +10,64 @@ sync:
   executor:
     location:
       name: "地点"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true
     location_destination:
       name: "目的地"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true
     hacker:
       name: "员工"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true
     whouse:
       name: "仓库"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true
     part_type:
       name: "零件类型"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true
     part:
       name: "零件"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true
     position:
       name: "库位"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true
     part_position:
       name: "零件库位"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true
     regex_category:
       name: "正则类别"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true
     regex:
       name: "正则项"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true
     container:
       name: "容器"
       get: true
@@ -76,49 +76,49 @@ sync:
       delete: true
     location_container:
       name: "容器层次"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true
     record:
       name: "操作记录"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true
     storage:
       name: "库存"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true
     pick_item_filter:
       name: "员工择货规则"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true
     order:
       name: "需求单"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true
     order_item:
       name: "需求单项目"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true
     pick_list:
       name: "择货单"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true
     pick_item:
       name: "择货单项"
-      get: false
-      post: false
-      put: false
-      delete: false
+      get: true
+      post: true
+      put: true
+      delete: true

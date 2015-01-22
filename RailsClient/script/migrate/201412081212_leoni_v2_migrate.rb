@@ -40,11 +40,11 @@ Order.all.each do |o|
 end
 OrderItem.all.each do |oi|
   if oi.is_finished
-    oi.update(state: OrderItemState::FINISHED)
+    oi.update(state: OrderItemState::FINISHED,is_dirty:false)
   elsif oi.out_of_stock
-    oi.update(state: OrderItemState::OUT_OF_STOCK)
+    oi.update(state: OrderItemState::OUT_OF_STOCK,is_dirty:false)
   else
-    oi.update(state: OrderItemState::INIT)
+    oi.update(state: OrderItemState::INIT,is_dirty:false)
   end
 end
 puts "结束迁移要货单......"
