@@ -16,10 +16,6 @@ class Container< ActiveRecord::Base
     self.type=ContainerType.get_type(self.class.name)
   end
 
-  def self.tricky_reset
-    self.set_callback(:create, :before, :init_container_attr)
-  end
-
   def self.exists?(id)
     self.find_by_id(id)
   end
