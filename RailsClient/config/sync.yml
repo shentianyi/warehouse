@@ -5,7 +5,7 @@ sync:
   sync_lock: false
   enabled: false
   advance_second: 1800
-  per_request_size: 0
+  per_request_size: 1000
   lock: false
   executor:
     location:
