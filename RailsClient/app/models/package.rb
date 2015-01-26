@@ -19,7 +19,7 @@ class Package<Container
   def custom_fifo_time
     @custom_fifo_time || (self.fifo_time.strftime('%d.%m.%y') unless self.fifo_time.nil?)
   end
-  
+
   def custom_quantity=(value)
     @custom_quantity=value
     self.quantity=@custom_quantity
