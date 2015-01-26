@@ -12,18 +12,18 @@ module V1
 
     post :verify do
       unless part = OrderItemService.verify_part_id(params[:part_id],current_user)
-        return {result:0,content:OrderItemMessage::PartIDError}
+        return {result:0,error_code: ErrorCode.part.not_exist,content:OrderItemMessage::PartIDError}
       end
 
       unless part_position = OrderItemService.verify_department(params[:department],params[:part_id])
-        return {result:0,content:OrderItemMessage::DepartmentError}
+        return {result:0,error_code:ErrorCode.default ,content:OrderItemMessage::DepartmentError}
       end
       unless quantity = OrderItemService.verify_quantity(params[:quantity])
-        return {result:0,content:OrderItemMessage::QuantityError}
+        return {result:0,error_code:ErrorCode.default,content:OrderItemMessage::QuantityError}
       end
 
       unless item = OrderItemService.new(part_position,part,quantity,false,0,current_user)
-        return {result:0,content:OrderItemMessage::VerifyFailed}
+        return {result:0,error_code:ErrorCode.default,content:OrderItemMessage::VerifyFailed}
       end
 
       return {result:1,content:OrderItemPresenter.new(item).to_json}

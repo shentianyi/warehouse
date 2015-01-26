@@ -8,204 +8,316 @@ module V1
     #strong parameters
     helpers do
       def delivery_params
-        ActionController::Parameters.new(params).require(:delivery).permit(:id,:destination_id,:user_id,:delivery_date,:forklifts,:remark)
+        ActionController::Parameters.new(params).require(:delivery).permit(:id, :destination_id, :user_id, :delivery_date, :forklifts, :remark)
       end
     end
 
-    # get deliveries
-    # optional params: created_at, user_id, state...
-    get :list do
-      delivery_date = Time.parse(params[:delivery_date])
-      deliveries = Delivery.where(created_at: (12.hour.ago..delivery_date.end_of_day),source_id:current_user.location_id).all.order(created_at: :desc)
-      data = []
-      DeliveryPresenter.init_presenters(deliveries).each do |d|
-        data << d.to_json
+    #get by create at time and state
+    #@start_time
+    #@end_time
+    #@state
+    #@type 0=> sent from my location
+    #1 => sent to my location
+    # 2014-11-24 => 搜索结果很慢，参数 start_time:2014-8-10 end_time:2014-10-1 type:0 结果760条左右运单，消耗75秒！！！
+    get :get_by_time_and_state do
+      args = {}
+      start_time = params[:start_time].nil? ? 48.hour.ago : Time.parse(params[:start_time])
+      end_time = params[:end_time].nil? ? Time.now : Time.parse(params[:end_time])
+
+      args[:state] = params[:state] if params[:state]
+
+      if params[:type].nil? || params[:type].to_i == 0
+        args[:created_at] = start_time..end_time
+        args[:source_location_id] = [current_user.location_id,nil]
+        #args[:user_id] = current_user.id
+        args[:user_id] = current_user.id if params[:all].nil?
+      else
+        args['records.impl_time'] = start_time..end_time
+        args['records.impl_user_type'] = ImplUserType::RECEIVER
+        args[:des_location_id] = current_user.location_id
       end
-      #puts data
-      {result:1,content:data}
+
+      args[:ancestry]= nil
+
+      #数据量太大，最多只支持50个运单
+      {result: 1, content: DeliveryPresenter.init_json_presenters(DeliveryService.search(args).order(created_at: :desc).limit(50))}
+    end
+
+    get :forklifts do
+      msg = ApiMessage.new
+
+      unless lc = LogisticsContainer.exists?(params[:id])
+        return msg.set_false(DeliveryMessage::NotExist)
+      end
+
+      dpresenger = DeliveryPresenter.new(lc)
+
+      {result:1,content: ForkliftPresenter.init_json_presenters(dpresenger.forklifts)}
     end
 
     # check forklift
     # forklift id
+    # *need to move this api to forklift*
+    # *2014-11-28 这里有个问题，can_copy?有问题，需要修改
     post :check_forklift do
-      #d = Delivery.find_by_id(params[:id])
-      f = ForkliftService.exits?(params[:forklift_id])
-      #puts f.to_json
-      if f && f.delivery.nil?
-        {result:1,content:ForkliftPresenter.new(f).to_json}
+      unless Forklift.exists?(params[:forklift_id])
+        return {result: 0, content: DeliveryMessage::CheckForkliftFailed}
+      end
+
+      lc = LogisticsContainer.find_latest_by_container_id(params[:forklift_id])
+
+      unless lc.can_copy?
+        return {resule: 0, content: ForkliftMessage::CannotAdd}
+      end
+
+      f = nil
+
+      if lc.base_state == CZ::State::INIT
+        f = lc
       else
-        {result:0,content:DeliveryMessage::CheckForkliftFailed}
+        f=LogisticsContainer.build(params[:forklift_id], current_user.id, current_user.location_id)
+      end
+
+      if f.root?
+        {result: 1, content: ForkliftPresenter.new(f).to_json}
+      else
+        {result: 0, content: DeliveryMessage::CheckForkliftFailed}
       end
     end
 
-    # add forklift
+    # add forklift to delivery
     # id: delivery id
     # forklift: forklift ids
+    #
     post :add_forklift do
-      if (d = DeliveryService.exit?(params[:id])).nil?
-        return {result:0,content:DeliveryMessage::NotExit}
+      unless d = LogisticsContainer.exists?(params[:id])
+        return {result: 0, content: DeliveryMessage::NotExit}
       end
 
-      if !DeliveryState.can_update?(d.state)
-        return {result:0,content:DeliveryMessage::CannotUpdate}
+      #unless Forklift.where(id: params[:forklifts]).count == params[:forklifts].length
+      #  return {result: 0, content: DeliveryMessage::ForkliftHasNotExist}
+      #end
+
+      lcs = []
+
+      unless (lcs = LogisticsContainer.where(id: params[:forklifts])).count == params[:forklifts].length
+        return {result: 0, content: DeliveryMessage::ForkliftHasNotExist}
+      end if params[:forklifts]
+
+      container_ids = lcs.collect{|l|l.container_id}
+
+      unless LogisticsContainer.are_roots?(container_ids,current_user.location_id)
+        return {result: 0, content: DeliveryMessage::ForkliftExistInOthers}
       end
 
-      if DeliveryService.add_forklifts(d,params[:forklifts])
-        {result:1,content:DeliveryMessage::AddForkliftSuccess}
+      #unless LogisticsContainer.are_roots?(params[:forklifts], current_user.location_id)
+      #  return {result: 0, content: DeliveryMessage::ForkliftExistInOthers}
+      #end
+
+      unless d.can_update?
+        return {result: 0, content: DeliveryMessage::CannotUpdate}
+      end
+
+      if d.add_by_ids(container_ids)
+        {result: 1, content: DeliveryMessage::AddForkliftSuccess}
       else
-        {result:0,content:''}
+        {result: 0, content: ''}
       end
-
     end
 
     # remove forklift
     # id is forklift_id
     delete :remove_forklift do
-      if (f = ForkliftService.exits?(params[:forklift_id])).nil?
-        return {result:0,content:ForkliftMessage::NotExit}
-      end
-      if !ForkliftState.can_update?(f.state)
-        return {result:0,content:ForkliftMessage::CannotUpdate}
+      unless f = LogisticsContainer.exists?(params[:forklift_id])
+        return {result: 0, content: ForkliftMessage::NotExit}
       end
 
-      result = DeliveryService.remove_forklifk(f)
+      unless f.can_delete?
+        return {result: 0, content: DeliveryMessage::DeleteForkliftFailed}
+      end
+
+      result =f.remove
       if result
-        {result:1,content:DeliveryMessage::DeleteForkliftSuccess}
+        {result: 1, content: DeliveryMessage::DeleteForkliftSuccess}
       else
-        {result:0,content:DeliveryMessage::DeleteForkliftFailed}
+        {result: 0, content: DeliveryMessage::DeleteForkliftFailed}
       end
     end
 
     # send delivery
+    #**
+    #@deprecated
+    #**
     post :send do
-      if (d = DeliveryService.exit?(params[:id])).nil?
-        return {result:0,content:DeliveryMessage::NotExit}
-      end
-      if !DeliveryState.can_update?(d.state)
-        return {result:0,content:DeliveryMessage::CannotUpdate}
-      end
-      if DeliveryService.send(d,current_user)
-        if NetService.ping()
-          {result:1,content:DeliveryMessage::SendSuccess}
-        else
-          {result:1,content:DeliveryMessage::SendSuccess+DeliveryMessage::NetworkNotGood}
-        end
+      msg = ApiMessage.new
 
-      else
-        {result:0,content:DeliveryMessage::SendFailed}
+      unless lc = LogisticsContainer.exists?(params[:id])
+        return msg.set_false(DeliveryMessage::NotExist)
       end
+
+      unless lc.can_update?
+        return msg.set_false(DeliveryMessage::CannotUpdate)
+      end
+
+      unless destination = Location.find_by_id(params[:destination_id])
+        return msg.set_false(DeliveryMessage::DestinationNotExist)
+      end
+
+      #lc.dispatch
+      #*different type of logistics_container should have its own implementation of dispatch*
+      unless (r = DeliveryService.dispatch(lc,destination,current_user)).result
+        return msg.set_false(r.content)
+      end
+
+      return msg.set_true(DeliveryMessage::SendSuccess)
     end
 
+    #create delivery
+    #@forklifts : forklift ids
     post do
-      if DeliveryService.check_add_forklifts(params[:forklift_ids])
-        return {result:0,content:DeliveryMessage::ForkliftExistInOthers}
+      container_ids = []
+      if params[:forklifts] && params[:forklifts].length>0
+        unless (fs = LogisticsContainerService.search({id: params[:forklifts]}).all).count == params[:forklifts].length
+          return {result: 0, content: DeliveryMessage::ForkliftHasNotExist}
+        end
+
+        container_ids = fs.collect{|f|f.container_id}
+
+        unless LogisticsContainer.are_roots?(container_ids, current_user.location_id)
+          return {result: 0, content: DeliveryMessage::ForkliftExistInOthers}
+        end
       end
 
-      d = Delivery.new(delivery_params)
-      d.user = current_user
-
-      d.source = current_user.location
-      d.destination = current_user.location.destination
-
-      result = d.save
+      msg = DeliveryService.create(delivery_params, current_user)
 
       if params.has_key?(:forklifts)
-        DeliveryService.add_forklifts(d,params[:forklifts])
+        msg.object.add_by_ids(container_ids)
       end
-
-      if result
-        {result:1,content:DeliveryPresenter.new(d).to_json}
+      #
+      if msg.result
+        {result: 1, content: DeliveryPresenter.new(msg.object).to_json}
       else
-        {result:0,content:d.errors}
+        {result: 0, content: msg.content}
       end
-
     end
 
     # delete delivery
+    #@id
     delete do
-      if (d = DeliveryService.exit?(params[:id])).nil?
-        return {result:0,content:DeliveryMessage::NotExit}
-      end
-
-      if !DeliveryState.can_delete?(d.state)
-        return {result:0,content:DeliveryMessage::CannotDelete}
-      end
-
-      if  DeliveryService.delete(d)
-        {result:1,content:DeliveryMessage::DeleteSuccess}
+      msg = LogisticsContainerService.destroy_by_id(params[:id])
+      if msg.result
+        {result: 1, content: BaseMessage::DESTROYED}
       else
-        {result:0,content:DeliveryMessage::DeleteFailed}
+        {result: 0, content: msg.content}
       end
     end
 
     # get delivery detail
     get :detail do
-      if (d = DeliveryService.exit?(params[:id])).nil?
-        return {result:0,content:DeliveryMessage::NotExit}
+      msg = ApiMessage.new
+      unless lc = LogisticsContainer.exists?(params[:id])
+        return msg.set_false(DeliveryMessage::NotExist)
       end
-      content = DeliveryPresenter.new(d).to_json_with_forklifts(false)
-      {result:1,content:content}
+      content = DeliveryPresenter.new(lc).to_json
+      msg.set_true(content)
     end
 
+    # update delivery
     put do
-      if (d = DeliveryService.exit?(delivery_params[:id])).nil?
-        return {result:0,content:DeliveryMessage::NotExit}
+      msg = ApiMessage.new
+      args=delivery_params
+      if (d = LogisticsContainer.exists?(args[:id])).nil?
+        return msg.set_false(DeliveryMessage::NotExist)
       end
 
-      if !DeliveryState.can_delete?(d.state)
-        return {result:0,content:DeliveryMessage::CannotUpdate}
+      unless d.can_update?
+        return msg.set_false(DeliveryMessage::CannotUpdate)
       end
 
-      if DeliveryService.update(d,delivery_params)
-        {result:1,content:DeliveryMessage::UpdateSuccess}
+      if d.update_attributes(remark:args[:remark])
+        return msg.set_true(DeliveryMessage::UpdateSuccess)
       else
-        {result:0,contnet:DeliveryMessage::UpdateFailed}
+        return msg.set_false(DeliveryMessage::UpdateFailed)
       end
     end
 
+    #**
+    #@deprecated
+    #**
     # receive delivery
     post :receive do
-      if (d = DeliveryService.exit?(params[:id])).nil?
-        return {result:0,content:DeliveryMessage::NotExit}
+      #这里的id其实是container_id，因为扫描的是运单号
+      unless d = LogisticsContainer.find_latest_by_container_id(params[:id])
+        return {return: 0, content: DeliveryMessage::NotExist}
       end
 
-      if !DeliveryState.before_state?(DeliveryState::DESTINATION,d.state)
-        return {result:0,content:DeliveryMessage::ReceiveFailed+DeliveryMessage::NotSend}
-      end
+      #unless d.can_receive?
+      #  return {return: 0, content: DeliveryMessage::ReceiveFailed}
+      #end
 
-      if DeliveryService.receive(d)
-        {result:1,content:DeliveryPresenter.new(d).to_json_with_forklifts(true)}
+      #*own implementation of receive
+      if (r = DeliveryService.receive(d,current_user)).result
+        {result: 1, content: DeliveryPresenter.new(d).to_json}
       else
-        {result:0,content:DeliveryMessage::AlreadyReceived}
+        {result: 0, content: r.content}
       end
     end
 
     # received deliveries
+    # get all received deliveries by time and location
+    # @deprecated
+    # *use get_by_time_and_state api*
     get :received do
-      arg={
-            state: DeliveryState::RECEIVED,
-            received_date: params[:receive_date]
+      args={
+          state: [MovableState::ARRIVED,MovableState::CHECKED,MovableState::REJECTED],
+          created_at: params[:receive_date]
       }
-      arg[:user_id]=params[:user_id] unless params[:user_id].blank?
-      data = []
-      DeliveryPresenter.init_presenters(DeliveryService.search(arg,false)).each do |dp|
-        data<<dp.to_json
-      end
-      {result:1,content:data}
+      args[:des_location_id]= current_user.location_id
+      {result: 1, content: DeliveryPresenter.init_json_presenters(DeliveryService.get_list(args).all)}
     end
 
+    #**
+    #@deprecated
+    #**
     # confirm_receive
+    # end the process of logistics
+    # 统一状态之后，原来的状态不能使用了，目前通过confirm_receive接口来统一设置状态
+    # 目前这个接口不做任何事情
+    # -->2014-11-19需要重新修改
+    # -->2014-11-23：运单下的拖清单被接收了，运单本身的状态如何处理？如果这个运单并没有被调用接收？
     post :confirm_receive do
-      if (d = DeliveryService.exit?(params[:id])).nil?
-        return {result:0,content:DeliveryMessage::NotExit}
+      unless d = LogisticsContainer.exists?(params[:id])
+        return {result: 0, content: DeliveryMessage::NotExit}
       end
 
-      if DeliveryService.confirm_received(d,current_user)
-        {result:1,content:DeliveryMessage::ReceiveSuccess}
-      else
-        {result:0,content:DeliveryMessage::ReceiveFailed}
+      unless (m = DeliveryService.confirm_receive(d,current_user)).result
+        return {result:0,content: DeliveryMessage::ReceiveFailed}
       end
 
+      return {result:1,content: DeliveryMessage::ReceiveSuccess}
+
+      #if LogisticsContainerService.end_receive(d, current_user)
+      #{result: 1, content: DeliveryMessage::ReceiveSuccess}
+      #else
+
+      # {result: 0, content: DeliveryMessage::ReceiveFailed}
+      #end
+    end
+
+    # list
+    # @deprecated!
+    # @params: delivery_date
+    # *get all deliveries sent from current_user's location*
+    get :list do
+      created_at = Time.parse(params[:delivery_date])
+      args = {
+          created_at: (created_at.beginning_of_day..created_at.end_of_day),
+          source_location_id: current_user.location_id
+      }
+
+      args[:user_id] = current_user.id if params[:all].nil?
+
+      {result: 1, content: DeliveryPresenter.init_json_presenters(DeliveryService.get_list(args).all)}
     end
   end
 end

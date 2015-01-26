@@ -1,0 +1,47 @@
+<h1>新建正则规范</h1>
+
+<%= form_for(@regex_category) do |f| %>
+    <% if @regex_category.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@regex_category.errors.count, "error") %> prohibited this regex_category from being
+            saved:</h2>
+
+          <ul>
+            <% @regex_category.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+    <div class="field">
+      <p>
+        <%= f.label :type, '类型：' %>
+        <%= f.select(:type, RegexType.types.collect { |l| [RegexType.display(l), l] }, {include_blank: false}, {onchange: 'render_regex_template()'}) %>
+      </p>
+    </div>
+    <div class="field">
+      <%= f.label :name, '名称：' %>
+      <%= f.text_field :name %>
+    </div>
+    <div class="field">
+      <%= f.label :desc, '描述：' %>
+      <%= f.text_field :desc %>
+    </div>
+    <div id="regex-template">
+      <%= render 'pack_label_regex' %>
+    </div>
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+<% end %>
+
+<%= link_to '返回', regex_categories_path %>
+
+
+<script type="text/javascript">
+    function render_regex_template() {
+        $.get('/regex_categories/regex_template', {type: $("#regex_category_type").val()}, function (template) {
+            $("#regex-template").html(template)
+        }, 'html');
+    }
+</script>

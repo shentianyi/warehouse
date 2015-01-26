@@ -80,12 +80,19 @@ module Sync
     end
 
     def self.skip_callbacks model
+      #puts "-----------#{model} skip_callbacks"
       model.record_timestamps=false
+      #model.skip_callbacks
       model.skip_callback(:update, :before, :reset_dirty_flag)
-      model.skip_callback(:save, :after, :log_state)
-      model.skip_callback(:save, :before, :set_package_position)
-      model.skip_callback(:update, :after, :set_update_flag)
-      model.skip_callback(:save, :after, :auto_shelved)
+      model.skip_callback(:create,:before,:init_container_attr) if model.instance_methods.include?(:init_container_attr)
+    end
+
+    def self.reset_callbacks model
+      #puts "-----------#{model} reset_callbacks"
+      model.record_timestamps=true
+      #model.reset_callbacks
+      model.set_callback(:update, :before, :reset_dirty_flag)
+      model.set_callback(:create,:before,:init_container_attr) if model.instance_methods.include?(:init_container_attr)
     end
 
     def self.reload

@@ -6,7 +6,7 @@ module V1
     #strong parameters
     helpers do
       def order_params
-        ActionController::Parameters.new(params).require(:order).permit(:id,:source_id,:user_id)
+        ActionController::Parameters.new(params).require(:order).permit(:id,:source_id,:user_id,:remark)
       end
     end
 
@@ -15,12 +15,6 @@ module V1
     #post start and end time(local time)
     #=============
     get :history do
-      #args = {
-      #    start_time:params[:start],
-      #    end_time:params[:end]
-      #}
-      #args[:user_id] = params[:user_id].nil? ? current_user.id : params[:user_id]
-
       #new params
       condition = {}
       condition[:user_id] = params[:user_id].nil? ? current_user.id : params[:user_id]
@@ -55,7 +49,7 @@ module V1
     #verified
     #=============
     post do
-      unless order = OrderService.create_with_items({order:order_params,order_items:params[:order_items]},current_user)
+      unless order = OrderService.create_with_items({order:order_params,order_items:params[:order_items],nopart_items:params[:no_part_items]},current_user)
         return {result:0,content:OrderMessage::CreatedFailed}
       end
 

@@ -8,7 +8,7 @@
       <li id='pick_panel_li'><a href="<%= pick_panel_orders_path %>">择货</a></li>
     </ul>
   </li>
-  <li id="notification"><a href="<%= notifications_path%>">通知面板</a></li>
+  <li id="notification"><a href="<%= notifications_path %>">通知面板</a></li>
 
   <li class="dropdown">
     <a class="dropdown-toggle" data-toggle="dropdown" href="#">择货流程<span class="caret"></span></a>
@@ -36,12 +36,18 @@
   </li>
 
   <li class="dropdown">
+    <a class="dropdown-toggle " data-toggle="dropdown" href="#">库存管理<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="manage">
+      <li><a href="<%= storages_path %>">库存查询</a></li>
+    </ul>
+  </li>
+
+  <li class="dropdown">
     <a class="dropdown-toggle" data-toggle="dropdown" href="#">报表<span class="caret"></span></a>
     <ul class="dropdown-menu" role="reporter">
-      <li id="reports_entry_report"><a href="<%= reports_entry_report_path %>">收货报表</a></li>
-      <li id="reports_removal_report"><a href="<%= reports_removal_report_path %>">发货报表</a></li>
-      <li id="reports_entry_discrepancy_report"><a href="<%= reports_entry_discrepancy_path %>">差异报表</a></li>
-      <li id="reports_order_report"><a href="<%= reports_orders_report_path%>">要货报表</a></li>
+      <li id="reports_reports"><a href="<%= reports_reports_path %>">收发货报表</a></li>
+      <li id="reports_reports"><a href="<%= reports_discrepancy_path %>">收发货差异报表</a></li>
+      <li id="reports_order_report"><a href="<%= reports_orders_report_path %>">要货报表</a></li>
     </ul>
   </li>
 
@@ -75,12 +81,13 @@
   <li class="dropdown">
     <a class="dropdown-toggle" data-toggle="dropdown" href="#">配置<span class="caret"></span></a>
     <ul class="dropdown-menu" role="setting">
-      <li id='regex_li'><a href="<%= regexes_path %>">正则规范配置</a></li>
+      <li id='regex_li'><a href="<%= regexes_path %>">X正则规范配置X</a></li>
+      <li id='regex_li'><a href="<%= regex_categories_path %>">正则规范配置</a></li>
       <li id='label_li'><a href="<%= labels_path %>">标签配置</a></li>
       <li id='sync_li'><a href="<%= syncs_path %>">同步配置</a></li>
       <li class="divider"></li>
       <li id='sys_config_li'><a href="<%= sys_configs_path %>">系统配置</a></li>
-      <li id="led_state_li"><a href="<%= led_states_path%>">LED配置</a></li>
+      <li id="led_state_li"><a href="<%= led_states_path %>">LED配置</a></li>
     </ul>
   </li>
   <li><a href="<%= destroy_user_session_path %>">｜注 销｜</a></li>

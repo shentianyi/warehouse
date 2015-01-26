@@ -9,7 +9,8 @@ function save_base_config(type) {
                 sync_lock: $('#sync_lock').prop('checked'),
                 enabled: $('#enabled').prop('checked'),
                 advance_second: $('#advance_second').val(),
-                per_request_size: $('#per_request_size').val()
+                per_request_size: $('#per_request_size').val(),
+                lock: $('#lock').prop('checked')
             }};
         } else if (type == 'sync') {
             data = {config: {last_time: $('#last_time').val()}};

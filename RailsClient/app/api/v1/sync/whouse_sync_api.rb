@@ -13,29 +13,56 @@ module V1
       end
 
       post do
-        whouses=JSON.parse(params[:whouse])
-        whouses.each do |whouse|
-          whouse=Whouse.new(whouse)
-          whouse.save
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            whouses=JSON.parse(params[:whouse])
+            whouses.each do |whouse|
+              whouse=Whouse.new(whouse)
+              whouse.save
+            end
+          end
+          msg.result =true
+        rescue => e
+          msg.content = "put:#{e.message}"
         end
+        return msg
       end
 
       put '/:id' do
-        whouses=JSON.parse(params[:whouse])
-        whouses.each do |whouse|
-          if u=Whouse.unscoped.find_by_id(whouse['id'])
-            u.update(whouse.except('id'))
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            whouses=JSON.parse(params[:whouse])
+            whouses.each do |whouse|
+              if u=Whouse.unscoped.find_by_id(whouse['id'])
+                u.update(whouse.except('id'))
+              end
+            end
           end
+          msg.result =true
+        rescue => e
+          msg.content = "put:#{e.message}"
         end
+        return msg
       end
 
       post :delete do
-        whouses=JSON.parse(params[:whouse])
-        whouses.each do |id|
-          if whouse=Whouse.unscoped.find_by_id(id)
-            whouse.update(is_delete: true)
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            whouses=JSON.parse(params[:whouse])
+            whouses.each do |id|
+              if whouse=Whouse.unscoped.find_by_id(id)
+                whouse.update(is_delete: true)
+              end
+            end
           end
+          msg.result =true
+        rescue => e
+          msg.content = "put:#{e.message}"
         end
+        return msg
       end
     end
   end

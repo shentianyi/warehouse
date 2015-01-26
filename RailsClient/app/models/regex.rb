@@ -2,6 +2,7 @@ class Regex < ActiveRecord::Base
   self.inheritance_column = nil
   include Extensions::UUID
   belongs_to :regexable, polymorphic: true
+  belongs_to :regex_category
 
   before_save :count_fix_length
 

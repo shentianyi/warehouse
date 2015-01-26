@@ -1,11 +1,12 @@
 module DeliveryMessage
-  NotExit ='运单不存在'
+  NotExist ='运单不存在'
   AddForkliftSuccess='添加清单成功'
   CheckForkliftFailed='托清单不存在或已经加入都其他运单中'
   DeleteForkliftSuccess='删除清单成功'
   DeleteForkliftFailed='删除清单失败'
-  CannotUpdate='不能修改'
+  CannotUpdate='运单不能被修改'
   CannotDelete='不能删除'
+  ForkliftHasNotExist='不是所有的托清单都存在'
   ForkliftExistInOthers = '托清单已经存在运单中,不能创建'
   SendSuccess='发送成功'
   SendFailed='发送失败'
@@ -18,4 +19,5 @@ module DeliveryMessage
   ReceiveSuccess='接收成功'
   ReceiveFailed='接收失败'
   NotSend=',运单未发送,请联系发货人员发货'
+  DestinationNotExist = '目的地不存在'
 end

@@ -9,4 +9,13 @@ class RegexType
     end
     types
   end
+
+  def self.display(type)
+    case type
+      when PACKAGE_LABEL
+        '包装箱标签规范'
+      when ORDERITEM_LABEL
+        '需求单标签规范'
+    end
+  end
 end

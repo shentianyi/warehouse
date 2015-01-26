@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Type:</strong>
+  <%= @regex_category.type %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @regex_category.name %>
+</p>
+
+<p>
+  <strong>Desc:</strong>
+  <%= @regex_category.desc %>
+</p>
+
+
+<%= link_to 'Edit', edit_regex_category_path(@regex_category) %> |
+<%= link_to 'Back', regex_categories_path %>

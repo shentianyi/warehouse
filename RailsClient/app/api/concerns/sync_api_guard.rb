@@ -11,6 +11,31 @@ module SyncAPIGuard
   end
 
   module ClassMethods
+    def lock_sync
+      before do
+        if Sync::Config.lock
+          #if lock sync return false
+          puts "###Sync Locked"
+          return error!('Sync Locked',423)
+        end
+        tb= get_table_name
+        if table = SyncLog.find_by_table_name(tb)
+          if !table.sync
+            table.update(sync: true)
+          end
+        else
+          SyncLog.create(table_name:tb,sync:true)
+        end
+      end
+
+      after do
+        tb= get_table_name
+        if table=SyncLog.find_by_table_name(tb)
+          table.update(sync: false)
+        end
+      end
+    end
+
     def lock_sync_pool
       before do
         tb= get_table_name
@@ -30,8 +55,10 @@ module SyncAPIGuard
       end
 
       after do
+        tb= get_table_name
+        model = tb.singularize.classify.constantize
+        Sync::Config.reset_callbacks(model)
         if Sync::Config.sync_lock
-          tb= get_table_name
           if table=SyncPool.find_by_table_name(tb)
             table.update(locked: false)
           end

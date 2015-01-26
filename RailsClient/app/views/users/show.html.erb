@@ -2,6 +2,8 @@
 <span class="label label-primary"><%= @user.id%></span>
 
 <h4>姓名: <small><%= @user.name%></small></h4>
+<h4>用户名： <small><%= @user.user_name %></small></h4>
+<h4>操作模式： <small><%= OperationMode.display(@user.operation_mode) %></small></h4>
 <h4>上次登录IP: <small><%= @user.current_sign_in_ip%></small></h4>
 <h4>所属地点: <small><%= @user.location.name if @user.location%></small></h4>
 <h4>角色: <small><%= Role.display(@user.role_id) %></small></h4>

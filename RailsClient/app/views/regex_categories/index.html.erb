@@ -1,0 +1,30 @@
+<h2>正则规范配置列表</h2>
+
+<table class="table table-bordered table-striped globle-table">
+  <thead>
+  <tr>
+    <th>序号</th>
+    <th>名称</th>
+    <th>描述</th>
+    <th>类别</th>
+    <th colspan="3">&nbsp;</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @regex_categories.each_with_index do |regex_category, i| %>
+      <tr>
+        <td><%= i+1 %></td>
+        <td><%= regex_category.name %></td>
+        <td><%= regex_category.desc %></td>
+        <td><%= RegexType.display(regex_category.type) %></td>
+        <td><%= link_to '详细', edit_regex_category_path(regex_category), :class => 'btn btn-default' %></td>
+        <td><%= link_to '删除', regex_category, method: :delete, data: {confirm: '确认删除?'}, :class => 'btn btn-default' %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to '新建正则规范', new_regex_category_path %>

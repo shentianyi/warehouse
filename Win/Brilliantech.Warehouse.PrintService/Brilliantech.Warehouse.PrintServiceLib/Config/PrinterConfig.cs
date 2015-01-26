@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text; 
 using Brilliantech.Warehouse.PrintServiceLib.Model;
 using Brilliantech.Framwork.Utils.ConfigUtil;
- 
+using System.Drawing.Printing;
+
 
 namespace Brilliantech.Warehouse.PrintServiceHost.Config
 {
@@ -12,6 +13,20 @@ namespace Brilliantech.Warehouse.PrintServiceHost.Config
     {
         private static ConfigUtil printerConfig;
         private static List<Printer> printers;
+        private static List<string> systemPrinters;
+
+        public static List<string> SystemPrinters
+        {
+            get
+            {
+                systemPrinters = new List<string>();
+                foreach (string printer in PrinterSettings.InstalledPrinters)
+                {
+                    systemPrinters.Add(printer);
+                }
+                return PrinterConfig.systemPrinters;
+            }
+        }
 
         static PrinterConfig()
         {
@@ -37,7 +52,7 @@ namespace Brilliantech.Warehouse.PrintServiceHost.Config
             {
                 throw e;
             }
-        } 
+        }
         public static List<Printer> Printers
         {
             get { return PrinterConfig.printers; }
@@ -54,10 +69,32 @@ namespace Brilliantech.Warehouse.PrintServiceHost.Config
 
         public static Printer Find(string code)
         {
-           return printers.Find(delegate(Printer printer)
-            {
-                return printer.Id == code;
-            });
+            return printers.Find(delegate(Printer printer)
+             {
+                 return printer.Id == code;
+             });
         }
+    }
+
+    public class PrintSet
+    {
+        private List<Printer> defaultPrinters;
+
+        private List<string> systemPrinters;
+
+        public List<Printer> DefaultPrinters
+        {
+            get { return defaultPrinters; }
+            set { defaultPrinters = value; }
+        }
+
+
+        public List<string> SystemPrinters
+        {
+            get { return systemPrinters; }
+            set { systemPrinters = value; }
+        }
+
+         
     }
 }

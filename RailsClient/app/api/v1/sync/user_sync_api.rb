@@ -11,29 +11,56 @@ module V1
       end
 
       post do
-        users=JSON.parse(params[:hacker])
-        users.each do |user|
-          user=Hacker.new(user)
-          user.save
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            users=JSON.parse(params[:hacker])
+            users.each do |user|
+              user=Hacker.new(user)
+              user.save
+            end
+          end
+          msg.result =true
+        rescue => e
+          msg.content = "put:#{e.message}"
         end
+        return msg
       end
 
       put '/:id' do
-        users=JSON.parse(params[:hacker])
-        users.each do |user|
-          if u=Hacker.unscoped.find_by_id(user['id'])
-            u.update(user.except('id'))
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            users=JSON.parse(params[:hacker])
+            users.each do |user|
+              if u=Hacker.unscoped.find_by_id(user['id'])
+                u.update(user.except('id'))
+              end
+            end
           end
+          msg.result =true
+        rescue => e
+          msg.content = "put:#{e.message}"
         end
+        return msg
       end
 
       post :delete do
-        users=JSON.parse(params[:hacker])
-        users.each do |id|
-          if user=Hacker.unscoped.find_by_id(id)
-            user.update(is_delete: true)
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            users=JSON.parse(params[:hacker])
+            users.each do |id|
+              if user=Hacker.unscoped.find_by_id(id)
+                user.update(is_delete: true)
+              end
+            end
           end
+          msg.result =true
+        rescue => e
+          msg.content = "put:#{e.message}"
         end
+        return msg
       end
     end
   end

@@ -10,16 +10,19 @@
       <form method="get" action="<%= reports_orders_report_path %>">
         <div>
           <div>
-            <span>时间范围:
-              <input type="text" name="date_start" class="datepicker" value="<%= @date_start %>"/>
-              ~ <input type="text" name="date_end" class="datepicker" value="<%= @date_end %>"/>
-            </span>
-            <span>查看类型：
-              <%= select_tag :format, options_for_select([["查找", "html"],["导出xlsx", "xlsx"],["导出CSV", "csv"]], "html") %>
-            </span>
-            <input type="submit" value="确定" class="btn btn-warning" name="commit"/>
+            <span class="label label-info">地点:</span>
+            <%= select_tag(:source_location_id, options_for_select(Location.list_menu(current_user), @source_location_id), include_blank: false) %>
+
+            <span class="label label-info">要货时间:</span>
+            <input type="text" name="date_start" class="datepicker" value="<%= @date_start %>"/>
+            ~ <input type="text" name="date_end" class="datepicker" value="<%= @date_end %>"/>
+
+            <span class="label label-info">显示方式:</span>
+            <%= select_tag :format, options_for_select([["Web", "html"], ["Excel File(MS 07 or later)", "xlsx"]], "html") %>
+            <input type="submit" value="生成" class="btn btn-warning" name="commit"/>
           </div>
         </div>
+
       </form>
     </div>
     <br/>
@@ -33,25 +36,47 @@
         <th>部门</th>
         <th>要货人</th>
         <th>状态</th>
+        <th>已发货总数</th>
+        <th>已发运箱数</th>
+        <th>差异数（要货总数-已发运总数）</th>
       </tr>
       </thead>
       <tbody>
-      <% @order_items.each_with_index do |o,index| %>
-      <tr>
-        <td><%= index+1%></td>
-        <td><%= o.part_id%></td>
-        <td><%= o.total %></td>
-        <td><%= o.box_count%></td>
-        <td><%= o.whouse_id%></td>
-        <td><%= o.user_id%></td>
-        <% if o.out_of_stock %>
-        <td><span class="label label-danger">缺货</span></td>
-        <% elsif o.is_finished %>
-        <td><span class="label label-info" >完成备货</span></td>
-        <% else %>
-        <td><span class="label label-warning">未处理</span></td>
-        <%end%>
-      </tr>
+      <% @order_items.each_with_index do |o, index| %>
+          <tr>
+            <td><%= index+1 %></td>
+            <td><%= o.part_id %></td>
+            <td><%= o.total %></td>
+            <td><%= o.box_count %></td>
+            <td><%= o.whouse_id %></td>
+            <td><%= o.user_id %></td>
+            <% case o.state %>
+            <% when OrderItemState::INIT %>
+                <td><span class="label label-warning">未处理</span></td>
+            <% when OrderItemState::OUT_OF_STOCK %>
+                <td><span class="label label-danger">缺货</span></td>
+            <% when OrderItemState::FINISHED %>
+                <td><span class="label label-info">完成备货</span></td>
+            <% end %>
+            <% unless @removal_packages["#{o.part_id}#{o.whouse_id}"].nil? %>
+                <td>
+                  <span class="label label-info"><%= @removal_packages["#{o.part_id}#{o.whouse_id}"]['count'] %></span>
+                </td>
+                <td>
+                  <span class="label label-info"><%= @removal_packages["#{o.part_id}#{o.whouse_id}"]['box'] %></span>
+                </td>
+                <td>
+              <span class="label label-warning">
+                <%= @all_orders["#{o.part_id}#{o.whouse_id}"] - @removal_packages["#{o.part_id}#{o.whouse_id}"]['count'] %>
+              </span>
+                </td>
+            <% else %>
+                <td></td>
+                <td></td>
+                <td></td>
+            <% end %>
+            <% @removal_packages["#{o.part_id}#{o.whouse_id}"] = nil %>
+          </tr>
       <% end %>
       </tbody>
     </table>

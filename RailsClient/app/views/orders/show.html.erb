@@ -20,6 +20,7 @@
       <span class="label label-warning">否</span>
   <%end%>
 </small></h4>
+<h4>备注:</h4><%= @order.remark%>
 
 <%= link_to '编辑', edit_order_path(@order), :class=>'btn btn-default' %> |
 <%= link_to '返回', orders_path, :class=>'btn btn-default' %>

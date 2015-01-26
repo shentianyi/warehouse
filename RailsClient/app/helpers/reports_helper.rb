@@ -1,6 +1,10 @@
 require 'csv'
 
 module ReportsHelper
+  def self.gen_title type,start_t,end_t,location_id,sub_title=nil
+    "#{Time.parse(start_t).strftime("%Y-%m-%d")}~#{Time.parse(end_t).strftime("%Y-%m-%d")} #{Location.find_by_id(location_id).name} #{ReportType.display(type.to_i)}#{sub_title}报表"
+  end
+
   def self.csv_filter file
     res_hash = {}
     jsfile = JSON.parse(file)

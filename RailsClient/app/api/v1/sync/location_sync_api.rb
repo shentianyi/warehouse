@@ -12,29 +12,56 @@ module V1
       end
 
       post do
-        locations=JSON.parse(params[:location])
-        locations.each do |location|
-          location=Location.new(location)
-          location.save
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            locations=JSON.parse(params[:location])
+            locations.each do |location|
+              location=Location.new(location)
+              location.save
+            end
+          end
+          msg.result =true
+        rescue => e
+          msg.content = "post:#{e.message}"
         end
+        return msg
       end
 
       put '/:id' do
-        locations=JSON.parse(params[:location])
-        locations.each do |location|
-          if u=Location.unscoped.find_by_id(location['id'])
-            u.update(location.except('id'))
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            locations=JSON.parse(params[:location])
+            locations.each do |location|
+              if u=Location.unscoped.find_by_id(location['id'])
+                u.update(location.except('id'))
+              end
+            end
           end
+          msg.result =true
+        rescue => e
+          msg.content = "put:#{e.message}"
         end
+        return msg
       end
 
       post :delete do
-        locations=JSON.parse(params[:location])
-        locations.each do |id|
-          if location=Location.unscoped.find_by_id(id)
-            location.update(is_delete: true)
+        msg=Message.new
+        begin
+          ActiveRecord::Base.transaction do
+            locations=JSON.parse(params[:location])
+            locations.each do |id|
+              if location=Location.unscoped.find_by_id(id)
+                location.update(is_delete: true)
+              end
+            end
           end
+          msg.result =true
+        rescue => e
+          msg.content = "delete:#{e.message}"
         end
+        return msg
       end
     end
   end

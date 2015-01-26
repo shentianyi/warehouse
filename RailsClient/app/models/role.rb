@@ -23,7 +23,11 @@ class Role
 	end
 
 	def self.display id
-		@@roles[id_sym(id)][:display]
+		if @@roles[id_sym(id)]
+			@@roles[id_sym(id)][:display]
+		else
+			'No Role'
+		end
 	end
 
 	def self.id_sym id

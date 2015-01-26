@@ -1,6 +1,13 @@
 class OrderService
 
   #=============
+  #
+  #=============
+  def self.where condition
+    Order.where(condition)
+  end
+
+  #=============
   #get last n days order
   #params
   # @user_id:current_user.id,
@@ -80,6 +87,8 @@ class OrderService
   def self.create_with_items args, current_user
     order = Order.new(args[:order])
     order.user = current_user
+    order.source_location_id = current_user.location_id
+    order.remark = no_parts_to_string(args[:nopart_items])
     ActiveRecord::Base.transaction do
       begin
         if order.save
@@ -112,6 +121,14 @@ class OrderService
   def self.exits? id
     #search({id: id}).first
     find({id:id}).first
+  end
+
+  def self.no_parts_to_string items
+    remark = ""
+    items.each {|item|
+      remark += "零件:"+item[:part_id]+",数量:"+item[:quantity].to_s+",箱数:"+item[:box_quantity].to_s+",部门:"+item[:department]+",是否加急:"+item[:is_emergency].to_s+"\n"
+    } if items
+    remark
   end
 
   #-------------

@@ -11,7 +11,6 @@ namespace Brilliantech.Warehouse.PrintServiceLib.Model
 {
     public class ApiClient
     {
-        private static string baseUrl = ApiConfig.BaseUri;
         private static string token = ApiConfig.Token; 
 
         public T Execute<T>(IRestRequest request) where T : new()
@@ -29,7 +28,7 @@ namespace Brilliantech.Warehouse.PrintServiceLib.Model
         private RestClient genClient()
         {
             var client = new RestClient();
-            client.BaseUrl = baseUrl;
+            client.BaseUrl = ApiConfig.BaseUri;
             client.Authenticator = new OAuth2AuthorizationRequestHeaderAuthenticator(token, "Bearer");
             return client;
         }

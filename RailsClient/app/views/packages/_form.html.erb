@@ -1,4 +1,4 @@
-<%= form_for(@package) do |f| %>
+<%= form_for(@package,url:package_path)  do |f| %>
   <% if @package.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@package.errors.count, "error") %> prohibited this package from being saved:</h2>
@@ -13,7 +13,12 @@
 
     <p>
       <%= f.label :state,'状 态'%>
-      <%=  f.select(:state,PackageState.state,{include_blank: false})%>
+      <%=  f.select(:state,MovableState.state,{include_blank: false})%>
+    </p>
+
+    <p>
+      <%= f.label :remark,'备注'%>
+      <%= f.text_field :remark%>
     </p>
 
   <div class="actions">

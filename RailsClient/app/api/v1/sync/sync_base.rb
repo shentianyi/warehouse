@@ -7,10 +7,11 @@ module V1
       version 'v1', :using => :path
       namespace 'sync'
       guard_all!
+      lock_sync
       lock_sync_pool
 
-
       mount LocationSyncAPI
+      mount LocationDestinationSyncAPI
       mount UserSyncAPI
       mount WhouseSyncAPI
       mount PartTypeSyncAPI
@@ -19,11 +20,14 @@ module V1
       mount PartPositionSyncAPI
       mount PickItemFilterSyncAPI
 
-      mount DeliverySyncAPI
-      mount ForkliftSyncAPI
-      mount PackageSyncAPI
-      mount PackagePositionSyncAPI
-      mount StateLogSyncAPI
+      mount RegexCategorySyncAPI
+      mount RegexSyncAPI
+
+      mount ContainerSyncAPI
+      mount LocationContainerSyncAPI
+      mount RecordSyncAPI
+
+      mount StorageSyncAPI
 
       mount OrderSyncAPI
       mount OrderItemSyncAPI

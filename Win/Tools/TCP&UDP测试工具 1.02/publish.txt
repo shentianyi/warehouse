@@ -1,0 +1,12 @@
+PUBLISH sip:event@192.168.104.10 SIP/2.0
+Via: SIP/2.0/UDP 192.168.10.226:5070;rport;branch=z9hG4bK1352030262
+From: <sip:ec00001-0@192.168.104.10>;tag=73202069
+To: <sip:event@192.168.104.10>
+Call-ID: 1019639763
+CSeq: 20 PUBLISH
+Max-Forwards: 70
+User-Agent: NE-Vimicro-Dvs-1-2-V1.0
+Expires: 3600
+Event:report;name=temperature;deviceid=lec3100;value=25;time=1077105241
+Content-Length: 0
+

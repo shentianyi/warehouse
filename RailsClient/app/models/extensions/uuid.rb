@@ -6,7 +6,7 @@ module Extensions
       #self.primary_key='id' # rails 4
       default_scope { where(is_delete: false) }
       validates_uniqueness_of :id
-      before_create :generate_uuid
+      after_initialize :generate_uuid
       before_create :set_timestamps
       before_update :reset_dirty_flag
 
@@ -28,9 +28,18 @@ module Extensions
       end
 
       def destroy
+        # self.send(:destroy_dependent, self.id) if self.respond_to?(:destroy_dependent)
         self.is_delete=true
         self.is_dirty=true
         self.save
+      end
+
+      def update_info
+        if self.is_dirty.nil? 
+          '未同步'
+        else
+          '已同步'
+        end
       end
 
       # for sync

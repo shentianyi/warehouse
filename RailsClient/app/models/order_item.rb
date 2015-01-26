@@ -33,13 +33,15 @@ class OrderItem < ActiveRecord::Base
     "OI#{Time.now.to_milli}"
   end
 
-  def state
-    if self.out_of_stock
-      '缺货'
-    elsif self.is_finished
-      '完成备货'
-    else
-      '未处理'
-    end
+  def self.generate_report_data(start_t,end_t,source_location_id)
+    time_range = Time.parse(start_t)..Time.parse(end_t)
+    condition = {}
+    condition['order_items.created_at']= time_range
+    condition['orders.source_location_id'] = source_location_id
+
+    joins(:order)
+        .where(condition)
+        .select('order_items.part_id,SUM(order_items.box_quantity) as box_count,SUM(order_items.quantity) as total,order_items.whouse_id as whouse_id,order_items.state,order_items.user_id as user_id')
+        .group('part_id,whouse_id,state').order("whouse_id DESC,part_id,state DESC").all
   end
 end
