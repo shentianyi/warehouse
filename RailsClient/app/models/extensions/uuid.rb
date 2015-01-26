@@ -35,7 +35,7 @@ module Extensions
       end
 
       def update_info
-        if self.is_dirty
+        if self.is_dirty.nil? 
           '未同步'
         else
           '已同步'
