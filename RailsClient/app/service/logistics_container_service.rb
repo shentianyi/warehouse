@@ -48,6 +48,7 @@ class LogisticsContainerService
   end
 
   def self.get_all_packages(lc)
+    puts lc
     lc.subtree.joins(:package)
   end
 

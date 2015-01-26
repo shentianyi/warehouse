@@ -193,7 +193,7 @@ class ReportsController < ApplicationController
                           p['count'],
                           p['box'],
                           p['whouse'],
-                          p.state_display
+                          MovableState.display(p['state'])
                       ], :types => [:string]
       }
     end
