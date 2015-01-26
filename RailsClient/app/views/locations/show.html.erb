@@ -3,7 +3,13 @@
 
 <h4>地 址: <small><%= @location.address%></small></h4>
 <h4>联系方式: <small><%= @location.tel%></small></h4>
-<h4>目的地: <small><%= @location.destination.name if @location.destination%></small></h4>
+<h4>目的地: <small>
+  <ul>
+    <% @location.destinations.each do |d|%>
+        <li><span class="label label-default"><%= d.name %></span></li>
+    <% end %>
+  </ul>
+</small></h4>
 
 <%= link_to '编辑', edit_location_path(@location) ,:class=>"btn btn-default"%> |
 <%= link_to '返回', locations_path ,:class=>"btn btn-default"%>

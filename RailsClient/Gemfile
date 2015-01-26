@@ -49,7 +49,15 @@ gem 'rack-oauth2'
 # For test
 group :development, :test do
   gem 'rspec-rails'
+  gem 'factory_girl_rails', '~> 4.0'
 end
+
+#sidekiq
+#gem 'sidekiq'
+#gem 'sinatra',require: false
+#gem 'slim'
+#gem 'sidekiq-benchmark'
+#gem 'redis'
 
 # For sync
 gem 'whenever'
@@ -68,3 +76,11 @@ gem 'roo'
 
 # for excelx
 gem 'axlsx'
+
+# from dump
+gem 'yaml_db'
+gem 'database_cleaner'
+
+# for container
+# gem 'closure_tree'
+gem 'ancestry'

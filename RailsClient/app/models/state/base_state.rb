@@ -3,6 +3,7 @@ class BaseState
   WAY = 1
   DESTINATION = 2
   RECEIVED = 3
+  REJECTED = 4
 
   def self.display state
     case state
@@ -14,8 +15,27 @@ class BaseState
         '到达'
       when RECEIVED
         '已接收'
+      when REJECTED
+        '拒收'
       else
         '未知状态'
+    end
+  end
+
+  def self.pre_states state
+    case state
+      when ORIGINAL
+        [ORIGINAL]
+      when WAY
+        [ORIGINAL,WAY]
+      when DESTINATION
+        [DESTINATION,WAY]
+      when RECEIVED
+        [DESTINATION,REJECTED,RECEIVED]
+      when REJECTED
+        [DESTINATION,REJECTED,RECEIVED]
+      else
+        []
     end
   end
 

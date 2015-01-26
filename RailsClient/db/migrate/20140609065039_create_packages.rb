@@ -3,7 +3,7 @@ class CreatePackages < ActiveRecord::Migration
     create_table(:packages, :id=>false )do |t|
       t.string :uuid, :limits=>36, :null => false
       t.string :id,:limits=>36, :primary=>true, :null=>false
-      t.string
+      # t.string
       t.string :part_id
       t.float :quantity, :default=>0
       t.datetime :in_date

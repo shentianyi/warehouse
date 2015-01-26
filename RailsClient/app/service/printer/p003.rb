@@ -5,18 +5,24 @@ module Printer
     BODY=[:forklift_id, :quantity, :receive_qty, :status, :whouse]
 
     def generate_data
-      d=Delivery.find(self.id)
-      head={id: d.id,
-            receive_addr: d.destination.nil? ? '' : d.destination.address,
-            user: d.receiver_id,
-            receive_date: d.received_date.nil? ? '' : d.received_date.localtime.strftime('%Y.%m.%d %H:%M')}
+      d=LogisticsContainer.find(self.id)
+      dp=DeliveryPresenter.new(d)
+
+      head={id: d.container_id,
+            receive_addr: d.des_location.nil? ? '' : d.des_location.address,
+            user: dp.received_user,
+            receive_date: dp.received_date}
       heads=[]
       HEAD.each do |k|
         heads<<{Key: k, Value: head[k]}
       end
-      forklifts=d.forklifts
+      forklifts=LogisticsContainerService.get_forklifts(d)
       forklifts.each do |f|
-        body={forklift_id: f.id, quantity: f.sum_packages, receive_qty: f.accepted_packages, status: ForkliftState.display(f.state), whouse: f.whouse_id}
+        body={forklift_id: f.container_id,
+              quantity: LogisticsContainerService.count_all_packages(f),
+              receive_qty: LogisticsContainerService.count_accepted_packages(f),
+              status: f.state_display,
+              whouse: f.destinationable.nil? ? '' : f.destinationable.name}
         bodies=[]
         BODY.each do |k|
           bodies<<{Key: k, Value: body[k]}

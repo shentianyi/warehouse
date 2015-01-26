@@ -10,9 +10,15 @@
           </ul>
         </div>
     <% end %>
+
     <p>
       <%= f.label :id, '员工号' %>
       <%= f.text_field :id %>
+    </p>
+
+    <p>
+      <%= f.label :user_name, '用户名' %>
+      <%= f.text_field :user_name %>
     </p>
 
     <p>
@@ -27,6 +33,11 @@
     <p>
       <%= f.label :password_confirmation, '确认密码' %>
       <%= f.password_field :password_confirmation %>
+    </p>
+
+    <p>
+      <%= f.label :operation_mode, '操作模式' %>
+      <%= f.select(:operation_mode, OperationMode.list_menu, {include_blank: false})%>
     </p>
 
     <p>

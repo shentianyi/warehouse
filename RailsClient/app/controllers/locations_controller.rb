@@ -1,6 +1,6 @@
 class LocationsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_location, only: [:show, :edit, :update, :destroy, :users, :whouses]
+  before_action :set_location, only: [:show, :edit, :update, :destroy, :users, :whouses,:destinations,:add_destination,:remove_destination,:set_default_destination]
 
   # GET /locations
   # GET /locations.json
@@ -37,6 +37,50 @@ class LocationsController < ApplicationController
         format.html { render :new }
         format.json { render json: @location.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+  def destinations
+
+  end
+
+  def add_destination
+    if @location.destinations.include?(Location.find_by_id(location_params[:destination_id]))
+      redirect_to destinations_location_path(@location), notice: '目的地未找到'
+    end
+
+    if @location.location_destinations.count == 0
+      d = @location.location_destinations.build({destination_id:location_params[:destination_id],is_default:true})
+    else
+      d = @location.location_destinations.build({destination_id:location_params[:destination_id]})
+    end
+
+    if d.save
+      redirect_to destinations_location_path(@location), notice: '添加成功'
+    else
+      redirect_to destinations_location_path(@location), notice: d.errors.full_messages.to_json
+    end
+  end
+
+  def remove_destination
+    d = @location.location_destinations.where({destination_id:params[:destination_id]}).first
+    d.destroy
+    render :destinations
+    #render :json => d.errors.full_messages.to_json
+  end
+
+  def set_default_destination
+    unless @location.destinations.include?(Location.find_by_id(params[:destination_id]))
+      redirect_to destinations_location_path(@location), notice: '目的地未找到'
+    end
+
+    @location.location_destinations.where({is_default:true}).first.update({is_default:false})
+
+    d = @location.location_destinations.where({destination_id:params[:destination_id]}).first
+    if d.update({is_default:true})
+      redirect_to destinations_location_path(@location), notice: '设置成功'
+    else
+      redirect_to destinations_location_path(@location), notice: '设置失败'
     end
   end
 
@@ -93,6 +137,6 @@ class LocationsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def location_params
       #params[:location]
-      params.require(:location).permit(:name,:address,:tel,:destination_id,:id,:prefix,:suffix)
+      params.require(:location).permit(:name,:address,:tel,:id,:prefix,:suffix,:destination_id)
     end
 end

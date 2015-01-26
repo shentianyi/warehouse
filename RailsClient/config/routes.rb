@@ -1,7 +1,35 @@
 Rails.application.routes.draw do
 
+  resources :storages do
+    collection do
+      get :search
+    end
+  end
+
+  resources :regex_categories do
+    collection do
+      get :regex_template
+    end
+  end
   resources :led_states
   resources :sys_configs
+  resources :logistics_containers do
+    collection do
+      get :search
+      match :import, to: :import, via: [:get, :post]
+    end
+
+    member do
+      get :export
+    end
+  end
+=begin
+
+  require 'sidekiq/web'
+  authenticate :user, lambda { |u| u.is_sys } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
+=end
 
   resources :order_items do
     collection do
@@ -29,13 +57,12 @@ Rails.application.routes.draw do
 
   resources :deliveries do
     collection do
-      match :import, to: :import, via: [:get, :post]
+      #match :import, to: :import, via: [:get, :post]
       match :generate, to: :generate, via: [:get, :post]
       match :receive, to: :receive, via: [:get, :post]
       get :search
     end
     member do
-      get :export
       get :forklifts
     end
   end
@@ -87,7 +114,7 @@ Rails.application.routes.draw do
   post 'parts/do_import_positions', to: 'parts#do_import_positions'
 
   [:locations, :whouses, :parts, :positions, :part_positions, :users, :deliveries, :forklifts,
-   :packages, :part_types, :pick_item_filters, :orders,:modems,:leds].each do |model|
+   :packages, :part_types, :pick_item_filters, :orders, :modems, :leds].each do |model|
     resources model do
       collection do
         post :do_import
@@ -101,10 +128,7 @@ Rails.application.routes.draw do
 
   delete '/parts/delete_position/:id', to: 'parts#delete_position'
 
-  get 'reports/entry_report', to: 'reports#entry_report'
-  get 'reports/removal_report', to: 'reports#removal_report'
-  get 'reports/entry_discrepancy', to: 'reports#entry_discrepancy'
-  get 'reports/removal_discrepancy', to: 'reports#removal_discrepancy'
+  get 'reports/discrepancy', to: 'reports#discrepancy'
   get 'reports/orders_report', to: 'reports#orders_report'
   get 'reports/reports', to: 'reports#reports'
   post 'reports/upload_file', to: 'reports#upload_file'
@@ -125,6 +149,10 @@ Rails.application.routes.draw do
     member do
       get 'users'
       get 'whouses'
+      get 'destinations'
+      post :add_destination
+      delete 'remove_destination/:destination_id', to: :remove_destination, as: 'remove_destination'
+      post 'set_default_destination/:destination_id', to: :set_default_destination, as: 'set_default_destination'
     end
   end
 

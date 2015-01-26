@@ -6,6 +6,15 @@ class Position < ActiveRecord::Base
   has_many :part_positions, :dependent => :destroy
   has_many :parts, :through => :part_positions
 
+  validate :validate_save
+
+  def display
+    "#{self.whouse.name} => #{self.detail}"
+  end
+
+  def validate_save
+    errors.add(:id, '编号不可为空') if self.id.blank?
+  end
 
   def generate_id
     "PS#{Time.now.to_milli}"

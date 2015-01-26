@@ -53,13 +53,13 @@ class OrderItemService
 	#verify part id
 	#=============
 	def self.verify_part_id part_id,current_user
-		PartService.validate_id part_id,current_user
+		PartService.validate_id part_id
 		Part.find_by_id part_id
 	end
 
 	#=============
 	#verify quantity,
-	#need to know 
+	#need to know
 	#=============
 	def self.verify_quantity quantity
     return quantity

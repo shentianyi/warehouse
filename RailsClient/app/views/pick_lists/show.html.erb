@@ -1,18 +1,26 @@
-<div>
-  <a href="<%=@back_url%>" class="btn btn-success">返回</a>
-</div>
+
 <div class="header">
-  <p>择货单号：<%= @pick_list.id %></p>
+  <p id="pick-list" pick_id = "<%= @pick_list.id %>">择货单号：<%= @pick_list.id %></p>
 
   <p>择货员工号：<%= @pick_list.user_id %></p>
 
   <p>生成时间：<%= @pick_list.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></p>
+
+  <p>备注：<%= @pick_list.remark%></p>
 </div>
 
 <div class="body">
+  <div>
+    <input type="button" value="打印择货单" class='btn btn-primary btn-lg' id="print-pick-list" onclick="print_pick_list_with_id('<%= @pick_list.id %>');"/>
+    <%= link_to '返回需求面板', panel_orders_path, :class=>'btn btn-default btn-lg' %>
+    <a href="<%=@back_url%>" class="btn btn-default btn-lg">返回择货单列表</a>
+  </div>
   <table class="table table-bpicked table-striped globle-table">
     <thead>
     <tr>
+      <th>
+        <input type="checkbox" id="check-all-unprinted"/><label class="label label-info">全选未打印</label>
+      </th>
       <th>NO.</th>
       <th>零件号</th>
       <th>数量</th>
@@ -27,6 +35,18 @@
     <tbody>
     <% @pick_items.each_with_index do |pick_item, index| %>
         <tr>
+          <td>
+            <div id="<%= pick_item.id %>">
+              <input type="checkbox" <%= "printed" if pick_item.state == PickItemState::PRINTED%> class="pick-item" id="<%= pick_item.id %>" state="<%= pick_item.state%>"/>
+              <% if pick_item.state == PickItemState::PRINTED%>
+                  <label>已打印</label>
+              <% elsif pick_item.state == PickItemState::PRINTING%>
+                  <label>正在打印</label>
+              <% else %>
+                  <label>未打印</label>
+               <% end %>
+            </div>
+          </td>
           <td><%= index+1 %></td>
           <td><%= pick_item.part_id %></td>
           <td><%= pick_item.quantity %></td>
@@ -43,12 +63,71 @@
     </tbody>
   </table>
 </div>
-<div>
-  <input type="button" value="打印择货单" class='btn btn-primary btn-lg' onclick="print_pick_list_with_id('<%= @pick_list.id %>');"/>
-  <%= link_to '返回需求面板', panel_orders_path, :class=>'btn btn-default btn-lg' %>
-</div>
+
+<% content_for :javascript_includes do %>
+    <%= javascript_include_tag "pickitem-manage" %>
+<%end%>
+
 <script type="text/javascript">
 	$(document).ready(function(){
-	init_check();
-})
-	</script>
+        init_check();
+        $("body").on("change","#check-all-unprinted",function(){
+            var checked = $(this).attr('checked') == undefined ? false : true;
+            $(".pick-item").not("[printed]").each(function () {
+                $(this).prop("checked",checked).trigger("change");
+            })
+        }).on("change",".pick-item",function(){
+            var target = $(this);
+            var checked = $(this).attr('checked') == undefined ? false : true;
+            var id = $(this).attr("id");
+            var state = $(this).attr("state");
+            var prestate = $(this).attr("prestate");
+
+            if(prestate == undefined){
+                prestate = state;
+                if(state == 0 && checked == true){
+                    state = 1
+                }
+                else if(state == 1 && checked == false){
+                    state = 0
+                }
+                else if(state == 2 && checked == true){
+                    state = 1
+                }
+            }
+            else{
+                var pre_state = state;
+                if(state == 0 && checked == true){
+                    state = 1
+                }
+                else if(state == 1 && checked == false && (prestate == 0 || prestate == 1)){
+                    state = 0
+                }
+                else if(state == 1 && checked == false && prestate == 2){
+                    state = 2
+                }
+                else if(state == 2 && checked == true){
+                    state = 1
+                }
+                prestate = pre_state;
+            }
+
+            console.log(state);
+            console.log(id);
+            Manage.pick_item.update(id,{pick_item:{state:state}},function(data){
+                target.prop("checked",checked);
+                target.attr("state",state);
+                target.attr("prestate",prestate);
+                target.removeAttr("printed");
+                $("div#"+id+" label").remove();
+                if(state == 1){
+                    $("div#"+id).append($("<label>").text("正在打印"));
+                }else if(state == 0){
+                    $("div#"+id).append($("<label>").text("未打印"));
+                }else if(state == 2){
+                    $("div#"+id).append($("<label>").text("已打印"));
+                }
+            });
+        })
+    })
+</script>

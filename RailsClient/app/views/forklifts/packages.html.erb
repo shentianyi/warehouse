@@ -1,4 +1,4 @@
-<h2><%= @forklift.id%>包装箱列表</h2>
+<h2><%= @forklift.container_id%>包装箱列表</h2>
 <br/>
 <div class="digg_pagination">
   <div class="page_info">
@@ -19,13 +19,14 @@
   </thead>
   <tbody>
   <% @packages.each_with_index do |package,index|%>
+      <% ppresenter = PackagePresenter.new(package)%>
       <tr>
         <td><%= index+@packages.offset+1%></td>
-        <td><%= package.id %></td>
-        <td><%= PackageLabelRegex.part_prefix_string+package.part_id %></td>
-        <td><%= PackageLabelRegex.quantity_prefix_string + package.quantity_str %></td>
-        <td><%= package.position.whouse_id + " "+package.position.detail if package.position %></td>
-        <td><%= PackageState.display(package.state)%></td>
+        <td><%= link_to package.container_id,package_path(package),:class=>'btn btn-default' %></td>
+        <td><%= PackageLabelRegex.part_prefix_string+package.package.part_id %></td>
+        <td><%= PackageLabelRegex.quantity_prefix_string + package.package.quantity_str %></td>
+        <td><%= ppresenter.position_nr %></td>
+        <td><%= package.state_display%></td>
       </tr>
   <% end%>
   </tbody>

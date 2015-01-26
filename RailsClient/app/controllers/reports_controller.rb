@@ -6,131 +6,17 @@ class ReportsController < ApplicationController
     @date_end = params[:date_end].nil? ? Time.now.strftime("%Y-%m-%d 7:00") : params[:date_end]
     @location_id = params[:location_id].nil? ? current_user.location_id : params[:location_id]
     @title = ''
-    case @type.to_i
-      when ReportType::Entry
-        @title = 'Entry Report'
-      when ReportType::Removal
-        @title = 'Removal Report'
-      when ReportType::Discrepancy
-        @title = 'Discrepancy Report'
-    end
-    #generate condition
-    condition = Package.generate_report_condition(@type, @date_start, @date_end, @location_id)
-    @packages = Package.search(condition)
-    if @type.to_i == ReportType::Discrepancy
 
-    end
-
-    filename = "#{Location.find_by_id(@location_id).name}#{@title}_#{@date_start}_#{@date_end}"
-
+    @packages = Package.generate_report_data(@type,@date_start,@date_end,@location_id)
+    #render :json=> @packages
+    @title = ReportsHelper.gen_title(@type,@date_start,@date_end,@location_id)
     respond_to do |format|
-      format.csv do
-        send_data(Package.export_to_csv(@packages),
-                  :type => "text/csv;charset=utf-8; header=present",
-                  :filename => filename+".csv")
-      end
-
-      format.xlsx do
-        send_data(Package.export_to_xlsx(@packages),
-                  :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
-                  :filename => filename+".xlsx"
-        )
-      end
-      format.html
-    end
-  end
-
-  def entry_report
-    @location_id = params[:location_id].nil? ? current_user.location_id : params[:location_id]
-    @received_date_start = params[:received_date_start].nil? ? 1.day.ago.strftime("%Y-%m-%d 7:00") : params[:received_date_start]
-    @received_date_end = params[:received_date_end].nil? ? Time.now.strftime("%Y-%m-%d 7:00") : params[:received_date_end]
-    time_range = Time.parse(@received_date_start).utc..Time.parse(@received_date_end).utc
-    @type=params[:type].nil? ? "total" : params[:type]
-
-    condition = {}
-    condition["deliveries.destination_id"] = @location_id
-    condition["deliveries.created_at"] = time_range
-    report = ""
-    case @type
-      when "total"
-        condition["deliveries.state"] = [DeliveryState::WAY, DeliveryState::DESTINATION, DeliveryState::RECEIVED]
-        report = "收货报表"
-      when "received"
-        condition["packages.state"] = [PackageState::RECEIVED]
-        report = "实际收货报表"
-      when "rejected"
-        condition["packages.state"] = [PackageState::DESTINATION]
-        report = "拒收报表"
-    end
-
-    @packages = Package.entry_report(condition)
-    filename = "#{Location.find_by_id(@location_id).name}#{report}_#{@received_date_start}_#{@received_date_end}"
-    respond_to do |format|
-      format.csv do
-        send_data(entry_with_csv(@packages),
-                  :type => "text/csv;charset=utf-8; header=present",
-                  :filename => filename+".csv")
-      end
-      format.xls do
-        headers['Content-Type'] = "application/vnd.ms-excel"
-        headers["Content-disposition"] = "inline;  filename=#{filename}.xls"
-        headers['Cache-Control'] = ''
-      end
       format.xlsx do
         send_data(entry_with_xlsx(@packages),
-                  :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
-                  :filename => filename+".xlsx"
-        )
+            :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+            :filename => "#{@title}.xlsx")
       end
       format.html
-    end
-  end
-
-  def removal_report
-    @location_id = params[:location_id].nil? ? current_user.location_id : params[:location_id]
-    @received_date_start = params[:received_date_start].nil? ? 1.day.ago.strftime("%Y-%m-%d 7:00") : params[:received_date_start]
-    @received_date_end = params[:received_date_end].nil? ? Time.now.strftime("%Y-%m-%d 7:00") : params[:received_date_end]
-    time_range = Time.parse(@received_date_start).utc..Time.parse(@received_date_end).utc
-    @type=params[:type].nil? ? "total" : params[:type]
-
-    condition = {}
-    condition["deliveries.source_id"] = @location_id
-    condition["deliveries.created_at"] = time_range
-
-    report = ""
-    case @type
-      when "total"
-        condition["deliveries.state"] = [DeliveryState::WAY, DeliveryState::DESTINATION, DeliveryState::RECEIVED]
-        report="发货报表"
-      when "send"
-        condition["packages.state"] = [PackageState::RECEIVED]
-        report = "实际发货报表"
-      when "rejected"
-        condition["packages.state"] = [PackageState::DESTINATION]
-        report = "被拒收报表"
-    end
-    @packages = Package.removal_report(condition)
-
-    filename = "#{Location.find_by_id(@location_id).name}#{report}_#{@received_date_start}_#{@received_date_end}"
-
-    respond_to do |format|
-      format.html
-      format.csv do
-        send_data(removal_with_csv(@packages),
-                  :type => "text/csv;charset=utf-8; header=present",
-                  :filename => "#{filename}.csv")
-      end
-      format.xls do
-        headers['Content-Type'] = "application/vnd.ms-excel"
-        headers["Content-disposition"] = "inline;  filename=#{filename}.xls"
-        headers['Cache-Control'] = ''
-      end
-      format.xlsx do
-        send_data(removal_with_xlsx(@packages),
-                  :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
-                  :filename => filename+".xlsx"
-        )
-      end
     end
   end
 
@@ -149,29 +35,25 @@ class ReportsController < ApplicationController
     render json: msg
   end
 
-  def entry_discrepancy
+  def discrepancy
+    @type = params[:type].nil? ? ReportType::Entry : params[:type]
     @location_id = params[:location_id].nil? ? current_user.location_id : params[:location_id]
-    @received_date_start = params[:received_date_start].nil? ? 1.day.ago.strftime("%Y-%m-%d 7:00") : params[:received_date_start]
-    @received_date_end = params[:received_date_end].nil? ? Time.now.strftime("%Y-%m-%d 7:00") : params[:received_date_end]
-    time_range = Time.parse(@received_date_start).utc..Time.parse(@received_date_end).utc
-
-    condition = {}
-    #condition["packages.part_id"] = 'P00112425'
-    condition["deliveries.destination_id"] = @location_id
-    #condition["deliveries.received_date"] = time_range
-    #condition["deliveries.created_at"] = time_range
-    condition["packages.created_at"] = time_range
-    condition["packages.state"] = [PackageState::RECEIVED]
+    @date_start = params[:received_date_start].nil? ? 1.day.ago.strftime("%Y-%m-%d 7:00") : params[:received_date_start]
+    @date_end = params[:received_date_end].nil? ? Time.now.strftime("%Y-%m-%d 7:00") : params[:received_date_end]
+    @title = ''
 
     @packages = {}
 
-    Package.entry_report(condition).each { |p|
-      if @packages[p.part_id+p.whouse_id].nil?
-        @packages[p.part_id+p.whouse_id] = {"PartNr." => p.part_id, "Warehouse" => p.whouse_id, "Amount" => 0}
+    Package.generate_report_data(@type,@date_start,@date_end,@location_id).each { |p|
+      if @packages[p['part_id']+p['whouse']].nil?
+        @packages[p['part_id']+p['whouse']] = {"PartNr." => p['part_id'], "Warehouse" => p['whouse'], "Amount" => 0}
       end
-      @packages[p.part_id+p.whouse_id]["Amount"] = @packages[p.part_id+p.whouse_id]["Amount"] + p.total
+      @packages[p['part_id']+p['whouse']]["Amount"] = @packages[p['part_id']+p['whouse']]["Amount"] + p['count']
     }
 
+    # ===>2014/12/08 李其：写这个是因为之前出现同步错误，现在不允许出现同步覆盖状态的问题
+    #     现在不允许出现，故注释代码
+=begin
     @uncounted_packages = {}
     condition["packages.state"] = [PackageState::WAY, PackageState::ORIGINAL]
     Package.entry_report(condition).each { |p|
@@ -180,6 +62,7 @@ class ReportsController < ApplicationController
       end
       @uncounted_packages[p.part_id+p.whouse_id]["Amount"] = @uncounted_packages[p.part_id+p.whouse_id]["Amount"] + p.total
     }
+=end
 
     @results = {}
     if params.has_key?(:file)
@@ -192,80 +75,7 @@ class ReportsController < ApplicationController
       end
     end
 
-    filename = "#{Location.find_by_id(@location_id).name}收货差异报表_#{@received_date_start}_#{@received_date_end}"
-
-    respond_to do |format|
-      format.html
-      format.xlsx do
-        send_data(entry_discrepancy_xlsx(@packages, @results, @uncounted_packages),
-                  :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
-                  :filename => filename+".xlsx"
-        )
-      end
-    end
-  end
-
-  def removal_discrepancy
-    @location_id = params[:location_id].nil? ? current_user.location_id : params[:location_id]
-    @received_date_start = params[:received_date_start].nil? ? 1.day.ago.strftime("%Y-%m-%d 7:00") : params[:received_date_start]
-    @received_date_end = params[:received_date_end].nil? ? Time.now.strftime("%Y-%m-%d 7:00") : params[:received_date_end]
-    time_range = Time.parse(@received_date_start).utc..Time.parse(@received_date_end).utc
-
-    condition = {}
-    condition["deliveries.destination_id"] = @location_id
-    condition["deliveries.created_at"] = time_range
-    condition["packages.state"] = [PackageState::RECEIVED]
-
-    @packages = {}
-
-    Package.entry_report(condition).each { |p|
-      if @packages[p.part_id+p.whouse_id].nil?
-        @packages[p.part_id+p.whouse_id] = {"PartNr." => p.part_id, "Warehouse" => p.whouse_id, "Amount" => 0}
-      end
-      @packages[p.part_id+p.whouse_id]["Amount"] = @packages[p.part_id+p.whouse_id]["Amount"] + p.total
-    }
-
-    @results = {}
-
-    unless params[:file].nil?
-
-      f = FileData.new(JSON.parse(params[:file]))
-
-      book = Roo::Excelx.new f.full_path
-
-      book.default_sheet = book.sheets.first
-      headers = []
-      book.row(1).each { |header|
-        headers << header
-      }
-
-      fors_data = []
-      2.upto(book.last_row) do |line|
-        params ={}
-        headers.each_with_index { |key, i|
-          params[key]=book.cell(line, i+1).to_s
-        }
-
-        _params = {}
-        fors_keys.each { |key|
-          if  params[key].is_number?
-            _params[key] = params[key].to_i.to_s
-          else
-            _params[key] = params[key]
-          end
-        }
-        fors_data<<_params
-      end
-
-      fors_data.each { |f|
-        if @results[f["PartNr."]+f["Warehouse"]].nil?
-          @results[f["PartNr."]+f["Warehouse"]] = {"PartNr." => f["PartNr."], "Warehouse" => f["Warehouse"], "Amount" => 0}
-        end
-        @results[f["PartNr."]+f["Warehouse"]]["Amount"] = @results[f["PartNr."]+f["Warehouse"]]["Amount"] + f["Quantity"].to_f
-      }
-    end
-
-    filename = "#{Location.find_by_id(@location_id).name}收货差异报表_#{@received_date_start}_#{@received_date_end}"
+    @title = ReportsHelper.gen_title(@type,@date_start,@date_end,@location_id,"差异")
 
     respond_to do |format|
       format.html
@@ -281,25 +91,44 @@ class ReportsController < ApplicationController
   def orders_report
     @date_start = params[:date_start].nil? ? 1.day.ago.strftime("%Y-%m-%d 7:00") : params[:date_start]
     @date_end = params[:date_end].nil? ? Time.now.strftime("%Y-%m-%d 7:00") : params[:date_end]
-    time_range = Time.parse(@date_start).utc..Time.parse(@date_end).utc
+    @source_location_id = params[:source_location_id].nil? ? current_user.location_id : params[:source_location_id]
     @title = '要货报表'
-    condition = {}
-    condition['order_items.created_at']= time_range
-    @order_items = OrderItem.joins(:order)
-    .where(condition).select('order_items.part_id,SUM(order_items.box_quantity) as box_count,SUM(order_items.quantity) as total,order_items.whouse_id as whouse_id,order_items.is_finished ,order_items.out_of_stock,order_items.user_id as user_id')
-    .group('part_id,whouse_id,is_finished,out_of_stock,user_id').order("whouse_id DESC").all
 
-    filename = "#{@title}_#{@date_start}_#{@date_end}"
+    @order_items = OrderItem.generate_report_data(@date_start,@date_end,@source_location_id)
+
+    #获得发货数据，注：包括外库和工厂库
+    packages = Package.generate_report_data(ReportType::Entry,@date_start,@date_end,@source_location_id)
+    @removal_packages = {}
+    @all_orders = {}
+
+    @order_items.inject(@all_orders) { |h, oi|
+      if h["#{oi.part_id}#{oi.whouse_id}"].nil?
+        h["#{oi.part_id}#{oi.whouse_id}"] = 0
+      end
+      h["#{oi.part_id}#{oi.whouse_id}"] += oi.total
+      h
+    }
+
+    packages.inject(@removal_packages) { |h, p|
+      if h["#{p['part_id']}#{p['whouse']}"].nil?
+        h["#{p['part_id']}#{p['whouse']}"] = {'count'=>0,'box'=>0}
+      end
+      h["#{p['part_id']}#{p['whouse']}"]['count'] += p['count']
+      h["#{p['part_id']}#{p['whouse']}"]['box'] += p['box']
+      h
+    }
+
+    filename = "#{Location.find_by_id(@source_location_id).name}的#{@title}_#{@date_start}_#{@date_end}"
 
     respond_to do |format|
       format.csv do
-        send_data(order_report_csv(@order_items),
+        send_data(order_report_csv(@order_items,@removal_packages,@all_orders),
                   :type => "text/csv;charset=utf-8; header=present",
                   :filename => filename+".csv")
       end
 
       format.xlsx do
-        send_data(order_report_xlsx(@order_items),
+        send_data(order_report_xlsx(@order_items,@removal_packages,@all_orders),
                   :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
                   :filename => filename+".xlsx"
         )
@@ -310,11 +139,11 @@ class ReportsController < ApplicationController
 
   private
 
-  def order_report_xlsx order_items
+  def order_report_xlsx order_items,removal_packages,all_orders
     p = Axlsx::Package.new
     wb = p.workbook
     wb.add_worksheet(:name => "Basic Sheet") do |sheet|
-      sheet.add_row ["No.", "零件号", "总数", "箱数", "部门", "要货人", "状态"]
+      sheet.add_row ["No.", "零件号", "总数", "箱数", "部门", "要货人", "状态","已发货总数","已发货箱数","差异数（要货总数-已发运总数）"]
       order_items.each_with_index { |o, index|
         sheet.add_row [
                           index+1,
@@ -323,14 +152,18 @@ class ReportsController < ApplicationController
                           o.box_count,
                           o.whouse_id,
                           o.user_id,
-                          o.state
-                      ], :types => [:string]
+                          OrderItemState.display(o.state),
+                          removal_packages["#{o.part_id}#{o.whouse_id}"].nil? ? "" : removal_packages["#{o.part_id}#{o.whouse_id}"]['count'],
+                          removal_packages["#{o.part_id}#{o.whouse_id}"].nil? ? "" : removal_packages["#{o.part_id}#{o.whouse_id}"]['box'],
+                          removal_packages["#{o.part_id}#{o.whouse_id}"].nil? ? "" : all_orders["#{o.part_id}#{o.whouse_id}"] - removal_packages["#{o.part_id}#{o.whouse_id}"]['count']
+                         ], :types => [:string]
+        removal_packages["#{o.part_id}#{o.whouse_id}"] = nil
       }
     end
     p.to_stream.read
   end
 
-  def entry_discrepancy_xlsx packages, results, uncounted_packages
+  def entry_discrepancy_xlsx packages, results
     p = Axlsx::Package.new
     wb = p.workbook
     wb.add_worksheet(:name => "Basic Sheet") do |sheet|
@@ -341,8 +174,7 @@ class ReportsController < ApplicationController
                           v["Warehouse"],
                           v["Amount"],
                           packages[k].nil? ? 0 : packages[k]["Amount"],
-                          packages[k].nil? ? v["Amount"] : v["Amount"] - packages[k]["Amount"],
-                          uncounted_packages[k].nil? ? 0 : uncounted_packages[k]["Amount"]
+                          packages[k].nil? ? v["Amount"] : v["Amount"] - packages[k]["Amount"]
                       ], :types => [:string]
       }
     end
@@ -357,43 +189,20 @@ class ReportsController < ApplicationController
       packages.each_with_index { |p, index|
         sheet.add_row [
                           index+1,
-                          p.part_id,
-                          p.total,
-                          p.box_count,
-                          p.whouse_id,
-                          p.rdate.nil? ? '' : p.rdate.localtime.to_formatted_s(:db),
-                          p.receover_id.nil? ? '' : User.find_by_id(p.receover_id).name,
-                          p.state == PackageState::RECEIVED ? "是" : "否"
+                          p['part_id'],
+                          p['count'],
+                          p['box'],
+                          p['whouse'],
+                          MovableState.display(p['state'])
                       ], :types => [:string]
       }
     end
     p.to_stream.read
   end
 
-  def removal_with_xlsx packages
-    p = Axlsx::Package.new
-    wb = p.workbook
-    wb.add_worksheet(:name => "Basic Sheet") do |sheet|
-      sheet.add_row removal_header
-      packages.each_with_index { |p, index|
-        sheet.add_row [
-                          index+1,
-                          p.part_id,
-                          p.total,
-                          p.box_count,
-                          p.whouse_id,
-                          p.ddate.nil? ? '' : p.ddate.localtime.to_formatted_s(:db),
-                          p.sender_id.nil? ? '' : User.find_by_id(p.sender_id).name,
-                          p.state == PackageState::DESTINATION ? "是" : "否"
-                      ], :types => [:string]
-      }
-    end
-    p.to_stream.read
-  end
-
-  def order_report_csv order_items
+  def order_report_csv order_items,removal_packages,all_orders
     CSV.generate do |csv|
-      csv << ["No.", "零件号", "总数", "箱数", "部门", "要货人", "状态"]
+      csv << ["No.", "零件号", "总数", "箱数", "部门", "要货人", "状态","已发货总数","已发货箱数","差异数（要货总数-已发运总数）"]
 
       order_items.each_with_index { |o, index|
         csv <<[
@@ -403,8 +212,13 @@ class ReportsController < ApplicationController
             o.box_count,
             o.whouse_id,
             o.user_id,
-            o.state
+            OrderItemState.display(o.state),
+            removal_packages["#{o.part_id}#{o.whouse_id}"].nil? ? "" : removal_packages["#{o.part_id}#{o.whouse_id}"]['count'],
+            removal_packages["#{o.part_id}#{o.whouse_id}"].nil? ? "" : removal_packages["#{o.part_id}#{o.whouse_id}"]['box'],
+            removal_packages["#{o.part_id}#{o.whouse_id}"].nil? ? "" : all_orders["#{o.part_id}#{o.whouse_id}"] - removal_packages["#{o.part_id}#{o.whouse_id}"]['count']
+
         ]
+        removal_packages["#{o.part_id}#{o.whouse_id}"] = nil
       }
     end
   end
@@ -449,7 +263,7 @@ class ReportsController < ApplicationController
   end
 
   def entry_header
-    ["编号", "零件号", "总数", "箱数", "部门", "创建时间", "收货人", "已接收"]
+    ["编号", "零件号", "总数", "箱数","部门","状态"]
   end
 
   def removal_header
@@ -457,7 +271,7 @@ class ReportsController < ApplicationController
   end
 
   def discrepancy_header
-    ["零件号", "部门", "报表数量", "系统数量", "差值", "未记入统计（未发送或在途）"]
+    ["零件号", "部门", "报表数量", "系统数量", "差值"]
   end
 
   def fors_keys

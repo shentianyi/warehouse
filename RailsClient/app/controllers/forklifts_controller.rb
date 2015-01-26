@@ -5,7 +5,7 @@ class ForkliftsController < ApplicationController
   # GET /forklifts
   # GET /forklifts.json
   def index
-    @forklifts = Forklift.paginate(:page=>params[:page]).order(created_at: :desc)#all
+    @forklifts = ForkliftService.search(nil).order(created_at: :desc).paginate(:page=>params[:page])#all
     #@forklifts = @forklifts.paginate(:page=>params[:page])
   end
 
@@ -25,6 +25,7 @@ class ForkliftsController < ApplicationController
 
   # POST /forklifts
   # POST /forklifts.json
+=begin
   def create
     @forklift = Forklift.new(forklift_params)
 
@@ -38,26 +39,23 @@ class ForkliftsController < ApplicationController
       end
     end
   end
+=end
 
   # PATCH/PUT /forklifts/1
   # PATCH/PUT /forklifts/1.json
   def update
-    if forklift_params.has_key?(:state)
-      ForkliftService.set_state(@forklift,forklift_params[:state])
-    end
+    #if forklift_params.has_key?(:state)
+    #  ForkliftService.set_state(@forklift,forklift_params[:state])
+    #end
 
-    if forklift_params.has_key?(:whouse_id)
-      whouse_change = @forklift.whouse_id != forklift_params[:whouse_id]
-    end
+    #if forklift_params.has_key?(:whouse_id)
+    #  whouse_change = @forklift.whouse_id != forklift_params[:whouse_id]
+    #end
 
+    #现在不能修改备货仓库了。
     respond_to do |format|
       if @forklift.update(forklift_params)
-        if whouse_change
-          @forklift.packages.each do |p|
-            p.set_position
-          end
-        end
-        format.html { redirect_to @forklift, notice: '托盘更新成功' }
+        format.html { redirect_to forklift_url(@forklift), notice: '托盘更新成功' }
         format.json { render :show, status: :ok, location: @forklift }
       else
         format.html { render :edit }
@@ -78,21 +76,22 @@ class ForkliftsController < ApplicationController
 
   # GET /forklifts/1/packages
   def packages
-    @packages = @forklift.packages.paginate(:page=>params[:page]).order(created_at: :desc)
+    @packages = ForkliftPresenter.new(@forklift).packages.paginate(:page=>params[:page]).order(created_at: :desc)
   end
 
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_forklift
-    @forklift = Forklift.find(params[:id])
+    @forklift = ForkliftService.search({id:params[:id]}).first
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def forklift_params
     #params[:forklift]
-    params.require(:forklift).permit(:state,:remark,:whouse_id)
+    params.require(:logistics_container).permit(:state,:remark)
   end
 
+=begin
   def set_search_variable
     p= params[:forklift]
     @id=p[:id]
@@ -101,4 +100,5 @@ class ForkliftsController < ApplicationController
     @created_at_start=p[:created_at][:start]
     @created_at_end=p[:created_at][:end]
   end
+=end
 end

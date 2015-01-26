@@ -11,7 +11,7 @@
 
 default: &default
   adapter: mysql2
-  pool: 5
+  pool: 30
   timeout: 5000
   socket: /var/run/mysqld/mysqld.sock
   username: whouser
@@ -37,4 +37,12 @@ production:
 
 server:
   <<: *default
-  database: whouse_server_db
+
+sync1:
+  <<: *default
+  database: whouse_sync_1_db
+
+sync2:
+  <<: *default
+  database: whouse_sync_2_db
+

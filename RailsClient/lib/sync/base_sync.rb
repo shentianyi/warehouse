@@ -7,18 +7,18 @@ module Sync
 
     def self.execute
       ## base data
-      #begin
       current=Time.now
- begin      
-      Sync::Execute::LocationSync.sync
-      Sync::Execute::HackerSync.sync
-      Sync::Execute::WhouseSync.sync
-      Sync::Execute::PartTypeSync.sync
-      Sync::Execute::PartSync.sync
-      Sync::Execute::PositionSync.sync
-      Sync::Execute::PartPositionSync.sync
-      Sync::Execute::PickItemFilterSync.sync
-   rescue => e 
+      begin
+        Sync::Execute::LocationSync.sync
+        Sync::Execute::LocationDestinationSync.sync
+        Sync::Execute::HackerSync.sync
+        Sync::Execute::WhouseSync.sync
+        Sync::Execute::PartTypeSync.sync
+        Sync::Execute::PartSync.sync
+        Sync::Execute::PositionSync.sync
+        Sync::Execute::PartPositionSync.sync
+        Sync::Execute::PickItemFilterSync.sync
+      rescue => e
         puts "[#{Time.now.localtime}][ERROR]"
         puts e.class
         puts e.to_s
@@ -28,11 +28,9 @@ module Sync
       no_error=true
       # sync delivery data
       begin
-        Sync::Execute::DeliverySync.sync
-        Sync::Execute::ForkliftSync.sync
-        Sync::Execute::PackageSync.sync
-        Sync::Execute::PackagePositionSync.sync
-        Sync::Execute::StateLogSync.sync
+        Sync::Execute::ContainerSync.sync
+        Sync::Execute::LocationContainerSync.sync
+        Sync::Execute::RecordSync.sync
       rescue => e
         no_error=false
         puts "[#{Time.now.localtime}][ERROR]"
@@ -40,6 +38,28 @@ module Sync
         puts e.to_s
         puts e.backtrace
       end
+
+      begin
+        Sync::Execute::StorageSync.sync
+      rescue => e
+        no_error=false
+        puts "[#{Time.now.localtime}][ERROR]"
+        puts e.class
+        puts e.to_s
+        puts e.backtrace
+      end
+
+      begin
+        Sync::Execute::RegexCategorySync.sync
+        Sync::Execute::RegexSync.sync
+      rescue => e
+        no_error=false
+        puts "[#{Time.now.localtime}][ERROR]"
+        puts e.class
+        puts e.to_s
+        puts e.backtrace
+      end
+
 
       begin
         # sync order data
@@ -64,12 +84,6 @@ module Sync
         puts e.backtrace
       end
       Sync::Config.last_time=(current- Sync::Config.advance_second.seconds).utc if no_error
-      #rescue => e
-      #  puts "[#{Time.now.localtime}][ERROR]"
-      #  puts e.class
-      #  puts e.to_s
-      #  puts e.backtrace
-      #end
     end
 
     def self.sync
@@ -187,6 +201,7 @@ module Sync
         items.each do |item|
           item.save if item.can_reset_sync_dirty_flag
         end
+        #model.record_timestamps=true
       end
     end
 
@@ -196,6 +211,7 @@ module Sync
         items.each do |item|
           item.save if item.can_reset_sync_dirty_flag
         end
+        #model.record_timestamps=true
       end
     end
 
@@ -205,6 +221,7 @@ module Sync
         items.each do |item|
           item.save
         end
+        #model.record_timestamps=true
       end
     end
 

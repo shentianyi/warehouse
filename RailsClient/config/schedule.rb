@@ -23,3 +23,7 @@ set :output, {:error => 'log/cron_error_log.log', :standard => 'log/cron_log.log
 every 2.minute do
   rake 'sync:execute'
 end
+
+#every 1.minute do
+#  runner 'script/test/test_delivery.rb'
+#end

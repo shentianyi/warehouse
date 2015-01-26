@@ -6,17 +6,13 @@ class Part < ActiveRecord::Base
   belongs_to :part_type
   has_many :part_positions, :dependent => :destroy
   has_many :positions, :through => :part_positions
+  has_many :whouses, :through => :positions
   has_many :packages
+  has_many :storages
 
-  # validate part id existance
-  # delete ,no use tesla at 2014-7-21
-=begin
-  def self.validate_id id
-    unless find_by_id(id)
-      false
-    else
-      true
-    end
+  has_many :containers
+
+  def self.exists?(id)
+    Part.find_by_id(id)
   end
-=end
 end

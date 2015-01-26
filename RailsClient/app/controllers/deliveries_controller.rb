@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 class DeliveriesController < ApplicationController
+  #2014-12-24 *no delivery model exists
   #load_and_authorize_resource
   before_action :set_delivery, only: [:show, :edit, :update, :destroy, :forklifts]
   skip_before_filter :delivery_params
@@ -8,8 +9,7 @@ class DeliveriesController < ApplicationController
   # GET /deliveries
   # GET /deliveries.json
   def index
-    @deliveries = Delivery.paginate(:page => params[:page]).order(created_at: :desc) #all
-    #@deliveries = @deliveries.paginate(:page => params[:page])
+    @deliveries= DeliveryService.search(nil).order(created_at: :desc).paginate(:page => params[:page])
   end
 
   # GET /deliveries/1
@@ -45,12 +45,16 @@ class DeliveriesController < ApplicationController
   # PATCH/PUT /deliveries/1
   # PATCH/PUT /deliveries/1.json
   def update
-    if delivery_params.has_key?(:state)
-      DeliveryService.set_state(@delivery, delivery_params[:state])
-    end
+    #need to update
     respond_to do |format|
       if @delivery.update(delivery_params)
-        format.html { redirect_to @delivery, notice: '运单更新成功.' }
+
+        if delivery_params.has_key? :state
+          @delivery.descendants.each{|d| d.update({state: delivery_params[:state]})}
+        end
+
+        # 注意修改了状态的后果
+        format.html { redirect_to delivery_url(@delivery), notice: '运单更新成功.' }
         format.json { render :show, status: :ok, location: @delivery }
       else
         format.html { render :edit }
@@ -61,52 +65,20 @@ class DeliveriesController < ApplicationController
 
   # DELETE /deliveries/1
   # DELETE /deliveries/1.json
+=begin
   def destroy
     @delivery.destroy
     respond_to do |format|
-      format.html { redirect_to deliveries_url, notice: 'Delivery was successfully destroyed.' }
+      format.html { redirect_to deliveries_url, notice: '运单成功删除.' }
       format.json { head :no_content }
     end
   end
+=end
 
   # GET /deliveries/1/forklifts
   def forklifts
-    @forklifts = @delivery.forklifts.paginate(:page => params[:page]).order(created_at: :desc)
-  end
-
-  def export
-    json={}
-    # delivery,forklift,package,package_position
-    d=Delivery.find(params[:id])
-    json[:delivery]=d
-    json[:forklifts]=d.forklifts
-    json[:packages]=[]
-    json[:forklifts].each { |f|
-      json[:packages] += f.packages }
-    json[:package_positions]= []
-    json[:packages].each { |p|
-      json[:package_positions]<< p.package_position }
-    send_data json.to_json, :filename => "#{d.id}.json"
-  end
-
-  def import
-    if request.post?
-      msg=Message.new
-      #begin
-        if params[:files].size==1
-          file=params[:files][0]
-          data=FileData.new(data: file, oriName: file.original_filename, path: $DELIVERYPATH, pathName: "#{Time.now.strftime('%Y%m%d%H%M%S')}-#{file.original_filename}")
-          data.saveFile
-          msg=DeliveryService.import_by_file(data.full_path)
-          #msg.content= msg.result ? '运单导入成功' : msg.content
-        else
-          msg.content='未选择文件或只能上传一个文件'
-        end
-      #rescue => e
-      #  msg.content = e.message
-      #end
-      render json: msg
-    end
+    dp = DeliveryPresenter.new(@delivery)
+    @forklifts = dp.forklifts.paginate(:page => params[:page]).order(created_at: :desc)
   end
 
   def generate
@@ -146,18 +118,19 @@ class DeliveriesController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_delivery
-    @delivery = Delivery.find(params[:id])
+    @delivery = DeliveryService.search({id:params[:id]}).first
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def delivery_params
-    params.require(:delivery).permit(:state, :remark, :source_id, :destination_id,:delivery_date,:received_date,:user_id,:receiver_id)
+    params.require(:logistics_container).permit(:state, :remark)
   end
 
   def get_states
-    @states=DeliveryState.state #.insert(0, %w())
+    @states=MovableState.state
   end
 
+=begin
   def set_search_variable
     p= params[:delivery]
     @id=p[:id]
@@ -172,4 +145,5 @@ class DeliveriesController < ApplicationController
     @created_at_end = p[:created_at_end][:end]
     @source_id = p[:srouce_id]
   end
+=end
 end

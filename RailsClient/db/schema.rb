@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140929041418) do
+ActiveRecord::Schema.define(version: 20150120071344) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -52,6 +52,38 @@ ActiveRecord::Schema.define(version: 20140929041418) do
   add_index "attachments", ["attachable_id"], name: "index_attachments_on_attachable_id", using: :btree
   add_index "attachments", ["attachable_type"], name: "index_attachments_on_attachable_type", using: :btree
   add_index "attachments", ["id"], name: "index_attachments_on_id", using: :btree
+
+  create_table "containers", force: true do |t|
+    t.string   "custom_id",                 limit: 36
+    t.integer  "type"
+    t.float    "quantity"
+    t.integer  "state"
+    t.string   "location_id"
+    t.string   "user_id"
+    t.string   "current_positionable_id"
+    t.string   "current_positionable_type"
+    t.datetime "fifo_time"
+    t.string   "remark"
+    t.string   "part_id"
+    t.boolean  "is_delete",                            default: false
+    t.boolean  "is_dirty",                             default: true
+    t.boolean  "is_new",                               default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "part_id_display"
+    t.string   "quantity_display"
+    t.string   "fifo_time_display"
+  end
+
+  add_index "containers", ["current_positionable_id"], name: "index_containers_on_current_positionable_id", using: :btree
+  add_index "containers", ["current_positionable_type"], name: "index_containers_on_current_positionable_type", using: :btree
+  add_index "containers", ["custom_id"], name: "index_containers_on_custom_id", using: :btree
+  add_index "containers", ["id"], name: "index_containers_on_id", using: :btree
+  add_index "containers", ["is_delete"], name: "index_containers_on_is_delete", using: :btree
+  add_index "containers", ["location_id"], name: "index_containers_on_location_id", using: :btree
+  add_index "containers", ["part_id"], name: "index_containers_on_part_id", using: :btree
+  add_index "containers", ["type"], name: "index_containers_on_type", using: :btree
+  add_index "containers", ["user_id"], name: "index_containers_on_user_id", using: :btree
 
   create_table "deliveries", force: true do |t|
     t.string   "uuid",           limit: 36,                 null: false
@@ -128,6 +160,61 @@ ActiveRecord::Schema.define(version: 20140929041418) do
   add_index "leds", ["position"], name: "index_leds_on_position", using: :btree
   add_index "leds", ["signal_id"], name: "index_leds_on_signal_id", using: :btree
 
+  create_table "location_container_hierarchies", id: false, force: true do |t|
+    t.string   "ancestor_id",                   null: false
+    t.string   "descendant_id",                 null: false
+    t.integer  "generations",                   null: false
+    t.boolean  "is_delete",     default: false
+    t.boolean  "is_dirty",      default: true
+    t.boolean  "is_new",        default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "location_container_hierarchies", ["ancestor_id", "descendant_id", "generations"], name: "anc_desc_idx", unique: true, using: :btree
+  add_index "location_container_hierarchies", ["descendant_id"], name: "desc_idx", using: :btree
+
+  create_table "location_containers", force: true do |t|
+    t.string   "source_location_id"
+    t.string   "des_location_id"
+    t.string   "user_id"
+    t.string   "container_id"
+    t.string   "remark"
+    t.integer  "type"
+    t.boolean  "is_delete",            default: false
+    t.boolean  "is_dirty",             default: true
+    t.boolean  "is_new",               default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "state",                default: 0
+    t.string   "destinationable_id"
+    t.string   "destinationable_type"
+    t.string   "ancestry"
+  end
+
+  add_index "location_containers", ["ancestry"], name: "index_location_containers_on_ancestry", using: :btree
+  add_index "location_containers", ["container_id"], name: "index_location_containers_on_container_id", using: :btree
+  add_index "location_containers", ["des_location_id"], name: "index_location_containers_on_des_location_id", using: :btree
+  add_index "location_containers", ["destinationable_id"], name: "index_location_containers_on_destinationable_id", using: :btree
+  add_index "location_containers", ["destinationable_type"], name: "index_location_containers_on_destinationable_type", using: :btree
+  add_index "location_containers", ["id"], name: "index_location_containers_on_id", using: :btree
+  add_index "location_containers", ["source_location_id"], name: "index_location_containers_on_source_location_id", using: :btree
+
+  create_table "location_destinations", force: true do |t|
+    t.string   "location_id"
+    t.string   "destination_id"
+    t.boolean  "is_default",     default: false
+    t.boolean  "is_delete",      default: false
+    t.boolean  "is_dirty",       default: true
+    t.boolean  "is_new",         default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "location_destinations", ["destination_id"], name: "index_location_destinations_on_destination_id", using: :btree
+  add_index "location_destinations", ["id"], name: "index_location_destinations_on_id", using: :btree
+  add_index "location_destinations", ["location_id"], name: "index_location_destinations_on_location_id", using: :btree
+
   create_table "locations", force: true do |t|
     t.string   "uuid",           limit: 36,                 null: false
     t.string   "name"
@@ -178,6 +265,7 @@ ActiveRecord::Schema.define(version: 20140929041418) do
     t.boolean  "is_finished",  default: false
     t.boolean  "out_of_stock", default: false
     t.boolean  "handled",      default: false
+    t.integer  "state",        default: 0
   end
 
   add_index "order_items", ["id"], name: "index_order_items_on_id", using: :btree
@@ -190,16 +278,18 @@ ActiveRecord::Schema.define(version: 20140929041418) do
   add_index "order_items", ["whouse_id"], name: "index_order_items_on_whouse_id", using: :btree
 
   create_table "orders", force: true do |t|
-    t.string   "uuid",       limit: 36,                 null: false
-    t.boolean  "handled",               default: false
-    t.boolean  "is_delete",             default: false
-    t.boolean  "is_dirty",              default: true
-    t.boolean  "is_new",                default: true
+    t.string   "uuid",               limit: 36,                 null: false
+    t.boolean  "handled",                       default: false
+    t.boolean  "is_delete",                     default: false
+    t.boolean  "is_dirty",                      default: true
+    t.boolean  "is_new",                        default: true
     t.string   "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "source_id"
-    t.integer  "status",                default: 0
+    t.integer  "status",                        default: 0
+    t.text     "remark"
+    t.string   "source_location_id"
   end
 
   add_index "orders", ["id"], name: "index_orders_on_id", using: :btree
@@ -329,6 +419,7 @@ ActiveRecord::Schema.define(version: 20140929041418) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "order_item_id"
+    t.integer  "state",                 default: 0
   end
 
   add_index "pick_items", ["destination_whouse_id"], name: "index_pick_items_on_destination_whouse_id", using: :btree
@@ -345,6 +436,7 @@ ActiveRecord::Schema.define(version: 20140929041418) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "order_ids"
+    t.text     "remark"
   end
 
   add_index "pick_lists", ["id"], name: "index_pick_lists_on_id", using: :btree
@@ -365,27 +457,62 @@ ActiveRecord::Schema.define(version: 20140929041418) do
   add_index "positions", ["uuid"], name: "index_positions_on_uuid", using: :btree
   add_index "positions", ["whouse_id"], name: "index_positions_on_whouse_id", using: :btree
 
-  create_table "regexes", force: true do |t|
-    t.string   "name",                           null: false
-    t.string   "code",                           null: false
-    t.integer  "prefix_length",  default: 0
-    t.string   "prefix_string"
-    t.integer  "type",                           null: false
-    t.integer  "suffix_length",  default: 0
-    t.integer  "suffix_string"
-    t.string   "regex_string",   default: ""
-    t.string   "regexable_id"
-    t.string   "regexable_type"
-    t.string   "remark"
-    t.boolean  "is_sys_default", default: false
-    t.boolean  "is_delete",      default: false
-    t.boolean  "is_dirty",       default: true
-    t.boolean  "is_new",         default: true
+  create_table "records", force: true do |t|
+    t.string   "recordable_id"
+    t.string   "recordable_type"
+    t.string   "impl_id"
+    t.integer  "impl_user_type"
+    t.string   "impl_action"
+    t.datetime "impl_time"
+    t.string   "destinationable_id"
+    t.string   "destinationable_type"
+    t.boolean  "is_delete",            default: false
+    t.boolean  "is_dirty",             default: true
+    t.boolean  "is_new",               default: true
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "records", ["id"], name: "index_records_on_id", using: :btree
+  add_index "records", ["impl_id"], name: "index_records_on_impl_id", using: :btree
+  add_index "records", ["recordable_id"], name: "index_records_on_recordable_id", using: :btree
+
+  create_table "regex_categories", force: true do |t|
+    t.string   "name"
+    t.string   "desc"
+    t.integer  "type"
+    t.boolean  "is_delete",  default: false
+    t.boolean  "is_dirty",   default: true
+    t.boolean  "is_new",     default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "regex_categories", ["id"], name: "index_regex_categories_on_id", using: :btree
+
+  create_table "regexes", force: true do |t|
+    t.string   "name",                              null: false
+    t.string   "code",                              null: false
+    t.integer  "prefix_length",     default: 0
+    t.string   "prefix_string"
+    t.integer  "type"
+    t.integer  "suffix_length",     default: 0
+    t.integer  "suffix_string"
+    t.string   "regex_string",      default: ""
+    t.string   "regexable_id"
+    t.string   "regexable_type"
+    t.string   "remark"
+    t.boolean  "is_sys_default",    default: false
+    t.boolean  "is_delete",         default: false
+    t.boolean  "is_dirty",          default: true
+    t.boolean  "is_new",            default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "regex_category_id"
+  end
+
   add_index "regexes", ["id"], name: "index_regexes_on_id", using: :btree
+  add_index "regexes", ["regex_category_id"], name: "index_regexes_on_regex_category_id", using: :btree
   add_index "regexes", ["regexable_id"], name: "index_regexes_on_regexable_id", using: :btree
   add_index "regexes", ["regexable_type"], name: "index_regexes_on_regexable_type", using: :btree
 
@@ -402,6 +529,33 @@ ActiveRecord::Schema.define(version: 20140929041418) do
   end
 
   add_index "state_logs", ["id"], name: "index_state_logs_on_id", using: :btree
+
+  create_table "storages", force: true do |t|
+    t.string   "location_id"
+    t.string   "part_id"
+    t.float    "quantity"
+    t.datetime "fifo_time"
+    t.string   "storable_id"
+    t.string   "storable_type"
+    t.boolean  "is_delete",     default: false
+    t.boolean  "is_dirty",      default: true
+    t.boolean  "is_new",        default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "storages", ["id"], name: "index_storages_on_id", using: :btree
+  add_index "storages", ["location_id"], name: "index_storages_on_location_id", using: :btree
+  add_index "storages", ["part_id"], name: "index_storages_on_part_id", using: :btree
+  add_index "storages", ["storable_id"], name: "index_storages_on_storable_id", using: :btree
+  add_index "storages", ["storable_type"], name: "index_storages_on_storable_type", using: :btree
+
+  create_table "sync_logs", force: true do |t|
+    t.string   "table_name"
+    t.boolean  "sync",       default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "sync_pools", force: true do |t|
     t.string   "table_name"
@@ -449,6 +603,8 @@ ActiveRecord::Schema.define(version: 20140929041418) do
     t.string   "authentication_token"
     t.integer  "role_id",                           default: 100,   null: false
     t.boolean  "is_sys",                            default: false
+    t.string   "user_name"
+    t.integer  "operation_mode",                    default: 0
   end
 
   add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree

@@ -74,8 +74,8 @@ class OrdersController < ApplicationController
     #@orders=OrderService.get_orders_by_days(current_user.location.id).order(created_at: :desc).all
     #@filters = current_user.pick_item_filters
     #@orders = OrderService.get_orders_by_user(current_user.id).order(created_at: :asc).all
-    @start_t = 3.day.ago.localtime.at_beginning_of_day.strftime("%Y-%m-%d %H:00:00")
-    @end_t = Time.now.at_end_of_day.strftime("%Y-%m-%d %H:00:00")
+    @start_t = 1.day.ago.localtime.at_beginning_of_day.strftime("%Y-%m-%d 7:00:00")
+    @end_t = Time.now.at_end_of_day.strftime("%Y-%m-%d 7:00:00")
     @picklists = PickListService.find_by_days(current_user)
   end
 
@@ -103,7 +103,11 @@ class OrdersController < ApplicationController
       #.select('order_items.*,sum(order_items.quantity) as quantity')
     else
       @order_items=PickItemService.get_order_items(params[:user_id],params[:order_ids]).order(is_emergency: :desc)||[]
+
     end
+
+    @orders = Order.where(id:params[:order_ids])
+
     render partial:'item'
   end
 

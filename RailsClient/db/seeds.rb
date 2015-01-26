@@ -15,7 +15,7 @@ ActiveRecord::Base.transaction do
   l = Location.create({id: 'Basic', name: 'Basic Location', is_base: true}) unless (l=Location.find_by_id('Basic'))
 
   whouse=Whouse.new(id: 'TransWhouse', name: '在途库')
-  whouse.location=Location.find('Basic')
+  whouse.location=Location.find_by_id('Basic')
   whouse.save
   unless user=User.find_by_id('admin')
     user = User.create({id: 'admin', name: 'Admin', location_id: l.id, password: '123456@', password_confirmation: '123456@', role_id: 100, is_sys: true})
@@ -23,7 +23,7 @@ ActiveRecord::Base.transaction do
 
   # init package label regex
   unless Regex.where(code: 'UNIQ', type: RegexType::PACKAGE_LABEL).first
-    Regex.create(name: '唯一码', code: 'UNIQ', prefix_string: 'WI', regex_string: '^WI\d*$', type: RegexType::PACKAGE_LABEL)
+    Regex.create(name: '唯一码', code: 'UNIQ', prefix_string: 'WI', regex_string: '^WI\w+', type: RegexType::PACKAGE_LABEL)
   end
   unless Regex.where(code: 'PART', type: RegexType::PACKAGE_LABEL).first
     Regex.create(name: '零件号', code: 'PART', prefix_string: 'P', regex_string: '^P\w+', type: RegexType::PACKAGE_LABEL)
@@ -89,15 +89,27 @@ ActiveRecord::Base.transaction do
 
   #LED STATE
   unless LedState.find_by_state(LedLightState::NORMAL)
-    LedState.create({state:LedLightState::NORMAL,rgb:"0 255 0",led_code:0})
+    LedState.create({state: LedLightState::NORMAL, rgb: "0 255 0", led_code: 0})
   end
   unless LedState.find_by_state(LedLightState::ORDERED)
-    LedState.create({state:LedLightState::ORDERED,rgb:"255 0 0",led_code:1})
+    LedState.create({state: LedLightState::ORDERED, rgb: "255 0 0", led_code: 1})
   end
   unless LedState.find_by_state(LedLightState::DELIVERED)
-    LedState.create({state:LedLightState::DELIVERED,rgb:"0 0 255",led_code:2})
+    LedState.create({state: LedLightState::DELIVERED, rgb: "0 0 255", led_code: 2})
   end
   unless LedState.find_by_state(LedLightState::RECEIVED)
-    LedState.create({state:LedLightState::RECEIVED,rgb:"0 255 0",led_code:0})
+    LedState.create({state: LedLightState::RECEIVED, rgb: "0 255 0", led_code: 0})
+  end
+
+  l = Location.create({id: 'FG', name: '成品仓库', is_base: false}) unless (l=Location.find_by_id('FG'))
+  unless Whouse.find_by_id('FW87')
+    whouse=Whouse.new(id: 'FW87', name: '成品在途库')
+    whouse.location=l
+    whouse.save
+  end
+  unless  User.find_by_id('PACK_SYS_USER')
+    User.create({id: 'PACK_SYS_USER', name: 'PACK_SYS_USER',
+                 location_id: l.id, password: '123456@',
+                 password_confirmation: '123456@', role_id: 100, is_sys: true})
   end
 end

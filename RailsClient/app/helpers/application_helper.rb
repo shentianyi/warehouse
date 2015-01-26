@@ -47,8 +47,8 @@ module ApplicationHelper
       #query=query.where(Hash[k, v]) if v.is_a?(Range)
       if v.is_a?(Hash) && v.values.count==2 && v.values.uniq!=['']
         values=v.values.sort
-        values[0]=Time.parse(values[0]).utc.to_s if values[0].is_date?
-        values[1]=Time.parse(values[1]).utc.to_s if values[1].is_date?
+        values[0]=Time.parse(values[0]).utc.to_s if values[0].is_date? & values[0].include?('-')
+        values[1]=Time.parse(values[1]).utc.to_s if values[1].is_date? & values[1].include?('-')
         query=query.where(Hash[k, (values[0]..values[1])])
         v.each do |kk, vv|
           instance_variable_set("@#{k}_#{kk}", vv)
@@ -56,8 +56,6 @@ module ApplicationHelper
       end
     end
     instance_variable_set("@#{@model.pluralize}", query.paginate(:page => params[:page]).all)
-    puts "================"
-    puts query.paginate(:page => params[:page]).all.to_json
     if params.has_key? "download"
       send_data(query.to_xlsx(query),
                 :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
@@ -67,7 +65,6 @@ module ApplicationHelper
       render :index
     end
   end
-
 
   def download
     query=nil

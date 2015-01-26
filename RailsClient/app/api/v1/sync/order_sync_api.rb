@@ -38,7 +38,6 @@ module V1
               end
             end
           end
-
           msg.result =true
         rescue => e
           msg.content = "put:#{e.message}"

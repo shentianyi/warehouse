@@ -1,0 +1,15 @@
+<script type="text/javascript">
+    $(function () {
+        data_upload("#item-data-uploader", 'json');
+    });
+</script>
+<p id="notice">
+  <%= notice %>
+</p>
+<h3>导入数据</h3>
+<div>
+  选择数据文件
+  <input id="item-data-uploader" type="file" name="files[]" data-url="/logistics_containers/import">
+  <div class="abstractblock" id="item-data-uploader-preview" style="display:none;"></div>
+</div>
+<%= link_to '返回', deliveries_path %>

@@ -10,11 +10,11 @@ class User < ActiveRecord::Base
   has_many :pick_item_filters
   before_save :ensure_authentication_token!
 
-  validates_uniqueness_of :id
+  validates_uniqueness_of :id,:user_name
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
-         :authentication_keys => [:id]
+         :authentication_keys => [:user_name]
 
   def ensure_authentication_token!
     if authentication_token.blank?

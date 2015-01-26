@@ -1,4 +1,4 @@
-<h2><%= @delivery.id %>托清单列表</h2>
+<h2><%= @delivery.container_id %>托清单列表</h2>
 <br/>
 <div class="digg_pagination">
   <div class="page_info">
@@ -14,22 +14,19 @@
     <td>状态</td>
     <td>备货仓库</td>
     <td>包装箱总数</td>
-    <td>已接收数</td>
-    <td>备货员工</td>
-    <td>状态</td>
+    <td>已接收箱数</td>
   </tr>
   </thead>
   <tbody>
   <% @forklifts.each_with_index do |f, index| %>
+  <% fpresenter = ForkliftPresenter.new(f) %>
       <tr>
         <td><%= index+@forklifts.offset+1%></td>
-        <td><%= link_to f.id, packages_forklift_path(f) %><span class='badge pull-right'><%= f.packages.count %></span></td>
-        <td><%= ForkliftState.display(f.state) %></td>
-        <td><%= f.whouse.name %></td>
-        <td><%= f.sum_packages %></td>
-        <td><%= f.accepted_packages %></td>
-        <td><%= f.stocker.name %></td>
-        <td><%= ForkliftState.display(f.state)%></td>
+        <td><%= link_to f.container_id,forklift_path(f), :class => "btn btn-default"%></td>
+        <td><%= f.state_display %></td>
+        <td><%= f.destinationable.name %></td>
+        <td><%= fpresenter.sum_packages %></td>
+        <td><%= fpresenter.accepted_packages %></td>
       </tr>
   <% end %>
   </tbody>

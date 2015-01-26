@@ -1,238 +1,109 @@
 class DeliveryService
-  #=============
-  #check add forklift
-  #=============
-  def self.check_add_forklifts forklift_ids
-    Forklift.where(id: forklift_ids).where.not(delivery_id: nil).count > 0
-  end
 
-
-  #=============
-  #delete @delivery
-  #delete a delivery
-  #=============
-  def self.delete delivery
-    if delivery
-      ActiveRecord::Base.transaction do
-        delivery.forklifts.each do |f|
-          f.remove_from_delivery
-        end
-        delivery.destroy
-      end
-    else
-      false
+  def self.dispatch(movable, destination, user)
+    if movable.descendants.count == 0
+      return Message.new.set_false("无法发运空运单")
     end
-  end
 
-  #=============
-  #update @args
-  #update a delivery
-  #=============
-  def self.update delivery, args
-    if delivery.nil?
-      return false
-    end
-    delivery.update_attributes(args)
-  end
-
-  def self.add_forklifts delivery, forklift_ids
-    if delivery.nil?
-      return false
-    end
     ActiveRecord::Base.transaction do
-      unless forklift_ids.nil?
-        forklift_ids.each do |f_id|
-          f = Forklift.find_by_id(f_id)
-          if f && f.packages.count > 0
-            f.add_to_delivery(delivery.id)
-          end
-        end
+      unless (m = movable.get_movable_service.dispatch(movable, destination, user)).result
+        return m
       end
-    end
-    true
-  end
 
-  #=============
-  #remove_forklifk @forklift
-  #remove a forklift from delivery
-  #=============
-  def self.remove_forklifk forklift
-
-    if forklift.nil?
-      return false
-    end
-
-    forklift.remove_from_delivery
-  end
-
-  #=============
-  #serarch args,all=false
-  #search delivery if all is true,return all packages' detail information
-  #=============
-  def self.search(args, all=false)
-    if all
-      Delivery.where(args).order(created_at: :desc)
-    elsif args[:received_date].empty?
-      []
-    else
-      received_date = Time.parse(args[:received_date])
-      Delivery.where(state: args[:state], received_date: (received_date.beginning_of_day..received_date.end_of_day)).all.order(created_at: :desc)
-    end
-  end
-
-  #=============
-  #confirm_received @delivery,@current_user
-  #set the delivery state to RECEIVED
-  #=============
-  def self.confirm_received(delivery, current_user)
-    if delivery.nil?
-      return false
-    end
-    ActiveRecord::Base.transaction do
-      if delivery.set_state(DeliveryState::RECEIVED)
-        delivery.forklifts.each do |f|
-          ForkliftService.confirm_received(f)
+      movable.descendants.each { |d|
+        unless (m = d.get_movable_service.dispatch(d, destination, user)).result
+          return m
         end
-        #delivery.receiver = current_user
-        #delivery.received_date = Time.now
-        #delivery.save
-        delivery.update({receiver: current_user,received_date:Time.now})
+      }
+
+      return Message.new.set_true
+    end
+  end
+
+  def self.receive(movable, user)
+    ActiveRecord::Base.transaction do
+      unless (m = movable.get_movable_service.receive(movable, user)).result
+        return m
+      end
+
+      movable.descendants.each { |d|
+        unless (m = d.get_movable_service.receive(d, user)).result
+          return m
+        end
+      }
+      return Message.new.set_true
+    end
+  end
+
+  #兼容以前的接口
+  def self.confirm_receive movable, user
+    ActiveRecord::Base.transaction do
+      unless (m = movable.get_movable_service.check(movable, user)).result
+        return m
+      end
+
+      #设置forklift的状态
+      movable.children.each { |c|
+        unless (m = ForkliftService.confirm_receive(c,user)).result
+          return m
+        end
+      }
+      return Message.new.set_true
+    end
+  end
+
+  def self.create args, user
+    msg=Message.new
+    ActiveRecord::Base.transaction do
+      delivery=Delivery.new(remark: args[:remark], user_id: user.id, location_id: user.location_id)
+      if delivery.save
+        lc=delivery.logistics_containers.build(source_location_id: user.location_id, user_id: user.id, remark: args[:remark])
+        # lc.destinationable=user.location.destination
+        # lc.des_location_id=user.location.destination.id
+
+        lc.save
+        msg.result=true
+        msg.object = lc
       else
-        false
+        msg.content = delivery.errors.full_messages
       end
+    end
+    msg
+  end
+
+  def self.get_list(conditions)
+    LogisticsContainer.joins(:delivery).where(conditions).order(created_at: :desc)
+  end
+
+  def self.search(condition)
+    if condition && condition['records.impl_time']
+      LogisticsContainer.joins(:delivery).joins(:records).where(condition)
+    else
+      LogisticsContainer.joins(:delivery).where(condition)
     end
   end
 
-  #=============
-  #receive @delivery
-  #set state to DESTINATION
-  #=============
-  def self.receive(delivery)
-    if delivery.nil?
-      return false
-    end
-
-    if (delivery.state == DeliveryState::RECEIVED)
-      return true
-    end
-
-    ActiveRecord::Base.transaction do
-      if !delivery.set_state(DeliveryState::DESTINATION)
-        return false
-      end
-      delivery.forklifts.each do |f|
-        ForkliftService.receive(f)
-      end
-    end
-    true
-  end
-
-  #=============
-  #semd @delivery
-  #set state to WAY
-  #=============
-  def self.send(delivery, current_user)
-    if delivery.nil?
-      return false
-    end
-
-    if delivery.forklifts.count == 0
-      return false
-    end
-
-    ActiveRecord::Base.transaction do
-      delivery.delivery_date = Time.now
-      delivery.set_state(DeliveryState::WAY)
-      delivery.forklifts.each do |f|
-        ForkliftService.send(f)
-      end
-    end
-    true
-  end
-
-  #=============
-  #set_state @delivery,@state
-  #set delivery to a specific state
-  #=============
-  def self.set_state(delivery, state)
-    if delivery.nil?
-      return false
-    end
-    ActiveRecord::Base.transaction do
-      if delivery.set_state(state)
-        delivery.forklifts.each do |f|
-          ForkliftService.set_state(f, state)
-        end
-      end
-    end
-  end
-
-  #=============
-  #exit? @id
-  #=============
-  def self.exit? id
-    Delivery.includes(forklifts: :packages).find_by_id(id)
-  end
-
-  #=============
-  #import_by_file
-  #=============
-  # def self.import_by_file path
-  #  msg=Message.new
-  #  ActiveRecord::Base.transaction do
-  #   Sync::Config.skip_muti_callbacks([Delivery, Forklift, Package, PackagePosition, StateLog])
-  #  data=JSON.parse(IO.read(path))
-  #  msg.result =true # unless Delivery.find_by_id(data['delivery']['id'])
-  # Delivery.create(data['delivery'])
-  # Forklift.create(data['forklifts'])
-  # Package.create(data['packages'])
-  # PackagePosition.create(data['package_positions'].select { |pp| !pp.nil? })
-  # StateLog.create(data['state_logs'])
-  # end
-  # return msg
-  # end
   def self.import_by_file path
     msg=Message.new
     begin
       ActiveRecord::Base.transaction do
-        Sync::Config.skip_muti_callbacks([Delivery, Forklift, Package, PackagePosition, StateLog])
+        Sync::Config.skip_muti_callbacks([Container, LogisticsContainer, Record])
         data=JSON.parse(IO.read(path))
-        msg.result =true # unless Delivery.find_by_id(data['delivery']['id'])
-        if dori=Delivery.find_by_id(data['delivery']['id'])
-          dtmp=Delivery.new(data['delivery'])
-          if dori.updated_at<=dtmp.updated_at
-            attr=dori.gen_sync_attr(dtmp)
-            dori.update(attr)
-          end
-        else
-          Delivery.create(data['delivery'])
-        end
-        data['forklifts'].each do |forklift|
-          if fori=Forklift.find_by_id(forklift['id'])
-            ftmp=Forklift.new(forklift)
-            if fori.updated_at<=ftmp.updated_at
-              attr=fori.gen_sync_attr(ftmp)
-              fori.update(attr)
-            end
-          else
-            Forklift.create(forklift)
-          end
-        end
 
-        data['packages'].each do |package|
-          if pori=Package.find_by_id(package['id'])
-            ptmp=Package.new(package)
-            if pori.updated_at<=ptmp.updated_at
-              attr=pori.gen_sync_attr(ptmp)
-              pori.update(attr)
+        msg.result =true
+        [Container, LogisticsContainer, Record].each do |m|
+          data[m.name.tableize].each do |c|
+            citmp=m.new(c)
+            if ci=m.find_by_id(c['id'])
+              if ci.updated_at<=citmp.updated_at
+                attr=ci.gen_sync_attr(citmp)
+                ci.update(attr)
+              end
+            else
+              citmp.save
             end
-          else
-            Package.create(package)
           end
         end
-
-        PackagePosition.create(data['package_positions'].select { |pp| !pp.nil? })
-        #StateLog.create(data['state_logs'])
       end
       msg.result=true
       msg.content='处理成功'
@@ -251,46 +122,117 @@ class DeliveryService
         book.default_sheet=book.sheets.first
         return nil if book.cell(2, 1).nil?
         # generate delivery
-        delivery=Delivery.new(state: DeliveryState::WAY,
-                              user_id: book.cell(2, 1),
-                              source_id: book.cell(2, 2),
-                              destination_id: book.cell(2, 3),
-                              delivery_date: book.cell(2, 4),
-                              remark: book.cell(2, 5))
-        # generate forklifts
+        user = User.find_by_id(book.cell(2, 1))
+
+        unless user
+          raise 'User not found!'
+        end
+        # generate delivery container
+        source = Location.find_by_id(book.cell(2, 2))
+
+        unless source
+          raise 'Destination not found!'
+        end
+
+        delivery = Delivery.create({
+                                       remark: book.cell(2, 5),
+                                       user_id: user.id,
+                                       location_id: source.id
+                                   })
+
+        # generate delivery location_container
+        destination = Location.find_by_id(book.cell(2, 3))
+
+        unless destination
+          raise 'Destination not found!'
+        end
+        dlc = delivery.logistic_containers.build(source_location_id: source.id, des_location_id: destination.id, user_id: user.id, remark: book.cell(2, 5), state: MovableState::WAY)
+        dlc.destinationable = destination
+        dlc.save
+        # send dlc,create record for dlc
+        impl_time = Time.parse(book.cell(2, 4))
+        Record.create({recordable: dlc, destiationable: dlc.destinationable, impl_id: user.id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
+        # generate forklifts containers
         forklifts={}
         book.default_sheet=book.sheets[1]
         return nil if book.cell(2, 1).nil?
 
         2.upto(book.last_row) do |row|
-          whouse=book.cell(row, 1)
+          whouse= Whouse.find_by_id(book.cell(row, 1))
+          unless whouse
+            raise 'Warehouse not found!'
+          end
+=begin
           forklift=Forklift.new(state: ForkliftState::WAY,
                                 user_id: delivery.user_id,
                                 stocker_id: delivery.user_id,
                                 whouse_id: Whouse.find_by_id(whouse).id)
           delivery.forklifts<<forklift
-          forklifts[whouse]=forklift
+=end
+          forklift = Forklift.create({
+                                         user_id: user.id,
+                                         location_id: source.id
+                                     })
+          #create forklift lc
+          flc = forklift.logistics_containers.build({source_location_id: source.id, des_location_id: destination.id, user_id: user.id, state: MovableState::WAY})
+          flc.destinationable = whouse
+          flc.save
+          #impl_time = Time.parse(book.cell(2, 4))
+          Record.create({recordable: flc, destiationable: flc.destinationable, impl_id: user.id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
+
+          dlc.add(flc)
+
+          forklifts[whouse.id]=flc
         end
         # generate packages
         book.default_sheet=book.sheets[2]
         return nil if book.cell(2, 1).nil?
         2.upto(book.last_row) do |row|
+          if plc = LogisticsContainer.find_latest_by_container_id(book.cell(row, 2))
+            #if found and can copy
+            forklifts[book.cell(row, 1)].add(plc)
+          else
+            #create container
+            package = Package.create({
+                                         user_id: user.id,
+                                         location_id: source.id
+                                     })
+            #create lc
+            #*王松修改了package check_in_time之后，需要重新写
+            plc = package.logistics_containers.build({
+                                                         source_location_id: source.id,
+                                                         des_location_id: destination.id,
+                                                         user_id: user.id,
+                                                         state: MovableState::WAY,
+                                                         part_id: bool.cell(row, 3).sub(/P/, ''),
+                                                         quantity: bool.cell(row, 4).sub(/Q/, ''),
+                                                         check_in_time: book.cell(row, 5).sub(/W\s*/, '')
+                                                     })
+            plc.destinationable = PartService.get_position_by_whouse_id(op.part_id, flc.destinationable_id)
+            plc.save
+            #impl_time = Time.parse(book.cell(2, 4))
+            Record.create({recordable: plc, destiationable: plc.destinationable, impl_id: user.id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
+            forklifts[book.cell(row, 1)].add(plc)
+          end
+
+=begin
           if package=Package.find_by_id(book.cell(row, 2))
- forklifts[book.cell(row, 1)].packages<<package
-else
-          forklifts[book.cell(row, 1)].packages<<Package.new(id: book.cell(row, 2),
-                                                             location_id: delivery.source_id,
-                                                             user_id: delivery.user_id,
-                                                             part_id: book.cell(row, 3).sub(/P/, ''),
-                                                             quantity: book.cell(row, 4).sub(/Q/, ''),
-                                                             quantity_str: book.cell(row, 4).sub(/Q/, ''),
-                                                             check_in_time: book.cell(row, 5).sub(/W\s*/, ''),
-                                                             state: PackageState::WAY
-          )
-end
+            forklifts[book.cell(row, 1)].packages<<package
+          else
+            forklifts[book.cell(row, 1)].packages<<Package.new(id: book.cell(row, 2),
+                                                               location_id: delivery.source_id,
+                                                               user_id: delivery.user_id,
+                                                               part_id: book.cell(row, 3).sub(/P/, ''),
+                                                               quantity: book.cell(row, 4).sub(/Q/, ''),
+                                                               quantity_str: book.cell(row, 4).sub(/Q/, ''),
+                                                               check_in_time: book.cell(row, 5).sub(/W\s*/, ''),
+                                                               state: PackageState::WAY
+            )
+          end
+=end
         end
 
-        delivery.save
+        #delivery.save
 =begin
         forklifts.values.each do |forklift|
           forklift.update(sum_packages: forklift.packages.count)
@@ -313,16 +255,22 @@ end
         book=Roo::Excelx.new file
         book.default_sheet=book.sheets.first
         return nil if book.cell(2, 1).nil?
+
+        default_receiver = User.where({role_id: Role.sender}).first
+
         2.upto(book.last_row) do |row|
-          if package=Package.find_by_id(book.cell(row, 1))
-            package.update(state: PackageState::RECEIVED,is_dirty:true)
-            if  forklift=package.forklift
-              forklift.update(state: ForkliftState::RECEIVED,is_dirty:true)
-              if delivery= forklift.delivery
-                delivery.update(state: DeliveryState::RECEIVED,is_dirty:true)
+          if plc = LogisticsContainer.find_latest_by_container_id(book.cell(2, 1))
+            plc.get_movable_service.receive(plc, default_receiver)
+
+            if  flc = plc.parent
+              flc.get_movable_service.receive(flc, default_receiver)
+
+              if dlc = flc.parent
+                dlc.get_movable_service.receive(dlc, default_receiver)
               end
             end
           end
+
         end
       end
       msg.result =true

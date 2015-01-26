@@ -20,6 +20,11 @@
         <td><span>用于访问同步服务权限验证</span></td>
       </tr>
       <tr>
+        <td><span>是否锁定同步</span></td>
+        <td><span><%= check_box_tag :lock, @lock, @lock %></span></td>
+        <td><span>用于控制在服务器端进行基础数据修改时，客户端无法同步数据(只有总同步服务器需要设置)</span></td>
+      </tr>
+      <tr>
         <td><span>是否开启同步锁</span></td>
         <td><span><%= check_box_tag :sync_lock, @sync_lock, @sync_lock %></span></td>
         <td><span>用于限制同一时间只有一个客户端进行同步(只有总同步服务需要设置)</span></td>
@@ -64,6 +69,9 @@
         </span></td>
       </tr>
     </table>
+  </div>
+  <div>
+    <%= render 'sync'%>
   </div>
   <div>
     <h4 class="bg-primary">
