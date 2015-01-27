@@ -50,7 +50,7 @@
   <li class="dropdown">
     <a class="dropdown-toggle" data-toggle="dropdown" href="#">报表<span class="caret"></span></a>
     <ul class="dropdown-menu" role="reporter">
-      <% if current_user.sender? || current_receiver?%>
+      <% if current_user.sender? || current_user.receiver? %>
           <li id="reports_reports"><a href="<%= reports_reports_path %>">收发货报表</a></li>
       <%end%>
       <% if current_user.stocker?%>
