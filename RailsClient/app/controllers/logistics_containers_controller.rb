@@ -7,7 +7,7 @@ class LogisticsContainersController < ApplicationController
   def search
     model = params[:model]
     @condition=params[model.to_sym]
-    query = LogisticsContainer
+    query = LogisticsContainer.uniq
 
     joins = ["location_containers"]
     args = [model]
@@ -61,6 +61,9 @@ class LogisticsContainersController < ApplicationController
     query.first
 
     instance_variable_set("@#{model.pluralize}", query.paginate(:page => params[:page]).all.order(created_at: :desc))
+
+    puts "---------------------"
+    puts query.paginate(:page => params[:page]).all.order(created_at: :desc).to_json
     render "#{model.pluralize}/index"
     #render :json => 1
   end

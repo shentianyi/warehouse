@@ -32,7 +32,7 @@ class Package<Container
   def self.generate_report_condition(type,start_t,end_t,location_id)
     #joins({logistics_containers: :records})
     condition = {}
-    condition["records.impl_time"] = start_t..end_t
+    condition["records.impl_time"] = Time.parse(start_t).utc.to_s..Time.parse(end_t).utc.to_s
     case type.to_i
       when ReportType::Entry
         condition["records.impl_user_type"] = [ImplUserType::RECEIVER,ImplUserType::EXAMINER,ImplUserType::REJECTOR]

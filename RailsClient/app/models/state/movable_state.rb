@@ -15,9 +15,9 @@ class MovableState
       when ARRIVED
         [ARRIVED,WAY]
       when CHECKED
-        [ARRIVED,REJECTED,CHECKED]
+        [ARRIVED,REJECTED]
       when REJECTED
-        [ARRIVED,CHECKED,REJECTED]
+        [ARRIVED,CHECKED]
       else
         []
     end
