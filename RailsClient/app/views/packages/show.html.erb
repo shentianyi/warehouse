@@ -4,6 +4,7 @@
 <h2>基础</h2>
 <h4>零件号: <small><%= PackageLabelRegex.part_prefix_string + @package.package.part_id %></small></h4>
 <h4>数量: <small><%= PackageLabelRegex.quantity_prefix_string + @package.package.quantity_str %></small></h4>
+<h4>目的地:<small><%= @package.destination.name if @package.destination%></small></h4>
 <h4>入库时间: <small><%= @package.package.fifo_time_display %></small></h4>
 <h4>上架库位: <small><%= ppresenter.position_nr%></small></h4>
 <h4>备注: <small><%= @package.remark %></small></h4>
