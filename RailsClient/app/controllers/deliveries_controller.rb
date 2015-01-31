@@ -50,7 +50,7 @@ class DeliveriesController < ApplicationController
       if @delivery.update(delivery_params)
 
         if delivery_params.has_key? :state
-          @delivery.descendants.each{|d| d.update({state: delivery_params[:state]})}
+          @delivery.descendants.each{|d| d.update({state: delivery_params[:state],is_dirty:true})}
         end
 
         # 注意修改了状态的后果

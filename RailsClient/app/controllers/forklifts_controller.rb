@@ -50,7 +50,7 @@ class ForkliftsController < ApplicationController
       if @forklift.update(forklift_params)
 
         if forklift_params.has_key? :state
-          @forklift.descendants.each{|d| d.update({state: forklift_params[:state]})}
+          @forklift.descendants.each{|d| d.update({state: forklift_params[:state],is_dirty:true})}
         end
 
         format.html { redirect_to forklift_url(@forklift), notice: '托盘更新成功' }
