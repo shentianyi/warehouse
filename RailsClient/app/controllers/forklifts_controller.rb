@@ -44,17 +44,15 @@ class ForkliftsController < ApplicationController
   # PATCH/PUT /forklifts/1
   # PATCH/PUT /forklifts/1.json
   def update
-    #if forklift_params.has_key?(:state)
-    #  ForkliftService.set_state(@forklift,forklift_params[:state])
-    #end
-
-    #if forklift_params.has_key?(:whouse_id)
-    #  whouse_change = @forklift.whouse_id != forklift_params[:whouse_id]
-    #end
 
     #现在不能修改备货仓库了。
     respond_to do |format|
       if @forklift.update(forklift_params)
+
+        if forklift_params.has_key? :state
+          @forklift.descendants.each{|d| d.update({state: forklift_params[:state]})}
+        end
+
         format.html { redirect_to forklift_url(@forklift), notice: '托盘更新成功' }
         format.json { render :show, status: :ok, location: @forklift }
       else
