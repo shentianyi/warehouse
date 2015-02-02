@@ -46,6 +46,8 @@ class PackagesController < ApplicationController
   def update
     respond_to do |format|
       if @package.update(package_params)
+        @package.update(is_dirty: true)
+
         format.html { redirect_to package_url(@package), notice: '包装箱修改成功.' }
         format.json { render :show, status: :ok, location: @package }
       else
