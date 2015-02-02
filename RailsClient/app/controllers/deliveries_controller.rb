@@ -53,6 +53,10 @@ class DeliveriesController < ApplicationController
           @delivery.descendants.each{|d| d.update({state: delivery_params[:state],is_dirty:true})}
         end
 
+        if delivery_params.has_key? :des_location_id
+          @delivery.descendants.each{|d| d.update({des_location_id: delivery_params[:des_location_id],is_dirty:true})}
+        end
+
         # 注意修改了状态的后果
         format.html { redirect_to delivery_url(@delivery), notice: '运单更新成功.' }
         format.json { render :show, status: :ok, location: @delivery }
@@ -123,7 +127,7 @@ class DeliveriesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def delivery_params
-    params.require(:logistics_container).permit(:state, :remark)
+    params.require(:logistics_container).permit(:state, :remark,:des_location_id)
   end
 
   def get_states

@@ -18,6 +18,11 @@
     <p>*状态可以被修改，但是依然需要使用移动设备进行接收，否则不会产生操作记录</p>
 
     <p>
+      <%= f.label :des_location_id, '目的地'%>
+      <%= f.select(:des_location_id, Location.list_menu,{include_blank: false})%>
+    </p>
+
+    <p>
       <%= f.label :remark,'备 注'%>
       <%= f.text_field :remark%>
     </p>
