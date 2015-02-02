@@ -82,7 +82,7 @@ class ReportsController < ApplicationController
       format.xlsx do
         send_data(entry_discrepancy_xlsx(@packages, @results),
                   :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
-                  :filename => filename+".xlsx"
+                  :filename => "#{@title}.xlsx"
         )
       end
     end
