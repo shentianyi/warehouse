@@ -24,6 +24,10 @@ $FORSREPROTSPATH=path_config[:fors_reports_file_path]
 auth=config['api']['auth']
 $API_AUTH_USER={user: auth['user'], passwd: auth['passwd']}
 
+#
+log_config=config['log']
+$LOG_FOLDER=log_config[:log_folder]
+
 WillPaginate.per_page = 20
 
 PackageLabelRegex.initialize_methods if ActiveRecord::Base.connection.table_exists?('regexes')
