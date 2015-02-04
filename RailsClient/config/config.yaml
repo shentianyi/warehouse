@@ -20,3 +20,4 @@ api:
 
 log:
  :log_folder: 'tmp/log'
+ :log_file_name: 'base_log.log'

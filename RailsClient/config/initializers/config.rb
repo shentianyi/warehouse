@@ -27,6 +27,7 @@ $API_AUTH_USER={user: auth['user'], passwd: auth['passwd']}
 #
 log_config=config['log']
 $LOG_FOLDER=log_config[:log_folder]
+$LOG_FILE_NAME=log_config[:log_file_name]
 
 WillPaginate.per_page = 20
 
