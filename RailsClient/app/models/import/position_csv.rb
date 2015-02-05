@@ -73,9 +73,9 @@ module Import
             #update
             if data['detail_new']
               data['detail'] = data['detail_new']
-              data.delete('detail_new')
             end
             Position.trans_position
+            data.delete('detail_new')
             p.update(data)
           else
             raise(ArgumentError, "行:#{line_no} Position 不存在对应的库位")

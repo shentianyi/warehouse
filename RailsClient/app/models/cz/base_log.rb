@@ -1,5 +1,6 @@
 module CZ
   class BaseLog
+=begin
     @@folder=nil
     @@file_name=$LOG_FILE_NAME
     unless File.directory?($LOG_FOLDER)
@@ -12,5 +13,6 @@ module CZ
     def self.write()
 
     end
+=end
   end
 end
