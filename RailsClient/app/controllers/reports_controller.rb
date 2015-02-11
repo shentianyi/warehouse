@@ -193,7 +193,8 @@ class ReportsController < ApplicationController
                           p['count'],
                           p['box'],
                           p['whouse'],
-                          MovableState.display(p['state'])
+                          MovableState.display(p['state']),
+                          DatetimeHelper.ddate(p['ddate'])
                       ], :types => [:string]
       }
     end
@@ -263,7 +264,7 @@ class ReportsController < ApplicationController
   end
 
   def entry_header
-    ["编号", "零件号", "总数", "箱数","部门","状态"]
+    ["编号", "零件号", "总数", "箱数","部门","状态","时间"]
   end
 
   def removal_header
