@@ -6,6 +6,25 @@ class StoragesController < ApplicationController
     @storages= Storage.joins(:part).paginate(:page => params[:page])
   end
 
+  # GET /storages/panel
+  def panel
+    conditon = {}
+    conditon[:part_type_id] = params[:part_type_id] if params[:part_type_id]
+    @part_id = nil
+    @parts = Part.includes(:storages).where(conditon).all.paginate(:page => params[:page])
+    @part_type_id = params[:part_type_id]
+  end
+
+  # GET /storages/search_storage
+  def search_storage
+    conditon = {}
+    conditon[:part_type_id] = params[:part_type_id] if params[:part_type_id]
+    @part_id = params[:part_id]
+    @part_type_id = params[:part_type_id]
+    @parts = Part.includes(storages: :location).where('id LIKE ?',"%#{params[:part_id]}%").all.paginate(:page => params[:page])
+    render :panel
+  end
+
   # def search
   #   @condition=params[@model]
   #   query=model.unscoped

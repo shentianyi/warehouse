@@ -4,7 +4,9 @@ class Order < ActiveRecord::Base
   belongs_to :user
 
   has_many :order_items, :dependent => :destroy
+  #发货地
   belongs_to :source, class_name: "Location"
+  #要货地
   belongs_to :source_location, class_name: "Location"
 
   def generate_id

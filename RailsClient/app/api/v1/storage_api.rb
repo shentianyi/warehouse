@@ -5,6 +5,7 @@ module V1
     post :move_store do
       ActiveRecord::Base.transaction do
         if forklift=Forklift.exists?(params[:id])
+          #该Forklift是否已经入库？
           if fsc=forklift.store_containers.where(source_location_id: current_user.location_id).first
             fsc_destination=nil
             fsc.descendants.joins(:package).each do |psc|

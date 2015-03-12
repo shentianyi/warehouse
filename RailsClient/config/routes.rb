@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   resources :storages do
     collection do
       get :search
+      get :panel
+      get :search_storage
     end
   end
 
