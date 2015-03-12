@@ -27,5 +27,20 @@ module V1
         end
       end
     end
+
+    #以包装箱为单位进行移库
+    post :move_storage do
+
+    end
+
+    #以包装箱为单位创建Storage
+    post :create_storage do
+
+    end
+
+    #以包装箱为党委删除Storage
+    post :destroy_storage do
+
+    end
   end
 end
