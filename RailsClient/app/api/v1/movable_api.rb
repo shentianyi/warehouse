@@ -1,34 +1,33 @@
-
 module V1
   class MovableAPI<Base
-    namespace :movables
-    guard_all!
+    namespace :movables do
+      guard_all!
 
-    #
-    helpers do
-      def movable_params
-        ActionController::Parameters.new(params).require(:movable).permit(:id)
-      end
-    end
-
-    post :get_type do
-      msg = ApiMessage.new
-      unless lc = LogisticsContainer.find_latest_by_container_id(params[:id])
-        return msg.set_false(MovableMessage::TargetNotExist)
+      #
+      helpers do
+        def movable_params
+          ActionController::Parameters.new(params).require(:movable).permit(:id)
+        end
       end
 
-      unless lc.root?
-        return msg.set_false(MovableMessage::CannotReceiveSingle)
+      post :get_type do
+        msg = ApiMessage.new
+        unless lc = LogisticsContainer.find_latest_by_container_id(params[:id])
+          return msg.set_false(MovableMessage::TargetNotExist)
+        end
+
+        unless lc.root?
+          return msg.set_false(MovableMessage::CannotReceiveSingle)
+        end
+
+        if (r = lc.get_service.receive(lc, current_user)).result
+          msg.set_true({type: lc.container.type, type_display: ContainerType.display(lc.container.type), object: lc.presenter.to_json})
+        else
+          msg.set_false(MovableMessage::ReceiveFailed)
+        end
       end
 
-      if (r = lc.get_service.receive(lc,current_user)).result
-        msg.set_true({type:lc.container.type,type_display:ContainerType.display(lc.container.type),object:lc.presenter.to_json})
-      else
-        msg.set_false(MovableMessage::ReceiveFailed)
-      end
-    end
-
-    #not a good api set remove
+      #not a good api set remove
 =begin
     post :dispatch do
       msg = ApiMessage.new
@@ -95,5 +94,6 @@ module V1
       return msg.set_true(MovableMessage::Success).to_json
     end
 =end
+    end
   end
 end

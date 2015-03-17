@@ -25,7 +25,7 @@ module OauthAPIGuard
     def guard_by_token
       token_string = get_token_string
       #raise BasicAuthError unless  ApiToken.find_by_token(token_string)
-      raise BasicAuthError unless  '3dcba17f596969a676bfdd90b5425c703f983acf7306760e1057c95afe9f17b1d'==token_string
+      raise BasicAuthError unless '3dcba17f596969a676bfdd90b5425c703f983acf7306760e1057c95afe9f17b1d'==token_string
     end
 
     def guard_by_basic
@@ -55,10 +55,10 @@ module OauthAPIGuard
     def oauth2_bearer_token_error_handler
       Proc.new { |e|
         response = case e
-                     when BasicAuthError
-                       Rack::OAuth2::Server::Resource::Bearer::Unauthorized.new(
-                           :invalid_token,
-                           'Invalid Token.')
+                   when BasicAuthError
+                     Rack::OAuth2::Server::Resource::Bearer::Unauthorized.new(
+                         :invalid_token,
+                         'Invalid Token.')
                    end
         response.finish
       }

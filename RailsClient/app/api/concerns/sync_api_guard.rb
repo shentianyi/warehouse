@@ -17,7 +17,7 @@ module SyncAPIGuard
         if Sync::Config.lock
           #if lock sync return false
           puts "###Sync Locked"
-          return error!('Sync Locked',423)
+          return error!('Sync Locked', 423)
         end
         tb= get_table_name
         if table = SyncLog.find_by_table_name(tb)
@@ -25,7 +25,7 @@ module SyncAPIGuard
             table.update(sync: true)
           end
         else
-          SyncLog.create(table_name:tb,sync:true)
+          SyncLog.create(table_name: tb, sync: true)
         end
       end
 
