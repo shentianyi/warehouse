@@ -5,35 +5,35 @@ module V1
       include SyncAPIGuard
 
       version 'v1', :using => :path
-      namespace 'sync'
-      guard_all!
-      lock_sync
-      lock_sync_pool
+      namespace :sync do
+        guard_all!
+        lock_sync
+        lock_sync_pool
 
-      mount LocationSyncAPI
-      mount LocationDestinationSyncAPI
-      mount UserSyncAPI
-      mount WhouseSyncAPI
-      mount PartTypeSyncAPI
-      mount PartSyncAPI
-      mount PositionSyncAPI
-      mount PartPositionSyncAPI
-      mount PickItemFilterSyncAPI
+        mount LocationSyncAPI
+        mount LocationDestinationSyncAPI
+        mount UserSyncAPI
+        mount WhouseSyncAPI
+        mount PartTypeSyncAPI
+        mount PartSyncAPI
+        mount PositionSyncAPI
+        mount PartPositionSyncAPI
+        mount PickItemFilterSyncAPI
 
-      mount RegexCategorySyncAPI
-      mount RegexSyncAPI
+        mount RegexCategorySyncAPI
+        mount RegexSyncAPI
 
-      mount ContainerSyncAPI
-      mount LocationContainerSyncAPI
-      mount RecordSyncAPI
+        mount ContainerSyncAPI
+        mount LocationContainerSyncAPI
+        mount RecordSyncAPI
 
-      mount StorageSyncAPI
+        mount StorageSyncAPI
 
-      mount OrderSyncAPI
-      mount OrderItemSyncAPI
-      mount PickListSyncAPI
-      mount PickItemSyncAPI
-
+        mount OrderSyncAPI
+        mount OrderItemSyncAPI
+        mount PickListSyncAPI
+        mount PickItemSyncAPI
+      end
     end
   end
 end

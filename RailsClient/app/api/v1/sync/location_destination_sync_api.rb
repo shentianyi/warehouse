@@ -1,67 +1,68 @@
 module V1
   module Sync
     class LocationDestinationSyncAPI<SyncBase
-      namespace 'location_destinations'
-      rescue_from :all do |e|
-        LocationDestinationSyncAPI.error_unlock_pool('location_destinations')
-        Rack::Response.new([e.message],500).finish
-      end
+      namespace :location_destinations do
+        rescue_from :all do |e|
+          LocationDestinationSyncAPI.error_unlock_pool('location_destinations')
+          Rack::Response.new([e.message], 500).finish
+        end
 
-      get do
-        LocationDestination.unscoped.where('updated_at>=?',params[:last_time]).all
-      end
+        get do
+          LocationDestination.unscoped.where('updated_at>=?', params[:last_time]).all
+        end
 
-      post do
-        msg = Message.new
-        begin
-          ActiveRecord::Base.transaction do
-            location_destinations=JSON.parse(params[:location_destination])
-            location_destinations.each do |ld|
-              l = LocationDestination.new(ld)
-              l.save
+        post do
+          msg = Message.new
+          begin
+            ActiveRecord::Base.transaction do
+              location_destinations=JSON.parse(params[:location_destination])
+              location_destinations.each do |ld|
+                l = LocationDestination.new(ld)
+                l.save
+              end
             end
-          end
             msg.result = true
-        rescue => e
-          msg.content = "post:#{e.message}"
+          rescue => e
+            msg.content = "post:#{e.message}"
+          end
+          return msg
         end
-        return msg
-      end
 
-      put '/:id' do
-        msg = Message.new
-        begin
-          ActiveRecord::Base.transaction do
-            location_destinations = JSON.parse(params[:location_destination])
-            location_destinations.each do |ld|
-              if l = LocationDestination.unscoped.find_by_id(ld['id'])
-                l.update(ld.except('id'))
+        put '/:id' do
+          msg = Message.new
+          begin
+            ActiveRecord::Base.transaction do
+              location_destinations = JSON.parse(params[:location_destination])
+              location_destinations.each do |ld|
+                if l = LocationDestination.unscoped.find_by_id(ld['id'])
+                  l.update(ld.except('id'))
+                end
               end
             end
+            msg.result = true
+          rescue => e
+            msg.content = "put:#{e.message}"
           end
-          msg.result = true
-        rescue => e
-          msg.content = "put:#{e.message}"
+          return msg
         end
-        return msg
-      end
 
-      post :delete do
-        msg = Message.new
-        begin
-          ActiveRecord::Base.transaction do
-            location_destinations = JSON.parse(params[:location_destination])
-            location_destinations.each do |id|
-              if l = LocationDestination.unscoped.find_by_id(id)
-                l.update(is_delete: true)
+        post :delete do
+          msg = Message.new
+          begin
+            ActiveRecord::Base.transaction do
+              location_destinations = JSON.parse(params[:location_destination])
+              location_destinations.each do |id|
+                if l = LocationDestination.unscoped.find_by_id(id)
+                  l.update(is_delete: true)
+                end
               end
             end
+            msg.result = true
+          rescue => e
+            msg.content = "delete:#{e.message}"
           end
-          msg.result = true
-        rescue => e
-          msg.content = "delete:#{e.message}"
+          return msg
         end
-        return msg
       end
     end
   end

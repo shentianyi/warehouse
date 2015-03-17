@@ -6,7 +6,8 @@ module SyncAPIGuard
 
   module HelperMethods
     def get_table_name
-      params.route_info.instance_variable_get('@options')[:namespace].sub(/\/sync\//, '')
+      instance_variable_get('@namespace').sub(/\/sync\//, '')
+      #params.route_info.instance_variable_get('@options')[:namespace].sub(/\/sync\//, '')
     end
   end
 
