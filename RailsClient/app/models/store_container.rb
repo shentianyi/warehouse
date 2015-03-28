@@ -83,6 +83,7 @@ class StoreContainer<LocationContainer
   end
 
   def can_move_store?(destination)
+    #只有Container的当前位置不是目的地并且该Container也已经被入库时，才能做移库操作
     self.container.current_positionable !=destination && self.state== StorableState::INSTORE
   end
 
