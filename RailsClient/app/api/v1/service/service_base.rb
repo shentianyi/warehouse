@@ -3,9 +3,10 @@ module V1
     class ServiceBase < ApplicationAPI
       include OauthAPIGuard
       version 'v1', :using => :path
-      namespace 'service'
-      mount PrintServiceAPI
-      mount ImportServiceAPI
+      namespace :service do
+        mount PrintServiceAPI
+        mount ImportServiceAPI
+      end
     end
   end
 end

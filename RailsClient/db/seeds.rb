@@ -18,7 +18,7 @@ ActiveRecord::Base.transaction do
   whouse.location=Location.find_by_id('Basic')
   whouse.save
   unless user=User.find_by_id('admin')
-    user = User.create({id: 'admin', name: 'Admin', location_id: l.id, password: '123456@', password_confirmation: '123456@', role_id: 100, is_sys: true})
+    user = User.create({id: 'admin', name: 'Admin', location_id: l.id, password: '123456@', password_confirmation: '123456@', role_id: 100, is_sys: true,user_name:'admin'})
   end
 
   # init package label regex
