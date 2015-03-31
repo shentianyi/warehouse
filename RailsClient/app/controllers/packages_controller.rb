@@ -41,6 +41,29 @@ class PackagesController < ApplicationController
   end
 =end
 
+  def download_quantity
+    file_name= 'packages_quantities_'+Time.now.strftime('%Y%m%d%H%M%S')+'.csv'
+    path=File.join($DOWNLOADPATH, file_name)
+    msg = Message.new
+    msg.result = false
+    begin
+      File.open(path, 'wb') do |f|
+        f.puts ['Part', 'Quantity'].join($CSVSP)
+        items = Package.joins(:part).select("DISTINCT parts.id,containers.quantity")
+        items.each do |item|
+          line = [item['id'], item['quantity']]
+          f.puts line.join($CSVSP)
+        end
+      end
+      msg.result=true
+    rescue => e
+      msg.content =e.message
+      puts e.backtrace
+      render json: msg and return
+    end
+    send_file path, :type => 'application/csv', :filename => file_name
+  end
+
   # PATCH/PUT /packages/1
   # PATCH/PUT /packages/1.json
   def update
@@ -70,13 +93,13 @@ class PackagesController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_package
-    @package = PackageService.search(id:params[:id]).first
+    @package = PackageService.search(id: params[:id]).first
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def package_params
     #params[:package]
-    params.require(:logistics_container).permit(:state,:remark)
+    params.require(:logistics_container).permit(:state, :remark)
   end
 
 =begin

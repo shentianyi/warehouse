@@ -98,6 +98,7 @@ Rails.application.routes.draw do
   resources :packages do
     collection do
       get :search
+      get :download_quantity
     end
   end
 

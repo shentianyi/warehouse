@@ -1,11 +1,11 @@
 class PartsController < ApplicationController
   #load_and_authorize_resource
   before_action :set_part, only: [:show, :edit, :update, :destroy]
-  before_action :set_part_type,only:[:index,:new,:edit,:search,:download_positions]
+  before_action :set_part_type, only: [:index, :new, :edit, :search, :download_positions]
   # GET /parts
   # GET /parts.json
   def index
-    @parts = Part.unscoped.paginate(:page=>params[:page])#.all
+    @parts = Part.unscoped.paginate(:page => params[:page]) #.all
   end
 
   # GET /parts/1
@@ -47,7 +47,7 @@ class PartsController < ApplicationController
     @part_position = PartPosition.find_by_id(params[:id])
     @part_position.destroy
 
-    render :json => {result:true}
+    render :json => {result: true}
   end
 
   # PATCH/PUT /parts/1
@@ -149,7 +149,7 @@ class PartsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def part_params
     #params[:part]
-    params.require(:part).permit(:id, :unit_pack, :customernum, :user_id,:part_type_id,:is_delete)
+    params.require(:part).permit(:id, :unit_pack, :customernum, :user_id, :part_type_id, :is_delete)
   end
 
   def set_part_type

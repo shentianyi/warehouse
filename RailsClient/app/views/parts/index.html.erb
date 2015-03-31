@@ -24,6 +24,7 @@
 <%= link_to "下载零件", send("download_#{@model.pluralize}_path"),data: { confirm: 'Are you sure?' },:class=>'btn btn-default' %>
 <%= link_to "上传/更新零件位置", parts_import_positions_path ,:class=>'btn btn-default'%>
 <%= link_to "下载零件位置", download_part_positions_path , data: {confirm: 'Are you sure?'} ,:class=>'btn btn-default'%>
+<%= link_to "下载零件包装箱数量", download_quantity_packages_path, data:{confirm: 'Are you sure?'}, :class => 'btn btn-default'%>
 <br>
 <div class="digg_pagination">
   <div class="page_info">
