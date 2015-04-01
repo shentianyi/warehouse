@@ -5,7 +5,7 @@ class PartsController < ApplicationController
   # GET /parts
   # GET /parts.json
   def index
-    @parts = Part.unscoped.paginate(:page => params[:page]) #.all
+    @parts = Part.paginate(:page => params[:page]) #.all
   end
 
   # GET /parts/1
