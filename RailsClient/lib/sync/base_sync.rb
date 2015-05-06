@@ -257,8 +257,8 @@ module Sync
     end
 
     def self.init_site(url)
-      RestClient::Resource.new(url, :timeout => -1,
-                               :open_timeout => -1,
+      RestClient::Resource.new(url, :timeout =>nil,
+                               :open_timeout => nil,
                                headers: {'Authorization' => "Bearer #{Sync::Config.token}"}, 'content_type' => 'application/json')
     end
 
