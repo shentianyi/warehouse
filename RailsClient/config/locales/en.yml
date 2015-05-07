@@ -237,3 +237,4 @@ en:
       receiver: 'Receiver'
       sender: 'Sender'
       stocker: 'Orderer'
+      picker: 'Picker'
