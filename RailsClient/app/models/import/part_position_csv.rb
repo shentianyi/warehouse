@@ -24,8 +24,8 @@ module Import
         line<<item.part_id
         line<<item.position_id
         line<<item.sourceable_id
-        line<<item.position.detail
-        line<<item.position.whouse.name
+        line<<item.position.detail if item.position
+        line<<item.position.whouse.name if item.position
       }
     end
 

@@ -256,12 +256,13 @@ module Sync
       model_name.constantize
     end
 
+
     def self.init_site(url)
       RestClient::Resource.new(url, :timeout =>nil,
                                :open_timeout => nil,
                                headers: {'Authorization' => "Bearer #{Sync::Config.token}"}, 'content_type' => 'application/json')
     end
-
+    
     def self.model_name
       self.name.gsub(/Sync|::Execute::/, '')
     end
