@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150120071344) do
+ActiveRecord::Schema.define(version: 20150511083014) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -244,6 +244,51 @@ ActiveRecord::Schema.define(version: 20150120071344) do
   end
 
   add_index "modems", ["id"], name: "index_modems_on_id", using: :btree
+
+  create_table "move_types", force: true do |t|
+    t.string   "typeId"
+    t.string   "short_desc"
+    t.text     "long_desc"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "movements", force: true do |t|
+    t.string   "partnr"
+    t.datetime "fifo"
+    t.integer  "qty"
+    t.integer  "from"
+    t.string   "from_position"
+    t.string   "to_position"
+    t.string   "packageId"
+    t.string   "uniqueId"
+    t.integer  "type_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "n_locations", force: true do |t|
+    t.string   "locationId"
+    t.string   "name"
+    t.string   "remark"
+    t.integer  "status"
+    t.integer  "parent_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "n_storages", force: true do |t|
+    t.string   "storageId"
+    t.string   "part_nr"
+    t.datetime "fifo"
+    t.integer  "qty"
+    t.string   "position"
+    t.string   "packageId"
+    t.string   "uniqueId"
+    t.integer  "ware_house_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "order_items", force: true do |t|
     t.string   "uuid",                         null: false
@@ -613,6 +658,15 @@ ActiveRecord::Schema.define(version: 20150120071344) do
   add_index "users", ["location_id"], name: "index_users_on_location_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["uuid"], name: "index_users_on_uuid", using: :btree
+
+  create_table "ware_houses", force: true do |t|
+    t.string   "whId"
+    t.string   "name"
+    t.integer  "location_id"
+    t.string   "position_pattern"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "whouses", force: true do |t|
     t.string   "uuid",        limit: 36,                 null: false
