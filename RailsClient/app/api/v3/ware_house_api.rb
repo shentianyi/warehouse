@@ -64,11 +64,17 @@ module V3
           s.qty = s.qty + params[:qty]
           s.save!
         else
-          data = {partNr: params[:partNr], qty: params[:qty], fifo: fifo, ware_house: wh, position: params[:toPosition]}
+          data = {partNr: params[:partNr], qty: params[:qty], fifo: fifo, ware_house_id: wh.id, position: params[:toPosition]}
           data[:uniqueId] = params[:uniqueId] if params[:uniqueId].present?
           data[:packageId] = params[:packageId] if params[:packageId].present?
           s = NStorage.create!(data)
         end
+        type = MoveType.find_by!(typeId: 'ENTRY')
+        data = {fifo: fifo, partNr: params[:partNr], qty: params[:qty], to_id: wh.id, toPosition: params[:toPosition],
+                type_id: type.id}
+        data[:uniqueId] = params[:uniqueId] if params[:uniqueId].present?
+        data[:packageId] = params[:packageId] if params[:packageId].present?
+        Movement.create!(data)
         {result: 1, content: s}
       end
     end

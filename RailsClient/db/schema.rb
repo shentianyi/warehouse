@@ -254,13 +254,13 @@ ActiveRecord::Schema.define(version: 20150511083014) do
   end
 
   create_table "movements", force: true do |t|
-    t.string   "partnr"
+    t.string   "partNr"
     t.datetime "fifo"
     t.integer  "qty"
     t.integer  "from_id"
-    t.string   "from_position"
+    t.string   "fromPosition"
     t.integer  "to_id"
-    t.string   "to_position"
+    t.string   "toPosition"
     t.string   "packageId"
     t.string   "uniqueId"
     t.integer  "type_id"
