@@ -4,7 +4,7 @@ module V3
 
     format :json
     rescue_from :all do |e|
-      {result: 0, content: "Error: #{e.class.name} : [#{e.message}]"}
+      error!({result: 0, content: "Error: #{e.class.name} : [#{e.message}]"}, 500)
     end
 
     helpers do
@@ -44,14 +44,15 @@ module V3
       desc 'Enter Stock.'
       params do
         requires :partNr, type: String, desc: 'require partNr'
-        requires :qty, type: Integer, desc: 'require qty(quantity)'
-        requires :fifo, type: String, desc: 'require fifo'
-        requires :toWh, type: String, desc: 'require toWh(to warehouse, whId)'
-        requires :toPosition, type: String, desc: 'require toPosition'
-        optional :uniqueId, type: String, desc: 'require uniqueId'
-        optional :packageId, type: String, desc: 'require packageId'
+        # requires :qty, type: Integer, desc: 'require qty(quantity)'
+        # requires :fifo, type: String, desc: 'require fifo'
+        # requires :toWh, type: String, desc: 'require toWh(to warehouse, whId)'
+        # requires :toPosition, type: String, desc: 'require toPosition'
+        # optional :uniqueId, type: String, desc: 'require uniqueId'
+        # optional :packageId, type: String, desc: 'require packageId'
       end
-      post :enter_stock do
+      get :enter_stock do
+        return 'test'
         # validate fifo
         fifo = validate_fifo_time(params[:fifo])
         # validate whId existing
@@ -60,7 +61,7 @@ module V3
         raise 'uniqueId already exists!' if params[:uniqueId].present? and NStorage.find_by(params[:uniqueId])
         s = nil
         if params[:packageId] and  s = NStorage.find_by(packageId: params[:packageId], partNr: params[:partNr],
-                                                            fifo: fifo)
+                                                        fifo: fifo)
           s.qty = s.qty + params[:qty]
           s.save!
         else

@@ -2,7 +2,7 @@
 module V3
   class LocationApi < Grape::API
     rescue_from :all do |e|
-      {result: 0, content: "Error: #{e.class.name} : [#{e.message}]"}
+      error!({result: 0, content: "Error: #{e.class.name} : [#{e.message}]"}, 500)
     end
 
     helpers do
