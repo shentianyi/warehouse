@@ -257,8 +257,9 @@ ActiveRecord::Schema.define(version: 20150511083014) do
     t.string   "partnr"
     t.datetime "fifo"
     t.integer  "qty"
-    t.integer  "from"
+    t.integer  "from_id"
     t.string   "from_position"
+    t.integer  "to_id"
     t.string   "to_position"
     t.string   "packageId"
     t.string   "uniqueId"
@@ -267,15 +268,22 @@ ActiveRecord::Schema.define(version: 20150511083014) do
     t.datetime "updated_at"
   end
 
+  add_index "movements", ["packageId"], name: "package_id_unique", unique: true, using: :btree
+  add_index "movements", ["type_id"], name: "index_movements_on_type_id", using: :btree
+  add_index "movements", ["uniqueId"], name: "unique_id_unique", unique: true, using: :btree
+
   create_table "n_locations", force: true do |t|
     t.string   "locationId"
     t.string   "name"
-    t.string   "remark"
-    t.integer  "status"
+    t.string   "remark",     default: ""
+    t.integer  "status",     default: 0
     t.integer  "parent_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "n_locations", ["locationId"], name: "location_id_unique", unique: true, using: :btree
+  add_index "n_locations", ["parent_id"], name: "index_n_locations_on_parent_id", using: :btree
 
   create_table "n_storages", force: true do |t|
     t.string   "storageId"
@@ -289,6 +297,11 @@ ActiveRecord::Schema.define(version: 20150511083014) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "n_storages", ["packageId"], name: "package_id_unique", unique: true, using: :btree
+  add_index "n_storages", ["storageId"], name: "storage_id_unique", unique: true, using: :btree
+  add_index "n_storages", ["uniqueId"], name: "unique_id_unique", unique: true, using: :btree
+  add_index "n_storages", ["ware_house_id"], name: "index_n_storages_on_ware_house_id", using: :btree
 
   create_table "order_items", force: true do |t|
     t.string   "uuid",                         null: false
@@ -663,10 +676,13 @@ ActiveRecord::Schema.define(version: 20150511083014) do
     t.string   "whId"
     t.string   "name"
     t.integer  "location_id"
-    t.string   "position_pattern"
+    t.string   "positionPattern", default: ""
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "ware_houses", ["location_id"], name: "index_ware_houses_on_location_id", using: :btree
+  add_index "ware_houses", ["whId"], name: "wh_id_unique", unique: true, using: :btree
 
   create_table "whouses", force: true do |t|
     t.string   "uuid",        limit: 36,                 null: false
