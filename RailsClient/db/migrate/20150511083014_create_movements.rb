@@ -14,7 +14,7 @@ class CreateMovements < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index 'movements', ['packageId'], :name => "package_id_unique", :unique => true
+    add_index 'movements', ['packageId'], :name => "package_id_index"
     add_index 'movements', ['uniqueId'], :name => "unique_id_unique", :unique => true
   end
 end

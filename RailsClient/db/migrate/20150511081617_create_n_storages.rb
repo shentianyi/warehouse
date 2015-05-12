@@ -13,7 +13,7 @@ class CreateNStorages < ActiveRecord::Migration
       t.timestamps
     end
     add_index 'n_storages', ['storageId'], :name => "storage_id_unique", :unique => true
-    add_index 'n_storages', ['packageId'], :name => "package_id_unique", :unique => true
+    add_index 'n_storages', ['packageId'], :name => "package_id_index"
     add_index 'n_storages', ['uniqueId'], :name => "unique_id_unique", :unique => true
   end
 end

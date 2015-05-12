@@ -268,7 +268,7 @@ ActiveRecord::Schema.define(version: 20150511083014) do
     t.datetime "updated_at"
   end
 
-  add_index "movements", ["packageId"], name: "package_id_unique", unique: true, using: :btree
+  add_index "movements", ["packageId"], name: "package_id_index", using: :btree
   add_index "movements", ["type_id"], name: "index_movements_on_type_id", using: :btree
   add_index "movements", ["uniqueId"], name: "unique_id_unique", unique: true, using: :btree
 
@@ -298,7 +298,7 @@ ActiveRecord::Schema.define(version: 20150511083014) do
     t.datetime "updated_at"
   end
 
-  add_index "n_storages", ["packageId"], name: "package_id_unique", unique: true, using: :btree
+  add_index "n_storages", ["packageId"], name: "package_id_index", using: :btree
   add_index "n_storages", ["storageId"], name: "storage_id_unique", unique: true, using: :btree
   add_index "n_storages", ["uniqueId"], name: "unique_id_unique", unique: true, using: :btree
   add_index "n_storages", ["ware_house_id"], name: "index_n_storages_on_ware_house_id", using: :btree
