@@ -43,7 +43,7 @@ gem 'devise'
 gem 'cancan'
 
 # For API
-gem 'grape'
+gem 'grape', github: 'intridea/grape'
 gem 'rack-oauth2'
 
 # For test
