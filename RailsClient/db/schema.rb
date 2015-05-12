@@ -287,7 +287,7 @@ ActiveRecord::Schema.define(version: 20150511083014) do
 
   create_table "n_storages", force: true do |t|
     t.string   "storageId"
-    t.string   "part_nr"
+    t.string   "partNr"
     t.datetime "fifo"
     t.integer  "qty"
     t.string   "position"

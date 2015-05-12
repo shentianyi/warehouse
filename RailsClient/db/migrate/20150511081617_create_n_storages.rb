@@ -2,7 +2,7 @@ class CreateNStorages < ActiveRecord::Migration
   def change
     create_table :n_storages do |t|
       t.string :storageId
-      t.string :part_nr
+      t.string :partNr
       t.datetime :fifo
       t.integer :qty
       t.string :position

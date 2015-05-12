@@ -44,15 +44,14 @@ module V3
       desc 'Enter Stock.'
       params do
         requires :partNr, type: String, desc: 'require partNr'
-        # requires :qty, type: Integer, desc: 'require qty(quantity)'
-        # requires :fifo, type: String, desc: 'require fifo'
-        # requires :toWh, type: String, desc: 'require toWh(to warehouse, whId)'
-        # requires :toPosition, type: String, desc: 'require toPosition'
-        # optional :uniqueId, type: String, desc: 'require uniqueId'
-        # optional :packageId, type: String, desc: 'require packageId'
+        requires :qty, type: Integer, desc: 'require qty(quantity)'
+        requires :fifo, type: String, desc: 'require fifo'
+        requires :toWh, type: String, desc: 'require toWh(to warehouse, whId)'
+        requires :toPosition, type: String, desc: 'require toPosition'
+        optional :uniqueId, type: String, desc: 'require uniqueId'
+        optional :packageId, type: String, desc: 'require packageId'
       end
-      get :enter_stock do
-        return 'test'
+      post :enter_stock do
         # validate fifo
         fifo = validate_fifo_time(params[:fifo])
         # validate whId existing
