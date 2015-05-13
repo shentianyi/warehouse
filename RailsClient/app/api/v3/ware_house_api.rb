@@ -196,25 +196,76 @@ module V3
     desc 'Query Stock.'
     params do
       # regex params
-      optional :partNr, type: String, desc: 'require partNr'
-      optional :whId, type: String, desc: 'require toWh(to warehouse, whId)'
-      optional :position, type: String, desc: 'require toPosition'
+      optional :partNr, type: String
+      optional :position, type: String
       optional :uniqueId, type: String
       optional :packageId, type: String
+      # relations
+      optional :whId, type: String
+      # XXX no type relation in NStorage
+      # optional :movementType, type: Array
       # other params
-      optional :fifo, type: String, desc: 'require fifo'
-      optional :movementType, type: Array, desc: 'require movement types'
+      optional :fifo, type: String
     end
     get :query_stock do
-      regex_params = [:partNr, :packageId, :whId, :position, :uniqueId].select{|i| params.include? i}
+      query = NStorage
+      # query relation params
+      if params[:whId].present?
+        query = query.joins(:ware_house).where(WareHouse.arel_table[:whId].eq(params[:whId]))
+      end
+      # XXX no type relation in NStorage
+      # if params[:movementType].present?
+      #   query = query.joins(:type).where(MoveType.arel_table[:typeId].in(params[:movementType]))
+      # end
+      # query regex params
+      regex_params = [:partNr, :packageId, :position, :uniqueId].select{|i| params.include? i}
       location = NLocation.arel_table
-      query = regex_params.reduce(NStorage) do |query, param|
+      query = regex_params.reduce(query) do |query, param|
         query.where(location[param].matches("%#{params[param]}%"))
       end
-      if params[:movementType].present?
-        types = MoveType.where(typeId: params[:movementType])
-        query = query.where(type_id: types.map{|t| t.id})
+      if params[:fifo].present?
+        start_time, end_time = get_fifo_time_range(params[:fifo])
+        query = query.where(fifo: start_time..end_time)
       end
+      {result:1, content: query}
+    end
+
+    desc 'Query Movement.'
+    params do
+      # regex params
+      optional :partNr, type: String
+      optional :uniqueId, type: String
+      optional :packageId, type: String
+      optional :fromPosition, type: String
+      optional :toPosition, type: String
+      # relation params
+      optional :movementType, type: Array
+      optional :fromWh, type: String
+      optional :toWh, type: String
+      # other params
+      optional :fifo, type: String
+    end
+    get :query_move do
+      query = Movement
+      # format query with relation params
+      if params[:fromWh].present?
+        from_arel = Arel::Table.new(:from)
+        query = query.joins('inner join ware_houses `from` ON `from`.`id` = from_id').where(from_arel[:whId].eq(params[:fromWh]))
+      end
+      if params[:toWh].present?
+        to_arel = Arel::Table.new(:to)
+        query = query.joins('inner join ware_houses `to` ON `to`.`id` = from_id').where(to_arel[:whId].eq(params[:toWh]))
+      end
+      if params[:movementType].present?
+        query = query.joins(:type).where(MoveType.arel_table[:typeId].in(params[:movementType]))
+      end
+      # format query with regex params
+      regex_params = [:partNr, :packageId, :uniqueId, :fromPosition, :toPosition].select{|i| params.include? i}
+      location = NLocation.arel_table
+      query = regex_params.reduce(query) do |query, param|
+        query.where(location[param].matches("%#{params[param]}%"))
+      end
+      # format query with other params
       if params[:fifo].present?
         start_time, end_time = get_fifo_time_range(params[:fifo])
         query = query.where(fifo: start_time..end_time)
