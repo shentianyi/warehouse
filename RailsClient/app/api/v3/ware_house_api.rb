@@ -22,7 +22,7 @@ module V3
 
       def validate_position(wh, position)
         regex = wh.positionPattern ? /"#{wh.positionPattern}/ : nil
-        raise 'position pattern is invalid' if regex and regex.match(position).nil? or not position.present?
+        raise 'position pattern is invalid' if not position.present? or regex and regex.match(position).nil?
       end
 
       def get_fifo_time_range(fifo)
