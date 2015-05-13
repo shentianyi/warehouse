@@ -5,7 +5,7 @@ module V3
 
     format :json
     rescue_from :all do |e|
-      error!({result: 0, content: "Error: #{e.class.name} : [#{e.message}]"}, 500)
+      Rack::Response.new([e.message], 500).finish
     end
 
     helpers do
@@ -15,7 +15,7 @@ module V3
         t
       end
 
-      def validate_position_pattern(wh, position)
+      def validate_position_pattern(position)
         # TODO
       end
 
@@ -37,7 +37,7 @@ module V3
 
     desc 'Create WareHouse.'
     params do
-      requires :id, type: Integer, desc: 'require whId'
+      requires :id, type: String, desc: 'require whId'
       requires :name, type: String, desc: 'require WareHouse name'
       requires :locationId, type: String, desc: 'require locationId'
       requires :positionPattern, type: String, desc: 'require positionPattern'
@@ -46,7 +46,8 @@ module V3
       # validate locationId
       if location = NLocation.find_by(locationId: params[:locationId])
         validate_position_pattern( params[:positionPattern] )
-        wh = WareHouse.create!(whId: params[:id], name: params[:name], positionPattern: params[:positionPattern])
+        wh = WareHouse.create!(whId: params[:id], name: params[:name], positionPattern: params[:positionPattern],
+                               location_id: location.id)
       else
         raise 'locationId does not exists'
       end

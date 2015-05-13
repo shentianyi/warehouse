@@ -2,8 +2,8 @@
 module V3
   class LocationApi < Grape::API
     namespace :location
+    format :json
     rescue_from :all do |e|
-      LocationContainerSyncAPI.error_unlock_sync_pool('location_containers')
       Rack::Response.new([e.message], 500).finish
     end
 
