@@ -16,11 +16,15 @@ module V3
       end
 
       def validate_position_pattern(wh, position)
-        TODO
+        # TODO
       end
 
       def validate_position(wh, position)
-        TODO
+        # TODO
+      end
+
+      def get_fifo_time_range(fifo)
+        # TODO
       end
     end
 
@@ -184,6 +188,35 @@ module V3
           restqty
         end
       end
+
+    end
+    desc 'Query Stock.'
+    params do
+      # regex params
+      optional :partNr, type: String, desc: 'require partNr'
+      optional :whId, type: String, desc: 'require toWh(to warehouse, whId)'
+      optional :position, type: String, desc: 'require toPosition'
+      optional :uniqueId, type: String
+      optional :packageId, type: String
+      # other params
+      optional :fifo, type: String, desc: 'require fifo'
+      optional :movementType, type: Array, desc: 'require movement types'
+    end
+    get :query_stock do
+      regex_params = [:partNr, :packageId, :whId, :position, :uniqueId].select{|i| params.include? i}
+      location = NLocation.arel_table
+      query = regex_params.reduce(NStorage) do |query, param|
+        query.where(location[param].matches("%#{params[param]}%"))
+      end
+      if params[:movementType].present?
+        types = MoveType.where(typeId: params[:movementType])
+        query = query.where(type_id: types.map{|t| t.id})
+      end
+      if params[:fifo].present?
+        start_time, end_time = get_fifo_time_range(params[:fifo])
+        query = query.where(fifo: start_time..end_time)
+      end
+      {result:1, content: query}
 
     end
   end
