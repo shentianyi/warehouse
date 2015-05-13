@@ -189,7 +189,9 @@ module V3
         end
       end
 
+      {result:1, content: 'move success'}
     end
+
     desc 'Query Stock.'
     params do
       # regex params
@@ -217,7 +219,6 @@ module V3
         query = query.where(fifo: start_time..end_time)
       end
       {result:1, content: query}
-
     end
   end
 end
