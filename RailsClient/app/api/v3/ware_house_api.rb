@@ -16,15 +16,17 @@ module V3
       end
 
       def validate_position_pattern(position)
-        # TODO
+        # convert position to Regex object, if no exception raised, it's valid
+        /"#{wh.positionPattern}/
       end
 
       def validate_position(wh, position)
-        # TODO
+        regex = wh.positionPattern ? /"#{wh.positionPattern}/ : nil
+        raise 'position pattern is invalid' if regex and regex.match(position).nil? or not position.present?
       end
 
       def get_fifo_time_range(fifo)
-        # TODO
+        [fifo[:start].to_time, fifo[:end].to_time]
       end
     end
 
