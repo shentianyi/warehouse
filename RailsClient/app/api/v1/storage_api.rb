@@ -1,6 +1,6 @@
 module V1
   class StorageAPI<Base
-    namespace :storages
+    namespace :storages do
 
     post :move_store do
       ActiveRecord::Base.transaction do
@@ -25,6 +25,7 @@ module V1
           return {result: 0, content: ForkliftMessage::NotExit}
         end
       end
+    end
     end
   end
 end
