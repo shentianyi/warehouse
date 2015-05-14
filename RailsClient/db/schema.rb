@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150120071344) do
+ActiveRecord::Schema.define(version: 20150514174106) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -227,10 +227,14 @@ ActiveRecord::Schema.define(version: 20150120071344) do
     t.string   "tel"
     t.boolean  "is_base",                   default: false
     t.string   "destination_id"
+    t.integer  "parent_id"
+    t.integer  "status",                    default: 0
+    t.string   "remark",                    default: ""
   end
 
   add_index "locations", ["destination_id"], name: "index_locations_on_destination_id", using: :btree
   add_index "locations", ["id"], name: "index_locations_on_id", using: :btree
+  add_index "locations", ["parent_id"], name: "index_locations_on_parent_id", using: :btree
   add_index "locations", ["uuid"], name: "index_locations_on_uuid", using: :btree
 
   create_table "modems", force: true do |t|
@@ -244,6 +248,64 @@ ActiveRecord::Schema.define(version: 20150120071344) do
   end
 
   add_index "modems", ["id"], name: "index_modems_on_id", using: :btree
+
+  create_table "move_types", force: true do |t|
+    t.string   "typeId"
+    t.string   "short_desc"
+    t.text     "long_desc"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "movements", force: true do |t|
+    t.string   "partNr"
+    t.datetime "fifo"
+    t.integer  "qty"
+    t.integer  "from_id"
+    t.string   "fromPosition"
+    t.integer  "to_id"
+    t.string   "toPosition"
+    t.string   "packageId"
+    t.string   "uniqueId"
+    t.integer  "type_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "movements", ["packageId"], name: "package_id_index", using: :btree
+  add_index "movements", ["type_id"], name: "index_movements_on_type_id", using: :btree
+  add_index "movements", ["uniqueId"], name: "unique_id_unique", unique: true, using: :btree
+
+  create_table "n_locations", force: true do |t|
+    t.string   "locationId"
+    t.string   "name"
+    t.string   "remark",     default: ""
+    t.integer  "status",     default: 0
+    t.integer  "parent_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "n_locations", ["locationId"], name: "location_id_unique", unique: true, using: :btree
+  add_index "n_locations", ["parent_id"], name: "index_n_locations_on_parent_id", using: :btree
+
+  create_table "n_storages", force: true do |t|
+    t.string   "storageId"
+    t.string   "partNr"
+    t.datetime "fifo"
+    t.integer  "qty"
+    t.string   "position"
+    t.string   "packageId"
+    t.string   "uniqueId"
+    t.integer  "ware_house_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "n_storages", ["packageId"], name: "package_id_index", using: :btree
+  add_index "n_storages", ["storageId"], name: "storage_id_unique", unique: true, using: :btree
+  add_index "n_storages", ["uniqueId"], name: "unique_id_unique", unique: true, using: :btree
+  add_index "n_storages", ["ware_house_id"], name: "index_n_storages_on_ware_house_id", using: :btree
 
   create_table "order_items", force: true do |t|
     t.string   "uuid",                         null: false
@@ -614,15 +676,28 @@ ActiveRecord::Schema.define(version: 20150120071344) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["uuid"], name: "index_users_on_uuid", using: :btree
 
-  create_table "whouses", force: true do |t|
-    t.string   "uuid",        limit: 36,                 null: false
+  create_table "ware_houses", force: true do |t|
+    t.string   "whId"
     t.string   "name"
-    t.string   "location_id"
-    t.boolean  "is_delete",              default: false
-    t.boolean  "is_dirty",               default: true
-    t.boolean  "is_new",                 default: true
+    t.integer  "location_id"
+    t.string   "positionPattern", default: ""
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  add_index "ware_houses", ["location_id"], name: "index_ware_houses_on_location_id", using: :btree
+  add_index "ware_houses", ["whId"], name: "wh_id_unique", unique: true, using: :btree
+
+  create_table "whouses", force: true do |t|
+    t.string   "uuid",             limit: 36,                 null: false
+    t.string   "name"
+    t.string   "location_id"
+    t.boolean  "is_delete",                   default: false
+    t.boolean  "is_dirty",                    default: true
+    t.boolean  "is_new",                      default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "position_pattern",            default: ""
   end
 
   add_index "whouses", ["id"], name: "index_whouses_on_id", using: :btree

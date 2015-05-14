@@ -1,28 +1,27 @@
 class WhouseService
-  helpers do
-    def validate_fifo_time(fifo)
-      t = fifo.to_time
-      raise 'fifo time is invalid' if t > Time.now
-      t
-    end
+  def validate_fifo_time(fifo)
+    t = fifo.to_time
+    raise 'fifo time is invalid' if t > Time.now
+    t
+  end
 
-    def validate_position_pattern(position)
-      # convert position to Regex object, if no exception raised, it's valid
-      /"#{wh.positionPattern}/
-    end
+  def validate_position_pattern(positionPattern)
+    # convert position to Regex object, if no exception raised, it's valid
+    /"#{positionPattern}/
+  end
 
-    def validate_position(wh, position)
-      regex = wh.positionPattern ? /"#{wh.positionPattern}/ : nil
-      raise 'position pattern is invalid' if not position.present? or regex and regex.match(position).nil?
-    end
+  def validate_position(wh, position)
+    regex = wh.positionPattern ? /"#{wh.positionPattern}/ : nil
+    raise 'position pattern is invalid' if not position.present? or regex and regex.match(position).nil?
+  end
 
-    def get_fifo_time_range(fifo)
-      [fifo[:start].to_time, fifo[:end].to_time]
-    end
+  def get_fifo_time_range(fifo)
+    [fifo[:start].to_time, fifo[:end].to_time]
   end
 
   def create_whouse(params)
-    if location = NLocation.find_by(locationId: params[:locationId])
+    puts '----------------'
+    if location = Location.find_by(id: params[:locationId])
       validate_position_pattern(params[:positionPattern])
       wh = Whouse.create!(id: params[:id], name: params[:name], position_pattern: params[:positionPattern],
                           location_id: location.id)
