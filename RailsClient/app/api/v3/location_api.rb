@@ -15,7 +15,7 @@ module V3
 
     get do
       # guard!
-      locations = NLocation.all
+      locations = Location.all
       {result: 1, content: locations}
     end
 
@@ -28,8 +28,9 @@ module V3
     end
     post do
       # validate locationId
-      parent = params[:parentId].present? ? NLocation.find_by!(parentId: params[:parentId]) : nil
-      location = NLocation.create!(locationId: params[:locationId], name: params[:name], remark: params[:remark],
+      # find the parent by id, not parent id -by charlot
+      parent = params[:parentId].present? ? Location.find_by!(id: params[:parentId]) : nil
+      location = Location.create!(id: params[:locationId], name: params[:name], remark: params[:remark],
                                    status: params[:status], parent: parent)
       {result: 1, content: location}
     end
