@@ -34,7 +34,7 @@ class WhouseService
     # validate fifo
     fifo = validate_fifo_time(params[:fifo])
     # validate whId existing
-    wh = Whouse.find_by!(whId: params[:toWh])
+    wh = Whouse.find_by!(id: params[:toWh])
     # validate uniqueId
     raise 'uniqueId already exists!' if params[:uniqueId].present? and NStorage.find_by(params[:uniqueId])
     s = nil
