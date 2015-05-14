@@ -40,5 +40,6 @@ end
     post :destroy_storage do
 
     end
+    end
   end
 end

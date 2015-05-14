@@ -112,4 +112,8 @@ ActiveRecord::Base.transaction do
                  location_id: l.id, password: '123456@',
                  password_confirmation: '123456@', role_id: 100, is_sys: true})
   end
+
+  # api v3
+  MoveType.create!([{typeId: 'MOVE', short_desc: 'move type'},
+                   {typeId: 'ENTRY', short_desc: 'entey'}])
 end
