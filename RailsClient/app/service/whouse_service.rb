@@ -61,7 +61,7 @@ class WhouseService
     # XXX does not work now
 
     type = MoveType.find_by!(typeId: 'MOVE')
-    toWh = Whouse.find_by!(whId: params[:toWh])
+    toWh = Whouse.find_by!(id: params[:toWh])
     validate_position(toWh, params[:toPosition])
     data = {to_id: toWh.id, toPosition: params[:toPosition], type_id: type.id}
     if params[:uniqueId].present?
@@ -106,7 +106,7 @@ class WhouseService
     elsif [:partNr, :qty, :fromWh, :fromPosition].reduce(true) { |seed, i| seed and params.include? i }
       # Move(partNr, qty, fromWh,fromPosition,toWh,toPosition,type)
       # Move(partNr, qty, fifo,fromWh,fromPosition,toWh,toPosition,type)
-      fromWh = Whouse.find_by!(whId: params[:fromWh])
+      fromWh = Whouse.find_by!(id: params[:fromWh])
       validate_position(fromWh, params[:fromPosition])
       # find storage records
       storages = NStorage.where(partNr: params[:partNr], ware_house_id: fromWh.id, position: params[:fromPosition])

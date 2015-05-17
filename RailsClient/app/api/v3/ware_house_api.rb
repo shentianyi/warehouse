@@ -37,7 +37,8 @@ module V3
         optional :packageId, type: String
       end
       post :enter_stock do
-        WhouseService.new.enter_stock(params)
+        puts params.to_json
+        s=WhouseService.new.enter_stock(params)
         {result: 1, content: s}
       end
 
@@ -55,8 +56,19 @@ module V3
         optional :packageId, type: String
         optional :fifo, type: String
       end
+
       post :move do
         WhouseService.new.move(params)
+        {result: 1, content: 'move success'}
+      end
+
+      post :moves do
+        puts "===================#{params.to_json}"
+        NStorage.transaction do
+          params.each do |p|
+            WhouseService.new.move(p)
+          end
+        end
         {result: 1, content: 'move success'}
       end
 

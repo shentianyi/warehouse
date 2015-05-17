@@ -1,11 +1,11 @@
 class LocationsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_location, only: [:show, :edit, :update, :destroy, :users, :whouses,:destinations,:add_destination,:remove_destination,:set_default_destination]
+  before_action :set_location, only: [:show, :edit, :update, :destroy, :users, :whouses, :destinations, :add_destination, :remove_destination, :set_default_destination]
 
   # GET /locations
   # GET /locations.json
   def index
-    @locations = Location.paginate(:page=> params[:page])#all
+    @locations = Location.paginate(:page => params[:page]) #all
     #@locations = @locations.paginate(:page=>params[:page])
   end
 
@@ -50,9 +50,9 @@ class LocationsController < ApplicationController
     end
 
     if @location.location_destinations.count == 0
-      d = @location.location_destinations.build({destination_id:location_params[:destination_id],is_default:true})
+      d = @location.location_destinations.build({destination_id: location_params[:destination_id], is_default: true})
     else
-      d = @location.location_destinations.build({destination_id:location_params[:destination_id]})
+      d = @location.location_destinations.build({destination_id: location_params[:destination_id]})
     end
 
     if d.save
@@ -63,7 +63,7 @@ class LocationsController < ApplicationController
   end
 
   def remove_destination
-    d = @location.location_destinations.where({destination_id:params[:destination_id]}).first
+    d = @location.location_destinations.where({destination_id: params[:destination_id]}).first
     d.destroy
     render :destinations
     #render :json => d.errors.full_messages.to_json
@@ -74,10 +74,11 @@ class LocationsController < ApplicationController
       redirect_to destinations_location_path(@location), notice: '目的地未找到'
     end
 
-    @location.location_destinations.where({is_default:true}).first.update({is_default:false})
+    @location.location_destinations.where({is_default: true}).first.update({is_default: false})
 
-    d = @location.location_destinations.where({destination_id:params[:destination_id]}).first
-    if d.update({is_default:true})
+    d = @location.location_destinations.where({destination_id: params[:destination_id]}).first
+    @location.update(destination_id:params[:destination_id])
+    if d.update({is_default: true})
       redirect_to destinations_location_path(@location), notice: '设置成功'
     else
       redirect_to destinations_location_path(@location), notice: '设置失败'
@@ -86,12 +87,12 @@ class LocationsController < ApplicationController
 
   # GET /locations/1/users
   def users
-    @users = @location.users.paginate(:page=> params[:page])
+    @users = @location.users.paginate(:page => params[:page])
   end
 
   # GET /locations/1/whouses
   def whouses
-    @whouses = @location.whouses.paginate(:page=> params[:page])
+    @whouses = @location.whouses.paginate(:page => params[:page])
   end
 
   # PATCH/PUT /locations/1
@@ -129,14 +130,14 @@ class LocationsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_location
-      @location = Location.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_location
+    @location = Location.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def location_params
-      #params[:location]
-      params.require(:location).permit(:name,:address,:tel,:id,:prefix,:suffix,:destination_id)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def location_params
+    #params[:location]
+    params.require(:location).permit(:name, :address, :tel, :id, :prefix, :suffix, :destination_id)
+  end
 end

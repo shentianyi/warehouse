@@ -116,4 +116,5 @@ ActiveRecord::Base.transaction do
   # api v3
   MoveType.create!([{typeId: 'MOVE', short_desc: 'move type'},
                    {typeId: 'ENTRY', short_desc: 'entey'}])
+
 end
