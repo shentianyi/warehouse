@@ -28,4 +28,5 @@ class LocationContainer < ActiveRecord::Base
     where(container_id: container_id).update_all(is_delete: true, is_dirty: true, ancestry: nil)
   end
 
+
 end

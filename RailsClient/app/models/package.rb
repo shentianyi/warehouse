@@ -90,4 +90,6 @@ class Package<Container
   alias_method :check_in_time, :custom_fifo_time
   alias_method :quantity_str=, :custom_quantity=
   alias_method :quantity_str, :custom_quantity
+
+
 end

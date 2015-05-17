@@ -39,10 +39,10 @@ module Import
                 #raise(ArgumentError, "行:#{line_no} 已经存在")
               end
             else
-              self.create(data)
+           puts    self.create(data)
             end
           else
-            self.create(data)
+            puts  self.create(data)
           end
           msg.result=true
           msg.content='数据导入成功'

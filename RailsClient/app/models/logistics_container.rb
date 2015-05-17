@@ -4,7 +4,8 @@ class LogisticsContainer<LocationContainer
   include CZ::Recordable
   include CZ::Service
 
-  alias_method :movable_state_display,:state_display
+  alias_method :movable_state_display, :state_display
+  after_update :enter_store
 
 
   default_scope { where(type: LocationContainerType::LOGISTICS) }
@@ -47,7 +48,6 @@ class LogisticsContainer<LocationContainer
         self.get_delivery_presenter
     end
   end
-
 
 
   def add_by_ids(ids)
@@ -116,11 +116,31 @@ class LogisticsContainer<LocationContainer
   def out_store
     begin
       if self.state==MovableState::WAY && self.container.is_package?
-        StoreContainer.out_store_by_container(container,self.source_location_id)
+        StoreContainer.out_store_by_container(container, self.source_location_id)
       end
-    # rescue Exception=>e
-    #   puts e.message
-    #   false
+      # rescue Exception=>e
+      #   puts e.message
+      #   false
+    end
+  end
+
+  def enter_store
+    if self.state_changed? && self.state==MovableState::CHECKED
+      if self.container.type==ContainerType::PACKAGE
+        puts '---------------------------'
+        # raise
+        if (package=self.package) && self.destinationable && self.destinationable_type == Whouse.to_s
+          if position=PartService.get_position_by_whouse_id(package.part_id, self.destinationable_id)
+            params={partNr: package.part_id,
+                    qty: package.quantity,
+                    fifo: package.fifo_time,
+                    packageId:package.id,
+                    toWh: self.destinationable_id,
+                    toPosition: position.id}
+            WhouseService.new.enter_stock(params)
+          end
+        end
+      end
     end
   end
 end
