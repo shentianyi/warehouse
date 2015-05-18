@@ -9,15 +9,15 @@ module Sync
       ## base data
       current=Time.now
       begin
-        Sync::Execute::LocationSync.sync
-        Sync::Execute::LocationDestinationSync.sync
-        Sync::Execute::HackerSync.sync
-        Sync::Execute::WhouseSync.sync
-        Sync::Execute::PartTypeSync.sync
-        Sync::Execute::PartSync.sync
-        Sync::Execute::PositionSync.sync
-        Sync::Execute::PartPositionSync.sync
-        Sync::Execute::PickItemFilterSync.sync
+        # Sync::Execute::LocationSync.sync
+        # Sync::Execute::LocationDestinationSync.sync
+        # Sync::Execute::HackerSync.sync
+        # Sync::Execute::WhouseSync.sync
+        # Sync::Execute::PartTypeSync.sync
+        # Sync::Execute::PartSync.sync
+        # Sync::Execute::PositionSync.sync
+        # Sync::Execute::PartPositionSync.sync
+        # Sync::Execute::PickItemFilterSync.sync
       rescue => e
         puts "[#{Time.now.localtime}][ERROR]"
         puts e.class
