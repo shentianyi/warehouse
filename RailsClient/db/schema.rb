@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150514174106) do
+ActiveRecord::Schema.define(version: 20150518004113) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -261,9 +261,9 @@ ActiveRecord::Schema.define(version: 20150514174106) do
     t.string   "partNr"
     t.datetime "fifo"
     t.integer  "qty"
-    t.integer  "from_id"
+    t.string   "from_id"
     t.string   "fromPosition"
-    t.integer  "to_id"
+    t.string   "to_id"
     t.string   "toPosition"
     t.string   "packageId"
     t.string   "uniqueId"
@@ -297,7 +297,7 @@ ActiveRecord::Schema.define(version: 20150514174106) do
     t.string   "position"
     t.string   "packageId"
     t.string   "uniqueId"
-    t.integer  "ware_house_id"
+    t.string   "ware_house_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
