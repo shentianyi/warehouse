@@ -80,6 +80,7 @@ class WhouseService
     elsif params[:packageId].present?
       # Move(packageId,partnr, quantity,toWh, toPosition,type)
       # find from wh
+
       storage = nil
       if params[:partNr].blank?
         storage = NStorage.find_by!(packageId: params[:packageId])
