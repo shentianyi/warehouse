@@ -31,6 +31,7 @@ class Package<Container
   end
 
   def parsed_fifo
+    puts "-----------------------------------------#{self.fifo_time_display}"
     if self.fifo_time_display
       begin
         return Date.strptime(self.fifo_time_display.sub(/W  /, ''), '%d.%m.%y')
