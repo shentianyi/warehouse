@@ -80,8 +80,16 @@ class WhouseService
     elsif params[:packageId].present?
       # Move(packageId,partnr, quantity,toWh, toPosition,type)
       # find from wh
-      storage = NStorage.find_by!(packageId: params[:packageId])
-      params[:partNr]=storage.partNr
+      storage = nil
+      if params[:partNr].blank?
+        storage = NStorage.find_by!(packageId: params[:packageId])
+        params[:partNr]=storage.partNr
+      else
+        storage = NStorage.find_by!(packageId: params[:packageId], partNr: params[:partNr])
+      end
+
+      raise 'No Storage found' unless storage.blank?
+
       #storage = NStorage.find_by!(packageId: params[:packageId], partNr: params[:partNr])
       # validate package qty
       raise 'No enough qty in package' if params[:qty] > storage.qty
