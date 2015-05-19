@@ -63,7 +63,7 @@ class WhouseService
 
     type = MoveType.find_by!(typeId: 'MOVE')
     toWh = Whouse.find_by!(id: params[:toWh])
-    validate_position(toWh, params[:toPosition])
+    # validate_position(toWh, params[:toPosition])
     data = {to_id: toWh.id, toPosition: params[:toPosition], type_id: type.id}
     if params[:uniqueId].present?
       #Move(uniqueId,toWh,toPosition,type)
@@ -80,7 +80,9 @@ class WhouseService
     elsif params[:packageId].present?
       # Move(packageId,partnr, quantity,toWh, toPosition,type)
       # find from wh
-      storage = NStorage.find_by!(packageId: params[:packageId], partNr: params[:partNr])
+      storage = NStorage.find_by!(packageId: params[:packageId])
+      params[:partNr]=storage.partNr
+      #storage = NStorage.find_by!(packageId: params[:packageId], partNr: params[:partNr])
       # validate package qty
       raise 'No enough qty in package' if params[:qty] > storage.qty
       # update parameters of movement creation
@@ -90,6 +92,7 @@ class WhouseService
       Movement.create!(data)
       # adjust storage
       ## adjust to storage
+
       tostorage = NStorage.find_by(ware_house_id: toWh.id, partNr: params[:partNr], position: params[:toPosition])
       if tostorage.present?
         tostorage.update!(qty: tostorage.qty + params[:qty])
@@ -108,7 +111,7 @@ class WhouseService
       # Move(partNr, qty, fromWh,fromPosition,toWh,toPosition,type)
       # Move(partNr, qty, fifo,fromWh,fromPosition,toWh,toPosition,type)
       fromWh = Whouse.find_by!(id: params[:fromWh])
-      validate_position(fromWh, params[:fromPosition])
+      #validate_position(fromWh, params[:fromPosition])
       # find storage records
       storages = NStorage.where(partNr: params[:partNr], ware_house_id: fromWh.id, position: params[:fromPosition])
       # add fifo condition if fifo param exists
