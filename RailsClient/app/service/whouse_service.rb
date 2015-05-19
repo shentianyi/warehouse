@@ -33,16 +33,22 @@ class WhouseService
 
   def enter_stock(params)
     # validate fifo
+
     fifo = validate_fifo_time(params[:fifo])
     # validate whId existing
-    wh = Whouse.find_by!(id: params[:toWh])
+    wh = Whouse.find_by(id: params[:toWh])
+    raise '仓库未找到' unless wh
     # validate uniqueId
     raise 'uniqueId already exists!' if params[:uniqueId].present? and NStorage.find_by(params[:uniqueId])
     s = nil
     if params[:packageId] and s = NStorage.find_by(packageId: params[:packageId], partNr: params[:partNr],
                                                    fifo: fifo)
-      # s.qty = s.qty + params[:qty]
-      # s.save!
+      unless params[:uniq].present?
+        s.qty = s.qty + params[:qty]
+        s.save!
+      else
+        raise 'Already Enter Stock'
+      end
     else
       data = {partNr: params[:partNr], qty: params[:qty], fifo: fifo, ware_house_id: wh.id, position: params[:toPosition]}
       data[:uniqueId] = params[:uniqueId] if params[:uniqueId].present?
@@ -60,15 +66,16 @@ class WhouseService
 
   def move(params)
     # XXX does not work now
-
     type = MoveType.find_by!(typeId: 'MOVE')
-    toWh = Whouse.find_by!(id: params[:toWh])
+    toWh = Whouse.find_by(id: params[:toWh])
+    raise '仓库未找到' unless toWh
     # validate_position(toWh, params[:toPosition])
     data = {to_id: toWh.id, toPosition: params[:toPosition], type_id: type.id}
     if params[:uniqueId].present?
       #Move(uniqueId,toWh,toPosition,type)
       # find from wh
-      storage = NStorage.find_by!(uniqueId: params[:uniqueId])
+      storage = NStorage.find_by(uniqueId: params[:uniqueId])
+      raise '包装未入库！' unless storage.blank?
       # update parameters of movement creation
       data.update({from_id: storage.ware_house_id, fromPosition: storage.position,
                    uniqueId: params[:uniqueId], qty: storage.qty, fifo: storage.fifo, partRr: storage.partNr})
@@ -80,20 +87,20 @@ class WhouseService
     elsif params[:packageId].present?
       # Move(packageId,partnr, quantity,toWh, toPosition,type)
       # find from wh
-
       storage = nil
       if params[:partNr].blank?
-        storage = NStorage.find_by!(packageId: params[:packageId])
-        params[:partNr]=storage.partNr
+        storage = NStorage.find_by(packageId: params[:packageId])
+        params[:partNr]=storage.partNr if storage
       else
-        storage = NStorage.find_by!(packageId: params[:packageId], partNr: params[:partNr])
+        storage = NStorage.find_by(packageId: params[:packageId], partNr: params[:partNr])
       end
 
-      raise 'No Storage found' unless storage.blank?
+      puts "############{storage.to_json}"
+      raise '包装未入库！' if storage.nil?
 
       #storage = NStorage.find_by!(packageId: params[:packageId], partNr: params[:partNr])
       # validate package qty
-      raise 'No enough qty in package' if params[:qty] > storage.qty
+      raise '移库量大于剩余量' if params[:qty] > storage.qty
       # update parameters of movement creation
       data.update({from_id: storage.ware_house_id, fromPosition: storage.position,
                    packageId: params[:packageId], qty: params[:qty], fifo: storage.fifo, partNr: storage.partNr})
@@ -119,7 +126,8 @@ class WhouseService
     elsif [:partNr, :qty, :fromWh, :fromPosition].reduce(true) { |seed, i| seed and params.include? i }
       # Move(partNr, qty, fromWh,fromPosition,toWh,toPosition,type)
       # Move(partNr, qty, fifo,fromWh,fromPosition,toWh,toPosition,type)
-      fromWh = Whouse.find_by!(id: params[:fromWh])
+      fromWh = Whouse.find_by(id: params[:fromWh])
+      raise '目标仓库未找到' unless fromWh
       #validate_position(fromWh, params[:fromPosition])
       # find storage records
       storages = NStorage.where(partNr: params[:partNr], ware_house_id: fromWh.id, position: params[:fromPosition])

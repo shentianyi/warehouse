@@ -58,7 +58,12 @@ module V3
       end
 
       post :move do
-        WhouseService.new.move(params)
+        puts "#{params.to_json}-----------"
+        begin
+          WhouseService.new.move(params)
+        rescue => e
+         return {result: 0, content: e.message}
+        end
         {result: 1, content: 'move success'}
       end
 
