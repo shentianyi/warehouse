@@ -1,5 +1,6 @@
 class WhouseService
   def validate_fifo_time(fifo)
+    puts "---------------88888888888#{fifo}"
     t = fifo.to_time
     raise 'fifo time is invalid' if t > Time.now
     t

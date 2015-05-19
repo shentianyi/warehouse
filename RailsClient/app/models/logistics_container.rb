@@ -133,7 +133,7 @@ class LogisticsContainer<LocationContainer
           if position=PartService.get_position_by_whouse_id(package.part_id, self.destinationable_id)
             params={partNr: package.part_id,
                     qty: package.quantity,
-                    fifo: package.fifo_time,
+                    fifo: package.parsed_fifo,
                     packageId:package.id,
                     toWh: self.destinationable_id,
                     toPosition: position.id}
