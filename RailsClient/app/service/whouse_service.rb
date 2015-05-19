@@ -41,8 +41,8 @@ class WhouseService
     s = nil
     if params[:packageId] and s = NStorage.find_by(packageId: params[:packageId], partNr: params[:partNr],
                                                    fifo: fifo)
-      s.qty = s.qty + params[:qty]
-      s.save!
+      # s.qty = s.qty + params[:qty]
+      # s.save!
     else
       data = {partNr: params[:partNr], qty: params[:qty], fifo: fifo, ware_house_id: wh.id, position: params[:toPosition]}
       data[:uniqueId] = params[:uniqueId] if params[:uniqueId].present?
