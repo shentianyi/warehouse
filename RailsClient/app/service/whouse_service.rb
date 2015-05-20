@@ -47,7 +47,9 @@ class WhouseService
         s.qty = s.qty + params[:qty]
         s.save!
       else
-        #raise 'Already Enter Stock'
+       # raise params[:packageId]
+
+        raise 'Already Enter Stock' unless params[:wms].present?
       end
     else
       data = {partNr: params[:partNr], qty: params[:qty], fifo: fifo, ware_house_id: wh.id, position: params[:toPosition]}
@@ -99,8 +101,8 @@ class WhouseService
       raise '包装未入库！' if storage.nil?
 
       if storage
-        pre=NStorage.where(partNr: storage.partNr).where('fifo<?', storage.fifo).first
-        raise '未先进先出,不能移库' if pre
+        pre=NStorage.where(partNr: storage.partNr,ware_house_id:storage.ware_house_id).where('fifo<?', storage.fifo).first
+        raise "FIFO!不能移库,此箱入库时间为:#{storage.fifo.localtime.strftime('%Y-%m-%d')}" if pre
       end
       #storage = NStorage.find_by!(packageId: params[:packageId], partNr: params[:partNr])
       # validate package qty
@@ -113,7 +115,6 @@ class WhouseService
       Movement.create!(data)
       # adjust storage
       ## adjust to storage
-
       tostorage = NStorage.find_by(ware_house_id: toWh.id, partNr: params[:partNr], position: params[:toPosition])
       if tostorage.present?
         tostorage.update!(qty: tostorage.qty + params[:qty])
