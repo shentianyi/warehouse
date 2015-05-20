@@ -33,7 +33,7 @@ class WhouseService
 
   def enter_stock(params)
     # validate fifo
-
+    puts '----------------------ss'
     fifo = validate_fifo_time(params[:fifo])
     # validate whId existing
     wh = Whouse.find_by(id: params[:toWh])
@@ -47,7 +47,7 @@ class WhouseService
         s.qty = s.qty + params[:qty]
         s.save!
       else
-        raise 'Already Enter Stock'
+        #raise 'Already Enter Stock'
       end
     else
       data = {partNr: params[:partNr], qty: params[:qty], fifo: fifo, ware_house_id: wh.id, position: params[:toPosition]}
@@ -98,9 +98,14 @@ class WhouseService
       puts "############{storage.to_json}"
       raise '包装未入库！' if storage.nil?
 
+      if storage
+        pre=NStorage.where(partNr: storage.partNr).where('fifo<?', storage.fifo).first
+        raise '未先进先出,不能移库' if pre
+      end
       #storage = NStorage.find_by!(packageId: params[:packageId], partNr: params[:partNr])
       # validate package qty
       raise '移库量大于剩余量' if params[:qty] > storage.qty
+
       # update parameters of movement creation
       data.update({from_id: storage.ware_house_id, fromPosition: storage.position,
                    packageId: params[:packageId], qty: params[:qty], fifo: storage.fifo, partNr: storage.partNr})

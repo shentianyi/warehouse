@@ -130,11 +130,39 @@ class LogisticsContainer<LocationContainer
         puts '---------------------------'
         # raise
         if (package=self.package) && self.destinationable && self.destinationable_type == Whouse.to_s
-          params={partNr: package.part_id,
-                  qty: package.quantity,
-                  fifo: package.parsed_fifo,
-                  packageId: package.id,
-                  toWh: self.destinationable_id}
+          params={
+              partNr: package.part_id,
+              qty: package.quantity,
+              fifo: package.parsed_fifo,
+              packageId: package.id,
+              toWh: self.destinationable_id,
+              uniq: true
+          }
+          if position=PartService.get_position_by_whouse_id(package.part_id, self.destinationable_id)
+            params[:toPosition]=position.id
+          else
+            params[:toPosition]='00 00 00'
+          end
+          WhouseService.new.enter_stock(params)
+        end
+      end
+    end
+  end
+
+  def enter_stock
+    if self.state==MovableState::CHECKED
+      if self.container.type==ContainerType::PACKAGE
+        puts '---------------------------'
+        # raise
+        if (package=self.package) && self.destinationable && self.destinationable_type == Whouse.to_s
+          params={
+              partNr: package.part_id,
+              qty: package.quantity,
+              fifo: package.parsed_fifo,
+              packageId: package.id,
+              toWh: self.destinationable_id,
+              uniq: true
+          }
           if position=PartService.get_position_by_whouse_id(package.part_id, self.destinationable_id)
             params[:toPosition]=position.id
           else

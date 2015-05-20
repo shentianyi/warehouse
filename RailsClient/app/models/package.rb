@@ -35,6 +35,8 @@ class Package<Container
     if self.fifo_time_display
       begin
         return Date.strptime(self.fifo_time_display.sub(/W  /, ''), '%d.%m.%y')
+        rescue => e
+        return Time.now
       end
     end
     return Time.now
