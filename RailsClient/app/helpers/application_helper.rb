@@ -30,7 +30,6 @@ module ApplicationHelper
 
   def search
     @condition=params[@model]
-    raise @condition.to_json
     query=model.unscoped
     @condition.each do |k, v|
       if (v.is_a?(Fixnum) || v.is_a?(String)) && !v.blank?

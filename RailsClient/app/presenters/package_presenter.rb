@@ -52,6 +52,8 @@ class PackagePresenter<Presenter
 
   def possible_departments
     pos = []
+
+    puts "------------------#{self.container.id}"
     self.container.part.whouses.each do |ps|
       pos << {id:ps.id,name:ps.name}
     end
