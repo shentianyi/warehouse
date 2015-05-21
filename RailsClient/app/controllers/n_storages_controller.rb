@@ -9,7 +9,7 @@ class NStoragesController < ApplicationController
   def search
     @n_storages=NStorage
     if params[:partNr].present?
-      @n_storages=@n_storages.where("partNr like '#{params[:partNr]}%'")
+      @n_storages=@n_storages.where("partNr like '%#{params[:partNr]}%'")
       @partNr=params[:partNr]
     end
     @n_storages=@n_storages.paginate(:page => params[:page])
