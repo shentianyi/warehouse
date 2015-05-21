@@ -8,6 +8,14 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :n_storages do
+    collection do
+      get :search
+      # get :panel
+      # get :search_storage
+    end
+  end
+
   resources :regex_categories do
     collection do
       get :regex_template

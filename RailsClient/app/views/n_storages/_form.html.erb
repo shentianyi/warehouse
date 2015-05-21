@@ -1,0 +1,30 @@
+<%= form_for(@storage) do |f| %>
+  <% if @storage.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@storage.errors.count, "error") %> prohibited this storage from being saved:</h2>
+
+      <ul>
+      <% @storage.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+    <div class="field">
+      <%= f.label :ware_house_id, '仓库' %>
+      <br>
+      <%= f.text_field :ware_house_id %>
+    </div>
+
+    <div class="field">
+      <%= f.label :position, '库位' %>
+      <br>
+      <%= f.text_field :position %>
+    </div>
+
+
+    <div class="actions">
+    <%= f.submit value: '提 交', class: 'btn btn-primary btn-lg' %>
+  </div>
+<% end %>

@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>零件号:</strong>
+  <%= @storage.partNr %>
+</p>
+
+<p>
+  <strong>包装号:</strong>
+  <%= @storage.packageId %>
+</p>
+
+<p>
+  <strong>库存量:</strong>
+  <%= @storage.qty %>
+</p>
+
+<p>
+  <strong>仓库:</strong>
+  <%= @storage.ware_house_id %>
+</p>
+
+
+<p>
+  <strong>库位:</strong>
+  <%= @storage.position %>
+</p>
+
+<%= link_to '编辑', edit_n_storage_path(@storage) %> |
+<%= link_to '返回', n_storages_path %>

@@ -1,0 +1,33 @@
+<div class="container-fluid">
+  <div class="digg_pagination">
+    <div class="page_info">
+      <%= page_entries_info @parts %>
+    </div>
+    <%= will_paginate @parts, :container => false %>
+  </div>
+  <table class="table">
+    <thead>
+    <tr>
+      <th>零件号</th>
+      <th>总数</th>
+      <th>库存详情</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @parts.each do |part| %>
+        <tr>
+          <td><%= part.id%></td>
+          <td><%= part.storages.inject(0) { |sum, store| sum+=store.quantity }%></td>
+          <td>
+            <% part.storages.select("location_id,SUM(quantity) as sum,storable_id ,storable_type").group("location_id,storable_id").order("location_id,storable_id").each do |store| %>
+                <%= "#{store.location_name} => #{store.storable_name}" %> <span class="badge"><%= store.sum%></span> |
+            <% end %>
+          </td>
+        </tr>
+    <% end %>
+    </tbody>
+  </table>
+  <div class="digg_pagination">
+    <%= will_paginate @parts, :container => false %>
+  </div>
+</div>
