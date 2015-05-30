@@ -64,10 +64,14 @@ class Package<Container
   def self.generate_report_data(type, start_t, end_t, location_id)
     condition = generate_report_condition(type, start_t, end_t, location_id)
     #零件号，总数，箱数，部门(部门如何获得？)
+    # a = LogisticsContainer.joins(:package)
+    #         .where(condition)
+    #         .select("containers.part_id as part_id,SUM(containers.quantity) as count, COUNT(containers.id) as box,location_containers.destinationable_id as whouse,location_containers.state as state,location_containers.created_at as ddate")
+    #         .group("state,whouse,part_id").order(state: :desc)
     a = LogisticsContainer.joins(:package)
             .where(condition)
-            .select("containers.part_id as part_id,SUM(containers.quantity) as count, COUNT(containers.id) as box,location_containers.destinationable_id as whouse,location_containers.state as state,location_containers.created_at as ddate")
-            .group("state,whouse,part_id").order(state: :desc)
+            .select("containers.part_id as part_id,SUM(containers.quantity) as count, COUNT(containers.id) as box,location_containers.destinationable_id as whouse,location_containers.created_at as ddate")
+            .group("whouse,part_id").order(state: :desc)
     a
   end
 
