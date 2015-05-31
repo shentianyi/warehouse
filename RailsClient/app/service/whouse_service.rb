@@ -49,7 +49,7 @@ class WhouseService
       else
        # raise params[:packageId]
 
-        raise 'Already Enter Stock' unless params[:wms].present?
+        #raise 'Already Enter Stock' unless params[:wms].present?
       end
     else
       data = {partNr: params[:partNr], qty: params[:qty], fifo: fifo, ware_house_id: wh.id, position: params[:toPosition]}
