@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @inventory_list.name %>
+</p>
+
+<p>
+  <strong>State:</strong>
+  <%= @inventory_list.state %>
+</p>
+
+<p>
+  <strong>Whouse:</strong>
+  <%= @inventory_list.whouse_id %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @inventory_list.user_id %>
+</p>
+
+<%= link_to 'Edit', edit_inventory_list_path(@inventory_list) %> |
+<%= link_to 'Back', inventory_lists_path %>

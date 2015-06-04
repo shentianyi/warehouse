@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150518004113) do
+ActiveRecord::Schema.define(version: 20150604164854) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -129,6 +129,24 @@ ActiveRecord::Schema.define(version: 20150518004113) do
   add_index "forklifts", ["user_id"], name: "index_forklifts_on_user_id", using: :btree
   add_index "forklifts", ["uuid"], name: "index_forklifts_on_uuid", using: :btree
   add_index "forklifts", ["whouse_id"], name: "index_forklifts_on_whouse_id", using: :btree
+
+  create_table "inventory_lists", force: true do |t|
+    t.string   "name"
+    t.integer  "state",      default: 100
+    t.string   "whouse_id"
+    t.string   "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "inverntory_lists", force: true do |t|
+    t.string   "name"
+    t.integer  "state"
+    t.string   "whouse_id"
+    t.string   "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "led_states", force: true do |t|
     t.integer  "state"

@@ -1,0 +1,31 @@
+<h1>Listing inventory_lists</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>State</th>
+      <th>Whouse</th>
+      <th>User</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @inventory_lists.each do |inventory_list| %>
+      <tr>
+        <td><%= inventory_list.name %></td>
+        <td><%= inventory_list.state %></td>
+        <td><%= inventory_list.whouse_id %></td>
+        <td><%= inventory_list.user_id %></td>
+        <td><%= link_to 'Show', inventory_list %></td>
+        <td><%= link_to 'Edit', edit_inventory_list_path(inventory_list) %></td>
+        <td><%= link_to 'Destroy', inventory_list, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Inventory list', new_inventory_list_path %>

@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :inventory_lists
+
   resources :storages do
     collection do
       get :search
