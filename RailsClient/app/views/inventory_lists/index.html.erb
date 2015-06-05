@@ -14,6 +14,7 @@
       <th>名称</th>
       <th>状态</th>
       <th>仓库</th>
+	  <th>清单</td>
       <th>创建人</th>
       <th colspan="3"></th>
     </tr>
@@ -25,6 +26,7 @@
         <td><%= inventory_list.name %></td>
         <td><%= InventoryListState.display inventory_list.state %></td>
         <td><%= inventory_list.whouse_id %></td>
+		<td><%= link_to '清单列表',inventory_list_items_inventory_list_path(inventory_list) %><span class="badge pull-right"><%= inventory_list.inventory_list_items.count%></td>
         <td><%= inventory_list.user_id %></td>
         <td><%= link_to 'Show', inventory_list %></td>
         <td><%= link_to 'Edit', edit_inventory_list_path(inventory_list) %></td>

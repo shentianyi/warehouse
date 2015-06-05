@@ -1,5 +1,5 @@
 class InventoryListsController < ApplicationController
-  before_action :set_inventory_list, only: [:show, :edit, :update, :destroy]
+  before_action :set_inventory_list, only: [:show, :edit, :update, :destroy, :inventory_list_items]
 
   respond_to :html
 
@@ -44,6 +44,10 @@ class InventoryListsController < ApplicationController
   def destroy
     @inventory_list.destroy
     respond_with(@inventory_list)
+  end
+  
+  def inventory_list_items
+    @inventory_list_items = @inventory_list.inventory_list_items.paginate(:page => params[:page])
   end
 
   private

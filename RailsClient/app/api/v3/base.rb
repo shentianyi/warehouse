@@ -5,5 +5,6 @@ module V3
     version 'v3', :using => :path
     mount V3::WareHouseApi
     mount V3::LocationApi
+    mount V3::InventoryListApi
   end
 end

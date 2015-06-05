@@ -1,13 +1,16 @@
 Rails.application.routes.draw do
 
+  resources :inventory_lists do
+    member do
+      get 'inventory_list_items'
+    end
+  end
   
   resources :inventory_list_items do
     collection do
       get :search
     end
   end
-
-  resources :inventory_lists
 
   resources :storages do
     collection do
