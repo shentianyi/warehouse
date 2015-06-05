@@ -4,7 +4,8 @@ class InventoryListsController < ApplicationController
   respond_to :html
 
   def index
-    @inventory_lists = InventoryList.all
+   
+    @inventory_lists = InventoryList.paginate(:page => params[:page])
     respond_with(@inventory_lists)
   end
 
@@ -22,8 +23,17 @@ class InventoryListsController < ApplicationController
 
   def create
     @inventory_list = InventoryList.new(inventory_list_params)
+    @inventory_list.user_id = current_user.id
     @inventory_list.save
-    respond_with(@inventory_list)
+    respond_to do |format|
+      if @inventory_list.save
+        format.html { redirect_to @inventory_list, notice: 'InventoryList was successfully created.' }
+        format.json { render :show, status: :created, location: @inventory_list }
+      else
+        format.html { render :new }
+        format.json { render json: @inventory_list.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   def update
