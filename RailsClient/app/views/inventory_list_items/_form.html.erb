@@ -1,0 +1,55 @@
+<%= form_for(@inventory_list_item) do |f| %>
+  <% if @inventory_list_item.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@inventory_list_item.errors.count, "error") %> prohibited this inventory_list from being saved:</h2>
+
+      <ul>
+      <% @inventory_list_item.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :package_id, "包装号" %><br>
+   <%= f.select(:package_id, Package.all.collect{|p| [p.id, p.id]}, { include_blank: false}) %>
+  </div>
+ <div class="field">
+   <%= f.label :unique_id, "唯一号" %><br>
+   <%= f.text_field :unique_id %>
+ </div>
+  <div class="field">
+    <%= f.label :part_id %><br>
+    <%= f.select(:part_id, Part.all.collect{|p| [p.id, p.id]}, { include_blank: false}) %>
+  </div>
+  <div class="field">
+    <%= f.label :qty %><br>
+    <%= f.text_field :qty %>
+  </div>
+  <div class="field">
+    <%= f.label :position %><br>
+    <%= f.select(:position, Position.all.collect{|p| [p.id, p.id]}, { include_blank: false}) %>
+  </div>
+  <div class="field">
+    <%= f.label :current_whouse %><br>
+    <%= f.select(:current_whouse, Whouse.all.collect{|w| [w.id, w.name]}, { include_blank: false}) %>
+  </div>
+  <div class="field">
+    <%= f.label :current_position %><br>
+    <%= f.select(:current_position, Position.all.collect{|p| [p.id, p.id]}, { include_blank: false}) %>
+  </div>
+  
+  <div class="field">
+    <%= f.label :in_store %><br>
+    <%= f.select(:in_store, [['否', false], [' 是', true]], { include_blank: false}) %>
+  </div>
+  <div class="field">
+    <%= f.label :inventory_list_id %><br>
+    <%= f.select(:inventory_list_id, InventoryList.all.collect{|i| [i.name, i.id]}, { include_blank: false}) %>
+  </div>
+	  
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

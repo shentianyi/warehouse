@@ -52,6 +52,6 @@ class InventoryListsController < ApplicationController
     end
 
     def inventory_list_params
-      params.require(:inventory_list).permit(:package_id, :unique_id, :part_id, :qty, :position, :current_whouse, :current_position, :user_id, :in_store, :inventory_list_id)
+      params.require(:inventory_list).permit(:name, :state, :whouse_id, :user_id)
     end
 end
