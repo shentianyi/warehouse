@@ -154,15 +154,6 @@ ActiveRecord::Schema.define(version: 20150605082618) do
     t.datetime "updated_at"
   end
 
-  create_table "inverntory_lists", force: true do |t|
-    t.string   "name"
-    t.integer  "state"
-    t.string   "whouse_id"
-    t.string   "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "led_states", force: true do |t|
     t.integer  "state"
     t.string   "rgb"
