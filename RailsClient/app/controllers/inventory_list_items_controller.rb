@@ -20,7 +20,7 @@ class InventoryListItemsController < ApplicationController
     @inventory_list_item.save
     respond_to do |format|
       if @inventory_list_item.save
-        format.html { redirect_to @inventory_list_item, notice: 'InventoryListItem was successfully created.' }
+        format.html { redirect_to inventory_list_items_path, notice: '创建成功.' }
         format.json { render :show, status: :created, location: @inventory_list_item }
       else
         format.html { render :new }
@@ -35,7 +35,7 @@ class InventoryListItemsController < ApplicationController
   def update
     respond_to do |format|
       if @inventory_list_item.update(inventory_list_item_params)
-        format.html { redirect_to inventory_list_items_path, notice: '修改成功' }
+        format.html { redirect_to inventory_list_items_path, notice: '修改成功.' }
       else
         format.html { render :edit }
       end

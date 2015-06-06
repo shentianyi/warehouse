@@ -272,6 +272,10 @@ class ReportsController < ApplicationController
   #   ["编号", "零件号", "总数", "箱数","部门","状态","时间"]
   # end
 
+  def inventory_lists_discrepancy
+    @results = {}
+  end
+
 
   def removal_header
     ["编号", "零件号", "总数", "箱数", "部门", "创建时间", "发货人", "是否被拒绝"]
