@@ -4,6 +4,10 @@ Rails.application.routes.draw do
     member do
       get 'inventory_list_items'
     end
+    
+    collection do
+      get :discrepancy
+    end
   end
   
   resources :inventory_list_items do
@@ -155,7 +159,7 @@ Rails.application.routes.draw do
   get 'reports/orders_report', to: 'reports#orders_report'
   get 'reports/reports', to: 'reports#reports'
   post 'reports/upload_file', to: 'reports#upload_file'
-  # get 'reports/inventory_lists', to: 'reports#inventory_lists'
+  
   get 'reports/inventory_lists_discrepancy', to:'reports#inventory_lists_discrepancy'
 
   get 'notifications', to: 'notifications#index'

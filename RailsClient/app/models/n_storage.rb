@@ -7,9 +7,10 @@ class NStorage < ActiveRecord::Base
   
   def self.generate_diff_report(inventory_list_id)
     condition = {}
-    condition['inventory_list_item.inventory_list_id']= inventory_list_id
+    condition['inventory_list_items.inventory_list_id']= inventory_list_id
     NStorage.joins("LEFT JOIN inventory_list_items ON inventory_list_items.part_id = n_storages.partNr")
             .where(condition)
-            .select("distinct(n_storages.partNr), n_storages.qty, inventory_list_items.qty")
+            .select("n_storages.partNr, sum(n_storages.qty) as qty, sum(inventory_list_items.qty) as qty2, sum(n_storages.qty)-sum(inventory_list_items.qty) as diff")
+            .group('n_storages.partNr')
   end
 end

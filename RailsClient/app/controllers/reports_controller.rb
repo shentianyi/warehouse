@@ -277,27 +277,27 @@ class ReportsController < ApplicationController
     puts '++++++++++++++++'
     puts '++++++++++++++++'
     puts '++++++++++++++++'
-    @inventory_list_id = params[:inventory_list_id].nil? ? 1 : params[:inventory_list_id]
-    @inventory_list_items = NStorage.generate_diff_report(@inventory_list_id)
-    @inventory_list_items = InventoryListItem.all
+    # @inventory_list_id = params[:inventory_list_id].nil? ? 1 : params[:inventory_list_id]
+    # @inventory_list_items = NStorage.generate_diff_report(@inventory_list_id)
+    # @inventory_list_items = InventoryListItem.all
     puts '++++++++++++++++'
     
-    respond_to do |format|
-      # format.csv do
-#         send_data(order_report_csv(@order_items,@removal_packages,@all_orders),
-#                   :type => "text/csv;charset=utf-8; header=present",
-#                   :filename => filename+".csv")
-#       end
-#
-#       format.xlsx do
-#         send_data(order_report_xlsx(@order_items,@removal_packages,@all_orders),
-#                   :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
-#                   :filename => filename+".xlsx"
-#         )
-#       end
-      format.html
+    # respond_to do |format|
+#       # format.csv do
+# #         send_data(order_report_csv(@order_items,@removal_packages,@all_orders),
+# #                   :type => "text/csv;charset=utf-8; header=present",
+# #                   :filename => filename+".csv")
+# #       end
+# #
+# #       format.xlsx do
+# #         send_data(order_report_xlsx(@order_items,@removal_packages,@all_orders),
+# #                   :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+# #                   :filename => filename+".xlsx"
+# #         )
+# #       end
+#       format.html
+#     end
     end
-  end
   
   
 
