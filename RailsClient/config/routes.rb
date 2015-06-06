@@ -160,7 +160,7 @@ Rails.application.routes.draw do
   get 'reports/reports', to: 'reports#reports'
   post 'reports/upload_file', to: 'reports#upload_file'
   
-  get 'reports/inventory_lists_discrepancy', to:'reports#inventory_lists_discrepancy'
+  
 
   get 'notifications', to: 'notifications#index'
   get 'notifications/orderbus', to: 'notifications#orderbus'
