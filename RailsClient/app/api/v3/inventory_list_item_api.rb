@@ -9,75 +9,78 @@ module V3
       desc 'get processing data'
       get :processing do
         p = InventoryListItem.all
-        # inventory_items = InventoryItem.find_by_state(200)
-        # { result: 1, content: inventory_lists }
         { result: 1, content: p }
       end
       
-      desc 'Add InventoryListItem.'
+      desc 'Create InventoryListItem.'
       params do
-        optional :packageId, type: String
-        optional :uniqueId, type: String
-        optional :partId, type: String
+        optional :package_id, type: String
+        optional :unique_id, type: String
+        optional :part_id, type: String
         optional :qty, type: Float, desc: 'require qty(quantity)'
         requires :position, type: String
-        requires :inventorylistId, type: Integer
+        requires :inventory_list_id, type: Integer
       end
-      post :add do
+      post do
         puts params.to_json
         query = NStorage
         # query relation params
-        if params[:packageId].present? && params[:position].present?
-          query = NStorage.find_by(packageid: params[:packageId])
-          #query = query.joins(:ware_house).where(Whouse.arel_table[:whId].eq(params[:whId]))
-          if query.blank?
-            ex="找不到packageid对应记录"
-            {result: 1, content: ex}
+        
+        @package_id = ""
+        @unique_id = ""
+        # 此处由于model中 InventListItem表设计要求part_id不能为空，故强行赋一个默认值？
+        @part_id = "411140015"
+        
+        # 根据参数组合情况获取nstorage start
+        if params[:package_id].present?
+          @package_id = params[:package_id]
+          query = NStorage.find_by(packageid: params[:package_id])
+        elsif params[:unique_id].present?
+          @unique_id = params[:unique_id]
+          query = NStorage.find_by(uniqueid: params[:unique_id])
+        elsif params[:part_id].present?
+          @part_id = params[:part_id]
+          query = NStorage.find_by(partNr: params[:part_id])
+        else
+          query = nil
+        end
+        # 根据参数组合情况获取nstorage end
+        
+        @qty = params[:qty].nil? ? 0 : params[:qty]
+        @position = params[:position].nil? ? "" : params[:position]
+        @inventory_list_id = params[:inventory_list_id].nil? ? 1 : params[:inventory_list_id]
+        @user_id = "admin"
+        
+        if query.blank?
+          # 未入库，直接生成
+          @current_whouse = nil
+          @current_position = nil
+          @in_store = false
+        else
+          # 已入库，参数组合生成
+          @current_whouse = query.ware_house_id
+          @current_position = query.position
+          @in_store = true
+        end
+        
+        # 赋值
+        inventory_list_item = InventoryListItem.new(:package_id => @package_id,:unique_id => @unique_id,
+        :part_id => @part_id,:qty => @qty,:position => @position,:current_whouse => @current_whouse,
+        :current_position => @current_position,:user_id => @user_id,:in_store => @in_store,
+        :inventory_list_id => @inventory_list_id)
+        
+        # 保存
+        if inventory_list_item.save
+          if inventory_list_item.in_store
+            {result: 1, content: inventory_list_item}
           else
-            #添加
-            puts query.position
-            s = InventoryListItem.new
-            s.package_id = params[:packageId]
-            s.unique_id = "1"
-            s.part_id = "1"
-            s.qty = "1"
-            s.position = params[:position]
-            #s.position = "1"
-            # s.position = Position.find_by(id: params[:position])
-            #s.position = query.position
-            #s.position = 3Floor
-            s.current_whouse = query.ware_house_id
-            #s.current_position = query.position
-            s.current_position = query.position
-            # s.current_position = "1"
-            s.user_id = "1"
-            s.in_store = true
-            s.inventory_list_id = params[:inventorylistId]
-            if s.save
-              ex="添加Item成功"
-              {result: 1, content: ex}
-            else
-              ex="添加Item失败"
-              {result: 0, content: ex}
-            end
+            {result: 1, content: "未入库"}
           end
         else
-          ex="未入库"
-          {result: 1, content: ex}
+          {result: 0, content: "添加Item失败"}
         end
-        # if params[:fromWh].present?
-#
-#         s = InventoryListItem.new(params)
-#         #s.user_id = current_user.id
-#         if s.save
-#           {result: 1, content: s}
-#         # s=WhouseService.new.enter_stock(params)
-#         else
-#           ex="未入库"
-#           {result: 1, content: ex}
-#         end
+        
       end
-      
     end
   end
 end

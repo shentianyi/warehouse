@@ -11,7 +11,7 @@ class Part < ActiveRecord::Base
   has_many :storages
 
   has_many :containers
-  has_many :inventory_list_items
+  #has_many :inventory_list_items
 
   def self.exists?(id)
     Part.find_by_id(id)

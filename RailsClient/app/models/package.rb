@@ -2,7 +2,7 @@ class Package<Container
 
   has_many :part_positions, through: :part
   has_many :positions, through: :part
-  has_many :inventory_list_items
+  #has_many :inventory_list_items
   
   default_scope { where(type: ContainerType::PACKAGE) }
 

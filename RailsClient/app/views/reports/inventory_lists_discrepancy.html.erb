@@ -6,15 +6,15 @@
     <br/>
     <div>
       <script type="text/javascript">
-          $(function () {
-              
-          });
+        function submitForm() {
+            document.forms[0].submit();
+        }
           
       </script>
      
     </div>
     <div>
-      <form method="get" action="<%= reports_inventory_list_discrepancy_path %>">
+      <form method="get" action="<%= reports_inventory_lists_discrepancy_path %>">
           <div>
             <span class="label label-info">盘点清单:</span>
 			<% inventory_lists_array = InventoryList.all.map { |inventory_list| [inventory_list.name, inventory_list.id]}%>
@@ -22,7 +22,7 @@
             
             <span class="label label-info">显示方式:</span>
             <%= select_tag :format, options_for_select([["Web", "html"],["Excel File(MS 07 or later)", "xlsx"]], "html") %>
-            <input type="hidden" id="file" name="file" value="<%= @jsonfile%>">
+           
             <input type="button" value="确定" class="btn btn-warning" name="commit" onclick="submitForm()"/>
           </div>
       </form>
@@ -43,6 +43,7 @@
     </tr>
     </thead>
     <tbody>
+    <% i = 0%>
     
     </tbody>
   </table>
