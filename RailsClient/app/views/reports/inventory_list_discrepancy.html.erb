@@ -14,7 +14,7 @@
      
     </div>
     <div>
-      <form method="get" action="<%= reports_discrepancy_path %>">
+      <form method="get" action="<%= reports_inventory_list_discrepancy_path %>">
           <div>
             <span class="label label-info">盘点清单:</span>
 			<% inventory_lists_array = InventoryList.all.map { |inventory_list| [inventory_list.name, inventory_list.id]}%>
