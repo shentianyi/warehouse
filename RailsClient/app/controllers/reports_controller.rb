@@ -185,7 +185,7 @@ class ReportsController < ApplicationController
     p = Axlsx::Package.new
     wb = p.workbook
     wb.add_worksheet(:name => "Basic Sheet") do |sheet|
-      sheet.add_row entry_header
+      sheet.add_row entry_header_detials
       packages.each_with_index { |p, index|
         sheet.add_row [
                           index+1,
@@ -193,8 +193,8 @@ class ReportsController < ApplicationController
                           p['count'],
                           p['box'],
                           p['whouse'],
-                          # MovableState.display(p['state']),
-                          DatetimeHelper.ddate(p['ddate'])
+                           MovableState.display(p['state'])
+                          #DatetimeHelper.ddate(p['ddate'])
                       ], :types => [:string]
       }
     end
@@ -267,6 +267,9 @@ class ReportsController < ApplicationController
     ["编号", "零件号", "总数", "箱数","部门","时间"]
   end
 
+  def entry_header_detials
+    ["编号", "零件号", "总数", "箱数","部门","状态"]
+  end
 
   # def entry_header
   #   ["编号", "零件号", "总数", "箱数","部门","状态","时间"]
