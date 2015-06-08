@@ -56,27 +56,27 @@ class InventoryListsController < ApplicationController
     puts '++++++++++++++++'
     puts '++++++++++++++++'
     @inventory_list_id = params[:inventory_list_id].nil? ? 1 : params[:inventory_list_id]
-    @inventory_list_items = NStorage.generate_diff_report(@inventory_list_id)
+    @results = NStorage.generate_diff_report(@inventory_list_id)
     
-    @title="#{InventoryList.find_by(:id => @inventory_list_id).name}差异报表"
-    # @inventory_list_items = InventoryListItem.all
-    # puts @inventory_list_items.first.part_id
-    respond_to do |format|
-      format.csv do
-        send_data(order_report_csv(@inventory_list_items),
-                  :type => "text/csv;charset=utf-8; header=present",
-                  :filename => @title+".csv")
-      end
-
-      format.xlsx do
-        send_data(order_report_xlsx(@inventory_list_items),
-                  :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
-                  :filename => @title+".xlsx"
-        )
-      end
-      
-      format.html
-    end
+    # @title="#{InventoryList.find_by(:id => @inventory_list_id).name}差异报表"
+#     # @inventory_list_items = InventoryListItem.all
+#     # puts @inventory_list_items.first.part_id
+#     respond_to do |format|
+#       format.csv do
+#         send_data(order_report_csv(@inventory_list_items),
+#                   :type => "text/csv;charset=utf-8; header=present",
+#                   :filename => @title+".csv")
+#       end
+#
+#       format.xlsx do
+#         send_data(order_report_xlsx(@inventory_list_items),
+#                   :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+#                   :filename => @title+".xlsx"
+#         )
+#       end
+#
+#       format.html
+#     end
   end  
     
   private

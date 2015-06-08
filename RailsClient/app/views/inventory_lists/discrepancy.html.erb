@@ -44,13 +44,13 @@
     </thead>
     <tbody>
     <% i = 0%>
-    <% @inventory_list_items.each_with_index do |o, index| %>
+    <% @results.each_with_index do |o, i| %>
         <tr>
-          <td><%= index + 1 %></td>
-          <td><%= o.partNr %></td>
-          <td><%= o.qty %></td>
-          <td><%= o.qty2 %></td>
-          <td><%= o.diff %></td>
+          <td><%= i+1 %></td>
+          <td><%= o[0] %></td>
+          <td><%= o[1] %></td>
+          <td><%= o[2] %></td>
+          <td><%= o[3] %></td>
         </tr>
     <% end %>
     </tbody>
