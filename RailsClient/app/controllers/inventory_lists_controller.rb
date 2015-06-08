@@ -51,32 +51,28 @@ class InventoryListsController < ApplicationController
   end
   
   def discrepancy
-    puts '++++++++++++++++'
-    puts '++++++++++++++++'
-    puts '++++++++++++++++'
-    puts '++++++++++++++++'
     @inventory_list_id = params[:inventory_list_id].nil? ? 1 : params[:inventory_list_id]
     @results = NStorage.generate_diff_report(@inventory_list_id)
     
-    # @title="#{InventoryList.find_by(:id => @inventory_list_id).name}差异报表"
-#     # @inventory_list_items = InventoryListItem.all
-#     # puts @inventory_list_items.first.part_id
-#     respond_to do |format|
-#       format.csv do
-#         send_data(order_report_csv(@inventory_list_items),
-#                   :type => "text/csv;charset=utf-8; header=present",
-#                   :filename => @title+".csv")
-#       end
-#
-#       format.xlsx do
-#         send_data(order_report_xlsx(@inventory_list_items),
-#                   :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
-#                   :filename => @title+".xlsx"
-#         )
-#       end
-#
-#       format.html
-#     end
+    @title="#{InventoryList.find_by(:id => @inventory_list_id).name}差异报表"
+    # @inventory_list_items = InventoryListItem.all
+    # puts @inventory_list_items.first.part_id
+    respond_to do |format|
+      format.csv do
+        send_data(order_report_csv(@results),
+                  :type => "text/csv;charset=utf-8; header=present",
+                  :filename => @title+".csv")
+      end
+
+      format.xlsx do
+        send_data(order_report_xlsx(@results),
+                  :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+                  :filename => @title+".xlsx"
+        )
+      end
+
+      format.html
+    end
   end  
     
   private
@@ -88,39 +84,36 @@ class InventoryListsController < ApplicationController
       params.require(:inventory_list).permit(:name, :state, :whouse_id, :user_id)
     end
     
-    def order_report_xlsx inventory_list_items
+    def order_report_xlsx results
       p = Axlsx::Package.new
       wb = p.workbook
       wb.add_worksheet(:name => "Basic Sheet") do |sheet|
-        # sheet.add_row ["No.", "零件号", "总数", "箱数", "部门", "要货人", "状态","已发货总数","已发货箱数","差异数（要货总数-已发运总数）"]
         sheet.add_row ["No.", "零件号", "库存数量", "盘点数量", "差异数（库存数-盘点数）"]
-        inventory_list_items.each_with_index { |o, index|
+        results.each_with_index { |o, index|
           sheet.add_row [
-                            index+1,
-                            o.partNr,
-                            o.qty,
-                            o.qty2,
-                            o.diff
-                           ], :types => [:string]
+                    index+1,
+                    o[0],
+                    o[1],
+                    o[2],
+                    o[3]
+                   ], :types => [:string]
           # removal_packages["#{o.part_id}#{o.whouse_id}"] = nil
         }
       end
       p.to_stream.read
     end
     
-    def order_report_csv inventory_list_items
+    def order_report_csv results
       CSV.generate do |csv|
-        # csv << ["No.", "零件号", "总数", "箱数", "部门", "要货人", "状态","已发货总数","已发货箱数","差异数（要货总数-已发运总数）"]
         csv << ["No.", "零件号", "库存数量", "盘点数量", "差异数（库存数-盘点数）"]
-
-        inventory_list_items.each_with_index { |o, index|
+        results.each.each_with_index { |o, index|
           csv <<[
               index+1,
-              o.partNr,
-              o.qty,
-              o.qty2,
-              diff
-          ]
+              o[0],
+              o[1],
+              o[2],
+              o[3]
+          ]   
           # removal_packages["#{o.part_id}#{o.whouse_id}"] = nil
         }
       end
