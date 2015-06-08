@@ -1,0 +1,12 @@
+
+
+************************
+
+
+# 示例数据调用 情况4中由于示例数据库中unique_id全为nil，故手工修改1条记录unique_id为123,未入库情况仅修改package_id,unique_id,part_id的值不为nstorage表中已存在的值即可，返回未入库。
+      
+      # 情况1 curl http://localhost:3000/api/v3/inventory_list_item -d "package_id=WI301501127746;position=411140015;inventory_list_id=1"
+      # 情况2 curl http://localhost:3000/api/v3/inventory_list_item -d "unique_id=123;position=411140015;inventory_list_id=1"
+      # 情况3 curl http://localhost:3000/api/v3/inventory_list_item -d "package_id=WI301501127746;position=411140015;inventory_list_id=1;qty=10"
+      # 情况4 curl http://localhost:3000/api/v3/inventory_list_item -d "unique_id=123;position=411140015;inventory_list_id=1;qty=11"
+      # 情况5 curl http://localhost:3000/api/v3/inventory_list_item -d "part_id=93NFL001A_GH43/GH42;position=411140015;inventory_list_id=1;qty=12"

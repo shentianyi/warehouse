@@ -1,0 +1,42 @@
+<h2>盘点清单列表</h2>
+
+<%= link_to "新建盘点", send("new_#{@model}_path"),:class=>'btn btn-default' %>
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @inventory_lists %>
+  </div>
+  <%= will_paginate @inventory_lists, :container => false %>
+</div>
+
+<table class="table table-bordered table-striped globle-table">
+  <thead>
+    <tr>
+      <th>名称</th>
+      <th>状态</th>
+      <th>仓库</th>
+	  <th>清单</td>
+      <th>创建人</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @inventory_lists.each do |inventory_list| %>
+      <tr>
+        <td><%= inventory_list.name %></td>
+        <td><%= InventoryListState.display inventory_list.state %></td>
+        <td><%= inventory_list.whouse_id %></td>
+		<td><%= link_to '清单列表',inventory_list_items_inventory_list_path(inventory_list) %><span class="badge pull-right"><%= inventory_list.inventory_list_items.count%></td>
+        <td><%= inventory_list.user_id %></td>
+        <td><%= link_to 'Show', inventory_list %></td>
+        <td><%= link_to 'Edit', edit_inventory_list_path(inventory_list) %></td>
+        <td><%= link_to 'Destroy', inventory_list, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<div class="digg_pagination">
+  <%= will_paginate @inventory_lists, :container => false %>
+</div>

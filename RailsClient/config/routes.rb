@@ -1,5 +1,21 @@
 Rails.application.routes.draw do
 
+  resources :inventory_lists do
+    member do
+      get 'inventory_list_items'
+    end
+    
+    collection do
+      get :discrepancy
+    end
+  end
+  
+  resources :inventory_list_items do
+    collection do
+      get :search
+    end
+  end
+
   resources :storages do
     collection do
       get :search
@@ -143,6 +159,8 @@ Rails.application.routes.draw do
   get 'reports/orders_report', to: 'reports#orders_report'
   get 'reports/reports', to: 'reports#reports'
   post 'reports/upload_file', to: 'reports#upload_file'
+  
+  
 
   get 'notifications', to: 'notifications#index'
   get 'notifications/orderbus', to: 'notifications#orderbus'

@@ -81,6 +81,21 @@ module V3
         {result: 1, content: 'move success'}
       end
 
+      desc 'Check Stock By package_id or uniq_id'
+      params do
+        optional :package_id, type: String
+        optional :unique_id, type: String
+      end
+      get :check_stock do
+        q=NStorage
+        if params[:package_id].present?
+          q=NStorage.find_by_packageId(params[:package_id])
+        elsif params[:unique_id].present?
+          q=NStorage.find_by_uniqueId(params[:unique_id])
+        end
+        {result: q.nil? ? 0 : 1, content: ''}
+      end
+
       desc 'Query Stock.'
       params do
         # regex params

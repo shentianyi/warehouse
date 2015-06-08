@@ -8,6 +8,9 @@ class User < ActiveRecord::Base
   has_many :deliveries
   has_many :pick_lists
   has_many :pick_item_filters
+  has_many :inventory_lists
+  #has_many :inventory_list_items
+  
   before_save :ensure_authentication_token!
 
   validates_uniqueness_of :id,:user_name
