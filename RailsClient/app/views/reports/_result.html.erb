@@ -7,7 +7,7 @@
     <th>箱数</th>
     <th>部门</th>
     <th>状态</th>
-    <th>时间</th>
+
   </tr>
   </thead>
   <tbody>
@@ -19,7 +19,7 @@
     <td><%= p['box']%></td>
     <td><%= p['whouse']%></td>
     <td><%= MovableState.display(p['state'])%></td>
-    <td><%= DatetimeHelper.ddate(p['ddate']) %></td>
+
   </tr>
   <%end%>
   </tbody>
