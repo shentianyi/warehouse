@@ -13,7 +13,7 @@
 
   <div class="field">
     <%= f.label :package_id, "包装号" %><br>
-   <%= f.select(:package_id, Package.all.collect{|p| [p.id, p.id]}, { include_blank: false}) %>
+    <%= f.text_field :package_id %>
   </div>
  <div class="field">
    <%= f.label :unique_id, "唯一号" %><br>
@@ -21,7 +21,7 @@
  </div>
   <div class="field">
     <%= f.label :part_id %><br>
-    <%= f.select(:part_id, Part.all.collect{|p| [p.id, p.id]}, { include_blank: false}) %>
+    <%= f.text_field :part_id %>
   </div>
   <div class="field">
     <%= f.label :qty %><br>
@@ -29,7 +29,7 @@
   </div>
   <div class="field">
     <%= f.label :position %><br>
-    <%= f.select(:position, Position.all.collect{|p| [p.id, p.id]}, { include_blank: false}) %>
+    <%= f.text_field :position %>
   </div>
   <div class="field">
     <%= f.label :current_whouse %><br>
@@ -37,16 +37,12 @@
   </div>
   <div class="field">
     <%= f.label :current_position %><br>
-    <%= f.select(:current_position, Position.all.collect{|p| [p.id, p.id]}, { include_blank: false}) %>
+    <%= f.text_field :current_position %>
   </div>
   
   <div class="field">
     <%= f.label :in_store %><br>
     <%= f.select(:in_store, [['否', false], [' 是', true]], { include_blank: false}) %>
-  </div>
-  <div class="field">
-    <%= f.label :inventory_list_id %><br>
-    <%= f.select(:inventory_list_id, InventoryList.all.collect{|i| [i.name, i.id]}, { include_blank: false}) %>
   </div>
 	  
   <div class="actions">

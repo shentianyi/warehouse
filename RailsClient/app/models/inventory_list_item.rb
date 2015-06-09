@@ -16,10 +16,11 @@ class InventoryListItem < ActiveRecord::Base
       query = NStorage.where("packageid = :packageid ",{:packageid => package_id})
     elsif !unique_id.blank?
       query = NStorage.where("uniqueid = :uniqueid ",{:uniqueid => unique_id})
-    elsif !part_id.blank? && !part_id.blank?
+    elsif !part_id.blank? && !position.blank?
       # query = NStorage.find_by(partNr: params[:part_id])
-      query = NStorage.where("partNr = :partNr and position = :position",
-        {:partNr => part_id, :position => position})
+      # query = NStorage.where("partNr = :partNr and position = :position",
+      #   {:partNr => part_id, :position => position})
+      query=nil
     else
       query = nil
     end
@@ -52,7 +53,6 @@ class InventoryListItem < ActiveRecord::Base
       if part_id.blank?
         part_id = query[0].partNr
       end
-      
     end
     
     # 赋值

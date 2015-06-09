@@ -17,7 +17,7 @@ class InventoryListItemsController < ApplicationController
   def create
     @inventory_list_item = InventoryListItem.new(inventory_list_item_params)
     @inventory_list_item.user_id = current_user.id
-    @inventory_list_item.save
+    # @inventory_list_item.save
     respond_to do |format|
       if @inventory_list_item.save
         format.html { redirect_to inventory_list_items_path, notice: '创建成功.' }
