@@ -17,7 +17,8 @@
 ~ <input id="date-end" type="text" name="date_end" class="datepicker" value="<%= @date_end %>"/>
   <span class="label label-info">显示方式:</span>
   <%= select_tag :format, options_for_select([["Web", "html"],["Excel File(MS 07 or later)", "xlsx"]], "html") %>
-  <input type="submit" value="生成" class="btn btn-warning" name="commit" onclick="submitForm()"/>
+  <input type="submit" value="汇总" class="btn btn-warning" name="commit" onclick="submitForm()"/>
+  <input type="submit" value="详细" class="btn btn-warning" name="commit" onclick="submitForm()"/>
 </form>
 </div>
 <!--Form-->

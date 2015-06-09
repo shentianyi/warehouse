@@ -62,13 +62,20 @@ class Package<Container
     return condition
   end
 
-  def self.generate_report_data(type, start_t, end_t, location_id)
+  def self.generate_report_data(type, start_t, end_t, location_id,commit_value)
     condition = generate_report_condition(type, start_t, end_t, location_id)
     #零件号，总数，箱数，部门(部门如何获得？)
-    a = LogisticsContainer.joins(:package)
-            .where(condition)
-            .select("containers.part_id as part_id,SUM(containers.quantity) as count, COUNT(containers.id) as box,location_containers.destinationable_id as whouse,location_containers.state as state")
-            .group("state,whouse,part_id").order('containers.part_id asc').order(state: :desc)
+    if commit_value=="详细"
+      a = LogisticsContainer.joins(:package)
+              .where(condition)
+              .select("containers.id as containers_id,containers.part_id as part_id,SUM(containers.quantity) as count,COUNT(containers.id) as box,containers.fifo_time as FIFO,location_containers.destinationable_id as whouse,location_containers.state as state,location_containers.*")
+              .group("state,containers_id").order('containers.id asc').order(state: :desc)
+    else
+      a = LogisticsContainer.joins(:package)
+              .where(condition)
+              .select("containers.part_id as part_id,SUM(containers.quantity) as count, COUNT(containers.id) as box,location_containers.destinationable_id as whouse,location_containers.state as state")
+              .group("state,whouse,part_id").order('containers.part_id asc').order(state: :desc)
+    end
     # a = LogisticsContainer.joins(:package)
     #         .where(condition)
     #         .select("containers.part_id as part_id,SUM(containers.quantity) as count, COUNT(containers.id) as box,location_containers.destinationable_id as whouse,location_containers.created_at as ddate")

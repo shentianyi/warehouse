@@ -6,13 +6,14 @@ class ReportsController < ApplicationController
     @date_end = params[:date_end].nil? ? Time.now.strftime("%Y-%m-%d 7:00") : params[:date_end]
     @location_id = params[:location_id].nil? ? current_user.location_id : params[:location_id]
     @title = ''
+    @commit_value = params[:commit]
 
-    @packages = Package.generate_report_data(@type,@date_start,@date_end,@location_id)
+    @packages = Package.generate_report_data(@type,@date_start,@date_end,@location_id,@commit_value)
     #render :json=> @packages
     @title = ReportsHelper.gen_title(@type,@date_start,@date_end,@location_id)
     respond_to do |format|
       format.xlsx do
-        send_data(entry_with_xlsx(@packages),
+        send_data(entry_with_xlsx(@packages, @commit_value),
             :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
             :filename => "#{@title}.xlsx")
       end
@@ -181,22 +182,48 @@ class ReportsController < ApplicationController
     p.to_stream.read
   end
 
-  def entry_with_xlsx packages
+  def entry_with_xlsx packages, commit_value
     p = Axlsx::Package.new
     wb = p.workbook
     wb.add_worksheet(:name => "Basic Sheet") do |sheet|
-      sheet.add_row entry_header_detials
-      packages.each_with_index { |p, index|
-        sheet.add_row [
-                          index+1,
-                          p['part_id'],
-                          p['count'],
-                          p['box'],
-                          p['whouse'],
-                           MovableState.display(p['state'])
-                          #DatetimeHelper.ddate(p['ddate'])
-                      ], :types => [:string]
-      }
+      if commit_value == "详细"
+        sheet.add_row entry_header_detials
+        packages.each_with_index { |p, index|
+          f= p.parent.nil? ? nil:p.parent
+          d=(f.nil? || f.parent.nil?) ? nil:f.parent
+          s=p.records.where(impl_action:'dispatch').last
+          r=p.records.where(impl_action:'receive').last
+          #["编号", "运单号","托盘号","唯一码", "零件号", "总数", "箱数","部门","状态","FIFO","发运时间","入库时间"]
+          sheet.add_row [
+                            index+1,
+                            d.nil? ? nil : d.container_id,
+                            f.nil? ? nil : f.container_id,
+                            p['containers_id'],
+                            p['part_id'],
+                            p['count'],
+                            p['box'],
+                            p['whouse'],
+                            MovableState.display(p['state']),
+                            p['FIFO'],
+                            s.nil? ? nil : s.impl_time.localtime,
+                            r.nil? ? nil : r.impl_time.localtime
+                            #DatetimeHelper.ddate(p['ddate'])
+                        ], :types => [:string]
+        }
+      else
+        sheet.add_row entry_header_total
+        packages.each_with_index { |p, index|
+          sheet.add_row [
+                            index+1,
+                            p['part_id'],
+                            p['count'],
+                            p['box'],
+                            p['whouse'],
+                            MovableState.display(p['state'])
+                        #DatetimeHelper.ddate(p['ddate'])
+                        ], :types => [:string]
+        }
+      end
     end
     p.to_stream.read
   end
@@ -268,6 +295,10 @@ class ReportsController < ApplicationController
   end
 
   def entry_header_detials
+    ["编号", "运单号","托盘号","唯一码", "零件号", "总数", "箱数","部门","状态","FIFO","发运时间","入库时间"]
+  end
+
+  def entry_header_total
     ["编号", "零件号", "总数", "箱数","部门","状态"]
   end
 
