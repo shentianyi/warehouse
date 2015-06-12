@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
 
+  resources :scrap_lists do
+    member do
+      get 'scrap_list_items'
+    end
+  end
+
   resources :inventory_lists do
     member do
       get 'inventory_list_items'

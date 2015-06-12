@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Src warehouse:</strong>
+  <%= @scrap_list.src_warehouse %>
+</p>
+
+<p>
+  <strong>Dse warehouse:</strong>
+  <%= @scrap_list.dse_warehouse %>
+</p>
+
+<p>
+  <strong>Builder:</strong>
+  <%= @scrap_list.builder %>
+</p>
+
+<%= link_to 'Edit', edit_scrap_list_path(@scrap_list) %> |
+<%= link_to 'Back', scrap_lists_path %>
