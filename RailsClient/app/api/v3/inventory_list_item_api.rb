@@ -33,7 +33,7 @@ module V3
         
         position = params[:position].nil? ? nil : params[:position]
         inventory_list_id = params[:inventory_list_id].nil? ? nil : params[:inventory_list_id]
-        user_id = "admin"
+        user_id = current_user.id
         
         # 保存
         inventory_list_item = InventoryListItem.new_item(package_id, unique_id, part_id, qty, position, inventory_list_id, user_id)
