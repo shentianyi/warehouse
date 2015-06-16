@@ -1,0 +1,49 @@
+<%= form_for(@scrap_list_item) do |f| %>
+  <% if @scrap_list_item.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@scrap_list_item.errors.count, "error") %> prohibited this scrap_list_item from being saved:</h2>
+
+      <ul>
+      <% @scrap_list_item.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :scrap_list_id, "报废单号"%><br>
+    <%= f.number_field :scrap_list_id %>
+  </div>
+  <div class="field">
+    <%= f.label :part_id, "零件号" %><br>
+    <%= f.number_field :part_id %>
+  </div>
+    <div class="field">
+      <%= f.label :product_id, "总成号" %><br>
+      <%= f.number_field :product_id %>
+    </div>
+    <div class="field">
+      <%= f.label :quantity, "数量" %><br>
+      <%= f.number_field :quantity %>
+    </div>
+    <div class="field">
+      <%= f.label :IU, "单位" %><br>
+      <%= f.text_field :IU %>
+    </div>
+    <div class="field">
+      <%= f.label :reason, "原因" %><br>
+      <%= f.text_field :reason %>
+    </div>
+    <div class="field">
+      <%= f.label :name, "登记人" %><br>
+      <%= f.text_field :name %>
+    </div>
+    <div class="field">
+      <%= f.label :time, "登记时间" %><br>
+      <%= f.datetime_field :time %>
+    </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

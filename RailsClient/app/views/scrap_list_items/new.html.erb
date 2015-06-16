@@ -1,0 +1,25 @@
+<h1>报废单</h1>
+
+<th>报废单号: </th><%= @scrap_list.id %>
+<th>源仓库: </th><%= @scrap_list.src_warehouse %>
+<th>目的仓库: </th><%= @scrap_list.dse_warehouse %>
+<th>创建者: </th><%= @scrap_list.builder %>
+
+<script type="text/javascript">
+    $(function () {
+        data_upload("#item-data-uploader", 'xlsx');
+    });
+</script>
+
+<p id="notice"><%= notice %></p>
+
+<h3>上传报废项文件</h3>
+<div>
+  选择数据文件：
+  <input id="item-data-uploader" type="file" name="files[]" data-url="/scrap_list_items/import"/>
+
+  <div class="abstractblock" id="item-data-uploader-preview" style="display:none;"></div>
+
+</div>
+
+<div><a href="/files/download?folder=template&file=scrap_list_items_template.xlsx">下载模板</a></div>

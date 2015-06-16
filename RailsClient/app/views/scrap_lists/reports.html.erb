@@ -1,0 +1,44 @@
+<div class="panel panel-warning">
+  <div class="panel-heading">
+    <h2>实际使用量报表</h2>
+    实际使用量的统计报表.
+  </div>
+</div>
+<div class="panel-body">
+  <br/>
+  <!--Form-->
+  <form method="get" path="<%= scrap_lists_reports_path%>">
+    <span class="label label-info">创建时间:</span>
+    <input id="date-start" type="text" name="date_start" class="datepicker" value="<%= @date_start %>"/>
+    ~ <input id="date-end" type="text" name="date_end" class="datepicker" value="<%= @date_end %>"/>
+    <span class="label label-info">显示方式:</span>
+    <%= select_tag :format, options_for_select([["Web", "html"],["Excel File(MS 07 or later)", "xlsx"]], "html") %>
+    <input type="submit" value="汇总" class="btn btn-warning" name="commit" onclick="submitForm()"/>
+  </form>
+</div>
+
+<!--Form-->
+<div class="alert alert-success" role="alert">
+  <p><%= @title%></p>
+</div>
+<div id="result">
+  <%= render "result" %>
+</div>
+
+<% content_for :javascript_includes do %>
+    <%= javascript_include_tag "bootstrap-select" %>
+    <%= javascript_include_tag "treport" %>
+<% end %>
+
+<script>
+    $(document).ready(function(){
+        $(".datepicker").datetimepicker({
+            lang: 'ch',
+            format: 'Y-m-d H:i'
+        });
+
+        $('.selectpicker').selectpicker();
+        $('.selectpicker').selectpicker('val', 'Mustard');
+        $('.selectpicker').selectpicker('render');
+    });
+</script>

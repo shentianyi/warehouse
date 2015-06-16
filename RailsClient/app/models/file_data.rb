@@ -59,4 +59,6 @@ class FileData<CZ::BaseClass
         return nil
     end
   end
+
+  alias :save :saveFile
 end

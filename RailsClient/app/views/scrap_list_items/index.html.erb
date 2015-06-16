@@ -1,0 +1,34 @@
+<h1>报废项</h1>
+
+<table class="table table-bordered table-striped globle-table">
+  <thead>
+    <tr>
+      <th>报废单号</th>
+      <th>零件号</th>
+      <th>总成号</th>
+      <th>数量</th>
+      <th>单位</th>
+      <th>原因</th>
+      <th>登记人</th>
+      <th>登记时间</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @scrap_list_items.each do |scrap_list_item| %>
+      <tr>
+        <td><%= scrap_list_item.scrap_list_id %></td>
+        <td><%= scrap_list_item.part_id %></td>
+        <td><%= scrap_list_item.product_id %></td>
+        <td><%= scrap_list_item.quantity %></td>
+        <td><%= scrap_list_item.IU %></td>
+        <td><%= scrap_list_item.reason %></td>
+        <td><%= scrap_list_item.name %></td>
+        <td><%= scrap_list_item.time %></td>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+

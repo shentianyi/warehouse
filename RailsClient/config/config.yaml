@@ -13,6 +13,7 @@ path:
  :import_part_positions_file_path: 'uploadfiles/part_positions'
  :import_fors_report_file_path: 'uploadfiles/fors_reports'
 
+
 api:
  auth:
   user: 'UPDATE'

@@ -1,8 +1,20 @@
 Rails.application.routes.draw do
 
+  resources :scrap_list_items do
+    collection do
+      match :import, to: :import,via: [:get,:post]
+    end
+  end
+
+  get 'scrap_lists/reports', to: 'scrap_lists#reports'
+
   resources :scrap_lists do
     member do
       get 'scrap_list_items'
+    end
+
+    collection do
+      match :import, to: :import,via: [:get,:post]
     end
   end
 

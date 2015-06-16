@@ -1,6 +1,6 @@
 require 'base_class'
 class Message<CZ::BaseClass
-  attr_accessor :result, :object, :content
+  attr_accessor :result, :object, :content ,:contents
 
   def default
     {result: false}

@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>报废单号:</strong>
+  <%= @scrap_list_item.scrap_list_id %>
+</p>
+
+<p>
+  <strong>零件号:</strong>
+  <%= @scrap_list_item.part_id %>
+</p>
+
+<p>
+  <strong>总成号:</strong>
+  <%= @scrap_list_item.product_id %>
+</p>
+
+<p>
+  <strong>数量:</strong>
+  <%= @scrap_list_item.quantity %>
+</p>
+
+<p>
+  <strong>单位:</strong>
+  <%= @scrap_list_item.IU %>
+</p>
+
+<p>
+  <strong>原因:</strong>
+  <%= @scrap_list_item.reason %>
+</p>
+
+<p>
+  <strong>登记人:</strong>
+  <%= @scrap_list_item.name %>
+</p>
+
+<p>
+  <strong>登记时间:</strong>
+  <%= @scrap_list_item.time %>
+</p>
+
+<%= link_to 'Edit', edit_scrap_list_item_path(@scrap_list_item) %> |
+<%= link_to 'Back', scrap_list_items_path %>
