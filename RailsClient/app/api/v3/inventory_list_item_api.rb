@@ -33,17 +33,19 @@ module V3
         
         position = params[:position].nil? ? nil : params[:position]
         inventory_list_id = params[:inventory_list_id].nil? ? nil : params[:inventory_list_id]
-        user_id = "admin"
+        user_id = current_user.id
         
         # 保存
-        inventory_list_item = InventoryListItem.new_item(package_id, unique_id, part_id, qty, position, inventory_list_id, user_id)
+        inventory_list_item = InventoryListItem.new_item(package_id, unique_id,
+                                                         part_id, qty, position,
+                                                         inventory_list_id, user_id)
         if inventory_list_item.blank?
-          {result: 0, content: "添加Item失败"}
+          {result: 0, content: '添加失败'}
         else
           if inventory_list_item.in_store
-            {result: 1, content: inventory_list_item}
+            {result: 1, content: '生成成功'}
           else
-            {result: 1, content: "未入库"}
+            {result: 2, content: '生成成功，未入库'}
           end
         end
       end
