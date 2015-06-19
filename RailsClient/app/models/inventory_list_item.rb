@@ -13,8 +13,8 @@ class InventoryListItem < ActiveRecord::Base
     
     # 根据参数组合情况获取nstorage start
     if !package_id.blank?
-      if InventoryListItem.where(package_id: package_id).first
-        return nil
+      if InventoryListItem.where(package_id: package_id ,inventory_list_id:inventory_list_id).first
+        raise '已盘点'
       end
       query = NStorage.where("packageid = :packageid ",{:packageid => package_id})
     elsif !unique_id.blank?
