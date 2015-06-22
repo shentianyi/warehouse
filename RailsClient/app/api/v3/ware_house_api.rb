@@ -50,17 +50,20 @@ module V3
         # requires :type, type: String, desc: 'require move type'
         optional :fromWh, type: String, desc: 'require toWh(to warehouse, whId)'
         optional :fromPosition, type: String, desc: 'require toPosition'
-        optional :qty, type: Integer, desc: 'require qty(quantity)'
+        optional :qty, type: String, desc: 'require qty(quantity)'
         optional :partNr, type: String
         optional :uniqueId, type: String
         optional :packageId, type: String
         optional :fifo, type: String
       end
-
       post :move do
         puts "#{params.to_json}-----------"
         begin
-          WhouseService.new.move(params)
+          params[:qty]=params[:qty].to_f
+
+          NStorage.transaction do
+            WhouseService.new.move(params)
+          end
         rescue => e
           if params[:uniq].blank?
             return {result: 0, content: e.message}
@@ -68,7 +71,7 @@ module V3
             raise e.message
           end
         end
-        {result: 1, content: 'move success'}
+        {result: 1, content: '移库成功'}
       end
 
       post :moves do
@@ -86,7 +89,8 @@ module V3
         optional :package_id, type: String
         optional :unique_id, type: String
       end
-      get :check_stock do
+      post :check_stock do
+        puts "----#{params}"
         q=NStorage
         if params[:package_id].present?
           q=NStorage.find_by_packageId(params[:package_id])

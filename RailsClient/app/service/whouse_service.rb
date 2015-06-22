@@ -154,6 +154,7 @@ class WhouseService
       end
 
     elsif [:partNr, :qty, :fromWh, :fromPosition, :toPosition].reduce(true) { |seed, i| seed and params.include? i }
+
       # Move(partNr, qty, fromWh,fromPosition,toWh,toPosition,type)
       # Move(partNr, qty, fifo,fromWh,fromPosition,toWh,toPosition,type)
       fromWh = Whouse.find_by(id: params[:fromWh])
@@ -182,13 +183,13 @@ class WhouseService
         # update parameters of movement creation
         move_data.update({from_id: storage.ware_house_id, fromPosition: storage.position,
                      fifo: storage.fifo, partNr: storage.partNr})
+
         if restqty.to_i >= storage.qty
 
           move_data[:qty] = storage.qty
           restqty = restqty.to_i - storage.qty
 
           # move all storage
-
           if tostorages.present?
             tostorages.first.update!(qty: tostorages.first.qty + storage.qty)
             storage.destroy!
