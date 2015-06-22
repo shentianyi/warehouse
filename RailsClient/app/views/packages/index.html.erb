@@ -88,7 +88,7 @@
             <td><%= index+@packages.offset+1 %></td>
             <td><%= package.container_id%></td>
             <td><%= package.package.part_id if package.package%></td>
-            <td><%= PackageLabelRegex.quantity_prefix_string + package.package.quantity_str if package.package%></td>
+            <td><%= package.package.quantity_str if package.package%></td>
             <td><%= package.package.fifo_time_display if package.package%></td>
             <td><%= package.remark %></td>
             <td><%= package.state_display%></td>
