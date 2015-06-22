@@ -100,10 +100,10 @@ class WhouseService
       puts "############{storage.to_json}"
       raise '包装未入库！' if storage.nil?
 
-      if storage
-        pre=NStorage.where(partNr: storage.partNr,ware_house_id:storage.ware_house_id).where('fifo<?', storage.fifo).first
-        raise "FIFO!不能移库,此箱入库时间为:#{storage.fifo.localtime.strftime('%Y-%m-%d')}" if pre
-      end
+      #if storage
+      #  pre=NStorage.where(partNr: storage.partNr,ware_house_id:storage.ware_house_id).where('fifo<?', storage.fifo).first
+      #  raise "FIFO!不能移库,此箱入库时间为:#{storage.fifo.localtime.strftime('%Y-%m-%d')}" if pre
+      #end
       #storage = NStorage.find_by!(packageId: params[:packageId], partNr: params[:partNr])
       # validate package qty
       raise '移库量大于剩余量' if params[:qty] > storage.qty
@@ -115,7 +115,7 @@ class WhouseService
       Movement.create!(data)
       # adjust storage
       ## adjust to storage
-      tostorage = NStorage.find_by(ware_house_id: toWh.id, partNr: params[:partNr], position: params[:toPosition])
+      tostorage = NStorage.find_by(ware_house_id: toWh.id, partNr: params[:partNr], position: params[:toPosition],packageId:nil)
       if tostorage.present?
         tostorage.update!(qty: tostorage.qty + params[:qty])
       else
@@ -145,7 +145,7 @@ class WhouseService
       # order by fifo
       storage.order(fifo: :asc)
       # validate sum of storage qty is enough
-      raise 'No enough qty in source' if sumqty = storages.reduce(0) { |seed, s| seed + s.qty } < params[:qty]
+      raise '库存不足' if sumqty = storages.reduce(0) { |seed, s| seed + s.qty } < params[:qty]
       storages.reduce(params[:qty]) do |restqty, storage|
         break if restqty <= 0
         # update parameters of movement creation
