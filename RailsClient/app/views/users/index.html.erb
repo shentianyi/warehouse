@@ -1,3 +1,4 @@
+<% if current_user.admin? || current_user.manager? %>
 <h2>员工列表</h2>
 
 <div>
@@ -27,6 +28,8 @@
   </div>
   <%= will_paginate @users, :container => false %>
 </div>
+<%end%>
+
 <table class="table table-bordered table-striped globle-table">
   <thead>
   <tr>
@@ -45,17 +48,21 @@
   <tbody>
   <% @users.each_with_index do |user,index| %>
       <tr>
-        <td><%= index+@users.offset+1 %>
-        <td><%= user.id %>
-        <td><%= user.user_name%></td>
-        <td><%= user.name %>
-        <td><%= OperationMode.display(user.operation_mode) %></td>
-        <!--<td><%= user.current_sign_in_ip %></td>-->
-        <td><%= user.location.name if user.location%></td>
-        <td><%= user.role %></td>
-        <td><%= link_to '详细', user ,:class=> 'btn btn-default'%></td>
-        <td><%= link_to '编辑', edit_user_path(user) ,:class=> 'btn btn-default'%></td>
-        <td><%= link_to '删除', user, method: :delete, data: {confirm: 'Are you sure?'} ,:class=> 'btn btn-default'%></td>
+        <% if current_user.admin? || current_user.manager? || (current_user.id == user.id) %>
+            <td><%= index+@users.offset+1 %>
+            <td><%= user.id %>
+            <td><%= user.user_name%></td>
+            <td><%= user.name %>
+            <td><%= OperationMode.display(user.operation_mode) %></td>
+            <!--<td><%= user.current_sign_in_ip %></td>-->
+            <td><%= user.location.name if user.location%></td>
+            <td><%= user.role %></td>
+            <td><%= link_to '详细', user ,:class=> 'btn btn-default'%></td>
+            <td><%= link_to '编辑', edit_user_path(user) ,:class=> 'btn btn-default'%></td>
+        <%end%>
+        <% if current_user.admin? || current_user.manager? %>
+            <td><%= link_to '删除', user, method: :delete, data: {confirm: 'Are you sure?'} ,:class=> 'btn btn-default'%></td>
+        <%end%>
       </tr>
   <% end %>
   </tbody>

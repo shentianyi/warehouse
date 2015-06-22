@@ -13,6 +13,8 @@
 <ul  id="main-menu" class="nav nav-pills">
   <Li id="welcome_li"><a href="/">首 页</a></li>
   <!--<li id="welcome_li"><a href="<%= panel_orders_path %>">需求面板</a></li>-->
+
+  <% unless current_user.buyer? %>
   <li class="dropdown">
     <a class="dropdown-toggle" data-toggle="dropdown" href="#">面板<span class="caret"></span></a>
     <ul class="dropdown-menu" role="manage">
@@ -20,8 +22,11 @@
       <li id='pick_panel_li'><a href="<%= pick_panel_orders_path %>">择货</a></li>
     </ul>
   </li>
+  <%end%>
+
   <li id="notification"><a href="<%= notifications_path%>">通知面板</a></li>
 
+  <% unless current_user.buyer? %>
   <li class="dropdown">
     <a class="dropdown-toggle" data-toggle="dropdown" href="#">择货流程<span class="caret"></span></a>
     <ul class="dropdown-menu" role="manage">
@@ -46,21 +51,30 @@
       <li id='package_li'><a href="<%= packages_path %>">包装箱</a></li>
     </ul>
   </li>
+  <%end%>
 
   <li class="dropdown">
     <a class="dropdown-toggle" data-toggle="dropdown" href="#">报表<span class="caret"></span></a>
     <ul class="dropdown-menu" role="reporter">
-      <% if current_user.sender? || current_user.receiver? %>
+      <% if current_user.sender? || current_user.receiver? || current_user.buyer? %>
           <li id="reports_reports"><a href="<%= reports_reports_path %>">收发货报表</a></li>
       <%end%>
-      <% if current_user.sender? || current_user.receiver? %>
+      <% if current_user.sender? || current_user.receiver? || current_user.buyer? %>
           <li id="reports_reports"><a href="<%= reports_discrepancy_path %>">收发货差异报表</a></li>
       <%end%>
-      <% if current_user.stocker?%>
+      <% if current_user.stocker? || current_user.buyer? %>
           <li id="reports_order_report"><a href="<%= reports_orders_report_path%>">要货报表</a></li>
       <% end %>
     <li id="reports_removal_report"></li>
     </ul>
   </li>
+
+  <li class="dropdown">
+    <a class="dropdown-toggle " data-toggle="dropdown" href="#">管理<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="manage">
+      <li id='user_li'><a href="<%= users_path %>">员 工</a></li>
+    </ul>
+  </li>
+
   <li><a href="<%= destroy_user_session_path%>">|注 销|</a></li>
 </ul>

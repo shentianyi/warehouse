@@ -13,8 +13,10 @@ class ScrapListItemsController < ApplicationController
   end
 
   def new
-    @scrap_list_item = ScrapListItem.new
-    respond_with(@scrap_list_item)
+    # @scrap_list_item = ScrapListItem.new
+    # respond_with(@scrap_list_item)
+    @scrap_list=ScrapList.find_by_id(params[:id])
+    session[:scrap_list_id]=params[:id]
   end
 
   def edit
@@ -43,7 +45,7 @@ class ScrapListItemsController < ApplicationController
         file=params[:files][0]
         fd = FileData.new(data: file, oriName: file.original_filename, path: $tmp_file_path, pathName: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
         fd.save
-        msg = FileHandler::Excel::ScrapListItemHandler.import(fd)
+        msg = FileHandler::Excel::ScrapListItemHandler.import(fd,session[:scrap_list_id])
       rescue => e
         msg.content = e.message
       end

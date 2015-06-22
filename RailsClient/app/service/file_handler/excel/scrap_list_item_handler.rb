@@ -5,7 +5,7 @@ module FileHandler
           '源仓库','目的仓库','创建者','零件号','总成号','数量','单位','原因','登记人','登记时间'
       ]
 
-      def self.import(file)
+      def self.import(file,scrap_list_id)
         msg = Message.new
         book = Roo::Excelx.new file.full_path
         book.default_sheet = book.sheets.first
@@ -21,8 +21,6 @@ module FileHandler
                 HEADERS.each_with_index do |k, i|
                   row[k] = book.cell(line, i+1).to_s.strip
                 end
-
-                scrap_list_id = ScrapList.where(builder:row['创建者']).last[:id]
 
                 ScrapListItem.create({scrap_list_id:scrap_list_id,part_id:row['零件号'],product_id:row['总成号'],quantity:row['数量'],IU:row['单位'],reason:row['原因'],name:row['登记人'],time:row['登记时间']})
               end

@@ -42,13 +42,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :n_storages do
-    collection do
-      get :search
-      # get :panel
-      # get :search_storage
-    end
-  end
+
 
   resources :regex_categories do
     collection do
@@ -158,6 +152,16 @@ Rails.application.routes.draw do
   get 'parts/download_positions', to: 'parts#download_positions'
   post 'parts/do_import_positions', to: 'parts#do_import_positions'
 
+  resources :n_storages do
+    collection do
+      get :search
+      match :import, to: :import,via: [:get,:post]
+      match :move, to: :move,via: [:get,:post]
+      # get :panel
+      # get :search_storage
+    end
+  end
+
   [:locations, :whouses, :parts, :positions, :part_positions, :users, :deliveries, :forklifts,
    :packages, :part_types, :pick_item_filters, :orders, :modems, :leds].each do |model|
     resources model do
@@ -170,6 +174,7 @@ Rails.application.routes.draw do
       end
     end
   end
+
 
   delete '/parts/delete_position/:id', to: 'parts#delete_position'
 

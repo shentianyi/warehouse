@@ -24,6 +24,7 @@ class ScrapListsController < ApplicationController
   def create
     @scrap_list = ScrapList.new(scrap_list_params)
     if @scrap_list.save
+      session[:scrap_list_id]=@scrap_list.id
       render 'scrap_list_items/new', location: @scrap_list_items
     else
     end

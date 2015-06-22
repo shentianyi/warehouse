@@ -62,9 +62,10 @@ class Package<Container
     return condition
   end
 
-  def self.generate_report_data(type, start_t, end_t, location_id,commit_value)
+  def self.generate_report_data(type, start_t, end_t, location_id, *args)
     condition = generate_report_condition(type, start_t, end_t, location_id)
     #零件号，总数，箱数，部门(部门如何获得？)
+    commit_value = args[0]
     if commit_value=="详细"
       a = LogisticsContainer.joins(:package)
               .where(condition)
