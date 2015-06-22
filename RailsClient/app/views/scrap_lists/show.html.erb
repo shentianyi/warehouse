@@ -1,0 +1,56 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>ID:</strong>
+  <%= @scrap_list.id %>
+</p>
+
+<p>
+  <strong>源仓库:</strong>
+  <%= @scrap_list.src_warehouse %>
+</p>
+
+<p>
+  <strong>目的仓库:</strong>
+  <%= @scrap_list.dse_warehouse %>
+</p>
+
+<p>
+  <strong>创建者:</strong>
+  <%= @scrap_list.builder %>
+</p>
+
+
+<table class="table table-bordered table-striped globle-table">
+  <thead>
+  <tr>
+    <th>报废单号</th>
+    <th>零件号</th>
+    <th>总成号</th>
+    <th>数量</th>
+    <th>单位</th>
+    <th>原因</th>
+    <th>登记人</th>
+    <th>登记时间</th>
+    <th colspan="3"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @scrap_list_items.each do |scrap_list_item| %>
+      <tr>
+        <td><%= scrap_list_item.scrap_list_id %></td>
+        <td><%= scrap_list_item.part_id %></td>
+        <td><%= scrap_list_item.product_id %></td>
+        <td><%= scrap_list_item.quantity %></td>
+        <td><%= scrap_list_item.IU %></td>
+        <td><%= scrap_list_item.reason %></td>
+        <td><%= scrap_list_item.name %></td>
+        <td><%= scrap_list_item.time %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+
+<%= link_to 'Back', scrap_lists_path %>

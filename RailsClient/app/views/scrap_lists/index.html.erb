@@ -1,0 +1,31 @@
+<h1>报废单</h1>
+
+<table class="table table-bordered table-striped globle-table">
+
+  <thead>
+    <tr>
+      <th>源仓库</th>
+      <th>目的仓库</th>
+      <th>创建者</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @scrap_lists.each do |scrap_list| %>
+      <tr>
+        <td><%= scrap_list.src_warehouse %></td>
+        <td><%= scrap_list.dse_warehouse %></td>
+        <td><%= scrap_list.builder %></td>
+        <td><%= link_to '详细', scrap_list %></td>
+        <td><%= link_to '导入报废', new_scrap_list_item_path(id:scrap_list.id) %></td>
+        <td><%= link_to '删除', scrap_list, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to '新建报废单', new_scrap_list_path,:class=>'btn btn-default' %> |
+<%= link_to '生成报表', scrap_lists_reports_path,:class=>'btn btn-default' %>

@@ -139,7 +139,7 @@ class LogisticsContainer<LocationContainer
               uniq: true
           }
           if position=PartService.get_position_by_whouse_id(package.part_id, self.destinationable_id)
-            params[:toPosition]=position.id
+            params[:toPosition]=position.detail
           else
             params[:toPosition]='00 00 00'
           end
@@ -161,11 +161,10 @@ class LogisticsContainer<LocationContainer
               fifo: package.parsed_fifo,
               packageId: package.id,
               toWh: self.destinationable_id,
-              uniq: true,
-              wms:true
+              uniq: true
           }
           if position=PartService.get_position_by_whouse_id(package.part_id, self.destinationable_id)
-            params[:toPosition]=position.id
+            params[:toPosition]=position.detail
           else
             params[:toPosition]='00 00 00'
           end

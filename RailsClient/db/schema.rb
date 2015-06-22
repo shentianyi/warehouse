@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150605082618) do
+ActiveRecord::Schema.define(version: 20150612032219) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -601,6 +601,27 @@ ActiveRecord::Schema.define(version: 20150605082618) do
   add_index "regexes", ["regex_category_id"], name: "index_regexes_on_regex_category_id", using: :btree
   add_index "regexes", ["regexable_id"], name: "index_regexes_on_regexable_id", using: :btree
   add_index "regexes", ["regexable_type"], name: "index_regexes_on_regexable_type", using: :btree
+
+  create_table "scrap_list_items", force: true do |t|
+    t.integer  "scrap_list_id"
+    t.integer  "part_id"
+    t.integer  "product_id"
+    t.integer  "quantity"
+    t.string   "IU"
+    t.string   "reason"
+    t.string   "name"
+    t.datetime "time"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "scrap_lists", force: true do |t|
+    t.string   "src_warehouse"
+    t.string   "dse_warehouse"
+    t.string   "builder"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "state_logs", force: true do |t|
     t.string   "stateable_id"

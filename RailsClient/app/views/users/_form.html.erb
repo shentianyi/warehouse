@@ -13,17 +13,29 @@
 
     <p>
       <%= f.label :id, '员工号' %>
-      <%= f.text_field :id %>
+      <% if current_user.admin? || current_user.manager? %>
+        <%= f.text_field :id%>
+      <%else%>
+        <input type="text" name="id" readonly="" value="<%=current_user.id%>">
+      <%end%>
     </p>
 
     <p>
       <%= f.label :user_name, '用户名' %>
-      <%= f.text_field :user_name %>
+      <% if current_user.admin? || current_user.manager? %>
+          <%= f.text_field :user_name %>
+      <%else%>
+          <input type="text" name="id" readonly="" value="<%=current_user.user_name%>">
+      <%end%>
     </p>
 
     <p>
       <%= f.label :name, '姓 名' %>
-      <%= f.text_field :name %>
+      <% if current_user.admin? || current_user.manager? %>
+          <%= f.text_field :name %>
+      <%else%>
+          <input type="text" name="id" readonly="" value="<%=current_user.name%>">
+      <%end%>
     </p>
 
     <p>
@@ -37,17 +49,31 @@
 
     <p>
       <%= f.label :operation_mode, '操作模式' %>
-      <%= f.select(:operation_mode, OperationMode.list_menu, {include_blank: false})%>
+
+      <% if current_user.admin? || current_user.manager? %>
+          <%= f.select(:operation_mode, OperationMode.list_menu, {include_blank: false})%>
+      <%else%>
+          <input type="text" name="id" readonly="" value="<%= OperationMode.display(current_user.operation_mode) %>">
+      <%end%>
     </p>
 
     <p>
       <%= f.label :role_id, '角 色' %>
-      <%= f.select(:role_id, Role.menu, {include_blank: false}) %>
+
+      <% if current_user.admin? || current_user.manager? %>
+          <%= f.select(:role_id, Role.menu, {include_blank: false}) %>
+      <%else%>
+          <input type="text" name="id" readonly="" value="<%= Role.display(current_user.role_id) %>">
+      <%end%>
     </p>
 
     <p>
       <%= f.label :location_id, '地 点' %>
-      <%= f.select(:location_id, Location.all.collect { |l| [l.name, l.id] }, {include_blank: false}) %>
+      <% if current_user.admin? || current_user.manager? %>
+          <%= f.select(:location_id, Location.all.collect { |l| [l.name, l.id] }, {include_blank: false}) %>
+      <%else%>
+          <input type="text" name="id" readonly="" value="<%= Location.find(current_user.location_id).name %>">
+      <%end%>
     </p>
 
     <p>
