@@ -100,10 +100,10 @@ class WhouseService
       puts "############{storage.to_json}"
       raise '包装未入库！' if storage.nil?
 
-      if storage
-        pre=NStorage.where(partNr: storage.partNr,ware_house_id:storage.ware_house_id).where('fifo<?', storage.fifo).first
-        raise "FIFO!不能移库,此箱入库时间为:#{storage.fifo.localtime.strftime('%Y-%m-%d')}" if pre
-      end
+      # if storage
+      #   pre=NStorage.where(partNr: storage.partNr,ware_house_id:storage.ware_house_id).where('fifo<?', storage.fifo).first
+      #   raise "FIFO!不能移库,此箱入库时间为:#{storage.fifo.localtime.strftime('%Y-%m-%d')}" if pre
+      # end
       #storage = NStorage.find_by!(packageId: params[:packageId], partNr: params[:partNr])
       # validate package qty
       raise '移库量大于剩余量' if params[:qty] > storage.qty
@@ -130,6 +130,7 @@ class WhouseService
         storage.update!(qty: storage.qty - params[:qty])
       end
     elsif [:partNr, :qty, :fromWh, :fromPosition].reduce(true) { |seed, i| seed and params.include? i }
+
       # Move(partNr, qty, fromWh,fromPosition,toWh,toPosition,type)
       # Move(partNr, qty, fifo,fromWh,fromPosition,toWh,toPosition,type)
       fromWh = Whouse.find_by(id: params[:fromWh])
@@ -140,10 +141,10 @@ class WhouseService
       # add fifo condition if fifo param exists
       if params[:fifo]
         fifo = validate_fifo_time(params[:fifo])
-        storage.where(fifo: fifo)
+        storages.where(fifo: fifo)
       end
       # order by fifo
-      storage.order(fifo: :asc)
+      storages=storages.order(fifo: :asc)
       # validate sum of storage qty is enough
       raise 'No enough qty in source' if sumqty = storages.reduce(0) { |seed, s| seed + s.qty } < params[:qty]
       storages.reduce(params[:qty]) do |restqty, storage|
@@ -151,7 +152,7 @@ class WhouseService
         # update parameters of movement creation
         data.update({from_id: storage.ware_house_id, fromPosition: storage.position,
                      fifo: storage.fifo, partNr: storage.partNr})
-        if restqty >= storage
+        if restqty >= storage.qty
           # move all storage
           storage.update!(ware_house_id: toWh.id, position: params[:toPosition])
           data[:qty] = storage.qty
@@ -160,7 +161,9 @@ class WhouseService
           # adjust source storage
           storage.update!(qty: storage.qty - restqty)
           # create target storage
-          last = NStorage.create!(data)
+          sdata = {partNr: params[:partNr], qty: params[:qty], fifo: storage.fifo, ware_house_id: toWh.id,
+                  position: params[:toPosition]}
+          last = NStorage.create!(sdata)
           data[:qty] = restqty
           restqty = 0
         end

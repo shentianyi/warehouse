@@ -25,7 +25,7 @@ module V3
         puts '-----------'
         puts params.to_json
         puts '-----------'
-
+msg=nil
         query = NStorage
         # query relation params
 
@@ -38,24 +38,26 @@ module V3
         inventory_list_id = params[:inventory_list_id].nil? ? nil : params[:inventory_list_id]
         user_id = current_user.id
 
-        # begin
+        begin
           # 保存
           inventory_list_item = InventoryListItem.new_item(package_id, unique_id,
                                                            part_id, qty, position,
                                                            inventory_list_id, user_id)
           if inventory_list_item.blank?
-            {result: 0, content: '添加失败'}
+            msg= {result: 0, content: '添加失败'}
           else
-            if inventory_list_item.in_store
-              {result: 1, content: '生成成功'}
+            if inventory_list_item.in_store || inventory_list_item.package_id.blank?
+              msg= {result: 1, content: '生成成功'}
             else
-              {result: 2, content: '生成成功，未入库'}
+              msg= {result: 2, content: '生成成功，未入库'}
             end
           end
-        # rescue => e
-        #   puts e.message
-        #   {result: 0, content: e.message}
-        # end
+        rescue => e
+          puts e.message
+          msg={result: 0, content: e.message}
+        end
+        puts "#{msg}......"
+        msg
       end
     end
   end

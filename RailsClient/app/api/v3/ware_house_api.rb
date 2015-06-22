@@ -56,12 +56,14 @@ module V3
         optional :packageId, type: String
         optional :fifo, type: String
       end
-
       post :move do
         puts "#{params.to_json}-----------"
         begin
           params[:qty]=params[:qty].to_f
-          WhouseService.new.move(params)
+
+          NStorage.transaction do
+            WhouseService.new.move(params)
+          end
         rescue => e
           if params[:uniq].blank?
             return {result: 0, content: e.message}
@@ -69,7 +71,7 @@ module V3
             raise e.message
           end
         end
-        {result: 1, content: 'move success'}
+        {result: 1, content: '移库成功'}
       end
 
       post :moves do
