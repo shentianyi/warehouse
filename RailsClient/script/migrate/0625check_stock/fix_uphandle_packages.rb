@@ -14,7 +14,7 @@ Container.transaction do
       part_id: '418487500',
       part_id_display: 'P418487500',
       quantity: '3000',
-      quantity_display: 'Q3000',
+      quantity_display: 'Q3000.000',
       custom_fifo_time: '26/06/14',
       fifo_time_display: 'W  26/06/14'
   }
