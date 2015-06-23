@@ -17,5 +17,6 @@
 //= require jquery.file.upload/jquery.fileupload
 //= require bootstrap.min
 //= require part-manage
+//= require best_in_place
 //= require turbolinks
 //= require_tree .

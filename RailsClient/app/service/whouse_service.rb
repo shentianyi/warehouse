@@ -1,5 +1,6 @@
 class WhouseService
   def validate_fifo_time(fifo)
+    return fifo if fifo.nil?
     puts "---------------88888888888#{fifo}"
     t = fifo.to_time
     raise 'fifo time is invalid' if t > Time.now
@@ -40,20 +41,22 @@ class WhouseService
     raise '仓库未找到' unless wh
     # validate uniqueId
     raise 'uniqueId already exists!' if params[:uniqueId].present? and NStorage.find_by(params[:uniqueId])
-    s = nil
-    if params[:packageId] and s = NStorage.find_by(packageId: params[:packageId], partNr: params[:partNr],
-                                                   fifo: fifo)
+    if params[:packageId] and  NStorage.find_by(packageId: params[:packageId], partNr: params[:partNr])
       raise 'Already Enter Stock'
     else
       data = {partNr: params[:partNr], qty: params[:qty], fifo: fifo, ware_house_id: wh.id, position: params[:toPosition]}
       data[:uniqueId] = params[:uniqueId] if params[:uniqueId].present?
       data[:packageId] = params[:packageId] if params[:packageId].present?
-      storages = NStorage.where(partNr: params[:partNr], fifo: fifo, ware_house_id: wh.id, position: params[:toPosition])
-      NStorage.transaction do
-        if storages.present?
-          storages.first.update!(qty: storages.first.qty + params[:qty])
-        else
-          s = NStorage.create!(data)
+      if params[:packageId].present?
+        NStorage.create!(data)
+      else
+        storage = NStorage.where(partNr: params[:partNr], fifo: fifo, ware_house_id: wh.id, position: params[:toPosition]).first
+        NStorage.transaction do
+          if storage
+            storage.update!(qty: storage.qty + params[:qty])
+          else
+            NStorage.create!(data)
+          end
         end
       end
     end
@@ -105,12 +108,12 @@ class WhouseService
       raise '包装未入库！' if storage.nil?
 
       if storage
-        pre=NStorage.where(partNr: storage.partNr,ware_house_id:storage.ware_house_id).where('fifo<?', storage.fifo).first
+        pre=NStorage.where(partNr: storage.partNr, ware_house_id: storage.ware_house_id).where('fifo<?', storage.fifo).first
         raise "FIFO!不能移库,此箱入库时间为:#{storage.fifo.localtime.strftime('%Y-%m-%d')}" if pre
       end
 
       # record: packid + nopackid
-      noPackIdStorages = NStorages.where(partNr: storage.partNr,ware_house_id:storage.ware_house_id, position: storage.position).where("n_storages.qty > ?", 0).select("n_storages.*, SUM(n_storages.qty) as total_qty").order("n_storages.fifo asc")
+      noPackIdStorages = NStorages.where(partNr: storage.partNr, ware_house_id: storage.ware_house_id, position: storage.position).where("n_storages.qty > ?", 0).select("n_storages.*, SUM(n_storages.qty) as total_qty").order("n_storages.fifo asc")
       if storage.qty > 0
         # validate package qty
         # 正库存

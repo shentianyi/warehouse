@@ -1,3 +1,3 @@
 class ScrapListItem < ActiveRecord::Base
-  belongs_to :scrap_lists
+  belongs_to :scrap_list
 end

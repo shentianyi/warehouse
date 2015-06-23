@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150612032219) do
+ActiveRecord::Schema.define(version: 20150623194524) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -604,8 +604,8 @@ ActiveRecord::Schema.define(version: 20150612032219) do
 
   create_table "scrap_list_items", force: true do |t|
     t.integer  "scrap_list_id"
-    t.integer  "part_id"
-    t.integer  "product_id"
+    t.string   "part_id"
+    t.string   "product_id"
     t.integer  "quantity"
     t.string   "IU"
     t.string   "reason"

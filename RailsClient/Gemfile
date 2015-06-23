@@ -84,3 +84,5 @@ gem 'database_cleaner'
 # for container
 # gem 'closure_tree'
 gem 'ancestry'
+
+gem 'best_in_place', '~> 3.0.1'
