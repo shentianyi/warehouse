@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150623194524) do
+ActiveRecord::Schema.define(version: 20150623201029) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -613,6 +613,7 @@ ActiveRecord::Schema.define(version: 20150623194524) do
     t.datetime "time"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "state",         default: 100
   end
 
   create_table "scrap_lists", force: true do |t|

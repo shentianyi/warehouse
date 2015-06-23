@@ -1,5 +1,5 @@
 class ScrapListsController < ApplicationController
-  before_action :set_scrap_list, only: [:show, :edit, :update, :destroy]
+  before_action :set_scrap_list, only: [:show, :edit, :update, :destroy, :scrap]
 
   respond_to :html
 
@@ -9,7 +9,7 @@ class ScrapListsController < ApplicationController
   end
 
   def show
-    @scrap_list_items = ScrapListItem.where(scrap_list_id:@scrap_list.id).all
+    @scrap_list_items = ScrapListItem.where(scrap_list_id: @scrap_list.id).all
     respond_with(@scrap_list)
   end
 
@@ -53,7 +53,7 @@ class ScrapListsController < ApplicationController
     @title = ''
 
     @movements = Movement.generate_report_data(@date_start, @date_end)
-    @title = ScrapListsHelper.gen_title(@date_start,@date_end)
+    @title = ScrapListsHelper.gen_title(@date_start, @date_end)
     respond_to do |format|
       format.xlsx do
         send_data(entry_with_xlsx(@movements),
@@ -68,30 +68,50 @@ class ScrapListsController < ApplicationController
     p = Axlsx::Package.new
     wb = p.workbook
     wb.add_worksheet(:name => "Basic Sheet") do |sheet|
-        sheet.add_row entry_header
-        movements.each_with_index { |m, index|
-          sheet.add_row [
-                            index+1,
-                            m.partNr,
-                            m.src_qty,
-                            m.dse_qty,
-                            (m.src_qty - m.dse_qty)
-                        ], :types => [:string]
-        }
+      sheet.add_row entry_header
+      movements.each_with_index { |m, index|
+        sheet.add_row [
+                          index+1,
+                          m.partNr,
+                          m.src_qty,
+                          m.dse_qty,
+                          (m.src_qty - m.dse_qty)
+                      ], :types => [:string]
+      }
     end
     p.to_stream.read
   end
 
   def entry_header
-    ["编号","零件号","源数量", "报废数量","实际使用量"]
+    ["编号", "零件号", "源数量", "报废数量", "实际使用量"]
   end
 
-  private
-    def set_scrap_list
-      @scrap_list = ScrapList.find(params[:id])
+
+  def scrap
+    msg=Message.new
+    ScrapListItem.transaction do
+      @scrap_list.scrap_list_items.where(state:ScrapListItemState::UNHANDLED).each do |item|
+        item.scrap
+      end
+      msg.result =true
     end
 
-    def scrap_list_params
-      params.require(:scrap_list).permit(:src_warehouse, :dse_warehouse, :builder)
-    end
+    respond_to do |format|
+      if  msg.result
+        format.html { redirect_to @scrap_list, notice: '报废成功' }
+        format.json { render :show, status: :ok, location: @scrap_list }
+      else
+        format.html { redirect_to @scrap_list, notice: msg.content }
+        format.json { render json: @scrap_list.errors, status: :unprocessable_entity }
+      end
+    end  end
+
+  private
+  def set_scrap_list
+    @scrap_list = ScrapList.find(params[:id])
+  end
+
+  def scrap_list_params
+    params.require(:scrap_list).permit(:src_warehouse, :dse_warehouse, :builder)
+  end
 end

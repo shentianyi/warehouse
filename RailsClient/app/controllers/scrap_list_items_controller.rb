@@ -66,6 +66,6 @@ class ScrapListItemsController < ApplicationController
     end
 
     def scrap_list_item_params
-      params.require(:scrap_list_item).permit(:scrap_list_id, :part_id, :product_id, :quantity, :IU, :reason, :name, :time)
+      params.require(:scrap_list_item).permit(:scrap_list_id, :part_id, :product_id, :quantity, :IU, :reason, :name, :time,:state)
     end
 end
