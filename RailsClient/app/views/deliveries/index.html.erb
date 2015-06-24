@@ -103,7 +103,7 @@
           <%= link_to delivery_presenter.forklifts.count,forklifts_delivery_path(delivery), class:'btn btn-default' %>
         </td>
         <td>
-          <%= delivery.get_records.last.display if delivery.get_records.last%>
+          <%= delivery.get_records.last.display%>
         </td>
         <td><%= link_to '详细',{ controller:'deliveries',action: 'show',id:delivery.id },class:'btn btn-default' %></td>
         <td><%= link_to '编辑', { controller:'deliveries',action: 'edit',id:delivery.id },class:'btn btn-default' %></td>
