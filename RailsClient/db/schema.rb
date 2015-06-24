@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150623201029) do
+ActiveRecord::Schema.define(version: 20150624023159) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -284,7 +284,6 @@ ActiveRecord::Schema.define(version: 20150623201029) do
   create_table "movements", force: true do |t|
     t.string   "partNr"
     t.datetime "fifo"
-    t.integer  "qty"
     t.string   "from_id"
     t.string   "fromPosition"
     t.string   "to_id"
@@ -294,6 +293,7 @@ ActiveRecord::Schema.define(version: 20150623201029) do
     t.integer  "type_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.decimal  "qty",          precision: 9, scale: 2
   end
 
   add_index "movements", ["packageId"], name: "package_id_index", using: :btree
@@ -317,13 +317,13 @@ ActiveRecord::Schema.define(version: 20150623201029) do
     t.string   "storageId"
     t.string   "partNr"
     t.datetime "fifo"
-    t.integer  "qty"
     t.string   "position"
     t.string   "packageId"
     t.string   "uniqueId"
     t.string   "ware_house_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.decimal  "qty",           precision: 9, scale: 2
   end
 
   add_index "n_storages", ["packageId"], name: "package_id_index", using: :btree
