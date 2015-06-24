@@ -52,4 +52,30 @@ class NStorage < ActiveRecord::Base
     return results
   end
 
+
+  def self.to_xlsx n_storages
+    p = Axlsx::Package.new
+
+    puts "9999999999999999999999999999999999"
+    wb = p.workbook
+    wb.add_worksheet(:name => "sheet1") do |sheet|
+      sheet.add_row ["序号", "零件号", "仓库号", "库位号", "数量", "FIFO", "包装号", "唯一码"]
+      n_storages.each_with_index { |n_storage, index|
+        if n_storage.id && n_storage.id != ""
+          sheet.add_row [
+                            index+1,
+                            n_storage.partNr,
+                            n_storage.ware_house_id,
+                            n_storage.position,
+                            n_storage.total_qty,
+                            n_storage.fifo,
+                            n_storage.packageId,
+                            n_storage.uniqueId
+                        ]
+        end
+      }
+    end
+    p.to_stream.read
+  end
+
 end

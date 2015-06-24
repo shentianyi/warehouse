@@ -19,6 +19,7 @@ class NStoragesController < ApplicationController
  # end
 
 
+
   def update
     respond_to do |format|
       if @storage.update(storage_params)
@@ -60,6 +61,50 @@ class NStoragesController < ApplicationController
       render json: msg
     end
   end
+
+  def exports
+    @condition=params[@model]
+    puts @condition
+    query=model.unscoped
+    @condition.each do |k, v|
+      if (v.is_a?(Fixnum) || v.is_a?(String)) && !v.blank?
+        puts @condition.has_key?(k+'_fuzzy')
+        if @condition.has_key?(k+'_fuzzy')
+          query=query.where("#{k} like ?", "%#{v}%")
+        else
+          query=query.where(Hash[k, v])
+        end
+        instance_variable_set("@#{k}", v)
+      end
+
+      if v.is_a?(Hash) && v.values.count==2 && v.values.uniq!=['']
+        values=v.values.sort
+        values[0]=Time.parse(values[0]).utc.to_s if values[0].is_date? & values[0].include?('-')
+        values[1]=Time.parse(values[1]).utc.to_s if values[1].is_date? & values[1].include?('-')
+        query=query.where(Hash[k, (values[0]..values[1])])
+        v.each do |kk, vv|
+          instance_variable_set("@#{k}_#{kk}", vv)
+        end
+      end
+    end
+
+    if params.has_key? "negative"
+      query = query.where("n_storages.qty < 0").select("n_storages.qty as total_qty, n_storages.*")
+    else
+      query = query.select("SUM(n_storages.qty) as total_qty, n_storages.*").group("n_storages.partNr, n_storages.ware_house_id, position")
+    end
+
+    instance_variable_set("@#{@model.pluralize}", query.paginate(:page => params[:page]).all)
+    if params.has_key? "download"
+      send_data(query.to_xlsx(query),
+                :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+                :filename => @model.pluralize+".xlsx")
+      #render :json => query.to_xlsx(query)
+    else
+      render :group
+    end
+  end
+
 
   private
 # Use callbacks to share common setup or constraints between actions.
