@@ -157,6 +157,7 @@ Rails.application.routes.draw do
       get :search
       match :import, to: :import,via: [:get,:post]
       match :move, to: :move,via: [:get,:post]
+      match :group, to: :group,via: [:get,:post]
       # get :panel
       # get :search_storage
     end

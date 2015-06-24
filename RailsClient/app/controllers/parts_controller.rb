@@ -143,7 +143,6 @@ class PartsController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_part
-    puts "99999999999999999999999999"
     @part = Part.unscoped.find_by_id(params[:id])
   end
 

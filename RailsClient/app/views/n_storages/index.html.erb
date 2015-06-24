@@ -1,4 +1,4 @@
-<h2>库存查询</h2>
+<h2>库存详细</h2>
 <div>
   <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
     <div>
@@ -32,6 +32,11 @@
               FIFO：
               <input type="text" name="n_storage[fifo][start]" class="datepicker" value="<%= @fifo_start %>"/>
               ~  <input type="text" name="n_storage[fifo][end]" class="datepicker" value="<%= @fifo_end %>"/>
+            </span>
+            <span>
+              数量：
+              <input type="number" name="n_storage[qty][start]" value="<%= @qty_start %>"/>
+              ~  <input type="number" name="n_storage[qty][end]" value="<%= @qty_end %>"/>
             </span>
         </div>
         <div>

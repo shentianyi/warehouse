@@ -26,6 +26,7 @@
         <td><%= scrap_list_item.reason %></td>
         <td><%= scrap_list_item.name %></td>
         <td><%= scrap_list_item.time %></td>
+        <td><%= link_to '删除', scrap_list_item, method: :delete, data: {confirm: 'Are you sure?'} ,:class=> 'btn btn-default'%></td>
     <% end %>
   </tbody>
 </table>

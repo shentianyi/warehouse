@@ -231,7 +231,7 @@ class WhouseService
         #dse
         tostorages = NStorage.where(ware_house_id: toWh.id, partNr: params[:partNr], position: params[:toPosition])
         if tostorages.present?
-          tostorages.first.update!(qty: tostorages.first.qty + storage.qty)
+          tostorages.first.update!(qty: tostorages.first.qty + restqty)
         else
           data = {partNr: params.partNr, qty: restqty, ware_house_id: toWh.id, position: params[:toPosition]}
           NStorage.create!(data)
