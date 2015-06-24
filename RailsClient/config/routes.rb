@@ -162,7 +162,10 @@ Rails.application.routes.draw do
       match :group, to: :group,via: [:get,:post]
       # get :panel
       # get :search_storage
+      get :summary
+      get :exports
     end
+
   end
 
   [:locations, :whouses, :parts, :positions, :part_positions, :users, :deliveries, :forklifts,
