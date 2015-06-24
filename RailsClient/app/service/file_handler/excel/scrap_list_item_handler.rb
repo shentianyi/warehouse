@@ -20,6 +20,7 @@ module FileHandler
                 row = {}
                 HEADERS.each_with_index do |k, i|
                   row[k] = book.cell(line, i+1).to_s.strip
+                  row[k]=row[k].sub(/\.0/, '') if k=='零件号'
                 end
 
                 ScrapListItem.create({scrap_list_id:scrap_list_id,part_id:row['零件号'],product_id:row['总成号'],quantity:row['数量'],IU:row['单位'],reason:row['原因'],name:row['登记人'],time:row['登记时间']})

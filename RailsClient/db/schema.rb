@@ -11,7 +11,6 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
 ActiveRecord::Schema.define(version: 20150624032200) do
 
   create_table "api_logs", force: true do |t|
@@ -294,7 +293,7 @@ ActiveRecord::Schema.define(version: 20150624032200) do
     t.integer  "type_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "qty"
+    t.decimal  "qty",          precision: 9, scale: 2
   end
 
   add_index "movements", ["packageId"], name: "package_id_index", using: :btree
@@ -324,7 +323,7 @@ ActiveRecord::Schema.define(version: 20150624032200) do
     t.string   "ware_house_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "qty"
+    t.decimal  "qty",           precision: 9, scale: 2
   end
 
   add_index "n_storages", ["packageId"], name: "package_id_index", using: :btree
