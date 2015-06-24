@@ -85,17 +85,17 @@ module FileHandler
           msg.contents << "目的仓库:#{row['目的仓库']} not found!"
         end
 
-        builder = User.find_by_name(row['创建者'])
-        unless builder
-          msg.contents << "创建者:#{row['创建者']} not found!"
-        end
+        # builder = User.find_by_name(row['创建者'])
+        # unless builder
+        #   msg.contents << "创建者:#{row['创建者']} not found!"
+        # end
+        #
+        # builder = User.find_by_name(row['登记人'])
+        # unless builder
+        #   msg.contents << "登记人:#{row['登记人']} not found!"
+        # end
 
-        builder = User.find_by_name(row['登记人'])
-        unless builder
-          msg.contents << "登记人:#{row['登记人']} not found!"
-        end
-
-        part_id = Part.find_by_id(row['零件号'].to_i)
+        part_id = Part.find_by_id(row['零件号'])
         unless part_id
           msg.contents << "零件号:#{row['零件号']} not found!"
         end

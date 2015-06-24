@@ -11,6 +11,8 @@ Rails.application.routes.draw do
   resources :scrap_lists do
     member do
       get 'scrap_list_items'
+      get :scrap
+
     end
 
     collection do

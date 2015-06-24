@@ -29,8 +29,15 @@ class ScrapListItemsController < ApplicationController
   end
 
   def update
-    @scrap_list_item.update(scrap_list_item_params)
-    respond_with(@scrap_list_item)
+    respond_to do |format|
+      if @scrap_list_item.update(scrap_list_item_params)
+        format.html { redirect_to @scrap_list_item, notice: 'successfully updated.' }
+        format.json { render :show, status: :ok, location: @scrap_list_item }
+      else
+        format.html { render :edit }
+        format.json { render json: @scrap_list_item.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   def destroy
@@ -59,6 +66,6 @@ class ScrapListItemsController < ApplicationController
     end
 
     def scrap_list_item_params
-      params.require(:scrap_list_item).permit(:scrap_list_id, :part_id, :product_id, :quantity, :IU, :reason, :name, :time)
+      params.require(:scrap_list_item).permit(:scrap_list_id, :part_id, :product_id, :quantity, :IU, :reason, :name, :time,:state)
     end
 end
