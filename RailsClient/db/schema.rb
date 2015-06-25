@@ -323,7 +323,7 @@ ActiveRecord::Schema.define(version: 20150625052200) do
     t.string   "uniqueId"
     t.string   "ware_house_id"
     t.datetime "created_at"
-    t.decimal  "qty",           precision: 20, scale: 10
+    t.datetime "updated_at"
   end
 
   add_index "n_storages", ["packageId"], name: "package_id_index", using: :btree
