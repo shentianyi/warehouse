@@ -53,13 +53,13 @@ class NStorage < ActiveRecord::Base
   end
 
 
-  def self.to_xlsx n_storages
+  def self.to_total_xlsx n_storages
     p = Axlsx::Package.new
 
     puts "9999999999999999999999999999999999"
     wb = p.workbook
     wb.add_worksheet(:name => "sheet1") do |sheet|
-      sheet.add_row ["序号", "零件号", "仓库号", "库位号", "数量", "FIFO", "包装号", "唯一码"]
+      sheet.add_row ["序号", "零件号", "仓库号", "库位号", "数量", "FIFO", "包装号"]
       n_storages.each_with_index { |n_storage, index|
         if n_storage.id && n_storage.id != ""
           sheet.add_row [
@@ -69,8 +69,7 @@ class NStorage < ActiveRecord::Base
                             n_storage.position,
                             n_storage.total_qty,
                             n_storage.fifo,
-                            n_storage.packageId,
-                            n_storage.uniqueId
+                            n_storage.packageId
                         ]
         end
       }
@@ -78,4 +77,28 @@ class NStorage < ActiveRecord::Base
     p.to_stream.read
   end
 
+
+  def self.to_xlsx n_storages
+    p = Axlsx::Package.new
+
+    puts "9999999999999999999999999999999999"
+    wb = p.workbook
+    wb.add_worksheet(:name => "sheet1") do |sheet|
+      sheet.add_row ["序号","零件号", "包装号",  "仓库号", "库位号", "数量", "FIFO"]
+      n_storages.each_with_index { |n_storage, index|
+        if n_storage.id && n_storage.id != ""
+          sheet.add_row [
+                            index+1,
+                            n_storage.partNr,
+                            n_storage.packageId,
+                            n_storage.ware_house_id,
+                            n_storage.position,
+                            n_storage.qty,
+                            n_storage.fifo
+                        ]
+        end
+      }
+    end
+    p.to_stream.read
+  end
 end
