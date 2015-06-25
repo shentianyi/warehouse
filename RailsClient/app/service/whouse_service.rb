@@ -53,7 +53,7 @@ class WhouseService
         storage = NStorage.where(partNr: params[:partNr], fifo: fifo, ware_house_id: wh.id, position: params[:toPosition]).first
         NStorage.transaction do
           if storage
-            storage.update!(qty: storage.qty + params[:qty])
+            storage.update!(qty: storage.qty + params[:qty].to_f)
           else
             NStorage.create!(data)
           end
@@ -113,25 +113,33 @@ class WhouseService
       # end
 
       # record: packid + nopackid
-      noPackIdStorages = NStorages.where(partNr: storage.partNr, ware_house_id: storage.ware_house_id, position: storage.position).where("n_storages.qty > ?", 0).select("n_storages.*, SUM(n_storages.qty) as total_qty").order("n_storages.fifo asc")
       if storage.qty > 0
         # validate package qty
         # 正库存
-        raise '移库量大于剩余量' if params[:qty] > storage.qty
+        raise '移库量大于剩余量' if params[:qty].to_f > storage.qty
+        if params[:qty].to_f == storage.qty
+          storage.update!(ware_house_id: toWh.id, position: params[:toPosition])
+          return
+        end
       end
+
+      # no means ignore pACKID BUT INCLUDE
+      noPackIdStorages = NStorage.where(partNr: storage.partNr, ware_house_id: storage.ware_house_id, position: storage.position).where("n_storages.qty > ?", 0).select("n_storages.*, SUM(n_storages.qty) as total_qty").order("n_storages.fifo asc")
 
       # adjust storage
       ## adjust to storage
       tostorages = NStorage.where(ware_house_id: toWh.id, partNr: params[:partNr], position: params[:toPosition], packageId: nil)
 
-      noPackIdStorages.reduce(params[:qty]) do |restqty, noPackIdStorage|
+      noPackIdStorages.reduce(params[:qty].to_f) do |restqty, noPackIdStorage|
+
         break if restqty.to_f <= 0
         move_data.update({from_id: noPackIdStorage.ware_house_id, fromPosition: noPackIdStorage.position,
                           fifo: noPackIdStorage.fifo, partNr: noPackIdStorage.partNr})
 
         if restqty.to_f >= noPackIdStorage.qty
+
           move_data[:qty] = noPackIdStorage.qty
-          if tostorages.nil?
+          if tostorages.first.nil?
             noPackIdStorage.update!(ware_house_id: toWh.id, position: params[:toPosition])
           else
             tostorages.first.update!(qty: tostorages.first.qty + noPackIdStorage.qty)
@@ -139,9 +147,10 @@ class WhouseService
           end
           restqty = restqty.to_f - noPackIdStorage.qty
         else
+
           move_data[:qty] = restqty
           noPackIdStorage.update!(qty: storage.qty - restqty.to_f)
-          if tostorages.nil?
+          if tostorages.first.nil?
             data = {partNr: noPackIdStorage.partNr, qty: restqty, fifo: noPackIdStorage.fifo, ware_house_id: toWh.id,
                     position: params[:toPosition]}
             NStorage.create!(data)
@@ -187,45 +196,49 @@ class WhouseService
       #支持负库存#raise 'No enough qty in source' if sumqty = storages.reduce(0) { |seed, s| seed + s.qty } < params[:qty]
       restqty = params[:qty].to_f
 
-      storages.reduce(params[:qty]) do |restqty, storage|
+      if storages.present?
 
-        break if restqty <= 0
-        # update parameters of movement creation
-        move_data.update({from_id: storage.ware_house_id, fromPosition: storage.position,
-                          fifo: storage.fifo, partNr: storage.partNr})
+        storages.reduce(params[:qty].to_f) do |restqty, storage|
 
-        if restqty >= storage.qty
+          break if restqty <= 0
+          # update parameters of movement creation
+          move_data.update({from_id: storage.ware_house_id, fromPosition: storage.position,
+                            fifo: storage.fifo, partNr: storage.partNr})
 
-          move_data[:qty] = storage.qty
-          restqty = restqty - storage.qty
+          if restqty >= storage.qty
 
-          # move all storage
-          if tostorages.present?
-            tostorages.first.update!(qty: tostorages.first.qty + storage.qty)
-            storage.destroy!
+            move_data[:qty] = storage.qty
+            restqty = restqty - storage.qty
+
+            # move all storage
+            if tostorages.present?
+              tostorages.first.update!(qty: tostorages.first.qty + storage.qty)
+              storage.destroy!
+            else
+              storage.update!(ware_house_id: toWh.id, position: params[:toPosition])
+            end
           else
-            storage.update!(ware_house_id: toWh.id, position: params[:toPosition])
-          end
-        else
 
-          move_data[:qty] = restqty
-          # adjust source storage
-          storage.update!(qty: storage.qty - restqty)
-          # create target storage
-          if tostorages.present?
-            tostorages.first.update!(qty: tostorages.first.qty + restqty)
-          else
-            data = {partNr: storage.partNr, qty: restqty, fifo: storage.fifo, ware_house_id: toWh.id,
-                    position: params[:toPosition]}
-            NStorage.create!(data)
+            move_data[:qty] = restqty
+            # adjust source storage
+            storage.update!(qty: storage.qty - restqty)
+            # create target storage
+            if tostorages.present?
+              tostorages.first.update!(qty: tostorages.first.qty + restqty)
+            else
+              data = {partNr: storage.partNr, qty: restqty, fifo: storage.fifo, ware_house_id: toWh.id,
+                      position: params[:toPosition]}
+              NStorage.create!(data)
+            end
+
+            restqty = 0
           end
 
-          restqty = 0
+          # create movement
+          Movement.create!(move_data)
+          restqty
         end
 
-        # create movement
-        Movement.create!(move_data)
-        restqty
       end
 
       if restqty > 0
