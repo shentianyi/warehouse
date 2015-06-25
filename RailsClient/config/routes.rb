@@ -33,6 +33,11 @@ Rails.application.routes.draw do
   resources :inventory_list_items do
     collection do
       get :search
+      match :import, to: :import,via: [:get,:post]
+    end
+    member do
+      get :export_list_detail
+      get :export_list_total
     end
   end
 

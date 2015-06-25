@@ -16,4 +16,8 @@ class Part < ActiveRecord::Base
   def self.exists?(id)
     Part.find_by_id(id)
   end
+
+  def is_wire?
+    self.part_type_id=='Wire'
+  end
 end
