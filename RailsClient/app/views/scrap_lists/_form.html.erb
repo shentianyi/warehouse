@@ -10,7 +10,10 @@
       </ul>
     </div>
   <% end %>
-
+    <div class="field">
+      <%= f.label :name, "名称/备注" %><br>
+      <%= f.text_field :name %>
+    </div>
   <div class="field">
     <%= f.label :src_warehouse, "源仓库" %><br>
     <%= f.text_field :src_warehouse %>
