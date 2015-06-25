@@ -96,7 +96,7 @@ class NStoragesController < ApplicationController
 
     instance_variable_set("@#{@model.pluralize}", query.paginate(:page => params[:page]).all)
     if params.has_key? "download"
-      send_data(query.to_xlsx(query),
+      send_data(query.to_total_xlsx(query),
                 :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
                 :filename => @model.pluralize+".xlsx")
       #render :json => query.to_xlsx(query)
