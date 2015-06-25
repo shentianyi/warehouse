@@ -284,7 +284,7 @@ ActiveRecord::Schema.define(version: 20150625032200) do
   create_table "movements", force: true do |t|
     t.string   "partNr"
     t.datetime "fifo"
-    t.decimal  "qty",          precision: 9, scale: 2
+    t.decimal  "qty",          precision: 20, scale: 10
     t.string   "from_id"
     t.string   "fromPosition"
     t.string   "to_id"
@@ -294,10 +294,6 @@ ActiveRecord::Schema.define(version: 20150625032200) do
     t.integer  "type_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-<<<<<<< HEAD
-=======
-    t.decimal  "qty",          precision: 20, scale: 10
->>>>>>> 56012599b847a196f7fecb58b63a9689b8b5a2f7
   end
 
   add_index "movements", ["packageId"], name: "package_id_index", using: :btree
@@ -321,17 +317,13 @@ ActiveRecord::Schema.define(version: 20150625032200) do
     t.string   "storageId"
     t.string   "partNr"
     t.datetime "fifo"
-    t.decimal  "qty",           precision: 9, scale: 2
+    t.decimal  "qty",           precision: 20, scale: 10
     t.string   "position"
     t.string   "packageId"
     t.string   "uniqueId"
     t.string   "ware_house_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-<<<<<<< HEAD
-=======
-    t.decimal  "qty",           precision: 20, scale: 10
->>>>>>> 56012599b847a196f7fecb58b63a9689b8b5a2f7
   end
 
   add_index "n_storages", ["packageId"], name: "package_id_index", using: :btree
@@ -463,29 +455,17 @@ ActiveRecord::Schema.define(version: 20150625032200) do
   add_index "part_types", ["id"], name: "index_part_types_on_id", using: :btree
 
   create_table "parts", force: true do |t|
-<<<<<<< HEAD
-    t.string   "uuid",         limit: 36,                 null: false
-    t.string   "customernum"
-    t.string   "user_id"
-    t.boolean  "is_delete",               default: false
-    t.boolean  "is_dirty",                default: true
-    t.boolean  "is_new",                  default: true
-=======
     t.string   "uuid",         limit: 36,                                           null: false
     t.string   "customernum"
     t.string   "user_id"
     t.boolean  "is_delete",                                         default: false
     t.boolean  "is_dirty",                                          default: true
     t.boolean  "is_new",                                            default: true
->>>>>>> 56012599b847a196f7fecb58b63a9689b8b5a2f7
     t.datetime "created_at"
     t.datetime "updated_at"
     t.float    "unit_pack"
     t.string   "part_type_id"
-<<<<<<< HEAD
-=======
     t.decimal  "convert_unit",            precision: 20, scale: 10, default: 1.0
->>>>>>> 56012599b847a196f7fecb58b63a9689b8b5a2f7
   end
 
   add_index "parts", ["id"], name: "index_parts_on_id", using: :btree
