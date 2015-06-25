@@ -1,8 +1,8 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>ID:</strong>
-  <%= @scrap_list.id %>
+  <strong>Name:</strong>
+  <%= @scrap_list.name %>
 </p>
 
 <p>
@@ -23,9 +23,10 @@
   <strong>##点击数量、状态可以修改值##</strong>
 </p>
 <%= link_to '！报废移库！', scrap_scrap_list_path, :class => 'btn btn-warning', data: {confirm: "确定报废?"} %>
-<span style="color:blue;font-weight: bold">
+<br/>
+<p style="color:blue;font-weight: bold">
   共：<%= @scrap_list_items.count %>
-</span>
+</p>
 <table class="table table-bordered table-striped globle-table">
   <thead>
   <tr>
@@ -54,7 +55,7 @@
         <td><%= scrap_list_item.IU %></td>
         <td><%= scrap_list_item.reason %></td>
         <td><%= scrap_list_item.name %></td>
-        <td><%= scrap_list_item.time %></td>
+        <td><%= scrap_list_item.time.localtime %></td>
         <td><%= best_in_place scrap_list_item, :state, as: :select, collection: ScrapListItemState.list.map { |s| [s[1], s[0]] }.to_h %></td>
         <td><%= link_to '删除', scrap_list_item, method: :delete, data: {confirm: 'Are you sure?'} %></td>
       </tr>

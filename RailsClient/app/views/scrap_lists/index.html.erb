@@ -4,6 +4,8 @@
 
   <thead>
     <tr>
+      <td>NO.</td>
+      <th>名称/备注</th>
       <th>源仓库</th>
       <th>目的仓库</th>
       <th>创建者</th>
@@ -12,8 +14,10 @@
   </thead>
 
   <tbody>
-    <% @scrap_lists.each do |scrap_list| %>
+    <% @scrap_lists.each_with_index do |scrap_list,i| %>
       <tr>
+        <td><%=i+1%></td>
+        <td><%= best_in_place scrap_list, :name, as: :input %></td>
         <td><%= scrap_list.src_warehouse %></td>
         <td><%= scrap_list.dse_warehouse %></td>
         <td><%= scrap_list.builder %></td>
