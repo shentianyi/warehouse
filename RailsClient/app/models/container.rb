@@ -8,7 +8,7 @@ class Container< ActiveRecord::Base
   belongs_to :part
   belongs_to :current_positionable, polymorphic: true
   has_many :logistics_containers, :dependent => :destroy
-  has_many :store_containers
+  has_many :store_containers, :dependent => :destroy
 
   before_create :init_container_attr
 
