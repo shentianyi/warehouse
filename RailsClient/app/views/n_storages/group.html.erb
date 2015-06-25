@@ -40,10 +40,11 @@
               ~  <input type="number" name="n_storage[qty][end]" value="<%= @qty_end %>"/>
             </span>
         </div>
+        <span class="label label-info">显示方式:</span>
+        <%= select_tag :format, options_for_select([["Web", "html"],["Excel File(MS 07 or later)", "xlsx"]], "html") %>
         <div>
           <input type="submit" value="负库存" class="btn btn-primary" name="negative"/>
           <input type="submit" value="汇总" class="btn btn-primary" name="search"/>
-          <input type="submit" value="导出" class="btn btn-primary" name="download"/>
         </div>
       </div>
     </div>
