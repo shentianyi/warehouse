@@ -55,8 +55,6 @@ class NStorage < ActiveRecord::Base
 
   def self.to_total_xlsx n_storages
     p = Axlsx::Package.new
-
-    puts "9999999999999999999999999999999999"
     wb = p.workbook
     wb.add_worksheet(:name => "sheet1") do |sheet|
       sheet.add_row ["序号", "零件号", "仓库号", "库位号", "数量", "FIFO", "包装号"]
