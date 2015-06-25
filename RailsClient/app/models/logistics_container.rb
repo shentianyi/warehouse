@@ -15,7 +15,7 @@ class LogisticsContainer<LocationContainer
   has_many :positions, through: :package
   belongs_to :forklift, foreign_key: :container_id
   belongs_to :delivery, foreign_key: :container_id
-  has_many :records, :as => :recordable,dependent: :destroy
+  has_many :records, :as => :recordable, dependent: :destroy
 
   after_update :out_store
 
@@ -140,13 +140,17 @@ class LogisticsContainer<LocationContainer
 
   def enter_stock
     if self.state==MovableState::CHECKED
-      if (package=self.package) && self.destinationable && self.destinationable_type == Whouse.to_s
+      if (package=self.package)
+        toWh='3EX'
+        if self.destinationable && self.destinationable_type == Whouse.to_s
+          toWh=self.destinationable_id
+        end
         params={
             partNr: package.part_id,
             qty: package.quantity,
             fifo: package.parsed_fifo,
             packageId: package.id,
-            toWh: self.destinationable_id,
+            toWh: toWh,
             uniq: true
         }
         if position=PartService.get_position_by_whouse_id(package.part_id, self.destinationable_id)
