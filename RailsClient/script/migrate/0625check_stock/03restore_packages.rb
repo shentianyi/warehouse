@@ -3,6 +3,7 @@ NStorage.transaction do
   Movement.where("packageId like 'WI%'").delete_all
 
   LogisticsContainer.uniq.joins(:package).each do |lc|
-    lc.enter_store
+    puts
+    lc.enter_stock
   end
 end
