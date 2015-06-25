@@ -15,9 +15,13 @@ class LogisticsContainer<LocationContainer
   has_many :positions, through: :package
   belongs_to :forklift, foreign_key: :container_id
   belongs_to :delivery, foreign_key: :container_id
-  has_many :records, :as => :recordable
+  has_many :records, :as => :recordable,dependent: :destroy
 
   after_update :out_store
+
+  # def destroy
+  #    self.package.destroy
+  # end
 
   def exists?(location_id)
     self.source_location_id==location_id
