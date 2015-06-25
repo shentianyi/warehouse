@@ -25,7 +25,7 @@ module V3
         puts '-----------'
         puts params.to_json
         puts '-----------'
-msg=nil
+        msg=nil
         query = NStorage
         # query relation params
 
@@ -40,9 +40,13 @@ msg=nil
 
         begin
           # 保存
-          inventory_list_item = InventoryListItem.new_item(package_id, unique_id,
-                                                           part_id, qty, position,
-                                                           inventory_list_id, user_id)
+          inventory_list_item = InventoryListItem.new_item(package_id,
+                                                           unique_id,
+                                                           part_id,
+                                                           qty,
+                                                           position,
+                                                           inventory_list_id,
+                                                           user_id)
           if inventory_list_item.blank?
             msg= {result: 0, content: '添加失败'}
           else
