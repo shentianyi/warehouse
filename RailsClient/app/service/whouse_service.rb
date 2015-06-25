@@ -113,22 +113,21 @@ class WhouseService
       # end
 
       # record: packid + nopackid
-      noPackIdStorages = NStorages.where(partNr: storage.partNr, ware_house_id: storage.ware_house_id, position: storage.position).where("n_storages.qty > ?", 0).select("n_storages.*, SUM(n_storages.qty) as total_qty").order("n_storages.fifo asc")
+      puts "#######################"
+      noPackIdStorages = NStorage.where(partNr: storage.partNr, ware_house_id: storage.ware_house_id, position: storage.position).where("qty>?", 0).select("n_storages.*, SUM(n_storages.qty) as total_qty").order("n_storages.fifo asc")
       if storage.qty > 0
         # validate package qty
         # 正库存
-        raise '移库量大于剩余量' if params[:qty] > storage.qty
+        raise '移库量大于剩余量' if params[:qty].to_f > storage.qty
       end
 
       # adjust storage
       ## adjust to storage
       tostorages = NStorage.where(ware_house_id: toWh.id, partNr: params[:partNr], position: params[:toPosition], packageId: nil)
-
       noPackIdStorages.reduce(params[:qty]) do |restqty, noPackIdStorage|
         break if restqty.to_f <= 0
         move_data.update({from_id: noPackIdStorage.ware_house_id, fromPosition: noPackIdStorage.position,
                           fifo: noPackIdStorage.fifo, partNr: noPackIdStorage.partNr})
-
         if restqty.to_f >= noPackIdStorage.qty
           move_data[:qty] = noPackIdStorage.qty
           if tostorages.nil?
@@ -141,7 +140,7 @@ class WhouseService
         else
           move_data[:qty] = restqty
           noPackIdStorage.update!(qty: storage.qty - restqty.to_f)
-          if tostorages.nil?
+          if tostorages.first.nil?
             data = {partNr: noPackIdStorage.partNr, qty: restqty, fifo: noPackIdStorage.fifo, ware_house_id: toWh.id,
                     position: params[:toPosition]}
             NStorage.create!(data)
@@ -250,7 +249,7 @@ class WhouseService
         if tostorages.present?
           tostorages.first.update!(qty: tostorages.first.qty + restqty)
         else
-          data = {partNr: params.partNr, qty: restqty, ware_house_id: toWh.id, position: params[:toPosition]}
+          data = {partNr: params[:partNr], qty: restqty, ware_house_id: toWh.id, position: params[:toPosition]}
           NStorage.create!(data)
         end
 
