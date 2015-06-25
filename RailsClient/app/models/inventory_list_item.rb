@@ -52,7 +52,7 @@ class InventoryListItem < ActiveRecord::Base
     end
 
     if params[:whouse_id].blank?
-      params[:whouse_id]=InventoryList.find(inventory_list_id).whouse_id
+      params[:whouse_id]=InventoryList.find(params[:inventory_list_id]).whouse_id
     end
 
     # 存在nstorage记录，且传入part_id为nil则使用nstorage的partNr，否则默认使用传入的part_id
