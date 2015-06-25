@@ -16,7 +16,7 @@ class InventoryListItem < ActiveRecord::Base
       if InventoryListItem.where(package_id: package_id, inventory_list_id: inventory_list_id).first
         raise '已盘点'
       end
-      query = NStorage.where("packageid = :packageid ", {:packageid => package_id}).first
+      query = NStorage.where("packageid = :packageid ", {packageId: package_id}).first
     elsif !unique_id.blank?
       query = NStorage.where("uniqueid = :uniqueid ", {:uniqueid => unique_id}).first
     elsif !part_id.blank? && !position.blank?
