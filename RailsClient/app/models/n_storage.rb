@@ -36,7 +36,7 @@ class NStorage < ActiveRecord::Base
         # @storages.each do |storage|
           if inventory_list_item.part_id.to_s == result[0].to_s
             result.insert(2,inventory_list_item.qty2)
-            result[3] = result[1] -  result[2]
+            result[3] = (result[1]||0) -  result[2]
             @flag = true
             # break
           end
