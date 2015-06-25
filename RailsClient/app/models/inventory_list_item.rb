@@ -81,9 +81,14 @@ class InventoryListItem < ActiveRecord::Base
   end
 
   def need_convert_display
-    self.need_convert? ? 'Y':'N'
+    self.need_convert? ? 'Y' : 'N'
   end
+
   def in_store_display
-    self.in_store? ? 'Y':'N'
+    self.in_store? ? 'Y' : 'N'
+  end
+
+  def locked_display
+    self.locked? ? 'Y' : 'N'
   end
 end

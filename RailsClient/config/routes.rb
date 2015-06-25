@@ -38,6 +38,7 @@ Rails.application.routes.draw do
     member do
       get :export_list_detail
       get :export_list_total
+      get :lock_unlock_list
     end
   end
 
