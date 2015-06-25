@@ -95,8 +95,8 @@ class NStoragesController < ApplicationController
     end
 
     respond_to do |format|
-      format.to_total_xlsx do
-        send_data(query.to_xlsx(query),
+      format.xlsx do
+        send_data(query.to_total_xlsx(query),
                   :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
                   :filename => @model.pluralize+".xlsx")
       end
