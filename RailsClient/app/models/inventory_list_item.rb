@@ -17,9 +17,9 @@ class InventoryListItem < ActiveRecord::Base
                                  inventory_list_id: params[:inventory_list_id]).first
         raise '已盘点'
       end
-      query = NStorage.where("packageid = :packageid ", {packageId: params[:package_id]}).first
+      query = NStorage.where(packageId: params[:package_id]).first
     elsif !params[:unique_id].blank?
-      query = NStorage.where("uniqueid = :uniqueid ", {:uniqueid => params[:unique_id]}).first
+      query = NStorage.where(uniqueid: params[:unique_id]).first
     elsif !params[:part_id].blank? && !params[:position].blank?
       query=nil
     else
