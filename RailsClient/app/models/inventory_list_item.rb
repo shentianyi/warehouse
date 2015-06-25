@@ -37,13 +37,12 @@ class InventoryListItem < ActiveRecord::Base
       current_position = query.position
       in_store = true
       qty=query.qty if qty.blank?
+      if part_id.blank?
+        part_id = query.partNr
+      end
     end
 
     # 存在nstorage记录，且传入part_id为nil则使用nstorage的partNr，否则默认使用传入的part_id
-    if part_id.blank?
-      part_id = query.partNr
-    end
-
     # 赋值
     inventory_list_item = InventoryListItem.new(:package_id => package_id, :unique_id => unique_id,
                                                 :part_id => part_id, :qty => qty, :position => position, :current_whouse => current_whouse,
