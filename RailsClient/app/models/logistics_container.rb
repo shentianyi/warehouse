@@ -125,52 +125,33 @@ class LogisticsContainer<LocationContainer
   end
 
   def enter_store
-    if self.state_changed? && self.state==MovableState::CHECKED
-      if self.container.type==ContainerType::PACKAGE
-        puts '---------------------------'
-        # raise
-        if (package=self.package) && self.destinationable && self.destinationable_type == Whouse.to_s
-          params={
-              partNr: package.part_id,
-              qty: package.quantity,
-              fifo: package.parsed_fifo,
-              packageId: package.id,
-              toWh: self.destinationable_id,
-              uniq: true
-          }
-          if position=PartService.get_position_by_whouse_id(package.part_id, self.destinationable_id)
-            params[:toPosition]=position.detail
-          else
-            params[:toPosition]='00 00 00'
-          end
-          WhouseService.new.enter_stock(params)
-        end
+    if self.container.type==ContainerType::PACKAGE && self.state_changed?
+      begin
+        enter_stock
+      rescue
+
       end
     end
   end
 
   def enter_stock
-   # if self.state==MovableState::CHECKED
-      if self.container.type==ContainerType::PACKAGE
-        puts '---------------------------'
-        # raise
-        if (package=self.package) && self.destinationable && self.destinationable_type == Whouse.to_s
-          params={
-              partNr: package.part_id,
-              qty: package.quantity,
-              fifo: package.parsed_fifo,
-              packageId: package.id,
-              toWh: self.destinationable_id,
-              uniq: true
-          }
-          if position=PartService.get_position_by_whouse_id(package.part_id, self.destinationable_id)
-            params[:toPosition]=position.detail
-          else
-            params[:toPosition]='00 00 00'
-          end
-          WhouseService.new.enter_stock(params)
+    if self.state==MovableState::CHECKED
+      if (package=self.package) && self.destinationable && self.destinationable_type == Whouse.to_s
+        params={
+            partNr: package.part_id,
+            qty: package.quantity,
+            fifo: package.parsed_fifo,
+            packageId: package.id,
+            toWh: self.destinationable_id,
+            uniq: true
+        }
+        if position=PartService.get_position_by_whouse_id(package.part_id, self.destinationable_id)
+          params[:toPosition]=position.detail
+        else
+          params[:toPosition]='00 00 00'
         end
+        WhouseService.new.enter_stock(params)
       end
-   # end
+    end
   end
 end
