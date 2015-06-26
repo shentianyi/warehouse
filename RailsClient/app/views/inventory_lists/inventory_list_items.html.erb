@@ -11,7 +11,7 @@
     <%= link_to "锁定包装箱库存", lock_unlock_list_inventory_list_item_path(@inventory_list.id), class: "btn btn-warning", data: {confirm: "数据量较大，确定导出?"} %>
 <% end %>
 
-<% if @inventory_list.has_unlocked_pack_item %>
+<% if @inventory_list.has_locked_pack_item %>
     <%= link_to "解锁包装箱库存", lock_unlock_list_inventory_list_item_path(@inventory_list.id), class: "btn btn-warning", data: {confirm: "数据量较大，确定导出?"} %>
 <% end %>
 <table class="table table-bordered table-striped">
