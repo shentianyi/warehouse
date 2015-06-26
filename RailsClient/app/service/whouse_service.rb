@@ -169,7 +169,7 @@ class WhouseService
       # Move(partNr, qty, fifo,fromWh,fromPosition,toWh,toPosition,type)
       fromWh = Whouse.find_by(id: params[:fromWh])
       raise "目标仓库:#{fromWh}未找到" unless fromWh
-      raise "移库数量必须大于零" if  params[:qty].to_f < 0
+      #raise "移库数量必须大于零" if  params[:qty].to_f < 0
       #validate_position(fromWh, params[:fromPosition])
       # find storage records
       if params[:fromPosition].present?
@@ -205,16 +205,21 @@ class WhouseService
           move_data.update({from_id: storage.ware_house_id, fromPosition: storage.position,
                             fifo: storage.fifo, partNr: storage.partNr})
 
-          if restqty >= storage.qty
+          if restqty.to_f >= storage.qty.to_f
 
             move_data[:qty] = storage.qty
-            lastqty = restqty = restqty - storage.qty
+            lastqty = restqty = restqty.to_f - storage.qty.to_f
 
             # move all storage
             if !tostorage.nil?
-              tostorage.update!(qty: tostorage.qty + storage.qty)
+              if (tostorage.qty.to_f + storage.qty.to_f) == 0
+                tostorage.destroy!
+              else
+                tostorage.update!(qty: tostorage.qty + storage.qty)
+              end
               storage.destroy!
             else
+
               storage.update!(ware_house_id: toWh.id, position: params[:toPosition])
             end
           else
@@ -224,7 +229,11 @@ class WhouseService
             storage.update!(qty: storage.qty - restqty)
             # create target storage
             if !tostorage.nil?
-              tostorage.update!(qty: tostorage.qty + restqty)
+              if (tostorage.qty.to_f + restqty.to_f) == 0
+                tostorage.destroy!
+              else
+                tostorage.update!(qty: tostorage.qty + restqty)
+              end
             else
               data = {partNr: storage.partNr, qty: restqty, fifo: storage.fifo, ware_house_id: toWh.id,
                       position: params[:toPosition]}
@@ -261,7 +270,11 @@ class WhouseService
         #dse
         tostorage = NStorage.where(ware_house_id: toWh.id, partNr: params[:partNr], position: params[:toPosition]).first
         if !tostorage.nil?
-          tostorage.update!(qty: tostorage.qty + lastqty)
+          if (tostorage.qty.to_f + lastqty.to_f) == 0
+            tostorage.destroy!
+          else
+            tostorage.update!(qty: tostorage.qty + lastqty)
+          end
         else
           data = {partNr: params[:partNr], qty: lastqty, ware_house_id: toWh.id, position: params[:toPosition]}
           NStorage.create!(data)
@@ -270,11 +283,12 @@ class WhouseService
         #movement
         move_data.update({from_id: params[:toWh], fromPosition: params[:toPosition], partNr: params[:partNr], qty: lastqty})
         Movement.create!(move_data)
+
       end
 
     end
-
     {result: 1, content: 'move success'}
+
   end
 
 end
