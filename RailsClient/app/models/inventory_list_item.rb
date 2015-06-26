@@ -36,6 +36,7 @@ class InventoryListItem < ActiveRecord::Base
       params[:current_whouse] = query.ware_house_id
       params[:current_position] = query.position
       params[:in_store] = true
+      params[:fifo]=query.fifo
       params[:origin_qty] =params[:qty]=query.qty if params[:qty].blank?
       if params[:part_id].blank?
         params[:part_id] = query.partNr
