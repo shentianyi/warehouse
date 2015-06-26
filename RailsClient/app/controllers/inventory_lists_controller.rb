@@ -48,6 +48,7 @@ class InventoryListsController < ApplicationController
   
   def inventory_list_items
     @inventory_list_items = @inventory_list.inventory_list_items.paginate(:page => params[:page])
+    @page_start=(params[:page].nil? ? 0 : (params[:page].to_i-1))*20
   end
   
   def discrepancy

@@ -81,6 +81,10 @@ class InventoryListItem < ActiveRecord::Base
     end
   end
 
+  def fifo_display=(v)
+    self.fifo=v.to_time.utc
+  end
+
   def need_convert_display
     self.need_convert? ? 'Y' : 'N'
   end

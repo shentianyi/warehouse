@@ -169,7 +169,11 @@ class WhouseService
       # Move(partNr, qty, fifo,fromWh,fromPosition,toWh,toPosition,type)
       fromWh = Whouse.find_by(id: params[:fromWh])
       raise "目标仓库:#{fromWh}未找到" unless fromWh
+<<<<<<< HEAD
       #raise "移库数量必须大于零" if  params[:qty].to_f < 0
+=======
+      # raise "移库数量必须大于零" if  params[:qty].to_f < 0
+>>>>>>> d84834b89b945e0bb666d7ec5447428ed3fc6d79
       #validate_position(fromWh, params[:fromPosition])
       # find storage records
       if params[:fromPosition].present?

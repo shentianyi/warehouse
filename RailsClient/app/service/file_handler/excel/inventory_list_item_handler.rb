@@ -5,7 +5,7 @@ module FileHandler
           '仓库号', '零件号', 'FIFO', '数量', '库位号', '包装号', '唯一码', '原材料/半成品标记', '需要转换'
       ]
       DETAIL_HEADERS=[
-          '仓库号', '零件号', 'FIFO', '数量', '原数量', '盘点库位号', '包装号', '唯一号', '目前仓库', '目前库位', '原材料/半成品标记', '原材料线/非线标记', '需要转换', '创建人', '是否在库存', '所属清单'
+          'No.','仓库号', '零件号', 'FIFO', '数量', '原数量', '盘点库位号', '包装号', '唯一号', '目前仓库', '目前库位', '原材料/半成品标记', '原材料线/非线标记', '需要转换', '创建人', '是否在库存', '所属清单'
       ]
 
       TOTAL_HEADERS=[
@@ -60,7 +60,7 @@ module FileHandler
 
       def self.export_total(items)
         msg=Message.new
-        tmp_file=full_tmp_path('盘点详细清单.xlsx')
+        tmp_file=full_tmp_path('盘点汇总清单.xlsx')
         p = Axlsx::Package.new
         p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
           sheet.add_row TOTAL_HEADERS
@@ -90,8 +90,9 @@ module FileHandler
         p = Axlsx::Package.new
         p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
           sheet.add_row DETAIL_HEADERS
-          items.all.each do |inventory_list_item|
+          items.all.each_with_index do |inventory_list_item,i|
             sheet.add_row [
+                              i+1,
                               inventory_list_item.whouse_id,
                               inventory_list_item.part_id,
                               inventory_list_item.fifo_display,
@@ -108,7 +109,7 @@ module FileHandler
                               inventory_list_item.user_id,
                               inventory_list_item.in_store_display,
                               inventory_list_item.inventory_list.name
-                          ], types: [:string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string]
+                          ], types: [:string,:string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string]
 
           end
         end

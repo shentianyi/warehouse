@@ -42,19 +42,19 @@
   <tbody>
   <% @inventory_list_items.each_with_index do |inventory_list_item, i| %>
       <tr>
-        <td><%= i+1 %></td>
+        <td><%= @page_start+i+1 %></td>
         <td><%= inventory_list_item.whouse_id %></td>
-        <td><%= inventory_list_item.part_id %></td>
-        <td><%= inventory_list_item.fifo_display %></td>
+        <td><%= best_in_place inventory_list_item, :part_id, as: :input %></td>
+        <td><%= best_in_place inventory_list_item, :fifo_display, as: :input ,display_as: :fifo_display%></td>
         <td><%= best_in_place inventory_list_item, :qty, as: :input %></td>
         <td><%= best_in_place inventory_list_item, :origin_qty, as: :input %></td>
-        <td><%= inventory_list_item.position %></td>
+        <td><%= best_in_place inventory_list_item, :position, as: :input %></td>
         <td><%= inventory_list_item.package_id %></td>
         <td><%= inventory_list_item.unique_id %></td>
         <td><%= inventory_list_item.current_whouse %></td>
         <td><%= inventory_list_item.current_position %></td>
-        <td><%= inventory_list_item.part_form_mark %></td>
-        <td><%= inventory_list_item.part_wire_mark %></td>
+        <td><%= best_in_place inventory_list_item, :part_form_mark, as: :input %></td>
+        <td><%= best_in_place inventory_list_item, :part_wire_mark, as: :input %></td>
         <td><%= inventory_list_item.need_convert_display %></td>
         <td><%= inventory_list_item.user_id %></td>
         <td><%= inventory_list_item.in_store_display %></td>
