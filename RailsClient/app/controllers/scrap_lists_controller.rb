@@ -112,6 +112,6 @@ class ScrapListsController < ApplicationController
   end
 
   def scrap_list_params
-    params.require(:scrap_list).permit(:src_warehouse, :dse_warehouse, :builder)
+    params.require(:scrap_list).permit(:name,:src_warehouse, :dse_warehouse, :builder)
   end
 end

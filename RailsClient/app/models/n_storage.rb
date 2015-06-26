@@ -1,5 +1,6 @@
 class NStorage < ActiveRecord::Base
   belongs_to :ware_house, class_name: 'WareHouse'
+  default_scope { where(locked: false) }
 
   def whId
     ware_house and ware_house.whId or nil

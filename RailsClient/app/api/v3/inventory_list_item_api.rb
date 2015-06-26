@@ -25,14 +25,14 @@ module V3
         puts '-----------'
         puts params.to_json
         puts '-----------'
-msg=nil
+        msg=nil
         query = NStorage
         # query relation params
 
         package_id = params[:package_id].nil? ? nil : params[:package_id]
         unique_id = params[:unique_id].nil? ? nil : params[:unique_id]
-        part_id = params[:part_id].nil? ? nil : params[:part_id]
-        qty = params[:qty].nil? ? nil : params[:qty]
+        part_id = params[:part_id].nil? ? nil : params[:part_id].sub(/^P/,'')
+        qty = params[:qty].nil? ? nil : params[:qty].sub(/^Q/,'')
 
         position = params[:position].nil? ? nil : params[:position]
         inventory_list_id = params[:inventory_list_id].nil? ? nil : params[:inventory_list_id]
@@ -40,9 +40,17 @@ msg=nil
 
         begin
           # 保存
-          inventory_list_item = InventoryListItem.new_item(package_id, unique_id,
-                                                           part_id, qty, position,
-                                                           inventory_list_id, user_id)
+          item={
+              package_id:package_id,
+              unique_id:unique_id,
+              part_id:part_id,
+              qty:qty,
+              position:position,
+              inventory_list_id:inventory_list_id,
+              user_id:user_id,
+              need_convert:false
+          }
+          inventory_list_item = InventoryListItem.new_item(item)
           if inventory_list_item.blank?
             msg= {result: 0, content: '添加失败'}
           else
