@@ -60,7 +60,7 @@ module FileHandler
 
       def self.export_total(items)
         msg=Message.new
-        tmp_file=full_tmp_path('盘点详细清单.xlsx')
+        tmp_file=full_tmp_path('盘点汇总清单.xlsx')
         p = Axlsx::Package.new
         p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
           sheet.add_row TOTAL_HEADERS
