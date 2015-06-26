@@ -122,27 +122,25 @@ class WhouseService
           return
         end
       end
-
       # no means ignore pACKID BUT INCLUDE
       noPackIdStorages = NStorage.where(partNr: storage.partNr, ware_house_id: storage.ware_house_id, position: storage.position).where("n_storages.qty > ?", 0).select("n_storages.*, SUM(n_storages.qty) as total_qty").order("n_storages.fifo asc")
 
       # adjust storage
       ## adjust to storage
-      tostorages = NStorage.where(ware_house_id: toWh.id, partNr: params[:partNr], position: params[:toPosition], packageId: nil)
 
       noPackIdStorages.reduce(params[:qty].to_f) do |restqty, noPackIdStorage|
-
         break if restqty.to_f <= 0
         move_data.update({from_id: noPackIdStorage.ware_house_id, fromPosition: noPackIdStorage.position,
                           fifo: noPackIdStorage.fifo, partNr: noPackIdStorage.partNr})
+        tostorage = NStorage.where(ware_house_id: toWh.id, partNr: params[:partNr], position: params[:toPosition], packageId: nil).first
 
         if restqty.to_f >= noPackIdStorage.qty
 
           move_data[:qty] = noPackIdStorage.qty
-          if tostorages.first.nil?
+          if tostorage.nil?
             noPackIdStorage.update!(ware_house_id: toWh.id, position: params[:toPosition])
           else
-            tostorages.first.update!(qty: tostorages.first.qty + noPackIdStorage.qty)
+            tostorage.update!(qty: tostorage.qty + noPackIdStorage.qty)
             noPackIdStorage.destroy!
           end
           restqty = restqty.to_f - noPackIdStorage.qty
@@ -150,12 +148,12 @@ class WhouseService
 
           move_data[:qty] = restqty
           noPackIdStorage.update!(qty: storage.qty - restqty.to_f)
-          if tostorages.first.nil?
+          if tostorage.nil?
             data = {partNr: noPackIdStorage.partNr, qty: restqty, fifo: noPackIdStorage.fifo, ware_house_id: toWh.id,
                     position: params[:toPosition]}
             NStorage.create!(data)
           else
-            tostorages.first.update!(qty: tostorages.first.qty + restqty.to_f)
+            tostorage.update!(qty: tostorage.qty + restqty.to_f)
           end
           restqty = 0
         end
@@ -171,6 +169,7 @@ class WhouseService
       # Move(partNr, qty, fifo,fromWh,fromPosition,toWh,toPosition,type)
       fromWh = Whouse.find_by(id: params[:fromWh])
       raise "目标仓库:#{fromWh}未找到" unless fromWh
+      raise "移库数量必须大于零" if  params[:qty].to_f < 0
       #validate_position(fromWh, params[:fromPosition])
       # find storage records
       if params[:fromPosition].present?
