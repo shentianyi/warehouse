@@ -2,14 +2,14 @@ module FileHandler
   module Excel
     class InventoryListItemHandler<Base
       HEADERS=[
-          '仓库号', '零件号', 'FIFO', '数量', '库位号', '包装号', '唯一码', '原材料/成品标记', '需要转换'
+          '仓库号', '零件号', 'FIFO', '数量', '库位号', '包装号', '唯一码', '原材料/半成品标记', '需要转换'
       ]
       DETAIL_HEADERS=[
-          '仓库号', '零件号', 'FIFO', '数量', '原数量', '盘点库位号', '包装号', '唯一号', '目前仓库', '目前库位', '原材料/成品标记', '原材料线/非线标记', '需要转换', '创建人', '是否在库存', '所属清单'
+          '仓库号', '零件号', 'FIFO', '数量', '原数量', '盘点库位号', '包装号', '唯一号', '目前仓库', '目前库位', '原材料/半成品标记', '原材料线/非线标记', '需要转换', '创建人', '是否在库存', '所属清单'
       ]
 
       TOTAL_HEADERS=[
-          '仓库号', '零件号', 'FIFO', '数量', '原材料/成品标记', '原材料线/非线标记'
+          '仓库号', '零件号', 'FIFO', '数量', '原材料/半成品标记', '原材料线/非线标记'
       ]
 
       def self.import(file, inventory_list_id)
@@ -38,7 +38,7 @@ module FileHandler
                         position: row['库位号'],
                         package_id: row['包装号'],
                         unique_id: row['唯一码'],
-                        part_form_mark: row['原材料/成品标记'],
+                        part_form_mark: row['原材料/半成品标记'],
                         need_convert: row['需要转换'].present? ? (row['需要转换']=='Y') : true
                 }
                 InventoryListItem.new_item(params)

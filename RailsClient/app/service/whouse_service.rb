@@ -42,7 +42,7 @@ class WhouseService
     # validate uniqueId
     raise 'uniqueId already exists!' if params[:uniqueId].present? and NStorage.find_by(params[:uniqueId])
     if params[:packageId] and NStorage.find_by(packageId: params[:packageId], partNr: params[:partNr])
-      # raise 'Already Enter Stock'
+      raise 'Already Enter Stock'
     else
       data = {partNr: params[:partNr], qty: params[:qty], fifo: fifo, ware_house_id: wh.id, position: params[:toPosition]}
       data[:uniqueId] = params[:uniqueId] if params[:uniqueId].present?
