@@ -39,7 +39,7 @@ module FileHandler
                         package_id: row['包装号'],
                         unique_id: row['唯一码'],
                         part_form_mark: row['原材料/半成品标记'],
-                        need_convert: row['需要转换'].present? ? (row['需要转换']=='Y') : true
+                        need_convert: row['需要转换'].present? ? (row['需要转换']=='Y') : false
                 }
                 InventoryListItem.new_item(params)
               end
