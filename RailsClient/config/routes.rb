@@ -39,6 +39,8 @@ Rails.application.routes.draw do
       get :export_list_detail
       get :export_list_total
       get :lock_unlock_list
+      get :store_list
+      get :unstore_list
     end
   end
 

@@ -45,7 +45,9 @@ class InventoryListItem < ActiveRecord::Base
 
     part=Part.find_by_id(params[:part_id])
     if params[:need_convert]
-      params[:qty]=BigDecimal.new(params[:origin_qty].to_s)/part.convert_unit
+      params[:qty]=BigDecimal.new(params[:origin_qty].to_s)/BigDecimal.new(part.convert_unit.to_s)
+    else
+      params[:qty]=BigDecimal.new(params[:origin_qty].to_s)
     end
 
     if params[:part_wire_mark].blank?
@@ -75,6 +77,19 @@ class InventoryListItem < ActiveRecord::Base
   end
 
 
+  def enter_stock
+    params={
+        partNr: self.part_id,
+        qty: self.qty,
+        fifo: self.fifo,
+        packageId: self.package_id,
+        toWh: self.whouse_id,
+        toPosition: self.position,
+        uniq: true
+    }
+    WhouseService.new.enter_stock(params)
+  end
+
   def fifo_display
     if self.fifo
       self.fifo.localtime.strftime('%Y/%m/%d')
@@ -95,5 +110,9 @@ class InventoryListItem < ActiveRecord::Base
 
   def locked_display
     self.locked? ? 'Y' : 'N'
+  end
+
+  def in_stored_display
+    self.in_stored? ? 'Y' : 'N'
   end
 end
