@@ -183,7 +183,6 @@ class WhouseService
       #   else
       #   negatives_storages = NStorage.where(partNr: params[:partNr], ware_house_id: fromWh.id).where("n_storages.qty < ?", 0)
       # end
-      tostorages = NStorage.where(ware_house_id: toWh.id, partNr: params[:partNr], position: params[:toPosition])
 
       # add fifo condition if fifo param exists
       if params[:fifo]
@@ -194,13 +193,15 @@ class WhouseService
       storages.order(fifo: :asc)
       # validate sum of storage qty is enough
       #支持负库存#raise 'No enough qty in source' if sumqty = storages.reduce(0) { |seed, s| seed + s.qty } < params[:qty]
-      restqty = params[:qty].to_f
+      lastqty = params[:qty].to_f
 
       if storages.present?
 
         storages.reduce(params[:qty].to_f) do |restqty, storage|
 
           break if restqty <= 0
+
+          tostorage = NStorage.where(ware_house_id: toWh.id, partNr: params[:partNr], position: params[:toPosition]).first
           # update parameters of movement creation
           move_data.update({from_id: storage.ware_house_id, fromPosition: storage.position,
                             fifo: storage.fifo, partNr: storage.partNr})
@@ -208,11 +209,11 @@ class WhouseService
           if restqty >= storage.qty
 
             move_data[:qty] = storage.qty
-            restqty = restqty - storage.qty
+            lastqty = restqty = restqty - storage.qty
 
             # move all storage
-            if tostorages.present?
-              tostorages.first.update!(qty: tostorages.first.qty + storage.qty)
+            if !tostorage.nil?
+              tostorage.update!(qty: tostorage.qty + storage.qty)
               storage.destroy!
             else
               storage.update!(ware_house_id: toWh.id, position: params[:toPosition])
@@ -223,15 +224,15 @@ class WhouseService
             # adjust source storage
             storage.update!(qty: storage.qty - restqty)
             # create target storage
-            if tostorages.present?
-              tostorages.first.update!(qty: tostorages.first.qty + restqty)
+            if !tostorage.nil?
+              tostorage.update!(qty: tostorage.qty + restqty)
             else
               data = {partNr: storage.partNr, qty: restqty, fifo: storage.fifo, ware_house_id: toWh.id,
                       position: params[:toPosition]}
               NStorage.create!(data)
             end
 
-            restqty = 0
+            lastqty = restqty = 0
           end
 
           # create movement
@@ -241,7 +242,7 @@ class WhouseService
 
       end
 
-      if restqty > 0
+      if lastqty > 0
         #src
         # negatives_storages = NStorage.where(partNr: params[:partNr], ware_house_id: fromWh.id, position: params[:fromPosition])
 
@@ -252,23 +253,23 @@ class WhouseService
         end
 
         if negatives_storages.present?
-          negatives_storages.first.update!(qty: negatives_storages.first.qty - restqty)
+          negatives_storages.first.update!(qty: negatives_storages.first.qty - lastqty)
         else
-          data = {partNr: params[:partNr], qty: -restqty, ware_house_id: fromWh.id, position: params[:fromPosition]||''}
+          data = {partNr: params[:partNr], qty: -lastqty, ware_house_id: fromWh.id, position: params[:fromPosition]||''}
           NStorage.create!(data)
         end
 
         #dse
-        tostorages = NStorage.where(ware_house_id: toWh.id, partNr: params[:partNr], position: params[:toPosition])
-        if tostorages.present?
-          tostorages.first.update!(qty: tostorages.first.qty + restqty)
+        tostorage = NStorage.where(ware_house_id: toWh.id, partNr: params[:partNr], position: params[:toPosition]).first
+        if !tostorage.nil?
+          tostorage.update!(qty: tostorage.qty + lastqty)
         else
-          data = {partNr: params[:partNr], qty: restqty, ware_house_id: toWh.id, position: params[:toPosition]}
+          data = {partNr: params[:partNr], qty: lastqty, ware_house_id: toWh.id, position: params[:toPosition]}
           NStorage.create!(data)
         end
 
         #movement
-        move_data.update({from_id: params[:toWh], fromPosition: params[:toPosition], partNr: params[:partNr], qty: restqty})
+        move_data.update({from_id: params[:toWh], fromPosition: params[:toPosition], partNr: params[:partNr], qty: lastqty})
         Movement.create!(move_data)
       end
 
