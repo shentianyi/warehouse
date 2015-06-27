@@ -3,7 +3,7 @@ module FileHandler
     class NStorageHandler<Base
 
       HEADERS=[
-          :toWh,:partNr,:fifo,:qty,:toPosition,:packageId,:uniqeId
+          :toWh,:partNr,:fifo,:qty,:toPosition,:packageId
       ]
 
       def self.import(file)
@@ -33,7 +33,7 @@ module FileHandler
       end
 
       def self.move(file)
-        heads = [:fromWh, :fromPosition, :uniqeId, :packageId, :partNr, :qty, :fifo, :toWh, :toPosition]
+        heads = [:fromWh, :fromPosition, :packageId, :partNr, :qty, :fifo, :toWh, :toPosition]
         msg = Message.new
         book = Roo::Excelx.new file.full_path
         book.default_sheet = book.sheets.first

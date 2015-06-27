@@ -47,8 +47,7 @@
     <th>数量</th>
     <th>原数量</th>
     <th>盘点库位号</th>
-    <th>包装号</th>
-    <th>唯一号</th>
+    <th>唯一码</th>
     <th>目前仓库</th>
     <th>目前库位</th>
     <th>原材料/半成品/成品标记</th>
@@ -75,7 +74,6 @@
         <td><%= best_in_place inventory_list_item, :origin_qty, as: :input %></td>
         <td><%= best_in_place inventory_list_item, :position, as: :input %></td>
         <td><%= inventory_list_item.package_id %></td>
-        <td><%= inventory_list_item.unique_id %></td>
         <td><%= inventory_list_item.current_whouse %></td>
         <td><%= inventory_list_item.current_position %></td>
         <td><%= best_in_place inventory_list_item, :part_form_mark, as: :input %></td>
