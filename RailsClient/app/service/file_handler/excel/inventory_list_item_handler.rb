@@ -69,7 +69,7 @@ module FileHandler
             sheet.add_row [
                               inventory_list_item.whouse_id,
                               inventory_list_item.part_id,
-                              inventory_list_item.fifo_display,
+                              inventory_list_item.fifo_export_display,
                               inventory_list_item.qty,
                               inventory_list_item.part_form_mark,
                               inventory_list_item.part_wire_mark
@@ -96,7 +96,7 @@ module FileHandler
                               i+1,
                               inventory_list_item.whouse_id,
                               inventory_list_item.part_id,
-                              inventory_list_item.fifo_display,
+                              inventory_list_item.fifo_export_display,
                               inventory_list_item.qty,
                               inventory_list_item.origin_qty,
                               inventory_list_item.position,

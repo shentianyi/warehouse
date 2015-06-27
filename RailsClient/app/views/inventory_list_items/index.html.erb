@@ -16,6 +16,7 @@
     <th>仓库号</th>
     <th>零件号</th>
     <th>FIFO</th>
+    <th>FIFO报表</th>
     <th>数量</th>
     <th>原数量</th>
     <th>盘点库位号</th>
@@ -42,6 +43,7 @@
         <td><%= inventory_list_item.whouse_id %></td>
         <td><%= best_in_place inventory_list_item, :part_id, as: :input %></td>
         <td><%= best_in_place inventory_list_item, :fifo_display, as: :input ,display_as: :fifo_display%></td>
+        <td><%= inventory_list_item.fifo_export_display%></td>
         <td><%= best_in_place inventory_list_item, :qty, as: :input %></td>
         <td><%= best_in_place inventory_list_item, :origin_qty, as: :input %></td>
         <td><%= best_in_place inventory_list_item, :position, as: :input %></td>
