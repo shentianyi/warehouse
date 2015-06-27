@@ -24,6 +24,18 @@
     <%= link_to "取消入库", unstore_list_inventory_list_item_path(@inventory_list.id), class: "btn btn-warning", data: {confirm: "确定?"} %>
 <% end %>
 
+<div>
+  <form method="get" action="<%= send("search_inventory_list_items_path") %>">
+    <div>
+      <span>零件号：
+        <input type="text" name="inventory_list_item[part_id]" value="<%= @id %>"/>
+        <input type="hidden" name="inventory_list_item[part_id_fuzzy]"/>
+      </span>
+      <input type="submit" value="查 找" class="btn btn-primary"/>
+    </div>
+  </form>
+</div>
+
 <table class="table table-bordered table-striped">
   <thead>
   <tr>
