@@ -96,6 +96,10 @@ class InventoryListItem < ActiveRecord::Base
     end
   end
 
+  def qty_export_display
+    self.qty.round.to_i
+  end
+
   def fifo_export_display
     if self.fifo
       self.fifo.localtime.strftime('%d.%m.%y')
