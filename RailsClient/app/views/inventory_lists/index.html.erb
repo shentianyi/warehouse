@@ -8,6 +8,9 @@
   <%= will_paginate @inventory_lists, :container => false %>
 </div>
 
+<%= link_to "导出 汇总", export_total_inventory_lists_path, class: "btn btn-default", data: {confirm: "数据量较大，确定导出?"} %>
+
+
 <table class="table table-bordered table-striped globle-table">
   <thead>
     <tr>
