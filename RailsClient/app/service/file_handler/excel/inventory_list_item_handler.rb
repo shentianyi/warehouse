@@ -5,7 +5,7 @@ module FileHandler
           '仓库号', '零件号', 'FIFO', '数量', '库位号', '唯一码', '原材料/半成品/成品标记', '需要转换'
       ]
       DETAIL_HEADERS=[
-          'No.', '仓库号', '零件号', 'FIFO', '数量', '原数量', '盘点库位号', '唯一码', '目前仓库', '目前库位', '原材料/半成品/成品标记', '原材料线/非线标记', '需要转换','是否已入库', '创建人', '是否在库存', '所属清单'
+          'No.', '仓库号', '零件号','FIFO原', 'FIFO', '数量', '原数量', '盘点库位号', '唯一码', '目前仓库', '目前库位', '原材料/半成品/成品标记', '原材料线/非线标记', '需要转换','是否已入库', '创建人', '是否在库存', '所属清单'
       ]
 
       TOTAL_HEADERS=[
@@ -95,6 +95,7 @@ module FileHandler
             sheet.add_row [
                               inventory_list_item.whouse_id,
                               inventory_list_item.part_id,
+                              inventory_list_item.fifo_display,
                               inventory_list_item.fifo_export_display,
                               inventory_list_item.qty,
                               inventory_list_item.part_form_mark,
