@@ -18,7 +18,7 @@
           <div>
             <span class="label label-info">盘点清单:</span>
 			<% inventory_lists_array = InventoryList.all.map { |inventory_list| [inventory_list.name, inventory_list.id]}%>
-            <%= select_tag(:inventory_list_id,options_for_select(inventory_lists_array,@inventory_list_id),include_blank: false)%>
+            <%= select_tag(:sid,options_for_select(inventory_lists_array,@inventory_list_id),include_blank: false)%>
             
             <span class="label label-info">显示方式:</span>
             <%= select_tag :format, options_for_select([["Web", "html"],["Excel File(MS 07 or later)", "xlsx"]], "html") %>

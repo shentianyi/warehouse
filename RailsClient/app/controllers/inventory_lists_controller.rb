@@ -52,8 +52,8 @@ class InventoryListsController < ApplicationController
   end
   
   def discrepancy
-    @inventory_list_id = params[:id]
-    @inventory_list=InventoryList.find_by_id(params[:id])
+    @inventory_list_id = params[:sid]||params[:id]
+    @inventory_list=InventoryList.find_by_id(@inventory_list_id)
     @results = NStorage.generate_diff_report(@inventory_list_id)
     
     @title="#{InventoryList.find_by(:id => @inventory_list_id).name}差异报表"
