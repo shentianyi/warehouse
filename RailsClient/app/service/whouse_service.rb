@@ -3,7 +3,7 @@ class WhouseService
     return nil if fifo.blank?
     puts "---------------88888888888#{fifo}"
     t = fifo.to_time
-    raise 'fifo time is invalid' if t > Time.now
+    raise "fifo:#{fifo} 无效" if t > Time.now
     t
   end
 
