@@ -23,10 +23,10 @@ Rails.application.routes.draw do
   resources :inventory_lists do
     member do
       get 'inventory_list_items'
+      get :discrepancy
     end
     
     collection do
-      get :discrepancy
       get :export_total
     end
   end

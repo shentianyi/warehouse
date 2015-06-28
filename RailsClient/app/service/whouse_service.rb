@@ -47,6 +47,7 @@ class WhouseService
       data = {partNr: params[:partNr], qty: params[:qty], fifo: fifo, ware_house_id: wh.id, position: params[:toPosition]}
       data[:uniqueId] = params[:uniqueId] if params[:uniqueId].present?
       data[:packageId] = params[:packageId] if params[:packageId].present?
+      data[:locked]=true if params[:locked].present?
       if params[:packageId].present?
         NStorage.create!(data)
       else
