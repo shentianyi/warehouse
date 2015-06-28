@@ -31,26 +31,42 @@
     <th>是否已锁定包装箱库存</th>
     <th>是否已入库</th>
     <th>所属清单</th>
-    <th colspan="3">&nbsp;</th>
+    <th colspan="2">&nbsp;</th>
   </tr>
   </thead>
 
   <tbody>
   <% @inventory_list_items.each_with_index do |inventory_list_item, i| %>
       <tr>
-        <td><%= i+1 %></td>
+        <td><%= @page_start+i+1 %></td>
         <td><%= inventory_list_item.whouse_id %></td>
-        <td><%= best_in_place inventory_list_item, :part_id, as: :input %></td>
-        <td><%= best_in_place inventory_list_item, :fifo_display, as: :input ,display_as: :fifo_display%></td>
-        <td><%= inventory_list_item.fifo_export_display%></td>
-        <td><%= best_in_place inventory_list_item, :qty, as: :input %></td>
-        <td><%= best_in_place inventory_list_item, :origin_qty, as: :input %></td>
-        <td><%= best_in_place inventory_list_item, :position, as: :input %></td>
+        <% unless inventory_list_item.in_stored? %>
+            <td><%= best_in_place inventory_list_item, :part_id, as: :input %></td>
+            <td><%= best_in_place inventory_list_item, :fifo_display, as: :input, display_as: :fifo_display %></td>
+        <% else %>
+            <td><%= inventory_list_item.part_id %></td>
+            <td><%= inventory_list_item.fifo_display %></td>
+        <% end %>
+        <td><%= inventory_list_item.fifo_export_display %></td>
+        <% unless inventory_list_item.in_stored? %>
+            <td><%= best_in_place inventory_list_item, :qty, as: :input %></td>
+            <td><%= best_in_place inventory_list_item, :origin_qty, as: :input %></td>
+            <td><%= best_in_place inventory_list_item, :position, as: :input %></td>
+        <% else %>
+            <td><%= inventory_list_item.qty %></td>
+            <td><%= inventory_list_item.origin_qty %></td>
+            <td><%= inventory_list_item.position %></td>
+        <% end %>
         <td><%= inventory_list_item.package_id %></td>
         <td><%= inventory_list_item.current_whouse %></td>
         <td><%= inventory_list_item.current_position %></td>
-        <td><%= best_in_place inventory_list_item, :part_form_mark, as: :input %></td>
-        <td><%= best_in_place inventory_list_item, :part_wire_mark, as: :input %></td>
+        <% unless inventory_list_item.in_stored? %>
+            <td><%= best_in_place inventory_list_item, :part_form_mark, as: :input %></td>
+            <td><%= best_in_place inventory_list_item, :part_wire_mark, as: :input %></td>
+        <% else %>
+            <td><%= inventory_list_item.part_form_mark %></td>
+            <td><%= inventory_list_item.part_wire_mark %></td>
+        <% end %>
         <td><%= inventory_list_item.need_convert_display %></td>
         <td><%= inventory_list_item.user_id %></td>
         <td><%= inventory_list_item.in_store_display %></td>
@@ -58,8 +74,11 @@
         <td><%= inventory_list_item.in_stored_display %></td>
         <td><%= inventory_list_item.inventory_list.name %></td>
         <td><%= link_to 'Show', inventory_list_item %></td>
-        <td><%= link_to 'Edit', edit_inventory_list_item_path(inventory_list_item) %></td>
-        <td><%= link_to 'Destroy', inventory_list_item, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        <td>
+          <% unless inventory_list_item.in_stored? %>
+              <%= link_to 'Destroy', inventory_list_item, method: :delete, data: {confirm: 'Are you sure?'} %>
+          <% end %>
+        </td>
       </tr>
   <% end %>
   </tbody>
