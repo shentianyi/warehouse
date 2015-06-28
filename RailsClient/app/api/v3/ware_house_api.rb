@@ -57,6 +57,10 @@ module V3
         optional :fifo, type: String
       end
       post :move do
+        params[:toWh]=params[:toWh].sub(/LO/,'')
+        params[:fromWh]=params[:fromWh].sub(/LO/,'') if params[:fromWh].present?
+        params[:partNr]=params[:partNr].sub(/P/,'') if params[:partNr].present?
+
         puts "#{params.to_json}-----------"
         begin
           params[:qty]=params[:qty].to_f

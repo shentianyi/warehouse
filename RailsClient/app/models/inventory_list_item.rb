@@ -81,12 +81,15 @@ class InventoryListItem < ActiveRecord::Base
     params={
         partNr: self.part_id,
         qty: self.qty,
-        fifo: self.fifo,
-        packageId: self.package_id,
-        toWh: self.whouse_id,
-        toPosition: self.position,
+        fifo: self.fifo.present? ? self.fifo : nil,
+        packageId: self.package_id.present? ? self.package_id : nil,
+        toWh: self.whouse_id.present? ? self.whouse_id : nil,
+        toPosition: self.position.present? ? self.position : nil,
         uniq: true
     }
+    puts '--------------------------------------'
+    puts params.to_json
+    puts '--------------------------------------'
     WhouseService.new.enter_stock(params)
   end
 
