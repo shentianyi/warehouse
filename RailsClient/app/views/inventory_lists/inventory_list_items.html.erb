@@ -15,13 +15,11 @@
     <%= link_to "解锁包装箱库存", lock_unlock_list_inventory_list_item_path(@inventory_list.id), class: "btn btn-warning", data: {confirm: "确定?"} %>
 <% end %>
 
+<p id="notice"><%= notice %></p>
+
 
 <% if @inventory_list.has_un_stored_item %>
     <%= link_to "开始入库", store_list_inventory_list_item_path(@inventory_list.id), class: "btn btn-warning", data: {confirm: "确定?"} %>
-<% end %>
-
-<% if @inventory_list.has_stored_item %>
-    <%= link_to "取消入库", unstore_list_inventory_list_item_path(@inventory_list.id), class: "btn btn-warning", data: {confirm: "确定?"} %>
 <% end %>
 
 <div>
