@@ -107,11 +107,15 @@ class WhouseService
 
       puts "############{storage.to_json}"
       raise '包装未入库！' if storage.nil?
-
+      if params[:qty].blank?
+        params[:qty]=storage.qty
+      end
       # if storage
       #   pre=NStorage.where(partNr: storage.partNr, ware_house_id: storage.ware_house_id).where('fifo<?', storage.fifo).first
       #   raise "FIFO!不能移库,此箱入库时间为:#{storage.fifo.localtime.strftime('%Y-%m-%d')}" if pre
       # end
+
+      puts "#{storage.qty}:#{params[:qty]}"
 
       # record: packid + nopackid
       if storage.qty > 0
@@ -170,7 +174,7 @@ class WhouseService
       # Move(partNr, qty, fifo,fromWh,fromPosition,toWh,toPosition,type)
       fromWh = Whouse.find_by(id: params[:fromWh])
       raise "目标仓库:#{fromWh}未找到" unless fromWh
-      
+
       #raise "移库数量必须大于零" if  params[:qty].to_f < 0
       #validate_position(fromWh, params[:fromPosition])
       # find storage records

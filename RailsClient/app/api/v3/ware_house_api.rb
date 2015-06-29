@@ -58,13 +58,17 @@ module V3
       end
       post :move do
         params[:toWh]=params[:toWh].sub(/LO/,'')
+        params[:toPosition]=params[:toPosition].sub(/LO/,'')
         params[:fromWh]=params[:fromWh].sub(/LO/,'') if params[:fromWh].present?
         params[:partNr]=params[:partNr].sub(/P/,'') if params[:partNr].present?
 
         puts "#{params.to_json}-----------"
         begin
-          params[:qty]=params[:qty].to_f
-
+          params[:qty]=params[:qty].to_f if params[:qty].present?
+          if params[:partNr].present?
+            raise '请填写数量' unless params[:qty].present?
+            params[:packageId]=nil
+          end
           NStorage.transaction do
             WhouseService.new.move(params)
           end
