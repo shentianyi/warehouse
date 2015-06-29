@@ -52,7 +52,8 @@ class InventoryListsController < ApplicationController
   end
   
   def discrepancy
-    @inventory_list_id = params[:inventory_list_id].nil? ? 1 : params[:inventory_list_id]
+    @inventory_list_id = params[:sid]||params[:id]
+    @inventory_list=InventoryList.find_by_id(@inventory_list_id)
     @results = NStorage.generate_diff_report(@inventory_list_id)
     
     @title="#{InventoryList.find_by(:id => @inventory_list_id).name}差异报表"
@@ -74,7 +75,15 @@ class InventoryListsController < ApplicationController
 
       format.html
     end
-  end  
+  end
+
+
+  def export_total
+    msg = FileHandler::Excel::InventoryListItemHandler.export_total_no_fifo(
+        InventoryListItem.joins(:inventory_list).where(inventory_lists:{state:InventoryListState::PROCESSING}).group('part_id').select('*,sum(qty) as qty')
+    )
+    send_file msg.content
+  end
     
   private
     def set_inventory_list

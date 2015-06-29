@@ -23,10 +23,11 @@ Rails.application.routes.draw do
   resources :inventory_lists do
     member do
       get 'inventory_list_items'
+      get :discrepancy
     end
     
     collection do
-      get :discrepancy
+      get :export_total
     end
   end
   
@@ -39,6 +40,8 @@ Rails.application.routes.draw do
       get :export_list_detail
       get :export_list_total
       get :lock_unlock_list
+      get :store_list
+      get :unstore_list
     end
   end
 
