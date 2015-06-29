@@ -75,6 +75,7 @@ class WhouseService
   def move(params)
     # XXX does not work now
     type = MoveType.find_by!(typeId: 'MOVE')
+
     toWh = Whouse.find_by(id: params[:toWh])
     raise "仓库#{toWh}未找到" unless toWh
     # validate_position(toWh, params[:toPosition])
