@@ -3,7 +3,7 @@ module FileHandler
     class NStorageHandler<Base
 
       HEADERS=[
-          :toWh,:partNr,:fifo,:qty,:toPosition,:packageId
+          :toWh,:partNr,:fifo,:qty,:toPosition,:packageId,:uniqeId, :employee_id, :remarks
       ]
 
       def self.import(file)
@@ -16,6 +16,9 @@ module FileHandler
               row = {}
               HEADERS.each_with_index do |k, i|
                 row[k] = book.cell(line, i+1).to_s.strip
+                if k== :partNr || k== :packageId
+                  row[k] = row[k].sub(/\.0/, '')
+                end
               end
 
               WhouseService.new.enter_stock(row)
@@ -33,7 +36,7 @@ module FileHandler
       end
 
       def self.move(file)
-        heads = [:fromWh, :fromPosition, :packageId, :partNr, :qty, :fifo, :toWh, :toPosition]
+        heads = [:fromWh, :fromPosition, :uniqeId, :packageId, :partNr, :qty, :fifo, :toWh, :toPosition, :employee_id, :remarks]
         msg = Message.new
         book = Roo::Excelx.new file.full_path
         book.default_sheet = book.sheets.first
@@ -43,6 +46,9 @@ module FileHandler
               row = {}
               heads.each_with_index do |k, i|
                 row[k] = book.cell(line, i+1).to_s.strip
+                if k== :partNr || k== :packageId
+                  row[k] = row[k].sub(/\.0/, '')
+                end
               end
 
               WhouseService.new.move(row)

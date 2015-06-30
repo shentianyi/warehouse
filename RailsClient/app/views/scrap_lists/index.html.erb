@@ -1,5 +1,15 @@
 <h1>报废单</h1>
 
+<%= link_to '新建报废单', new_scrap_list_path,:class=>'btn btn-default' %> |
+<%= link_to '生成报表', scrap_lists_reports_path,:class=>'btn btn-default' %>
+
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @scrap_lists %>
+  </div>
+  <%= will_paginate @scrap_lists, :container => false %>
+</div>
+
 <table class="table table-bordered table-striped globle-table">
 
   <thead>
@@ -17,7 +27,7 @@
   <tbody>
     <% @scrap_lists.each_with_index do |scrap_list,i| %>
       <tr>
-        <td><%=i+1%></td>
+        <td><%= i+@scrap_lists.offset+1 %></td>
         <td><%= best_in_place scrap_list, :name, as: :input %></td>
         <td><%= scrap_list.src_warehouse %></td>
         <td><%= scrap_list.dse_warehouse %></td>
@@ -32,6 +42,6 @@
 </table>
 
 <br>
-
-<%= link_to '新建报废单', new_scrap_list_path,:class=>'btn btn-default' %> |
-<%= link_to '生成报表', scrap_lists_reports_path,:class=>'btn btn-default' %>
+<div class="digg_pagination">
+  <%= will_paginate @scrap_lists, :container => false %>
+</div>
