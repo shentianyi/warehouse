@@ -151,6 +151,7 @@ ActiveRecord::Schema.define(version: 20150629025042) do
     t.boolean  "need_convert",                                default: false
     t.boolean  "locked",                                      default: false
     t.boolean  "in_stored",                                   default: false
+
   end
 
   create_table "inventory_lists", force: true do |t|
@@ -303,6 +304,7 @@ ActiveRecord::Schema.define(version: 20150629025042) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "remark"
+    t.decimal  "qty",          precision: 20, scale: 10
     t.string   "remarks"
     t.string   "employee_id"
   end
@@ -335,6 +337,7 @@ ActiveRecord::Schema.define(version: 20150629025042) do
     t.string   "ware_house_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.decimal  "qty",           precision: 20, scale: 10
     t.boolean  "locked",                                  default: false
   end
 
