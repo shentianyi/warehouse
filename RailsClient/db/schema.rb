@@ -11,11 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema.define(version: 20150627014446) do
-=======
+
 ActiveRecord::Schema.define(version: 20150629025042) do
->>>>>>> penglai-develop
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -154,10 +151,8 @@ ActiveRecord::Schema.define(version: 20150629025042) do
     t.decimal  "origin_qty",        precision: 20, scale: 10
     t.boolean  "need_convert",                                default: false
     t.boolean  "locked",                                      default: false
-<<<<<<< HEAD
     t.boolean  "in_stored",                                   default: false
-=======
->>>>>>> penglai-develop
+
   end
 
   create_table "inventory_lists", force: true do |t|
@@ -309,13 +304,9 @@ ActiveRecord::Schema.define(version: 20150629025042) do
     t.integer  "type_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-<<<<<<< HEAD
-    t.string   "remark"
-=======
     t.decimal  "qty",          precision: 20, scale: 10
     t.string   "remarks"
     t.string   "employee_id"
->>>>>>> penglai-develop
   end
 
   add_index "movements", ["packageId"], name: "package_id_index", using: :btree
@@ -346,10 +337,7 @@ ActiveRecord::Schema.define(version: 20150629025042) do
     t.string   "ware_house_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-<<<<<<< HEAD
-=======
     t.decimal  "qty",           precision: 20, scale: 10
->>>>>>> penglai-develop
     t.boolean  "locked",                                  default: false
   end
 
