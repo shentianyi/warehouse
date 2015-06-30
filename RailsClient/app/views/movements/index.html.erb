@@ -57,6 +57,10 @@
               ~  <input type="number" name="movement[qty][end]" value="<%= @qty_end %>"/>
             </span>
         </div>
+        <div>备注：
+          <input type="text" name="movement[remarks]" value="<%= @remarks %>"/>
+          <input type="hidden" name="movement[remarks_fuzzy]"/>
+        </div>
         <div>
           <input type="submit" value="查找" class="btn btn-primary" name="search"/>
           <input type="submit" value="导出" class="btn btn-primary" name="download"/>
