@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150624032200) do
+ActiveRecord::Schema.define(version: 20150629025042) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -134,15 +134,22 @@ ActiveRecord::Schema.define(version: 20150624032200) do
     t.string   "package_id"
     t.string   "unique_id"
     t.string   "part_id"
-    t.float    "qty"
+    t.decimal  "qty",               precision: 20, scale: 10
     t.string   "position"
     t.string   "current_whouse"
     t.string   "current_position"
     t.string   "user_id"
-    t.boolean  "in_store",          default: false
+    t.boolean  "in_store",                                    default: false
     t.integer  "inventory_list_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "whouse_id"
+    t.datetime "fifo"
+    t.string   "part_wire_mark"
+    t.string   "part_form_mark"
+    t.decimal  "origin_qty",        precision: 20, scale: 10
+    t.boolean  "need_convert",                                default: false
+    t.boolean  "locked",                                      default: false
   end
 
   create_table "inventory_lists", force: true do |t|
@@ -293,7 +300,9 @@ ActiveRecord::Schema.define(version: 20150624032200) do
     t.integer  "type_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "qty",          precision: 9, scale: 2
+    t.decimal  "qty",          precision: 20, scale: 10
+    t.string   "remarks"
+    t.string   "employee_id"
   end
 
   add_index "movements", ["packageId"], name: "package_id_index", using: :btree
@@ -323,7 +332,8 @@ ActiveRecord::Schema.define(version: 20150624032200) do
     t.string   "ware_house_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "qty",           precision: 9, scale: 2
+    t.decimal  "qty",           precision: 20, scale: 10
+    t.boolean  "locked",                                  default: false
   end
 
   add_index "n_storages", ["packageId"], name: "package_id_index", using: :btree
@@ -455,16 +465,17 @@ ActiveRecord::Schema.define(version: 20150624032200) do
   add_index "part_types", ["id"], name: "index_part_types_on_id", using: :btree
 
   create_table "parts", force: true do |t|
-    t.string   "uuid",         limit: 36,                 null: false
+    t.string   "uuid",         limit: 36,                                           null: false
     t.string   "customernum"
     t.string   "user_id"
-    t.boolean  "is_delete",               default: false
-    t.boolean  "is_dirty",                default: true
-    t.boolean  "is_new",                  default: true
+    t.boolean  "is_delete",                                         default: false
+    t.boolean  "is_dirty",                                          default: true
+    t.boolean  "is_new",                                            default: true
     t.datetime "created_at"
     t.datetime "updated_at"
     t.float    "unit_pack"
     t.string   "part_type_id"
+    t.decimal  "convert_unit",            precision: 20, scale: 10, default: 1.0
   end
 
   add_index "parts", ["id"], name: "index_parts_on_id", using: :btree
@@ -606,14 +617,14 @@ ActiveRecord::Schema.define(version: 20150624032200) do
     t.integer  "scrap_list_id"
     t.string   "part_id"
     t.string   "product_id"
-    t.integer  "quantity"
+    t.decimal  "quantity",      precision: 20, scale: 10
     t.string   "IU"
     t.string   "reason"
     t.string   "name"
     t.datetime "time"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "state",         default: 100
+    t.integer  "state",                                   default: 100
   end
 
   create_table "scrap_lists", force: true do |t|
@@ -622,6 +633,7 @@ ActiveRecord::Schema.define(version: 20150624032200) do
     t.string   "builder"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "name"
   end
 
   create_table "state_logs", force: true do |t|

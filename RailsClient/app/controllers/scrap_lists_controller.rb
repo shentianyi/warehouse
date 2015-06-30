@@ -4,7 +4,7 @@ class ScrapListsController < ApplicationController
   respond_to :html
 
   def index
-    @scrap_lists = ScrapList.all
+    @scrap_lists = ScrapList.all.paginate(:page => params[:page])
     respond_with(@scrap_lists)
   end
 

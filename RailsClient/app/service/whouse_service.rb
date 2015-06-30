@@ -65,6 +65,8 @@ class WhouseService
             type_id: type.id}
     data[:uniqueId] = params[:uniqueId] if params[:uniqueId].present?
     data[:packageId] = params[:packageId] if params[:packageId].present?
+    data[:employee_id] = params[:employee_id] if params[:employee_id].present?
+    data[:remarks] = params[:remarks] if params[:remarks].present?
     Movement.transaction do
       Movement.create!(data)
     end
@@ -78,6 +80,8 @@ class WhouseService
     raise "仓库#{toWh}未找到" unless toWh
     # validate_position(toWh, params[:toPosition])
     move_data = {to_id: toWh.id, toPosition: params[:toPosition], type_id: type.id}
+    move_data[:employee_id] = params[:employee_id] if params[:employee_id].present?
+    move_data[:remarks] = params[:remarks] if params[:remarks].present?
 
     if params[:uniqueId].present?
       #Move(uniqueId,toWh,toPosition,type)
@@ -186,7 +190,7 @@ class WhouseService
       #支持负库存#raise 'No enough qty in source' if sumqty = storages.reduce(0) { |seed, s| seed + s.qty } < params[:qty]
       restqty = params[:qty].to_f
 
-      storages.reduce(params[:qty]) do |restqty, storage|
+      storages.reduce(params[:qty].to_f) do |restqty, storage|
 
         break if restqty <= 0
         # update parameters of movement creation

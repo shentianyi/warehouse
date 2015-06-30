@@ -1,0 +1,127 @@
+<h2>库存移动记录</h2>
+
+<div>
+  <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+    <div>
+      <div>
+        <div>
+            <span>零件号：
+              <input type="text" name="movement[partNr]" value="<%= @partNr %>"/>
+              <input type="hidden" name="movement[partNr_fuzzy]"/>
+            </span>
+            <span>包装号：
+              <input type="text" name="movement[packageId]" value="<%= @packageId %>"/>
+              <input type="hidden" name="movement[packageId_fuzzy]"/>
+            </span>
+
+            <span>类型：
+              <%= select_tag('movement[type_id]', options_from_collection_for_select(MoveType.all, :id, :typeId, @type_id), include_blank: true) %>
+            </span>
+            <span>员工号：
+              <input type="text" name="movement[employee_id]" value="<%= @employee_id %>"/>
+            </span>
+        </div>
+
+        <div>
+            <span>源仓库号：
+              <%= select_tag('movement[from_id]', options_from_collection_for_select(Whouse.all, :name, :id, @from_id), include_blank: true) %>
+            </span>
+            <span>源库位号：
+              <input type="text" name="movement[fromPosition]" value="<%= @fromPosition %>"/>
+              <input type="hidden" name="movement[fromPosition_fuzzy]"/>
+            </span>
+
+            <span>目的仓库号：
+              <%= select_tag('movement[to_id]', options_from_collection_for_select(Whouse.all, :name, :id, @to_id), include_blank: true) %>
+            </span>
+            <span>目的库位号：
+              <input type="text" name="movement[toPosition]" value="<%= @toPosition %>"/>
+              <input type="hidden" name="movement[toPosition_fuzzy]"/>
+            </span>
+        </div>
+
+        <div>
+            <span>
+              创建日期：
+              <input type="text" name="movement[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
+              ~  <input type="text" name="movement[created_at][end]" class="datepicker" value="<%= @created_at_end %>"/>
+            </span>
+            <span>
+              FIFO：
+              <input type="text" name="movement[fifo][start]" class="datepicker" value="<%= @fifo_start %>"/>
+              ~  <input type="text" name="movement[fifo][end]" class="datepicker" value="<%= @fifo_end %>"/>
+            </span>
+            <span>
+              数量：
+              <input type="number" name="movement[qty][start]" value="<%= @qty_start %>"/>
+              ~  <input type="number" name="movement[qty][end]" value="<%= @qty_end %>"/>
+            </span>
+        </div>
+        <div>
+          <input type="submit" value="查找" class="btn btn-primary" name="search"/>
+          <input type="submit" value="导出" class="btn btn-primary" name="download"/>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @movements %>
+  </div>
+  <%= will_paginate @movements, :container => false %>
+</div>
+<table class="table table-striped table-condensed table-hover">
+  <thead>
+  <tr>
+    <th>NO.</th>
+    <th>零件号</th>
+    <th>包装号</th>
+    <th>移动量</th>
+    <th>类型</th>
+    <th>FIFO</th>
+    <th>创建时间</th>
+    <th>源仓库</th>
+    <th>源库位</th>
+    <th>目的仓库</th>
+    <th>目的库位</th>
+    <th>员工号</th>
+    <th>备注</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @movements.each_with_index do |movement, i| %>
+      <tr>
+        <td><%= i+@movements.offset+1 %></td>
+        <td><%= movement.partNr if movement.partNr %></td>
+        <td><%= movement.packageId if movement.packageId %></td>
+        <td><%= movement.qty %></td>
+        <td><%= MoveType.find(movement.type_id).typeId if movement.type_id %> </td>
+        <td><%= movement.fifo.localtime if movement.fifo %> </td>
+        <td><%= movement.created_at.localtime if movement.created_at %></td>
+        <td><%= movement.from_id if movement.from_id %></td>
+        <td><%= movement.fromPosition if movement.fromPosition %></td>
+        <td><%= movement.to_id if movement.to_id %></td>
+        <td><%= movement.toPosition if movement.toPosition %></td>
+        <td><%= movement.employee_id if movement.employee_id %> </td>
+        <td><%= movement.remarks if movement.remarks %> </td>
+        <!--<td><%= link_to '编辑', :class => 'btn btn-default' %></td>-->
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+<div class="digg_pagination">
+  <%= will_paginate @movements, :container => false %>
+</div>
+
+<script>
+    $(function () {
+        $(".datepicker").datetimepicker({
+            lang: 'ch',
+            format: 'Y-m-d H:i'
+        });
+    });
+    init_check();
+</script>
