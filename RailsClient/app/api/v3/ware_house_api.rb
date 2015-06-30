@@ -84,6 +84,7 @@ module V3
       end
 
       post :moves do
+        # raise ''
         puts "===================#{params.to_json}"
         NStorage.transaction do
           JSON.parse(params[:moves]).each do |p|
