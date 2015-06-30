@@ -303,6 +303,7 @@ ActiveRecord::Schema.define(version: 20150629025042) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "remark"
+    t.decimal  "qty",          precision: 20, scale: 10
     t.string   "remarks"
     t.string   "employee_id"
   end
