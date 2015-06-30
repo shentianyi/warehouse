@@ -66,6 +66,8 @@ class WhouseService
             type_id: type.id}
     data[:uniqueId] = params[:uniqueId] if params[:uniqueId].present?
     data[:packageId] = params[:packageId] if params[:packageId].present?
+    data[:employee_id] = params[:employee_id] if params[:employee_id].present?
+    data[:remarks] = params[:remarks] if params[:remarks].present?
     Movement.transaction do
       Movement.create!(data)
     end
@@ -80,6 +82,8 @@ class WhouseService
     raise "仓库#{toWh}未找到" unless toWh
     # validate_position(toWh, params[:toPosition])
     move_data = {to_id: toWh.id, toPosition: params[:toPosition], type_id: type.id}
+    move_data[:employee_id] = params[:employee_id] if params[:employee_id].present?
+    move_data[:remarks] = params[:remarks] if params[:remarks].present?
 
     if params[:uniqueId].present?
       #Move(uniqueId,toWh,toPosition,type)
@@ -284,6 +288,7 @@ class WhouseService
           end
         else
           data = {partNr: params[:partNr], qty: lastqty, ware_house_id: toWh.id, position: params[:toPosition]}
+
           NStorage.create!(data)
         end
 
