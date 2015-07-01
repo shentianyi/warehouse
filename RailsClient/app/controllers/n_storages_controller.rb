@@ -94,15 +94,16 @@ class NStoragesController < ApplicationController
       query = query.select("SUM(n_storages.qty) as total_qty, n_storages.*").group("n_storages.partNr, n_storages.ware_house_id, n_storages.position")
     end
 
+    instance_variable_set("@#{@model.pluralize}", query.paginate(:page => params[:page]).all)
+
     respond_to do |format|
       format.xlsx do
         send_data(query.to_total_xlsx(query),
                   :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
-                  :filename => @model.pluralize+".xlsx")
+                  :filename => "库存查询导出.xlsx")
       end
 
       format.html do
-        instance_variable_set("@#{@model.pluralize}", query.paginate(:page => params[:page], :per_page => 20).all)
         render :group
       end
     end
