@@ -57,10 +57,10 @@
   </div>
   <%= will_paginate @n_storages, :container => false unless @n_storages.nil? %>
 </div>
+
 <table class="table table-striped table-condensed table-hover">
   <thead>
   <tr>
-    <th>NO.</th>
     <th>零件号</th>
     <th>包装号</th>
     <th>库存总量</th>
@@ -73,9 +73,8 @@
   </thead>
   <tbody>
   <% if @n_storages.present? %>
-      <% @n_storages.each_with_index do |storage, i| %>
+      <% @n_storages.each do |storage| %>
           <tr>
-            <td><%= i+@n_storages.offset+1 %></td>
             <td><%= storage.partNr %></td>
             <td><%= storage.packageId %></td>
             <td><%= storage.total_qty %></td>
