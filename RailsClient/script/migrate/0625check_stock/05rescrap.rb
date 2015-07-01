@@ -5,7 +5,7 @@ ScrapListItem.transaction do
         partNr: item.part_id,
         qty: item.quantity,
         toWh: '3EX',
-        toPosition:'3EX',
+        toPosition: '3EX',
         fromWh: 'BaofeiKu'
     }
 
@@ -16,10 +16,10 @@ ScrapListItem.transaction do
         partNr: item.part_id,
         qty: item.quantity,
         toWh: item.scrap_list.dse_warehouse,
-        toPosition:'BaofeiWeizhi',
+        toPosition: 'BaofeiWeizhi',
         fromWh: item.scrap_list.src_warehouse
     }
-
+    puts "#{params.to_json}"
     WhouseService.new.move(params)
 
   end
