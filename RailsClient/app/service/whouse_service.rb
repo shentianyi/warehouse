@@ -51,7 +51,7 @@ class WhouseService
       if params[:packageId].present?
         NStorage.create!(data)
       else
-        storage = NStorage.where(partNr: params[:partNr], fifo: fifo, ware_house_id: wh.id, position: params[:toPosition]).first
+        storage = NStorage.where(partNr: params[:partNr], fifo: fifo, ware_house_id: wh.id, position: params[:toPosition], packageId: nil).first
         NStorage.transaction do
           if storage
             storage.update!(qty: storage.qty + params[:qty].to_f)

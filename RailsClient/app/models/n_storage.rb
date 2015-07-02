@@ -58,7 +58,7 @@ class NStorage < ActiveRecord::Base
     p = Axlsx::Package.new
     wb = p.workbook
     wb.add_worksheet(:name => "sheet1") do |sheet|
-      sheet.add_row ["序号", "零件号", "仓库号", "库位号", "数量", "FIFO", "唯一码"]
+      sheet.add_row ["序号", "零件号", "仓库号", "库位号", "数量", "FIFO", "创建时间", "唯一码"]
       n_storages.each_with_index { |n_storage, index|
         if n_storage.id && n_storage.id != ""
           sheet.add_row [
@@ -67,7 +67,8 @@ class NStorage < ActiveRecord::Base
                             n_storage.ware_house_id,
                             n_storage.position,
                             n_storage.total_qty,
-                            n_storage.fifo,
+                            n_storage.fifo.present? ? n_storage.fifo.localtime.strftime("%Y-%m-%d %H:%M") : '',
+                            n_storage.created_at.present? ? n_storage.created_at.localtime.strftime("%Y-%m-%d %H:%M") : '',
                             n_storage.packageId
                         ]
         end
@@ -83,7 +84,7 @@ class NStorage < ActiveRecord::Base
     puts "9999999999999999999999999999999999"
     wb = p.workbook
     wb.add_worksheet(:name => "sheet1") do |sheet|
-      sheet.add_row ["序号","零件号", "唯一码",  "仓库号", "库位号", "数量", "FIFO"]
+      sheet.add_row ["序号","零件号", "唯一码",  "仓库号", "库位号", "数量", "FIFO", "创建时间"]
       n_storages.each_with_index { |n_storage, index|
         if n_storage.id && n_storage.id != ""
           sheet.add_row [
@@ -93,7 +94,8 @@ class NStorage < ActiveRecord::Base
                             n_storage.ware_house_id,
                             n_storage.position,
                             n_storage.qty,
-                            n_storage.fifo
+                            n_storage.fifo.present? ? n_storage.fifo.localtime.strftime("%Y-%m-%d %H:%M") : '',
+                            n_storage.created_at.present? ? n_storage.created_at.localtime.strftime("%Y-%m-%d %H:%M") : ''
                         ]
         end
       }

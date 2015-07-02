@@ -18,7 +18,7 @@
               <input type="text" name="n_storage[position]" value="<%= @position %>"/>
               <input type="hidden" name="n_storage[position_fuzzy]"/>
             </span>
-            <span>包装号：
+            <span>唯一码：
               <input type="text" name="n_storage[packageId]" value="<%= @packageId %>"/>
               <input type="hidden" name="n_storage[packageId_fuzzy]"/>
             </span>
@@ -51,18 +51,20 @@
   </form>
 </div>
 
-<div class="digg_pagination">
-  <div class="page_info">
-    <%= page_entries_info @n_storages unless @n_storages.nil? %>
-  </div>
-  <%= will_paginate @n_storages, :container => false unless @n_storages.nil? %>
-</div>
+<% if @n_storages.present? %>
+    <div class="digg_pagination">
+      <div class="page_info">
+        <%= page_entries_info @n_storages %>
+      </div>
+      <%= will_paginate @n_storages, :container => false %>
+    </div>
+<% end %>
 
 <table class="table table-striped table-condensed table-hover">
   <thead>
   <tr>
     <th>零件号</th>
-    <th>包装号</th>
+    <th>唯一码</th>
     <th>库存总量</th>
     <th>FIFO</th>
     <th>入库时间</th>
@@ -88,9 +90,12 @@
   <% end %>
   </tbody>
 </table>
-<div class="digg_pagination">
-  <%= will_paginate @n_storages, :container => false unless @n_storages.nil? %>
-</div>
+
+<% if @n_storages.present? %>
+    <div class="digg_pagination">
+      <%= will_paginate @n_storages, :container => false %>
+    </div>
+<% end %>
 
 <script>
     $(function () {

@@ -1,5 +1,41 @@
 <h1>报废项</h1>
 
+
+<div>
+  <form method="get" action="<%= send("search_scrap_list_items_path") %>">
+    <div>
+      <div>
+        <span>源仓库号：
+          <%= select_tag(:src_warehouse, options_from_collection_for_select(Whouse.all, :name, :id, @src_warehouse), include_blank: true) %>
+        </span>
+        <span>目的仓库号：
+          <%= select_tag(:dse_warehouse, options_from_collection_for_select(Whouse.all, :name, :id, @dse_warehouse), include_blank: true) %>
+        </span>
+
+        <span>
+          登记时间：
+          <input type="text" name="date_start" class="datepicker" value="<%= @date_start %>"/>
+          ~  <input type="text" name="date_end" class="datepicker" value="<%= @date_end %>"/>
+        </span>
+
+        <span class="label label-info">显示方式:</span>
+        <%= select_tag :format, options_for_select([["Web", "html"],["Excel File(MS 07 or later)", "xlsx"]], "html") %>
+        <div>
+          <input type="submit" value="查找" class="btn btn-primary" name="search"/>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @scrap_list_items %>
+  </div>
+  <%= will_paginate @scrap_list_items, :container => false %>
+</div>
+
 <table class="table table-bordered table-striped globle-table">
   <thead>
     <tr>
@@ -30,6 +66,20 @@
     <% end %>
   </tbody>
 </table>
+
+<div class="digg_pagination">
+  <%= will_paginate @scrap_list_items, :container => false %>
+</div>
+
+<script>
+    $(function () {
+        $(".datepicker").datetimepicker({
+            lang: 'ch',
+            format: 'Y-m-d H:i'
+        });
+    });
+    init_check();
+</script>
 
 <br>
 

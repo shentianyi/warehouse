@@ -17,7 +17,7 @@
               <input type="text" name="n_storage[position]" value="<%= @position %>"/>
               <input type="hidden" name="n_storage[position_fuzzy]"/>
             </span>
-            <span>包装号：
+            <span>唯一码：
               <input type="text" name="n_storage[packageId]" value="<%= @packageId %>"/>
               <input type="hidden" name="n_storage[packageId_fuzzy]"/>
             </span>
@@ -34,7 +34,7 @@
               ~  <input type="text" name="n_storage[fifo][end]" class="datepicker" value="<%= @fifo_end %>"/>
             </span>
             <span>
-              数量：
+              库存量：
               <input type="number" name="n_storage[qty][start]" value="<%= @qty_start %>"/>
               ~  <input type="number" name="n_storage[qty][end]" value="<%= @qty_end %>"/>
             </span>
@@ -59,12 +59,12 @@
   <tr>
     <th>NO.</th>
     <th>零件号</th>
-    <th>包装号</th>
+    <th>唯一码</th>
     <th>库存量</th>
     <th>FIFO</th>
-    <th>入库时间</th>
-    <th>仓库</th>
-    <th>库位</th>
+    <th>创建日期</th>
+    <th>仓库号</th>
+    <th>库位号</th>
     <th></th>
   </tr>
   </thead>
