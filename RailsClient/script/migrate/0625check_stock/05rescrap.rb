@@ -1,10 +1,11 @@
 ScrapListItem.transaction do
-  ScrapListItem.where(scrap_list_id: [2, 3]).all.each do |item|
+  ScrapListItem.where(scrap_list_id: [11, 12]).all.each do |item|
     puts "-------#{item.to_json}"
     params1={
         partNr: item.part_id,
         qty: item.quantity,
         toWh: '3EX',
+        toPosition: '3EX',
         fromWh: 'BaofeiKu'
     }
 
@@ -15,9 +16,10 @@ ScrapListItem.transaction do
         partNr: item.part_id,
         qty: item.quantity,
         toWh: item.scrap_list.dse_warehouse,
+        toPosition: 'BaofeiWeizhi',
         fromWh: item.scrap_list.src_warehouse
     }
-
+    puts "#{params.to_json}"
     WhouseService.new.move(params)
 
   end

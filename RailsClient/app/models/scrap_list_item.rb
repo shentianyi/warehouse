@@ -14,6 +14,7 @@ class ScrapListItem < ActiveRecord::Base
           partNr: self.part_id,
           qty: self.quantity,
           toWh: self.scrap_list.dse_warehouse,
+          toPosition:'BaofeiWeizhi',
           fromWh: self.scrap_list.src_warehouse
       }
 

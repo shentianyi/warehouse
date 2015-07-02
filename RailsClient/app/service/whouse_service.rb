@@ -173,7 +173,11 @@ class WhouseService
         restqty
       end
 
-    elsif [:partNr, :qty, :fromWh, :toPosition].reduce(true) { |seed, i| seed and params.include? i }
+    elsif [:partNr, :qty].reduce(true) { |seed, i| seed and params.include? i }
+
+      if params[:toPosition].blank?
+        raise "目标库位:#{params[:toPosition]}不可空"
+      end
 
       # Move(partNr, qty, fromWh,fromPosition,toWh,toPosition,type)
       # Move(partNr, qty, fifo,fromWh,fromPosition,toWh,toPosition,type)
