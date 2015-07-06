@@ -25,13 +25,11 @@ class ScrapListItem < ActiveRecord::Base
 
   def self.generate_report_data(date_start, date_end, src_warehouse, dse_warehouse)
 
-puts "111111111111111111"
     if date_start.present? && date_end.present?
 
       if date_end.to_time < date_start.to_time
         raise "登记时间范围选择错误！"
       end
-      puts "222222222222222222"
       condition = ""
       if src_warehouse.present? && dse_warehouse.present?
         condition = "WHERE src_warehouse = '#{src_warehouse}' AND dse_house = '#{dse_warehouse}' "
@@ -44,7 +42,6 @@ puts "111111111111111111"
 
     elsif !date_start.present? && !date_end.present?
 
-      puts "3333333333333333333333"
       condition = ""
       if src_warehouse.present? && dse_warehouse.present?
         condition = "WHERE src_warehouse = '#{src_warehouse}' AND dse_house = '#{dse_warehouse}' "
@@ -58,7 +55,6 @@ puts "111111111111111111"
     else
       raise "登记时间范围选择错误！"
     end
-
 
   end
 

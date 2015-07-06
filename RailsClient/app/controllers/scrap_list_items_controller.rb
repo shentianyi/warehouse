@@ -61,7 +61,6 @@ class ScrapListItemsController < ApplicationController
   end
 
   def search
-    puts "88888888888888888888888"
     @date_start = params[:date_start].nil? ? 1.day.ago.strftime("%Y-%m-%d 7:00") : params[:date_start]
     @date_end = params[:date_end].nil? ? Time.now.strftime("%Y-%m-%d 7:00") : params[:date_end]
     @src_warehouse = params[:src_warehouse] if params[:src_warehouse].present?
@@ -108,7 +107,7 @@ class ScrapListItemsController < ApplicationController
                           item.IU,
                           item.reason,
                           item.name,
-                          item.state,
+                          ScrapListItemState.display(item.state),
                           item.time
                       ], :types => [:string]
       }

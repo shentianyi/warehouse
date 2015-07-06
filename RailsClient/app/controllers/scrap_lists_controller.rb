@@ -22,12 +22,23 @@ class ScrapListsController < ApplicationController
   end
 
   def create
-    @scrap_list = ScrapList.new(scrap_list_params)
-    if @scrap_list.save
-      session[:scrap_list_id]=@scrap_list.id
-      render 'scrap_list_items/new', location: @scrap_list_items
-    else
+    builder = User.where(name: params[:scrap_list][:builder]).first
+    if builder.nil?
+      redirect_to new_scrap_list_path, notice: "该员工不存在！"
+      return
     end
+
+    if params[:scrap_list][:src_warehouse] == "" || params[:scrap_list][:dse_warehouse] == ""
+      redirect_to new_scrap_list_path, notice: "源仓库和目的仓库不能为空！"
+    else
+      @scrap_list = ScrapList.new(scrap_list_params)
+      if @scrap_list.save
+        session[:scrap_list_id]=@scrap_list.id
+        render 'scrap_list_items/new', location: @scrap_list_items
+      else
+      end
+    end
+
   end
 
   def update
