@@ -64,7 +64,7 @@ gem 'whenever'
 gem 'rest-client'
 gem 'oauth'
 
-gem 'will_paginate', '~> 3.0'
+gem 'will_paginate', '~> 3.0.6'
 
 # for cache
 #gem 'redis'
