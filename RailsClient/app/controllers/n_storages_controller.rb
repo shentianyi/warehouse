@@ -110,8 +110,11 @@ class NStoragesController < ApplicationController
     if params.has_key? "negative"
       query = query.where("n_storages.qty < 0").select("n_storages.qty as total_qty, n_storages.*")
     else
-      #query = query.select("SUM(n_storages.qty) as total_qty, n_storages.*").group("n_storages.partNr, n_storages.ware_house_id, n_storages.position")
-      query = query.find_by_sql("select SUM(n_storages.qty) as total_qty, n_storages.* from n_storages #{where_comdition} group by n_storages.partNr, n_storages.ware_house_id, n_storages.position")
+      if params[:format] == 'xlsx'
+        query = query.select("SUM(n_storages.qty) as total_qty, n_storages.*").group("n_storages.partNr, n_storages.ware_house_id, n_storages.position")
+      else
+        query = NStorage.find_by_sql("select SUM(n_storages.qty) as total_qty, n_storages.* from n_storages #{where_comdition} group by n_storages.partNr, n_storages.ware_house_id, n_storages.position")
+      end
     end
 
     instance_variable_set("@#{@model.pluralize}", query.paginate(:page => params[:page]))
