@@ -64,7 +64,7 @@ gem 'whenever'
 gem 'rest-client'
 gem 'oauth'
 
-gem 'will_paginate', '~> 3.0'
+gem 'will_paginate', '~> 3.0.6'
 
 # for cache
 #gem 'redis'
@@ -86,3 +86,5 @@ gem 'database_cleaner'
 gem 'ancestry'
 
 gem 'best_in_place', '~> 3.0.1'
+
+gem 'paper_trail', '~> 4.0.0.rc'

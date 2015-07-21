@@ -13,4 +13,9 @@ class Whouse < ActiveRecord::Base
   has_many :source_containers, class_name: 'LocationContainer'
   has_many :storages, as: :storable
   has_many :inventory_lists
+
+
+  def self.nr_by_regex(nr)
+    nr.sub(/^LO/,'')
+  end
 end

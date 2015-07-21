@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :scrap_list_items do
     collection do
       match :import, to: :import,via: [:get,:post]
+      get :search
     end
   end
 
@@ -23,16 +24,25 @@ Rails.application.routes.draw do
   resources :inventory_lists do
     member do
       get 'inventory_list_items'
+      get :discrepancy
     end
     
     collection do
-      get :discrepancy
+      get :export_total
     end
   end
   
   resources :inventory_list_items do
     collection do
       get :search
+      match :import, to: :import,via: [:get,:post]
+    end
+    member do
+      get :export_list_detail
+      get :export_list_total
+      get :lock_unlock_list
+      get :store_list
+      get :unstore_list
     end
   end
 

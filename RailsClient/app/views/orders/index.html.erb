@@ -27,7 +27,8 @@
           ~  <input type="text" name="order[created_at][end]" class="datepicker" value="<%= @created_at_end %>"/>
         </span>
     </div>
-    <input type="submit" value="查 找" class="btn btn-primary"/>
+    <input type="submit" value="查 找" class="btn btn-primary" name="search"/>
+    <input type="submit" value="导 出" class="btn btn-primary" name="download"/>
   </form>
 </div>
 
@@ -61,7 +62,7 @@
       <tr>
         <td><%= index+@orders.offset+1 %></td>
         <td><%= order.id %></td>
-        <td><%= order.user.name if order.user%></td>
+        <td><%= order.user_id%></td>
         <td><%= order.source_location.name %></td>
         <td><%= order.source.name if order.source%></td>
         <td>

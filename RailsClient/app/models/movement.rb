@@ -11,9 +11,11 @@ class Movement < ActiveRecord::Base
   def self.to_xlsx movements
     p = Axlsx::Package.new
     wb = p.workbook
+
+    list = movements
     wb.add_worksheet(:name => "sheet1") do |sheet|
       sheet.add_row ["序号", "零件号", "包装号", "唯一码", "移动量", "类型", "FIFO", "创建时间", "源仓库号", "源库位号", "目的仓库号", "目的库位号", "员工号", "备注"]
-      movements.each_with_index { |movement, index|
+      list.each_with_index { |movement, index|
         if movement.id
           sheet.add_row [
                             index+1,
@@ -22,8 +24,8 @@ class Movement < ActiveRecord::Base
                             movement.uniqueId,
                             movement.qty,
                             MoveType.find(movement.type_id).typeId,
-                            movement.fifo,
-                            movement.created_at,
+                            movement.fifo.present? ? movement.fifo.localtime.strftime("%Y-%m-%d %H:%M") : '',
+                            movement.created_at.present? ? movement.created_at.localtime.strftime("%Y-%m-%d %H:%M") : '',
                             movement.from_id,
                             movement.fromPosition,
                             movement.to_id,
