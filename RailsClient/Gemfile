@@ -52,13 +52,6 @@ group :development, :test do
   gem 'factory_girl_rails', '~> 4.0'
 end
 
-#sidekiq
-#gem 'sidekiq'
-#gem 'sinatra',require: false
-#gem 'slim'
-#gem 'sidekiq-benchmark'
-#gem 'redis'
-
 # For sync
 gem 'whenever'
 gem 'rest-client'
@@ -67,9 +60,12 @@ gem 'oauth'
 gem 'will_paginate', '~> 3.0.6'
 
 # for cache
-#gem 'redis'
-#gem 'redis-rails'
-#gem 'redis-namespace'
+gem 'redis'
+gem 'redis-namespace'
+#sidekiq
+gem 'sidekiq'
+gem 'sinatra'
+gem 'colorize'
 
 # for excel
 gem 'roo'
