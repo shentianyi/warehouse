@@ -15,7 +15,7 @@ class OrderService
   # @days: integer
   # @state: false
   #=============
-  def self.get_orders_by_days location_id, days=7, handled = false, user_id = nil
+  def self.get_orders_by_days location_id, days=70, handled = false, user_id = nil
     start_time = days.days.ago.at_beginning_of_day.utc
     end_time = Time.now.at_end_of_day.utc
     if user_id.nil?
