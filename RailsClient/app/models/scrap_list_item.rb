@@ -32,7 +32,7 @@ class ScrapListItem < ActiveRecord::Base
       end
       condition = ""
       if src_warehouse.present? && dse_warehouse.present?
-        condition = "WHERE src_warehouse = '#{src_warehouse}' AND dse_house = '#{dse_warehouse}' "
+        condition = "WHERE src_warehouse = '#{src_warehouse}' AND dse_warehouse = '#{dse_warehouse}' "
       elsif !src_warehouse.present? && dse_warehouse.present?
         condition = "WHERE dse_warehouse = '#{dse_warehouse}' "
       elsif src_warehouse.present? && !dse_warehouse.present?
@@ -44,7 +44,7 @@ class ScrapListItem < ActiveRecord::Base
 
       condition = ""
       if src_warehouse.present? && dse_warehouse.present?
-        condition = "WHERE src_warehouse = '#{src_warehouse}' AND dse_house = '#{dse_warehouse}' "
+        condition = "WHERE src_warehouse = '#{src_warehouse}' AND dse_warehouse = '#{dse_warehouse}' "
       elsif !src_warehouse.present? && dse_warehouse.present?
         condition = "WHERE dse_warehouse = '#{dse_warehouse}' "
       elsif src_warehouse.present? && !dse_warehouse.present?

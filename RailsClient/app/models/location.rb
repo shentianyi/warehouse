@@ -21,6 +21,7 @@ class Location < ActiveRecord::Base
     end
   end
 
+
   def self.list
     self.all.select { |l| l unless l.is_base }
   end

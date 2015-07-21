@@ -15,13 +15,13 @@ class OrderService
   # @days: integer
   # @state: false
   #=============
-  def self.get_orders_by_days location_id, days=70, handled = false, user_id = nil
+  def self.get_orders_by_days location_ids, days=7, handled = false, user_id = nil
     start_time = days.days.ago.at_beginning_of_day.utc
     end_time = Time.now.at_end_of_day.utc
     if user_id.nil?
-      find({created_at:(start_time..end_time),handled: handled, source_id: location_id})
+      find({created_at:(start_time..end_time),handled: handled, source_id: location_ids})
     else
-      find({created_at: (start_time..end_time),user_id: user_id, handled: handled, source_id: location_id})
+      find({created_at: (start_time..end_time),user_id: user_id, handled: handled, source_id: location_ids})
     end
   end
 
@@ -37,7 +37,7 @@ class OrderService
     if user.nil?
       return []
     end
-    order_items = PickItemService.get_order_items(user_id, get_orders_by_days(user.location_id).ids, filters)
+    order_items = PickItemService.get_order_items(user_id, get_orders_by_days(user.location_destination_ids).ids, filters)
     if order_items.nil?
       return []
     end

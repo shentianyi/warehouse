@@ -1,3 +1,5 @@
+require 'will_paginate/array'
+
 class NStoragesController < ApplicationController
   before_action :set_storage, only: [:show, :edit, :update, :destroy]
 
@@ -66,13 +68,25 @@ class NStoragesController < ApplicationController
     @condition=params[@model]
     puts @condition
     query=model.unscoped
+    where_comdition = ""
+
     @condition.each do |k, v|
       if (v.is_a?(Fixnum) || v.is_a?(String)) && !v.blank?
         puts @condition.has_key?(k+'_fuzzy')
         if @condition.has_key?(k+'_fuzzy')
           query=query.where("#{k} like ?", "%#{v}%")
+          if where_comdition.empty?
+            where_comdition += "WHERE #{k} like '#{v}' "
+          else
+            where_comdition += "AND #{k} = '#{v}' "
+          end
         else
           query=query.where(Hash[k, v])
+          if where_comdition.empty?
+            where_comdition += "WHERE #{k} like '#{v}' "
+          else
+            where_comdition += "AND #{k} = '#{v}' "
+          end
         end
         instance_variable_set("@#{k}", v)
       end
@@ -82,6 +96,11 @@ class NStoragesController < ApplicationController
         values[0]=Time.parse(values[0]).utc.to_s if values[0].is_date? & values[0].include?('-')
         values[1]=Time.parse(values[1]).utc.to_s if values[1].is_date? & values[1].include?('-')
         query=query.where(Hash[k, (values[0]..values[1])])
+        if where_comdition.empty?
+          where_comdition += "WHERE #{k} BETWEEN '#{values[0]}' AND '#{values[1]}' "
+        else
+          where_comdition += "AND #{k} BETWEEN '#{values[0]}' AND '#{values[1]}' "
+        end
         v.each do |kk, vv|
           instance_variable_set("@#{k}_#{kk}", vv)
         end
@@ -91,10 +110,14 @@ class NStoragesController < ApplicationController
     if params.has_key? "negative"
       query = query.where("n_storages.qty < 0").select("n_storages.qty as total_qty, n_storages.*")
     else
-      query = query.select("SUM(n_storages.qty) as total_qty, n_storages.*").group("n_storages.partNr, n_storages.ware_house_id, n_storages.position")
+      if params[:format] == 'xlsx'
+        query = query.select("SUM(n_storages.qty) as total_qty, n_storages.*").group("n_storages.partNr, n_storages.ware_house_id, n_storages.position")
+      else
+        query = NStorage.find_by_sql("select SUM(n_storages.qty) as total_qty, n_storages.* from n_storages #{where_comdition} group by n_storages.partNr, n_storages.ware_house_id, n_storages.position")
+      end
     end
 
-    instance_variable_set("@#{@model.pluralize}", query.paginate(:page => params[:page]).all)
+    instance_variable_set("@#{@model.pluralize}", query.paginate(:page => params[:page]))
 
     respond_to do |format|
       format.xlsx do

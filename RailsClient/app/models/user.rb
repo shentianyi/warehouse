@@ -53,6 +53,15 @@ class User < ActiveRecord::Base
     User.where(role_id:role_id).all
   end
 
+
+  def location_destinations
+    self.location.destinations
+  end
+
+  def location_destination_ids
+    self.location_destinations.pluck(:id)
+  end
+
   private
   def generate_authentication_token
     loop do
