@@ -1,6 +1,8 @@
 class PickListsController < ApplicationController
   before_action :set_pick_list, only: [:show, :edit, :update, :destroy]
 
+  include LedStateable
+
   # GET /pick_lists
   # GET /pick_lists.json
   def index

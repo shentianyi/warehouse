@@ -26,7 +26,7 @@ module V1
       end
 
       get :search_part do
-        LedService.create_stockout_list('1001', 105)
+        LedService.create_stockout_list('1001', 'flase', 19)
       end
 
     end
