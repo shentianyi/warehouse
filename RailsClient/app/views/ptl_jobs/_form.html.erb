@@ -1,0 +1,37 @@
+<%= form_for(@ptl_job) do |f| %>
+  <% if @ptl_job.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@ptl_job.errors.count, "error") %> prohibited this ptl_job from being saved:</h2>
+
+      <ul>
+      <% @ptl_job.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :params %><br>
+    <%= f.text_area :params %>
+  </div>
+  <div class="field">
+    <%= f.label :state %><br>
+    <%= f.number_field :state %>
+  </div>
+  <div class="field">
+    <%= f.label :is_dirty %><br>
+    <%= f.check_box :is_dirty %>
+  </div>
+  <div class="field">
+    <%= f.label :is_new %><br>
+    <%= f.check_box :is_new %>
+  </div>
+  <div class="field">
+    <%= f.label :is_delete %><br>
+    <%= f.check_box :is_delete %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

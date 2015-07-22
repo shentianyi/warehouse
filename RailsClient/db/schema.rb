@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150706063549) do
+ActiveRecord::Schema.define(version: 20150722070817) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -555,6 +555,16 @@ ActiveRecord::Schema.define(version: 20150706063549) do
   add_index "positions", ["id"], name: "index_positions_on_id", using: :btree
   add_index "positions", ["uuid"], name: "index_positions_on_uuid", using: :btree
   add_index "positions", ["whouse_id"], name: "index_positions_on_whouse_id", using: :btree
+
+  create_table "ptl_jobs", force: true do |t|
+    t.text     "params"
+    t.integer  "state",      default: 100
+    t.boolean  "is_delete",  default: false
+    t.boolean  "is_dirty",   default: true
+    t.boolean  "is_new",     default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "records", force: true do |t|
     t.string   "recordable_id"

@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Params:</strong>
+  <%= @ptl_job.params %>
+</p>
+
+<p>
+  <strong>State:</strong>
+  <%= @ptl_job.state %>
+</p>
+
+<p>
+  <strong>Is dirty:</strong>
+  <%= @ptl_job.is_dirty %>
+</p>
+
+<p>
+  <strong>Is new:</strong>
+  <%= @ptl_job.is_new %>
+</p>
+
+<p>
+  <strong>Is delete:</strong>
+  <%= @ptl_job.is_delete %>
+</p>
+
+<%= link_to 'Edit', edit_ptl_job_path(@ptl_job) %> |
+<%= link_to 'Back', ptl_jobs_path %>

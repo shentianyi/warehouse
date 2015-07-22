@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :ptl_jobs
+
   resources :scrap_list_items do
     collection do
       match :import, to: :import, via: [:get, :post]

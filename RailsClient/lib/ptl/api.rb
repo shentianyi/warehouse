@@ -6,10 +6,15 @@ module Ptl
     # include Sidekiq::Paginator
 
 
-    get '/led' do
+    get '/confirm' do
 
-      pm=Ptl::PhaseMachine.new({led_id: 1})
-      pm.to_json
+    end
+
+    # params
+    #  required: message string
+    #
+    get '/receive' do
+      raise
     end
   end
 end
