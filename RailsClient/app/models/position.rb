@@ -5,6 +5,7 @@ class Position < ActiveRecord::Base
   belongs_to :whouse
   has_many :part_positions, :dependent => :destroy
   has_many :parts, :through => :part_positions
+  has_one :led, -> {where is_valid: false}
   # has_many :inventory_list_items
   validate :validate_save
 
@@ -18,6 +19,10 @@ class Position < ActiveRecord::Base
 
   def generate_id
     "PS#{Time.now.to_milli}"
+  end
+
+  def default_part
+    self.parts.first
   end
 
   def self.trans_position

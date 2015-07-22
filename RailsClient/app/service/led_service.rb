@@ -27,4 +27,41 @@ class LedService
     puts msg.to_json
     return msg
   end
+
+  def self.create_stockout_list(led_id, count)
+
+    position = Position.find_by_detail(Led.find_by_name(led_id).position)
+    part = position.default_part
+    puts position.detail
+
+    order = Order.new()
+    builder = User.find(SysConfigCache.led_builder_value)
+    order.user = builder
+    puts order.user
+
+    order.source_location_id = builder.location_id
+    ActiveRecord::Base.transaction do
+      begin
+        if order.save
+          #save success
+          part = OrderItemService.verify_part_id(part.id, builder)
+          part_position = OrderItemService.verify_department(position.detail, part.id)
+          #quantity = item[:quantity]
+          box_quantity = count
+
+          if item = OrderItemService.new(part_position, part, 1, true, box_quantity, builder)
+            item.order = order
+            item.save
+          end
+        else
+          return nil
+        end
+
+      rescue ActiveRecord::RecordInvalid => invalid
+        return nil
+      end
+    end
+
+  end
+
 end

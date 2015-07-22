@@ -86,6 +86,10 @@ ActiveRecord::Base.transaction do
     SysConfig.create(code: 'LED_ENABLE', value: 'false', name: '是否开启LED')
   end
 
+  unless SysConfig.find_by_code('LED_BUILDER')
+    SysConfig.create(code: 'LED_BUILDER', value: 'admin', name: 'LED默认创建用户')
+  end
+
 
   #LED STATE
   unless LedState.find_by_state(LedLightState::NORMAL)
