@@ -10,7 +10,7 @@ module V1
         end
       end
 
-      get :search do
+      get :get_positions do
 
         wh_id=params[:wh_id].present? ? Whouse.nr_by_regex(params[:wh_id]) : SysConfigCache.default_warehouse_value
         if part = Part.find_by_id(Part.nr_by_regex( params[:part_id]))
