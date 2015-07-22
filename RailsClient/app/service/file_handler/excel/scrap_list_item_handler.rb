@@ -23,7 +23,14 @@ module FileHandler
                   row[k]=row[k].sub(/\.0/, '') if k=='零件号'
                 end
 
-                ScrapListItem.create({scrap_list_id:scrap_list_id,part_id:row['零件号'],product_id:row['总成号'],quantity:row['数量'],IU:row['单位'],reason:row['原因'],name:row['登记人'],time:row['登记时间']})
+                ScrapListItem.create({scrap_list_id:scrap_list_id,
+                                      part_id:row['零件号'],
+                                      product_id:row['总成号'],
+                                      quantity:row['数量'],
+                                      IU:row['单位'],
+                                      reason:row['原因'],
+                                      name:row['登记人'],
+                                      time:row['登记时间'].to_time.utc})
               end
             end
             msg.result = true
@@ -79,12 +86,12 @@ module FileHandler
 
         src_warehouse = Whouse.find_by_name(row['源仓库'])
         unless src_warehouse
-          msg.contents << "源仓库:#{row['源仓库']} not found!"
+          msg.contents << "源仓库:#{row['源仓库']} 不存在!"
         end
 
         dse_warehouse = Whouse.find_by_name(row['目的仓库'])
         unless dse_warehouse
-          msg.contents << "目的仓库:#{row['目的仓库']} not found!"
+          msg.contents << "目的仓库:#{row['目的仓库']} 不存在!"
         end
 
         # builder = User.find_by_name(row['创建者'])
@@ -99,7 +106,7 @@ module FileHandler
 
         part_id = Part.find_by_id(row['零件号'])
         unless part_id
-          msg.contents << "零件号:#{row['零件号']} not found!"
+          msg.contents << "零件号:#{row['零件号']} 不存在!"
         end
 
         unless row['数量'].to_f > 0

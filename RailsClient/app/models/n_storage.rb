@@ -1,5 +1,8 @@
 class NStorage < ActiveRecord::Base
   belongs_to :ware_house, class_name: 'WareHouse'
+  default_scope { where(locked: false) }
+
+  has_paper_trail
 
   def whId
     ware_house and ware_house.whId or nil
@@ -36,7 +39,7 @@ class NStorage < ActiveRecord::Base
         # @storages.each do |storage|
           if inventory_list_item.part_id.to_s == result[0].to_s
             result.insert(2,inventory_list_item.qty2)
-            result[3] = result[1] -  result[2]
+            result[3] = (result[1]||0) -  result[2]
             @flag = true
             # break
           end
@@ -53,11 +56,11 @@ class NStorage < ActiveRecord::Base
   end
 
 
-  def self.to_xlsx n_storages
+  def self.to_total_xlsx n_storages
     p = Axlsx::Package.new
     wb = p.workbook
     wb.add_worksheet(:name => "sheet1") do |sheet|
-      sheet.add_row ["序号", "零件号", "仓库号", "库位号", "数量", "FIFO", "包装号", "唯一码"]
+      sheet.add_row ["序号", "零件号", "仓库号", "库位号", "数量", "FIFO", "创建时间", "唯一码"]
       n_storages.each_with_index { |n_storage, index|
         if n_storage.id && n_storage.id != ""
           sheet.add_row [
@@ -66,9 +69,9 @@ class NStorage < ActiveRecord::Base
                             n_storage.ware_house_id,
                             n_storage.position,
                             n_storage.total_qty,
-                            n_storage.fifo,
-                            n_storage.packageId,
-                            n_storage.uniqueId
+                            n_storage.fifo.present? ? n_storage.fifo.localtime.strftime("%Y-%m-%d %H:%M") : '',
+                            n_storage.created_at.present? ? n_storage.created_at.localtime.strftime("%Y-%m-%d %H:%M") : '',
+                            n_storage.packageId
                         ]
         end
       }
@@ -76,4 +79,29 @@ class NStorage < ActiveRecord::Base
     p.to_stream.read
   end
 
+
+  def self.to_xlsx n_storages
+    p = Axlsx::Package.new
+
+    puts "9999999999999999999999999999999999"
+    wb = p.workbook
+    wb.add_worksheet(:name => "sheet1") do |sheet|
+      sheet.add_row ["序号","零件号", "唯一码",  "仓库号", "库位号", "数量", "FIFO", "创建时间"]
+      n_storages.each_with_index { |n_storage, index|
+        if n_storage.id && n_storage.id != ""
+          sheet.add_row [
+                            index+1,
+                            n_storage.partNr,
+                            n_storage.packageId,
+                            n_storage.ware_house_id,
+                            n_storage.position,
+                            n_storage.qty,
+                            n_storage.fifo.present? ? n_storage.fifo.localtime.strftime("%Y-%m-%d %H:%M") : '',
+                            n_storage.created_at.present? ? n_storage.created_at.localtime.strftime("%Y-%m-%d %H:%M") : ''
+                        ]
+        end
+      }
+    end
+    p.to_stream.read
+  end
 end

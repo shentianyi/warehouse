@@ -86,8 +86,13 @@ ActiveRecord::Base.transaction do
     SysConfig.create(code: 'LED_ENABLE', value: 'false', name: '是否开启LED')
   end
 
+<<<<<<< HEAD
   unless SysConfig.find_by_code('LED_BUILDER')
     SysConfig.create(code: 'LED_BUILDER', value: 'admin', name: 'LED默认创建用户')
+=======
+  unless SysConfig.find_by_code('DEFAULT_WAREHOUSE')
+    SysConfig.create(code: 'DEFAULT_WAREHOUSE', value: '3EX', name: '默认仓库号')
+>>>>>>> 2d32497d3faccd16b95e5439d73845d61a76467a
   end
 
 

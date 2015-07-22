@@ -10,14 +10,17 @@
       </ul>
     </div>
   <% end %>
-
+    <div class="field">
+      <%= f.label :name, "名称/备注" %><br>
+      <%= f.text_field :name %>
+    </div>
   <div class="field">
     <%= f.label :src_warehouse, "源仓库" %><br>
-    <%= f.text_field :src_warehouse %>
+    <%= f.select(:src_warehouse, Whouse.all.collect {|w| [w.id, w.name]}, {include_blank: true})%>
   </div>
   <div class="field">
     <%= f.label :dse_warehouse, "目的仓库" %><br>
-    <%= f.text_field :dse_warehouse %>
+    <%= f.select(:dse_warehouse, Whouse.all.collect {|w| [w.id, w.name]}, {include_blank: true})%>
   </div>
   <div class="field">
     <%= f.label :builder, "创建者" %><br>

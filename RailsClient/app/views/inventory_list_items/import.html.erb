@@ -1,0 +1,19 @@
+<h1>盘点单：<%= @inventory_list.name %></h1>
+<script type="text/javascript">
+    $(function () {
+        data_upload("#item-data-uploader", 'xlsx');
+    });
+</script>
+
+<p id="notice"><%= notice %></p>
+
+<h3>上传盘点项文件</h3>
+<div>
+  选择数据文件：
+  <input id="item-data-uploader" type="file" name="files[]" data-url="/inventory_list_items/import"/>
+
+  <div class="abstractblock" id="item-data-uploader-preview" style="display:none;"></div>
+
+</div>
+
+<div><a href="/files/download?folder=template&file=inventory_list_items_template.xlsx">下载模板</a></div>

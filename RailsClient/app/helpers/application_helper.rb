@@ -30,7 +30,7 @@ module ApplicationHelper
 
   def search
     @condition=params[@model]
-    query=model.unscoped
+    query=model.all#.unscoped
     @condition.each do |k, v|
       if (v.is_a?(Fixnum) || v.is_a?(String)) && !v.blank?
         puts @condition.has_key?(k+'_fuzzy')
@@ -55,13 +55,14 @@ module ApplicationHelper
         end
       end
     end
-    instance_variable_set("@#{@model.pluralize}", query.paginate(:page => params[:page]).all)
+
     if params.has_key? "download"
       send_data(query.to_xlsx(query),
                 :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
                 :filename => @model.pluralize+".xlsx")
       #render :json => query.to_xlsx(query)
     else
+      instance_variable_set("@#{@model.pluralize}", query.paginate(:page => params[:page]).all)
       render :index
     end
   end

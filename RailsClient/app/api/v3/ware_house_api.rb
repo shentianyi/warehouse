@@ -57,10 +57,19 @@ module V3
         optional :fifo, type: String
       end
       post :move do
+        params[:toWh]=params[:toWh].sub(/LO/, '')
+        params[:toPosition]=params[:toPosition].sub(/LO/, '')
+        params[:fromWh]=params[:fromWh].sub(/LO/, '') if params[:fromWh].present?
+        params[:fromPosition]=params[:fromPosition].sub(/LO/, '') if params[:fromPosition].present?
+
+        params[:partNr]=params[:partNr].sub(/P/, '') if params[:partNr].present?
         puts "#{params.to_json}-----------"
         begin
-          params[:qty]=params[:qty].to_f
-
+          params[:qty]=params[:qty].to_f if params[:qty].present?
+          if params[:partNr].present?
+            raise '请填写数量' unless params[:qty].present?
+            params[:packageId]=nil
+          end
           NStorage.transaction do
             WhouseService.new.move(params)
           end
@@ -75,9 +84,11 @@ module V3
       end
 
       post :moves do
+        # raise ''
         puts "===================#{params.to_json}"
         NStorage.transaction do
-          params.each do |p|
+          JSON.parse(params[:moves]).each do |p|
+            p.deep_symbolize_keys!
             WhouseService.new.move(p)
           end
         end

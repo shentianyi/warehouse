@@ -1,22 +1,14 @@
-=begin
 require 'redis'
 require 'redis-namespace'
 
-$default_db = 11
 
-$redis=Redis::Namespace.new('WarehouseRedisStore', redis: Redis.new(:host => '127.0.0.1', :port => '6379'))
+$redis= Redis::Namespace.new('wms', redis: Redis.new(:host => '127.0.0.1', :port => '6379', :db => 0))
 
 if defined?(PhusionPassenger)
   PhusionPassenger.on_event(:starting_worker_process) do |forked|
     if forked
       $redis.client.disconnect
-      Rails.cache.disconnect if Rails.cache.respond_to? :disconnect
-      $redis=Redis::Namespace.new('WarehouseRedisStore',
-                                  redis: Redis.new(:host => '127.0.0.1', :port => '6379'))
-      Rails.cache.redis=$redis
-      Rails.cache.reconnect if Rails.cache.respond_to? :reconnect
-      $redis.client.reconnect
+      $redis= Redis::Namespace.new('wms', redis: Redis.new(:host => '127.0.0.1', :port => '6379', :db => 0))
     end
   end
 end
-=end

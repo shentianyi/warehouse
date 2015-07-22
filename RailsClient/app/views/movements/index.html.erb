@@ -9,7 +9,7 @@
               <input type="text" name="movement[partNr]" value="<%= @partNr %>"/>
               <input type="hidden" name="movement[partNr_fuzzy]"/>
             </span>
-            <span>包装号：
+            <span>唯一码：
               <input type="text" name="movement[packageId]" value="<%= @packageId %>"/>
               <input type="hidden" name="movement[packageId_fuzzy]"/>
             </span>
@@ -57,6 +57,10 @@
               ~  <input type="number" name="movement[qty][end]" value="<%= @qty_end %>"/>
             </span>
         </div>
+        <div>备注：
+          <input type="text" name="movement[remarks]" value="<%= @remarks %>"/>
+          <input type="hidden" name="movement[remarks_fuzzy]"/>
+        </div>
         <div>
           <input type="submit" value="查找" class="btn btn-primary" name="search"/>
           <input type="submit" value="导出" class="btn btn-primary" name="download"/>
@@ -77,7 +81,7 @@
   <tr>
     <th>NO.</th>
     <th>零件号</th>
-    <th>包装号</th>
+    <th>唯一码</th>
     <th>移动量</th>
     <th>类型</th>
     <th>FIFO</th>

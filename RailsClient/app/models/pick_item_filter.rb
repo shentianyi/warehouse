@@ -24,7 +24,7 @@ class PickItemFilter < ActiveRecord::Base
     if user= User.find_by_id(self.user_id)
       if filterable=self.filterable_type.constantize.find_by_id(self.filterable_id)
         if self.filterable_type=='Whouse'
-          errors.add(:filterable_id,'接收仓库不存在') unless user.location.destination.whouses.where(id:self.filterable_id).count>0
+          # errors.add(:filterable_id,'接收仓库不存在') unless user.location.destination.whouses.where(id:self.filterable_id).count>0
 
           puts '--------------------------------'
           puts errors.to_json

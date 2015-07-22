@@ -2,7 +2,8 @@ Rails.application.routes.draw do
 
   resources :scrap_list_items do
     collection do
-      match :import, to: :import,via: [:get,:post]
+      match :import, to: :import, via: [:get, :post]
+      get :search
     end
   end
 
@@ -16,23 +17,32 @@ Rails.application.routes.draw do
     end
 
     collection do
-      match :import, to: :import,via: [:get,:post]
+      match :import, to: :import, via: [:get, :post]
     end
   end
 
   resources :inventory_lists do
     member do
       get 'inventory_list_items'
-    end
-    
-    collection do
       get :discrepancy
     end
+
+    collection do
+      get :export_total
+    end
   end
-  
+
   resources :inventory_list_items do
     collection do
       get :search
+      match :import, to: :import, via: [:get, :post]
+    end
+    member do
+      get :export_list_detail
+      get :export_list_total
+      get :lock_unlock_list
+      get :store_list
+      get :unstore_list
     end
   end
 
@@ -43,7 +53,6 @@ Rails.application.routes.draw do
       get :search_storage
     end
   end
-
 
 
   resources :regex_categories do
@@ -63,13 +72,14 @@ Rails.application.routes.draw do
       get :export
     end
   end
-=begin
 
-  require 'sidekiq/web'
-  authenticate :user, lambda { |u| u.is_sys } do
-    mount Sidekiq::Web => '/sidekiq'
-  end
-=end
+  # require 'sidekiq/web'
+  # authenticate :user, lambda { |u| u.is_sys } do
+  #   mount Sidekiq::Web => '/sidekiq'
+  # end
+
+  require 'ptl/api'
+  mount Ptl::Api => '/ptl'
 
   resources :order_items do
     collection do
@@ -157,9 +167,9 @@ Rails.application.routes.draw do
   resources :n_storages do
     collection do
       get :search
-      match :import, to: :import,via: [:get,:post]
-      match :move, to: :move,via: [:get,:post]
-      match :group, to: :group,via: [:get,:post]
+      match :import, to: :import, via: [:get, :post]
+      match :move, to: :move, via: [:get, :post]
+      match :group, to: :group, via: [:get, :post]
       # get :panel
       # get :search_storage
       get :summary
@@ -194,8 +204,7 @@ Rails.application.routes.draw do
   get 'reports/orders_report', to: 'reports#orders_report'
   get 'reports/reports', to: 'reports#reports'
   post 'reports/upload_file', to: 'reports#upload_file'
-  
-  
+
 
   get 'notifications', to: 'notifications#index'
   get 'notifications/orderbus', to: 'notifications#orderbus'

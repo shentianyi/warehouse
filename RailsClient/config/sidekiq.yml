@@ -2,7 +2,7 @@
 # Options here can still be overridden by cmd line args.
 #   sidekiq -C config.yml
 ---
-#:pidfile: ./tmp/pids/sidekiq.pid
+:pidfile: ./tmp/pids/sidekiq.pid
 :concurrency: 15
 # Set timeout to 8 on Heroku, longer if you manage your own systems.
 :timeout: 30

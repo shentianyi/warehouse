@@ -4,7 +4,7 @@ class ScrapListItemsController < ApplicationController
   respond_to :html
 
   def index
-    @scrap_list_items = ScrapListItem.all
+    @scrap_list_items = ScrapListItem.all.paginate(:page => params[:page])
     respond_with(@scrap_list_items)
   end
 
@@ -58,6 +58,62 @@ class ScrapListItemsController < ApplicationController
       end
       render json: msg
     end
+  end
+
+  def search
+    @date_start = params[:date_start].nil? ? 1.day.ago.strftime("%Y-%m-%d 7:00") : params[:date_start]
+    @date_end = params[:date_end].nil? ? Time.now.strftime("%Y-%m-%d 7:00") : params[:date_end]
+    @src_warehouse = params[:src_warehouse] if params[:src_warehouse].present?
+    @dse_warehouse = params[:dse_warehouse] if params[:dse_warehouse].present?
+
+    respond_to do |format|
+      format.xlsx do
+        @scrap_list_items = ScrapListItem.generate_report_data(@date_start, @date_end, @src_warehouse, @dse_warehouse)
+        send_data(entry_with_xlsx(@scrap_list_items),
+                  :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+                  :filename => "报废查询导出.xlsx")
+      end
+      format.html do
+        @scrap_list_items = ScrapListItem.generate_report_data(@date_start, @date_end, @src_warehouse, @dse_warehouse).paginate(:page => params[:page])
+        render :index
+      end
+    end
+  end
+
+  def scrap_list_item_header_detials
+    ["编号", "报废单号", "源仓库号","目的仓库号", "零件号", "总成号", "数量", "单位", "原因", "登记人", "状态", "登记时间"]
+  end
+
+  def entry_with_xlsx items
+    p = Axlsx::Package.new
+    wb = p.workbook
+    wb.add_worksheet(:name => "Basic Sheet") do |sheet|
+
+
+      sheet.add_row scrap_list_item_header_detials
+      items.each_with_index { |item, index|
+
+        src_warehouse = ScrapList.find(item.scrap_list_id).src_warehouse
+        dse_warehouse = ScrapList.find(item.scrap_list_id).dse_warehouse
+
+        sheet.add_row [
+                          index+1,
+                          item.scrap_list_id,
+                          src_warehouse,
+                          dse_warehouse,
+                          item.part_id,
+                          item.product_id,
+                          item.quantity,
+                          item.IU,
+                          item.reason,
+                          item.name,
+                          ScrapListItemState.display(item.state),
+                          item.time
+                      ], :types => [:string]
+      }
+
+    end
+    p.to_stream.read
   end
 
   private
