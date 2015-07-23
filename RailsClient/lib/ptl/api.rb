@@ -14,7 +14,7 @@ module Ptl
     #  required: message string
     #
     get '/receive' do
-      raise
+      raise 'no params message' if params[:message].blank?
     end
   end
 end
