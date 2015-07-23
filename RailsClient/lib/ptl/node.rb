@@ -1,5 +1,5 @@
 module Ptl
-  class Led
+  class Node
 
     attr_accessor :state, :color, :rate
 
@@ -23,7 +23,7 @@ module Ptl
 	}
     
 	def initialize(state)
-		map=Led.find_map(state)
+		map=Node.find_map(state)
 		self.state=map[:state]
 		self.color=map[:color]
 		self.rate=map[:rate]
@@ -54,7 +54,15 @@ module Ptl
 	end
 
 	def self.find(state)
-		Led.new(state)
+		Node.new(state)
 	end
+
+	def color_format
+	end
+
+	def rate_format
+	end
+
+
   end
 end
