@@ -1,5 +1,5 @@
-require 'ptl/led'
-require 'ptl/type/send_msg_type'
+#require 'ptl/led'
+#require 'ptl/type/send_msg_type'
 
 
 module Ptl
@@ -20,9 +20,9 @@ module Ptl
 		  end
 
 		  def encode
-			  led=Ptl::Led.find(job.to_state)
+			  node=Ptl::Node.find(job.to_state)
 
-			  "<#{self.type}>#{job.server_id}#{job.led_id}#{Ptl::Led.find(job.to_state).colro}"
+			  "<#{self.type}>#{job.server_id}#{job.node_id}#{job.color}"
 		  end
 	  end
   end

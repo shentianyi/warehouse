@@ -1,5 +1,5 @@
 require 'rest-client'
-require 'ptl/led'
+#require 'ptl/node'
 module Ptl
   class PhaseMachine
 	  attr_accessor :job
@@ -14,7 +14,7 @@ module Ptl
 		  begin
 			  log.info("start process job:#{job.id}")
 			  case job.to_state
-			  when PTL::Led::ORDERD
+			  when PTL::Node::ORDERD
 				  # TODO
 				  # call create order items api
 				  # params led

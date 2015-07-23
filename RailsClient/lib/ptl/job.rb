@@ -1,9 +1,9 @@
 module Ptl
   class Job
 
-	  # led_id 是4位数字字符串
+	  # node_id 是4位数字字符串
 	  # server_id 是3位数字字符串
-	  attr_accessor :id, :led_id, :curr_state, :to_state, :curr_display, :size, :server_id,:server_url,:in_time #, :http_type
+	  attr_accessor :id, :node_id, :curr_state, :to_state, :curr_display, :size, :server_id,:server_url,:in_time #, :http_type
 
     DEFAULT_HTTP_TYPE='POST'
     DEFAULT_RETRY_TIMES=3
@@ -37,6 +37,9 @@ module Ptl
         PtlJob.create(
             params: params.to_json
         )
+		
+		process if in_time
+
       rescue
         return false
       end
