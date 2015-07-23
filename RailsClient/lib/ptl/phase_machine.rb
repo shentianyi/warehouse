@@ -1,21 +1,32 @@
 require 'rest-client'
-
+require 'ptl/led'
 module Ptl
   class PhaseMachine
-    attr_accessor :led_id, :led_curr_state, :server, :http_type
+	  attr_accessor :job
 
-    REQUIRED_PARAMS=[:led_id, :led_curr_state, :server]
-    DEFAULT_HTTP_TYPE='POST'
-    DEFAULT_RETRY_TIMES=3
+	  def initialize(job)
+	   self.job=job
+	  end
 
+	  def process
+		  display=nil
 
-    def initialize(options={})
-      raise 'params is blank' if options.blank?
-      REQUIRED_PARAMS.each { |k| self.instance_variable_set("@#{k}", options[k]) if options.has_key?(k) }
-    end
-
-    def enqueue
-
-    end
+		  begin
+			  log.info("start process job:#{job.id}")
+			  case job.to_state
+			  when PTL::Led::ORDERD
+				  # TODO
+				  # call create order items api
+				  # params led
+				  #
+				 result=true # api
+				 if result
+					 
+				 end
+			  end
+		  rescue => e
+			  log.error(e.message)
+		  end
+	  end
   end
 end

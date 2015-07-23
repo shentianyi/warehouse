@@ -1,0 +1,33 @@
+<h1>Listing ptl_jobs</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Params</th>
+      <th>State</th>
+      <th>Is dirty</th>
+      <th>Is new</th>
+      <th>Is delete</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @ptl_jobs.each do |ptl_job| %>
+      <tr>
+        <td><%= ptl_job.params %></td>
+        <td><%= ptl_job.state %></td>
+        <td><%= ptl_job.is_dirty %></td>
+        <td><%= ptl_job.is_new %></td>
+        <td><%= ptl_job.is_delete %></td>
+        <td><%= link_to 'Show', ptl_job %></td>
+        <td><%= link_to 'Edit', edit_ptl_job_path(ptl_job) %></td>
+        <td><%= link_to 'Destroy', ptl_job, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Ptl job', new_ptl_job_path %>
