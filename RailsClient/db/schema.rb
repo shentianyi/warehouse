@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150722081820) do
+ActiveRecord::Schema.define(version: 20150723062209) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -181,16 +181,17 @@ ActiveRecord::Schema.define(version: 20150722081820) do
     t.boolean  "is_dirty",      default: true
     t.boolean  "is_new",        default: true
     t.string   "modem_id"
-    t.string   "position"
+    t.string   "position_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "mac"
     t.string   "led_display"
+    t.boolean  "is_valid"
   end
 
   add_index "leds", ["id"], name: "index_leds_on_id", using: :btree
   add_index "leds", ["modem_id"], name: "index_leds_on_modem_id", using: :btree
-  add_index "leds", ["position"], name: "index_leds_on_position", using: :btree
+  add_index "leds", ["position_id"], name: "index_leds_on_position_id", using: :btree
   add_index "leds", ["signal_id"], name: "index_leds_on_signal_id", using: :btree
 
   create_table "location_container_hierarchies", id: false, force: true do |t|

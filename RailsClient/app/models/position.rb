@@ -5,7 +5,7 @@ class Position < ActiveRecord::Base
   belongs_to :whouse
   has_many :part_positions, :dependent => :destroy
   has_many :parts, :through => :part_positions
-  has_one :led, -> {where is_valid: false}
+  has_one :led, -> {where is_valid: true}
   # has_many :inventory_list_items
   validate :validate_save
 
