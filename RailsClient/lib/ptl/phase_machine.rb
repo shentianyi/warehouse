@@ -1,5 +1,4 @@
 require 'rest-client'
-#require 'ptl/node'
 module Ptl
   class PhaseMachine
 	  attr_accessor :job
