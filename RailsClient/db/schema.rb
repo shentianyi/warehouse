@@ -302,9 +302,9 @@ ActiveRecord::Schema.define(version: 20150722070817) do
     t.integer  "type_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "remark"
     t.string   "remarks"
     t.string   "employee_id"
-    t.string   "remark"
   end
 
   add_index "movements", ["packageId"], name: "package_id_index", using: :btree

@@ -58,11 +58,27 @@ module Ptl
 	end
 
 	def color_format
+		self.color
 	end
 
 	def rate_format
+		'%04d' % self.rate
 	end
 
+	def self.encode_display(to_state,curr_dispaly='',size=1)
+		case to_state
+		when NORMAL
+			'0000'
+		when ORDERED
+			"#{curr_dispaly[0,1]}#{ '%02d' % (curr_dispaly[2,3].to_i+size)}"
+		when URGENT_ORDERED
+            "#{'%02d' % (curr_dispaly[0,1].to_i+size)}#{ '%02d' % (curr_dispaly[2,3].to_i+size)}"
+		when PICKED,DELIVERED
+			curr_dispaly
+		when RECEIVED
+           "#{curr_dispaly[0,1]}#{ '%02d' % (curr_dispaly[2,3].to_i+size)}"
+		end
+	end
 
   end
 end
