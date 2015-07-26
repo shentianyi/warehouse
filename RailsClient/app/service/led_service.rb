@@ -28,7 +28,7 @@ class LedService
     return msg
   end
 
-  #create 缺货单
+  #create 缺货单/需求单
   def self.create_stockout_list(led_id, is_emergency, box_quantity=1)
 
     position = Position.find_by_detail(Led.find_by_name(led_id).position)
@@ -36,7 +36,6 @@ class LedService
     source_id = PartPosition.find_by_part_id(part.id).sourceable_id
     builder = User.find(SysConfigCache.led_builder_value)
     quantity = part.unit_pack * box_quantity
-    puts source_id
 
     args = [{part_id: part.id, quantity: quantity, box_quantity: box_quantity, department: position.whouse.id, is_emergency: is_emergency}]
     OrderService.create_with_items({order: {source_id: source_id}, order_items: args, nopart_items: args}, builder)

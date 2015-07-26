@@ -2,6 +2,7 @@ class LocationContainer < ActiveRecord::Base
   self.inheritance_column = nil
   include Extensions::UUID
   include CZ::State
+  include LedStateable
   # has_ancestry
   belongs_to :user
   belongs_to :container

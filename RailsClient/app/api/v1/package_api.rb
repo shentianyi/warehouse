@@ -66,6 +66,7 @@ module V1
       # params
       #=============
       post do
+        puts "packages11111122222222222222222222222222222222222222222222"
         m = PackageService.create package_params, current_user
         m.result ? {result: 1, content: PackagePresenter.new(m.object).to_json} : {result: 0, content: m.content}
       end
@@ -155,7 +156,7 @@ module V1
 
       post :send do
         msg = ApiMessage.new
-
+puts "packages111111111111111111111111111111111111111"
         unless lc = LogisticsContainer.exists?(params[:id])
           return msg.set_false(PackageMessage::NotExit)
         end
@@ -172,12 +173,11 @@ module V1
         unless warehouse = destination.whouses.where(id: params[:whouse_id]).first
           return msg.set_false(PackageMessage::WarehouseNotInLocation)
         end
+        lc.update(destinationable: warehouse)
 
         unless (r = PackageService.dispatch(lc, destination, current_user)).result
           return msg.set_false(r.content)
         end
-
-        lc.update(destinationable: warehouse)
 
         return msg.set_true(MovableMessage::Success)
       end

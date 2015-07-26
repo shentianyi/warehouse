@@ -1,4 +1,5 @@
 class Delivery < Container
+  include LedStateable
   default_scope { where(type: ContainerType::DELIVERY) }
 
   def generate_id

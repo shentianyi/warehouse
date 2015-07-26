@@ -24,4 +24,18 @@ class Part < ActiveRecord::Base
   def self.nr_by_regex(nr)
     nr.sub(/^P/,'')
   end
+
+  #get part's defualt position
+  def self.get_default_position(whouse_id, part_id)
+
+    unless whouse = Whouse.find_by_id(whouse_id)
+      return nil
+    end
+
+    unless position = whouse.part_positions.where(part_id: part_id).first
+      return nil
+    end
+
+    return position
+  end
 end
