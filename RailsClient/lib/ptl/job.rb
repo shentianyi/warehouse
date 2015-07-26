@@ -1,8 +1,11 @@
 module Ptl
   class Job
 
+	  #
 	  # node_id 是4位数字字符串
 	  # server_id 是3位数字字符串
+	  # server_url 是控制器的IP+PORT,比如192.168.0.1:9000
+	  #
 	  attr_accessor :id, :node_id, :curr_state, :to_state, :curr_display, :size, :server_id,:server_url,:in_time #, :http_type
 
     DEFAULT_HTTP_TYPE='POST'

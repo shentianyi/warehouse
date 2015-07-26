@@ -22,7 +22,15 @@ module Ptl
 		  def encode
 			  node=Ptl::Node.find(job.to_state)
 
-			  "<#{self.type}>#{job.server_id}#{job.node_id}#{job.color}"
+			  "<#{self.type}>#{job.server_id}#{encode_node_id(job.node_id)}#{job.color_format}#{job.rate_format}#{'display'}#{encode_job_id}>"
+		  end
+
+		  def encode_node_id node_id
+		   '%040d' % node_id
+		  end
+
+		  def encode_job_id
+			  '%06d' % self.job.id
 		  end
 	  end
   end
