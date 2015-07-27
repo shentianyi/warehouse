@@ -27,9 +27,9 @@
   </div>
   <%= will_paginate @leds, :container => false %>
 </div>
-<table class="table table-bordered table-striped globle-table">
+<table class="table1">
   <thead>
-  <tr>
+  <tr class="alert">
     <th>编号(协调器自动分配的ID)</th>
     <th>MAC</th>
     <th>协调器ID</th>
@@ -41,8 +41,8 @@
   </thead>
 
   <tbody>
-  <% @leds.each do |led| %>
-      <tr>
+  <% @leds.each_with_index do |led,i| %>
+      <tr class="<%= i%2==0 ? 'alert' : ''%>">
         <td><%= led.signal_id %></td>
         <td><%= led.mac %></td>
         <td><%= led.modem_id %></td>

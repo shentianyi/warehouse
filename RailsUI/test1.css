@@ -1,0 +1,43 @@
+.table2
+{
+width: 100%;
+padding: 0;
+margin: 0;
+}
+.table2 tr.alert{
+background-color: #cad9ea;	
+	}
+.table2 th {
+font: bold 12px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+color: #4f6b72;
+border-right: 1px solid #C1DAD7;
+border-bottom: 1px solid #C1DAD7;
+border-top: 1px solid #C1DAD7;
+letter-spacing: 2px;
+text-transform: uppercase;
+text-align: left;
+padding: 6px 6px 6px 12px;
+background: #CAE8EA no-repeat;
+}
+.table2 td {
+border-right: 1px solid #C1DAD7;
+border-bottom: 1px solid #C1DAD7;
+background: #fff;
+font-size:14px;
+padding: 6px 6px 6px 12px;
+color: #4f6b72;
+} 
+.table2 td.alt {
+background: #F5FAFA;
+color: #797268;
+}
+.table2 th.spec,td.spec {
+border-left: 1px solid #C1DAD7;
+}
+/*---------for IE 5.x bug*/
+html>body td{ font-size:14px;}
+.table2 tr.select th,tr.select td
+{
+background-color:#CAE8EA;
+color: #797268;
+} 
