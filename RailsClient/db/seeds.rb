@@ -18,7 +18,7 @@ ActiveRecord::Base.transaction do
   whouse.location=Location.find_by_id('Basic')
   whouse.save
   unless user=User.find_by_id('admin')
-    user = User.create({id: 'admin',name: 'Admin', location_id: l.id, password: '123456@', password_confirmation: '123456@', role_id: 100, is_sys: true,user_name:'admin'})
+    user = User.create({id: 'admin', name: 'Admin', location_id: l.id, password: '123456@', password_confirmation: '123456@', role_id: 100, is_sys: true, user_name: 'admin'})
   end
 
   # init package label regex
@@ -86,13 +86,11 @@ ActiveRecord::Base.transaction do
     SysConfig.create(code: 'LED_ENABLE', value: 'false', name: '是否开启LED')
   end
 
-<<<<<<< HEAD
   unless SysConfig.find_by_code('LED_BUILDER')
     SysConfig.create(code: 'LED_BUILDER', value: 'admin', name: 'LED默认创建用户')
-=======
+  end
   unless SysConfig.find_by_code('DEFAULT_WAREHOUSE')
     SysConfig.create(code: 'DEFAULT_WAREHOUSE', value: '3EX', name: '默认仓库号')
->>>>>>> 2d32497d3faccd16b95e5439d73845d61a76467a
   end
 
 
@@ -116,7 +114,7 @@ ActiveRecord::Base.transaction do
     whouse.location=l
     whouse.save
   end
-  unless  User.find_by_id('PACK_SYS_USER')
+  unless User.find_by_id('PACK_SYS_USER')
     User.create({id: 'PACK_SYS_USER', name: 'PACK_SYS_USER',
                  location_id: l.id, password: '123456@',
                  password_confirmation: '123456@', role_id: 100, is_sys: true})
@@ -124,6 +122,6 @@ ActiveRecord::Base.transaction do
 
   # api v3
   MoveType.create!([{typeId: 'MOVE', short_desc: 'move type'},
-                   {typeId: 'ENTRY', short_desc: 'entey'}])
+                    {typeId: 'ENTRY', short_desc: 'entey'}])
 
 end

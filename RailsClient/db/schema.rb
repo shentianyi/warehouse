@@ -11,11 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20150723062209) do
-=======
-ActiveRecord::Schema.define(version: 20150722070817) do
->>>>>>> 8d0c86bb93e1786cc5e281b50e85e99d9caa6b4b
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -308,9 +304,9 @@ ActiveRecord::Schema.define(version: 20150722070817) do
     t.integer  "type_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "remark"
     t.string   "remarks"
     t.string   "employee_id"
+    t.string   "remark"
   end
 
   add_index "movements", ["packageId"], name: "package_id_index", using: :btree
