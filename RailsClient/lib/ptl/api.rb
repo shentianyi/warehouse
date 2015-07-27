@@ -15,6 +15,7 @@ module Ptl
     #
     get '/receive' do
       raise 'no params message' if params[:message].blank?
+      Ptl::Message::Parser.dispatch(params[:message])
     end
   end
 end

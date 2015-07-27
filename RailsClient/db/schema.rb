@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150723062209) do
+ActiveRecord::Schema.define(version: 20150727021704) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -566,6 +566,7 @@ ActiveRecord::Schema.define(version: 20150723062209) do
     t.boolean  "is_new",     default: true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "msg"
   end
 
   create_table "records", force: true do |t|

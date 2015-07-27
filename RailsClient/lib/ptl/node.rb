@@ -1,84 +1,93 @@
 module Ptl
   class Node
 
-    attr_accessor :state, :color, :rate
+    attr_accessor :state, :color, :rate, :display, :id, :job
 
 
-    NORMAL=100
-    ORDERED=200
-    URGENT_ORDERED=300
-    PICKED=400
-    DELIVERED=500
-	IN_RECEIVE=600
-    RECEIVED=700
+    NORMAL=100 #正常
+    ORDERED=200 #要货
+    URGENT_ORDERED=300 #紧急要货
+    PICKED=400 #择货
+    DELIVERED=500 #发运
+    RECEIVED=600 #接受
 
-	@@state_map={
-		:'100'=>{state:NORMAL,color:'G',rate:0},
-		:'200'=>{state:ORDERED,color:'R',rate:0},
-		:'300'=>{state:URGENT_ORDERED,color:'R',rate:200},
-		:'400'=>{state:PICKED,color:'B',rate:0},
-		:'500'=>{state:DELIVERED,color:'B',rate:200},
-		:'600'=>{state:IN_RECEIVE,color:'G',rate:200},
-		:'700'=>{state:RECEIVED,color:'G',rate:0}
-	}
-    
-	def initialize(state)
-		map=Node.find_map(state)
-		self.state=map[:state]
-		self.color=map[:color]
-		self.rate=map[:rate]
-	end
+    @@state_map={
+        :'100' => {state: NORMAL, color: 'G', rate: 0},
+        :'200' => {state: ORDERED, color: 'R', rate: 0},
+        :'300' => {state: URGENT_ORDERED, color: 'R', rate: 200},
+        :'400' => {state: PICKED, color: 'B', rate: 0},
+        :'500' => {state: DELIVERED, color: 'B', rate: 200},
+        :'600' => {state: RECEIVED, color: 'G', rate: 200}
+    }
+
+    def initialize(state)
+      map=Node.find_map(state)
+      self.state=map[:state]
+      self.color=map[:color]
+      self.rate=map[:rate]
+    end
 
 
-	def self.where(args={})
-		@@state_map.values.each do |v|
-			puts v
+    def self.where(args={})
+      @@state_map.values.each do |v|
+        puts v
 
-			finded=true
+        found=true
 
-			args.each do |k,vv|
-				puts "#{k}====#{vv}----#{v[k]}"
-				if	v[k]!=vv
-					(finded=false)
-					break
-				end
-			end
-				puts "----------#{v}"
-				return self.find(v[:state]) if finded
+        args.each do |k, vv|
+          puts "#{k}====#{vv}----#{v[k]}"
+          if v[k]!=vv
+            (found=false)
+            break
+          end
+        end
+        puts "----------#{v}"
+        return self.find(v[:state]) if found
 
-		end
-	end
+      end
+    end
 
-	def self.find_map(state)
-		@@state_map[state.to_s.to_sym] || raise('No State Error')
-	end
+    def self.find_map(state)
+      @@state_map[state.to_s.to_sym] || raise('No State Error')
+    end
 
-	def self.find(state)
-		Node.new(state)
-	end
+    def self.find(state)
+      Node.new(state)
+    end
 
-	def color_format
-		self.color
-	end
 
-	def rate_format
-		'%04d' % self.rate
-	end
+    def set_display(urgent_size=0, order_size=0)
+      urgent_size=0 if urgent_size<0
+      order_size=0 if order_size<0
+      # 当要货量为0时，灯变为正常状态
+      if order_size==0
+        map=Node.find_map(NORMAL)
+        self.state=map[:state]
+        self.color=map[:color]
+        self.rate=map[:rate]
+      end
+      self.display= "#{'%02d' % urgent_size}#{'%02d' % order_size}"
+    end
 
-	def self.encode_display(to_state,curr_dispaly='',size=1)
-		case to_state
-		when NORMAL
-			'0000'
-		when ORDERED
-			"#{curr_dispaly[0,1]}#{ '%02d' % (curr_dispaly[2,3].to_i+size)}"
-		when URGENT_ORDERED
-            "#{'%02d' % (curr_dispaly[0,1].to_i+size)}#{ '%02d' % (curr_dispaly[2,3].to_i+size)}"
-		when PICKED,DELIVERED
-			curr_dispaly
-		when RECEIVED
-           "#{curr_dispaly[0,1]}#{ '%02d' % (curr_dispaly[2,3].to_i+size)}"
-		end
-	end
+    def self.parse_display(display)
+      return display[0, 1].to_i, display[1, 2].to_i
+    end
+
+    def id_format
+      '%040d' % self.job.node_id
+    end
+
+    def job_id_format
+      '%06d' % self.job.id
+    end
+
+    def color_format
+      self.color
+    end
+
+    def rate_format
+      '%04d' % self.rate
+    end
 
   end
 end
