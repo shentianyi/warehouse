@@ -6,8 +6,8 @@ class LedService
     end
   end
 
-  def self.update_led_state_by_position(position_detail, led_state)
-    return update_led_state(Led.find_by_position(position_detail), led_state)
+  def self.update_led_state_by_position(position_id, led_state)
+    return update_led_state(Led.find_by_position_id(position_id), led_state)
   end
 
   def self.update_led_state_by_id(id, led_state)
