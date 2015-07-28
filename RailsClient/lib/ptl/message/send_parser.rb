@@ -23,7 +23,10 @@ module Ptl
         if res.code==201
           msg=JSON.parse(res.body)
           if msg['resultCode']=='0'
-            Ptl::Message::ConfirmParser.new(self.job, msg['Feedback']).process
+            #
+            # TODO
+            # 目前使用第一个msg
+            Ptl::Message::NodeParser.new(msg['Feedback'][0]).process
           elsif msg['resultCode']=='1'
             if ptl_job= PtlJob.find_by_id(job.id)
               ptl_job.update_attributes(state: Ptl::State::Job::HANDLE_FAIL, msg: msg['Msg'].to_s)
