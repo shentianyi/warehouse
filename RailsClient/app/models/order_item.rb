@@ -19,7 +19,7 @@ class OrderItem < ActiveRecord::Base
       return
     end
     puts 'position...........'
-    LedService.update_led_state_by_position(pp.position.detail,LedLightState::ORDERED)
+    LedService.update_led_state_by_position(pp.position.id,LedLightState::ORDERED)
 =begin
     led = Led.find_by_position(position.detail)
     to_state = LedLightState::ORDERED

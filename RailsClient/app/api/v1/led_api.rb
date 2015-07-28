@@ -11,6 +11,7 @@ module V1
 
       # params[:position]
       # params[:state]
+      #############need change:  :position -->  :position_id
       post :reset do
         msg=LedService.update_led_state_by_position(params[:position], params[:state])
         msg.result = msg.result ? 1 : 0
@@ -50,6 +51,46 @@ module V1
         end
         {result: 1, content: list}
       end
+
+      #create 缺货单/需求单
+      # def self.create_stockout_list(led_id, is_emergency, box_quantity=1)
+      get :create_stockout_list do
+        args = []
+
+        position = Position.find_by_id(Led.find_by_name(params[:led_id]).position)
+        if position.nil?
+          return {result: 0, content: '库位未找到！'}
+        end
+        part = position.default_part
+        if part.nil?
+          return {result: 0, content: '零件未找到！'}
+        end
+        source_id = PartPosition.find_by_part_id(part.id).sourceable_id
+        if source_id.nil?
+          return {result: 0, content: 'Source Id 未找到！'}
+        end
+        builder = User.find(SysConfigCache.led_builder_value)
+        if builder.nil?
+          return {result: 0, content: '创建者未找到！'}
+        end
+        if params[:box_quantity].nil?
+          puts "111111111111#{params[:box_quantity]}"
+          box_qty = 1
+        else
+          box_qty = params[:box_quantity]
+        end
+        puts "111111111111#{box_qty.to_f}"
+        quantity = part.unit_pack * box_qty.to_f
+
+        args = [{part_id: part.id, quantity: quantity, box_quantity: box_qty, department: position.whouse.id, is_emergency: params[:is_emergency]}]
+        orders = OrderService.create_with_items({order: {source_id: source_id}, order_items: args, nopart_items: args}, builder)
+        if orders.nil?
+          return {result: 0, content: '需求单创建失败！'}
+        else
+          return {result: 1, content: '需求单创建成功！'}
+        end
+      end
+
     end
   end
 end
