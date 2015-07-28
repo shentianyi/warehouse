@@ -53,7 +53,6 @@ module V1
       end
 
       #create 缺货单/需求单
-      # def self.create_stockout_list(led_id, is_emergency, box_quantity=1)
       get :create_stockout_list do
         args = []
 
@@ -74,12 +73,10 @@ module V1
           return {result: 0, content: '创建者未找到！'}
         end
         if params[:box_quantity].nil?
-          puts "111111111111#{params[:box_quantity]}"
           box_qty = 1
         else
           box_qty = params[:box_quantity]
         end
-        puts "111111111111#{box_qty.to_f}"
         quantity = part.unit_pack * box_qty.to_f
 
         args = [{part_id: part.id, quantity: quantity, box_quantity: box_qty, department: position.whouse.id, is_emergency: params[:is_emergency]}]
