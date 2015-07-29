@@ -19,20 +19,12 @@ module Ptl
             # all curr states apply this method
             node.set_display(0, 0)
           when Ptl::Node::ORDERED
-            # TODO
-            # call create order items api
-            # params led
-            #
-            result=true # api
+            result=LedService.create_stockout_list(node.id) # api
             if result
               node.set_display(displays[0], displays[1]+job.size)
             end
           when Node::URGENT_ORDERED
-            # TODO
-            # call create order items api
-            # params led
-            #
-            result=true # api
+            result=LedService.create_stockout_list(node.id, true)
             if result
               node.set_display(displays[0]+job.size, displays[1]+job.size)
             end
@@ -49,8 +41,14 @@ module Ptl
         self.job.node=node
         Ptl::Message::SendParser.new(job).process
       rescue => e
-        puts "error: #{e.message}".yellow
-        log.error(e.message)
+        puts "[#{Time.now}] error: #{e.message}"
+        begin
+          if ptl_job=PtlJob.find_by_id(job.id)
+            ptl_job.update_attributes(state: Ptl::State::Job::HANDLE_FAIL, msg: e.message)
+          end
+        rescue => ee
+          puts "[#{Time.now}] error: #{ee.message}"
+        end
       end
     end
 

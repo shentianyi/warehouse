@@ -5,7 +5,7 @@ class SysConfig < ActiveRecord::Base
 
 
   def self.method_missing(method_name, *args, &block)
-    puts '-------------------'
+    puts "-------sysconfig method messing: #{method_name}---------"
     if setting=SysConfig.where(code: method_name.upcase).first
       return setting.value
     else

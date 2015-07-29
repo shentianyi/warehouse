@@ -13,7 +13,7 @@ module Ptl
 
     DEFAULT_HTTP_TYPE='POST'
     DEFAULT_RETRY_TIMES=3
-    DEFAULT_PROCESS_SIZE=50
+    DEFAULT_PROCESS_SIZE=10
     DEFAULT_IN_TIME=false
 
     INT_FIELD=[:curr_state, :to_state, :size]
@@ -51,9 +51,12 @@ module Ptl
         j=PtlJob.create(
             params: params.to_json
         )
-        self.id=1
+        self.id= j.id
 
-        process if in_time
+        if in_time
+          j.update_attributes(state:Ptl::State::Job::HANDLING)
+          process
+        end
 
       rescue
         return false
@@ -61,8 +64,9 @@ module Ptl
       true
     end
 
-    def self.out_queue
-      if ptl_job= PtlJob.where.not(state: State::Job::UN_HANDLE).order(:created).first
+    def self.out_queue(size=DEFAULT_PROCESS_SIZE)
+      PtlJob.where(state: Ptl::State::Job.execute_states).order(:created_at).limit(size).each do |ptl_job|
+        puts "[#{Time.now}] execute job from mysql #{ptl_job.id}"
         job=parse_json_to_job(ptl_job.params)
         job.process
       end

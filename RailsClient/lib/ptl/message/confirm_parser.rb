@@ -9,11 +9,12 @@ module Ptl
 				self.type=message[1].to_i
 				self.msg_id=message[2,7].strip
 				self.server_id=message[8,10]
+        self.handle_state=message[11].to_i
 			end
 
 			def process
 				if job=PtlJob.find_by_id(self.msg_id)
-					job.update_attributes(state:get_job_state,msg: ConfirmMsgType.msg(self.type))
+					job.update_attributes(state:get_job_state,msg: ConfirmMsgType.msg(self.handle_state))
 				end
 			end
 

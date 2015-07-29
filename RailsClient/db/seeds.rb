@@ -92,8 +92,8 @@ ActiveRecord::Base.transaction do
   unless SysConfig.find_by_code('DEFAULT_WAREHOUSE')
     SysConfig.create(code: 'DEFAULT_WAREHOUSE', value: '3EX', name: '默认仓库号')
   end
-  unless SysConfig.find_by_code('LED_SERVERS')
-    SysConfig.create(code: 'LED_SERVERS', value: '192.168.0.101:8000,192.168.0.101:8001', name: 'LED控制器(多个,以英文逗号分割,修改后需重启服务器)')
+  unless SysConfig.find_by_code('LED_SERVER')
+    SysConfig.create(code: 'LED_SERVER', value: '192.168.0.101:8000', name: 'LED TCP 服务器IP和端口，比如:192.168.0.1:8989"')
   end
 
   #LED STATE

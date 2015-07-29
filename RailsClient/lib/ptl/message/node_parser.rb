@@ -56,15 +56,11 @@ module Ptl
                   to_state: self.to_state,
                   curr_display: self.curr_display,
                   size: 1,
-                  in_time: true,
-                  # TODO
-                  # get node server from database
-                  #
-                  server_id: '001',
-                  server_url: 'http://127.0.0.1:8000/'
+                  in_time: true
               ).in_queue
           end
         else
+          puts "led 的反馈，带有报文:#{self.msg_id}"
           if ptl_job=PtlJob.find_by_id(self.msg_id)
             job=Ptl::Job.find_by_ptl_job(ptl_job)
             ptl_job.update_attributes(state: Ptl::State::Job::HANDLE_SUCCESS, msg: 'job exec success') if job.to_state==self.curr_state
