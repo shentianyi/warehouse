@@ -6,6 +6,7 @@ module Ptl
     #
     # node_id 是4位数字字符串
     # server_id 是3位数字字符串
+    # TCP
     # server_url 是控制器的IP+PORT,比如192.168.0.1:9000
     #
     attr_accessor :id, :node_id, :curr_state, :to_state, :curr_rate, :to_rate, :curr_display, :to_display, :size, :server_id, :server_url, :in_time, :node #, :http_type
@@ -19,6 +20,7 @@ module Ptl
 
     def initialize(options={})
 
+      puts "4. start init job :#{options}"
       raise 'params is blank' if options.blank?
 
       self.size=1
@@ -30,13 +32,13 @@ module Ptl
 
       INT_FIELD.each do |f|
         if v=self.send(f)
-          self.send f, v.to_i
+          self.send "#{f}=", v.to_i
         end
       end
 
       node=Node.find(self.to_state)
       node.id=self.node_id
-      job.node=node
+      self.node=node
     end
 
     def in_queue
@@ -45,9 +47,11 @@ module Ptl
         self.instance_variable_names.each do |name|
           params[name.sub(/@/, '').to_sym]=self.instance_variable_get(name)
         end
-        PtlJob.create(
+        puts "5. create job in database..."
+        j=PtlJob.create(
             params: params.to_json
         )
+        self.id=1
 
         process if in_time
 
@@ -69,13 +73,14 @@ module Ptl
     end
 
     def process
+      puts "6. start job process......."
       PhaseMachine.new(self).process
     end
 
     private
     def self.parse_json_to_job(json)
       params=JSON.parse(json).deep_symbolize_keys
-      job=self.new(params)
+      self.new(params)
     end
   end
 end

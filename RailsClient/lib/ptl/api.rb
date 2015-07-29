@@ -9,16 +9,17 @@ module Ptl
     post '/confirm' do
 
     end
-	
+
     # params
     #  required: message string
     #
     post '/receive' do
-      puts params.to_json.red
-		raise 'no params message' if params[:message].blank?
-	  puts "receive msg: #{params[:message]}"
-
+      content_type :json
+      puts "1. api receive message : #{params}"
+      raise 'no params message' if params[:message].blank?
+      puts "1. api receive message : #{params[:message]}"
       Ptl::Message::Parser.dispatch(params[:message])
+      {result: 0}.to_json
     end
   end
 end

@@ -13,7 +13,7 @@ module Ptl
         node=job.node
         displays=Node.parse_display(job.curr_display)
 
-        log.info("start process job:#{job.id}")
+        puts "7. machine start process job:#{job.id}"
         case job.to_state
           when Ptl::Node::NORMAL
             # all curr states apply this method
@@ -49,6 +49,7 @@ module Ptl
         self.job.node=node
         Ptl::Message::SendParser.new(job).process
       rescue => e
+        puts "error: #{e.message}".yellow
         log.error(e.message)
       end
     end
