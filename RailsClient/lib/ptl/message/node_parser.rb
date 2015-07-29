@@ -56,12 +56,7 @@ module Ptl
                   to_state: self.to_state,
                   curr_display: self.curr_display,
                   size: 1,
-                  in_time: true,
-                  # TODO
-                  # get node server from database
-                  #
-                  server_id: '001',
-                  server_url: 'http://127.0.0.1:8000/'
+                  in_time: true
               ).in_queue
           end
         else
