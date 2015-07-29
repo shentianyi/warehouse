@@ -11,9 +11,11 @@ module Extensions
       before_update :reset_dirty_flag
 
       def generate_uuid
-        self.id = self.send(:generate_id) if self.id.nil? && self.respond_to?(:generate_id)
-        self.id = SecureRandom.uuid if self.id.nil?
-        self.uuid= SecureRandom.uuid if self.respond_to?(:uuid) and self.send(:uuid).nil?
+        unless self.respond_to?(:generate_auto_key)
+          self.id = self.send(:generate_id) if self.id.nil? && self.respond_to?(:generate_id)
+          self.id = SecureRandom.uuid if self.id.nil?
+          self.uuid= SecureRandom.uuid if self.respond_to?(:uuid) and self.send(:uuid).nil?
+        end
       end
 
       def set_timestamps
