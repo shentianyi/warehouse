@@ -30,10 +30,7 @@
 <table class="table table-bordered table-striped globle-table">
   <thead>
   <tr class="alert">
-    <th>编号(协调器自动分配的ID)</th>
-    <th>MAC</th>
-    <th>协调器ID</th>
-    <th>协调器IP</th>
+    <th>编号</th>
     <th>库位</th>
     <th>当前状态</th>
     <th colspan="2"></th>
@@ -43,11 +40,8 @@
   <tbody>
   <% @leds.each_with_index do |led,i| %>
       <tr class="<%= i%2==0 ? 'alert' : ''%>">
-        <td><%= led.signal_id %></td>
-        <td><%= led.mac %></td>
-        <td><%= led.modem_id %></td>
-        <td><%= led.modem.ip if led.modem %></td>
-        <td><%= led.position %></td>
+        <td><%= led.id %></td>
+        <td><%= led.position.detail if led.position %></td>
         <td><%= LedLightState.display(led.current_state) %></td>
         <td><%= link_to '编辑', edit_led_path(led) %></td>
         <td><%= link_to '删除', led, method: :delete, data: {confirm: '确认删除?'} %></td>

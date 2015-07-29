@@ -10,7 +10,7 @@ class Led < ActiveRecord::Base
   private
 
   def validate_save
-    errors.add(:signal_id, 'LED编号不可为空') if self.signal_id.blank?
+    errors.add(:id, 'LED编号不可为空') if self.id.blank?
   end
 
 

@@ -11,27 +11,16 @@
     <% end %>
 
     <div class="field">
-      <%= f.label :signal_id, '编号(协调器自动分配的ID)' %>
+      <%= f.label :id, '编号' %>
       <br>
-      <%= f.text_field :signal_id %>
+      <%= f.text_field :id %>
     </div>
 
-    <div class="field">
-      <%= f.label :mac, 'MAC' %>
-      <br>
-      <%= f.text_field :mac %>
-    </div>
 
     <div class="field">
-      <%= f.label :modem_id, '协调器ID' %>
+      <%= f.label :position_id, '库位' %>
       <br>
-      <%= f.text_field :modem_id %>
-    </div>
-
-    <div class="field">
-      <%= f.label :position, '库位' %>
-      <br>
-      <%= f.text_field :position %>
+      <%= f.text_field :position_id %>
     </div>
 
     <div class="field">

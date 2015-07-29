@@ -24,8 +24,7 @@ class LedService
 
   #create 缺货单/需求单
   def self.create_stockout_list(led_id, is_emergency=false, box_quantity=1)
-
-    position = Position.find_by_detail(Led.find_by_name(led_id).position)
+    position = Led.find_by_id(led_id).position
     part = position.default_part
     source_id = PartPosition.find_by_part_id(part.id).sourceable_id
     builder = User.find(SysConfigCache.led_builder_value)

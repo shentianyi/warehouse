@@ -19,12 +19,12 @@ module LedStateable
           pp = OrderItemService.verify_department(pick_item.order_item.whouse_id, pick_item.order_item.part_id)
           #puts pp.position.detail
           led =  pp.position.led
-          args[:led_id] = led.name
+          args[:led_id] = led.id
           args[:current_state] = led.current_state
           args[:current_display] = led.led_display
           args[:to_state] = Ptl::Node::PICKED
-          args[:server] = led.modem_id
-          args[:server_url] = Modem.find(led.modem_id).ip
+         # args[:server] = led.modem_id
+        #  args[:server_url] = Modem.find(led.modem_id).ip
 
           #function(args) #job action
           Ptl::Job.new(
@@ -33,7 +33,7 @@ module LedStateable
               to_state: args[:to_state],
               curr_display: args[:current_display],
               size: 1,
-              in_time: true
+              in_time: false
           ).in_queue
         end
       else
@@ -66,7 +66,7 @@ module LedStateable
           return
         end
 
-        args[:led_id] = led.name
+        args[:led_id] = led.id
         args[:current_state] = led.current_state
 
         if self.state == BaseState::WAY
@@ -82,8 +82,8 @@ module LedStateable
           args[:to_state] = nil
         end
         args[:current_display] = led.led_display
-        args[:server] = led.modem_id
-        args[:server_url] = Modem.find(led.modem_id).ip
+      #  args[:server] = led.modem_id
+      #  args[:server_url] = Modem.find(led.modem_id).ip
         puts args
 
         #function(args) #job action
@@ -93,7 +93,7 @@ module LedStateable
             to_state: args[:to_state],
             curr_display: args[:current_display],
             size: 1,
-            in_time: true
+            in_time: false
         ).in_queue
       else
         puts "update ##############################"

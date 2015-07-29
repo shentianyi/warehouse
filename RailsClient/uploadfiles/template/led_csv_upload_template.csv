@@ -1,2 +1,2 @@
-NodeId;PAN_ID;Mac;State;Position;DOUPDATE
-1;1;2;1(初始状态);01 02 03;1
+NodeId;Position;DOUPDATE
+0001;01 02 03;1
