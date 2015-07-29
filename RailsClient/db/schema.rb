@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150727021704) do
+ActiveRecord::Schema.define(version: 20150728095451) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -264,6 +264,7 @@ ActiveRecord::Schema.define(version: 20150727021704) do
     t.integer  "parent_id"
     t.integer  "status",                    default: 0
     t.string   "remark",                    default: ""
+    t.string   "ip_detail"
   end
 
   add_index "locations", ["destination_id"], name: "index_locations_on_destination_id", using: :btree

@@ -56,6 +56,10 @@ module V1
       get :create_stockout_list do
         args = []
 
+        if SysConfigCache.led_enable_value=='false'
+          return {result: 0, content: 'LED服务未开启！'}
+        end
+
         position = Position.find_by_id(Led.find_by_name(params[:led_id]).position)
         if position.nil?
           return {result: 0, content: '库位未找到！'}

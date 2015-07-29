@@ -8,6 +8,8 @@ module LedStateable
 
   def create_led_job
 
+    return unless (SysConfigCache.led_enable_value=='true')
+
     puts "create ###############################{self.class.name}"
     args = {}
 
@@ -25,6 +27,14 @@ module LedStateable
           args[:server_url] = Modem.find(led.modem_id).ip
 
           #function(args) #job action
+          Ptl::Job.new(
+              node_id: args[:led_id],
+              curr_state: args[:current_state],
+              to_state: args[:to_state],
+              curr_display: args[:current_display],
+              size: 1,
+              in_time: true
+          ).in_queue
         end
       else
         puts "create #######################################"
@@ -33,6 +43,8 @@ module LedStateable
   end
 
   def update_led_job
+
+    return unless (SysConfigCache.led_enable_value=='true')
 
     puts "update ###############################{self.class.name}"
     args = {}
@@ -75,6 +87,14 @@ module LedStateable
         puts args
 
         #function(args) #job action
+        Ptl::Job.new(
+            node_id: args[:led_id],
+            curr_state: args[:current_state],
+            to_state: args[:to_state],
+            curr_display: args[:current_display],
+            size: 1,
+            in_time: true
+        ).in_queue
       else
         puts "update ##############################"
     end

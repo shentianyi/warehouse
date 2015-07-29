@@ -96,6 +96,7 @@ ActiveRecord::Base.transaction do
     SysConfig.create(code: 'LED_SERVER', value: '192.168.0.101:8000', name: 'LED TCP 服务器IP和端口，比如:192.168.0.1:8989"')
   end
 
+
   #LED STATE
   unless LedState.find_by_state(LedLightState::NORMAL)
     LedState.create({state: LedLightState::NORMAL, rgb: "0 255 0", led_code: 0})
