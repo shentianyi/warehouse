@@ -1,8 +1,13 @@
-<h1>Listing ptl_jobs</h1>
-
-<table>
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @ptl_jobs %>
+  </div>
+  <%= will_paginate @ptl_jobs, :container => false %>
+</div>
+<table class="table table-bordered table-striped globle-table">
   <thead>
     <tr>
+      <th>ID</th>
       <th>Params</th>
       <th>State</th>
       <th>Is dirty</th>
@@ -15,8 +20,10 @@
   <tbody>
     <% @ptl_jobs.each do |ptl_job| %>
       <tr>
+        <td><%=ptl_job.id%></td>
         <td><%= ptl_job.params %></td>
         <td><%= ptl_job.state %></td>
+        <td><%= ptl_job.msg %></td>
         <td><%= ptl_job.is_dirty %></td>
         <td><%= ptl_job.is_new %></td>
         <td><%= ptl_job.is_delete %></td>
@@ -28,6 +35,6 @@
   </tbody>
 </table>
 
-<br>
-
-<%= link_to 'New Ptl job', new_ptl_job_path %>
+<div class="digg_pagination">
+  <%= will_paginate @ptl_jobs, :container => false %>
+</div>

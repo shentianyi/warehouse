@@ -4,8 +4,7 @@ class PtlJobsController < ApplicationController
   respond_to :html
 
   def index
-    @ptl_jobs = PtlJob.all
-    respond_with(@ptl_jobs)
+    @ptl_jobs = PtlJob.paginate(:page => params[:page]).order(created_at: :desc)
   end
 
   def show
@@ -37,11 +36,11 @@ class PtlJobsController < ApplicationController
   end
 
   private
-    def set_ptl_job
-      @ptl_job = PtlJob.find(params[:id])
-    end
+  def set_ptl_job
+    @ptl_job = PtlJob.find(params[:id])
+  end
 
-    def ptl_job_params
-      params.require(:ptl_job).permit(:params, :state, :is_dirty, :is_new, :is_delete)
-    end
+  def ptl_job_params
+    params.require(:ptl_job).permit(:params, :state, :msg, :is_dirty, :is_new, :is_delete)
+  end
 end
