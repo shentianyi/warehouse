@@ -6,30 +6,13 @@ class Led < ActiveRecord::Base
 
   validate :validate_save
 
-  after_save :send_led_message
-
   # alias :position_id :position
   private
 
   def validate_save
     errors.add(:signal_id, 'LED编号不可为空') if self.signal_id.blank?
-    errors.add(:modem, '协调器不存在') if self.modem.nil?
-    errors.add(:position, '库位不存在') unless Position.find_by_detail(self.position) unless self.position.blank?
-    q=self.class.where(signal_id: self.signal_id, modem_id: self.modem_id)
-    q=q.where('id<>?', self.id) unless new_record?
-    errors.add(:signal_id, '同一个协调器下不可重复LED编号') if q.first
   end
 
-  def send_led_message
-    puts self.current_state_changed?
-    if self.current_state_changed? && !self.current_state.blank? && (modem=self.modem)
-      puts 'send message-------------------'
-
-      if msg=LedState.get_message_by_state(self.current_state)
-        puts LedService.send_msg(self.signal_id, msg, modem.ip).to_json
-      end
-    end
-  end
 
 
 end
