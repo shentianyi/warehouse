@@ -3,14 +3,8 @@ module Ptl
   class Server
 
     attr_accessor :server, :clients
-    # def initialize
-    #   server_info=SysConfig.led_server.split(':')
-    #   @server =TCPServer.new(server_info[0], server_info[1])
-    #   @clients={}
-    # end
 
     def self.run
-
       job_t=Thread.new { execute_job }
 
       server_info=SysConfig.led_server.split(':')
@@ -24,7 +18,6 @@ module Ptl
     end
 
     def self.run_server
-
       loop {
         # for each user connected and accepted by server, it will create a new thread object
         # and which pass the connected client as an instance to the block
