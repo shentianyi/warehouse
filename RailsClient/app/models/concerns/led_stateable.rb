@@ -8,6 +8,8 @@ module LedStateable
 
   def create_led_job
 
+    return unless (SysConfigCache.led_enable_value=='true')
+
     puts "create ###############################{self.class.name}"
     args = {}
 
@@ -33,6 +35,8 @@ module LedStateable
   end
 
   def update_led_job
+
+    return unless (SysConfigCache.led_enable_value=='true')
 
     puts "update ###############################{self.class.name}"
     args = {}

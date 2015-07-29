@@ -17,7 +17,7 @@
           <input type="hidden" name="order[user_id_fuzzy]"/>
         </span>
       <span>备货地：
-        <%= select_tag('order[source_id]', options_from_collection_for_select(Location.all, 'id', 'name', @source_id), include_blank: true) %>
+        <%=  select_tag('order[source_id]',options_from_collection_for_select(Location.all,'id','name',@source_id), include_blank: true)%>
       </span>
     </div>
     <div>
@@ -51,61 +51,47 @@
     <th>是否有紧急需求</th>
     <th>创建时间</th>
     <th>已处理</th>
-    <!--<th>订单项目列表</th>-->
-    <th>要货部门</th>
-    <td>零件号</td>
-    <td>箱数</td>
-    <td>包装数量</td>
-    <td>状态</td>
+    <th>订单项目列表</th>
     <th>是否已删除</th>
     <th colspan="3"></th>
   </tr>
   </thead>
 
   <tbody>
-  <% @orders.each_with_index do |order, index| %>
-      <% order.order_items.each do |item| %>
-
-          <tr>
-            <td><%= index+@orders.offset+1 %></td>
-            <td><%= order.id %></td>
-            <td><%= order.user_id %></td>
-            <td><%= order.source_location.nil? ? '' : order.source_location.name %></td>
-            <td><%= order.source.name if order.source %></td>
-            <td>
-              <% if order.is_emergency %>
-                  <span class="label label-success">是</span>
-              <% else %>
-                  <span class="label label-warning">否</span>
-              <% end %>
-            </td>
-            <td><%= order.created_at.localtime.strftime('%Y-%m-%d %H:%M') %></td>
-            <td>
-              <% if order.handled %>
-                  <span class="label label-success">是</span>
-              <% else %>
-                  <span class="label label-warning">否</span>
-              <% end %>
-            </td>
-
-            <td><%= item.whouse.name %></td>
-            <td><%= OrderItemLabelRegex.part_prefix_string+item.part_id %></td>
-            <td><%= item.box_quantity %></td>
-            <td><%= OrderItemLabelRegex.quantity_prefix_string + item.quantity.to_s %></td>
-            <td><%= OrderItemState.display(item.state )%></td>
-
-            <td>
-              <% if order.is_delete %>
-                  <span class="label label-success">是</span>
-              <% else %>
-                  <span class="label label-warning">否</span>
-              <% end %>
-            </td>
-            <td><%= link_to '详细', order, :class => 'btn btn-default' %></td>
-            <td><%= link_to '编辑', edit_order_path(order), :class => 'btn btn-default' %></td>
-            <td><%= link_to '删除', order, method: :delete, data: {confirm: 'Are you sure?'}, :class => 'btn btn-default' %></td>
-          </tr>
-      <% end %>
+  <% @orders.each_with_index do |order,index| %>
+      <tr>
+        <td><%= index+@orders.offset+1 %></td>
+        <td><%= order.id %></td>
+        <td><%= order.user_id%></td>
+        <td><%= order.source_location.name %></td>
+        <td><%= order.source.name if order.source%></td>
+        <td>
+          <% if order.is_emergency %>
+              <span class="label label-success">是</span>
+          <%else%>
+              <span class="label label-warning">否</span>
+          <%end%>
+        </td>
+        <td><%= order.created_at.localtime.strftime('%Y-%m-%d %H:%M') %></td>
+        <td>
+          <% if order.handled %>
+              <span class="label label-success">是</span>
+          <%else%>
+              <span class="label label-warning">否</span>
+          <%end%>
+        </td>
+        <td><%= link_to '订单项目列表', order_items_order_path(order)%><span class="badge pull-right"><%= order.order_items.count %></span></td>
+        <td>
+          <% if order.is_delete %>
+              <span class="label label-success">是</span>
+          <%else%>
+              <span class="label label-warning">否</span>
+          <%end%>
+        </td>
+        <td><%= link_to '详细', order ,:class=>'btn btn-default'%></td>
+        <td><%= link_to '编辑', edit_order_path(order) ,:class=>'btn btn-default'%></td>
+        <td><%= link_to '删除', order, method: :delete, data: { confirm: 'Are you sure?' },:class=>'btn btn-default' %></td>
+      </tr>
   <% end %>
   </tbody>
 </table>
@@ -116,7 +102,7 @@
 <script>
     $(function () {
         $(".datepicker").datetimepicker({
-            lang: 'ch',
+            lang:'ch',
             format: 'Y-m-d H:i'
         });
     });

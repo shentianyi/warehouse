@@ -93,7 +93,6 @@ ActiveRecord::Base.transaction do
     SysConfig.create(code: 'DEFAULT_WAREHOUSE', value: '3EX', name: '默认仓库号')
   end
 
-
   #LED STATE
   unless LedState.find_by_state(LedLightState::NORMAL)
     LedState.create({state: LedLightState::NORMAL, rgb: "0 255 0", led_code: 0})
