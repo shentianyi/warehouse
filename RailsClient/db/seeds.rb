@@ -93,9 +93,11 @@ ActiveRecord::Base.transaction do
     SysConfig.create(code: 'DEFAULT_WAREHOUSE', value: '3EX', name: '默认仓库号')
   end
   unless SysConfig.find_by_code('LED_SERVER')
-    SysConfig.create(code: 'LED_SERVER', value: '192.168.0.101:8000', name: 'LED TCP 服务器IP和端口，比如:192.168.0.1:8989"')
+    SysConfig.create(code: 'LED_SERVER', value: '192.168.0.101:8000', name: 'LED TCP 服务器IP和端口，比如:192.168.0.1:8989')
   end
-
+  unless SysConfig.find_by_code('PTL_JOB_PREFIX')
+    SysConfig.create(code: 'PTL_JOB_PREFIX', value: 'C', name: 'PTL任务的数据开端，为了同步')
+  end
 
   #LED STATE
   unless LedState.find_by_state(LedLightState::NORMAL)

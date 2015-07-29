@@ -8,6 +8,20 @@ module Sync
     def self.execute
       ## base data
       current=Time.now
+
+
+      no_error=true
+
+      begin
+        Sync::Execute::PtlJobSync.sync
+      rescue => e
+        no_error=false
+        puts "[#{Time.now.localtime}][ERROR]"
+        puts e.class
+        puts e.to_s
+        puts e.backtrace
+      end
+
       begin
         Sync::Execute::LocationSync.sync
         Sync::Execute::LocationDestinationSync.sync
@@ -19,13 +33,13 @@ module Sync
         Sync::Execute::PartPositionSync.sync
         Sync::Execute::PickItemFilterSync.sync
       rescue => e
+        no_error=false
         puts "[#{Time.now.localtime}][ERROR]"
         puts e.class
         puts e.to_s
         puts e.backtrace
       end
 
-      no_error=true
       # sync delivery data
       begin
         Sync::Execute::ContainerSync.sync

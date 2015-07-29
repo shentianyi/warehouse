@@ -10,6 +10,8 @@ module V1
         lock_sync
         lock_sync_pool
 
+        mount PtlJobSyncAPI
+
         mount LocationSyncAPI
         mount LocationDestinationSyncAPI
         mount UserSyncAPI
