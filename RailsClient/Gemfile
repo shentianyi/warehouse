@@ -59,7 +59,7 @@ gem 'oauth'
 
 
 # tcp
-gem 'net_tcp_client'
+#gem 'net_tcp_client'
 # gem 'puma'
 
 gem 'will_paginate', '~> 3.0.6'
