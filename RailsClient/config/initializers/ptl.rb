@@ -1,7 +1,7 @@
 # require 'ptl'
 require 'socket'
 
-if SysConfig.led_enable=='true'
+# if SysConfig.led_enable=='true'
 #   require 'ptl'
 #
 #   $led_servers=[]
@@ -23,5 +23,5 @@ if SysConfig.led_enable=='true'
   #     end
   #   end
   # end
-end
+# end
 
