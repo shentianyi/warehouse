@@ -51,4 +51,9 @@ development_test:
   <<: *default
   database: whousedb_test #db/development.sqlite3
 
+leoni:
+  <<: *default
+  database: whousedb_leoni #db/development.sqlite3
+
+
 
