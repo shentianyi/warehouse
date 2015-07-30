@@ -24,7 +24,11 @@ class LedsController < ApplicationController
   # POST /leds
   # POST /leds.json
   def create
-    @led = Led.new(led_params)
+    args = {}
+    args[:id] = [:id]
+    args[:position_id] = Position.find_by_detail(led_params[:position_id]).id
+    args[:current_state] = led_params[:current_state]
+    @led = Led.new(args)
 
     respond_to do |format|
       if @led.save
@@ -69,6 +73,6 @@ class LedsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def led_params
-      params.require(:led).permit( :signal_id, :name, :modem_id, :position_id,:current_state,:mac)
+      params.require(:led).permit( :id, :name, :modem_id, :position_id,:current_state,:mac)
     end
 end
