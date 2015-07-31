@@ -11,7 +11,7 @@ module Warehouse
     #config.paths['config/database']='config/wangsong_database.yml' if ENV['USER']=='wangsong'
     #config.paths['config/database']='config/charlot_database.yml' if ENV['USER']=='charlot'
    # config.paths['config/database']='config/mac_database.yml' if ENV['USER']=='liqi'
-    #config.paths['config/database']='config/mac_database.yml' if ENV['USER']=='exmooncake'
+    config.paths['config/database']='config/leoni_root_database.yml' if ENV['USER']=='root'
     config.paths['config/database']='config/mac_database.yml' if /darwin\w+/.match(RbConfig::CONFIG['host_os'])
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
     # for the api

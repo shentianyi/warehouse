@@ -1,0 +1,59 @@
+# SQLite version 3.x
+#   gem install sqlite3
+#
+#   Ensure the SQLite 3 gem is defined in your Gemfile
+#   gem 'sqlite3'
+#
+#default: &default
+#  adapter: sqlite3
+#  pool: 5
+#  timeout: 5000
+
+default: &default
+  adapter: mysql2
+  pool: 30
+  timeout: 5000
+  socket: /var/run/mysqld/mysqld.sock
+  username: whouser
+  password: whouser@
+  reconnect: false
+  encoding: utf8
+
+
+development:
+  <<: *default
+  database: whousedb_leoni #db/development.sqlite3
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+test:
+  <<: *default
+  database: whousedb_leoni_test
+
+production:
+  <<: *default
+  database: whousedb_leoni
+
+server:
+  <<: *default
+
+sync1:
+  <<: *default
+  database: whouse_sync_1_db
+
+sync2:
+  <<: *default
+  database: whouse_sync_2_db
+
+
+development_test:
+  <<: *default
+  database: whousedb_test #db/development.sqlite3
+
+leoni:
+  <<: *default
+  database: whousedb_leoni #db/development.sqlite3
+
+
+
