@@ -6,7 +6,11 @@ Rails.application.configure do
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
   config.allow_concurrency = false
+<<<<<<< HEAD
+  config.assets.compile = false 
+=======
   # config.assets.compile = false
+>>>>>>> e9f9470d5ff38365e7180336961f67919c0661ca
   # Do not eager load code on boot.
   config.eager_load = false
 
