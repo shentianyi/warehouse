@@ -33,7 +33,7 @@ test:
 
 production:
   <<: *default
-  database: whousedb_leoni 
+  database: whousedb_leoni
 
 server:
   <<: *default
