@@ -9,8 +9,8 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
- *=require bootstrap.min
- *=require bootstrap-theme.min
+ *=require bootstrap.min.css
+ *=require bootstrap-theme.min.css
  *=require normalize
  *=require pagination
  *=require docs
