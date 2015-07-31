@@ -1,0 +1,1 @@
+var Manage=Manage||{};Manage.pick_item={},Manage.pick_item.update=function(a,e,n){$.ajax({url:"/pick_items/"+a,type:"PUT",dataType:"json",data:e,success:function(a){n&&n(a)}})};

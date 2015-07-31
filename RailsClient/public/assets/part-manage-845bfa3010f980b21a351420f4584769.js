@@ -1,0 +1,1 @@
+var Manage=Manage||{};Manage.part={},Manage.part.del_position=function(a,e){var a=a,e=$(e);$.ajax({url:"/parts/delete_position/"+a,type:"DELETE",dataType:"json",success:function(a){a.result&&e.parent().remove()}})};
