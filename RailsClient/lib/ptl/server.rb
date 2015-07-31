@@ -6,8 +6,8 @@ module Ptl
 
     def self.run
       job_t=Thread.new { execute_job }
-
       server_info=SysConfig.led_server.split(':')
+      server_info=['192.168.1.101',8899]
       $led_socket =TCPServer.open(server_info[0], server_info[1].to_i)
 
       puts "[#{Time.now}]---start tcpsever: #{server_info}---"
@@ -33,7 +33,7 @@ module Ptl
       puts "[#{Time.now}]-----start linsten to #{client_info(client)}"
       loop {
         Thread.new do
-          message = client.gets.chomp
+          message = client.gets
           puts "[#{Time.now}]new client message--- #{client_info(client)}:#{message}"
           Ptl::Message::Parser.dispatch(message)
         end

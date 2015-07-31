@@ -1,7 +1,7 @@
 module Ptl
   class Node
 
-    attr_accessor :state, :color, :rate, :display, :id, :job
+    attr_accessor :state, :color, :rate, :display, :id, :job,:job_id
 
 
     NORMAL=100 #正常
@@ -14,10 +14,10 @@ module Ptl
     @@state_map={
         :'100' => {state: NORMAL, color: 'G', rate: 0},
         :'200' => {state: ORDERED, color: 'R', rate: 0},
-        :'300' => {state: URGENT_ORDERED, color: 'R', rate: 200},
+        :'300' => {state: URGENT_ORDERED, color: 'R', rate: 3},
         :'400' => {state: PICKED, color: 'B', rate: 0},
-        :'500' => {state: DELIVERED, color: 'B', rate: 200},
-        :'600' => {state: RECEIVED, color: 'G', rate: 200}
+        :'500' => {state: DELIVERED, color: 'B', rate: 3},
+        :'600' => {state: RECEIVED, color: 'G', rate: 3}
     }
 
     def initialize(state)
@@ -74,11 +74,7 @@ module Ptl
     end
 
     def id_format
-      '%040d' % self.job.node_id
-    end
-
-    def job_id_format
-      '%06d' % self.job.id
+       self.id+' '*(40-self.id.length)
     end
 
     def color_format
