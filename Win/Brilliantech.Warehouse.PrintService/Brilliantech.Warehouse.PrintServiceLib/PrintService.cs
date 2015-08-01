@@ -64,6 +64,9 @@ namespace Brilliantech.Warehouse.PrintServiceLib
 
         private Msg<string> basePrint(string code, string id, string printer_name = null, string copy = null)
         {
+            //if (printer_name == "1") {
+                printer_name = null;
+           // }
             if (!setHead())
             {
                 return null;
