@@ -34,7 +34,7 @@ namespace Brilliantech.Warehouse.LEDServiceHost
     {
         WebServiceHost host = null;
 
-        string notifyString = "BW PTL TCP Serivce:" + PtlTcpConfig.Address();
+        string notifyString = "BW PTL TCP Serivce:" + PTLConfig.Address();
 
        public static bool IsTCPListen = false;
         TcpListener tcpsever = null;
@@ -88,8 +88,8 @@ namespace Brilliantech.Warehouse.LEDServiceHost
 
         private void initTcpServer()
         {
-            IPTB.Text = "192.168.3.101";
-            PortTB.Text = "8899";
+            IPTB.Text = PTLConfig.Ip;
+             PortTB.Text = PTLConfig.Port.ToString();
             //IPTB.Text = IPHelper.GetDefaultIPV4();
             this.DataReceived+=new PTCTCPEvent.DataReceivedHandler(TCPClient_DataReceived);
             this.ClientListUpdated+=new UpdateClientListBoxDelegate(BindClientList);
@@ -222,7 +222,11 @@ namespace Brilliantech.Warehouse.LEDServiceHost
                 ClientDataLB.Dispatcher.Invoke(new Action(delegate
                 {
                     StreamReader sr = new StreamReader(new MemoryStream(data));
-                    ClientDataLB.Items.Add(sr.ReadToEnd());
+                    string message = sr.ReadToEnd();
+                    ClientDataLB.Items.Add(message);
+                    /// 是使用HTTP想WMS服务器(Linux)发送消息
+                    new LedRestService(message).Send();
+                  
                 }), null);
 
             }));
@@ -262,12 +266,14 @@ namespace Brilliantech.Warehouse.LEDServiceHost
         {
           SendData(StringHelper.GetBytes(SendTB.Text.Trim()));
         }
+
         public static bool SendData(byte[] data)
         {
             foreach (PTLTCPClient client in TCPClientList)
             {
                 try
                 {
+                    string s = StringHelper.GetString(data);
                     client.NetWork.GetStream().Write(data, 0, data.Length);
                 }
                 catch (Exception e)

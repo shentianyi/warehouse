@@ -43,11 +43,15 @@
     <Reference Include="log4net">
       <HintPath>..\..\ThirdPart\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp">
+      <HintPath>..\..\ThirdPart\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Windows.Forms" />
@@ -68,12 +72,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Config\PtlTcpConfig.cs" />
+    <Compile Include="Config\PTLConfig.cs" />
     <Compile Include="Config\SerialPortConfig.cs" />
     <Compile Include="CusException\SerialPortNotUsableException.cs" />
     <Compile Include="Helper\IPHelper.cs" />
+    <Compile Include="Helper\JsonHelper.cs" />
     <Compile Include="Helper\StringHelper.cs" />
     <Compile Include="ILedService.cs" />
+    <Compile Include="LedRestService.cs" />
     <Compile Include="LedService.cs" />
     <Compile Include="Model\Msg.cs" />
     <Compile Include="PTLTCPClient.cs" />
@@ -130,7 +136,7 @@
     <Content Include="Ini\serial_port.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Ini\ptl_tcp.ini">
+    <Content Include="Ini\ptl.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Properties\Settings.settings">
