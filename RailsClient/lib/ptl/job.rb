@@ -1,5 +1,3 @@
-require 'ptl/node'
-
 module Ptl
   class Job
 

@@ -1,15 +1,14 @@
 # require 'rest-client'
 # require 'net/tcp_client'
 require 'socket'
-require 'ptl/message/confirm_parser'
 
 module Ptl
   module Message
     class SendParser<Parser
       DEFAULT_MSG_TYPE=Ptl::Type::SendMsgType::CONTROL
+      NODE_CONTROL_API='/ptl/receive'
       READ_TIME_OUT=nil
 
-      # NODE_CONTROL_API='api/control'
 
       def initialize(job)
         self.type=DEFAULT_MSG_TYPE
@@ -28,8 +27,34 @@ module Ptl
 
 
       def process
-        puts "9.  start send parser....."
-        Ptl::Server.send_message(message)
+        # puts "9.  start send parser....."
+        # Ptl::Server.send_message(message)
+
+
+        res=init_client(NODE_CONTROL_API).post({
+                                                  message:self.message
+                                               })
+        if res.code==201
+          msg=JSON.parse(res.body)
+          if msg['Result']=='true'
+            if ptl_job= PtlJob.find_by_id(job.id)
+              ptl_job.update_attributes(state: Ptl::State::Job::SEND_SUCCESS, msg: '发送成功')
+            end
+          elsif msg['resultCode']=='false'
+            if ptl_job= PtlJob.find_by_id(job.id)
+              ptl_job.update_attributes(state: Ptl::State::Job::HANDLE_FAIL, msg: msg['Content'].to_s)
+            end
+          end
+        end
+
+      end
+
+      def init_client(api)
+        RestClient::Resource.new("#{job.server_url}#{api}",
+                                 timeout: nil,
+                                 open_time_out: nil,
+                                 content_type: 'application/json'
+        )
       end
 
       def encode

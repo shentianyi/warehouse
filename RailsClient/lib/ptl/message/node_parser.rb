@@ -1,5 +1,3 @@
-require 'ptl/type/node_msg_type'
-
 module Ptl
   module Message
     class NodeParser<Parser
@@ -48,7 +46,7 @@ module Ptl
         if self.msg_id.blank? || self.msg_id=='000000'
           case self.type
             # 默认是要货
-            # when Ptl::Type::NodeMsgType::NODE_CONTROL,Ptl::Type::NodeMsgType::FEED_BACK
+            when Ptl::Type::NodeMsgType::NODE_CONTROL,Ptl::Type::NodeMsgType::FEED_BACK
               #
               Ptl::Job.new(
                   type: self.type,
@@ -59,7 +57,7 @@ module Ptl
                   size: 1,
                   in_time: true
               ).in_queue
-          # end
+          end
         else
           puts "led 的反馈，带有报文:#{self.msg_id}"
           if ptl_job=PtlJob.find_by_id(self.msg_id)

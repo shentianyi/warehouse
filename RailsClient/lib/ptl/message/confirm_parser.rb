@@ -1,7 +1,3 @@
-require 'ptl/type/confirm_msg_type'
-require 'ptl/state/job'
-
-
 module Ptl
 	module Message
 		class ConfirmParser<Parser
@@ -35,7 +31,7 @@ module Ptl
 			def get_job_state
 				case self.handle_state
 				when ConfirmMsgType::SEND_SUCCESS
-					Ptl::State::Job::HANDLE_SUCCESS
+					Ptl::State::Job::SEND_SUCCESS
 				else
 					Ptl::State::Job::HANDLE_FAIL
 				end
