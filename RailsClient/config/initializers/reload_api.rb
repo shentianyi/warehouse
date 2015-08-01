@@ -1,4 +1,4 @@
-if Rails.env.development?
+if Rails.env.development? || Rails.env.leoni?
   #ActiveSupport::Dependencies.explicitly_unloadable_constants << ['V1::Sync::UserSyncAPI']
 
   api_files = Dir[Rails.root.join('app', 'api', '**', '*.rb')]

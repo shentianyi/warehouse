@@ -1,1 +1,1 @@
-Rails.application.config.assets.precompile << '*.js' #['bootstrap-select.js', 'colpick.js', 'treport.js','panel-manage.js','order.js']
+Rails.application.config.assets.precompile << ['*.js','*.css'] #['bootstrap-select.js', 'colpick.js', 'treport.js','panel-manage.js','order.js']

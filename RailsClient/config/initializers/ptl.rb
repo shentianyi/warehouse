@@ -1,5 +1,5 @@
 # require 'ptl'
-require 'socket'
+# require 'socket'
 
 # if SysConfig.led_enable=='true'
 #   require 'ptl'

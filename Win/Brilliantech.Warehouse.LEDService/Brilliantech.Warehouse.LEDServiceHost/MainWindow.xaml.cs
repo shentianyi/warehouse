@@ -11,11 +11,19 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.ServiceModel.Web;
-using Brilliantech.Warehouse.LEDServiceLib;
-using Brilliantech.Framwork.Utils.LogUtil;
-using Brilliantech.Warehouse.LEDServiceLib.Config;
+using System.ServiceModel.Web; 
+using Brilliantech.Framwork.Utils.LogUtil; 
 using System.ServiceModel;
+using Brilliantech.Warehouse.LEDServiceHost.Helper;
+using System.Net.Sockets;
+using System.Net;
+using System.ComponentModel;
+using System.Threading;
+using System.IO;
+using System.Windows.Threading;
+using Brilliantech.Warehouse.LEDServiceHost.Config;
+//using MessageBox = System.Windows.MessageBox;
+//using System.Windows.Forms;
 
 namespace Brilliantech.Warehouse.LEDServiceHost
 {
@@ -26,16 +34,33 @@ namespace Brilliantech.Warehouse.LEDServiceHost
     {
         WebServiceHost host = null;
 
+        string notifyString = "BW PTL TCP Serivce:" + PtlTcpConfig.Address();
+
+       public static bool IsTCPListen = false;
+        TcpListener tcpsever = null;
+        public event PTCTCPEvent.DataReceivedHandler DataReceived;
+         public delegate void UpdateClientListBoxDelegate(bool add_remove,PTLTCPClient client);
+        public event UpdateClientListBoxDelegate ClientListUpdated;
+
+        /// <summary>
+        /// 当前已连接客户端集合
+        /// </summary>
+        public static BindingList<PTLTCPClient> TCPClientList = new BindingList<PTLTCPClient>();
+    
+
         public MainWindow()
         {
             InitializeComponent();
             init();
         }
+       
         private void init()
         {
             initNotifyIcon();
-            startService(); 
+            startService();
+            initTcpServer();
         }
+        
         private void startService()
         {
             try
@@ -60,15 +85,210 @@ namespace Brilliantech.Warehouse.LEDServiceHost
                 LogUtil.Logger.Error(e.Message);
             }
         }
+
+        private void initTcpServer()
+        {
+            IPTB.Text = "192.168.3.101";
+            PortTB.Text = "8899";
+            //IPTB.Text = IPHelper.GetDefaultIPV4();
+            this.DataReceived+=new PTCTCPEvent.DataReceivedHandler(TCPClient_DataReceived);
+            this.ClientListUpdated+=new UpdateClientListBoxDelegate(BindClientList);
+        }
+
+    
+
+        private void SerialPortBtn_Click(object sender, RoutedEventArgs e)
+        {
+            new SerialPortSetting().ShowDialog();
+        }
+
+        private void StartBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (IsTCPListen == false)
+            {
+                // 开始TCPServer
+                StartTCPServer();
+            }
+            else {
+             // 停止TCPServer
+                StopTCPServer();
+            }
+           IPTB.IsEnabled=PortTB.IsEnabled = !IsTCPListen;
+           TCPClientList = new BindingList<PTLTCPClient>();
+           TCPClientLB.ItemsSource = null;
+
+           StartBtn.Content = IsTCPListen ? "停 止" : "开 始";
+         }
+
+        /// <summary>
+        /// 开启TCP监听
+        /// </summary>
+        /// <returns></returns>
+        private void StartTCPServer()
+        {
+            try
+            {
+                tcpsever = new TcpListener(IPAddress.Parse(IPTB.Text), int.Parse(PortTB.Text));
+
+                tcpsever.Start();
+                tcpsever.BeginAcceptTcpClient(new AsyncCallback(Acceptor), tcpsever);
+                IsTCPListen = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        /// <summary>
+        /// 停止TCP监听
+        /// </summary>
+        /// <returns></returns>
+        private void StopTCPServer()
+        {
+            tcpsever.Stop();
+            tcpsever = null;
+            IsTCPListen = false;
+        }
+
+
+        /// <summary>
+        /// 客户端连接初始化
+        /// </summary>
+        /// <param name="o"></param>
+        private void Acceptor(IAsyncResult o)
+        {
+            TcpListener server = o.AsyncState as TcpListener;
+            try
+            {
+                //初始化连接的客户端
+                PTLTCPClient newClient = new PTLTCPClient();
+                newClient.NetWork = server.EndAcceptTcpClient(o);
+              //  tcpClientList.Add(newClient);
+              //  BindClientList();
+
+                ClientListUpdated.BeginInvoke(true, newClient, null, null);
+
+                newClient.NetWork.GetStream().BeginRead(newClient.buffer, 0, newClient.buffer.Length, new AsyncCallback(TCPCallBack), newClient);
+                server.BeginAcceptTcpClient(new AsyncCallback(Acceptor), server);//继续监听客户端连接
+            }
+            catch (ObjectDisposedException ex)
+            { //监听被关闭
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+
+
+        /// <summary>
+        /// 客户端通讯回调函数
+        /// </summary>
+        /// <param name="ar"></param>
+        private void TCPCallBack(IAsyncResult ar)
+        {
+            PTLTCPClient client = (PTLTCPClient)ar.AsyncState;
+            if (client.NetWork.Connected)
+            {
+                NetworkStream ns = client.NetWork.GetStream();
+                byte[] recdata = new byte[ns.EndRead(ar)];
+                if (recdata.Length > 0)
+                {
+                    Array.Copy(client.buffer, recdata, recdata.Length);
+                    if (DataReceived != null)
+                    {
+                        DataReceived.BeginInvoke(client.Name, recdata, null, null);//异步输出数据
+                    }
+                    ns.BeginRead(client.buffer, 0, client.buffer.Length, new AsyncCallback(TCPCallBack), client);
+                }
+                else
+                {
+                    client.DisConnect();
+                    ClientListUpdated.BeginInvoke(false, client, null, null);
+                }
+            }
+        }
+        /// <summary>
+        /// 获取TCPClient数据
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="data"></param>
+        private void TCPClient_DataReceived(object sender, byte[] data)
+        {
+            Thread t = new Thread(new ThreadStart(delegate
+            {
+                ClientDataLB.Dispatcher.Invoke(new Action(delegate
+                {
+                    StreamReader sr = new StreamReader(new MemoryStream(data));
+                    ClientDataLB.Items.Add(sr.ReadToEnd());
+                }), null);
+
+            }));
+
+            t.Start();
+        }
+
+        /// <summary>
+        /// 绑定客户端列表
+        /// </summary>
+        private void BindClientList(bool add_remove, PTLTCPClient client)
+        {
+            TCPClientLB.Dispatcher.Invoke(
+                         new Action(() =>
+                         {
+                             if (add_remove == true)
+                             {
+                                 TCPClientList.Add(client);
+                             }
+                             else
+                             {
+                                 TCPClientList.Remove(client);
+                             }
+
+                             TCPClientLB.ItemsSource = null;
+                             TCPClientLB.ItemsSource = TCPClientList;
+                             TCPClientLB.DisplayMemberPath = "Name";
+                         }), null);
+        }
+
+        /// <summary>
+        /// tcp server send data to all client
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SendBtn_Click(object sender, RoutedEventArgs e)
+        {
+          SendData(StringHelper.GetBytes(SendTB.Text.Trim()));
+        }
+        public static bool SendData(byte[] data)
+        {
+            foreach (PTLTCPClient client in TCPClientList)
+            {
+                try
+                {
+                    client.NetWork.GetStream().Write(data, 0, data.Length);
+                }
+                catch (Exception e)
+                {
+                    //MessageBox.Show(client.Name + ":" + e.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                    //return false;
+                }
+            }
+            return true;
+        }
+
+        //----------------------------------NOTIFY---------------------------------------------------------
+        /// <summary>
+        /// 
+        /// </summary>
         private System.Windows.Forms.NotifyIcon notifyIcon = null;
         private void initNotifyIcon()
         {
-            ZigBeeIdLab.Content = SerialPortConfig.ZigBeeId;
-            ServicePortLab.Content = SerialPortConfig.ServicePort;
-
             notifyIcon = new System.Windows.Forms.NotifyIcon();
-            notifyIcon.BalloonTipText = "BW LED " + SerialPortConfig.ZigBeeId + "(" + SerialPortConfig.ServicePort + ") Serivce";
-            notifyIcon.Text = "BW LED " + SerialPortConfig.ZigBeeId + "(" + SerialPortConfig.ServicePort + ") LED Serivce";
+            notifyIcon.BalloonTipText = notifyString;
+            notifyIcon.Text = notifyString;
             string path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "i.ico");
             notifyIcon.Icon = new System.Drawing.Icon(path);
             notifyIcon.Visible = true;
@@ -97,9 +317,9 @@ namespace Brilliantech.Warehouse.LEDServiceHost
 
         private void exit_Click(object sender, EventArgs e)
         {
-            if (System.Windows.MessageBox.Show("确定要退出"+SerialPortConfig.ZigBeeId+"("+SerialPortConfig.ServicePort+")吗?",
+            if (System.Windows.MessageBox.Show("确定要退出吗?",
                                                "退出",
-                                               MessageBoxButton.YesNo,
+                                                MessageBoxButton.YesNo,
                                                 MessageBoxImage.Question,
                                                 MessageBoxResult.No) == MessageBoxResult.Yes)
             {
@@ -131,9 +351,5 @@ namespace Brilliantech.Warehouse.LEDServiceHost
             e.Cancel = true;
         }
 
-        private void SerialPortBtn_Click(object sender, RoutedEventArgs e)
-        {
-            new SerialPortSetting().ShowDialog();
-        }
     }
 }

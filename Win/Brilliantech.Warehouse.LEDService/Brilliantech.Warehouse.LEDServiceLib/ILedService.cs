@@ -14,7 +14,7 @@ namespace Brilliantech.Warehouse.LEDServiceLib
     public interface ILedService
     {
         [OperationContract]
-        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, UriTemplate = "message/send/{message}")]
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, UriTemplate = "ptl/send/{message}")]
         Msg<string> SendComMessage(string message);
     }
    

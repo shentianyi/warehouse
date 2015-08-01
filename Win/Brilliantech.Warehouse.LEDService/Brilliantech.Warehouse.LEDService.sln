@@ -5,13 +5,23 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brilliantech.Warehouse.LEDS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brilliantech.Framwork", "Brilliantech.Framwork\Brilliantech.Framwork.csproj", "{9B5F850A-5136-4095-8955-6C4F7747C48A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brilliantech.Warehouse.LEDServiceLib", "Brilliantech.Warehouse.LEDServiceLib\Brilliantech.Warehouse.LEDServiceLib.csproj", "{87E715B1-BFC4-486B-8454-9C93FB77CBA5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brilliantech.Warehouse.LEDService.ConsoleApp", "Brilliantech.Warehouse.LEDService.ConsoleApp\Brilliantech.Warehouse.LEDService.ConsoleApp.csproj", "{E08974E4-D1F5-400D-A223-6A4259BC1D9B}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "LEDSericeHostSetup", "LEDSericeHostSetup\LEDSericeHostSetup.vdproj", "{62B4BAC1-A558-4141-920D-859E91651402}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProjectLEDService", "TestProjectLEDService\TestProjectLEDService.csproj", "{B1AE6C61-E81B-4DAF-82BF-40519066C94D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5AF6358A-0C99-4196-B5C9-FECC6AC6E479}"
+	ProjectSection(SolutionItems) = preProject
+		Brilliantech.Warehouse.LEDService.vsmdi = Brilliantech.Warehouse.LEDService.vsmdi
+		Local.testsettings = Local.testsettings
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
 Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = Brilliantech.Warehouse.LEDService.vsmdi
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -41,16 +51,6 @@ Global
 		{9B5F850A-5136-4095-8955-6C4F7747C48A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{9B5F850A-5136-4095-8955-6C4F7747C48A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{9B5F850A-5136-4095-8955-6C4F7747C48A}.Release|x86.ActiveCfg = Release|Any CPU
-		{87E715B1-BFC4-486B-8454-9C93FB77CBA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{87E715B1-BFC4-486B-8454-9C93FB77CBA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{87E715B1-BFC4-486B-8454-9C93FB77CBA5}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{87E715B1-BFC4-486B-8454-9C93FB77CBA5}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{87E715B1-BFC4-486B-8454-9C93FB77CBA5}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{87E715B1-BFC4-486B-8454-9C93FB77CBA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{87E715B1-BFC4-486B-8454-9C93FB77CBA5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{87E715B1-BFC4-486B-8454-9C93FB77CBA5}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{87E715B1-BFC4-486B-8454-9C93FB77CBA5}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{87E715B1-BFC4-486B-8454-9C93FB77CBA5}.Release|x86.ActiveCfg = Release|Any CPU
 		{E08974E4-D1F5-400D-A223-6A4259BC1D9B}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{E08974E4-D1F5-400D-A223-6A4259BC1D9B}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{E08974E4-D1F5-400D-A223-6A4259BC1D9B}.Debug|Mixed Platforms.Build.0 = Debug|x86
@@ -67,6 +67,16 @@ Global
 		{62B4BAC1-A558-4141-920D-859E91651402}.Release|Any CPU.ActiveCfg = Release
 		{62B4BAC1-A558-4141-920D-859E91651402}.Release|Mixed Platforms.ActiveCfg = Release
 		{62B4BAC1-A558-4141-920D-859E91651402}.Release|x86.ActiveCfg = Release
+		{B1AE6C61-E81B-4DAF-82BF-40519066C94D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1AE6C61-E81B-4DAF-82BF-40519066C94D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1AE6C61-E81B-4DAF-82BF-40519066C94D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B1AE6C61-E81B-4DAF-82BF-40519066C94D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B1AE6C61-E81B-4DAF-82BF-40519066C94D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B1AE6C61-E81B-4DAF-82BF-40519066C94D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1AE6C61-E81B-4DAF-82BF-40519066C94D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1AE6C61-E81B-4DAF-82BF-40519066C94D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B1AE6C61-E81B-4DAF-82BF-40519066C94D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B1AE6C61-E81B-4DAF-82BF-40519066C94D}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
