@@ -31,16 +31,16 @@ module Ptl
 
 
         msg=JSON.parse(res.body)
-        puts "@@@code:#{res.code}backdata:#{msg}:#{msg[Result].class}"
+        puts "@@@code:#{res.code}backdata:#{msg}:#{msg['Result'].class}"
 
         if res.code==201 || res.code==200
           msg=JSON.parse(res.body)
           puts "@@@backdata:#{msg}"
-          if msg['Result']=='true'
+          if msg['Result']
             if ptl_job= PtlJob.find_by_id(job.id)
               ptl_job.update_attributes(state: Ptl::State::Job::SEND_SUCCESS, msg: '发送成功')
             end
-          elsif msg['resultCode']=='false'
+          elsif msg['Result']
             if ptl_job= PtlJob.find_by_id(job.id)
               ptl_job.update_attributes(state: Ptl::State::Job::HANDLE_FAIL, msg: msg['Content'].to_s)
             end
