@@ -6,7 +6,6 @@ module Ptl
   module Message
     class SendParser<Parser
       DEFAULT_MSG_TYPE=Ptl::Type::SendMsgType::CONTROL
-      NODE_CONTROL_API='/ptl/receive'
       READ_TIME_OUT=nil
 
 
@@ -27,15 +26,16 @@ module Ptl
 
 
       def process
-        # puts "9.  start send parser....."
-        # Ptl::Server.send_message(message)
+        puts "@@@server:#{SysConfigCache.led_server_value}#{SysConfigCache.led_send_msg_action_value}#{URI.encode(message)}"
+        res=init_client(SysConfigCache.led_send_msg_action_value, self.message).post(nil)
 
 
-        res=init_client(NODE_CONTROL_API).post({
-                                                  message:self.message
-                                               })
-        if res.code==201
+        msg=JSON.parse(res.body)
+        puts "@@@code:#{res.code}backdata:#{msg}:#{msg[Result].class}"
+
+        if res.code==201 || res.code==200
           msg=JSON.parse(res.body)
+          puts "@@@backdata:#{msg}"
           if msg['Result']=='true'
             if ptl_job= PtlJob.find_by_id(job.id)
               ptl_job.update_attributes(state: Ptl::State::Job::SEND_SUCCESS, msg: '发送成功')
@@ -49,8 +49,8 @@ module Ptl
 
       end
 
-      def init_client(api)
-        RestClient::Resource.new("#{job.server_url}#{api}",
+      def init_client(api, message)
+        RestClient::Resource.new("#{SysConfigCache.led_server_value}#{api}#{URI.encode(message)}",
                                  timeout: nil,
                                  open_time_out: nil,
                                  content_type: 'application/json'

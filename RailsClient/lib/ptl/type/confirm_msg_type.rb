@@ -1,5 +1,5 @@
 module Ptl
-	module Message
+	module Type
 		class ConfirmMsgType
 			HANDLE_SUCCESS=0
 			SEND_SUCCESS=1
