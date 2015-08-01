@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestRun id="9f7e2f5c-99d7-49bc-bf2d-2acf45e13953" name="Charlot@CHARLOT-PC 2015-08-01 20:12:50" runUser="Charlot-PC\Charlot" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <TestSettings name="本地" id="bf3670ea-cfa8-47c3-9c9a-e83f850a40a8">
+    <Description>这些设置为本地测试运行的默认测试设置。</Description>
+    <Deployment enabled="false" runDeploymentRoot="Charlot_CHARLOT-PC 2015-08-01 20_12_50">
+      <DeploymentItem filename="C:\Users\Charlot\Documents\GitHub\warehouse\Win\Brilliantech.Warehouse.LEDService\Brilliantech.Warehouse.LEDServiceHost\bin\Debug\Brilliantech.Warehouse.LEDServiceHost.exe" />
+      <DeploymentItem filename="C:\Users\Charlot\Documents\GitHub\warehouse\Win\Brilliantech.Warehouse.LEDService\Brilliantech.Warehouse.LEDServiceLib\bin\Debug\Brilliantech.Warehouse.LEDServiceLib.dll" />
+      <DeploymentItem filename="C:\Users\Charlot\Documents\GitHub\warehouse\Win\Brilliantech.Warehouse.LEDService\Brilliantech.Framwork\bin\Debug\Brilliantech.Framwork.dll" />
+      <DeploymentItem filename="C:\Users\Charlot\Documents\GitHub\warehouse\Win\ThirdPart\log4net.dll" />
+    </Deployment>
+    <Execution>
+      <TestTypeSpecific />
+      <AgentRule name="Execution Agents">
+      </AgentRule>
+    </Execution>
+  </TestSettings>
+  <Times creation="2015-08-01T20:12:50.3755535+08:00" queuing="2015-08-01T20:12:52.0576497+08:00" start="2015-08-01T20:12:52.1696561+08:00" finish="2015-08-01T20:12:53.1407117+08:00" />
+  <ResultSummary outcome="Failed">
+    <Counters total="1" executed="1" error="0" failed="1" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" passed="0" completed="0" inProgress="0" pending="0" />
+  </ResultSummary>
+  <TestDefinitions>
+    <UnitTest name="GetDefaultIPV4Test" storage="c:\users\charlot\documents\github\warehouse\win\brilliantech.warehouse.ledservice\testprojectledservice\bin\debug\testprojectledservice.dll" id="4a9cf303-cb31-ecbb-bdb9-d93c93185a7b">
+      <Execution id="35e22afe-4b91-403b-9108-270725f9e93b" />
+      <TestMethod codeBase="C:/Users/Charlot/Documents/GitHub/warehouse/Win/Brilliantech.Warehouse.LEDService/TestProjectLEDService/bin/Debug/TestProjectLEDService.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="TestProjectLEDService.IPHelperTest, TestProjectLEDService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="GetDefaultIPV4Test" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestLists>
+    <TestList name="列表中未列出的结果" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="所有已加载的结果" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <TestEntries>
+    <TestEntry testId="4a9cf303-cb31-ecbb-bdb9-d93c93185a7b" executionId="35e22afe-4b91-403b-9108-270725f9e93b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <Results>
+    <UnitTestResult executionId="35e22afe-4b91-403b-9108-270725f9e93b" testId="4a9cf303-cb31-ecbb-bdb9-d93c93185a7b" testName="GetDefaultIPV4Test" computerName="CHARLOT-PC" duration="00:00:00.1719887" startTime="2015-08-01T20:12:52.1816568+08:00" endTime="2015-08-01T20:12:53.0777081+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="35e22afe-4b91-403b-9108-270725f9e93b">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.AreEqual 失败。应为: &lt;&gt;，实际为: &lt;(null)&gt;。</Message>
+          <StackTrace>   在 TestProjectLEDService.IPHelperTest.GetDefaultIPV4Test() 位置 C:\Users\Charlot\Documents\GitHub\warehouse\Win\Brilliantech.Warehouse.LEDService\TestProjectLEDService\IPHelperTest.cs:行号 86
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+</TestRun>
