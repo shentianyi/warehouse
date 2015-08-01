@@ -6,9 +6,9 @@ module Ptl
     # include Sidekiq::Paginator
 
 
-    post '/confirm' do
-
-    end
+    # post '/confirm' do
+    #
+    # end
 
     # params
     #  required: message string

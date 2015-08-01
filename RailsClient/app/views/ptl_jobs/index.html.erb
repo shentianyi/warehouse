@@ -4,12 +4,13 @@
   </div>
   <%= will_paginate @ptl_jobs, :container => false %>
 </div>
-<table class="table table-bordered table-striped globle-table">
+<table class="table table-bordered ">
   <thead>
     <tr>
       <th>ID</th>
       <th>Params</th>
       <th>State</th>
+      <th>Msg</th>
       <th>Is dirty</th>
       <th>Is new</th>
       <th>Is delete</th>
@@ -22,7 +23,7 @@
       <tr>
         <td><%=ptl_job.id%></td>
         <td><%= ptl_job.params %></td>
-        <td><%= ptl_job.state %></td>
+        <td><%= ptl_job.state_display %></td>
         <td><%= ptl_job.msg %></td>
         <td><%= ptl_job.is_dirty %></td>
         <td><%= ptl_job.is_new %></td>

@@ -24,6 +24,16 @@ every 2.minute do
   rake 'sync:execute'
 end
 
+#
+# every :reboot do
+#  runner "bundle exec sidekiq -C config/sidekiq.yml -L log/sidekiq.log -P tmp/pids/sidekiq.pid -d",:output => {:error => 'ptl_cron_error.log', :standard => 'ptl_cron.log'}
+# end
+
+# every 1.minute do
+#   runner 'PtlJobWorker.perform_async',:output => {:error => 'ptl_cron_error.log', :standard => 'ptl_cron.log'}
+# end
+
+
 #every 1.minute do
 #  runner 'script/test/test_delivery.rb'
 #end

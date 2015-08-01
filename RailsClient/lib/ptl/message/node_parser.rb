@@ -1,5 +1,3 @@
-require 'ptl/type/node_msg_type'
-
 module Ptl
   module Message
     class NodeParser<Parser
@@ -28,7 +26,7 @@ module Ptl
         self.curr_display=message[13..16]
         self.curr_rate=message[17..20].to_i
 
-        self.state=Ptl::Node.where(color: self.curr_color, rate: self.curr_rate)
+        self.node=Ptl::Node.where(color: self.curr_color, rate: self.curr_rate)
 
         self.handle_state=message[21].to_i
         self.press_type=message[22].to_i
@@ -48,9 +46,10 @@ module Ptl
         if self.msg_id.blank? || self.msg_id=='000000'
           case self.type
             # 默认是要货
-            when Ptl::Type::NodeMsgType::NODE_CONTROL
+            when Ptl::Type::NodeMsgType::NODE_CONTROL,Ptl::Type::NodeMsgType::FEED_BACK
               #
               Ptl::Job.new(
+                  type: self.type,
                   node_id: self.node_id,
                   curr_state: self.curr_state,
                   to_state: self.to_state,
@@ -62,8 +61,9 @@ module Ptl
         else
           puts "led 的反馈，带有报文:#{self.msg_id}"
           if ptl_job=PtlJob.find_by_id(self.msg_id)
-            job=Ptl::Job.find_by_ptl_job(ptl_job)
-            ptl_job.update_attributes(state: Ptl::State::Job::HANDLE_SUCCESS, msg: 'job exec success') if job.to_state==self.curr_state
+            if job=Ptl::Job.find_by_ptl_job(ptl_job)
+              ptl_job.update_attributes(state: Ptl::State::Job::HANDLE_SUCCESS, msg: 'job exec success') if job.to_state==self.curr_state
+            end
           end
         end
       end

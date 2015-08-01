@@ -1,5 +1,3 @@
-require 'ptl/node'
-
 module Ptl
   class Job
 
@@ -9,7 +7,7 @@ module Ptl
     # TCP
     # server_url 是控制器的IP+PORT,比如192.168.0.1:9000
     #
-    attr_accessor :id, :node_id, :curr_state, :to_state, :curr_rate, :to_rate, :curr_display, :to_display, :size, :server_id, :server_url, :in_time, :node #, :http_type
+    attr_accessor :type,:id, :node_id,:ptl_job, :curr_state, :to_state, :curr_rate, :to_rate, :curr_display, :to_display, :size, :server_id, :server_url, :in_time, :node #, :http_type
 
     DEFAULT_HTTP_TYPE='POST'
     DEFAULT_RETRY_TIMES=3
@@ -18,8 +16,8 @@ module Ptl
 
     INT_FIELD=[:curr_state, :to_state, :size]
 
-    def initialize(options={})
-
+    def initialize(options={},id=nil)
+      self.id=id
       puts "4. start init job :#{options}"
       raise 'params is blank' if options.blank?
 
@@ -38,6 +36,9 @@ module Ptl
 
       node=Node.find(self.to_state)
       node.id=self.node_id
+      node.job_id=self.id
+      puts "init job : node:#{node.id}"
+      # node.job=self
       self.node=node
     end
 
@@ -48,32 +49,40 @@ module Ptl
           params[name.sub(/@/, '').to_sym]=self.instance_variable_get(name)
         end
         puts "5. create job in database..."
-        j=PtlJob.create(
+        puts "5.params:#{params}"
+        ptl_job=PtlJob.create(
             params: params.to_json
         )
-        self.id= j.id
+        self.id= ptl_job.id
+        self.ptl_job=ptl_job
 
         if in_time
-          j.update_attributes(state:Ptl::State::Job::HANDLING)
+          ptl_job.update_attributes(state: Ptl::State::Job::HANDLING)
           process
         end
 
-      rescue
+      rescue => e
+        puts "5 in_queue:error:[#{Time.now}]#{e.message}"
         return false
       end
       true
     end
 
     def self.out_queue(size=DEFAULT_PROCESS_SIZE)
-      PtlJob.where(state: Ptl::State::Job.execute_states).order(:created_at).limit(size).each do |ptl_job|
+      PtlJob.where(state: Ptl::State::Job.execute_states)
+          .order(:created_at).limit(size).each do |ptl_job|
         puts "[#{Time.now}] execute job from mysql #{ptl_job.id}"
-        job=parse_json_to_job(ptl_job.params)
-        job.process
+        if job=parse_json_to_job(ptl_job)
+          puts "* #{job.id}"
+          job.id=ptl_job.id
+          job.ptl_job=ptl_job
+          job.process
+        end
       end
     end
 
     def self.find_by_ptl_job(ptl_job)
-      parse_json_to_job(ptl_job.params)
+      parse_json_to_job(ptl_job)
     end
 
     def process
@@ -81,10 +90,20 @@ module Ptl
       PhaseMachine.new(self).process
     end
 
+
+    def job_id_format
+      self.id
+    end
+
     private
-    def self.parse_json_to_job(json)
-      params=JSON.parse(json).deep_symbolize_keys
-      self.new(params)
+    def self.parse_json_to_job(ptl_job)
+      begin
+        params=JSON.parse(ptl_job.params).deep_symbolize_keys
+        self.new(params)
+      rescue => e
+        ptl_job.update_attributes(state: Ptl::State::Job::INVALID, msg: e.message)
+        nil
+      end
     end
   end
 end
