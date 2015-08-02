@@ -34,8 +34,14 @@
                     <ListBox Name="TCPClientLB" Height="200"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1">
+                    <StackPanel Orientation="Horizontal">
                     <Label Content="数据接收："/>
-                    <ListBox Name="ClientDataLB" Height="272"/>
+                      <!--<Button Content="清 空" Name="ClearReceiveBtn" Margin="300,0,1,0" Click="ClearReceiveBtn_Click" />-->  
+                    </StackPanel>
+                    <!--<ListBox Name="ClientDataLB" Height="272"/>-->
+                    <TextBox Name="ClientDataTB" Height="272"   TextWrapping="Wrap"
+  AcceptsReturn="True"
+  VerticalScrollBarVisibility="Visible"/>
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Left" Orientation="Horizontal" Margin="0,5,0,0">                        
                     <Label Content="数据发送："/>
                         <TextBox Name="SendTB" Width="326" />

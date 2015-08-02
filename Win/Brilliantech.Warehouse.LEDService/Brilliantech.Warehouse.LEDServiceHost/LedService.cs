@@ -9,6 +9,7 @@ using System.IO.Ports;
 using Brilliantech.Warehouse.LEDServiceHost.CusException;
 using System.ServiceModel.Web;
 using Brilliantech.Warehouse.LEDServiceHost.Helper;
+using Brilliantech.Framwork.Utils.LogUtil;
 
 namespace Brilliantech.Warehouse.LEDServiceHost
 {
@@ -16,12 +17,11 @@ namespace Brilliantech.Warehouse.LEDServiceHost
     public class LedService : ILedService
     {
         /// <summary>
-        /// message 是十六进制如：ff 64 32 01 10
-        /// 255 100 50 1 16
+        /// message 字符串
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
-        public Model.Msg<string> SendComMessage(string message)
+        public  Msg<string> SendTCPMessage(string message)
         {
             WebOperationContext.Current.OutgoingResponse.Headers.Add("Access-Control-Allow-Origin", "*");
             if (WebOperationContext.Current.IncomingRequest.Method == "OPTIONS")
@@ -36,8 +36,12 @@ namespace Brilliantech.Warehouse.LEDServiceHost
             Msg<string> msg = new Msg<string>();
             try
             {
-                MainWindow.SendData( StringHelper.GetBytes(message));
+                LogUtil.Logger.Info("接收到WMS服务器消息：" + message);
+
+                /// 使用TCPServer向灯节点发送消息
+                MainWindow.SendData(StringHelper.GetBytes(message));
                 msg.Result = true;
+                msg.Content = "PTL-HTTP接收到，并发送到TCPServer";
             }
             catch (Exception e)
             {
@@ -47,8 +51,11 @@ namespace Brilliantech.Warehouse.LEDServiceHost
                 {
                     msg.Content = e.InnerException.Message;
                 }
+                LogUtil.Logger.Error(e.Message);
             }
             return msg;
         }
+  
+
     }
 }
