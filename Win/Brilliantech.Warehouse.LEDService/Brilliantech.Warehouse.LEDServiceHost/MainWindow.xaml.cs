@@ -72,7 +72,7 @@ namespace Brilliantech.Warehouse.LEDServiceHost
                     host = new WebServiceHost(typeof(LedService), baseAddresses);
                 }
                 host.Open();
-                LogUtil.Logger.Info("LED服务启动");
+                LogUtil.Logger.Info("LED RESTFul服务启动");
             }
             catch (AddressAlreadyInUseException e)
             {
@@ -107,10 +107,13 @@ namespace Brilliantech.Warehouse.LEDServiceHost
             if (IsTCPListen == false)
             {
                 // 开始TCPServer
+                LogUtil.Logger.Info("LED TCPServer 开始启动");
+
                 StartTCPServer();
             }
             else {
              // 停止TCPServer
+                LogUtil.Logger.Info("LED TCPServer 开始停止");
                 StopTCPServer();
             }
            IPTB.IsEnabled=PortTB.IsEnabled = !IsTCPListen;
@@ -128,9 +131,10 @@ namespace Brilliantech.Warehouse.LEDServiceHost
         {
             try
             {
-                tcpsever = new TcpListener(IPAddress.Parse(IPTB.Text), int.Parse(PortTB.Text));
-
+                tcpsever = new TcpListener(IPAddress.Parse(IPTB.Text), int.Parse(PortTB.Text)); 
+                LogUtil.Logger.Info("LED TCPServer 启动完成");
                 tcpsever.Start();
+
                 tcpsever.BeginAcceptTcpClient(new AsyncCallback(Acceptor), tcpsever);
                 IsTCPListen = true;
             }
@@ -146,9 +150,30 @@ namespace Brilliantech.Warehouse.LEDServiceHost
         /// <returns></returns>
         private void StopTCPServer()
         {
-            tcpsever.Stop();
-            tcpsever = null;
-            IsTCPListen = false;
+
+            foreach (PTLTCPClient client in TCPClientList)
+            {
+                client.DisConnect();
+            }
+            if (tcpsever != null)
+            {
+                tcpsever.Stop();
+                tcpsever = null;
+                IsTCPListen = false;
+                LogUtil.Logger.Info("LED TCPServer 停止完成");
+            }
+
+        }
+
+        /// <summary>
+        /// 停止HTTP监听
+        /// </summary>
+        private void StopHttpServer() {
+            if (host != null) {
+                host.Close();
+                host = null;
+                LogUtil.Logger.Info("LED RESTFul服务停止");
+            }
         }
 
 
@@ -163,6 +188,7 @@ namespace Brilliantech.Warehouse.LEDServiceHost
             {
                 //初始化连接的客户端
                 PTLTCPClient newClient = new PTLTCPClient();
+               
                 newClient.NetWork = server.EndAcceptTcpClient(o);
               //  tcpClientList.Add(newClient);
               //  BindClientList();
@@ -219,16 +245,30 @@ namespace Brilliantech.Warehouse.LEDServiceHost
         {
             Thread t = new Thread(new ThreadStart(delegate
             {
-                ClientDataLB.Dispatcher.Invoke(new Action(delegate
+                //ClientDataLB.Dispatcher.Invoke(new Action(delegate
+                //{
+                //    StreamReader sr = new StreamReader(new MemoryStream(data));
+                //    string message = sr.ReadToEnd();
+                //    ClientDataLB.Items.Add(message);
+                //    LogUtil.Logger.Info("【接到】TCPClient消息: "+message);
+                //    /// 是使用HTTP想WMS服务器(Linux)发送消息
+                //  new LedRestService(message).Send();
+                  
+                //}), null);
+
+                ClientDataTB.Dispatcher.Invoke(new Action(delegate
                 {
                     StreamReader sr = new StreamReader(new MemoryStream(data));
                     string message = sr.ReadToEnd();
-                    ClientDataLB.Items.Add(message);
+                    ClientDataTB.AppendText(message);
+                    ClientDataTB.AppendText("\n");
+                    ClientDataTB.SelectionStart = ClientDataTB.Text.Length;
+
+                    LogUtil.Logger.Info("【接到】TCPClient消息: " + message);
                     /// 是使用HTTP想WMS服务器(Linux)发送消息
                     new LedRestService(message).Send();
-                  
-                }), null);
 
+                }), null);
             }));
 
             t.Start();
@@ -244,11 +284,14 @@ namespace Brilliantech.Warehouse.LEDServiceHost
                          {
                              if (add_remove == true)
                              {
+                                 LogUtil.Logger.Info("【新的连接】"+client.Name );
                                  TCPClientList.Add(client);
                              }
                              else
                              {
+                                 LogUtil.Logger.Info("【断开连接】" + client.Name);
                                  TCPClientList.Remove(client);
+                                 client.DisConnect();
                              }
 
                              TCPClientLB.ItemsSource = null;
@@ -273,11 +316,14 @@ namespace Brilliantech.Warehouse.LEDServiceHost
             {
                 try
                 {
-                    string s = StringHelper.GetString(data);
+                  string message = StringHelper.GetString(data);
+
+                     LogUtil.Logger.Info("【发送】TCPServer消息: " + message);
                     client.NetWork.GetStream().Write(data, 0, data.Length);
                 }
                 catch (Exception e)
                 {
+                    LogUtil.Logger.Error(e.Message);
                     //MessageBox.Show(client.Name + ":" + e.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
                     //return false;
                 }
@@ -330,6 +376,8 @@ namespace Brilliantech.Warehouse.LEDServiceHost
                                                 MessageBoxResult.No) == MessageBoxResult.Yes)
             {
                 notifyIcon.Dispose();
+                StopTCPServer();
+                StopHttpServer();
                 System.Windows.Application.Current.Shutdown();
             }
         }
@@ -355,6 +403,12 @@ namespace Brilliantech.Warehouse.LEDServiceHost
         {
             this.Visibility = Visibility.Hidden;
             e.Cancel = true;
+        }
+
+        private void ClearReceiveBtn_Click(object sender, RoutedEventArgs e)
+        {
+            //ClientDataLB.ItemsSource = null;
+            ClientDataTB.Text = "";
         }
 
     }

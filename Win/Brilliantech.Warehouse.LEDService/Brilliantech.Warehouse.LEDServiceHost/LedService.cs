@@ -9,6 +9,7 @@ using System.IO.Ports;
 using Brilliantech.Warehouse.LEDServiceHost.CusException;
 using System.ServiceModel.Web;
 using Brilliantech.Warehouse.LEDServiceHost.Helper;
+using Brilliantech.Framwork.Utils.LogUtil;
 
 namespace Brilliantech.Warehouse.LEDServiceHost
 {
@@ -35,8 +36,10 @@ namespace Brilliantech.Warehouse.LEDServiceHost
             Msg<string> msg = new Msg<string>();
             try
             {
+                LogUtil.Logger.Info("接收到WMS服务器消息：" + message);
+
                 /// 使用TCPServer向灯节点发送消息
-                MainWindow.SendData( StringHelper.GetBytes(message));
+                MainWindow.SendData(StringHelper.GetBytes(message));
                 msg.Result = true;
                 msg.Content = "PTL-HTTP接收到，并发送到TCPServer";
             }
@@ -48,6 +51,7 @@ namespace Brilliantech.Warehouse.LEDServiceHost
                 {
                     msg.Content = e.InnerException.Message;
                 }
+                LogUtil.Logger.Error(e.Message);
             }
             return msg;
         }
