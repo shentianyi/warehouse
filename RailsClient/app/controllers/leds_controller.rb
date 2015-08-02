@@ -25,7 +25,7 @@ class LedsController < ApplicationController
   # POST /leds.json
   def create
     args = {}
-    args[:id] = [:id]
+    args[:id] = led_params[:id]
     args[:position_id] = Position.find_by_detail(led_params[:position_id]).id
     args[:current_state] = led_params[:current_state]
     @led = Led.new(args)

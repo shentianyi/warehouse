@@ -43,10 +43,15 @@
     <Reference Include="log4net">
       <HintPath>..\..\ThirdPart\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp">
+      <HintPath>..\..\ThirdPart\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Windows.Forms" />
@@ -67,10 +72,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Config\PTLConfig.cs" />
+    <Compile Include="Config\SerialPortConfig.cs" />
+    <Compile Include="CusException\SerialPortNotUsableException.cs" />
+    <Compile Include="Helper\IPHelper.cs" />
+    <Compile Include="Helper\JsonHelper.cs" />
+    <Compile Include="Helper\StringHelper.cs" />
+    <Compile Include="ILedService.cs" />
+    <Compile Include="LedRestService.cs" />
+    <Compile Include="LedService.cs" />
+    <Compile Include="Model\Msg.cs" />
+    <Compile Include="PTLTCPClient.cs" />
+    <Compile Include="Helper\SerialPortHelper.cs" />
     <Compile Include="SerialPortSetting.xaml.cs">
       <DependentUpon>SerialPortSetting.xaml</DependentUpon>
     </Compile>
     <Compile Include="SingleInstance.cs" />
+    <Compile Include="PTCTCPEvent.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -118,6 +136,9 @@
     <Content Include="Ini\serial_port.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Ini\ptl.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -129,11 +150,8 @@
       <Project>{9B5F850A-5136-4095-8955-6C4F7747C48A}</Project>
       <Name>Brilliantech.Framwork</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Brilliantech.Warehouse.LEDServiceLib\Brilliantech.Warehouse.LEDServiceLib.csproj">
-      <Project>{87E715B1-BFC4-486B-8454-9C93FB77CBA5}</Project>
-      <Name>Brilliantech.Warehouse.LEDServiceLib</Name>
-    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

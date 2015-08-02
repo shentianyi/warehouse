@@ -8,9 +8,9 @@
 #   SysConfig.led_servers.split(',').each do |server_info|
 #     $led_servers<< Ptl::Message::SendParser.new(server_info)
 #   end
-
-  $led_socket=nil
-  $led_socket_clients={}
+#
+#   $led_socket=nil
+#   $led_socket_clients={}
 
   # if defined?(PhusionPassenger)
   #   PhusionPassenger.on_event(:starting_worker_process) do |forked|

@@ -2,7 +2,7 @@ module Ptl
   module Message
     class Parser
 
-      attr_accessor :message, :type, :msg_id, :job, :node,:node_id,:state, :curr_color, :curr_state, :to_state, :curr_display, :to_display, :curr_rate, :to_rate, :handle_state
+      attr_accessor :message, :type, :msg_id, :job, :node, :node_id, :state, :curr_color, :curr_state, :to_state, :curr_display, :to_display, :curr_rate, :to_rate, :handle_state,:server_id
 
       PHASE_REGEX=/<[0-9a-zA-Z\s]{59}>/
       CONFIRM_REGEX=/<[0-9a-zA-Z\s]{11}>/

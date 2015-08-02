@@ -6,9 +6,9 @@ module Ptl
     # include Sidekiq::Paginator
 
 
-    post '/confirm' do
-
-    end
+    # post '/confirm' do
+    #
+    # end
 
     # params
     #  required: message string
@@ -18,7 +18,11 @@ module Ptl
       puts "1. api receive message : #{params}"
       raise 'no params message' if params[:message].blank?
       puts "1. api receive message : #{params[:message]}"
-      Ptl::Message::Parser.dispatch(params[:message])
+      message=params[:message]
+      unless message.match(/^</)
+        message='<'+message
+      end
+      Ptl::Message::Parser.dispatch(message)
       {result: 0}.to_json
     end
   end

@@ -1,6 +1,6 @@
 module Sync
   module Execute
-    class OrderSync< CustomIdSyncBase
+    class PtlJobSync< CustomIdSyncBase
 
     end
   end

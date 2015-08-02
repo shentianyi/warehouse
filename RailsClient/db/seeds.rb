@@ -75,26 +75,34 @@ ActiveRecord::Base.transaction do
     SysConfig.create(code: 'TRANS_WAREHOUSE', value: 'ITLZ', name: '在途库编号')
   end
 
-  unless SysConfig.find_by_code('LED_SERVICE_PORT')
-    SysConfig.create(code: 'LED_SERVICE_PORT', value: '9001', name: 'LED服务端口')
-  end
-  unless SysConfig.find_by_code('LED_SEND_MSG_ACTION')
-    SysConfig.create(code: 'LED_SEND_MSG_ACTION', value: '/led/message/send/', name: 'LED服务发送消息方法')
+  # unless SysConfig.find_by_code('LED_SERVICE_PORT')
+  #   SysConfig.create(code: 'LED_SERVICE_PORT', value: '9001', name: 'LED服务端口')
+  # end
+  if s= SysConfig.find_by_code('LED_SERVICE_PORT')
+    s.destroy
   end
 
   unless SysConfig.find_by_code('LED_ENABLE')
     SysConfig.create(code: 'LED_ENABLE', value: 'false', name: '是否开启LED')
   end
 
+  unless SysConfig.find_by_code('LED_SERVER')
+    SysConfig.create(code: 'LED_SERVER', value: '192.168.0.101:9001', name: 'LED HTTP 服务器IP和端口，比如:192.168.0.1:9001')
+  end
+
+  unless SysConfig.find_by_code('LED_SEND_MSG_ACTION')
+    SysConfig.create(code: 'LED_SEND_MSG_ACTION', value: '/led/message/send/', name: 'LED服务发送消息方法')
+  end
+
   unless SysConfig.find_by_code('LED_BUILDER')
     SysConfig.create(code: 'LED_BUILDER', value: 'admin', name: 'LED默认创建用户')
   end
+
+
   unless SysConfig.find_by_code('DEFAULT_WAREHOUSE')
     SysConfig.create(code: 'DEFAULT_WAREHOUSE', value: '3EX', name: '默认仓库号')
   end
-  unless SysConfig.find_by_code('LED_SERVER')
-    SysConfig.create(code: 'LED_SERVER', value: '192.168.0.101:8000', name: 'LED TCP 服务器IP和端口，比如:192.168.0.1:8989')
-  end
+
   unless SysConfig.find_by_code('PTL_JOB_PREFIX')
     SysConfig.create(code: 'PTL_JOB_PREFIX', value: 'C', name: 'PTL任务的数据开端，为了同步')
   end

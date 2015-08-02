@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150728095451) do
+ActiveRecord::Schema.define(version: 20150731033108) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -561,13 +561,14 @@ ActiveRecord::Schema.define(version: 20150728095451) do
 
   create_table "ptl_jobs", force: true do |t|
     t.text     "params"
-    t.integer  "state",      default: 100
-    t.boolean  "is_delete",  default: false
-    t.boolean  "is_dirty",   default: true
-    t.boolean  "is_new",     default: true
+    t.integer  "state",       default: 100
+    t.boolean  "is_delete",   default: false
+    t.boolean  "is_dirty",    default: true
+    t.boolean  "is_new",      default: true
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "msg"
+    t.integer  "order_state", default: 100
   end
 
   create_table "records", force: true do |t|

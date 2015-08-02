@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config\SerialPortConfig.cs" />
+    <Compile Include="Config\PtlTcpConfig.cs" />
     <Compile Include="CusException\SerialPortNotUsableException.cs" />
     <Compile Include="ILedService.cs" />
     <Compile Include="Model\Msg.cs" />

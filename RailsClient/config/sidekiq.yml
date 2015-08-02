@@ -7,7 +7,6 @@
 # Set timeout to 8 on Heroku, longer if you manage your own systems.
 :timeout: 30
 :queues:
-#  - [often, 7]
+  - [often, 7]
   - [default, 5]
-#  - [seldom, 3]
-  - [transcontainersjob,7]
+  - [ptl,8]
