@@ -24,6 +24,10 @@ module Ptl
         #目前无法获取到状态，需要确定是否有rate
         self.curr_color=message[12]
         self.curr_display=message[13..16]
+        if led=Led.find_by_id(self.node_id)
+          self.curr_display = led.led_display
+        end
+
         self.curr_rate=message[17..20].to_i
 
         self.node=Ptl::Node.where(color: self.curr_color, rate: self.curr_rate)
