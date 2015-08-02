@@ -1,0 +1,30 @@
+.table1{
+table-layout: fixed;
+empty-cells: show;
+border-collapse: collapse;
+margin: 0 auto;
+border:1px solid #cad9ea;
+color:#666;
+}
+.table1 td{
+height: 30px;	
+	}
+.table1 h1,h2,h3{
+font-size: 12px;
+margin: 0;
+padding: 0;	
+	}
+.table1 th {
+background-repeat:repeat-x;
+height:30px;
+}
+.table1 tr.alert{
+background-color: white;;
+	}
+.table1 td,.table1 th{
+border:1px solid #cad9ea;
+padding:0 1em 0;
+}
+.table1 tr.alter{
+background-color:#f5fafe;
+} </hgroup>

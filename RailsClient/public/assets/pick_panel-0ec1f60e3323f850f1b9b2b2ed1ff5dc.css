@@ -1,0 +1,48 @@
+/*************************************************************  ul
+*********************************************************************************************************/
+/* line 63, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/basic.css.scss */
+ul {
+  padding: 0px;
+  margin: 0px;
+  list-style-type: none;
+}
+
+/*************************************************************  global
+*********************************************************************************************************/
+/* line 70, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/basic.css.scss */
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+/* line 2, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/pick_panel.css.scss */
+.panel-content.pick-panel {
+  background: #fff;
+}
+/* line 4, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/pick_panel.css.scss */
+.panel-content.pick-panel > .pick-list-history {
+  width: 300px;
+}
+/* line 6, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/pick_panel.css.scss */
+.panel-content.pick-panel > .pick-list-history > div:first-of-type {
+  padding: 17px 0 0 15px;
+}
+/* line 8, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/pick_panel.css.scss */
+.panel-content.pick-panel > .pick-list-history > div:first-of-type > a {
+  text-shadow: 0px 0px 0px white;
+  -moz-text-shadow: 0px 0px 0px white;
+  -webkit-text-shadow: 0px 0px 0px white;
+  font-size: 13px;
+  padding: 4px 16px;
+  position: relative;
+  left: 10px;
+  bottom: 3px;
+}
+/* line 16, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/pick_panel.css.scss */
+.panel-content.pick-panel > .pick-list-history > div:first-of-type input {
+  margin-top: 6px;
+}
+/* line 21, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/pick_panel.css.scss */
+.panel-content.pick-panel > .order-content-div {
+  width: calc(100% - 300px);
+}
