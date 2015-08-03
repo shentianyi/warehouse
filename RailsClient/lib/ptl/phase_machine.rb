@@ -8,7 +8,7 @@ module Ptl
 
     def process
 
-      begin
+      # begin
         PtlJob.transaction do
 
           node=job.node
@@ -62,16 +62,18 @@ module Ptl
           Ptl::Message::SendParser.new(job).process
           puts "7.3. machine updated node infos:#{job.id}"
         end
-      rescue => e
-        puts "[#{Time.now}] error: #{e.message}"
-        begin
-          if ptl_job=PtlJob.find_by_id(job.id)
-            ptl_job.update_attributes(state: Ptl::State::Job::HANDLE_FAIL, msg: e.message)
-          end
-        rescue => ee
-          puts "[#{Time.now}] error: #{ee.message}"
-        end
-      end
+      # rescue => e
+      #   puts "[#{Time.now}] error: #{e.message}"
+      #   begin
+      #     if ptl_job=PtlJob.find_by_id(job.id)
+      #       ptl_job.update_attributes(state: Ptl::State::Job::HANDLE_FAIL, msg: e.message)
+      #     end
+      #   rescue => ee
+      #     puts "[#{Time.now}] error: #{ee.message}"
+      #   end
+      # end
+
+
     end
 
   end
