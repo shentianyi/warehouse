@@ -33,7 +33,7 @@ module LedStateable
               to_state: args[:to_state],
               curr_display: args[:current_display],
               size: 1,
-              in_time: false
+              in_time: true
           ).in_queue
         end
       else
@@ -75,8 +75,8 @@ end
           args[:to_state] = Ptl::Node::DELIVERED
 
         elsif self.state == BaseState::DESTINATION
-          args[:to_state] = Ptl::Node::IN_RECEIVE
 
+          return 
         elsif self.state == BaseState::RECEIVED
           args[:to_state] = Ptl::Node::RECEIVED
 
@@ -95,7 +95,7 @@ end
             to_state: args[:to_state],
             curr_display: args[:current_display],
             size: 1,
-            in_time: false
+            in_time: true
         ).in_queue
       else
         puts "update ##############################"

@@ -8,12 +8,13 @@ module Ptl
 
     def process
 
-      # begin
+       begin
         PtlJob.transaction do
 
           node=job.node
+          node.display=job.curr_display
           displays=Node.parse_display(job.curr_display)
-
+puts "0.71 display #{job.curr_display}----#{displays}"
           puts "7. machine start process:#{job.id}:to_state#{job.to_state}:job_node:#{job.node.id}:job_node:#{job.node.job_id},jobdisplay:#{job.curr_display}"
           case job.to_state
             when Ptl::Node::NORMAL
@@ -21,10 +22,10 @@ module Ptl
               node.set_display(0, 0)
             when Ptl::Node::ORDERED
               result=true
-              if Ptl::State::OrderState.do_order?(job.ptl_job.order_state)
+              if Ptl::State::PtlOrderState.do_order?(job.ptl_job.order_state)
                 result=LedService.create_stockout_list(node.id)
                 if result
-                  job.ptl_job.update_attributes(order_state: Ptl::State::OrderState::SUCCESS)
+                  job.ptl_job.update_attributes(order_state: Ptl::State::PtlOrderState::SUCCESS)
                 end
               end
               if result
@@ -33,10 +34,10 @@ module Ptl
               end
             when Node::URGENT_ORDERED
               result=true
-              if Ptl::State::OrderState.do_order?(job.ptl_job.order_state)
+              if Ptl::State::PtlOrderState.do_order?(job.ptl_job.order_state)
                 result=LedService.create_stockout_list(node.id, true)
                 if result
-                  job.ptl_job.update_attributes(order_state: Ptl::State::OrderState::SUCCESS)
+                  job.ptl_job.update_attributes(order_state: Ptl::State::PtlOrderState::SUCCESS)
                 end
               end
               if result
@@ -51,6 +52,7 @@ module Ptl
             else
               raise 'invalid job to state'
           end
+          puts "0.72 display #{job.curr_display}----#{displays}---#{node.display}"
 
           puts "7.1. machine update node infos"
           puts "7.2. machine update node infos:#{job.id}"
@@ -62,16 +64,16 @@ module Ptl
           Ptl::Message::SendParser.new(job).process
           puts "7.3. machine updated node infos:#{job.id}"
         end
-      # rescue => e
-      #   puts "[#{Time.now}] error: #{e.message}"
-      #   begin
-      #     if ptl_job=PtlJob.find_by_id(job.id)
-      #       ptl_job.update_attributes(state: Ptl::State::Job::HANDLE_FAIL, msg: e.message)
-      #     end
-      #   rescue => ee
-      #     puts "[#{Time.now}] error: #{ee.message}"
-      #   end
-      # end
+      rescue => e
+        puts "[#{Time.now}] error: #{e.message}"
+        begin
+          if ptl_job=PtlJob.find_by_id(job.id)
+            ptl_job.update_attributes(state: Ptl::State::Job::HANDLE_FAIL, msg: e.message)
+          end
+        rescue => ee
+          puts "[#{Time.now}] error: #{ee.message}"
+        end
+      end
 
 
     end

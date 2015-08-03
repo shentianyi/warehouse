@@ -70,7 +70,7 @@ module Ptl
     end
 
     def self.parse_display(display)
-      return display[0..1].to_i, display[1..2].to_i
+      return display[0..1].to_i, display[2..3].to_i
     end
 
     def id_format
