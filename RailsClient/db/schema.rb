@@ -186,7 +186,7 @@ ActiveRecord::Schema.define(version: 20150731033108) do
     t.datetime "updated_at"
     t.string   "mac"
     t.string   "led_display"
-    t.boolean  "is_valid",      default: true
+    t.boolean  "is_valid"
   end
 
   add_index "leds", ["id"], name: "index_leds_on_id", using: :btree

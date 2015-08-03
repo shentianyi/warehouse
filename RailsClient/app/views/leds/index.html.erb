@@ -27,22 +27,33 @@
   </div>
   <%= will_paginate @leds, :container => false %>
 </div>
-<table class="table table-bordered table-striped globle-table">
+<table class="table table-bordered table-striped table-hover">
+<!--<table class="table table-bordered table-striped globle-table">-->
   <thead>
-  <tr class="alert">
+  <tr>
     <th>编号</th>
     <th>库位</th>
     <th>当前状态</th>
+    <th>当前显示</th>
+    <th>是否有效</th>
     <th colspan="2"></th>
   </tr>
   </thead>
 
   <tbody>
   <% @leds.each_with_index do |led,i| %>
-      <tr class="<%= i%2==0 ? 'alert' : ''%>">
+      <tr>
         <td><%= led.id %></td>
         <td><%= led.position.detail if led.position %></td>
         <td><%= LedLightState.display(led.current_state) %></td>
+        <td><%= led.led_display %></td>
+        <td>
+          <% if led.is_valid %>
+              <span class="label label-success">是</span>
+          <% else %>
+              <span class="label label-warning">否</span>
+          <% end %>
+        </td>
         <td><%= link_to '编辑', edit_led_path(led) %></td>
         <td><%= link_to '删除', led, method: :delete, data: {confirm: '确认删除?'} %></td>
       </tr>
