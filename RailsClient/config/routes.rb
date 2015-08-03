@@ -1,4 +1,4 @@
-require 'sidekiq'
+# require 'sidekiq'
 
 Rails.application.routes.draw do
 
@@ -77,10 +77,10 @@ Rails.application.routes.draw do
     end
   end
 
-  require 'sidekiq/web'
-  authenticate :user, lambda { |u| u.is_sys } do
-    mount Sidekiq::Web => '/sidekiq'
-  end
+  # require 'sidekiq/web'
+  # authenticate :user, lambda { |u| u.is_sys } do
+  #   mount Sidekiq::Web => '/sidekiq'
+  # end
 
   require 'ptl/api'
   mount Ptl::Api => '/ptl'
