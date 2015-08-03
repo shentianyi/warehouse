@@ -3,11 +3,8 @@
   <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
     <div>
       <span>LED号：
-        <input type="text" name="led[signal_id]" value="<%= @signal_id %>"/>
+        <input type="text" name="led[id]" value="<%= @id %>"/>
       </span>
-     <!--<span>协调器号：-->
-        <!--<input type="text" name="led[modem_id]" value="<%= @modem_id %>"/>-->
-      <!--</span>-->
       <span>库位：
         <input type="text" name="led[position]" value="<%= @position %>"/>
         <input type="hidden" name="led[position_fuzzy]"/>
