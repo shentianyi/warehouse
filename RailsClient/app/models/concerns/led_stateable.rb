@@ -59,7 +59,9 @@ module LedStateable
         whouse = self.destinationable_id
         part_id = Container.find(self.container_id).part_id
         pp = Part.get_default_position(whouse, part_id)
-
+if pp.nil?
+  return
+end
         led =  pp.position.led
         if led.nil?
           puts "this position have no led!"
