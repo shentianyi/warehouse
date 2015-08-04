@@ -59,7 +59,7 @@ puts "0.71 display #{job.curr_display}----#{displays}"
 
           job.node=node
           if led=Led.find_by_id(job.node_id)
-            led.update_attributes(led_display: node.display)
+            led.update_attributes(current_state:job.to_state,led_display: node.display)
           end
           Ptl::Message::SendParser.new(job).process
           puts "7.3. machine updated node infos:#{job.id}"

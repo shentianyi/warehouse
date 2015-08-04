@@ -81,7 +81,8 @@ end
           args[:to_state] = Ptl::Node::RECEIVED
 
         else
-          args[:to_state] = nil
+          # args[:to_state] = nil
+          return
         end
         args[:current_display] = led.led_display
       #  args[:server] = led.modem_id
