@@ -1,0 +1,383 @@
+/*************************************************************  ul
+*********************************************************************************************************/
+/* line 63, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/basic.css.scss */
+ul {
+  padding: 0px;
+  margin: 0px;
+  list-style-type: none;
+}
+
+/*************************************************************  global
+*********************************************************************************************************/
+/* line 70, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/basic.css.scss */
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+/* line 5, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.notice.alert {
+  margin-bottom: 0px;
+}
+
+/* line 8, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-input {
+  display: block;
+  margin-left: 30px;
+  width: 230px;
+  margin-bottom: 5px;
+}
+
+/* line 15, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-header {
+  min-width: 1024px;
+  height: 50px;
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+/* line 22, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-header p {
+  text-align: left;
+  position: absolute;
+  left: 12px;
+  right: 0px;
+  top: 15px;
+  color: #222;
+  font-weight: bold;
+  font-size: 25px;
+  pointer-events: none;
+}
+/* line 33, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-header .choose-employee {
+  margin: 13px 0 0 140px;
+  display: inline-block;
+}
+/* line 35, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-header .choose-employee label {
+  color: #777;
+}
+/* line 38, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-header .choose-employee a {
+  position: relative;
+  top: -2px;
+  padding: 1px 5px 2px;
+}
+/* line 45, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-header > .btn {
+  float: right;
+  margin-right: 40px;
+  margin-top: 5px;
+  width: 150px;
+  padding: 6px 15px;
+  font-size: 15px;
+}
+
+/* line 57, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-content {
+  min-width: 1024px;
+}
+/* line 59, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-content:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+/* line 63, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-content .choose-active .panel-title {
+  background: #428bca;
+  color: rgba(255, 255, 255, 0.8);
+}
+/* line 67, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-content .choose-active .picklists {
+  background: #d9e8f4 !important;
+}
+/* line 69, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-content .choose-active .picklists a {
+  color: #222 !important;
+}
+/* line 71, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-content .choose-active .picklists a:hover {
+  background: #a6c8e6 !important;
+}
+/* line 74, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-content .choose-active .picklists a.active {
+  background: #a6c8e6 !important;
+}
+/* line 80, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-content .choose-active .order-list-panel {
+  background: #d9e8f4 !important;
+}
+/* line 83, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-content .choose-active .order-list-panel li:hover {
+  background: #a6c8e6 !important;
+}
+/* line 86, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-content .choose-active .order-list-panel li.active {
+  background: #a6c8e6 !important;
+}
+/* line 93, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-content .panel-title {
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  width: 250px;
+  height: 36px;
+  margin: 10px auto 5px;
+  background: rgba(0, 0, 0, 0.03);
+  color: #777;
+}
+/* line 100, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-content .panel-title p {
+  font-size: 17px;
+}
+/* line 102, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-content .panel-title p.left {
+  margin: 8px 0 0 9px;
+  float: left;
+}
+/* line 106, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-content .panel-title p.right {
+  margin: 8px 9px 0 0px;
+  float: right;
+}
+/* line 111, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-content .panel-title i {
+  font-size: 21px;
+}
+/* line 113, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-content .panel-title i.glyphicon-chevron-right {
+  float: right;
+  margin: 6px 8px 0 0;
+}
+/* line 117, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-content .panel-title i.glyphicon-chevron-left {
+  float: left;
+  margin: 6px 0px 0 8px;
+}
+/* line 123, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-content .panel-list {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  float: left;
+  width: 300px;
+  min-height: 100px;
+}
+/* line 128, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-content .panel-list .order-list-panel {
+  margin-top: 8px;
+  background: rgba(0, 0, 0, 0.03);
+}
+/* line 131, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-content .panel-list .order-list-panel li {
+  cursor: pointer;
+  font-size: 13px;
+  margin-bottom: 8px;
+  padding: 8px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+/* line 137, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-content .panel-list .order-list-panel li:hover {
+  background: rgba(0, 0, 0, 0.03);
+}
+/* line 142, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-content .panel-list .filter-part {
+  padding: 4px 0 0 31px;
+}
+/* line 146, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-content .order-content-div {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  float: left;
+  width: calc(100% - 600px);
+  width: -moz-calc(100% - 600px);
+  width: -webkit-calc(100% - 600px);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  margin-top: 10px;
+}
+/* line 155, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-content .order-content-div table {
+  width: 95%;
+}
+/* line 159, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-content .pick-list-history {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  float: left;
+  width: 300px;
+}
+/* line 163, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-content .pick-list-history .picklists {
+  padding: 5px 6px;
+  margin: 5px 15px;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+}
+/* line 168, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-content .pick-list-history .picklists a.item-a {
+  display: inline-block;
+  font-size: 14px;
+  padding: 6px 3px;
+  width: 100%;
+  cursor: pointer;
+}
+/* line 174, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.panel-content .pick-list-history .picklists a.item-a:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* line 181, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.outer-scene {
+  background: rgba(0, 0, 0, 0.6);
+  position: absolute;
+  top: 0px;
+  left: -999em;
+  right: 0px;
+  bottom: 0px;
+  min-width: 1024px;
+  min-height: 768px;
+}
+
+/* line 191, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.inner-create {
+  position: relative;
+  width: 800px;
+  height: 600px;
+  left: 50%;
+  top: 50%;
+  margin-left: -400px;
+  margin-top: -300px;
+  background: #fff;
+}
+/* line 203, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.inner-create .inner-header {
+  height: 45px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+/* line 206, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.inner-create .inner-header h3 {
+  display: inline-block;
+  float: left;
+  margin: 8px 0 0 10px;
+}
+/* line 211, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.inner-create .inner-header i {
+  float: right;
+  font-size: 21px;
+  color: #777;
+  cursor: pointer;
+  margin: 10px 15px 0 0;
+}
+/* line 217, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.inner-create .inner-header i:hover {
+  color: #f75460;
+}
+/* line 222, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.inner-create .inner-body {
+  height: 555px;
+}
+/* line 224, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.inner-create .inner-body:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+/* line 227, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.inner-create .inner-body .left {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  float: left;
+  width: 70%;
+  height: 100%;
+}
+/* line 232, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.inner-create .inner-body .left .filter-part {
+  margin: 18px 0 5px 116px;
+  display: inline-block;
+}
+/* line 236, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.inner-create .inner-body .left .filter-result {
+  overflow-y: scroll;
+  height: 510px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  margin: 5px 10px;
+}
+/* line 242, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.inner-create .inner-body .left .filter-result li {
+  font-size: 13px;
+  margin-bottom: 8px;
+  padding: 8px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+/* line 247, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.inner-create .inner-body .left .filter-result li:hover {
+  background: rgba(0, 0, 0, 0.03);
+}
+/* line 250, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.inner-create .inner-body .left .filter-result li:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+/* line 253, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.inner-create .inner-body .left .filter-result li.active {
+  background: #d9e8f4 !important;
+}
+/* line 256, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.inner-create .inner-body .left .filter-result li .item-left {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 10%;
+  position: relative;
+  height: 60px;
+}
+/* line 262, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.inner-create .inner-body .left .filter-result li .item-left input {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  margin-top: -2px;
+  margin-left: -8px;
+}
+/* line 270, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.inner-create .inner-body .left .filter-result li .item-right {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 90%;
+}
+/* line 278, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.inner-create .inner-body .right {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  float: left;
+  width: 30%;
+  position: relative;
+  height: 100%;
+}
+/* line 284, /home/lzding/p/warehouse/RailsClient/app/assets/stylesheets/orders.css.scss */
+.inner-create .inner-body .right .btn {
+  bottom: 40px;
+  font-size: 13px;
+  padding: 8px 12px 10px;
+  position: absolute;
+  right: 30px;
+  width: 165px;
+}

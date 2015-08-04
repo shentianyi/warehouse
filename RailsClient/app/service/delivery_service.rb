@@ -39,6 +39,8 @@ class DeliveryService
   def self.confirm_receive movable, user
     ActiveRecord::Base.transaction do
       unless (m = movable.get_movable_service.check(movable, user)).result
+        puts '--------------------------'
+        puts m.to_json
         return m
       end
 

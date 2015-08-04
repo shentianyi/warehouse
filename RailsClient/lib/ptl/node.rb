@@ -14,10 +14,10 @@ module Ptl
     @@state_map={
         :'100' => {state: NORMAL, color: 'G', rate: 0},
         :'200' => {state: ORDERED, color: 'R', rate: 0},
-        :'300' => {state: URGENT_ORDERED, color: 'R', rate: 3},
+        :'300' => {state: URGENT_ORDERED, color: 'R', rate: 1},
         :'400' => {state: PICKED, color: 'B', rate: 0},
-        :'500' => {state: DELIVERED, color: 'B', rate: 3},
-        :'600' => {state: RECEIVED, color: 'G', rate: 3}
+        :'500' => {state: DELIVERED, color: 'B', rate: 1},
+        :'600' => {state: RECEIVED, color: 'G', rate: 1}
     }
 
     def initialize(state)
@@ -70,7 +70,7 @@ module Ptl
     end
 
     def self.parse_display(display)
-      return display[0, 1].to_i, display[1, 2].to_i
+      return display[0..1].to_i, display[2..3].to_i
     end
 
     def id_format

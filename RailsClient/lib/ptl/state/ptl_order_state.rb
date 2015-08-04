@@ -1,6 +1,6 @@
 module Ptl
   module State
-    class OrderState
+    class PtlOrderState
       UN_HANDLE=100
       SUCCESS=200
       FAIL=300

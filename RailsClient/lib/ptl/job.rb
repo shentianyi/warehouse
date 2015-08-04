@@ -43,7 +43,7 @@ module Ptl
     end
 
     def in_queue
-      begin
+      # begin
         params={}
         self.instance_variable_names.each do |name|
           params[name.sub(/@/, '').to_sym]=self.instance_variable_get(name)
@@ -61,10 +61,10 @@ module Ptl
           process
         end
 
-      rescue => e
-        puts "5 in_queue:error:[#{Time.now}]#{e.message}"
-        return false
-      end
+      # rescue => e
+      #   puts "5 in_queue:error:[#{Time.now}]#{e.message}"
+      #   return false
+      # end
       true
     end
 

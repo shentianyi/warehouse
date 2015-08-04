@@ -5,7 +5,7 @@ class LogisticsContainer<LocationContainer
   include CZ::Service
 
   alias_method :movable_state_display, :state_display
-  after_update :enter_store
+  # after_update :enter_store
 
 
   default_scope { where(type: LocationContainerType::LOGISTICS) }

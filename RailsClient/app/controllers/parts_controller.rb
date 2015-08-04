@@ -11,6 +11,15 @@ class PartsController < ApplicationController
   # GET /parts/1
   # GET /parts/1.json
   def show
+
+    url='http://192.168.0.101:9001/led/message/send/%3C00000256%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20R00000001C00044%3E'
+    c= RestClient::Resource.new(url,
+                                timeout: nil,
+                                open_time_out: nil,
+                                content_type: 'application/json'
+    )
+
+    c.post(nil)
   end
 
   # GET /parts/new
@@ -149,7 +158,7 @@ class PartsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def part_params
     #params[:part]
-    params.require(:part).permit(:id, :unit_pack, :customernum, :user_id, :part_type_id, :is_delete,:convert_unit)
+    params.require(:part).permit(:id, :unit_pack, :customernum, :user_id, :part_type_id, :is_delete, :convert_unit)
   end
 
   def set_part_type

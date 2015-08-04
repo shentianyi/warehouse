@@ -27,8 +27,10 @@ module Ptl
 
       def process
         puts "@@@server:#{SysConfigCache.led_server_value}#{SysConfigCache.led_send_msg_action_value}#{URI.encode(message)}"
-        res=init_client(SysConfigCache.led_send_msg_action_value, self.message).post(nil)
 
+
+        res=init_client(SysConfigCache.led_send_msg_action_value, self.message).post(nil)
+puts "@@ after post................."
 
         msg=JSON.parse(res.body)
         puts "@@@code:#{res.code}backdata:#{msg}:#{msg['Result'].class}"

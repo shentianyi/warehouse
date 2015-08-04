@@ -24,6 +24,10 @@ module Ptl
         #目前无法获取到状态，需要确定是否有rate
         self.curr_color=message[12]
         self.curr_display=message[13..16]
+        if led=Led.find_by_id(self.node_id)
+          self.curr_display = led.led_display
+        end
+
         self.curr_rate=message[17..20].to_i
 
         self.node=Ptl::Node.where(color: self.curr_color, rate: self.curr_rate)
@@ -43,7 +47,7 @@ module Ptl
 
       def process
         # 当msg_id为空时，说明是反馈，如果不为空时说明是新的消息
-        if self.msg_id.blank? || self.msg_id=='000000'
+        if self.msg_id.blank? || self.msg_id=='000000' || self.msg_id.match(/^[0-9]/)
           case self.type
             # 默认是要货
             when Ptl::Type::NodeMsgType::NODE_CONTROL,Ptl::Type::NodeMsgType::FEED_BACK

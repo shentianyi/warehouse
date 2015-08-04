@@ -57,9 +57,17 @@ module LedStateable
         return unless self.container_id.include?('WI')
 
         whouse = self.destinationable_id
+        if whouse.nil?
+            return
+        end
         part_id = Container.find(self.container_id).part_id
+if part_id.nil?
+  return
+end
         pp = Part.get_default_position(whouse, part_id)
-
+if pp.nil?
+  return
+end
         led =  pp.position.led
         if led.nil?
           puts "this position have no led!"
@@ -73,13 +81,14 @@ module LedStateable
           args[:to_state] = Ptl::Node::DELIVERED
 
         elsif self.state == BaseState::DESTINATION
-          args[:to_state] = Ptl::Node::IN_RECEIVE
 
+          return 
         elsif self.state == BaseState::RECEIVED
           args[:to_state] = Ptl::Node::RECEIVED
 
         else
-          args[:to_state] = nil
+          # args[:to_state] = nil
+          return
         end
         args[:current_display] = led.led_display
       #  args[:server] = led.modem_id

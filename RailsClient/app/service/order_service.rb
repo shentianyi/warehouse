@@ -19,7 +19,7 @@ class OrderService
     start_time = days.days.ago.at_beginning_of_day.utc
     end_time = Time.now.at_end_of_day.utc
     if user_id.nil?
-      find({created_at:(start_time..end_time),handled: handled, source_id: location_ids})
+      find({created_at:(start_time..end_time),handled: handled, source_location_id: location_ids})
     else
       find({created_at: (start_time..end_time),user_id: user_id, handled: handled, source_id: location_ids})
     end
