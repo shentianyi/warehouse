@@ -47,7 +47,7 @@ module Ptl
 
       def process
         # 当msg_id为空时，说明是反馈，如果不为空时说明是新的消息
-        if self.msg_id.blank? || self.msg_id=='000000'
+        if self.msg_id.blank? || self.msg_id=='000000' || self.msg_id.match(/^[0-9]/)
           case self.type
             # 默认是要货
             when Ptl::Type::NodeMsgType::NODE_CONTROL,Ptl::Type::NodeMsgType::FEED_BACK
