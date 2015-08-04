@@ -57,7 +57,13 @@ module LedStateable
         return unless self.container_id.include?('WI')
 
         whouse = self.destinationable_id
+        if whouse.nil?
+            return
+        end
         part_id = Container.find(self.container_id).part_id
+if part_id.nil?
+  return
+end
         pp = Part.get_default_position(whouse, part_id)
 if pp.nil?
   return
