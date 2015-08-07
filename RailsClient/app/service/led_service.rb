@@ -24,6 +24,10 @@ class LedService
 
   #create 缺货单/需求单
   def self.create_stockout_list(led_id, is_emergency=false, box_quantity=1)
+    if SysConfigCache.led_enable_value=='false'
+      return
+    end
+
     position = Led.find_by_id(led_id).position
     return if position.nil?
 
