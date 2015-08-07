@@ -10,7 +10,7 @@ module Ptl
 
 
       def self.execute_states
-        [UN_HANDLE,SEND_SUCCESS,HANDLING,HANDLE_FAIL]
+        [UN_HANDLE,SEND_SUCCESS,HANDLE_FAIL]
       end
 
       def self.display(state)

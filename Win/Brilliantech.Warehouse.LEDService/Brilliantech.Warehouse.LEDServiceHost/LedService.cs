@@ -10,10 +10,13 @@ using Brilliantech.Warehouse.LEDServiceHost.CusException;
 using System.ServiceModel.Web;
 using Brilliantech.Warehouse.LEDServiceHost.Helper;
 using Brilliantech.Framwork.Utils.LogUtil;
+using System.ServiceModel.Activation;
 
 namespace Brilliantech.Warehouse.LEDServiceHost
 {
     // 注意: 使用“重构”菜单上的“重命名”命令，可以同时更改代码和配置文件中的类名“Service1”。
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple, IncludeExceptionDetailInFaults = true)]
+    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class LedService : ILedService
     {
         /// <summary>

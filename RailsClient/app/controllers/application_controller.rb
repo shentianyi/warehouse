@@ -67,7 +67,9 @@ class ApplicationController < ActionController::Base
   end
 
   def get_print_server
-    @print_server="#{SysConfigCache.print_server_value}#{SysConfigCache.print_action_value}"
+    unless current_user.nil?
+      @print_server="#{current_user.location.ip_detail || SysConfigCache.print_server_value}#{SysConfigCache.print_action_value}"
+    end
   end
 
   def model

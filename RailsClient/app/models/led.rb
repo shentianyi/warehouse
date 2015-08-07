@@ -6,6 +6,12 @@ class Led < ActiveRecord::Base
 
   validate :validate_save
 
+  before_create :init_led_display
+
+  def init_led_display
+    self.led_display = self.led_display.nil? ? '0000' : self.led_display
+  end
+
   # alias :position_id :position
   private
 
