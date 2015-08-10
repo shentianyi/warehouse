@@ -66,16 +66,10 @@ class ApplicationController < ActionController::Base
   end
 
   def get_print_server
-<<<<<<< HEAD
     default_printer=SysConfigCache.print_server_value
     user_printer=current_user.nil? ? nil : current_user.location.ip_detail
 
     @print_server="#{user_printer.blank? ? default_printer : user_printer}#{SysConfigCache.print_action_value}"
-=======
-    unless current_user.nil?
-      @print_server="#{current_user.location.ip_detail || SysConfigCache.print_server_value}#{SysConfigCache.print_action_value}"
-    end
->>>>>>> e6e858cd07c8da6a7f0ae46d750694a018d66d9c
   end
 
   def model
