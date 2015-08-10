@@ -82,7 +82,7 @@ end
 
         elsif self.state == BaseState::DESTINATION
 
-          return 
+          return
         elsif self.state == BaseState::RECEIVED
           args[:to_state] = Ptl::Node::RECEIVED
 
