@@ -12,15 +12,15 @@ module Sync
 
       no_error=true
 
-      # begin
-      #   Sync::Execute::PtlJobSync.sync
-      # rescue => e
-      #   no_error=false
-      #   puts "[#{Time.now.localtime}][ERROR]"
-      #   puts e.class
-      #   puts e.to_s
-      #   puts e.backtrace
-      # end
+      begin
+        Sync::Execute::PtlJobSync.sync
+      rescue => e
+        no_error=false
+        puts "[#{Time.now.localtime}][ERROR]"
+        puts e.class
+        puts e.to_s
+        puts e.backtrace
+      end
 
       begin
         Sync::Execute::LocationSync.sync
