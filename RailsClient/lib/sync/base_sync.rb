@@ -23,15 +23,15 @@ module Sync
       end
 
       begin
-        Sync::Execute::LocationSync.sync
-        Sync::Execute::LocationDestinationSync.sync
-        Sync::Execute::HackerSync.sync
-        Sync::Execute::WhouseSync.sync
-        Sync::Execute::PartTypeSync.sync
-        Sync::Execute::PartSync.sync
-        Sync::Execute::PositionSync.sync
-        Sync::Execute::PartPositionSync.sync
-        Sync::Execute::PickItemFilterSync.sync
+#        Sync::Execute::LocationSync.sync
+ #       Sync::Execute::LocationDestinationSync.sync
+  #      Sync::Execute::HackerSync.sync
+   #     Sync::Execute::WhouseSync.sync
+    #    Sync::Execute::PartTypeSync.sync
+     #   Sync::Execute::PartSync.sync
+   #     Sync::Execute::PositionSync.sync
+    #    Sync::Execute::PartPositionSync.sync
+     #   Sync::Execute::PickItemFilterSync.sync
       rescue => e
         no_error=false
         puts "[#{Time.now.localtime}][ERROR]"
@@ -54,7 +54,7 @@ module Sync
       end
 
       begin
-        Sync::Execute::StorageSync.sync
+     #   Sync::Execute::StorageSync.sync
       rescue => e
         no_error=false
         puts "[#{Time.now.localtime}][ERROR]"
@@ -64,8 +64,8 @@ module Sync
       end
 
       begin
-        Sync::Execute::RegexCategorySync.sync
-        Sync::Execute::RegexSync.sync
+      #  Sync::Execute::RegexCategorySync.sync
+      #  Sync::Execute::RegexSync.sync
       rescue => e
         no_error=false
         puts "[#{Time.now.localtime}][ERROR]"
@@ -77,8 +77,8 @@ module Sync
 
       begin
         # sync order data
-        Sync::Execute::OrderSync.sync
-        Sync::Execute::OrderItemSync.sync
+   #     Sync::Execute::OrderSync.sync
+    #    Sync::Execute::OrderItemSync.sync
       rescue => e
         no_error=false
         puts "[#{Time.now.localtime}][ERROR]"
@@ -88,8 +88,8 @@ module Sync
       end
       begin
         # sync pick list data
-        Sync::Execute::PickListSync.sync
-        Sync::Execute::PickItemSync.sync
+     #   Sync::Execute::PickListSync.sync
+      #  Sync::Execute::PickItemSync.sync
       rescue => e
         no_error=false
         puts "[#{Time.now.localtime}][ERROR]"
@@ -97,7 +97,7 @@ module Sync
         puts e.to_s
         puts e.backtrace
       end
-      Sync::Config.last_time=(current- Sync::Config.advance_second.seconds).utc if no_error
+      Sync::Config.last_time=(current- Sync::Config.advance_second.seconds).utc
     end
 
     def self.sync

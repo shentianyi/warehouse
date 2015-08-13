@@ -5,11 +5,10 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   include ApplicationHelper
   before_filter :set_model
-  before_action :get_print_server
   before_filter :configure_permitted_parameters, if: :devise_controller?
   before_filter :authenticate_user_from_token!
   before_filter :authenticate_user!
-
+  before_filter :get_print_server 
   #============
   # fix cancan "ActiveModel::ForbiddenAttributesError" with Rails 4
   # see https://github.com/ryanb/cancan/issues/835
@@ -67,9 +66,10 @@ class ApplicationController < ActionController::Base
   end
 
   def get_print_server
-    unless current_user.nil?
-      @print_server="#{current_user.location.ip_detail || SysConfigCache.print_server_value}#{SysConfigCache.print_action_value}"
-    end
+    default_printer=SysConfigCache.print_server_value
+    user_printer=current_user.nil? ? nil : current_user.location.ip_detail
+
+    @print_server="#{user_printer.blank? ? default_printer : user_printer}#{SysConfigCache.print_action_value}"
   end
 
   def model
