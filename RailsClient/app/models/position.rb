@@ -7,7 +7,7 @@ class Position < ActiveRecord::Base
   has_one :led, -> {where is_valid: true}
 
   include Import::PositionCsv
-  
+
   # has_many :inventory_list_items
   validate :validate_save
 
