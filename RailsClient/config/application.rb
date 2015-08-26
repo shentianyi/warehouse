@@ -14,6 +14,7 @@ module Warehouse
     config.paths['config/database']='config/leoni_root_database.yml' if ENV['USER']=='root'
     config.paths['config/database']='config/mac_database.yml' if /darwin\w+/.match(RbConfig::CONFIG['host_os'])
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
+#raise ENV['USER'] 
     # for the api
     %w{models api service presenters caches workers}.each do |namespace|
       config.paths.add File.join('app', namespace), glob: File.join('**', '*.rb')
