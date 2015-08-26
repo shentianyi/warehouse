@@ -1,6 +1,6 @@
 ---
 sync:
-  host: http://121.199.34.191:8000
+  host: http://127.0.0.1:4000
   token: 3dcba17f596969a676bfdd90b5425c703f983acf7306760e1057c95afe9f17b1d
   sync_lock: false
   enabled: true
@@ -9,11 +9,11 @@ sync:
   lock: false
   executor:
     ptl_job:
-      name: "PTL任务"
-      get: true
-      post: true
-      put: true
-      delete: true
+      name: PTL任务
+      get: false
+      post: false
+      put: false
+      delete: false
     location:
       name: "地点"
       get: true
@@ -94,10 +94,10 @@ sync:
       delete: true
     storage:
       name: "库存"
-      get: true
-      post: true
-      put: true
-      delete: true
+      get: false
+      post: false
+      put: false
+      delete: false
     pick_item_filter:
       name: "员工择货规则"
       get: true
@@ -106,16 +106,16 @@ sync:
       delete: true
     order:
       name: "需求单"
-      get: true
-      post: true
-      put: true
-      delete: true
+      get: false
+      post: false
+      put: false
+      delete: false
     order_item:
       name: "需求单项目"
-      get: true
-      post: true
-      put: true
-      delete: true
+      get: false
+      post: false
+      put: false
+      delete: false
     pick_list:
       name: "择货单"
       get: true

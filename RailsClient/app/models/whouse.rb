@@ -1,6 +1,6 @@
 class Whouse < ActiveRecord::Base
   include Extensions::UUID
-  include Import::WhouseCsv
+
 
   belongs_to :location
   
@@ -14,6 +14,7 @@ class Whouse < ActiveRecord::Base
   has_many :storages, as: :storable
   has_many :inventory_lists
 
+  include Import::WhouseCsv
 
   def self.nr_by_regex(nr)
     nr.sub(/^LO/,'')

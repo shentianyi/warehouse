@@ -57,11 +57,12 @@ namespace Brilliantech.Warehouse.LEDServiceHost
         private void init()
         {
             initNotifyIcon();
-            startService();
+
+            startHttpService();
             initTcpServer();
         }
         
-        private void startService()
+        private void startHttpService()
         {
             try
             {
@@ -215,25 +216,31 @@ namespace Brilliantech.Warehouse.LEDServiceHost
         /// <param name="ar"></param>
         private void TCPCallBack(IAsyncResult ar)
         {
-            PTLTCPClient client = (PTLTCPClient)ar.AsyncState;
-            if (client.NetWork.Connected)
+            try
             {
-                NetworkStream ns = client.NetWork.GetStream();
-                byte[] recdata = new byte[ns.EndRead(ar)];
-                if (recdata.Length > 0)
+                PTLTCPClient client = (PTLTCPClient)ar.AsyncState;
+                if (client.NetWork.Connected)
                 {
-                    Array.Copy(client.buffer, recdata, recdata.Length);
-                    if (DataReceived != null)
+                    NetworkStream ns = client.NetWork.GetStream();
+                    byte[] recdata = new byte[ns.EndRead(ar)];
+                    if (recdata.Length > 0)
                     {
-                        DataReceived.BeginInvoke(client.Name, recdata, null, null);//异步输出数据
+                        Array.Copy(client.buffer, recdata, recdata.Length);
+                        if (DataReceived != null)
+                        {
+                            DataReceived.BeginInvoke(client.Name, recdata, null, null);//异步输出数据
+                        }
+                        ns.BeginRead(client.buffer, 0, client.buffer.Length, new AsyncCallback(TCPCallBack), client);
                     }
-                    ns.BeginRead(client.buffer, 0, client.buffer.Length, new AsyncCallback(TCPCallBack), client);
+                    else
+                    {
+                        client.DisConnect();
+                        ClientListUpdated.BeginInvoke(false, client, null, null);
+                    }
                 }
-                else
-                {
-                    client.DisConnect();
-                    ClientListUpdated.BeginInvoke(false, client, null, null);
-                }
+            }
+            catch (Exception e) {
+                LogUtil.Logger.Error(e.Message);
             }
         }
         /// <summary>
@@ -243,35 +250,25 @@ namespace Brilliantech.Warehouse.LEDServiceHost
         /// <param name="data"></param>
         private void TCPClient_DataReceived(object sender, byte[] data)
         {
-            Thread t = new Thread(new ThreadStart(delegate
-            {
-                //ClientDataLB.Dispatcher.Invoke(new Action(delegate
-                //{
-                //    StreamReader sr = new StreamReader(new MemoryStream(data));
-                //    string message = sr.ReadToEnd();
-                //    ClientDataLB.Items.Add(message);
-                //    LogUtil.Logger.Info("【接到】TCPClient消息: "+message);
-                //    /// 是使用HTTP想WMS服务器(Linux)发送消息
-                //  new LedRestService(message).Send();
-                  
-                //}), null);
+            //Thread t = new Thread(new ThreadStart(delegate
+            //{
 
-                ClientDataTB.Dispatcher.Invoke(new Action(delegate
-                {
-                    StreamReader sr = new StreamReader(new MemoryStream(data));
-                    string message = sr.ReadToEnd();
-                    ClientDataTB.AppendText(message);
-                    ClientDataTB.AppendText("\n");
-                    ClientDataTB.SelectionStart = ClientDataTB.Text.Length;
+            //    ClientDataTB.Dispatcher.Invoke(new Action(delegate
+            //    {
+            StreamReader sr = new StreamReader(new MemoryStream(data));
+            string message = sr.ReadToEnd();
+            //        ClientDataTB.AppendText(message);
+            //        ClientDataTB.AppendText("\n");
+            //        ClientDataTB.SelectionStart = ClientDataTB.Text.Length;
 
-                    LogUtil.Logger.Info("【接到】TCPClient消息: " + message);
-                    /// 是使用HTTP想WMS服务器(Linux)发送消息
-                    new LedRestService(message).Send();
+            LogUtil.Logger.Info("【接到】TCPClient消息: " + message);
+            /// 是使用HTTP想WMS服务器(Linux)发送消息
+           new LedRestService(message).Send();
 
-                }), null);
-            }));
+            //    }), null);
+            //}));
 
-            t.Start();
+            //t.Start();
         }
 
         /// <summary>
