@@ -1,6 +1,6 @@
 class Part < ActiveRecord::Base
   include Extensions::UUID
-  include Import::PartCsv
+
 
   belongs_to :user
   belongs_to :part_type
@@ -12,6 +12,9 @@ class Part < ActiveRecord::Base
 
   has_many :containers
   #has_many :inventory_list_items
+
+  include Import::PartCsv
+
 
   def self.exists?(id)
     Part.find_by_id(id)
