@@ -129,6 +129,12 @@ class WhouseService
         raise '移库量大于剩余量' if params[:qty].to_f > storage.qty
         if params[:qty].to_f == storage.qty
           storage.update!(ware_house_id: toWh.id, position: params[:toPosition])
+          move_data[:qty] = storage.qty
+          move_data[:from_id] = params[:fromWh]
+          move_data[:partNr] = storage.partNr
+          move_data[:fromPosition] = params[:fromPosition]
+          move_data[:packageId] = params[:packageId]
+          Movement.create!(move_data)
           return
         end
       end
