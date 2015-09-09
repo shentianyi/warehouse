@@ -6,7 +6,7 @@ module FileHandler
           :toWh,:partNr,:fifo,:qty,:toPosition,:packageId, :employee_id, :remarks
       ]
 
-      MOVE_HEADS = [
+      MOVE_HEADERS = [
           :fromWh, :fromPosition, :packageId, :partNr, :qty, :fifo, :toWh, :toPosition, :employee_id, :remarks
       ]
 
