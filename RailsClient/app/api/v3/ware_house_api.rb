@@ -65,7 +65,7 @@ module V3
         params[:partNr]=params[:partNr].sub(/P/, '') if params[:partNr].present?
         puts "#{params.to_json}-----------"
         begin
-          params[:qty]=params[:qty].to_f if params[:qty].present?
+          params[:qty]=params[:qty].sub(/Q/, '').to_f if params[:qty].present?
           if params[:partNr].present?
             raise '请填写数量' unless params[:qty].present?
             params[:packageId]=nil
