@@ -58,7 +58,7 @@ module FileHandler
             NStorage.transaction do
               2.upto(book.last_row) do |line|
                 row = {}
-                MOVE_HEADS.each_with_index do |k, i|
+                MOVE_HEADERS.each_with_index do |k, i|
                   row[k] = book.cell(line, i+1).to_s.strip
                   if k== :partNr || k== :packageId
                     row[k] = row[k].sub(/\.0/, '')
@@ -121,7 +121,7 @@ module FileHandler
       def self.validate_import_row(row, line)
         msg = Message.new(contents: [])
 
-        src_warehouse = Whouse.find_by_name(row[:toWh])
+        src_warehouse = Whouse.find_by_id(row[:toWh])
         unless src_warehouse
           msg.contents << "仓库号:#{row[:toWh]} 不存在!"
         end
@@ -144,7 +144,7 @@ module FileHandler
         end
 
         if row[:toPosition].present?
-          position = Position.find_by_name(row[:toPosition])
+          position = Position.find_by_id(row[:toPosition])
           unless position
             msg.contents << "库位号:#{row[:toPosition]} 不存在!"
           end
@@ -201,14 +201,14 @@ module FileHandler
         msg = Message.new(contents: [])
 
         if row[:fromWh].present?
-          src_warehouse = Whouse.find_by_name(row[:fromWh])
+          src_warehouse = Whouse.find_by_id(row[:fromWh])
           unless src_warehouse
             msg.contents << "源仓库号:#{row[:fromWh]} 不存在!"
           end
         end
 
         if row[:toWh].present?
-          dse_warehouse = Whouse.find_by_name(row[:toWh])
+          dse_warehouse = Whouse.find_by_id(row[:toWh])
           unless dse_warehouse
             msg.contents << "目的仓库号:#{row[:toWh]} 不存在!"
           end
@@ -232,14 +232,14 @@ module FileHandler
         end
 
         if row[:fromPosition].present?
-          from_position = Position.find_by_name(row[:fromPosition])
+          from_position = Position.find_by_id(row[:fromPosition])
           unless from_position
             msg.contents << "库位号:#{row[:fromPosition]} 不存在!"
           end
         end
 
         if row[:toPosition].present?
-          to_position = Position.find_by_name(row[:toPosition])
+          to_position = Position.find_by_id(row[:toPosition])
           unless to_position
             msg.contents << "库位号:#{row[:toPosition]} 不存在!"
           end
