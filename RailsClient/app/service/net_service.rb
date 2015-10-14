@@ -16,7 +16,7 @@ class NetService
         #  puts 'Start Request'
         #  http.request(req)
         #}
-res = http.get(url)
+        res = http.get(url)
         #puts res.body
         #puts res.code.class
         if res.code.to_i == 200
@@ -25,12 +25,12 @@ res = http.get(url)
           flag= false
         end
       rescue
-       #puts '-------------'
-       flag= false
+        #puts '-------------'
+        flag= false
       end
     end
 #puts '-------------'
-    #puts flag
+#puts flag
     return flag
   end
 end

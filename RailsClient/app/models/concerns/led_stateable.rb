@@ -18,13 +18,13 @@ module LedStateable
         self.pick_items.each do |pick_item|
           pp = OrderItemService.verify_department(pick_item.order_item.whouse_id, pick_item.order_item.part_id)
           #puts pp.position.detail
-          led =  pp.position.led
+          led = pp.position.led
           args[:led_id] = led.id
           args[:current_state] = led.current_state
           args[:current_display] = led.led_display
           args[:to_state] = Ptl::Node::PICKED
-         # args[:server] = led.modem_id
-        #  args[:server_url] = Modem.find(led.modem_id).ip
+          # args[:server] = led.modem_id
+          #  args[:server_url] = Modem.find(led.modem_id).ip
 
           #function(args) #job action
           Ptl::Job.new(
@@ -58,17 +58,17 @@ module LedStateable
 
         whouse = self.destinationable_id
         if whouse.nil?
-            return
+          return
         end
         part_id = Container.find(self.container_id).part_id
-if part_id.nil?
-  return
-end
+        if part_id.nil?
+          return
+        end
         pp = Part.get_default_position(whouse, part_id)
-if pp.nil?
-  return
-end
-        led =  pp.position.led
+        if pp.nil?
+          return
+        end
+        led = pp.position.led
         if led.nil?
           puts "this position have no led!"
           return
@@ -91,8 +91,8 @@ end
           return
         end
         args[:current_display] = led.led_display
-      #  args[:server] = led.modem_id
-      #  args[:server_url] = Modem.find(led.modem_id).ip
+        #  args[:server] = led.modem_id
+        #  args[:server_url] = Modem.find(led.modem_id).ip
         puts args
 
         #function(args) #job action

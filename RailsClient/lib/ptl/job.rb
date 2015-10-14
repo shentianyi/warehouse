@@ -7,7 +7,7 @@ module Ptl
     # TCP
     # server_url 是控制器的IP+PORT,比如192.168.0.1:9000
     #
-    attr_accessor :type,:id, :node_id,:ptl_job, :curr_state, :to_state, :curr_rate, :to_rate, :curr_display, :to_display, :size, :server_id, :server_url, :in_time, :node #, :http_type
+    attr_accessor :type, :id, :node_id, :ptl_job, :curr_state, :to_state, :curr_rate, :to_rate, :curr_display, :to_display, :urgent_size, :size, :server_id, :server_url, :in_time, :node #, :http_type
 
     DEFAULT_HTTP_TYPE='POST'
     DEFAULT_RETRY_TIMES=3
@@ -16,7 +16,7 @@ module Ptl
 
     INT_FIELD=[:curr_state, :to_state, :size]
 
-    def initialize(options={},id=nil)
+    def initialize(options={}, id=nil)
       self.id=id
       puts "4. start init job :#{options}"
       raise 'params is blank' if options.blank?
@@ -44,22 +44,24 @@ module Ptl
 
     def in_queue
       # begin
-        params={}
-        self.instance_variable_names.each do |name|
-          params[name.sub(/@/, '').to_sym]=self.instance_variable_get(name)
-        end
-        puts "5. create job in database..."
-        puts "5.params:#{params}"
-        ptl_job=PtlJob.create(
-            params: params.to_json
-        )
-        self.id= ptl_job.id
-        self.ptl_job=ptl_job
+      params={}
+      self.instance_variable_names.each do |name|
+        params[name.sub(/@/, '').to_sym]=self.instance_variable_get(name)
+      end
+      puts "5. create job in database..."
+      puts "5.params:#{params}"
+      ptl_job=PtlJob.create(
+          params: params.to_json,
+          node_id: self.node_id,
+          to_state: self.to_state
+      )
+      self.id= ptl_job.id
+      self.ptl_job=ptl_job
 
-        if in_time
-          ptl_job.update_attributes(state: Ptl::State::Job::HANDLING)
-          process
-        end
+      if in_time
+        ptl_job.update_attributes(state: Ptl::State::Job::HANDLING)
+        process
+      end
 
       # rescue => e
       #   puts "5 in_queue:error:[#{Time.now}]#{e.message}"

@@ -2,18 +2,12 @@ module Ptl
   module Message
     class ConfirmParser<Parser
       def initialize(message)
-        puts '***start confirm message......'
-        self.type=message[1].to_i
-        puts '***start confirm message......'+self.type.to_s
-
-        self.msg_id=message[2..7].strip
-        puts '***start confirm message......'+self.msg_id.to_s
-
-        self.server_id=message[8..10]
-        puts '***start confirm message......'+self.server_id.to_s
-
-        self.handle_state=message[11].to_i
-        puts '***start confirm message......'+self.handle_state.to_s
+        self.type=message[1]
+        self.node_id=message[2..5]
+        self.curr_display =message[6..9]
+        self.curr_color=message[10]
+        self.curr_rate=message[11].to_i
+        self.node=Ptl::Node.where(color: self.curr_color, rate: self.curr_rate)
 
       end
 

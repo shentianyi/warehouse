@@ -5,7 +5,7 @@ require 'socket'
 module Ptl
   module Message
     class SendParser<Parser
-      DEFAULT_MSG_TYPE=Ptl::Type::SendMsgType::CONTROL
+      DEFAULT_MSG_TYPE=2 #Ptl::Type::SendMsgType::CONTROL
       READ_TIME_OUT=nil
 
 
@@ -27,10 +27,8 @@ module Ptl
 
       def process
         puts "@@@server:#{SysConfigCache.led_server_value}#{SysConfigCache.led_send_msg_action_value}#{URI.encode(message)}"
-
-
         res=init_client(SysConfigCache.led_send_msg_action_value, self.message).post(nil)
-puts "@@ after post................."
+        puts "@@ after post................."
 
         msg=JSON.parse(res.body)
         puts "@@@code:#{res.code}backdata:#{msg}:#{msg['Result'].class}"
@@ -73,7 +71,9 @@ puts "@@ after post................."
         puts ':1 job_id_format'
         puts job.job_id_format
 
-        "<#{self.type}000#{node.id_format}#{node.color_format}#{node.rate_format}#{node.display}#{job.job_id_format}>"
+        # "<#{self.type}000#{node.id_format}#{node.color_format}#{node.rate_format}#{node.display}#{job.job_id_format}>"
+
+        "<#{self.type}#{node.id_format}#{node.display}#{node.color_format}#{node.rate_format}>"
       end
     end
   end
