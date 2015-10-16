@@ -77,7 +77,9 @@ module LedStateable
         args[:led_id] = led.id
         args[:current_state] = led.current_state
 
-        if self.state == BaseState::WAY
+        if self.state==BaseState::ORIGINAL
+          args[:to_state] = Ptl::Node::PICKED
+        elsif self.state == BaseState::WAY
           args[:to_state] = Ptl::Node::DELIVERED
 
         elsif self.state == BaseState::DESTINATION
@@ -85,7 +87,6 @@ module LedStateable
           return
         elsif self.state == BaseState::RECEIVED
           args[:to_state] = Ptl::Node::RECEIVED
-
         else
           # args[:to_state] = nil
           return

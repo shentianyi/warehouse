@@ -7,7 +7,6 @@ module Ptl
     end
 
     def process
-
       begin
         PtlJob.transaction do
           if led=Led.find_by_id(job.node_id)

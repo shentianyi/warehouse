@@ -37,14 +37,15 @@ class LedService
     source_id = PartPosition.find_by_part_id(part.id).sourceable_id
     builder = User.find(SysConfigCache.led_builder_value)
     args=[]
+
     if normal_quantity>0
-      args <{part_id: part.id, quantity: quantity, box_quantity: part.unit_pack * normal_quantity,
-             department: position.whouse.id, is_emergency: false}
+      args <<{part_id: part.id, quantity: part.unit_pack * normal_quantity, box_quantity: normal_quantity,
+              department: position.whouse.id, is_emergency: false}
     end
 
     if urgent_quantity>0
-      args <{part_id: part.id, quantity: quantity, box_quantity: part.unit_pack * urgent_quantity,
-             department: position.whouse.id, is_emergency: true}
+      args <<{part_id: part.id, quantity: part.unit_pack * urgent_quantity, box_quantity: urgent_quantity,
+              department: position.whouse.id, is_emergency: true}
     end
 
     OrderService.create_with_items({order: {source_id: source_id}, order_items: args, nopart_items: args}, builder)

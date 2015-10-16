@@ -29,6 +29,11 @@
       <%= f.select(:current_state, LedLightState.list, {include_blank: false}) %>
     </div>
 
+    <div class="field">
+      <%= f.label :led_display, '当前显示' %>
+      <br>
+      <%= f.text_field :led_display %>
+    </div>
     <div class="actions">
       <%= f.submit %>
     </div>

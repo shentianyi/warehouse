@@ -3,6 +3,7 @@ module Ptl
     class Job
       UN_HANDLE=100
       SEND_SUCCESS=200
+      SEND_FAIL=201
       HANDLING=201
       HANDLE_SUCCESS=300
       HANDLE_FAIL=400
@@ -10,7 +11,7 @@ module Ptl
 
 
       def self.execute_states
-        [UN_HANDLE,SEND_SUCCESS,HANDLE_FAIL]
+        [UN_HANDLE,SEND_FAIL,SEND_SUCCESS,HANDLE_FAIL]
       end
 
       def self.display(state)
@@ -19,6 +20,8 @@ module Ptl
             '未处理'
           when SEND_SUCCESS
             '发送成功'
+          when SEND_FAIL
+            '发送失败'
           when HANDLING
             '处理中'
           when HANDLE_SUCCESS

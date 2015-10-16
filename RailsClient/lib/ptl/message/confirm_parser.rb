@@ -5,21 +5,32 @@ module Ptl
         self.type=message[1]
         self.node_id=message[2..5]
         self.curr_display =message[6..9]
-        self.curr_color=message[10]
+        self.curr_color=message[10].to_i
         self.curr_rate=message[11].to_i
         self.node=Ptl::Node.where(color: self.curr_color, rate: self.curr_rate)
+        self.handle_state= Ptl::Type::ConfirmMsgType::HANDLE_SUCCESS
 
+        p self
       end
 
       def process
-        puts '******************start to update msg'+self.msg_id
-        if job=PtlJob.find_by_id(self.msg_id)
-          puts '*********find job'
-          puts "**************before update: #{job.state}"
-          puts "**************state: #{get_job_state}"
-          job.update_attributes(state: get_job_state, msg: Ptl::Type::ConfirmMsgType.msg(self.handle_state))
-          puts "**************after update: #{job.state}"
+        # 过滤冗余的重发消息
+
+        $redis.hmset(node_redis_key, 'curr_display', self.curr_display, 'date', Time.now)
+
+        current_job=PtlJob.where(node_id: self.node_id, to_display: self.curr_display, to_state: self.node.state).order(created_at: :desc).first
+        if current_job
+          PtlJob.where(node_id: self.node_id).where("created_at<=?", current_job.created_at.utc)
+              .update_all(state: get_job_state, msg: Ptl::Type::ConfirmMsgType.msg(self.handle_state))
         end
+        # puts '******************start to update msg'+self.msg_id
+        # if job=PtlJob.find_by_id(self.msg_id)
+        #   puts '*********find job'
+        #   puts "**************before update: #{job.state}"
+        #   puts "**************state: #{get_job_state}"
+        #   job.update_attributes(state: get_job_state, msg: Ptl::Type::ConfirmMsgType.msg(self.handle_state))
+        #   puts "**************after update: #{job.state}"
+        # end
       end
 
       def get_job_state

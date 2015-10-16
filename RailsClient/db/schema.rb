@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150731033108) do
+ActiveRecord::Schema.define(version: 20151013081022) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -569,6 +569,9 @@ ActiveRecord::Schema.define(version: 20150731033108) do
     t.datetime "updated_at"
     t.text     "msg"
     t.integer  "order_state", default: 100
+    t.integer  "to_state"
+    t.string   "to_display"
+    t.string   "node_id"
   end
 
   create_table "records", force: true do |t|

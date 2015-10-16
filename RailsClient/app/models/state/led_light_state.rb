@@ -1,8 +1,15 @@
 class LedLightState
-  NORMAL = 0
-  ORDERED = 1
-  DELIVERED = 2
-  RECEIVED = 3
+  # NORMAL = 0
+  # ORDERED = 1
+  # DELIVERED = 2
+  # RECEIVED = 3
+
+  NORMAL=100 #正常
+  ORDERED=200 #要货
+  URGENT_ORDERED=300 #紧急要货
+  PICKED=400 #择货
+  DELIVERED=500 #发运
+  RECEIVED=600 #接受
 
   def self.list
     data = []
@@ -20,13 +27,15 @@ class LedLightState
   def self.display state
     case state.to_i
       when NORMAL
-        'Normal'
+        '正常'
       when ORDERED
-        'Ordered'
+        '要货'
+      when URGENT_ORDERED
+        '紧急要货'
       when DELIVERED
-        'Delivered'
+        '发运'
       when RECEIVED
-        'Received'
+        '接受'
     end
   end
 end

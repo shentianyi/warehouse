@@ -14,7 +14,7 @@ module Ptl
     DEFAULT_PROCESS_SIZE=10
     DEFAULT_IN_TIME=false
 
-    INT_FIELD=[:curr_state, :to_state, :size]
+    INT_FIELD=[:curr_state, :to_state, :urgent_size, :size]
 
     def initialize(options={}, id=nil)
       self.id=id
@@ -50,11 +50,17 @@ module Ptl
       end
       puts "5. create job in database..."
       puts "5.params:#{params}"
-      ptl_job=PtlJob.create(
+      ptl_job=PtlJob.new(
           params: params.to_json,
           node_id: self.node_id,
-          to_state: self.to_state
+          to_state: self.to_state,
+          to_display:get_to_display
       )
+      if ptl_job.to_display=='0000'
+        ptl_job.to_state=Ptl::Node::NORMAL
+      end
+      ptl_job.save
+      
       self.id= ptl_job.id
       self.ptl_job=ptl_job
 
@@ -68,6 +74,29 @@ module Ptl
       #   return false
       # end
       true
+    end
+
+    def get_to_display
+      displays=Node.parse_display(self.curr_display)
+      case self.to_state
+        when Ptl::Node::NORMAL
+          self.node.set_display(0, 0)
+        when Node::URGENT_ORDERED
+          self.node.set_display(displays[0]+self.urgent_size, displays[1]+self.urgent_size+self.size)
+        when Ptl::Node::ORDERED
+            self.node.set_display(displays[0], displays[1]+self.size)
+        when Node::PICKED
+          # 'just change color and rate'
+          self.node.set_display(displays[0], displays[1])
+        when Node::DELIVERED
+          # 'just change color and rate'
+          self.node.set_display(displays[0], displays[1])
+        when Node::RECEIVED
+          self.node.set_display(displays[0]-self.size, displays[1]-self.size)
+        else
+          raise 'invalid job to state'
+      end
+      return self.node.display
     end
 
     def self.out_queue(size=DEFAULT_PROCESS_SIZE)

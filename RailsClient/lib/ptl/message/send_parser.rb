@@ -26,27 +26,30 @@ module Ptl
 
 
       def process
-        puts "@@@server:#{SysConfigCache.led_server_value}#{SysConfigCache.led_send_msg_action_value}#{URI.encode(message)}"
-        res=init_client(SysConfigCache.led_send_msg_action_value, self.message).post(nil)
-        puts "@@ after post................."
+        begin
+          puts "@@@server:#{SysConfigCache.led_server_value}#{SysConfigCache.led_send_msg_action_value}#{URI.encode(message)}"
+          res=init_client(SysConfigCache.led_send_msg_action_value, self.message).post(nil)
+          puts "@@ after post................."
 
-        msg=JSON.parse(res.body)
-        puts "@@@code:#{res.code}backdata:#{msg}:#{msg['Result'].class}"
-
-        if res.code==201 || res.code==200
           msg=JSON.parse(res.body)
-          puts "@@@backdata:#{msg}"
-          if msg['Result']
-            if ptl_job= PtlJob.find_by_id(job.id)
-              ptl_job.update_attributes(state: Ptl::State::Job::SEND_SUCCESS, msg: '发送成功')
-            end
-          elsif msg['Result']
-            if ptl_job= PtlJob.find_by_id(job.id)
-              ptl_job.update_attributes(state: Ptl::State::Job::HANDLE_FAIL, msg: msg['Content'].to_s)
+          puts "@@@code:#{res.code}backdata:#{msg}:#{msg['Result'].class}"
+
+          if res.code==201 || res.code==200
+            msg=JSON.parse(res.body)
+            puts "@@@backdata:#{msg}"
+            if msg['Result']
+              #if ptl_job= PtlJob.find_by_id(job.id)
+              job.ptl_job.update_attributes(state: Ptl::State::Job::SEND_SUCCESS, msg: '发送成功')
+              #end
+            elsif msg['Result']
+              #if ptl_job= PtlJob.find_by_id(job.id)
+                job.ptl_job.update_attributes(state: Ptl::State::Job::HANDLE_FAIL, msg: msg['Content'].to_s)
+              #end
             end
           end
+        rescue => e
+          job.ptl_job.update_attributes(state: Ptl::State::Job::HANDLE_FAIL, msg:e.message)
         end
-
       end
 
       def init_client(api, message)

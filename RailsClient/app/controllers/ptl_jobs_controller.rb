@@ -41,6 +41,6 @@ class PtlJobsController < ApplicationController
   end
 
   def ptl_job_params
-    params.require(:ptl_job).permit(:params, :state, :msg, :is_dirty, :is_new, :is_delete)
+    params.require(:ptl_job).permit(:params, :state, :msg,:to_display,:to_state, :is_dirty, :is_new, :is_delete)
   end
 end

@@ -22,23 +22,23 @@ module Sync
         puts e.backtrace
       end
 
-      begin
-#        Sync::Execute::LocationSync.sync
- #       Sync::Execute::LocationDestinationSync.sync
-  #      Sync::Execute::HackerSync.sync
-   #     Sync::Execute::WhouseSync.sync
-    #    Sync::Execute::PartTypeSync.sync
-     #   Sync::Execute::PartSync.sync
-   #     Sync::Execute::PositionSync.sync
-    #    Sync::Execute::PartPositionSync.sync
-     #   Sync::Execute::PickItemFilterSync.sync
-      rescue => e
-        no_error=false
-        puts "[#{Time.now.localtime}][ERROR]"
-        puts e.class
-        puts e.to_s
-        puts e.backtrace
-      end
+      # begin
+      #  Sync::Execute::LocationSync.sync
+      #  Sync::Execute::LocationDestinationSync.sync
+      #  Sync::Execute::HackerSync.sync
+      #  Sync::Execute::WhouseSync.sync
+      #  Sync::Execute::PartTypeSync.sync
+      #  Sync::Execute::PartSync.sync
+      #  Sync::Execute::PositionSync.sync
+      #  Sync::Execute::PartPositionSync.sync
+      #  Sync::Execute::PickItemFilterSync.sync
+      # rescue => e
+      #   no_error=false
+      #   puts "[#{Time.now.localtime}][ERROR]"
+      #   puts e.class
+      #   puts e.to_s
+      #   puts e.backtrace
+      # end
 
       # sync delivery data
       begin
@@ -53,8 +53,31 @@ module Sync
         puts e.backtrace
       end
 
+      # begin
+      #    Sync::Execute::StorageSync.sync
+      # rescue => e
+      #   no_error=false
+      #   puts "[#{Time.now.localtime}][ERROR]"
+      #   puts e.class
+      #   puts e.to_s
+      #   puts e.backtrace
+      # end
+
+      # begin
+      #   Sync::Execute::RegexCategorySync.sync
+      #   Sync::Execute::RegexSync.sync
+      # rescue => e
+      #   no_error=false
+      #   puts "[#{Time.now.localtime}][ERROR]"
+      #   puts e.class
+      #   puts e.to_s
+      #   puts e.backtrace
+      # end
+
+
       begin
-     #   Sync::Execute::StorageSync.sync
+        Sync::Execute::OrderSync.sync
+        Sync::Execute::OrderItemSync.sync
       rescue => e
         no_error=false
         puts "[#{Time.now.localtime}][ERROR]"
@@ -63,33 +86,10 @@ module Sync
         puts e.backtrace
       end
 
-      begin
-      #  Sync::Execute::RegexCategorySync.sync
-      #  Sync::Execute::RegexSync.sync
-      rescue => e
-        no_error=false
-        puts "[#{Time.now.localtime}][ERROR]"
-        puts e.class
-        puts e.to_s
-        puts e.backtrace
-      end
-
-
-      begin
-        # sync order data
-   #     Sync::Execute::OrderSync.sync
-    #    Sync::Execute::OrderItemSync.sync
-      rescue => e
-        no_error=false
-        puts "[#{Time.now.localtime}][ERROR]"
-        puts e.class
-        puts e.to_s
-        puts e.backtrace
-      end
       begin
         # sync pick list data
-     #   Sync::Execute::PickListSync.sync
-      #  Sync::Execute::PickItemSync.sync
+        Sync::Execute::PickListSync.sync
+        Sync::Execute::PickItemSync.sync
       rescue => e
         no_error=false
         puts "[#{Time.now.localtime}][ERROR]"
@@ -272,11 +272,11 @@ module Sync
 
 
     def self.init_site(url)
-      RestClient::Resource.new(url, :timeout =>nil,
+      RestClient::Resource.new(url, :timeout => nil,
                                :open_timeout => nil,
                                headers: {'Authorization' => "Bearer #{Sync::Config.token}"}, 'content_type' => 'application/json')
     end
-    
+
     def self.model_name
       self.name.gsub(/Sync|::Execute::/, '')
     end
