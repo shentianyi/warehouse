@@ -60,7 +60,7 @@ module Ptl
         ptl_job.to_state=Ptl::Node::NORMAL
       end
       ptl_job.save
-      
+
       self.id= ptl_job.id
       self.ptl_job=ptl_job
 
