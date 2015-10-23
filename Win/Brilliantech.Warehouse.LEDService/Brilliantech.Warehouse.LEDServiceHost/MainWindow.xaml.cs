@@ -250,13 +250,34 @@ namespace Brilliantech.Warehouse.LEDServiceHost
         /// <param name="data"></param>
         private void TCPClient_DataReceived(object sender, byte[] data)
         {
+            
             //Thread t = new Thread(new ThreadStart(delegate
             //{
 
             //    ClientDataTB.Dispatcher.Invoke(new Action(delegate
             //    {
+            //string returnStr = "";
+            //if (data != null)
+            //{
+            //    for (int i = 0; i < data.Length; i++)
+            //    {
+            //        returnStr += data[i].ToString("X2");
+            //    }
+            //}
+
+            LogUtil.Logger.Info("【接到】TCPClient消息字符: ");
+            LogUtil.Logger.Info(data);
             StreamReader sr = new StreamReader(new MemoryStream(data));
-            string message = System.Text.Encoding.Default.GetString(data);
+            string message = string.Empty;
+            try
+            {
+                message = BitConverter.ToString(data).Replace("-","");
+            }
+            catch (Exception convertException)
+            {
+                LogUtil.Logger.Error("字符转换错误：" + convertException.Message);
+            }
+            //System.Text.Encoding.Default.GetString(data);
             //BitConverter.ToString(data);//sr.ReadToEnd();
             //        ClientDataTB.AppendText(message);
             //        ClientDataTB.AppendText("\n");
