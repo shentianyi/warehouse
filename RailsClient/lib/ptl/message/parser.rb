@@ -13,6 +13,8 @@ module Ptl
       end
 
       def self.dispatch message
+        #TODO Add message filter
+
         puts "2. dispatch message : #{message}"
         if NODE_REGEX.match(message)
           NodeParser.new(message).process

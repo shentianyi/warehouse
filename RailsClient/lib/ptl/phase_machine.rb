@@ -73,9 +73,6 @@ module Ptl
           puts "[#{Time.now}] error: #{ee.message}"
         end
       end
-
-
     end
-
   end
 end
