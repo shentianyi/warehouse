@@ -256,7 +256,8 @@ namespace Brilliantech.Warehouse.LEDServiceHost
             //    ClientDataTB.Dispatcher.Invoke(new Action(delegate
             //    {
             StreamReader sr = new StreamReader(new MemoryStream(data));
-            string message = sr.ReadToEnd();
+            string message = System.Text.Encoding.Default.GetString(data);
+            //BitConverter.ToString(data);//sr.ReadToEnd();
             //        ClientDataTB.AppendText(message);
             //        ClientDataTB.AppendText("\n");
             //        ClientDataTB.SelectionStart = ClientDataTB.Text.Length;
