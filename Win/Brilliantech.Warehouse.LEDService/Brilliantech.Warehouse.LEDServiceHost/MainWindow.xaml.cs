@@ -331,14 +331,46 @@ namespace Brilliantech.Warehouse.LEDServiceHost
 
         public static bool SendData(byte[] data)
         {
+            //string StringOut = "";
+            //foreach (byte InByte in data)
+            //{
+            //    StringOut  += String.Format("{0:X2} ", InByte);
+            //}
+
+            //LogUtil.Logger.Info("【发送16bit】TCPServer消息: " + StringOut);
+
+
+            //string[] ByteStrings;
+            //ByteStrings = StringOut.Split(" ".ToCharArray());
+            //byte[] ByteOut;
+            //ByteOut = new byte[ByteStrings.Length - 1];
+            //for (int i = 0; i < ByteStrings.Length; i++)
+            //{
+            //    ByteOut[i] = Convert.ToByte(("0x" + ByteStrings[i]));
+            //}
+
+
+
+
+            string message = StringHelper.GetString(data);
+
+
+
+            byte[] returnBytes = new byte[message.Length / 2];
+            for (int i = 0; i < returnBytes.Length; i++)
+                returnBytes[i] = Convert.ToByte(message.Substring(i * 2, 2), 16);
+
+            LogUtil.Logger.Info("16bit:");
+            LogUtil.Logger.Info(returnBytes);
+
+
             foreach (PTLTCPClient client in TCPClientList)
             {
                 try
                 {
-                  string message = StringHelper.GetString(data);
-
+                  
                      LogUtil.Logger.Info("【发送】TCPServer消息: " + message);
-                    client.NetWork.GetStream().Write(data, 0, data.Length);
+                     client.NetWork.GetStream().Write(returnBytes, 0, returnBytes.Length);
                 }
                 catch (Exception e)
                 {
