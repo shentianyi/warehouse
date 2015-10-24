@@ -32,7 +32,7 @@ class PtlJobsController < ApplicationController
 
   def destroy
     @ptl_job.destroy
-    respond_with(@ptl_job)
+    redirect_to action: :index
   end
 
   private

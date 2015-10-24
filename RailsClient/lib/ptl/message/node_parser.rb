@@ -4,18 +4,13 @@ module Ptl
 
       attr_accessor :press_type
 
-
-      DEFAULT_MSG_TYPE=1
-
       def initialize(message)
-
         super
-        puts "3. start node parser:.....#{message}"
-        self.type=message[1].to_i
-        self.node_id=message[2..5]
-        self.curr_display =message[6..9]
-        self.curr_color=message[10]
-        self.curr_rate=message[11].to_i
+		puts "3. start node parser:.....#{message}"
+        self.node_id=message[4..7]
+        self.curr_display =message[12..15]
+        self.curr_color=message[16..17].to_i
+        self.curr_rate=message[18..19].to_i
         self.node=Ptl::Node.where(color: self.curr_color, rate: self.curr_rate)
 
         puts "3.1 end of init node parser: #{self.to_json}....."
@@ -23,7 +18,8 @@ module Ptl
 
 
       def process
-        if (self.type==1) && (led=Led.find_by_id(self.node_id))
+		  super
+        if led=Led.find_by_id(self.node_id)
           # unless led.led_display==self.curr_display
           # o1=led.led_display[0..1].to_i
           #  o2=led.led_display[2..3].to_i

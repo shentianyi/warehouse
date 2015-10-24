@@ -1,16 +1,13 @@
 # require 'rest-client'
 # require 'net/tcp_client'
-require 'socket'
+#require 'socket'
 
 module Ptl
   module Message
     class SendParser<Parser
-      DEFAULT_MSG_TYPE=2 #Ptl::Type::SendMsgType::CONTROL
-      READ_TIME_OUT=nil
-
 
       def initialize(job)
-        self.type=DEFAULT_MSG_TYPE
+        self.type=2=2=
         puts '0.9-----new sender parser'
         self.job=job
         puts '0.9.1-----new sender parser'
@@ -28,7 +25,7 @@ module Ptl
       def process
         begin
           puts "@@@server:#{SysConfigCache.led_server_value}#{SysConfigCache.led_send_msg_action_value}#{URI.encode(message)}"
-          res=init_client(SysConfigCache.led_send_msg_action_value, self.message).post(nil)
+          res=init_client.post(nil)
           puts "@@ after post................."
 
           msg=JSON.parse(res.body)
@@ -38,13 +35,9 @@ module Ptl
             msg=JSON.parse(res.body)
             puts "@@@backdata:#{msg}"
             if msg['Result']
-              #if ptl_job= PtlJob.find_by_id(job.id)
               job.ptl_job.update_attributes(state: Ptl::State::Job::SEND_SUCCESS, msg: '发送成功')
-              #end
             elsif msg['Result']
-              #if ptl_job= PtlJob.find_by_id(job.id)
                 job.ptl_job.update_attributes(state: Ptl::State::Job::HANDLE_FAIL, msg: msg['Content'].to_s)
-              #end
             end
           end
         rescue => e
@@ -52,8 +45,8 @@ module Ptl
         end
       end
 
-      def init_client(api, message)
-        RestClient::Resource.new("#{SysConfigCache.led_server_value}#{api}#{URI.encode(message)}",
+      def init_client
+        RestClient::Resource.new("#{SysConfigCache.led_server_value}#{SysConfigCache.led_send_msg_action_value}#{URI.encode(self.message)}",
                                  timeout: nil,
                                  open_time_out: nil,
                                  content_type: 'application/json'

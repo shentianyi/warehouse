@@ -2,21 +2,22 @@ module Ptl
   module Message
     class ConfirmParser<Parser
       def initialize(message)
-        self.type=message[1]
+        super
+
+		self.type=message[1]
         self.node_id=message[2..5]
         self.curr_display =message[6..9]
         self.curr_color=message[10].to_i
         self.curr_rate=message[11].to_i
         self.node=Ptl::Node.where(color: self.curr_color, rate: self.curr_rate)
         self.handle_state= Ptl::Type::ConfirmMsgType::HANDLE_SUCCESS
-
-        p self
       end
 
       def process
         # 过滤冗余的重发消息
-
-        $redis.hmset(node_redis_key, 'curr_display', self.curr_display, 'date', Time.now)
+        super
+        
+		$redis.hmset(node_redis_key, 'curr_display', self.curr_display, 'date', Time.now)
 
         current_job=PtlJob.where(node_id: self.node_id, to_display: self.curr_display, to_state: self.node.state).order(created_at: :desc).first
         if current_job

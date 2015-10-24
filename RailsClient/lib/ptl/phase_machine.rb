@@ -32,7 +32,7 @@ module Ptl
                 end
               when Ptl::Node::ORDERED
                 result=true
-                if Ptl::State::PtlOrderState.do_order?(job.ptl_job.order_state)
+				if Ptl::State::PtlOrderState.do_order?(job.ptl_job.order_state)
                   result=LedService.create_stockout_list(node.id, job.size)
                   if result
                     job.ptl_job.update_attributes(order_state: Ptl::State::PtlOrderState::SUCCESS)
