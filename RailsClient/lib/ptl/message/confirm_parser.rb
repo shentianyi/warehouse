@@ -4,12 +4,12 @@ module Ptl
       def initialize(message)
         super
 
-		self.type=message[1]
-        self.node_id=message[2..5]
-        self.curr_display =message[6..9]
-        self.curr_color=message[10].to_i
-        self.curr_rate=message[11].to_i
-        self.node=Ptl::Node.where(color: self.curr_color, rate: self.curr_rate)
+#		self.type=message[1]
+        self.node_id=message[4..7]
+       # self.curr_display =message[6..9]
+        #self.curr_color=message[10].to_i
+        #self.curr_rate=message[11].to_i
+        #self.node=Ptl::Node.where(color: self.curr_color, rate: self.curr_rate)
         self.handle_state= Ptl::Type::ConfirmMsgType::HANDLE_SUCCESS
       end
 
@@ -17,10 +17,12 @@ module Ptl
         # 过滤冗余的重发消息
         super
         
-		$redis.hmset(node_redis_key, 'curr_display', self.curr_display, 'date', Time.now)
+		#$redis.hmset(node_redis_key, 'curr_display', self.curr_display, 'date', Time.now)
 
-        current_job=PtlJob.where(node_id: self.node_id, to_display: self.curr_display, to_state: self.node.state).order(created_at: :desc).first
-        if current_job
+        #current_job=PtlJob.where(node_id: self.node_id, to_display: self.curr_display, to_state: self.node.state).order(created_at: :desc).first
+        current_job=PtlJob.where(node_id:self.node_id).order(created_at: :desc).first
+
+		if current_job
           PtlJob.where(node_id: self.node_id).where("created_at<=?", current_job.created_at.utc)
               .update_all(state: get_job_state, msg: Ptl::Type::ConfirmMsgType.msg(self.handle_state))
         end

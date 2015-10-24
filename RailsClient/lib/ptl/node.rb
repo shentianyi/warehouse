@@ -76,17 +76,24 @@ module Ptl
     end
 
     def id_format
-      self.id#+' '*(40-self.id.length)
+  '%04d' %   self.id#+' '*(40-self.id.length)
     end
 
     def color_format
-      self.color
+     '%02d' % self.color
     end
 
     def rate_format
       #'%04d' % self.rate
-      self.rate
+     '%02d' % self.rate
     end
+
+	def dispaly_format
+	 hex_s= self.display.to_i.to_s(16)
+	 s=''
+	 (4-hex_s.length).times{s+='0'}
+	 "#{s}#{hex_s}"
+	end
 
   end
 end

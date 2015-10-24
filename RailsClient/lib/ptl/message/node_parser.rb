@@ -31,7 +31,7 @@ module Ptl
           if (cd=$redis.hgetall(node_redis_key)).blank?
             $redis.hmset(node_redis_key, 'curr_display', self.curr_display, 'date', Time.now)
           else
-            return nil if cd['curr_display']==self.curr_display && (Time.parse(cd['date'])+1.minute)>Time.now
+            return nil if cd['curr_display']==self.curr_display && (Time.parse(cd['date'])+20.seconds)>Time.now
             $redis.hmset(node_redis_key, 'curr_display', self.curr_display, 'date', Time.now)
           end
           self.to_state=urgent_size>0 ? Ptl::Node::URGENT_ORDERED : Ptl::Node::ORDERED

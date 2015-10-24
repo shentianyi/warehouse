@@ -7,7 +7,7 @@ module Ptl
     class SendParser<Parser
 
       def initialize(job)
-        self.type=2=2=
+        self.type='03'
         puts '0.9-----new sender parser'
         self.job=job
         puts '0.9.1-----new sender parser'
@@ -64,12 +64,15 @@ module Ptl
         puts node.rate_format
         puts ':1 display'
         puts node.display
+		puts ':::#dispaly format'
+		puts node.dispaly_format
         puts ':1 job_id_format'
         puts job.job_id_format
 
         # "<#{self.type}000#{node.id_format}#{node.color_format}#{node.rate_format}#{node.display}#{job.job_id_format}>"
-
-        "<#{self.type}#{node.id_format}#{node.display}#{node.color_format}#{node.rate_format}>"
+        xor_str="#{self.type}#{node.id_format}#{node.dispaly_format}#{node.color_format}#{node.rate_format}0000"
+        "FC#{xor_str}#{self.class.get_xor(xor_str)}"
+        #"FC#{self.type}#{node.id_format}#{node.display}#{node.color_format}#{node.rate_format}>"
       end
     end
   end
