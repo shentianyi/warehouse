@@ -33,7 +33,7 @@ module LedStateable
               to_state: args[:to_state],
               curr_display: args[:current_display],
               size: 1,
-              in_time: false
+              in_time: true
           ).in_queue
         end
       else
@@ -103,7 +103,7 @@ module LedStateable
             to_state: args[:to_state],
             curr_display: args[:current_display],
             size: 1,
-            in_time: false
+            in_time: true
         ).in_queue
       else
         puts "update ##############################"
