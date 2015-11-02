@@ -90,6 +90,10 @@ ActiveRecord::Base.transaction do
     SysConfig.create(code: 'DEFAULT_WAREHOUSE', value: '3EX', name: '默认仓库号')
   end
 
+  unless SysConfig.find_by_code('INVENTORY_ENABLE')
+    SysConfig.create(code: 'INVENTORY_ENABLE', value: 'false', name: '是否开启盘点模式')
+  end
+
 
   #LED STATE
   unless LedState.find_by_state(LedLightState::NORMAL)
