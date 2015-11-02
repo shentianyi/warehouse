@@ -93,7 +93,7 @@ class WhouseService
 
       # update parameters of movement creation
       move_data.update({from_id: storage.ware_house_id, fromPosition: storage.position,
-                        uniqueId: params[:uniqueId], qty: moveqty, fifo: storage.fifo, partRr: storage.partNr})
+                        uniqueId: params[:uniqueId], qty: storage.qty, fifo: storage.fifo, partRr: storage.partNr})
       # create movement
       Movement.create!(move_data)
 
@@ -115,6 +115,8 @@ class WhouseService
       if params[:qty].blank?
         params[:qty]=storage.qty
       end
+      raise '移库数量为 0 ！' if params[:qty].to_i <= 0
+
       # if storage
       #   pre=NStorage.where(partNr: storage.partNr, ware_house_id: storage.ware_house_id).where('fifo<?', storage.fifo).first
       #   raise "FIFO!不能移库,此箱入库时间为:#{storage.fifo.localtime.strftime('%Y-%m-%d')}" if pre
@@ -148,7 +150,7 @@ class WhouseService
         break if restqty.to_f <= 0
         move_data.update({from_id: noPackIdStorage.ware_house_id, fromPosition: noPackIdStorage.position,
                           fifo: noPackIdStorage.fifo, partNr: noPackIdStorage.partNr})
-        tostorage = NStorage.where(ware_house_id: toWh.id, partNr: params[:partNr], position: params[:toPosition], packageId: nil).first
+        tostorage = NStorage.where(ware_house_id: toWh.id, partNr: params[:partNr], position: params[:toPosition], packageId: nil).order("n_storages.qty asc").first
 
         if restqty.to_f >= noPackIdStorage.qty
 
@@ -221,7 +223,7 @@ class WhouseService
 
           break if restqty <= 0
 
-          tostorage = NStorage.where(ware_house_id: toWh.id, partNr: params[:partNr], position: params[:toPosition]).first
+          tostorage = NStorage.where(ware_house_id: toWh.id, partNr: params[:partNr], position: params[:toPosition]).order("n_storages.qty asc").first
           # update parameters of movement creation
           move_data.update({from_id: storage.ware_house_id, fromPosition: storage.position,
                             fifo: storage.fifo, partNr: storage.partNr})
@@ -276,20 +278,20 @@ class WhouseService
         # negatives_storages = NStorage.where(partNr: params[:partNr], ware_house_id: fromWh.id, position: params[:fromPosition])
 
         if params[:fromPosition].present?
-          negatives_storages = NStorage.where(partNr: params[:partNr], ware_house_id: fromWh.id, position: params[:fromPosition]).where("n_storages.qty < ?", 0)
+          negatives_storage = NStorage.where(partNr: params[:partNr], ware_house_id: fromWh.id, position: params[:fromPosition]).where("n_storages.qty < ?", 0).first
         else
-          negatives_storages = NStorage.where(partNr: params[:partNr], ware_house_id: fromWh.id).where("n_storages.qty < ?", 0)
+          negatives_storage = NStorage.where(partNr: params[:partNr], ware_house_id: fromWh.id).where("n_storages.qty < ?", 0).first
         end
 
-        if negatives_storages.present?
-          negatives_storages.first.update!(qty: negatives_storages.first.qty - lastqty)
+        if !negatives_storage.nil?
+          negatives_storage.update!(qty: negatives_storage.qty - lastqty)
         else
           data = {partNr: params[:partNr], qty: -lastqty, ware_house_id: fromWh.id, position: params[:fromPosition]||''}
           NStorage.create!(data)
         end
 
         #dse
-        tostorage = NStorage.where(ware_house_id: toWh.id, partNr: params[:partNr], position: params[:toPosition]).first
+        tostorage = NStorage.where(ware_house_id: toWh.id, partNr: params[:partNr], position: params[:toPosition]).order("n_storages.qty asc").first
         if !tostorage.nil?
           if (tostorage.qty.to_f + lastqty.to_f) == 0
             tostorage.destroy!
