@@ -64,6 +64,7 @@ module V3
 
         params[:partNr]=params[:partNr].sub(/P/, '') if params[:partNr].present?
         puts "#{params.to_json}-----------"
+        params[:user_id] = current_user.id
         begin
           params[:qty]=params[:qty].sub(/Q/, '').to_f if params[:qty].present?
           if params[:partNr].present?

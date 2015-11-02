@@ -305,7 +305,8 @@ class WhouseService
         end
 
         #movement
-        move_data.update({from_id: params[:toWh], fromPosition: params[:toPosition], partNr: params[:partNr], qty: lastqty})
+        remarks = "原始备注信息 : #{params[:remarks]} ####### 系统添加备注信息【负库存产生【操作员：#{params[:user_id]} -- 初始移库数量：#{params[:qty]}】】"
+        move_data.update({from_id: params[:toWh], fromPosition: params[:toPosition], partNr: params[:partNr], qty: lastqty, remarks: remarks})
         Movement.create!(move_data)
 
       end

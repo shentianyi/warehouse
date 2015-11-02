@@ -13,6 +13,8 @@
   <thead>
   <tr>
     <th>NO.</th>
+    <th>盘点名称</th>
+    <th>盘点状态</th>
     <th>仓库号</th>
     <th>零件号</th>
     <th>FIFO</th>
@@ -39,6 +41,8 @@
   <% @inventory_list_items.each_with_index do |inventory_list_item, i| %>
       <tr>
         <td><%= i+1 %></td>
+        <td><%= inventory_list_item.inventory_list.name %></td>
+        <td><%= InventoryListState.display inventory_list_item.inventory_list.state %></td>
         <td><%= inventory_list_item.whouse_id %></td>
         <% unless inventory_list_item.in_stored? %>
             <td><%= best_in_place inventory_list_item, :part_id, as: :input %></td>
