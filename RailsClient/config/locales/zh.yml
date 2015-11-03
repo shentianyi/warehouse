@@ -200,6 +200,7 @@ zh:
   system:
     role:
       admin: '系统管理员'
+      supermanager: '超级管理者'
       manager: '管理者'
       receiver: '接收员'
       sender: '发送员'

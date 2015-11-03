@@ -42,7 +42,7 @@ class User < ActiveRecord::Base
   end
 
   def employee?
-    if self.admin? || self.manager?
+    if self.admin? || self.manager? || self.supermanager?
       false
     else
       true

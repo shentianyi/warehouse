@@ -33,6 +33,7 @@ class WhouseService
   end
 
   def enter_stock(params)
+    # raise '盘点模式,非超级管理员权限不可更改数据!' if (SysConfigCache.inventory_enable_value=='true' && !params[:user].supermanager?)
     # validate fifo
     puts '----------------------ss'
     fifo = validate_fifo_time(params[:fifo])
@@ -75,6 +76,8 @@ class WhouseService
 
 
   def move(params)
+    # raise '盘点模式,非超级管理员权限不可更改数据!' if (SysConfigCache.inventory_enable_value=='true' && !params[:user].supermanager?)
+
     # XXX does not work now
     type = MoveType.find_by!(typeId: 'MOVE')
 
@@ -305,7 +308,7 @@ class WhouseService
         end
 
         #movement
-        remarks = "原始备注信息 : #{params[:remarks]} ####### 系统添加备注信息【负库存产生【操作员：#{params[:user_id]} -- 初始移库数量：#{params[:qty]}】】"
+        remarks = "原始备注信息 : #{params[:remarks]} ####### 系统添加备注信息【负库存产生【操作员：#{params[:user].id} -- 初始移库数量：#{params[:qty]}】】"
         move_data.update({from_id: params[:toWh], fromPosition: params[:toPosition], partNr: params[:partNr], qty: lastqty, remarks: remarks})
         Movement.create!(move_data)
 

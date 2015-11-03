@@ -233,6 +233,7 @@ en:
   system:
     role:
       admin: 'Administrator'
+      supermanager: 'SuperManager'
       manager: 'Manager'
       receiver: 'Receiver'
       sender: 'Sender'

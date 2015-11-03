@@ -35,6 +35,7 @@ class NStoragesController < ApplicationController
   end
 
   def import
+    # raise '盘点模式,非超级管理员权限不可更改数据!' if (SysConfigCache.inventory_enable_value=='true' && !current_user.supermanager?)
     if request.post?
       msg = Message.new
       begin
@@ -50,6 +51,7 @@ class NStoragesController < ApplicationController
   end
 
   def move
+    # raise '盘点模式,非超级管理员权限不可更改数据!' if (SysConfigCache.inventory_enable_value=='true' && !current_user.supermanager?)
     if request.post?
       msg = Message.new
       begin
