@@ -52,7 +52,9 @@
   </form>
 </div>
 <input type="button" value="打印托清单" class='btn btn-warning' onclick="print_forklift_list();"/>
-<h3><%= link_to '导入离线拖清单', import_logistics_containers_path, :class => "btn btn-warning" %></h3>
+<% if current_user.can_edit_inventory? %>
+    <h3><%= link_to '导入离线拖清单', import_logistics_containers_path, :class => "btn btn-warning" %></h3>
+<% end %>
 <br/>
 <div class="digg_pagination">
   <div class="page_info">
@@ -62,46 +64,48 @@
 </div>
 <table class="table table-bordered table-striped table-hover">
   <thead>
-    <tr>
-      <th></th>
-      <th>序号</th>
-      <th>拖清单号</th>
-      <th>状态</th>
-      <th>所属运单</th>
-      <th>目标仓库</th>
-      <th>备注</th>
-      <th>包装箱列表</th>
-      <th>包装箱总数</th>
-      <th>已接收包装箱数</th>
-      <th>最新记录</th>
-      <th colspan="3"></th>
-    </tr>
+  <tr>
+    <th></th>
+    <th>序号</th>
+    <th>拖清单号</th>
+    <th>状态</th>
+    <th>所属运单</th>
+    <th>目标仓库</th>
+    <th>备注</th>
+    <th>包装箱列表</th>
+    <th>包装箱总数</th>
+    <th>已接收包装箱数</th>
+    <th>最新记录</th>
+    <th colspan="3"></th>
+  </tr>
   </thead>
 
   <tbody>
-    <% @forklifts.each_with_index do |forklift,index| %>
-      <% fpresenter = ForkliftPresenter.new(forklift)%>
+  <% @forklifts.each_with_index do |forklift, index| %>
+      <% fpresenter = ForkliftPresenter.new(forklift) %>
       <tr>
         <td><input type="checkbox" id="<%= forklift.id %>" class='print-check'></td>
-        <td><%= index+@forklifts.offset+1%>
-        <td><%= forklift.container_id%></td>
+        <td><%= index+@forklifts.offset+1 %>
+        <td><%= forklift.container_id %></td>
         <td><%= forklift.state_display %></td>
         <td>
-              <%= link_to forklift.parent.container_id,delivery_path(forklift.parent),:class=>'btn btn-default' if forklift.parent%>
+          <%= link_to forklift.parent.container_id, delivery_path(forklift.parent), :class => 'btn btn-default' if forklift.parent %>
         </td>
-        <td><%= forklift.destinationable.name if forklift.destinationable%></td>
+        <td><%= forklift.destinationable.name if forklift.destinationable %></td>
         <td><%= forklift.remark %></td>
         <td>
-          <%= link_to fpresenter.packages.count, packages_forklift_path(forklift), :class=>'btn btn-default' %>
+          <%= link_to fpresenter.packages.count, packages_forklift_path(forklift), :class => 'btn btn-default' %>
         </td>
         <td><%= fpresenter.sum_packages %></td>
-        <td><%= fpresenter.accepted_packages%></td>
+        <td><%= fpresenter.accepted_packages %></td>
         <td><%= forklift.get_records.last.display %></td>
-        <td><%= link_to '详细', forklift_path(forklift) ,:class=> 'btn btn-default' %></td>
-        <td><%= link_to '编辑', edit_forklift_path(forklift) ,:class=> 'btn btn-default' if current_user.admin?%></td>
-        <td><%= link_to '导出数据',{ controller:'logistics_containers',action: 'export',id:forklift.id },class:'btn btn-default'  %></td>
+        <td><%= link_to '详细', forklift_path(forklift), :class => 'btn btn-default' %></td>
+        <% if current_user.can_edit_inventory? %>
+            <td><%= link_to '编辑', edit_forklift_path(forklift), :class => 'btn btn-default' if current_user.admin? %></td>
+        <% end %>
+        <td><%= link_to '导出数据', {controller: 'logistics_containers', action: 'export', id: forklift.id}, class: 'btn btn-default' %></td>
       </tr>
-    <% end %>
+  <% end %>
   </tbody>
 </table>
 <div class="digg_pagination">
@@ -111,7 +115,7 @@
 <script>
     $(function () {
         $(".datepicker").datetimepicker({
-            lang:'ch',
+            lang: 'ch',
             format: 'Y-m-d H:i'
         });
     });

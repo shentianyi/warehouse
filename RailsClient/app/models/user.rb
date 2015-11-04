@@ -10,10 +10,10 @@ class User < ActiveRecord::Base
   has_many :pick_item_filters
   has_many :inventory_lists
   #has_many :inventory_list_items
-  
+
   before_save :ensure_authentication_token!
 
-  validates_uniqueness_of :id,:user_name
+  validates_uniqueness_of :id, :user_name
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
@@ -41,6 +41,14 @@ class User < ActiveRecord::Base
     false
   end
 
+  def can_edit_inventory?
+    if SysConfigCache.inventory_enable_value=='true' && self.inventoryer?
+      false
+    else
+      true
+    end
+  end
+
   def employee?
     if self.admin? || self.manager? || self.supermanager?
       false
@@ -50,7 +58,7 @@ class User < ActiveRecord::Base
   end
 
   def self.role_user role_id
-    User.where(role_id:role_id).all
+    User.where(role_id: role_id).all
   end
 
 

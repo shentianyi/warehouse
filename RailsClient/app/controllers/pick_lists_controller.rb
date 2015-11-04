@@ -49,6 +49,22 @@ class PickListsController < ApplicationController
     end
   end
 
+  def export
+    puts "---------------------------------iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"
+
+    respond_to do |format|
+      format.xlsx do
+        # send_data(query.to_total_xlsx(query),
+        #           :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+        #           :filename => "库存查询导出.xlsx")
+      end
+
+      format.html do
+        #render :index
+      end
+    end
+  end
+
   # DELETE /pick_lists/1
   # DELETE /pick_lists/1.json
   def destroy

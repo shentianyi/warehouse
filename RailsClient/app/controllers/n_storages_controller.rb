@@ -8,18 +8,17 @@ class NStoragesController < ApplicationController
     @n_storages= NStorage.paginate(:page => params[:page])
   end
 
-  #def search
-  #  @n_storages=NStorage
-  #  if params[:partNr].present?
-  #    @n_storages=@n_storages.where("partNr like '%#{params[:partNr]}%' AND ware_house_id like '%#{params[:toWh]}%' ")
-   #   @partNr=params[:partNr]
-    #  @toWh=params[:toWh]
+#def search
+#  @n_storages=NStorage
+#  if params[:partNr].present?
+#    @n_storages=@n_storages.where("partNr like '%#{params[:partNr]}%' AND ware_house_id like '%#{params[:toWh]}%' ")
+#   @partNr=params[:partNr]
+#  @toWh=params[:toWh]
 
 #    end
- #   @n_storages=@n_storages.paginate(:page => params[:page])
-  #  render :index
- # end
-
+#   @n_storages=@n_storages.paginate(:page => params[:page])
+#  render :index
+# end
 
 
   def update
@@ -52,17 +51,19 @@ class NStoragesController < ApplicationController
 
   def move
     # raise '盘点模式,非超级管理员权限不可更改数据!' if (SysConfigCache.inventory_enable_value=='true' && !current_user.supermanager?)
-    if request.post?
-      msg = Message.new
-      begin
-        file=params[:files][0]
-        fd = FileData.new(data: file, oriName: file.original_filename, path: $tmp_file_path, pathName: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
-        fd.save
-        msg = FileHandler::Excel::NStorageHandler.move(fd)
-      rescue => e
-        msg.content = e.message
+    if SysConfigCache.inventory_enable_value=='true' && current_user.supermanager?
+      if request.post?
+        msg = Message.new
+        begin
+          file=params[:files][0]
+          fd = FileData.new(data: file, oriName: file.original_filename, path: $tmp_file_path, pathName: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
+          fd.save
+          msg = FileHandler::Excel::NStorageHandler.move(fd)
+        rescue => e
+          msg.content = e.message
+        end
+        render json: msg
       end
-      render json: msg
     end
   end
 
@@ -143,6 +144,6 @@ class NStoragesController < ApplicationController
 
   def storage_params
     #params[:order_item]
-    params.require(:n_storage).permit(:partNr, :packageId,:ware_house_id,:position,:qty)
+    params.require(:n_storage).permit(:partNr, :packageId, :ware_house_id, :position, :qty)
   end
 end

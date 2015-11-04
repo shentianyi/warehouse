@@ -54,7 +54,9 @@
     </div>
   </form>
 </div>
-<h3><%= link_to '导入离线包装箱', import_logistics_containers_path, :class => "btn btn-warning" %></h3>
+<% if current_user.can_edit_inventory? %>
+    <h3><%= link_to '导入离线包装箱', import_logistics_containers_path, :class => "btn btn-warning" %></h3>
+<% end %>
 <br/>
 <div class="digg_pagination">
   <div class="page_info">
@@ -86,24 +88,26 @@
       <% if package.id && package.id != "" %>
           <tr>
             <td><%= index+@packages.offset+1 %></td>
-            <td><%= package.container_id%></td>
-            <td><%= package.package.part_id if package.package%></td>
-            <td><%= package.package.quantity_str if package.package%></td>
-            <td><%= package.package.fifo_time_display if package.package%></td>
+            <td><%= package.container_id %></td>
+            <td><%= package.package.part_id if package.package %></td>
+            <td><%= package.package.quantity_str if package.package %></td>
+            <td><%= package.package.fifo_time_display if package.package %></td>
             <td><%= package.remark %></td>
-            <td><%= package.state_display%></td>
-            <td><%= ppresenter.position_nr%></td>
+            <td><%= package.state_display %></td>
+            <td><%= ppresenter.position_nr %></td>
             <td>
-              <%= link_to package.parent.container_id,forklift_path(package.parent),:class => 'btn btn-default' if package.parent %>
+              <%= link_to package.parent.container_id, forklift_path(package.parent), :class => 'btn btn-default' if package.parent %>
             </td>
             <td>
-              <%= link_to package.parent.parent.container_id,delivery_path(package.parent.parent),:class => 'btn btn-default' if package.parent && package.parent.parent %>
+              <%= link_to package.parent.parent.container_id, delivery_path(package.parent.parent), :class => 'btn btn-default' if package.parent && package.parent.parent %>
             </td>
             <td><%= package.get_records.last.display %></td>
-            <td><%= link_to '详细' ,package_path(package), :class=>'btn btn-default'%></td>
-            <td><%= link_to '编辑', edit_package_path(package), :class=> 'btn btn-default'%></td>
-            <td><%= link_to '删除', package_path(package), method: :delete, data: {confirm: '确认删除?'} ,:class=>'btn btn-default'%></td>
-            <td><%= link_to '导出数据',{ controller:'logistics_containers',action: 'export',id:package.id},class:'btn btn-default' %></td>
+            <td><%= link_to '详细', package_path(package), :class => 'btn btn-default' %></td>
+            <% if current_user.can_edit_inventory? %>
+                <td><%= link_to '编辑', edit_package_path(package), :class => 'btn btn-default' %></td>
+                <td><%= link_to '删除', package_path(package), method: :delete, data: {confirm: '确认删除?'}, :class => 'btn btn-default' %></td>
+            <% end %>
+            <td><%= link_to '导出数据', {controller: 'logistics_containers', action: 'export', id: package.id}, class: 'btn btn-default' %></td>
           </tr>
       <% end %>
   <% end %>

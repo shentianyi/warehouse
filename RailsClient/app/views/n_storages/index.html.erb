@@ -79,7 +79,9 @@
         <td><%= storage.created_at.localtime if storage.created_at %> </td>
         <td><%= storage.ware_house_id %></td>
         <td><%= storage.position %></td>
-        <td><%= link_to '编辑', edit_n_storage_path(storage), :class => 'btn btn-default' %></td>
+        <% if current_user.can_edit_inventory? %>
+            <td><%= link_to '编辑', edit_n_storage_path(storage), :class => 'btn btn-default' %></td>
+        <% end %>
       </tr>
   <% end %>
   </tbody>

@@ -73,4 +73,6 @@
   <% end %>
 </ul>
 <%= link_to '返回', forklifts_path, :class => 'btn btn-default' %>
-<%= link_to '编辑', edit_forklift_path, :class => 'btn btn-default' %>
+<% if current_user.can_edit_inventory? %>
+    <%= link_to '编辑', edit_forklift_path, :class => 'btn btn-default' %>
+<% end %>

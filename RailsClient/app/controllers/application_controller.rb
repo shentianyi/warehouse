@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   before_filter :configure_permitted_parameters, if: :devise_controller?
   before_filter :authenticate_user_from_token!
   before_filter :authenticate_user!
-
+  before_filter :inventory_lock!
   #============
   # fix cancan "ActiveModel::ForbiddenAttributesError" with Rails 4
   # see https://github.com/ryanb/cancan/issues/835
@@ -51,6 +51,15 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.for(:sign_up) << :user_no
   end
 
+  def inventory_lock!
+    if current_user
+      if SysConfigCache.inventory_enable_value=='true' && (current_user.sender? || current_user.receiver? || current_user.stocker? || current_user.shifter? || current_user.buyer?)
+        signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))
+        redirect_to new_user_session_path, alert: '盘点中...登陆锁定!'
+      end
+    end
+  end
+
   private
   def authenticate_user_from_token!
     # Need to pass email and token every request
@@ -61,6 +70,7 @@ class ApplicationController < ActionController::Base
       sign_in user, store: false
     end
   end
+
 
   def set_model
     @model=self.class.name.gsub(/Controller/, '').tableize.singularize
