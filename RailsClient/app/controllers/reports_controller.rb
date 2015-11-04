@@ -46,10 +46,13 @@ class ReportsController < ApplicationController
     @packages = {}
 
     Package.generate_report_data(@type,@date_start,@date_end,@location_id).each { |p|
-      if @packages[p['part_id']+p['whouse']].nil?
-        @packages[p['part_id']+p['whouse']] = {"PartNr." => p['part_id'], "Warehouse" => p['whouse'], "Amount" => 0}
+      p_part_id = p['part_id'].blank? ? '' : p['part_id']
+      p_whouse = p['whouse'].blank? ? '' : p['whouse']
+      if @packages[p_part_id + p_whouse].nil?
+        @packages[p_part_id + p_whouse] = {"PartNr." => p['part_id'], "Warehouse" => p['whouse'], "Amount" => 0}
       end
-      @packages[p['part_id']+p['whouse']]["Amount"] = @packages[p['part_id']+p['whouse']]["Amount"] + p['count']
+      @packages[p_part_id + p_whouse]["Amount"] = @packages[p_part_id + p_whouse]["Amount"].blank? ? '' : @packages[p_part_id + p_whouse]["Amount"]
+      @packages[p_part_id + p_whouse]["Amount"] = @packages[p_part_id + p_whouse]["Amount"] + p['count']
     }
 
     # ===>2014/12/08 李其：写这个是因为之前出现同步错误，现在不允许出现同步覆盖状态的问题
