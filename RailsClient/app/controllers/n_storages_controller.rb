@@ -51,19 +51,17 @@ class NStoragesController < ApplicationController
 
   def move
     # raise '盘点模式,非超级管理员权限不可更改数据!' if (SysConfigCache.inventory_enable_value=='true' && !current_user.supermanager?)
-    if SysConfigCache.inventory_enable_value=='true' && current_user.supermanager?
-      if request.post?
-        msg = Message.new
-        begin
-          file=params[:files][0]
-          fd = FileData.new(data: file, oriName: file.original_filename, path: $tmp_file_path, pathName: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
-          fd.save
-          msg = FileHandler::Excel::NStorageHandler.move(fd)
-        rescue => e
-          msg.content = e.message
-        end
-        render json: msg
+    if request.post?
+      msg = Message.new
+      begin
+        file=params[:files][0]
+        fd = FileData.new(data: file, oriName: file.original_filename, path: $tmp_file_path, pathName: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
+        fd.save
+        msg = FileHandler::Excel::NStorageHandler.move(fd)
+      rescue => e
+        msg.content = e.message
       end
+      render json: msg
     end
   end
 

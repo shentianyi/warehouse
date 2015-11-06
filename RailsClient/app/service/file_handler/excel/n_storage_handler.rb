@@ -51,7 +51,6 @@ module FileHandler
         msg = Message.new
         book = Roo::Excelx.new file.full_path
         book.default_sheet = book.sheets.first
-
         validate_msg = validate_move(file)
         if validate_msg.result
           begin
@@ -144,7 +143,7 @@ module FileHandler
         end
 
         if row[:toPosition].present?
-          position = Position.find_by_id(row[:toPosition])
+          position = Position.find_by(detail: row[:toPosition])
           unless position
             msg.contents << "库位号:#{row[:toPosition]} 不存在!"
           end
@@ -199,7 +198,6 @@ module FileHandler
 
       def self.validate_move_row(row, line)
         msg = Message.new(contents: [])
-
         if row[:fromWh].present?
           src_warehouse = Whouse.find_by_id(row[:fromWh])
           unless src_warehouse
@@ -232,14 +230,14 @@ module FileHandler
         end
 
         if row[:fromPosition].present?
-          from_position = Position.find_by_id(row[:fromPosition])
+          from_position = Position.find_by(detail: row[:fromPosition])
           unless from_position
             msg.contents << "库位号:#{row[:fromPosition]} 不存在!"
           end
         end
 
         if row[:toPosition].present?
-          to_position = Position.find_by_id(row[:toPosition])
+          to_position = Position.find_by(detail: row[:toPosition])
           unless to_position
             msg.contents << "库位号:#{row[:toPosition]} 不存在!"
           end

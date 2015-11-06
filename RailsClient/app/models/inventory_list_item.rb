@@ -128,4 +128,21 @@ class InventoryListItem < ActiveRecord::Base
   def in_stored_display
     self.in_stored? ? 'Y' : 'N'
   end
+
+  def self.positions inventory_list_id
+    msg=Message.new
+    msg.result = false
+
+    items = InventoryListItem.where(inventory_list_id: inventory_list_id).group(:position)
+
+    record = []
+    items.each_with_index do |item, index|
+      record[index] = item.position
+    end
+
+    msg.result = true if record.length>0
+    msg.content = record
+
+    return msg
+  end
 end
