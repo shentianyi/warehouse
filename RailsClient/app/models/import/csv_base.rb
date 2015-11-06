@@ -55,10 +55,10 @@ module Import
     end
 
     # export csv
-    def export_csv(path, query)
+    def export_csv(path, query, user_agent)
       msg=Message.new
       #begin
-        File.open(path, 'wb') do |f|
+        File.open(path, 'wb', encoding: "#{Csv::CsvConfig.csv_write_encode(user_agent)}") do |f|
           f.puts self.csv_headers.join($CSVSP)
           items=query.nil? ? self.all : self.where(query).all
           items.each do |item|

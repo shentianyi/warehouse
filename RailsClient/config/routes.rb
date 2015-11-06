@@ -96,10 +96,10 @@ Rails.application.routes.draw do
     collection do
       post :print
       get :search
-      post :export
+      # post :export
     end
   end
-
+  post 'pick_lists/export', to: 'pick_lists#export'
 
   mount ApplicationAPI => '/api'
   root :to => "welcome#index"
