@@ -1,5 +1,33 @@
 <h2>盘点项列表</h2>
 
+<div>
+  <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+    <div>
+      <div>
+        <div>
+            <span>零件号：
+              <input type="text" name="inventory_list_item[part_id]" value="<%= @part_id %>"/>
+              <input type="hidden" name="inventory_list_item[part_id_fuzzy]"/>
+            </span>
+
+            <span>仓库号：
+              <%= select_tag('inventory_list_item[current_whouse]', options_from_collection_for_select(Whouse.all, :name, :id, @current_whouse), include_blank: true) %>
+            </span>
+
+            <span>库位号：
+              <input type="text" name="inventory_list_item[current_position]" value="<%= @current_position %>"/>
+              <input type="hidden" name="inventory_list_item[current_position_fuzzy]"/>
+            </span>
+        </div>
+        <div>
+          <input type="submit" value="查找" class="btn btn-primary" name="search"/>
+          <!--<input type="submit" value="导出" class="btn btn-primary" name="download"/>-->
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
 <%= link_to "新建盘点项", send("new_#{@model}_path"),:class=>'btn btn-default' %>
 <div class="digg_pagination">
   <div class="page_info">
@@ -13,9 +41,6 @@
   <thead>
   <tr>
     <th>NO.</th>
-    <th>盘点名称</th>
-    <th>盘点状态</th>
-    <th>仓库号</th>
     <th>零件号</th>
     <th>FIFO</th>
     <th>FIFO报表</th>
@@ -33,6 +58,7 @@
     <th>是否已锁定包装箱库存</th>
     <th>是否已入库</th>
     <th>所属清单</th>
+    <th>盘点状态</th>
     <th colspan="2">&nbsp;</th>
   </tr>
   </thead>
@@ -41,9 +67,6 @@
   <% @inventory_list_items.each_with_index do |inventory_list_item, i| %>
       <tr>
         <td><%= i+1 %></td>
-        <td><%= inventory_list_item.inventory_list.name %></td>
-        <td><%= InventoryListState.display inventory_list_item.inventory_list.state %></td>
-        <td><%= inventory_list_item.whouse_id %></td>
         <% unless inventory_list_item.in_stored? %>
             <td><%= best_in_place inventory_list_item, :part_id, as: :input %></td>
             <td><%= best_in_place inventory_list_item, :fifo_display, as: :input, display_as: :fifo_display %></td>
@@ -77,6 +100,7 @@
         <td><%= inventory_list_item.locked_display %></td>
         <td><%= inventory_list_item.in_stored_display %></td>
         <td><%= inventory_list_item.inventory_list.name %></td>
+        <td><%= InventoryListState.display inventory_list_item.inventory_list.state %></td>
         <td><%= link_to 'Show', inventory_list_item %></td>
         <td>
           <% unless inventory_list_item.in_stored? %>
