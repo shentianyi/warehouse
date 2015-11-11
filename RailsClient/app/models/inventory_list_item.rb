@@ -21,7 +21,8 @@ class InventoryListItem < ActiveRecord::Base
     elsif !params[:unique_id].blank?
       query = NStorage.where(uniqueid: params[:unique_id]).first
     elsif !params[:part_id].blank? && !params[:position].blank?
-      query=nil
+      #XXXXXXXXXX
+      query=NStorage.where(part_id: params[:part_id], position: params[:position]).first
     else
       query = nil
     end
@@ -129,11 +130,43 @@ class InventoryListItem < ActiveRecord::Base
     self.in_stored? ? 'Y' : 'N'
   end
 
-  def self.positions inventory_list_id
+  def self.condition_search params
+    if params[:group_condition].blank?
+      items = InventoryListItem.where(params[:where_condition])
+    else
+      items = InventoryListItem.where(params[:where_condition]).group(params[:group_condition])
+    end
+    items
+  end
+
+  def self.condition_items params
     msg=Message.new
     msg.result = false
 
-    items = InventoryListItem.where(inventory_list_id: inventory_list_id).group(:position)
+    items = InventoryListItem.where(inventory_list_id: params[:inventory_list_id],  position: params[:position]).offset(params[:page].to_i * params[:size].to_i).limit(params[:size].to_i)
+
+    records = []
+    items.each_with_index do |item, index|
+      record = {}
+      record[:id] = item.id
+      record[:part_id] = item.part_id
+      record[:package_id] = item.package_id
+      record[:qty] = item.qty
+      record[:fifo] = item.fifo
+      records[index] = record
+    end
+
+    msg.result = true if records.length>0
+    msg.content = records
+
+    return msg
+  end
+
+  def self.condition_positions params
+    msg=Message.new
+    msg.result = false
+
+    items = InventoryListItem.where(inventory_list_id: params[:inventory_list_id], user_id: params[:user_id]).group(:position).order(updated_at: :desc).offset(params[:page].to_i * params[:size].to_i).limit(params[:size].to_i)
 
     record = []
     items.each_with_index do |item, index|

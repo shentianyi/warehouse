@@ -41,9 +41,9 @@ class WhouseService
     wh = Whouse.find_by(id: params[:toWh])
     raise '仓库未找到' unless wh
     # validate uniqueId
-    raise 'uniqueId already exists!' if params[:uniqueId].present? and NStorage.find_by(params[:uniqueId])
+    raise 'uniqueId 已存在!' if params[:uniqueId].present? and NStorage.find_by(params[:uniqueId])
     if params[:packageId] and NStorage.find_by(packageId: params[:packageId], partNr: params[:partNr])
-      raise 'Already Enter Stock'
+      raise "该唯一码#{params[:packageId]}已入库！"
     else
       data = {partNr: params[:partNr], qty: params[:qty], fifo: fifo, ware_house_id: wh.id, position: params[:toPosition]}
       data[:uniqueId] = params[:uniqueId] if params[:uniqueId].present?
@@ -87,6 +87,7 @@ class WhouseService
     move_data = {to_id: toWh.id, toPosition: params[:toPosition], type_id: type.id}
     move_data[:employee_id] = params[:employee_id] if params[:employee_id].present?
     move_data[:remarks] = params[:remarks] if params[:remarks].present?
+    move_data[:movement_list_id] = params[:movement_list_id] if params[:movement_list_id].present?
 
     if params[:uniqueId].present?
       #Move(uniqueId,toWh,toPosition,type)
@@ -105,6 +106,10 @@ class WhouseService
     elsif params[:packageId].present?
       # Move(packageId,partnr, quantity,toWh, toPosition,type)
       # find from wh
+      if params[:toPosition].blank?
+        raise "目标库位:#{params[:toPosition]}不可空"
+      end
+
       storage = nil
       if params[:partNr].blank?
         storage = NStorage.find_by(packageId: params[:packageId])
@@ -125,7 +130,7 @@ class WhouseService
       if params[:qty].to_f > storage.qty
         raise '移库量大于剩余量'
       elsif params[:qty].to_f == storage.qty
-          storage.update!(ware_house_id: toWh.id, position: params[:toPosition])
+          storage.update!(ware_house_id: toWh.id, position: params[:toPosition], created_at: Time.now)
           move_data[:qty] = storage.qty
           move_data[:from_id] = params[:fromWh]
           move_data[:partNr] = storage.partNr
@@ -312,7 +317,7 @@ class WhouseService
           negatives_storage = NStorage.where(partNr: params[:partNr], ware_house_id: fromWh.id).where("n_storages.qty < ?", 0).first
         end
 
-        if !negatives_storage.nil?
+        if !negatives_storage.blank?
           negatives_storage.update!(qty: negatives_storage.qty - lastqty)
         else
           data = {partNr: params[:partNr], qty: -lastqty, ware_house_id: fromWh.id, position: params[:fromPosition]||''}
@@ -321,7 +326,8 @@ class WhouseService
 
         #dse
         tostorage = NStorage.where(ware_house_id: toWh.id, partNr: params[:partNr], position: params[:toPosition]).order("n_storages.qty asc").first
-        if !tostorage.nil?
+        if !tostorage.blank?
+          puts "-------------------------#{tostorage}-------------------------------------ss"
           if (tostorage.qty.to_f + lastqty.to_f) == 0
             tostorage.destroy!
           else
@@ -329,13 +335,12 @@ class WhouseService
           end
         else
           data = {partNr: params[:partNr], qty: lastqty, ware_house_id: toWh.id, position: params[:toPosition]}
-
           NStorage.create!(data)
         end
 
         #movement
         remark = "系统添加备注信息：#{Time.now} 负库存产生【操作员：#{params[:user].id} -- 初始移库数量：#{params[:qty]}】"
-        move_data.update({from_id: params[:toWh], fromPosition: params[:toPosition], partNr: params[:partNr], qty: lastqty, remarks: remarks, remark: remark})
+        move_data.update({from_id: params[:toWh], fromPosition: params[:toPosition], partNr: params[:partNr], qty: lastqty, remark: remark})
         Movement.create!(move_data)
 
       end

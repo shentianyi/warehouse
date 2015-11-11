@@ -56,7 +56,7 @@ class PickListsController < ApplicationController
       pick_items = PickItem.where(pick_list_id: pick_list_id)
       send_data(PickItem.to_total_xlsx(pick_items),
                 :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
-                :filename => "择货单详细导出.xlsx")
+                :filename => "择货单#{pick_list_id}详细导出.xlsx")
     else
       redirect_to :back, notice: '请选择需要导出的择货单.'
     end

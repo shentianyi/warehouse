@@ -38,6 +38,11 @@ module V3
         inventory_list_id = params[:inventory_list_id].nil? ? nil : params[:inventory_list_id]
         user_id = current_user.id
 
+        if Position.find_by(detail: position).blank?
+          msg= {result: 0, content: "库位#{position}不存在"}
+          return msg
+        end
+
         begin
           # 保存
           item={
@@ -67,6 +72,75 @@ module V3
         puts "#{msg}......"
         msg
       end
+
+      desc 'get inventory list items by positions api'
+      params do
+        requires :inventory_list_id, type: Integer, desc: 'inventory list id'
+        requires :user_id, type: String, desc: 'inventory list item builder'
+        requires :position, type: String, desc: 'inventory list item position'
+      end
+      get :inventory_item_list do
+        params[:page] = 0 if params[:page].blank? || params[:page].to_i < 0
+        params[:size] = 30 if params[:size].blank? || params[:size].to_i < 0
+
+        if Position.find_by(detail: params[:position]).blank?
+          msg= {result: 0, content: "库位#{params[:position]}不存在"}
+          return msg
+        end
+
+        msg = InventoryListItem.condition_items params
+        if msg.result
+          {
+              result_code: '1',
+              msg: msg.content
+          }
+        else
+          {
+              result_code: '0',
+              msg: ['there is no data in the request']
+          }
+        end
+      end
+
+      desc 'delete inventory list item api'
+      params do
+        requires :inventory_list_item_id, type: Integer, desc: 'inventory list id'
+      end
+      delete do
+        unless item = InventoryListItem.find_by(id: params[:inventory_list_item_id])
+          return {result: 0, content: InventoryListItemMessage::NotFound}
+        end
+
+        item.destroy
+        return {result: 1, content: InventoryListItemMessage::DeleteSuccess}
+      end
+
+
+      desc 'Update InventoryListItem.'
+      params do
+        optional :package_id, type: String
+        requires :part_id, type: String
+        requires :qty, type: String, desc: 'require qty(quantity)'
+        requires :whouse_id, type: String
+        requires :position, type: String
+        requires :inventory_list_item_id, type: Integer
+      end
+      post :data_update do
+        unless item = InventoryListItem.find_by(id: params[:inventory_list_item_id])
+          return {result: 0, content: InventoryListItemMessage::NotFound}
+        end
+
+        args = {}
+        args[:package_id] = params[:package_id] unless params[:package_id].blank?
+        args[:part_id] = params[:part_id] unless params[:part_id].blank?
+        args[:qty] = params[:qty] unless params[:qty].blank?
+        args[:whouse_id] = params[:whouse_id] unless params[:whouse_id].blank?
+        args[:position] = params[:position] unless params[:position].blank?
+
+        item.update(args)
+        return {result: 1, content: InventoryListItemMessage::UpdateSuccess}
+      end
+
     end
   end
 end

@@ -12,6 +12,20 @@ module V1
         end
       end
 
+      #get package info
+      get do
+        unless p = Container.exists?(params[:package_id])
+          return {result: 0, content: MovableMessage::TargetNotExist}
+        end
+
+        args = {}
+        args[:package_id] = p.id
+        args[:part_id] = p.part_id
+        args[:qty] = p.quantity
+        args[:fifo] = p.fifo_time_display.blank? ? '' : Date.strptime(p.fifo_time_display.sub(/W  /, ''), '%d.%m.%y')
+        {result_code: '1', msg: args}
+      end
+
       #get packages by created_at time and state
       #@start_time
       #@end_time

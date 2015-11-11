@@ -23,7 +23,7 @@ module FileHandler
                 row = {}
                 IMPORT_HEADERS.each_with_index do |k, i|
                   row[k] = book.cell(line, i+1).to_s.strip
-                  if k== :partNr || k== :packageId
+                  if k== :partNr || k== :packageId || k==:employee_id
                     row[k] = row[k].sub(/\.0/, '')
                   end
                 end
@@ -47,7 +47,7 @@ module FileHandler
         msg
       end
 
-      def self.move(file)
+      def self.move(file, current_user)
         msg = Message.new
         book = Roo::Excelx.new file.full_path
         book.default_sheet = book.sheets.first
@@ -64,6 +64,7 @@ module FileHandler
                   end
                 end
 
+                row[:user] = current_user
                 WhouseService.new.move(row)
 
               end
@@ -152,7 +153,7 @@ module FileHandler
         if row[:employee_id].present?
           employee_id = User.find(row[:employee_id])
           unless employee_id
-            msg.contents << "员工号:#{row[:employee_id]} 不存在!"
+            msg.contents << "员工号:#{row[:employee_id].sub(/\.0/, '')} 不存在!"
           end
         end
 
@@ -179,7 +180,7 @@ module FileHandler
               row[k]=row[k].sub(/\.0/, '') if k== :partNr || k== :packageId
             end
 
-            mssg = validate_move_row(row, line)
+            mssg = validate_move_row(row)
             if mssg.result
               sheet.add_row row.values
             else
@@ -196,7 +197,7 @@ module FileHandler
         msg
       end
 
-      def self.validate_move_row(row, line)
+      def self.validate_move_row(row)
         msg = Message.new(contents: [])
         if row[:fromWh].present?
           src_warehouse = Whouse.find_by_id(row[:fromWh])
@@ -212,8 +213,13 @@ module FileHandler
           end
         end
 
+        positions = []
         part_id = Part.find_by_id(row[:partNr])
-        unless part_id
+        if part_id
+          part_id.positions.each do |position|
+            positions += ["#{position.detail}"]
+          end
+        else
           msg.contents << "零件号:#{row[:partNr]} 不存在!"
         end
 
@@ -236,6 +242,12 @@ module FileHandler
           end
         end
 
+        if from_position && part_id
+          unless positions.include?(row[:fromPosition])
+            msg.contents << "零件号:#{row[:partNr]} 不在库位号:#{row[:fromPosition]}上!"
+          end
+        end
+
         if row[:toPosition].present?
           to_position = Position.find_by(detail: row[:toPosition])
           unless to_position
@@ -243,10 +255,16 @@ module FileHandler
           end
         end
 
+        if to_position && part_id
+          unless positions.include?(row[:toPosition])
+            msg.contents << "零件号:#{row[:partNr]}不在库位号:#{row[:toPosition]}上!"
+          end
+        end
+
         if row[:employee_id].present?
           employee_id = User.find(row[:employee_id])
           unless employee_id
-            msg.contents << "员工号:#{row[:employee_id]} 不存在!"
+            msg.contents << "员工号:#{row[:employee_id].sub(/\.0/, '')} 不存在!"
           end
         end
 

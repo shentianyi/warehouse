@@ -57,7 +57,7 @@ class NStoragesController < ApplicationController
         file=params[:files][0]
         fd = FileData.new(data: file, oriName: file.original_filename, path: $tmp_file_path, pathName: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
         fd.save
-        msg = FileHandler::Excel::NStorageHandler.move(fd)
+        msg = FileHandler::Excel::NStorageHandler.move(fd, current_user)
       rescue => e
         msg.content = e.message
       end
