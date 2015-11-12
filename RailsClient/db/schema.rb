@@ -292,14 +292,19 @@ ActiveRecord::Schema.define(version: 20151110060229) do
     t.datetime "updated_at"
   end
 
-  create_table "movement_lists", force: true do |t|
-    t.string   "name",       default: ""
-    t.string   "state",      default: "100"
+  create_table "movement_lists", id: false, force: true do |t|
+    t.string   "uuid",       limit: 36,                 null: false
+    t.string   "id",                                    null: false
+    t.string   "name",                  default: ""
+    t.string   "state",                 default: "100"
     t.string   "builder"
-    t.string   "remarks",    default: ""
+    t.string   "remarks",               default: ""
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "movement_lists", ["id"], name: "index_movement_lists_on_id", using: :btree
+  add_index "movement_lists", ["uuid"], name: "index_movement_lists_on_uuid", using: :btree
 
   create_table "movements", force: true do |t|
     t.string   "partNr"

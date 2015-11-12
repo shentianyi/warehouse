@@ -2,6 +2,7 @@ class MovementListState
   BEGINNING = 100
   PROCESSING = 200
   ENDING =300
+  ERROR =300
 
   def self.display state
     case state
@@ -11,6 +12,8 @@ class MovementListState
         '进行中'
       when ENDING
         '结束'
+      when ERROR
+        '失败'
       else
         '未知状态'
     end

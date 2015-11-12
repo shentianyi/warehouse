@@ -22,7 +22,7 @@ class InventoryListItem < ActiveRecord::Base
       query = NStorage.where(uniqueid: params[:unique_id]).first
     elsif !params[:part_id].blank? && !params[:position].blank?
       #XXXXXXXXXX
-      query=NStorage.where(part_id: params[:part_id], position: params[:position]).first
+      query=NStorage.where(partNr: params[:part_id], position: params[:position]).first
     else
       query = nil
     end
@@ -46,9 +46,9 @@ class InventoryListItem < ActiveRecord::Base
 
     part=Part.find_by_id(params[:part_id])
     if params[:need_convert]
-      params[:qty]=BigDecimal.new(params[:origin_qty].to_s)/BigDecimal.new(part.convert_unit.to_s)
+      params[:qty]=BigDecimal.new(params[:qty].to_s)/BigDecimal.new(part.convert_unit.to_s)
     else
-      params[:qty]=BigDecimal.new(params[:origin_qty].to_s)
+      params[:qty]=BigDecimal.new(params[:qty].to_s)
     end
 
     if params[:part_wire_mark].blank?

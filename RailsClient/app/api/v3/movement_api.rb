@@ -1,6 +1,8 @@
 module V3
-  class MovementApi < Grape::API
+  class MovementApi < Base
     namespace :movement do
+      guard_all!
+
       format :json
       rescue_from :all do |e|
         Rack::Response.new([e.message], 500).finish

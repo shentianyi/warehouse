@@ -1,6 +1,8 @@
 module V3
-  class InventoryListApi < Grape::API
+  class InventoryListApi < Base
     namespace :inventory_list do
+      guard_all!
+
       format :json
       rescue_from :all do |e|
         Rack::Response.new([e.message], 500).finish

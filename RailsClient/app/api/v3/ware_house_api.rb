@@ -1,7 +1,7 @@
 #encoding: utf-8
 module V3
-  class WareHouseApi < Grape::API
-
+  class WareHouseApi < Base
+    guard_all!
 
     format :json
     rescue_from :all do |e|

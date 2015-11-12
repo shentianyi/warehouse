@@ -1,6 +1,8 @@
 module V3
-  class MovementListApi < Grape::API
+  class MovementListApi < Base
     namespace :movement_list do
+      guard_all!
+
       format :json
       rescue_from :all do |e|
         Rack::Response.new([e.message], 500).finish
@@ -13,13 +15,14 @@ module V3
       get do
         time_condition = 7.days.ago.utc...Time.now.utc
         args = []
-        movement_lists = MovementList.where(created_at: time_condition, builder: params[:user_id])
+        movement_lists = MovementList.where(created_at: time_condition, builder: params[:user_id]).order(created_at: :desc)
         if movement_lists
           movement_lists.each_with_index do |movement_list, index|
             record = {}
             record[:id] = movement_list.id
             record[:created_at] = movement_list.created_at
             record[:count] = movement_list.movements.count
+            record[:state] = MovementListState.display movement_list.state.to_i
             args[index] = record
           end
           {result: 1, content: args}
@@ -30,20 +33,36 @@ module V3
 
       desc 'create movement list'
       params do
-        requires :user_id, type: String, desc: 'movement list builder'
+        requires :user_id, type: String, desc: 'ID of the movement list builder'
         optional :remarks, type: String
       end
       post do
+        if params[:user_id] && User.find_by(id: params[:user_id]).blank?
+          return {result: 0, content: "#{params[:user_id]}用户不存在！"}
+        end
+
         movement_list = MovementList.new(builder: params[:user_id], name: "#{params[:user_id]}#{DateTime.now.strftime("%H.%d.%m.%Y")}", remarks: params[:remarks])
         if movement_list.save
-          {result: 1, content: movement_list}
+          {result: 1, content: {id: movement_list.id, created_at: movement_list.created_at, count: 0, state: "新建"}}
         else
           {result: 0, content: "创建失败！"}
         end
       end
 
+      desc 'delete movement list'
+      params do
+        requires :movement_list_id, type: Integer, desc: 'ID of the movement list'
+      end
+      delete do
+        return {result: 0, content: "#{params[:movement_list_id]}移库单不存在！"} unless m=MovementList.find_by(id: params[:movement_list_id])
+
+        m.destroy
+        {result: 1, content: "删除成功"}
+      end
+
       desc 'validate movement' #store in class variable
       params do
+        requires :movement_list_id, type: Integer, desc: 'movement list id'
         requires :toWh, type: String, desc: 'des whouse'
         requires :toPosition, type: String, desc: 'des position'
         optional :fromWh, type: String, desc: 'src whouse'
@@ -59,6 +78,8 @@ module V3
         params[:fromPosition]=params[:fromPosition].sub(/LO/, '') if params[:fromPosition].present?
         params[:partNr]=params[:partNr].sub(/P/, '') if params[:partNr].present?
         puts "#{params.to_json}-----------"
+
+        return {result: 0, content: "#{params[:movement_list_id]}移库单不存在！"} unless m=MovementList.find_by(id: params[:movement_list_id])
 
         begin
           params[:qty]=params[:qty].sub(/Q/, '').to_f if params[:qty].present?
@@ -77,6 +98,7 @@ module V3
         end
 
         if msg.result
+          m.update(state: MovementListState::PROCESSING)
           {result: 1, content: '数据验证通过.'}
         else
           {result: 0, content: msg.content}
@@ -97,6 +119,9 @@ module V3
         args[:employee_id] = params[:employee_id].sub(/\.0/, '') if params[:employee_id].present?
         args[:remarks] = params[:remarks] if params[:remarks].present?
         args[:user] = current_user
+
+        return {result: 0, content: "#{params[:movement_list_id]}移库单不存在！"} unless m=MovementList.find_by(id: params[:movement_list_id])
+
         if params[:movements].blank?
           {result: 0, content: '没有数据移库'}
         else
@@ -118,9 +143,11 @@ module V3
                 WhouseService.new.move(args)
               end
             rescue => e
+              m.update(state: MovementListState::ERROR)
               return {result: 0, content: e.message}
             end
           end
+          m.update(state: MovementListState::ENDING)
           {result: 1, content: '移库成功'}
         end
       end

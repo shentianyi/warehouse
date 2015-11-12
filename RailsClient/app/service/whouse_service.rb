@@ -76,8 +76,6 @@ class WhouseService
 
 
   def move(params)
-    # raise '盘点模式,非超级管理员权限不可更改数据!' if (SysConfigCache.inventory_enable_value=='true' && !params[:user].supermanager?)
-
     # XXX does not work now
     type = MoveType.find_by!(typeId: 'MOVE')
 
@@ -327,7 +325,6 @@ class WhouseService
         #dse
         tostorage = NStorage.where(ware_house_id: toWh.id, partNr: params[:partNr], position: params[:toPosition]).order("n_storages.qty asc").first
         if !tostorage.blank?
-          puts "-------------------------#{tostorage}-------------------------------------ss"
           if (tostorage.qty.to_f + lastqty.to_f) == 0
             tostorage.destroy!
           else

@@ -1,6 +1,8 @@
 module V3
-  class InventoryListItemApi < Grape::API
+  class InventoryListItemApi < Base
     namespace :inventory_list_item do
+      guard_all!
+
       format :json
       rescue_from :all do |e|
         Rack::Response.new([e.message], 500).finish
@@ -38,8 +40,22 @@ module V3
         inventory_list_id = params[:inventory_list_id].nil? ? nil : params[:inventory_list_id]
         user_id = current_user.id
 
+        if !package_id.nil? && !qty.nil?
+          msg= {result: 0, content: "请填写数量！"}
+          return msg
+        end
         if Position.find_by(detail: position).blank?
           msg= {result: 0, content: "库位#{position}不存在"}
+          return msg
+        end
+
+        if InventoryList.find_by(id: inventory_list_id).blank?
+          msg= {result: 0, content: "盘点单号#{inventory_list_id}不存在"}
+          return msg
+        end
+
+        if part_id && Part.find_by(id: part_id).blank?
+          msg= {result: 0, content: "零件号#{part_id}不存在"}
           return msg
         end
 
