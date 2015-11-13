@@ -19,12 +19,18 @@ module V3
 
       desc 'get inventory list item positions api'
       params do
+        optional :position, type: String
         requires :inventory_list_id, type: Integer, desc: 'inventory list id'
         requires :user_id, type: String, desc: 'inventory list item builder'
       end
       get :inventory_list_position do
         params[:page] = 0 if params[:page].blank? || params[:page].to_i < 0
         params[:size] = 30 if params[:size].blank? || params[:size].to_i < 0
+
+        if params[:position] && Position.find_by(detail: params[:position]).blank?
+          msg= {result_code: 0, msg: "库位#{params[:position]}不存在"}
+          return msg
+        end
 
         msg = InventoryListItem.condition_positions params
         if msg.result

@@ -292,9 +292,8 @@ ActiveRecord::Schema.define(version: 20151110060229) do
     t.datetime "updated_at"
   end
 
-  create_table "movement_lists", id: false, force: true do |t|
+  create_table "movement_lists", force: true do |t|
     t.string   "uuid",       limit: 36,                 null: false
-    t.string   "id",                                    null: false
     t.string   "name",                  default: ""
     t.string   "state",                 default: "100"
     t.string   "builder"

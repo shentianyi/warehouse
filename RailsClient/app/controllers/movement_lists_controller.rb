@@ -42,6 +42,6 @@ class MovementListsController < ApplicationController
     end
 
     def movement_list_params
-      params.require(:movement_list).permit(:name, :state, :builder, :remarks)
+      params.require(:movement_list).permit(:uuid, :name, :state, :builder, :remarks)
     end
 end

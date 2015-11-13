@@ -13,5 +13,6 @@ class CreateMovementLists < ActiveRecord::Migration
 
     add_index :movement_lists, :uuid
     add_index :movement_lists, :id
+    execute 'ALTER TABLE movement_lists ADD PRIMARY KEY (id)'
   end
 end

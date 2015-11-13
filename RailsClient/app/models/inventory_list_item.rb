@@ -71,7 +71,6 @@ class InventoryListItem < ActiveRecord::Base
     if inventory_list_item.save!
       return inventory_list_item
     else
-
       return nil
     end
 
@@ -166,11 +165,16 @@ class InventoryListItem < ActiveRecord::Base
     msg=Message.new
     msg.result = false
 
-    items = InventoryListItem.where(inventory_list_id: params[:inventory_list_id], user_id: params[:user_id]).group(:position).order(updated_at: :desc).offset(params[:page].to_i * params[:size].to_i).limit(params[:size].to_i)
+    if params[:position]
+      items = InventoryListItem.where(position: params[:position], inventory_list_id: params[:inventory_list_id], user_id: params[:user_id]).group(:position).select('*, count(*) as count').order(updated_at: :desc).offset(params[:page].to_i * params[:size].to_i).limit(params[:size].to_i)
+    else
+      items = InventoryListItem.where(inventory_list_id: params[:inventory_list_id], user_id: params[:user_id]).group(:position).select('*, count(*) as count').order(updated_at: :desc).offset(params[:page].to_i * params[:size].to_i).limit(params[:size].to_i)
+
+    end
 
     record = []
     items.each_with_index do |item, index|
-      record[index] = item.position
+      record[index] = {position: item.position, count: item.count}
     end
 
     msg.result = true if record.length>0

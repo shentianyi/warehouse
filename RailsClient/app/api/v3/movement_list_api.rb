@@ -51,7 +51,7 @@ module V3
 
       desc 'delete movement list'
       params do
-        requires :movement_list_id, type: Integer, desc: 'ID of the movement list'
+        requires :movement_list_id, type: String, desc: 'ID of the movement list'
       end
       delete do
         return {result: 0, content: "#{params[:movement_list_id]}移库单不存在！"} unless m=MovementList.find_by(id: params[:movement_list_id])
@@ -62,7 +62,7 @@ module V3
 
       desc 'validate movement' #store in class variable
       params do
-        requires :movement_list_id, type: Integer, desc: 'movement list id'
+        requires :movement_list_id, type: String, desc: 'movement list id'
         requires :toWh, type: String, desc: 'des whouse'
         requires :toPosition, type: String, desc: 'des position'
         optional :fromWh, type: String, desc: 'src whouse'
@@ -108,7 +108,7 @@ module V3
 
       desc 'save movements'
       params do
-        requires :movement_list_id, type: Integer, desc: 'movement list id'
+        requires :movement_list_id, type: String, desc: 'movement list id'
         requires :employee_id, type: String, desc: 'The operator id'
         optional :remarks, type: String, desc: 'note info'
       end
@@ -148,6 +148,7 @@ module V3
             end
           end
           m.update(state: MovementListState::ENDING)
+
           {result: 1, content: '移库成功'}
         end
       end
