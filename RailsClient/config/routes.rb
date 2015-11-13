@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
 
-  resources :movement_lists
+  resources :movement_lists do
+    member do
+      get 'movement_list_items'
+    end
+  end
 
   resources :scrap_list_items do
     collection do

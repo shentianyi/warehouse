@@ -1,25 +1,46 @@
-<h1>Listing movement_lists</h1>
+<h2>移库单单列表</h2>
 
-<table>
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @movement_lists %>
+  </div>
+  <%= will_paginate @movement_lists, :container => false %>
+</div>
+
+<table class="table table-bordered table-striped globle-table">
   <thead>
-    <tr>
-      <th>Builder</th>
-      <th colspan="3"></th>
-    </tr>
+  <tr>
+    <th>No.</th>
+    <th>移库单号</th>
+    <th>状态</th>
+    <th>清单</td>
+    <th>创建人</th>
+    <th>创建时间</th>
+    <th>备注</th>
+    <th colspan="4"></th>
+    <th colspan="3"></th>
+  </tr>
   </thead>
 
   <tbody>
-    <% @movement_lists.each do |movement_list| %>
+  <% @movement_lists.each_with_index do |movement_list,i| %>
       <tr>
+        <td><%= i+1%></td>
+        <td><%= movement_list.id %></td>
+        <td><%= MovementListState.display movement_list.state.to_i %></td>
+        <td><%= link_to '清单列表',movement_list_items_movement_list_path(movement_list) %><span class="badge pull-right"><%= movement_list.movements.count%></td>
         <td><%= movement_list.builder %></td>
-        <td><%= link_to 'Show', movement_list %></td>
-        <td><%= link_to 'Edit', edit_movement_list_path(movement_list) %></td>
-        <td><%= link_to 'Destroy', movement_list, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= movement_list.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
+        <td><%= movement_list.remarks %></td>
+        <!--<td><%= link_to '详细', movement_list %></td>-->
+        <!--<td><%= link_to '编辑', edit_movement_list_path(movement_list) %></td>-->
+        <!--<td><%= link_to '删除', movement_list, method: :delete, data: { confirm: 'Are you sure?' } %></td>-->
       </tr>
-    <% end %>
+  <% end %>
   </tbody>
 </table>
 
 <br>
-
-<%= link_to 'New Movement list', new_movement_list_path %>
+<div class="digg_pagination">
+  <%= will_paginate @movement_lists, :container => false %>
+</div>

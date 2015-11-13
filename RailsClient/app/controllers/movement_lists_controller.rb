@@ -1,10 +1,10 @@
 class MovementListsController < ApplicationController
-  before_action :set_movement_list, only: [:show, :edit, :update, :destroy]
+  before_action :set_movement_list, only: [:show, :edit, :update, :destroy, :movement_list_items]
 
   respond_to :html
 
   def index
-    @movement_lists = MovementList.all
+    @movement_lists = MovementList.all.paginate(:page => params[:page])
     respond_with(@movement_lists)
   end
 
@@ -34,6 +34,11 @@ class MovementListsController < ApplicationController
   def destroy
     @movement_list.destroy
     respond_with(@movement_list)
+  end
+
+  def movement_list_items
+    @movement_list_items = @movement_list.movements.paginate(:page => params[:page])
+    @page_start=(params[:page].nil? ? 0 : (params[:page].to_i-1))*20
   end
 
   private
