@@ -121,6 +121,12 @@ module FileHandler
       def self.validate_import_row(row, line)
         msg = Message.new(contents: [])
 
+        if row['packageId'].present?
+          unless packageId = Container.exists?(row['packageId'])
+            msg.contents << "唯一码:#{row['packageId']} 不存在!"
+          end
+        end
+
         src_warehouse = Whouse.find_by_id(row[:toWh])
         unless src_warehouse
           msg.contents << "仓库号:#{row[:toWh]} 不存在!"
@@ -199,6 +205,13 @@ module FileHandler
 
       def self.validate_move_row(row)
         msg = Message.new(contents: [])
+
+        if row['packageId'].present?
+          unless packageId = Container.exists?(row['packageId'])
+            msg.contents << "唯一码:#{row['packageId']} 不存在!"
+          end
+        end
+
         if row[:fromWh].present?
           src_warehouse = Whouse.find_by_id(row[:fromWh])
           unless src_warehouse

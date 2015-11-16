@@ -71,6 +71,11 @@ module V3
               user_id:user_id,
               need_convert:false
           }
+
+          msg = FileHandler::Excel::InventoryListItemHandler.validate_api_params item
+          unless msg.result
+            return {result: 0, content: msg.content}
+          end
           inventory_list_item = InventoryListItem.new_item(item)
           if inventory_list_item.blank?
             msg= {result: 0, content: '添加失败'}
