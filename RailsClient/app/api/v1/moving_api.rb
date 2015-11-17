@@ -33,6 +33,7 @@ module V1
             raise '请填写数量' unless params[:qty].present?
             params[:packageId]=nil
           end
+
           msg = FileHandler::Excel::NStorageHandler.validate_move_row params
           unless msg.result
             return {result: 0, content: msg.content}

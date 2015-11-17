@@ -39,4 +39,20 @@ class Movement < ActiveRecord::Base
     p.to_stream.read
   end
 
+  def self.save_invalid_record params
+    move_data = {
+                    to_id: params[:toWh],
+                    toPosition: params[:toPosition],
+                    type_id: MoveType.find_by!(typeId: 'MOVE').id,
+                    employee_id: (params[:employee_id] if params[:employee_id].present?),
+                    remarks: (params[:remarks] if params[:remarks].present?),
+                    movement_list_id: (params[:movement_list_id] if params[:movement_list_id].present?),
+                    from_id: params[:fromWh],
+                    fromPosition: params[:fromPosition],
+                    fifo: (params[:fifo] if params[:fifo].present?),
+                    partNr: (params[:partNr] if params[:partNr].present?)
+                }
+    Movement.create!(move_data)
+  end
+
 end

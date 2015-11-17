@@ -70,6 +70,7 @@ module V3
             raise '请填写数量' unless params[:qty].present?
             params[:packageId]=nil
           end
+
           msg = FileHandler::Excel::NStorageHandler.validate_move_row params
           unless msg.result
             return {result: 0, content: msg.content}
@@ -94,6 +95,7 @@ module V3
         NStorage.transaction do
           JSON.parse(params[:moves]).each do |p|
             p.deep_symbolize_keys!
+            puts "----=============#{p}"
             WhouseService.new.move(p)
           end
         end

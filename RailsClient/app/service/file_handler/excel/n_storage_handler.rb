@@ -233,6 +233,7 @@ module FileHandler
             positions += ["#{position.detail}"]
           end
         else
+          Movement.save_invalid_record row
           msg.contents << "零件号:#{row[:partNr]} 不存在!"
         end
 
