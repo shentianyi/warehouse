@@ -1,7 +1,6 @@
 #encoding: utf-8
 module V3
   class WareHouseApi < Base
-    guard_all!
 
     format :json
     rescue_from :all do |e|
@@ -63,8 +62,8 @@ module V3
         params[:fromPosition]=params[:fromPosition].sub(/LO/, '') if params[:fromPosition].present?
 
         params[:partNr]=params[:partNr].sub(/P/, '') if params[:partNr].present?
-        puts "#{params.to_json}-----------"
         params[:user] = current_user
+        puts "#{params.to_json}-----------"
         begin
           params[:qty]=params[:qty].sub(/Q/, '').to_f if params[:qty].present?
           if params[:partNr].present?
