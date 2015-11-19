@@ -45,7 +45,7 @@ class Movement < ActiveRecord::Base
                     toPosition: params[:toPosition],
                     type_id: MoveType.find_by!(typeId: 'MOVE').id,
                     employee_id: (params[:employee_id] if params[:employee_id].present?),
-                    remarks: (params[:remarks] if params[:remarks].present?),
+                    remarks: "参数验证错误",
                     movement_list_id: (params[:movement_list_id] if params[:movement_list_id].present?),
                     from_id: params[:fromWh],
                     fromPosition: params[:fromPosition],

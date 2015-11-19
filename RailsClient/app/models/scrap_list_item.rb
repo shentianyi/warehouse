@@ -17,6 +17,7 @@ class ScrapListItem < ActiveRecord::Base
           toPosition: 'BaofeiWeizhi',
           fromWh: self.scrap_list.src_warehouse
       }
+      StorageOperationRecord.save_record(params, 'MOVE')
       NStorage.transaction do
         WhouseService.new.move(params)
       end

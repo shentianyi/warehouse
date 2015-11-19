@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151110060229) do
+ActiveRecord::Schema.define(version: 20151118075745) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -684,6 +684,22 @@ ActiveRecord::Schema.define(version: 20151110060229) do
   end
 
   add_index "state_logs", ["id"], name: "index_state_logs_on_id", using: :btree
+
+  create_table "storage_operation_records", force: true do |t|
+    t.string   "partNr"
+    t.string   "qty"
+    t.string   "fromWh"
+    t.string   "fromPosition"
+    t.string   "toWh"
+    t.string   "toPosition"
+    t.string   "packageId"
+    t.string   "type_id"
+    t.string   "remarks"
+    t.string   "employee_id"
+    t.datetime "fifo"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "storages", force: true do |t|
     t.string   "location_id"

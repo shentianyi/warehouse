@@ -22,8 +22,23 @@ class NStoragesController < ApplicationController
 
 
   def update
+    move_data = {
+        to_id: params[:n_storage][:ware_house_id],
+        toPosition: params[:n_storage][:position],
+        type_id: MoveType.find_by!(typeId: 'MOVE').id,
+        partNr: @storage.partNr,
+        fifo: @storage.fifo,
+        qty: @storage.qty,
+        from_id: @storage.ware_house_id,
+        fromPosition: @storage.position,
+        packageId: @storage.packageId,
+        remark: @storage.remarks,
+        employee_id: current_user
+    }
+    puts move_data
     respond_to do |format|
       if @storage.update(storage_params)
+        Movement.create!(move_data)
         format.html { redirect_to @storage, notice: 'Storage was successfully updated.' }
         format.json { render :show, status: :ok, location: @storage }
       else

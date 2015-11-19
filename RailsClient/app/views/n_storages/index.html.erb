@@ -65,6 +65,7 @@
     <th>创建日期</th>
     <th>仓库号</th>
     <th>库位号</th>
+    <th>备注</th>
     <th></th>
   </tr>
   </thead>
@@ -79,6 +80,7 @@
         <td><%= storage.created_at.localtime if storage.created_at %> </td>
         <td><%= storage.ware_house_id %></td>
         <td><%= storage.position %></td>
+        <td><%= storage.remarks %></td>
         <% if current_user.can_edit_inventory? %>
             <td><%= link_to '编辑', edit_n_storage_path(storage), :class => 'btn btn-default' %></td>
         <% end %>

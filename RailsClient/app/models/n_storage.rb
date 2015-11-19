@@ -1,8 +1,17 @@
 class NStorage < ActiveRecord::Base
-  belongs_to :ware_house, class_name: 'WareHouse'
+  belongs_to :ware_house, class_name: 'Whouse'
   default_scope { where(locked: false) }
 
+  before_validation :validate
+
   has_paper_trail
+
+  def validate
+    errors.add(:ware_house_id, "仓库不存在") unless Whouse.find_by_id(self.ware_house_id)
+    if self.ware_house
+      errors.add(:position, "库位不存在") unless self.ware_house.positions.find_by_detail(self.position)
+    end
+  end
 
   def whId
     ware_house and ware_house.whId or nil

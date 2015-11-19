@@ -113,7 +113,7 @@ module V3
         optional :remarks, type: String, desc: 'note info'
       end
       post :save_movements do
-
+        msg = Message.new(contents: [])
         args = {}
         args[:movement_list_id] = params[:movement_list_id]
         args[:employee_id] = params[:employee_id].sub(/\.0/, '') if params[:employee_id].present?
@@ -125,32 +125,39 @@ module V3
         if params[:movements].blank?
           {result: 0, content: '没有数据移库'}
         else
-          params[:movements].each_with_index do |movement, index|
-            puts movement
-            args[:toWh] = movement[:toWh].sub(/LO/, '')
-            args[:toPosition] = movement[:toPosition].sub(/LO/, '')
-            args[:fromWh] = movement[:fromWh].sub(/LO/, '') if movement[:fromWh].present?
-            args[:fromPosition] = movement[:fromPosition].sub(/LO/, '') if movement[:fromPosition].present?
-            args[:partNr] = movement[:partNr].sub(/P/, '') if movement[:partNr].present?
-            args[:qty] = movement[:qty].sub(/Q/, '').to_f if movement[:qty].present?
+          NStorage.transaction do
+            params[:movements].each_with_index do |movement, index|
+              puts movement
+              args[:toWh] = movement[:toWh].sub(/LO/, '')
+              args[:toPosition] = movement[:toPosition].sub(/LO/, '')
+              args[:fromWh] = movement[:fromWh].sub(/LO/, '') if movement[:fromWh].present?
+              args[:fromPosition] = movement[:fromPosition].sub(/LO/, '') if movement[:fromPosition].present?
+              args[:partNr] = movement[:partNr].sub(/P/, '') if movement[:partNr].present?
+              args[:qty] = movement[:qty].sub(/Q/, '').to_f if movement[:qty].present?
 
-            begin
-              if movement[:partNr].present?
-                raise '请填写数量' unless movement[:qty].present?
-                args[:packageId]=nil
-              end
-              NStorage.transaction do
+              begin
+                if movement[:partNr].present?
+                  raise '请填写数量' unless movement[:qty].present?
+                  args[:packageId]=nil
+                end
+
                 WhouseService.new.move(args)
+
+              rescue => e
+                m.update(state: MovementListState::ERROR)
+                msg.contents << e.message
               end
-            rescue => e
-              m.update(state: MovementListState::ERROR)
-              return {result: 0, content: e.message}
             end
           end
-          m.update(state: MovementListState::ENDING)
 
-          {result: 1, content: '移库成功'}
+          if msg.result=(msg.contents.size==0)
+            m.update(state: MovementListState::ENDING)
+            msg.content='移库成功'
+          else
+            msg.content=msg.contents.join('/')
+          end
         end
+        msg
       end
 
 

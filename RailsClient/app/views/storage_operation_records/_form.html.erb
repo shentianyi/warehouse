@@ -1,0 +1,57 @@
+<%= form_for(@storage_operation_record) do |f| %>
+  <% if @storage_operation_record.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@storage_operation_record.errors.count, "error") %> prohibited this storage_operation_record from being saved:</h2>
+
+      <ul>
+      <% @storage_operation_record.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :partNr %><br>
+    <%= f.text_field :partNr %>
+  </div>
+  <div class="field">
+    <%= f.label :qty %><br>
+    <%= f.text_field :qty %>
+  </div>
+  <div class="field">
+    <%= f.label :fromWh %><br>
+    <%= f.text_field :fromWh %>
+  </div>
+  <div class="field">
+    <%= f.label :fromPosition %><br>
+    <%= f.text_field :fromPosition %>
+  </div>
+  <div class="field">
+    <%= f.label :toWh %><br>
+    <%= f.text_field :toWh %>
+  </div>
+  <div class="field">
+    <%= f.label :toPosition %><br>
+    <%= f.text_field :toPosition %>
+  </div>
+  <div class="field">
+    <%= f.label :packageId %><br>
+    <%= f.text_field :packageId %>
+  </div>
+  <div class="field">
+    <%= f.label :type_id %><br>
+    <%= f.text_field :type_id %>
+  </div>
+  <div class="field">
+    <%= f.label :remarks %><br>
+    <%= f.text_field :remarks %>
+  </div>
+  <div class="field">
+    <%= f.label :employee_id %><br>
+    <%= f.text_field :employee_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

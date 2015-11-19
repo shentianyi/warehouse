@@ -120,8 +120,9 @@ module FileHandler
 
       def self.validate_import_row(row, line)
         msg = Message.new(contents: [])
+        StorageOperationRecord.save_record(row, 'ENTRY')
 
-        if row['packageId'].present?
+        if row[:packageId].present?
           unless packageId = Container.exists?(row['packageId'])
             msg.contents << "唯一码:#{row['packageId']} 不存在!"
           end
@@ -205,8 +206,9 @@ module FileHandler
 
       def self.validate_move_row(row)
         msg = Message.new(contents: [])
+        StorageOperationRecord.save_record(row, 'MOVE')
 
-        if row['packageId'].present?
+        if row[:packageId].present?
           unless packageId = Container.exists?(row['packageId'])
             msg.contents << "唯一码:#{row['packageId']} 不存在!"
           end
@@ -233,7 +235,6 @@ module FileHandler
             positions += ["#{position.detail}"]
           end
         else
-          Movement.save_invalid_record row
           msg.contents << "零件号:#{row[:partNr]} 不存在!"
         end
 

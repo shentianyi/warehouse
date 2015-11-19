@@ -1,0 +1,108 @@
+<h1>库存操作记录列表</h1>
+
+<div>
+  <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+    <div>
+      <div>
+        <div>
+            <span>零件号：
+              <input type="text" name="storage_operation_record[partNr]" value="<%= @partNr %>"/>
+              <input type="hidden" name="storage_operation_record[partNr_fuzzy]"/>
+            </span>
+            <span>唯一码：
+              <input type="text" name="storage_operation_record[packageId]" value="<%= @packageId %>"/>
+              <input type="hidden" name="storage_operation_record[packageId_fuzzy]"/>
+            </span>
+
+            <span>源仓库号：
+              <%= select_tag('storage_operation_record[fromWh]', options_from_collection_for_select(Whouse.all, :name, :id, @fromWh), include_blank: true) %>
+            </span>
+            <span>源库位号：
+              <input type="text" name="storage_operation_record[fromPosition]" value="<%= @fromPosition %>"/>
+              <input type="hidden" name="storage_operation_record[fromPosition_fuzzy]"/>
+            </span>
+
+            <span>目的仓库号：
+              <%= select_tag('storage_operation_record[toWh]', options_from_collection_for_select(Whouse.all, :name, :id, @toWh), include_blank: true) %>
+            </span>
+            <span>目的库位号：
+              <input type="text" name="storage_operation_record[toPosition]" value="<%= @toPosition %>"/>
+              <input type="hidden" name="storage_operation_record[toPosition_fuzzy]"/>
+            </span>
+        </div>
+        <div>
+            <span>
+              创建日期：
+              <input type="text" name="storage_operation_record[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
+              ~  <input type="text" name="storage_operation_record[created_at][end]" class="datepicker" value="<%= @created_at_end %>"/>
+            </span>
+            <span>
+              FIFO：
+              <input type="text" name="storage_operation_record[fifo][start]" class="datepicker" value="<%= @fifo_start %>"/>
+              ~  <input type="text" name="storage_operation_record[fifo][end]" class="datepicker" value="<%= @fifo_end %>"/>
+            </span>
+        </div>
+        <div>
+          <input type="submit" value="查找" class="btn btn-primary" name="search"/>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @parts %>
+  </div>
+  <%= will_paginate @parts, :container => false %>
+</div>
+<table class="table table-bordered table-striped">
+  <thead>
+  <tr>
+    <th>零件号</th>
+    <th>数量</th>
+    <th>FIFO</th>
+    <th>源仓库</th>
+    <th>源库位</th>
+    <th>目的仓库</th>
+    <th>目的库位</th>
+    <th>唯一码</th>
+    <th>类型</th>
+    <th>备注</th>
+    <th>员工号</th>
+    <th colspan="3"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @storage_operation_records.each do |storage_operation_record| %>
+      <tr>
+        <td><%= storage_operation_record.partNr %></td>
+        <td><%= storage_operation_record.qty %></td>
+        <td><%= storage_operation_record.fifo %></td>
+        <td><%= storage_operation_record.fromWh %></td>
+        <td><%= storage_operation_record.fromPosition %></td>
+        <td><%= storage_operation_record.toWh %></td>
+        <td><%= storage_operation_record.toPosition %></td>
+        <td><%= storage_operation_record.packageId %></td>
+        <td><%= MoveType.find(storage_operation_record.type_id).typeId if storage_operation_record.type_id %></td>
+        <td><%= storage_operation_record.remarks %></td>
+        <td><%= storage_operation_record.employee_id %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<div class="digg_pagination">
+  <%= will_paginate @parts, :container => false %>
+</div>
+
+<script>
+    $(function () {
+        $(".datepicker").datetimepicker({
+            lang: 'ch',
+            format: 'Y-m-d H:i'
+        });
+    });
+    init_check();
+</script>

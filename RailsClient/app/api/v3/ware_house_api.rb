@@ -7,6 +7,7 @@ module V3
       Rack::Response.new([e.message], 500).finish
     end
     namespace :whouse do
+
       desc 'Get WareHouse list.'
       get do
         # guard!
@@ -37,6 +38,7 @@ module V3
       end
       post :enter_stock do
         puts params.to_json
+        StorageOperationRecord.save_record(params, 'ENTRY')
         s=WhouseService.new.enter_stock(params)
         {result: 1, content: s}
       end
@@ -96,6 +98,7 @@ module V3
           JSON.parse(params[:moves]).each do |p|
             p.deep_symbolize_keys!
             puts "----=============#{p}"
+            StorageOperationRecord.save_record(params, 'MOVE')
             WhouseService.new.move(p)
           end
         end

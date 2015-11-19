@@ -90,6 +90,7 @@ class InventoryListItem < ActiveRecord::Base
     puts '--------------------------------------'
     puts params.to_json
     puts '--------------------------------------'
+    StorageOperationRecord.save_record(params, 'ENTRY')
     WhouseService.new.enter_stock(params)
   end
 
