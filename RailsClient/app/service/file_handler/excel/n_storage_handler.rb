@@ -3,7 +3,7 @@ module FileHandler
     class NStorageHandler<Base
 
       IMPORT_HEADERS=[
-          :toWh,:partNr,:fifo,:qty,:toPosition,:packageId, :employee_id, :remarks
+          :toWh, :partNr, :fifo, :qty, :toPosition, :packageId, :employee_id, :remarks
       ]
 
       MOVE_HEADERS = [
@@ -124,23 +124,30 @@ module FileHandler
         StorageOperationRecord.save_record(row, 'ENTRY')
 
         if row[:packageId].present?
-          unless packageId = Container.exists?(row['packageId'])
+          unless packageId = Container.exists?(row[:packageId])
             msg.contents << "唯一码:#{row['packageId']} 不存在!"
           end
         end
 
         src_warehouse = Whouse.find_by_id(row[:toWh])
         unless src_warehouse
-          msg.contents << "仓库号:#{row[:toWh]} 不存在!"
+          msg.contents << "目的仓库号:#{row[:toWh]} 不存在!"
         end
 
-        part_id = Part.find_by_id(row[:partNr])
-        unless part_id
-          msg.contents << "零件号:#{row[:partNr]} 不存在!"
+        if row[:packageId].present? && row[:partNr].blank?
+        else
+          part_id = Part.find_by_id(row[:partNr])
+          unless part_id
+            msg.contents << "零件号:#{row[:partNr]} 不存在!"
+          end
         end
 
-        unless row[:qty].to_f > 0
-          msg.contents << "数量: #{row[:qty]} 不可以小于等于 0!"
+        if row[:packageId].present?
+          msg.contents << "数量: #{row[:qty]} 不可以小于等于 0!" if row[:qty].to_f < 0
+        else
+          unless row[:qty].to_f > 0
+            msg.contents << "数量: #{row[:qty]} 不可以小于等于 0!"
+          end
         end
 
         if row[:fifo].present?
@@ -154,7 +161,7 @@ module FileHandler
         if row[:toPosition].present?
           position = Position.find_by(detail: row[:toPosition])
           unless position
-            msg.contents << "库位号:#{row[:toPosition]} 不存在!"
+            msg.contents << "目的库位号:#{row[:toPosition]} 不存在!"
           end
         end
 
@@ -210,7 +217,7 @@ module FileHandler
         StorageOperationRecord.save_record(row, 'MOVE')
 
         if row[:packageId].present?
-          unless packageId = Container.exists?(row['packageId'])
+          unless packageId = Container.exists?(row[:packageId])
             msg.contents << "唯一码:#{row['packageId']} 不存在!"
           end
         end
@@ -230,17 +237,24 @@ module FileHandler
         end
 
         positions = []
-        part_id = Part.find_by_id(row[:partNr])
-        if part_id
-          part_id.positions.each do |position|
-            positions += ["#{position.detail}"]
-          end
+        if row[:packageId].present? && row[:partNr].blank?
         else
-          msg.contents << "零件号:#{row[:partNr]} 不存在!"
+          part_id = Part.find_by_id(row[:partNr])
+          if part_id
+            part_id.positions.each do |position|
+              positions += ["#{position.detail}"]
+            end
+          else
+            msg.contents << "零件号:#{row[:partNr]} 不存在!"
+          end
         end
 
-        unless row[:qty].to_f > 0
-          msg.contents << "数量: #{row[:qty]} 不可以小于等于 0!"
+        if row[:packageId].present?
+          msg.contents << "数量: #{row[:qty]} 不可以小于等于 0!" if row[:qty].to_f < 0
+        else
+          unless row[:qty].to_f > 0
+            msg.contents << "数量: #{row[:qty]} 不可以小于等于 0!"
+          end
         end
 
         if row[:fifo].present?
@@ -254,7 +268,7 @@ module FileHandler
         if row[:fromPosition].present?
           from_position = Position.find_by(detail: row[:fromPosition])
           unless from_position
-            msg.contents << "库位号:#{row[:fromPosition]} 不存在!"
+            msg.contents << "目的库位号:#{row[:fromPosition]} 不存在!"
           end
         end
 
@@ -267,7 +281,7 @@ module FileHandler
         if row[:toPosition].present?
           to_position = Position.find_by(detail: row[:toPosition])
           unless to_position
-            msg.contents << "库位号:#{row[:toPosition]} 不存在!"
+            msg.contents << "目的库位号:#{row[:toPosition]} 不存在!"
           end
         end
 
