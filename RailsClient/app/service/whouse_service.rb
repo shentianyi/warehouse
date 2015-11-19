@@ -35,6 +35,7 @@ class WhouseService
   def enter_stock(params)
     # raise '盘点模式,非超级管理员权限不可更改数据!' if (SysConfigCache.inventory_enable_value=='true' && !params[:user].supermanager?)
     # validate fifo
+    PaperTrail.whodunnit = params[:user].blank? ? '' : params[:user].id
     puts '----------------------ss'
     fifo = validate_fifo_time(params[:fifo])
     # validate whId existing
@@ -87,7 +88,7 @@ class WhouseService
     move_data[:remarks] = params[:remarks] if params[:remarks].present?
     move_data[:movement_list_id] = params[:movement_list_id] if params[:movement_list_id].present?
 
-    PaperTrail.whodunnit = params[:user].id
+    PaperTrail.whodunnit = params[:user].blank? ? '' : params[:user].id
     if params[:uniqueId].present?
       #Move(uniqueId,toWh,toPosition,type)
       # find from wh

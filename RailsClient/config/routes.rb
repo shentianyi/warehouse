@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
 
+  resources :operation_logs do
+    collection do
+      get :search
+    end
+  end
+
   resources :storage_operation_records do
     collection do
       get :search

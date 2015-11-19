@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151118075745) do
+ActiveRecord::Schema.define(version: 20151119023720) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -360,6 +360,16 @@ ActiveRecord::Schema.define(version: 20151118075745) do
   add_index "n_storages", ["storageId"], name: "storage_id_unique", unique: true, using: :btree
   add_index "n_storages", ["uniqueId"], name: "unique_id_unique", unique: true, using: :btree
   add_index "n_storages", ["ware_house_id"], name: "index_n_storages_on_ware_house_id", using: :btree
+
+  create_table "operation_logs", force: true do |t|
+    t.string   "item_type"
+    t.string   "item_id"
+    t.string   "event"
+    t.string   "whodunnit"
+    t.text     "object"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "order_items", force: true do |t|
     t.string   "uuid",                         null: false

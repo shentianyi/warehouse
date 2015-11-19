@@ -9,6 +9,7 @@ class StorageOperationRecord < ActiveRecord::Base
         remarks: (params[:remarks] if params[:remarks].present?),
         fromWh: (params[:fromWh] if params[:fromWh].present?),
         fromPosition: (params[:fromPosition] if params[:fromPosition].present?),
+        partNr: (params[:fifo] if params[:fifo].present?),
         partNr: (params[:partNr] if params[:partNr].present?),
         qty: (params[:qty] if params[:qty].present?)
     }

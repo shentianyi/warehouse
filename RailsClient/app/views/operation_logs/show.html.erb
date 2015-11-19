@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Item type:</strong>
+  <%= @operation_log.item_type %>
+</p>
+
+<p>
+  <strong>Item:</strong>
+  <%= @operation_log.item_id %>
+</p>
+
+<p>
+  <strong>Event:</strong>
+  <%= @operation_log.event %>
+</p>
+
+<p>
+  <strong>Whodunnit:</strong>
+  <%= @operation_log.whodunnit %>
+</p>
+
+<p>
+  <strong>Object:</strong>
+  <%= @operation_log.object %>
+</p>
+
+<%= link_to 'Edit', edit_operation_log_path(@operation_log) %> |
+<%= link_to 'Back', operation_logs_path %>

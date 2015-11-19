@@ -38,6 +38,7 @@ module V3
       end
       post :enter_stock do
         puts params.to_json
+        params[:user] = current_user
         StorageOperationRecord.save_record(params, 'ENTRY')
         s=WhouseService.new.enter_stock(params)
         {result: 1, content: s}

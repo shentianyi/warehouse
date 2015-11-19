@@ -10,7 +10,7 @@ module FileHandler
           :fromWh, :fromPosition, :packageId, :partNr, :qty, :fifo, :toWh, :toPosition, :employee_id, :remarks
       ]
 
-      def self.import(file)
+      def self.import(file, current_user)
         msg = Message.new
         book = Roo::Excelx.new file.full_path
         book.default_sheet = book.sheets.first
@@ -28,6 +28,7 @@ module FileHandler
                   end
                 end
 
+                row[:user] = current_user
                 WhouseService.new.enter_stock(row)
 
               end
