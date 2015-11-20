@@ -43,7 +43,7 @@ module V3
 
         movement_list = MovementList.new(builder: params[:user_id], name: "#{params[:user_id]}#{DateTime.now.strftime("%H.%d.%m.%Y")}", remarks: params[:remarks])
         if movement_list.save
-          {result: 1, content: {id: movement_list.id, created_at: movement_list.created_at, count: 0, state: "新建"}}
+          {result: 1, content: {id: movement_list.id, created_at: movement_list.created_at, count: 0, state: MovementListState::BEGINNING}}
         else
           {result: 0, content: "创建失败！"}
         end
@@ -54,7 +54,7 @@ module V3
         requires :movement_list_id, type: String, desc: 'ID of the movement list'
       end
       delete do
-        return {result: 0, content: "#{params[:movement_list_id]}移库单不存在！"} unless m=MovementList.find_by(id: params[:movement_list_id])
+        return {result: 0, content: "#{params[:movement_list_id]}移库单不存在！"} unless m=MovementList.where(id: params[:movement_list_id], state: MovementListState::ERROR)
 
         m.destroy
         {result: 1, content: "删除成功"}

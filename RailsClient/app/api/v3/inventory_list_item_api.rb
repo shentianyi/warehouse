@@ -132,7 +132,11 @@ module V3
           return {result: 0, content: InventoryListItemMessage::NotFound}
         end
 
-        item.destroy
+        begin
+          item.destroy
+        rescue => e
+          return {result: 0, content: e.message}
+        end
         return {result: 1, content: InventoryListItemMessage::DeleteSuccess}
       end
 
@@ -158,8 +162,13 @@ module V3
         args[:whouse_id] = params[:whouse_id] unless params[:whouse_id].blank?
         args[:position] = params[:position] unless params[:position].blank?
 
-        item.update(args)
+        begin
+          item.update(args)
+        rescue => e
+            return {result: 0, content: e.message}
+        end
         return {result: 1, content: InventoryListItemMessage::UpdateSuccess}
+
       end
 
     end
