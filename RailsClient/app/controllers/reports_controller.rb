@@ -1,6 +1,7 @@
 # encoding: utf-8
 class ReportsController < ApplicationController
   def reports
+    @part_id = params[:part_id]
     @type = params[:type].nil? ? ReportType::Entry : params[:type]
     @date_start = params[:date_start].nil? ? 1.day.ago.strftime("%Y-%m-%d 7:00") : params[:date_start]
     @date_end = params[:date_end].nil? ? Time.now.strftime("%Y-%m-%d 7:00") : params[:date_end]
@@ -8,7 +9,7 @@ class ReportsController < ApplicationController
     @title = ''
     @commit_value = params[:commit]
 
-    @packages = Package.generate_report_data(@type,@date_start,@date_end,@location_id,@commit_value)
+    @packages = Package.generate_report_data(@type,@date_start,@date_end,@location_id,@commit_value,@part_id)
     #render :json=> @packages
     @title = ReportsHelper.gen_title(@type,@date_start,@date_end,@location_id)
     respond_to do |format|
