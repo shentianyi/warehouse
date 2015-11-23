@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151119023720) do
+ActiveRecord::Schema.define(version: 20151123032226) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -181,17 +181,15 @@ ActiveRecord::Schema.define(version: 20151119023720) do
     t.boolean  "is_dirty",      default: true
     t.boolean  "is_new",        default: true
     t.string   "modem_id"
-    t.string   "position_id"
+    t.string   "position"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "mac"
-    t.string   "led_display"
-    t.boolean  "is_valid",      default: true
   end
 
   add_index "leds", ["id"], name: "index_leds_on_id", using: :btree
   add_index "leds", ["modem_id"], name: "index_leds_on_modem_id", using: :btree
-  add_index "leds", ["position_id"], name: "index_leds_on_position_id", using: :btree
+  add_index "leds", ["position"], name: "index_leds_on_position", using: :btree
   add_index "leds", ["signal_id"], name: "index_leds_on_signal_id", using: :btree
 
   create_table "location_container_hierarchies", id: false, force: true do |t|
@@ -264,7 +262,6 @@ ActiveRecord::Schema.define(version: 20151119023720) do
     t.integer  "parent_id"
     t.integer  "status",                    default: 0
     t.string   "remark",                    default: ""
-    t.string   "ip_detail"
   end
 
   add_index "locations", ["destination_id"], name: "index_locations_on_destination_id", using: :btree
@@ -321,7 +318,7 @@ ActiveRecord::Schema.define(version: 20151119023720) do
     t.string   "remark"
     t.string   "remarks"
     t.string   "employee_id"
-    t.integer  "movement_list_id"
+    t.string   "movement_list_id"
   end
 
   add_index "movements", ["packageId"], name: "package_id_index", using: :btree
