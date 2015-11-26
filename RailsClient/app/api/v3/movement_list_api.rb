@@ -65,7 +65,7 @@ module V3
         requires :movement_list_id, type: String, desc: 'movement list id'
         requires :toWh, type: String, desc: 'des whouse'
         requires :toPosition, type: String, desc: 'des position'
-        optional :fromWh, type: String, desc: 'src whouse'
+        requires :fromWh, type: String, desc: 'src whouse'
         optional :fromPosition, type: String, desc: 'src position'
         optional :packageId, type: String, desc: 'package ID'
         optional :partNr, type: String, desc: 'part NO.'
@@ -83,6 +83,9 @@ module V3
 
         begin
           params[:qty]=params[:qty].sub(/Q/, '').to_f if params[:qty].present?
+          if params[:partNr].blank? && params[:packageId].blank?
+            raise '请填写零件号或者唯一码'
+          end
           if params[:partNr].present?
             raise '请填写数量' unless params[:qty].present?
             params[:packageId]=nil
