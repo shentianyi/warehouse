@@ -1,8 +1,8 @@
 class MovementListState
   BEGINNING = 100
   PROCESSING = 200
-  ENDING =300
-  ERROR =300
+  ENDING = 300
+  ERROR = 400
 
   def self.display state
     case state
