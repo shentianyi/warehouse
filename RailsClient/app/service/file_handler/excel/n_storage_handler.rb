@@ -268,13 +268,13 @@ module FileHandler
         if row[:fromPosition].present?
           from_position = Position.find_by(detail: row[:fromPosition])
           unless from_position
-            msg.contents << "目的库位号:#{row[:fromPosition]} 不存在!"
+            msg.contents << "源库位号:#{row[:fromPosition]} 不存在!"
           end
         end
 
         if from_position && part_id
           unless positions.include?(row[:fromPosition])
-            msg.contents << "零件号:#{row[:partNr]} 不在库位号:#{row[:fromPosition]}上!"
+            msg.contents << "零件号:#{row[:partNr]} 不在源库位号:#{row[:fromPosition]}上!"
           end
         end
 
@@ -287,7 +287,7 @@ module FileHandler
 
         if to_position && part_id
           unless positions.include?(row[:toPosition])
-            msg.contents << "零件号:#{row[:partNr]}不在库位号:#{row[:toPosition]}上!"
+            msg.contents << "零件号:#{row[:partNr]}不在目的库位号:#{row[:toPosition]}上!"
           end
         end
 

@@ -11,7 +11,7 @@ class MovementListState
       when PROCESSING
         '进行中'
       when ENDING
-        '结束'
+        '成功'
       when ERROR
         '失败'
       else

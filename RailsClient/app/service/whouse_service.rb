@@ -297,7 +297,7 @@ class WhouseService
 
         #movement
         remark = "系统添加备注信息：#{Time.now} 负库存产生【操作员：#{params[:user].id} -- 初始移库数量：#{params[:qty]}】"
-        move_data.update({from_id: params[:toWh], fromPosition: params[:toPosition], partNr: params[:partNr], qty: lastqty, remark: remark})
+        move_data.update({from_id: params[:fromWh], fromPosition: params[:fromPosition], partNr: params[:partNr], qty: lastqty, remark: remark})
         Movement.create!(move_data)
 
       end
