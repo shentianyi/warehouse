@@ -23,7 +23,7 @@ module V1
         args[:part_id] = p.part_id
         args[:qty] = p.quantity
         args[:fifo] = p.fifo_time_display.blank? ? '' : Date.strptime(p.fifo_time_display.sub(/W  /, ''), '%d.%m.%y')
-        {result_code: '1', msg: args}
+        {result: '1', content: args}
       end
 
       #get packages by created_at time and state

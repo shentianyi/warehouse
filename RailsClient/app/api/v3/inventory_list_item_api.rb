@@ -40,7 +40,7 @@ module V3
         inventory_list_id = params[:inventory_list_id].nil? ? nil : params[:inventory_list_id]
         user_id = current_user.id
 
-        if !package_id.nil? && !qty.nil?
+        if package_id.nil? && qty.nil?
           msg= {result: 0, content: "请填写数量！"}
           return msg
         end
@@ -112,13 +112,13 @@ module V3
         msg = InventoryListItem.condition_items params
         if msg.result
           {
-              result_code: '1',
-              msg: msg.content
+              result: '1',
+              content: msg.content
           }
         else
           {
-              result_code: '0',
-              msg: ['there is no data in the request']
+              result: '0',
+              content: ['there is no data in the request']
           }
         end
       end

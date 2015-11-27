@@ -123,7 +123,6 @@ module V3
         args[:movement_list_id] = params[:movement_list_id]
         args[:employee_id] = params[:employee_id].sub(/\.0/, '') if params[:employee_id].present?
         args[:remarks] = params[:remarks] if params[:remarks].present?
-        args[:user] = current_user
 
         return {result: 0, content: "#{params[:movement_list_id]}移库单不存在！"} unless m=MovementList.find_by(id: params[:movement_list_id])
 
@@ -131,9 +130,9 @@ module V3
           {result: 0, content: '没有数据移库'}
         else
           NStorage.transaction do
-            move_list = MovementList.create(builder: current_user.id, name: "#{current_user.id}_#{DateTime.now.strftime("%H.%d.%m.%Y")}")
             params[:movements].each_with_index do |movement, index|
               puts movement
+              args[:user] = current_user
               args[:toWh] = movement[:toWh].sub(/LO/, '')
               args[:toPosition] = movement[:toPosition].sub(/LO/, '')
               args[:fromWh] = movement[:fromWh].sub(/LO/, '') if movement[:fromWh].present?
@@ -149,8 +148,8 @@ module V3
 
                 WhouseService.new.move(args)
 
-                args[:movement_list_id] = move_list.id
-                MovementSource.create(row)
+                args.delete(:user)
+                MovementSource.create(args)
 
               rescue => e
                 m.update(state: MovementListState::ERROR)
@@ -166,7 +165,8 @@ module V3
             msg.content=msg.contents.join('/')
           end
         end
-        msg
+
+        {result: msg.result, content: msg.content}
       end
 
 

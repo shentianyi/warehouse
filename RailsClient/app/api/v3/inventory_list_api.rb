@@ -28,20 +28,20 @@ module V3
         params[:size] = 30 if params[:size].blank? || params[:size].to_i < 0
 
         if params[:position] && Position.find_by(detail: params[:position]).blank?
-          msg= {result_code: 0, msg: "库位#{params[:position]}不存在"}
+          msg= {result: 0, content: "库位#{params[:position]}不存在"}
           return msg
         end
 
         msg = InventoryListItem.condition_positions params
         if msg.result
           {
-              result_code: '1',
-              msg: msg.content
+              result: '1',
+              content: msg.content
           }
         else
           {
-              result_code: '0',
-              msg: ['there is no data in the request']
+              result: '0',
+              content: ['there is no data in the request']
           }
         end
       end
