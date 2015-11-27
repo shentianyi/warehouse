@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151123032226) do
+ActiveRecord::Schema.define(version: 20151126075233) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -301,6 +301,23 @@ ActiveRecord::Schema.define(version: 20151123032226) do
 
   add_index "movement_lists", ["id"], name: "index_movement_lists_on_id", using: :btree
   add_index "movement_lists", ["uuid"], name: "index_movement_lists_on_uuid", using: :btree
+
+  create_table "movement_sources", force: true do |t|
+    t.string   "movement_list_id"
+    t.string   "fromWh"
+    t.string   "fromPosition"
+    t.string   "packageId"
+    t.string   "partNr"
+    t.float    "qty"
+    t.datetime "fifo"
+    t.string   "toWh"
+    t.string   "toPosition"
+    t.string   "employee_id"
+    t.string   "remarks"
+    t.string   "type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "movements", force: true do |t|
     t.string   "partNr"

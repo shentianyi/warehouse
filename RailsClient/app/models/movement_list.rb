@@ -2,6 +2,7 @@ class MovementList < ActiveRecord::Base
   # include Extensions::UUID
 
   has_many :movements, dependent: :destroy
+  has_many :movement_sources, dependent: :destroy
   validates_uniqueness_of :id
   validate :validate_save
   after_initialize :generate_uuid

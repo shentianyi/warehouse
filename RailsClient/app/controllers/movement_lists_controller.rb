@@ -1,5 +1,5 @@
 class MovementListsController < ApplicationController
-  before_action :set_movement_list, only: [:show, :edit, :update, :destroy, :movement_list_items]
+  before_action :set_movement_list, only: [:show, :edit, :update, :destroy, :movement_sources]
 
   respond_to :html
 
@@ -36,8 +36,8 @@ class MovementListsController < ApplicationController
     respond_with(@movement_list)
   end
 
-  def movement_list_items
-    @movement_list_items = @movement_list.movements.paginate(:page => params[:page])
+  def movement_sources
+    @movement_sources = @movement_list.movement_sources.paginate(:page => params[:page])
     @page_start=(params[:page].nil? ? 0 : (params[:page].to_i-1))*20
   end
 

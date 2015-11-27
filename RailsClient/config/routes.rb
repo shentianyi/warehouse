@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
 
+  resources :movement_sources do
+    collection do
+      get :search
+    end
+  end
+
   resources :operation_logs do
     collection do
       get :search
@@ -13,8 +19,11 @@ Rails.application.routes.draw do
   end
 
   resources :movement_lists do
+    collection do
+      get :search
+    end
     member do
-      get 'movement_list_items'
+      get 'movement_sources'
     end
   end
 

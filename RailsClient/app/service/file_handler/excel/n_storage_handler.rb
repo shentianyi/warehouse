@@ -19,6 +19,8 @@ module FileHandler
         if validate_msg.result
           begin
             NStorage.transaction do
+              builder = current_user.blank? ? '' : current_user.id
+              move_list = MovementList.create(builder: builder, name: "#{builder}_#{DateTime.now.strftime("%H.%d.%m.%Y")}")
               2.upto(book.last_row) do |line|
                 row = {}
                 IMPORT_HEADERS.each_with_index do |k, i|
@@ -30,6 +32,9 @@ module FileHandler
 
                 row[:user] = current_user
                 WhouseService.new.enter_stock(row)
+
+                row[:movement_list_id] = move_list.id
+                MovementSource.create(row)
 
               end
             end
@@ -56,6 +61,8 @@ module FileHandler
         if validate_msg.result
           begin
             NStorage.transaction do
+              builder = current_user.blank? ? '' : current_user.id
+              move_list = MovementList.create(builder: builder, name: "#{builder}_#{DateTime.now.strftime("%H.%d.%m.%Y")}")
               2.upto(book.last_row) do |line|
                 row = {}
                 MOVE_HEADERS.each_with_index do |k, i|
@@ -64,6 +71,9 @@ module FileHandler
                     row[k] = row[k].sub(/\.0/, '')
                   end
                 end
+
+                row[:movement_list_id] = move_list.id
+                MovementSource.create(row)
 
                 row[:user] = current_user
                 WhouseService.new.move(row)

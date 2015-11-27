@@ -1,6 +1,6 @@
 <h2>盘点清单列表</h2>
 
-<%= link_to "新建盘点", send("new_#{@model}_path"),:class=>'btn btn-default' %>
+<%= link_to "新建盘点", send("new_#{@model}_path"), :class => 'btn btn-default' %>
 <div class="digg_pagination">
   <div class="page_info">
     <%= page_entries_info @inventory_lists %>
@@ -13,37 +13,41 @@
 
 <table class="table table-bordered table-striped globle-table">
   <thead>
-    <tr>
-      <th>No.</th>
-      <th>名称</th>
-      <th>状态</th>
-      <th>仓库</th>
-	  <th>清单</td>
-      <th>创建人</th>
-      <th>创建时间</th>
-      <th>导入盘点</th>
-      <th colspan="4"></th>
-      <th colspan="3"></th>
-    </tr>
+  <tr>
+    <th>No.</th>
+    <th>名称</th>
+    <th>状态</th>
+    <th>仓库</th>
+    <th>清单
+    </td>
+    <th>创建人</th>
+    <th>创建时间</th>
+    <th>导入盘点</th>
+    <th colspan="4"></th>
+    <th colspan="3"></th>
+  </tr>
   </thead>
 
   <tbody>
-    <% @inventory_lists.each_with_index do |inventory_list,i| %>
+  <% @inventory_lists.each_with_index do |inventory_list, i| %>
       <tr>
-        <td><%= i+1%></td>
+        <td><%= i+1 %></td>
         <td><%= inventory_list.name %></td>
         <td><%= InventoryListState.display inventory_list.state %></td>
         <td><%= inventory_list.whouse_id %></td>
-		<td><%= link_to '清单列表',inventory_list_items_inventory_list_path(inventory_list) %><span class="badge pull-right"><%= inventory_list.inventory_list_items.count%></td>
+        <td><%= link_to '清单列表', inventory_list_items_inventory_list_path(inventory_list) %>
+          <span class="badge pull-right"><%= inventory_list.inventory_list_items.count %></td>
         <td><%= inventory_list.user_id %></td>
         <td><%= inventory_list.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
-        <td><%= link_to '导入盘点', import_inventory_list_items_path(id:inventory_list.id) %></td>
-        <td><%= link_to '盘点差异',discrepancy_inventory_list_path(inventory_list)%></td>
+        <td><%= link_to '导入盘点', import_inventory_list_items_path(id: inventory_list.id) %></td>
+        <td><%= link_to '盘点差异', discrepancy_inventory_list_path(inventory_list) %></td>
         <td><%= link_to '详细', inventory_list %></td>
-        <td><%= link_to '编辑', edit_inventory_list_path(inventory_list) %></td>
-        <td><%= link_to '删除', inventory_list, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% unless SysConfigCache.inventory_enable_value=='true' && current_user.inventoryer? %>
+            <td><%= link_to '编辑', edit_inventory_list_path(inventory_list) %></td>
+            <td><%= link_to '删除', inventory_list, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        <% end %>
       </tr>
-    <% end %>
+  <% end %>
   </tbody>
 </table>
 

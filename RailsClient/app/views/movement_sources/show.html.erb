@@ -1,0 +1,59 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Movement list:</strong>
+  <%= @movement_source.movement_list_id %>
+</p>
+
+<p>
+  <strong>Fromwh:</strong>
+  <%= @movement_source.fromWh %>
+</p>
+
+<p>
+  <strong>Fromposition:</strong>
+  <%= @movement_source.fromPosition %>
+</p>
+
+<p>
+  <strong>Packageid:</strong>
+  <%= @movement_source.packageId %>
+</p>
+
+<p>
+  <strong>Partnr:</strong>
+  <%= @movement_source.partNr %>
+</p>
+
+<p>
+  <strong>Qty:</strong>
+  <%= @movement_source.qty %>
+</p>
+
+<p>
+  <strong>Fifo:</strong>
+  <%= @movement_source.fifo %>
+</p>
+
+<p>
+  <strong>Towh:</strong>
+  <%= @movement_source.toWh %>
+</p>
+
+<p>
+  <strong>Toposition:</strong>
+  <%= @movement_source.toPosition %>
+</p>
+
+<p>
+  <strong>Employee:</strong>
+  <%= @movement_source.employee_id %>
+</p>
+
+<p>
+  <strong>Remarks:</strong>
+  <%= @movement_source.remarks %>
+</p>
+
+<%= link_to 'Edit', edit_movement_source_path(@movement_source) %> |
+<%= link_to 'Back', movement_sources_path %>

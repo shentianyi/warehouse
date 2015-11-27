@@ -41,7 +41,7 @@ module V3
           return {result: 0, content: "#{params[:user_id]}用户不存在！"}
         end
 
-        movement_list = MovementList.new(builder: params[:user_id], name: "#{params[:user_id]}#{DateTime.now.strftime("%H.%d.%m.%Y")}", remarks: params[:remarks])
+        movement_list = MovementList.new(builder: params[:user_id], name: "#{params[:user_id]}_#{DateTime.now.strftime("%H.%d.%m.%Y")}", remarks: params[:remarks])
         if movement_list.save
           {result: 1, content: {id: movement_list.id, created_at: movement_list.created_at, count: 0, state: MovementListState::BEGINNING}}
         else
@@ -54,7 +54,9 @@ module V3
         requires :movement_list_id, type: String, desc: 'ID of the movement list'
       end
       delete do
-        return {result: 0, content: "#{params[:movement_list_id]}移库单不存在或者该移库单不可删除！"} unless m=MovementList.where(id: params[:movement_list_id]).where("state != #{MovementListState::ENDING}")
+        unless m=MovementList.where(id: params[:movement_list_id], state: [MovementListState::BEGINNING, MovementListState::PROCESSING, MovementListState::ERROR]).first
+          return {result: 0, content: "#{params[:movement_list_id]}移库单不存在或者该移库单不可删除！"}
+        end
 
         m.destroy
         {result: 1, content: "删除成功"}
@@ -129,6 +131,7 @@ module V3
           {result: 0, content: '没有数据移库'}
         else
           NStorage.transaction do
+            move_list = MovementList.create(builder: current_user.id, name: "#{current_user.id}_#{DateTime.now.strftime("%H.%d.%m.%Y")}")
             params[:movements].each_with_index do |movement, index|
               puts movement
               args[:toWh] = movement[:toWh].sub(/LO/, '')
@@ -145,6 +148,9 @@ module V3
                 end
 
                 WhouseService.new.move(args)
+
+                args[:movement_list_id] = move_list.id
+                MovementSource.create(row)
 
               rescue => e
                 m.update(state: MovementListState::ERROR)

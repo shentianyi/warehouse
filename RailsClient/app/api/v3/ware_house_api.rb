@@ -96,11 +96,15 @@ module V3
         # raise ''
         puts "===================#{params.to_json}"
         NStorage.transaction do
+          builder = current_user.blank? ? '' : current_user.id
+          move_list = MovementList.create(builder: builder, name: "#{builder}_#{DateTime.now.strftime("%H.%d.%m.%Y")}")
           JSON.parse(params[:moves]).each do |p|
             p.deep_symbolize_keys!
             puts "----=============#{p}"
             StorageOperationRecord.save_record(params, 'MOVE')
             WhouseService.new.move(p)
+            p[:movement_list_id] = move_list.id
+            MovementSource.create(p)
           end
         end
         {result: 1, content: 'move success'}

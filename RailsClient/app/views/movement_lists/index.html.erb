@@ -1,4 +1,37 @@
 <h2>移库单列表</h2>
+<div>
+  <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+    <div>
+      <div>
+        <div>
+            <span>移库单号：
+              <input type="text" name="movement_list[id]" value="<%= @id %>"/>
+            </span>
+
+            <span>状态：
+              <%= select 'movement_list', 'state', MovementListState.menu, selected: @state, include_blank: true %>
+            </span>
+
+            <span>创建人：
+              <input type="text" name="movement_list[builder]" value="<%= @builder %>"/>
+            </span>
+        </div>
+        <div>
+            <span>
+              创建日期：
+              <input type="text" name="movement_list[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
+              ~  <input type="text" name="movement_list[created_at][end]" class="datepicker" value="<%= @created_at_end %>"/>
+            </span>
+        </div>
+        <div>
+          <input type="submit" value="查找" class="btn btn-primary" name="search"/>
+          <input type="submit" value="导出" class="btn btn-primary" name="download"/>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
 
 <div class="digg_pagination">
   <div class="page_info">
@@ -28,7 +61,7 @@
         <td><%= i+1%></td>
         <td><%= movement_list.id %></td>
         <td><%= MovementListState.display movement_list.state.to_i %></td>
-        <td><%= link_to '清单列表',movement_list_items_movement_list_path(movement_list) %><span class="badge pull-right"><%= movement_list.movements.count%></td>
+        <td><%= link_to '清单列表',movement_sources_movement_list_path(movement_list) %><span class="badge pull-right"><%= movement_list.movement_sources.count%></td>
         <td><%= movement_list.builder %></td>
         <td><%= movement_list.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
         <td><%= movement_list.remarks %></td>
@@ -44,3 +77,12 @@
 <div class="digg_pagination">
   <%= will_paginate @movement_lists, :container => false %>
 </div>
+
+<script>
+    $(function () {
+        $(".datepicker").datetimepicker({
+            lang: 'ch',
+            format: 'Y-m-d H:i'
+        });
+    });
+</script>
