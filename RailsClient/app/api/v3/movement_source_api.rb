@@ -62,10 +62,10 @@ module V3
       delete do
         m = MovementSource.find_by(id: params[:movement_source_id])
         if m && m.movement_list
-          return {result: 0, content: "该记录所属移库单已经移库成功, 不可删除！"} if m.movement_list.state == "成功"
+          return {result: 0, content: "该记录所属移库单已经移库成功, 不可删除！"} if m.movement_list.state == "300"
         end
 
-        m.destroy
+        m.destroy if m
         {result: 1, content: "删除成功"}
       end
 
