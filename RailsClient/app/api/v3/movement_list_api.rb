@@ -94,6 +94,9 @@ module V3
           end
 
           msg = FileHandler::Excel::NStorageHandler.validate_move_row params
+          if msg.result
+            MovementSource.create(params)
+          end
         rescue => e
           if params[:uniq].blank?
             return {result: 0, content: e.message}
@@ -123,6 +126,7 @@ module V3
         args[:movement_list_id] = params[:movement_list_id]
         args[:employee_id] = params[:employee_id].sub(/\.0/, '') if params[:employee_id].present?
         args[:remarks] = params[:remarks] if params[:remarks].present?
+        args[:user] = current_user
 
         return {result: 0, content: "#{params[:movement_list_id]}移库单不存在！"} unless m=MovementList.find_by(id: params[:movement_list_id])
 
@@ -132,7 +136,6 @@ module V3
           NStorage.transaction do
             params[:movements].each_with_index do |movement, index|
               puts movement
-              args[:user] = current_user
               args[:toWh] = movement[:toWh].sub(/LO/, '')
               args[:toPosition] = movement[:toPosition].sub(/LO/, '')
               args[:fromWh] = movement[:fromWh].sub(/LO/, '') if movement[:fromWh].present?
@@ -147,9 +150,6 @@ module V3
                 end
 
                 WhouseService.new.move(args)
-
-                args.delete(:user)
-                MovementSource.create(args)
 
               rescue => e
                 m.update(state: MovementListState::ERROR)

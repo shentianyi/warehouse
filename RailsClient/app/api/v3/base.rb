@@ -9,5 +9,6 @@ module V3
     mount V3::InventoryListItemApi
     mount V3::MovementListApi
     mount V3::MovementApi
+    mount V3::MovementSourceApi
   end
 end
