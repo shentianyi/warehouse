@@ -25,7 +25,6 @@
         </div>
         <div>
           <input type="submit" value="查找" class="btn btn-primary" name="search"/>
-          <input type="submit" value="导出" class="btn btn-primary" name="download"/>
         </div>
       </div>
     </div>
@@ -47,6 +46,7 @@
     <th>移库单号</th>
     <th>状态</th>
     <th>清单</td>
+    <th>导出</td>
     <th>创建人</th>
     <th>创建时间</th>
     <th>备注</th>
@@ -62,6 +62,7 @@
         <td><%= movement_list.id %></td>
         <td><%= MovementListState.display movement_list.state.to_i %></td>
         <td><%= link_to '清单列表',movement_sources_movement_list_path(movement_list) %><span class="badge pull-right"><%= movement_list.movement_sources.count%></td>
+        <td><%= link_to '导出移库单详细',exports_movement_lists_path(movement_list) %></td>
         <td><%= movement_list.builder %></td>
         <td><%= movement_list.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
         <td><%= movement_list.remarks %></td>

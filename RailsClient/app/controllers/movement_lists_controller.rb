@@ -41,6 +41,49 @@ class MovementListsController < ApplicationController
     @page_start=(params[:page].nil? ? 0 : (params[:page].to_i-1))*20
   end
 
+  def exports
+puts params
+
+    @movement_sources = MovementList.find(params[:format]).movement_sources
+
+
+        send_data(entry_with_xlsx(@movement_sources),
+                  :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+                  :filename => "#{MovementList.find(params[:format]).name}.xlsx")
+
+  end
+
+  def entry_with_xlsx movement_sources
+    p = Axlsx::Package.new
+    wb = p.workbook
+    wb.add_worksheet(:name => "Basic Sheet") do |sheet|
+      sheet.add_row entry_header
+      movement_sources.each_with_index { |m, index|
+        sheet.add_row [
+                          index+1,
+                          m.movement_list_id,
+
+                          m.fromWh,
+                          m.fromPosition,
+                          m.toWh,
+                          m.toPosition,
+                          m.packageId,
+
+                          m.partNr,
+                          m.qty,
+                          m.fifo,
+                          m.employee_id,
+                          m.remarks
+                      ], :types => [:string]
+      }
+    end
+    p.to_stream.read
+  end
+
+  def entry_header
+    ["编号", "移库单号", "源仓库", "源库位", "目的仓库", "目的库位", "唯一码", "零件号", "数量", "FIFO", "员工号", "备注"]
+  end
+
   private
     def set_movement_list
       @movement_list = MovementList.find(params[:id])

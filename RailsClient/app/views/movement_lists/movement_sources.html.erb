@@ -1,63 +1,6 @@
 <h2>库存操作源数据列表</h2>
 
-<div>
-  <form method="get" action="<%= send("search_movement_sources_path") %>">
-    <div>
-      <div>
-        <div>
-            <span>零件号：
-              <input type="text" name="movement_source[partNr]" value="<%= @partNr %>"/>
-            </span>
-            <span>唯一码：
-              <input type="text" name="movement_source[packageId]" value="<%= @packageId %>"/>
-            </span>
-          <!--<span>类型：-->
-          <!--<%= select_tag('movement_source[type_id]', options_from_collection_for_select(MoveType.all, :id, :typeId, @type_id), include_blank: true) %>-->
-          <!--</span>-->
-            <span>员工号：
-              <input type="text" name="movement_source[employee_id]" value="<%= @employee_id %>"/>
-            </span>
-        </div>
-
-        <div>
-            <span>源仓库号：
-              <%= select_tag('movement_source[from_id]', options_from_collection_for_select(Whouse.all, :name, :id, @from_id), include_blank: true) %>
-            </span>
-            <span>源库位号：
-              <input type="text" name="movement_source[fromPosition]" value="<%= @fromPosition %>"/>
-            </span>
-
-            <span>目的仓库号：
-              <%= select_tag('movement_source[to_id]', options_from_collection_for_select(Whouse.all, :name, :id, @to_id), include_blank: true) %>
-            </span>
-            <span>目的库位号：
-              <input type="text" name="movement_source[toPosition]" value="<%= @toPosition %>"/>
-            </span>
-        </div>
-
-        <div>
-          <span>备注：
-            <input type="text" name="movement_source[remarks]" value="<%= @remarks %>"/>
-          </span>
-            <span>
-              创建日期：
-              <input type="text" name="movement_source[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
-              ~  <input type="text" name="movement_source[created_at][end]" class="datepicker" value="<%= @created_at_end %>"/>
-            </span>
-            <span>
-              FIFO：
-              <input type="text" name="movement_source[fifo][start]" class="datepicker" value="<%= @fifo_start %>"/>
-              ~  <input type="text" name="movement_source[fifo][end]" class="datepicker" value="<%= @fifo_end %>"/>
-            </span>
-        </div>
-        <div>
-          <input type="submit" value="查找" class="btn btn-primary" name="search"/>
-          <input type="submit" value="导出" class="btn btn-primary" name="download"/>
-        </div>
-      </div>
-    </div>
-  </form>
-</div>
+<%= link_to '返回', movement_lists_path, :class => "btn btn-default btn-lg" %>
 
 <div class="digg_pagination">
   <div class="page_info">
@@ -114,7 +57,6 @@
   <%= will_paginate @movement_sources, :container => false %>
 </div>
 
-<%= link_to '返回', movement_lists_path, :class => "btn btn-default btn-lg" %>
 
 <script>
     $(function () {
