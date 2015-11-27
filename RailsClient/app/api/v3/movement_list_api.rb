@@ -54,7 +54,7 @@ module V3
         requires :movement_list_id, type: String, desc: 'ID of the movement list'
       end
       delete do
-        unless m=MovementList.where(id: params[:movement_list_id], state: [MovementListState::BEGINNING, MovementListState::PROCESSING, MovementListState::ERROR]).first
+        unless m=MovementList.where(id: params[:movement_list_id]).where("state != #{MovementListState::ENDING}").first
           return {result: 0, content: "#{params[:movement_list_id]}移库单不存在或者该移库单不可删除！"}
         end
 
