@@ -153,6 +153,8 @@ class InventoryListItem < ActiveRecord::Base
       record[:package_id] = item.package_id
       record[:qty] = item.qty
       record[:fifo] = item.fifo
+      record[:position] = item.position
+      record[:whouse_id] = item.whouse_id
       records[index] = record
     end
 
@@ -176,6 +178,31 @@ class InventoryListItem < ActiveRecord::Base
     record = []
     items.each_with_index do |item, index|
       record[index] = {position: item.position, count: item.count}
+    end
+
+    msg.result = true if record.length>0
+    msg.content = record
+
+    return msg
+  end
+
+  def self.search_condition_positions params
+    msg=Message.new
+    msg.result = false
+
+    items = InventoryListItem.where(position: params[:position], user_id: params[:user_id]).order(updated_at: :desc)
+
+    records = []
+    items.each_with_index do |item, index|
+      record = {}
+      record[:id] = item.id
+      record[:part_id] = item.part_id
+      record[:package_id] = item.package_id
+      record[:qty] = item.qty
+      record[:fifo] = item.fifo
+      record[:position] = item.position
+      record[:whouse_id] = item.whouse_id
+      records[index] = record
     end
 
     msg.result = true if record.length>0
