@@ -205,8 +205,8 @@ class InventoryListItem < ActiveRecord::Base
       records[index] = record
     end
 
-    msg.result = true if record.length>0
-    msg.content = record
+    msg.result = true if records.length>0
+    msg.content = records
 
     return msg
   end
