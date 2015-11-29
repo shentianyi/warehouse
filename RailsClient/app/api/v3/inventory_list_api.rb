@@ -19,7 +19,8 @@ module V3
 
       desc 'get inventory list item positions api'
       params do
-        requires :position, type: String
+        optional :position, type: String
+        requires :inventory_list_id, type: Integer, desc: 'inventory list id'
         requires :user_id, type: String, desc: 'inventory list item builder'
       end
       get :inventory_list_position do
@@ -45,9 +46,10 @@ module V3
         end
       end
 
-      desc 'search inventory list item positions api'
+      desc 'search positions'
       params do
         requires :position, type: String
+        requires :inventory_list_id, type: Integer, desc: 'inventory list id'
         requires :user_id, type: String, desc: 'inventory list item builder'
       end
       get :search_position do

@@ -190,11 +190,19 @@ class InventoryListItem < ActiveRecord::Base
     msg=Message.new
     msg.result = false
 
-    items = InventoryListItem.where(position: params[:position], user_id: params[:user_id]).group(:position).select('*, count(*) as count').order(updated_at: :desc)
+    items = InventoryListItem.where(position: params[:position], user_id: params[:user_id], inventory_list_id: params[:inventory_list_id]).order(updated_at: :desc)
 
-    record = []
+    records = []
     items.each_with_index do |item, index|
-      record[index] = {position: item.position, count: item.count}
+      record = {}
+      record[:id] = item.id
+      record[:part_id] = item.part_id
+      record[:package_id] = item.package_id
+      record[:qty] = item.qty
+      record[:fifo] = item.fifo
+      record[:position] = item.position
+      record[:whouse_id] = item.whouse_id
+      records[index] = record
     end
 
     msg.result = true if record.length>0
