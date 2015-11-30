@@ -25,6 +25,10 @@ module V3
             record[:toPosition] = movement_source.toPosition
             record[:partNr] = movement_source.partNr
             record[:fifo] = movement_source.fifo
+            record[:fromWh] = movement_source.fromWh
+            record[:fromPosition] = movement_source.fromPosition
+            record[:packageId] = movement_source.packageId
+            record[:qty] = movement_source.qty
             args[index] = record
           end
           {result: 1, content: args}
@@ -50,7 +54,6 @@ module V3
           args[:packageId] = movement_source.packageId
           args[:partNr] = movement_source.partNr
           args[:qty] = movement_source.qty
-          args[:fifo] = movement_source.fifo
           {result: 1, content: args}
         end
       end
