@@ -46,6 +46,33 @@ module V3
         end
       end
 
+      desc 'search positions'
+      params do
+        requires :position, type: String
+        requires :inventory_list_id, type: Integer, desc: 'inventory list id'
+        requires :user_id, type: String, desc: 'inventory list item builder'
+      end
+      get :search_position do
+
+        if params[:position] && Position.find_by(detail: params[:position]).blank?
+          msg= {result: 0, content: "库位#{params[:position]}不存在"}
+          return msg
+        end
+
+        msg = InventoryListItem.search_condition_positions params
+        if msg.result
+          {
+              result: '1',
+              content: msg.content
+          }
+        else
+          {
+              result: '0',
+              content: ['there is no data in the request']
+          }
+        end
+      end
+
     end
   end
 end
