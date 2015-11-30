@@ -278,7 +278,7 @@ module FileHandler
         if row[:fromPosition].present?
           from_position = Position.find_by(detail: row[:fromPosition])
           unless from_position
-            msg.contents << "源库位号:#{row[:fromPosition]} 不存在!"
+            msg.contents << "源位置:#{row[:fromPosition]} 不存在!"
           end
         end
 
