@@ -169,9 +169,9 @@ class InventoryListItem < ActiveRecord::Base
     msg.result = false
 
     if params[:position]
-      items = InventoryListItem.where(position: params[:position], inventory_list_id: params[:inventory_list_id], user_id: params[:user_id]).group(:position).select('*, count(*) as count').order(updated_at: :desc).offset(params[:page].to_i * params[:size].to_i).limit(params[:size].to_i)
+      items = InventoryListItem.where(position: params[:position], inventory_list_id: params[:inventory_list_id]).group(:position).select('*, count(*) as count').order(updated_at: :desc).offset(params[:page].to_i * params[:size].to_i).limit(params[:size].to_i)
     else
-      items = InventoryListItem.where(inventory_list_id: params[:inventory_list_id], user_id: params[:user_id]).group(:position).select('*, count(*) as count').order(updated_at: :desc).offset(params[:page].to_i * params[:size].to_i).limit(params[:size].to_i)
+      items = InventoryListItem.where(inventory_list_id: params[:inventory_list_id]).group(:position).select('*, count(*) as count').order(updated_at: :desc).offset(params[:page].to_i * params[:size].to_i).limit(params[:size].to_i)
 
     end
 
