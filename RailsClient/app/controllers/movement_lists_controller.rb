@@ -42,15 +42,11 @@ class MovementListsController < ApplicationController
   end
 
   def exports
-puts params
-
     @movement_sources = MovementList.find(params[:format]).movement_sources
 
-
-        send_data(entry_with_xlsx(@movement_sources),
-                  :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
-                  :filename => "#{MovementList.find(params[:format]).name}.xlsx")
-
+    send_data(entry_with_xlsx(@movement_sources),
+              :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+              :filename => "#{MovementList.find(params[:format]).name}.xlsx")
   end
 
   def entry_with_xlsx movement_sources
@@ -85,11 +81,11 @@ puts params
   end
 
   private
-    def set_movement_list
-      @movement_list = MovementList.find(params[:id])
-    end
+  def set_movement_list
+    @movement_list = MovementList.find(params[:id])
+  end
 
-    def movement_list_params
-      params.require(:movement_list).permit(:uuid, :name, :state, :builder, :remarks)
-    end
+  def movement_list_params
+    params.require(:movement_list).permit(:uuid, :name, :state, :builder, :remarks)
+  end
 end

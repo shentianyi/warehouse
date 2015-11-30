@@ -14,17 +14,22 @@ module V3
       end
       get do
         args = []
-        movements = Movement.where(movement_list_id: params[:movement_list_id])
+        movements = MovementSource.where(movement_list_id: params[:movement_list_id])
         if movements.blank?
           {result: 0, content: "没有数据！"}
         else
           movements.each_with_index do |movement, index|
             record = {}
             record[:id] = movement.id
+            record[:toWh] = movement.toWh
             record[:toPosition] = movement.toPosition
             record[:partNr] = movement.partNr
             record[:qty] = movement.qty
             record[:fifo] = movement.fifo
+            record[:fromWh] = movement.fromWh
+            record[:fromPosition] = movement.fromPosition
+            record[:packageId] = movement.packageId
+
             args[index] = record
           end
           {result: 1, content: args}
@@ -36,16 +41,16 @@ module V3
         requires :movement_id, type: Integer, desc: 'movement id'
       end
       get :movement_detail do
-        movement = Movement.find_by(id: params[:movement_id])
+        movement = MovementSource.find_by(id: params[:movement_id])
         if movement.blank?
           {result: 0, content: "没有数据！"}
         else
           args = {}
           args[:id] = movement.id
-          args[:fromWh] = movement.from_id
+          args[:fromWh] = movement.fromWh
           args[:fromPosition] = movement.fromPosition
           args[:fifo] = movement.fifo
-          args[:toWh] = movement.to_id
+          args[:toWh] = movement.toWh
           args[:toPosition] = movement.toPosition
           args[:packageId] = movement.packageId
           args[:partNr] = movement.partNr
