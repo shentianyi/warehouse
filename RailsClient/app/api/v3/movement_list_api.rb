@@ -21,7 +21,7 @@ module V3
             record = {}
             record[:id] = movement_list.id
             record[:created_at] = movement_list.created_at
-            record[:count] = movement_list.movements.count
+            record[:count] = movement_list.movement_sources.count
             record[:state] = MovementListState.display movement_list.state.to_i
             args[index] = record
           end
@@ -95,7 +95,7 @@ module V3
 
           msg = FileHandler::Excel::NStorageHandler.validate_move_row params
           if msg.result
-            MovementSource.create(params.permit)
+            MovementSource.save_record(params)
           end
         rescue => e
           if params[:uniq].blank?

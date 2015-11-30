@@ -14,10 +14,7 @@ module V3
       end
       get do
         args = []
-        puts '9999999999999999999999999999999999999999'
-
         movements = MovementSource.where(movement_list_id: params[:movement_list_id])
-        puts '555555555555555555555555555555555555555'
 
         if movements.blank?
           {result: 0, content: "没有数据！"}
