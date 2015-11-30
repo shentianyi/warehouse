@@ -10,11 +10,15 @@ module V3
 
       desc 'get movements'
       params do
-        requires :movement_list_id, type: Integer, desc: 'movement list id'
+        requires :movement_list_id, type: String, desc: 'movement list id'
       end
       get do
         args = []
+        puts '9999999999999999999999999999999999999999'
+
         movements = MovementSource.where(movement_list_id: params[:movement_list_id])
+        puts '555555555555555555555555555555555555555'
+
         if movements.blank?
           {result: 0, content: "没有数据！"}
         else
@@ -38,7 +42,7 @@ module V3
 
       desc 'get movement detail'
       params do
-        requires :movement_id, type: Integer, desc: 'movement id'
+        requires :movement_id, type: String, desc: 'movement id'
       end
       get :movement_detail do
         movement = MovementSource.find_by(id: params[:movement_id])
