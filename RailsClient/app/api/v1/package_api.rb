@@ -14,7 +14,7 @@ module V1
 
       #get package info
       get do
-        unless p = Container.exists?(params[:package_id])
+        unless p = Package.exists?(params[:package_id])
           return {result: 0, content: MovableMessage::TargetNotExist}
         end
 
@@ -22,7 +22,23 @@ module V1
         args[:package_id] = p.id
         args[:part_id] = p.part_id
         args[:qty] = p.quantity
-        args[:fifo] = p.fifo_time_display.blank? ? '' : Date.strptime(p.fifo_time_display.sub(/W  /, ''), '%d.%m.%y')
+        args[:fifo] = p.fifo_time_display#.blank? ? '' : Date.strptime(p.parsed_fifo, '%d.%m.%y')
+        {result: '1', content: args}
+      end
+
+      #get package info from NStorage
+      get :nstorage_package do
+        return {result: 0, content: "请输入唯一码"} if params[:package_id].blank?
+
+        unless storage = NStorage.exists_package?(params[:package_id])
+          return {result: 0, content: MovableMessage::TargetNotExist}
+        end
+
+        args = {}
+        args[:package_id] = storage.packageId
+        args[:part_id] = storage.partNr
+        args[:qty] = storage.qty
+        args[:fifo] = storage.fifo
         {result: '1', content: args}
       end
 

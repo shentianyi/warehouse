@@ -88,9 +88,8 @@ module V3
           if params[:partNr].blank? && params[:packageId].blank?
             raise '请填写零件号或者唯一码'
           end
-          if params[:partNr].present?
+          if params[:partNr].present? && params[:packageId].blank?
             raise '请填写数量' unless params[:qty].present?
-            params[:packageId]=nil
           end
 
           msg = FileHandler::Excel::NStorageHandler.validate_move_row params
@@ -142,11 +141,11 @@ module V3
               args[:fromPosition] = movement[:fromPosition].sub(/LO/, '') if movement[:fromPosition].present?
               args[:partNr] = movement[:partNr].sub(/P/, '') if movement[:partNr].present?
               args[:qty] = movement[:qty].sub(/Q/, '').to_f if movement[:qty].present?
+              args[:packageId] = movement[:packageId] if movement[:packageId].present?
 
               begin
-                if movement[:partNr].present?
+                if movement[:partNr].present? && movement[:packageId].blank?
                   raise '请填写数量' unless movement[:qty].present?
-                  args[:packageId]=nil
                 end
 
                 WhouseService.new.move(args)
