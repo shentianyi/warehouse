@@ -132,29 +132,32 @@ module V3
         if params[:movements].blank?
           {result: 0, content: '没有数据移库'}
         else
-          NStorage.transaction do
-            params[:movements].each_with_index do |movement, index|
-              puts movement
-              args[:toWh] = movement[:toWh]
-              args[:toPosition] = movement[:toPosition]
-              args[:fromWh] = movement[:fromWh] if movement[:fromWh].present?
-              args[:fromPosition] = movement[:fromPosition] if movement[:fromPosition].present?
-              args[:partNr] = movement[:partNr] if movement[:partNr].present?
-              args[:qty] = movement[:qty].to_f if movement[:qty].present?
-              args[:packageId] = movement[:packageId] if movement[:packageId].present?
 
-              begin
+          begin
+
+            NStorage.transaction do
+              params[:movements].each_with_index do |movement, index|
+                puts movement
+                args[:toWh] = movement[:toWh]
+                args[:toPosition] = movement[:toPosition]
+                args[:fromWh] = movement[:fromWh].present? ? movement[:fromWh] : nil
+                args[:fromPosition] = movement[:fromPosition].present? ? movement[:fromPosition] : nil
+                args[:partNr] = movement[:partNr].present? ? movement[:partNr] : nil
+                args[:qty] = movement[:qty].present? ? movement[:qty].to_f : nil
+                args[:packageId] = movement[:packageId].present? ? movement[:packageId] : nil
+
                 if movement[:partNr].present? && movement[:packageId].blank?
                   raise '请填写数量' unless movement[:qty].present?
                 end
 
                 WhouseService.new.move(args)
-
-              rescue => e
-                m.update(state: MovementListState::ERROR)
-                msg.contents << e.message
               end
             end
+
+          rescue => e
+            m.update(state: MovementListState::ERROR)
+            puts e.message
+            msg.contents << e.message
           end
 
           if msg.result=(msg.contents.size==0)

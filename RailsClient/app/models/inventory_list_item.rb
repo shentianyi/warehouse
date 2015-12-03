@@ -126,6 +126,7 @@ class InventoryListItem < ActiveRecord::Base
     self.locked? ? 'Y' : 'N'
   end
 
+  # 盘点项手动入库后修改这个字段
   def in_stored_display
     self.in_stored? ? 'Y' : 'N'
   end
@@ -143,7 +144,7 @@ class InventoryListItem < ActiveRecord::Base
     msg=Message.new
     msg.result = false
 
-    items = InventoryListItem.where(inventory_list_id: params[:inventory_list_id],  position: params[:position]).offset(params[:page].to_i * params[:size].to_i).limit(params[:size].to_i)
+    items = InventoryListItem.where(inventory_list_id: params[:inventory_list_id],  position: params[:position]).order(updated_at: :desc).offset(params[:page].to_i * params[:size].to_i).limit(params[:size].to_i)
 
     records = []
     items.each_with_index do |item, index|

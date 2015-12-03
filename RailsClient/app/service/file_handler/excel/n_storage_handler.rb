@@ -227,12 +227,19 @@ module FileHandler
         StorageOperationRecord.save_record(row, 'MOVE')
 
         if row[:packageId].present?
-          unless package = Package.exists?(row[:packageId])
+          unless package = NStorage.exists_package?(row[:packageId])
             msg.contents << "唯一码:#{row['packageId']} 不存在!"
           end
 
-          if package.quantity < row[:qty].to_f
+          if package.qty < row[:qty].to_f
             msg.contents << "移库量大于剩余库存量!"
+          end
+
+          if row[:fromWh].present?
+            storage = NStorage.find_by(packageId: row[:packageId], ware_house_id: row[:fromWh])
+            unless storage
+              msg.contents << "源仓库#{row[:fromWh]}不存在该唯一码#{row[:packageId]}！"
+            end
           end
         end
 

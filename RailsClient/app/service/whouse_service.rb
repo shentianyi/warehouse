@@ -78,6 +78,8 @@ class WhouseService
 
   def move(params)
     # XXX does not work now
+    puts params
+    puts '----------------------------------------------------------------------'
     type = MoveType.find_by!(typeId: 'MOVE')
 
     toWh = Whouse.find_by(id: params[:toWh])
@@ -111,14 +113,22 @@ class WhouseService
 
       storage = nil
       if params[:partNr].blank?
-        storage = NStorage.find_by(packageId: params[:packageId])
+        if params[:fromWh].present?
+          storage = NStorage.find_by(packageId: params[:packageId], ware_house_id: params[:fromWh])
+        else
+          storage = NStorage.find_by(packageId: params[:packageId])
+        end
         params[:partNr]=storage.partNr if storage
       else
-        storage = NStorage.find_by(packageId: params[:packageId], partNr: params[:partNr])
+        if params[:fromWh].present?
+          storage = NStorage.find_by(packageId: params[:packageId], partNr: params[:partNr], ware_house_id: params[:fromWh])
+        else
+          storage = NStorage.find_by(packageId: params[:packageId], partNr: params[:partNr])
+        end
       end
-
+puts '------------------------------------------------------------11111111111111111111'
       puts "############{storage.to_json}"
-      raise '包装未入库！' if storage.nil? || storage.qty < 0
+      raise "源仓库#{params[:fromWh]}不存在该唯一码#{params[:packageId]}！" if storage.nil? || storage.qty < 0
       if params[:qty].blank?
         params[:qty]=storage.qty
       end

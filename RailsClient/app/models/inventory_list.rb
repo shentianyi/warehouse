@@ -22,4 +22,16 @@ class InventoryList < ActiveRecord::Base
     self.inventory_list_items.where(in_stored: false).count>0
   end
 
+  def self.validate_position(id, position)
+    if i=InventoryList.find_by(id: id)
+      if w=Whouse.find_by(id: i.whouse_id)
+        if !(ps = w.positions).blank?
+          return !ps.pluck(:detail).include?(position)
+        end
+      end
+    end
+
+    true
+  end
+
 end

@@ -27,8 +27,8 @@ module V3
         params[:page] = 0 if params[:page].blank? || params[:page].to_i < 0
         params[:size] = 30 if params[:size].blank? || params[:size].to_i < 0
 
-        if params[:position] && Position.find_by(detail: params[:position]).blank?
-          msg= {result: 0, content: "库位#{params[:position]}不存在"}
+        if params[:position] && InventoryList.validate_position(params[:inventory_list_id], params[:position])
+          msg= {result: 0, content: "库位#{params[:position]}不存在或者不在所盘仓库"}
           return msg
         end
 
@@ -54,8 +54,8 @@ module V3
       end
       get :search_position do
 
-        if params[:position] && Position.find_by(detail: params[:position]).blank?
-          msg= {result: 0, content: "库位#{params[:position]}不存在"}
+        if params[:position] && InventoryList.validate_position(params[:inventory_list_id], params[:position])
+          msg= {result: 0, content: "库位#{params[:position]}不存在或者不在所盘仓库"}
           return msg
         end
 
