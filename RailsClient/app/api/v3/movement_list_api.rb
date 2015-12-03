@@ -135,12 +135,12 @@ module V3
           NStorage.transaction do
             params[:movements].each_with_index do |movement, index|
               puts movement
-              args[:toWh] = movement[:toWh].sub(/LO/, '')
-              args[:toPosition] = movement[:toPosition].sub(/LO/, '')
-              args[:fromWh] = movement[:fromWh].sub(/LO/, '') if movement[:fromWh].present?
-              args[:fromPosition] = movement[:fromPosition].sub(/LO/, '') if movement[:fromPosition].present?
-              args[:partNr] = movement[:partNr].sub(/P/, '') if movement[:partNr].present?
-              args[:qty] = movement[:qty].sub(/Q/, '').to_f if movement[:qty].present?
+              args[:toWh] = movement[:toWh]
+              args[:toPosition] = movement[:toPosition]
+              args[:fromWh] = movement[:fromWh] if movement[:fromWh].present?
+              args[:fromPosition] = movement[:fromPosition] if movement[:fromPosition].present?
+              args[:partNr] = movement[:partNr] if movement[:partNr].present?
+              args[:qty] = movement[:qty].to_f if movement[:qty].present?
               args[:packageId] = movement[:packageId] if movement[:packageId].present?
 
               begin

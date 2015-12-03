@@ -20,9 +20,9 @@ module V1
 
         args = {}
         args[:package_id] = p.id
-        args[:part_id] = p.part_id
+        args[:part_id] = "P#{p.part_id}"
         args[:qty] = p.quantity
-        args[:fifo] = p.fifo_time_display#.blank? ? '' : Date.strptime(p.parsed_fifo, '%d.%m.%y')
+        args[:fifo] = p.fifo_time_display
         {result: '1', content: args}
       end
 
@@ -36,7 +36,7 @@ module V1
 
         args = {}
         args[:package_id] = storage.packageId
-        args[:part_id] = storage.partNr
+        args[:part_id] = "P#{storage.partNr}"
         args[:qty] = storage.qty
         args[:fifo] = storage.fifo
         {result: '1', content: args}

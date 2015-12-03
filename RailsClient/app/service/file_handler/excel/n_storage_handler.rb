@@ -227,8 +227,12 @@ module FileHandler
         StorageOperationRecord.save_record(row, 'MOVE')
 
         if row[:packageId].present?
-          unless packageId = Container.exists?(row[:packageId])
+          unless package = Package.exists?(row[:packageId])
             msg.contents << "唯一码:#{row['packageId']} 不存在!"
+          end
+
+          if package.quantity < row[:qty].to_f
+            msg.contents << "移库量大于剩余库存量!"
           end
         end
 

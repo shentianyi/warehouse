@@ -158,7 +158,7 @@ class InventoryListItem < ActiveRecord::Base
       records[index] = record
     end
 
-    msg.result = true if records.length>0
+    msg.result = true# if records.length>0
     msg.content = records
 
     return msg
@@ -166,13 +166,12 @@ class InventoryListItem < ActiveRecord::Base
 
   def self.condition_positions params
     msg=Message.new
-    msg.result = false
+    msg.result = true
 
     if params[:position]
       items = InventoryListItem.where(position: params[:position], inventory_list_id: params[:inventory_list_id]).group(:position).select('*, count(*) as count').order(updated_at: :desc).offset(params[:page].to_i * params[:size].to_i).limit(params[:size].to_i)
     else
       items = InventoryListItem.where(inventory_list_id: params[:inventory_list_id]).group(:position).select('*, count(*) as count').order(updated_at: :desc).offset(params[:page].to_i * params[:size].to_i).limit(params[:size].to_i)
-
     end
 
     record = []
@@ -180,7 +179,6 @@ class InventoryListItem < ActiveRecord::Base
       record[index] = {position: item.position, count: item.count}
     end
 
-    msg.result = true if record.length>0
     msg.content = record
 
     return msg
