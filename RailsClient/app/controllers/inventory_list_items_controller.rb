@@ -82,6 +82,7 @@ class InventoryListItemsController < ApplicationController
       @inventory_list.inventory_list_items.where("package_id<>''").each do |item|
         if s=NStorage.unscoped.where(packageId: item.package_id).first
           puts item.package_id
+          puts '111111111111111111111111111111111111'
           s.update_attributes(locked: !item.locked)
           item.update_attributes(locked: !item.locked)
         end if item.package_id.present?
