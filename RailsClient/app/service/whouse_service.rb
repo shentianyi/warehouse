@@ -83,7 +83,7 @@ class WhouseService
     type = MoveType.find_by!(typeId: 'MOVE')
 
     toWh = Whouse.find_by(id: params[:toWh])
-    raise "仓库#{toWh}未找到" unless toWh
+    raise "目的仓库#{toWh}未找到" unless toWh
     # validate_position(toWh, params[:toPosition])
     move_data = {to_id: toWh.id, toPosition: params[:toPosition], type_id: type.id}
     move_data[:employee_id] = params[:employee_id] if params[:employee_id].present?
@@ -117,6 +117,7 @@ class WhouseService
           storage = NStorage.find_by(packageId: params[:packageId], ware_house_id: params[:fromWh])
         else
           storage = NStorage.find_by(packageId: params[:packageId])
+          params[:fromWh] = storage.ware_house_id if storage
         end
         params[:partNr]=storage.partNr if storage
       else
@@ -124,9 +125,10 @@ class WhouseService
           storage = NStorage.find_by(packageId: params[:packageId], partNr: params[:partNr], ware_house_id: params[:fromWh])
         else
           storage = NStorage.find_by(packageId: params[:packageId], partNr: params[:partNr])
+          params[:fromWh] = storage.ware_house_id if storage
         end
       end
-puts '------------------------------------------------------------11111111111111111111'
+
       puts "############{storage.to_json}"
       raise "源仓库#{params[:fromWh]}不存在该唯一码#{params[:packageId]}！" if storage.nil? || storage.qty < 0
       if params[:qty].blank?
@@ -187,9 +189,9 @@ puts '------------------------------------------------------------11111111111111
       #validate_position(fromWh, params[:fromPosition])
       # find storage records
       if params[:fromPosition].present?
-        storages = NStorage.where(partNr: params[:partNr], ware_house_id: fromWh.id, position: params[:fromPosition]).where("n_storages.qty > ?", 0)
+        storages = NStorage.where(partNr: params[:partNr], ware_house_id: fromWh.id, position: params[:fromPosition]).where("n_storages.qty > ?", 0).order(fifo: :asc)
       else
-        storages = NStorage.where(partNr: params[:partNr], ware_house_id: fromWh.id).where("n_storages.qty > ?", 0)
+        storages = NStorage.where(partNr: params[:partNr], ware_house_id: fromWh.id).where("n_storages.qty > ?", 0).order(fifo: :asc)
       end
       #   if params[:fromPosition].present?
       #   negatives_storages = NStorage.where(partNr: params[:partNr], ware_house_id: fromWh.id, position: params[:fromPosition]).where("n_storages.qty < ?", 0)
@@ -202,8 +204,7 @@ puts '------------------------------------------------------------11111111111111
         fifo = validate_fifo_time(params[:fifo])
         storages.where(fifo: fifo)
       end
-      # order by fifo
-      storages.order(fifo: :asc)
+
       # validate sum of storage qty is enough
       #支持负库存#raise 'No enough qty in source' if sumqty = storages.reduce(0) { |seed, s| seed + s.qty } < params[:qty]
       lastqty = params[:qty].to_f
@@ -254,7 +255,7 @@ puts '------------------------------------------------------------11111111111111
                 if storage.packageId.blank?
                   tostorage.update!(qty: tostorage.qty + restqty)
                 else
-                  storage_remarks = "#{tostorage.remarks} #{Time.now}从包装箱#{storage.packageId}中移库#{storage.qty}---"
+                  storage_remarks = "#{tostorage.remarks} #{Time.now}从包装箱#{storage.packageId}中移库#{restqty}---"
                   tostorage.update!(remarks: storage_remarks, qty: tostorage.qty + restqty)
                 end
               end

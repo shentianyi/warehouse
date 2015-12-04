@@ -1,6 +1,6 @@
 # print movement list
 module Printer
-  class P009<Base
+  class P010<Base
     HEAD=[:transfernote_Nr, :transfer_quantity, :date]
     BODY=[:Nr, :part_Nr, :unique_code, :quantity, :originalW, :target_W, :remark]
 

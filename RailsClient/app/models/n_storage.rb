@@ -12,8 +12,8 @@ class NStorage < ActiveRecord::Base
 
   def validate
     errors.add(:ware_house_id, "仓库不存在") unless Whouse.find_by_id(self.ware_house_id)
-    if self.ware_house
-      errors.add(:position, "库位不存在") unless self.ware_house.positions.find_by_detail(self.position)
+    if self.ware_house && self.position.present?
+      errors.add(:position, "源库位不存在") unless self.ware_house.positions.find_by_detail(self.position)
     end
   end
 

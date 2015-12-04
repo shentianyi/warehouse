@@ -30,7 +30,7 @@ module FileHandler
                                       IU:row['单位'],
                                       reason:row['原因'],
                                       name:row['登记人'],
-                                      time:row['登记时间'].to_time.utc})
+                                      time:row['登记时间'].to_time.blank? ? '' : row['登记时间'].to_time.utc})
               end
             end
             msg.result = true
@@ -83,6 +83,10 @@ module FileHandler
 
       def self.validate_row(row,line)
         msg = Message.new(contents: [])
+
+        if row['登记时间'].blank?
+          msg.contents << "登记时间:#{row['登记时间']} 不可为空!"
+        end
 
         src_warehouse = Whouse.find_by_name(row['源仓库'])
         unless src_warehouse

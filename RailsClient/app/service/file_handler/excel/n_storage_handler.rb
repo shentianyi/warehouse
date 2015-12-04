@@ -231,7 +231,7 @@ module FileHandler
             msg.contents << "唯一码:#{row['packageId']} 不存在!"
           end
 
-          if package.qty < row[:qty].to_f
+          if package && package.qty < row[:qty].to_f
             msg.contents << "移库量大于剩余库存量!"
           end
 
@@ -241,6 +241,27 @@ module FileHandler
               msg.contents << "源仓库#{row[:fromWh]}不存在该唯一码#{row[:packageId]}！"
             end
           end
+
+          msg.contents << "数量: #{row[:qty]} 不可以小于等于 0!" if row[:qty].to_f < 0
+
+        else
+
+          if row[:partNr].blank?
+            msg.contents << "零件号不能为空!"
+          end
+
+          if row[:qty].blank? || row[:qty].to_f <= 0
+            msg.contents << "数量: #{row[:qty]} 不可以小于等于 0!"
+          end
+
+        end
+
+        if row[:toWh].blank?
+          msg.contents << "目的仓库号不能为空!"
+        end
+
+        if row[:toPosition].blank?
+          msg.contents << "目的库位号不能为空!"
         end
 
         if row[:fromWh].present?
@@ -267,14 +288,6 @@ module FileHandler
             end
           else
             msg.contents << "零件号:#{row[:partNr]} 不存在!"
-          end
-        end
-
-        if row[:packageId].present?
-          msg.contents << "数量: #{row[:qty]} 不可以小于等于 0!" if row[:qty].to_f < 0
-        else
-          unless row[:qty].to_f > 0
-            msg.contents << "数量: #{row[:qty]} 不可以小于等于 0!"
           end
         end
 

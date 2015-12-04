@@ -63,7 +63,7 @@
         <td><%= scrap_list_item.IU %></td>
         <td><%= scrap_list_item.reason %></td>
         <td><%= scrap_list_item.name %></td>
-        <td><%= scrap_list_item.time.localtime %></td>
+        <td><%= scrap_list_item.time.blank? ? '' : scrap_list_item.time.localtime %></td>
         <td><%= ScrapListItemState.display(scrap_list_item.state) %></td>
         <% if current_user.can_edit_inventory? %>
             <td><%= link_to '删除', scrap_list_item, method: :delete, data: {confirm: 'Are you sure?'}, :class => 'btn btn-default' %></td>

@@ -60,7 +60,7 @@
         <td><%= scrap_list_item.IU %></td>
         <td><%= scrap_list_item.reason %></td>
         <td><%= scrap_list_item.name %></td>
-        <td><%= scrap_list_item.time.localtime %></td>
+        <td><%= scrap_list_item.time.blank? ? '' : scrap_list_item.time.localtime %></td>
         <td><%= ScrapListItemState.display(scrap_list_item.state) %></td>
         <!--<td><%= best_in_place scrap_list_item, :state, as: :select, collection: ScrapListItemState.list.map { |s| [s[1], s[0]] }.to_h %></td>-->
         <% if current_user.can_edit_inventory? %>
