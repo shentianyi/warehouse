@@ -14,9 +14,9 @@ module Printer
 
       movement_sources = m.movement_sources
 
-      movement_sources.each do |i|
+      movement_sources.each_with_index do |i, index|
         body= {
-            Nr: i.id,
+            Nr: index+1,
             part_Nr: i.partNr,
             unique_code: i.packageId,
             quantity:i.qty,
