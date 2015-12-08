@@ -1,5 +1,5 @@
 class Role
-  RoleMethods=[:admin?, :supermanager?, :manager?, :sender?, :receiver?, :stocker?, :shifter?, :buyer?]
+  RoleMethods=[:admin?, :supermanager?, :manager?, :sender?, :receiver?, :stocker?, :shifter?, :buyer?, :inventoryer?]
 
   @@roles={
       :'100' => {:name => 'admin', :display => (I18n.t 'system.role.admin')},
@@ -9,7 +9,8 @@ class Role
       :'400' => {:name => 'receiver', :display => (I18n.t 'system.role.receiver')},
       :'500' => {:name => 'stocker', :display => (I18n.t 'system.role.orderer')},
       :'600' => {:name => 'shifter', :display => (I18n.t 'system.role.shifter')},
-      :'700' => {:name => 'buyer', :display => (I18n.t 'system.role.buyer')}
+      :'700' => {:name => 'buyer', :display => (I18n.t 'system.role.buyer')},
+      :'800' => {:name => 'inventoryer', :display => (I18n.t 'system.role.inventoryer')}
   }
 
   class<<self

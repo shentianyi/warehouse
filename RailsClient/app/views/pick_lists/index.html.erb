@@ -34,33 +34,42 @@
   </div>
   <%= will_paginate @pick_lists, :container => false %>
 </div>
-<table class="table table-bordered table-striped table-hover">
-  <thead>
-  <tr>
-    <th></th>
-    <th>NO.</th>
-    <th>择货单号</th>
-    <th>择货员工号</th>
-    <th>创建时间</th>
-    <th>状态</th>
-    <th></th>
-  </tr>
-  </thead>
 
-  <tbody>
-  <% @pick_lists.each_with_index do |pick_list, index| %>
+<%= form_tag controller: 'pick_lists', action: 'export', method: 'post' do %>
+    <input type="submit" class="btn btn-warning" value="导出EXCEL"/>
+
+    <table class="table table-bordered table-striped table-hover">
+      <thead>
       <tr>
-        <td><input type="checkbox" id="<%= pick_list.id %>" class='print-check'></td>
-        <td><%= index+@pick_lists.offset+1 %></td>
-        <td><%= pick_list.id %></td>
-        <td><%= pick_list.user_id %></td>
-        <td><%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at%></td>
-        <td><%= pick_list.state %></td>
-        <td><%= link_to '详细', pick_list_path(id: pick_list, show: true) %></td>
+        <th></th>
+        <th>NO.</th>
+        <th>择货单号</th>
+        <th>择货员工号</th>
+        <th>创建时间</th>
+        <th>状态</th>
+        <th></th>
       </tr>
-  <% end %>
-  </tbody>
-</table>
+      </thead>
+
+      <tbody>
+      <% @pick_lists.each_with_index do |pick_list, index| %>
+          <tr>
+            <td>
+              <input name="pick-list-check[<%= pick_list.id %>]" type="checkbox" id="<%= pick_list.id %>" class='print-check'>
+            </td>
+            <td><%= index+@pick_lists.offset+1 %></td>
+            <td><%= pick_list.id %></td>
+            <td><%= pick_list.user_id %></td>
+            <td><%= pick_list.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %></td>
+            <td><%= pick_list.state %></td>
+            <td><%= link_to '详细', pick_list_path(id: pick_list, show: true) %></td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+
+<% end %>
+
 <div class="digg_pagination">
   <%= will_paginate @pick_lists, :container => false %>
 </div>
@@ -69,7 +78,7 @@
 <script>
     $(function () {
         $(".datepicker").datetimepicker({
-            lang:'ch',
+            lang: 'ch',
             format: 'Y-m-d H:i'
         });
     });

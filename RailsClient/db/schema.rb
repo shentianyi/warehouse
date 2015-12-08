@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150706063549) do
+ActiveRecord::Schema.define(version: 20151126075233) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -181,15 +181,17 @@ ActiveRecord::Schema.define(version: 20150706063549) do
     t.boolean  "is_dirty",      default: true
     t.boolean  "is_new",        default: true
     t.string   "modem_id"
-    t.string   "position"
+    t.string   "position_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "mac"
+    t.string   "led_display"
+    t.boolean  "is_valid",      default: true
   end
 
   add_index "leds", ["id"], name: "index_leds_on_id", using: :btree
   add_index "leds", ["modem_id"], name: "index_leds_on_modem_id", using: :btree
-  add_index "leds", ["position"], name: "index_leds_on_position", using: :btree
+  add_index "leds", ["position_id"], name: "index_leds_on_position_id", using: :btree
   add_index "leds", ["signal_id"], name: "index_leds_on_signal_id", using: :btree
 
   create_table "location_container_hierarchies", id: false, force: true do |t|
@@ -262,6 +264,7 @@ ActiveRecord::Schema.define(version: 20150706063549) do
     t.integer  "parent_id"
     t.integer  "status",                    default: 0
     t.string   "remark",                    default: ""
+    t.string   "ip_detail"
   end
 
   add_index "locations", ["destination_id"], name: "index_locations_on_destination_id", using: :btree
@@ -289,10 +292,40 @@ ActiveRecord::Schema.define(version: 20150706063549) do
     t.datetime "updated_at"
   end
 
+  create_table "movement_lists", force: true do |t|
+    t.string   "uuid",       limit: 36,                 null: false
+    t.string   "name",                  default: ""
+    t.string   "state",                 default: "100"
+    t.string   "builder"
+    t.string   "remarks",               default: ""
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "movement_lists", ["id"], name: "index_movement_lists_on_id", using: :btree
+  add_index "movement_lists", ["uuid"], name: "index_movement_lists_on_uuid", using: :btree
+
+  create_table "movement_sources", force: true do |t|
+    t.string   "movement_list_id"
+    t.string   "fromWh"
+    t.string   "fromPosition"
+    t.string   "packageId"
+    t.string   "partNr"
+    t.float    "qty"
+    t.datetime "fifo"
+    t.string   "toWh"
+    t.string   "toPosition"
+    t.string   "employee_id"
+    t.string   "remarks"
+    t.string   "type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "movements", force: true do |t|
     t.string   "partNr"
     t.datetime "fifo"
-    t.decimal  "qty",          precision: 20, scale: 10
+    t.decimal  "qty",              precision: 20, scale: 10
     t.string   "from_id"
     t.string   "fromPosition"
     t.string   "to_id"
@@ -305,6 +338,7 @@ ActiveRecord::Schema.define(version: 20150706063549) do
     t.string   "remark"
     t.string   "remarks"
     t.string   "employee_id"
+    t.string   "movement_list_id"
   end
 
   add_index "movements", ["packageId"], name: "package_id_index", using: :btree
@@ -336,12 +370,23 @@ ActiveRecord::Schema.define(version: 20150706063549) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "locked",                                  default: false
+    t.text     "remarks"
   end
 
   add_index "n_storages", ["packageId"], name: "package_id_index", using: :btree
   add_index "n_storages", ["storageId"], name: "storage_id_unique", unique: true, using: :btree
   add_index "n_storages", ["uniqueId"], name: "unique_id_unique", unique: true, using: :btree
   add_index "n_storages", ["ware_house_id"], name: "index_n_storages_on_ware_house_id", using: :btree
+
+  create_table "operation_logs", force: true do |t|
+    t.string   "item_type"
+    t.string   "item_id"
+    t.string   "event"
+    t.string   "whodunnit"
+    t.text     "object"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "order_items", force: true do |t|
     t.string   "uuid",                         null: false
@@ -566,9 +611,6 @@ ActiveRecord::Schema.define(version: 20150706063549) do
     t.datetime "updated_at"
     t.text     "msg"
     t.integer  "order_state", default: 100
-    t.integer  "to_state"
-    t.string   "to_display"
-    t.string   "node_id"
   end
 
   create_table "records", force: true do |t|
@@ -666,6 +708,22 @@ ActiveRecord::Schema.define(version: 20150706063549) do
   end
 
   add_index "state_logs", ["id"], name: "index_state_logs_on_id", using: :btree
+
+  create_table "storage_operation_records", force: true do |t|
+    t.string   "partNr"
+    t.string   "qty"
+    t.string   "fromWh"
+    t.string   "fromPosition"
+    t.string   "toWh"
+    t.string   "toPosition"
+    t.string   "packageId"
+    t.string   "type_id"
+    t.string   "remarks"
+    t.string   "employee_id"
+    t.datetime "fifo"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "storages", force: true do |t|
     t.string   "location_id"

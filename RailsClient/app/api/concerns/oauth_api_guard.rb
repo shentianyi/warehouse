@@ -14,7 +14,7 @@ module OauthAPIGuard
 # Helper Methods for Grape Endpoint
   module HelperMethods
     def guard!
-      if request.env['HTTP_AUTHORIZATION'].split(' ')[0]=='Bearer'
+      if request.env['HTTP_AUTHORIZATION'] && request.env['HTTP_AUTHORIZATION'].split(' ')[0]=='Bearer'
         guard_by_token
       else
 

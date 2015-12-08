@@ -35,7 +35,7 @@ class Package<Container
     puts "-----------------------------------------#{self.fifo_time_display}"
     if self.fifo_time_display
       begin
-        return Date.strptime(self.fifo_time_display.sub(/W  /, ''), '%d.%m.%y')
+        return Date.strptime(self.fifo_time_display.sub(/W\s*/, ''), '%d.%m.%y')
         rescue => e
         return Time.now
       end

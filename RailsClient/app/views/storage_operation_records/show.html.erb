@@ -1,0 +1,54 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Partnr:</strong>
+  <%= @storage_operation_record.partNr %>
+</p>
+
+<p>
+  <strong>Qty:</strong>
+  <%= @storage_operation_record.qty %>
+</p>
+
+<p>
+  <strong>Fromwh:</strong>
+  <%= @storage_operation_record.fromWh %>
+</p>
+
+<p>
+  <strong>Fromposition:</strong>
+  <%= @storage_operation_record.fromPosition %>
+</p>
+
+<p>
+  <strong>Towh:</strong>
+  <%= @storage_operation_record.toWh %>
+</p>
+
+<p>
+  <strong>Toposition:</strong>
+  <%= @storage_operation_record.toPosition %>
+</p>
+
+<p>
+  <strong>Packageid:</strong>
+  <%= @storage_operation_record.packageId %>
+</p>
+
+<p>
+  <strong>Type:</strong>
+  <%= @storage_operation_record.type_id %>
+</p>
+
+<p>
+  <strong>Remarks:</strong>
+  <%= @storage_operation_record.remarks %>
+</p>
+
+<p>
+  <strong>Employee:</strong>
+  <%= @storage_operation_record.employee_id %>
+</p>
+
+<%= link_to 'Edit', edit_storage_operation_record_path(@storage_operation_record) %> |
+<%= link_to 'Back', storage_operation_records_path %>

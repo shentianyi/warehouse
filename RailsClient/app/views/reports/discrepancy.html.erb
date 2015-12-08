@@ -5,6 +5,7 @@
   </div>
   <div class="panel-body">
     <br/>
+
     <div>
       <script type="text/javascript">
           $(function () {
@@ -24,40 +25,44 @@
                   alert('请上传文件');
           }
       </script>
-      <div>
-        <span>上传报表：</span>
-        <input id="item-data-uploader" type="file" name="files[]" data-url="/reports/upload_file">
-        <div class="abstractblock" id="item-data-uploader-preview" style="<%= "display:none" if @file.nil? %>;">
-          <% if @file %>
-              <span>文件：<%= @file["data"]["original_filename"] %></span>
-              <br>
-              <span info>文件上传成功</span>
-          <% end%>
-        </div>
-      </div>
+      <% if current_user.can_edit_inventory? %>
+          <div>
+            <span>上传报表：</span>
+            <input id="item-data-uploader" type="file" name="files[]" data-url="/reports/upload_file">
+
+            <div class="abstractblock" id="item-data-uploader-preview" style="<%= "display:none" if @file.nil? %>;">
+              <% if @file %>
+                  <span>文件：<%= @file["data"]["original_filename"] %></span>
+                  <br>
+                  <span info>文件上传成功</span>
+              <% end %>
+            </div>
+          </div>
+      <% end %>
     </div>
     <div>
       <form method="get" action="<%= reports_discrepancy_path %>">
-          <div>
-            <span class="label label-info">报表类型:</span>
-            <%= select_tag(:type,options_for_select(ReportType.list,@type),include_blank: false)%>
-            <span class="label label-info">地点:</span>
-              <%= select_tag(:location_id, options_for_select(Location.list_menu(current_user), @location_id), include_blank: false) %>
-            <span class="label label-info">时间范围:</span>
-              <input type="text" name="received_date_start" class="datepicker" value="<%= @date_start %>"/>
-              ~ <input type="text" name="received_date_end" class="datepicker" value="<%= @date_end %>"/>
+        <div>
+          <span class="label label-info">报表类型:</span>
+          <%= select_tag(:type, options_for_select(ReportType.list, @type), include_blank: false) %>
+          <span class="label label-info">地点:</span>
+          <%= select_tag(:location_id, options_for_select(Location.list_menu(current_user), @location_id), include_blank: false) %>
+          <span class="label label-info">时间范围:</span>
+          <input type="text" name="received_date_start" class="datepicker" value="<%= @date_start %>"/>
+          ~ <input type="text" name="received_date_end" class="datepicker" value="<%= @date_end %>"/>
 
-            <span class="label label-info">显示方式:</span>
-            <%= select_tag :format, options_for_select([["Web", "html"],["Excel File(MS 07 or later)", "xlsx"]], "html") %>
-            <input type="hidden" id="file" name="file" value="<%= @jsonfile%>">
-            <input type="button" value="确定" class="btn btn-warning" name="commit" onclick="submitForm()"/>
-          </div>
+          <span class="label label-info">显示方式:</span>
+          <%= select_tag :format, options_for_select([["Web", "html"], ["Excel File(MS 07 or later)", "xlsx"]], "html") %>
+          <input type="hidden" id="file" name="file" value="<%= @jsonfile %>">
+          <input type="button" value="确定" class="btn btn-warning" name="commit" onclick="submitForm()"/>
+        </div>
       </form>
     </div>
   </div>
   <br/>
+
   <div class="alert alert-success" role="alert">
-    <p><%= @title%></p>
+    <p><%= @title %></p>
   </div>
   <table class="table table-striped table-condensed table-hover">
     <thead>
@@ -71,25 +76,26 @@
     </tr>
     </thead>
     <tbody>
-    <% i = 0%>
-    <% @results.each do |key,value| %>
-    <tr>
-      <td><%= i+1 %><% i=i+1%></td>
-      <td><span class="label label-info"><%= value["PartNr."]%></span></td>
-      <td><%= value["Warehouse"]%></td>
-      <td><span class="badge"><%= value["Amount"]%></span></td>
-      <td><span class="badge"><%= @packages[key].nil? ? 0 : @packages[key]["Amount"]%></span></td>
-      <td>
-        <% d =  @packages[key].nil? ? value["Amount"] : value["Amount"] - @packages[key]["Amount"]%>
-        <% if d > 0%>
-            <span class="label label-danger"><%= d %></span>
-        <% elsif d < 0%>
-            <span class="label label-warning"><%= d %></span>
-        <% else%>
-        <span class="label label-primary"><%= d %></span>
-        <% end %>
-      </td>
-    </tr>
+    <% i = 0 %>
+    <% @results.each do |key, value| %>
+        <tr>
+          <td><%= i+1 %>
+            <% i=i+1 %></td>
+          <td><span class="label label-info"><%= value["PartNr."] %></span></td>
+          <td><%= value["Warehouse"] %></td>
+          <td><span class="badge"><%= value["Amount"] %></span></td>
+          <td><span class="badge"><%= @packages[key].nil? ? 0 : @packages[key]["Amount"] %></span></td>
+          <td>
+            <% d = @packages[key].nil? ? value["Amount"] : value["Amount"] - @packages[key]["Amount"] %>
+            <% if d > 0 %>
+                <span class="label label-danger"><%= d %></span>
+            <% elsif d < 0 %>
+                <span class="label label-warning"><%= d %></span>
+            <% else %>
+                <span class="label label-primary"><%= d %></span>
+            <% end %>
+          </td>
+        </tr>
     <% end %>
     </tbody>
   </table>

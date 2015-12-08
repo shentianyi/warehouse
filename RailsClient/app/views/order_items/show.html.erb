@@ -1,27 +1,49 @@
-<h1><%= @order_item.id%></h1>
-<span class="label label-primary"><%= @order_item.id%></span>
+<h1><%= @order_item.id %></h1>
+<span class="label label-primary"><%= @order_item.id %></span>
 
-<h4>要货员: <small><%=  @order_item.user.name %></small></h4>
-<h4>要货员工号: <small><%= @order_item.user_id %></small></h4>
-<h4>所属订单: <small><%= @order_item.order_id %></small></h4>
-<h4>创建时间: <small><%= @order_item.created_at.localtime.strftime('%Y-%m-%d %H:%M') %></small></h4>
-<h4>箱数: <small><%= @order_item.box_quantity %></small></h4>
-<h4>数量: <small><%= OrderItemLabelRegex.quantity_prefix_string + @order_item.quantity.to_s %></small></h4>
-<h4>零件号: <small><%= OrderItemLabelRegex.part_prefix_string + @order_item.part_id %></small></h4>
-<h4>是否加急: <small>
-  <% if @order_item.is_emergency %>
-      <span class="label label-success">是</span>
-  <%else%>
-      <span class="label label-warning">否</span>
-  <%end%></small></h4>
-<h4>要货位置: <small>
-  <span class="label label-default"><%= @order_item.location.name%></span>
-</small></h4>
-<h4>发货位置: <small>
-  <% if pp = OrderItemService.verify_department(@order_item.whouse_id,@order_item.part_id)%>
-      <span class="label label-default"><%= pp.sourceable.name if pp.sourceable %></span>
-  <% end %>
-</small></h4>
+<h4>要货员:
+  <small><%= @order_item.user.name %></small>
+</h4>
+<h4>要货员工号:
+  <small><%= @order_item.user_id %></small>
+</h4>
+<h4>所属订单:
+  <small><%= @order_item.order_id %></small>
+</h4>
+<h4>创建时间:
+  <small><%= @order_item.created_at.localtime.strftime('%Y-%m-%d %H:%M') %></small>
+</h4>
+<h4>箱数:
+  <small><%= @order_item.box_quantity %></small>
+</h4>
+<h4>数量:
+  <small><%= OrderItemLabelRegex.quantity_prefix_string + @order_item.quantity.to_s %></small>
+</h4>
+<h4>零件号:
+  <small><%= OrderItemLabelRegex.part_prefix_string + @order_item.part_id %></small>
+</h4>
+<h4>是否加急:
+  <small>
+    <% if @order_item.is_emergency %>
+        <span class="label label-success">是</span>
+    <% else %>
+        <span class="label label-warning">否</span>
+    <% end %></small>
+</h4>
+<h4>要货位置:
+  <small>
+    <span class="label label-default"><%= @order_item.location.name %></span>
+  </small>
+</h4>
+<h4>发货位置:
+  <small>
+    <% if pp = OrderItemService.verify_department(@order_item.whouse_id, @order_item.part_id) %>
+        <span class="label label-default"><%= pp.sourceable.name if pp.sourceable %></span>
+    <% end %>
+  </small>
+</h4>
 
-<%= link_to '编辑', edit_order_item_path(@order_item),:class=>'btn btn-default' %> |
-<%= link_to '返回', order_items_path ,:class=>'btn btn-default'%>
+<% if current_user.can_edit_inventory? %>
+    <%= link_to '编辑', edit_order_item_path(@order_item), :class => 'btn btn-default' %> |
+<% end %>
+<%= link_to '返回', order_items_path, :class => 'btn btn-default' %>

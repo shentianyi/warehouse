@@ -1,0 +1,37 @@
+<%= form_for(@operation_log) do |f| %>
+  <% if @operation_log.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@operation_log.errors.count, "error") %> prohibited this operation_log from being saved:</h2>
+
+      <ul>
+      <% @operation_log.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :item_type %><br>
+    <%= f.text_field :item_type %>
+  </div>
+  <div class="field">
+    <%= f.label :item_id %><br>
+    <%= f.text_field :item_id %>
+  </div>
+  <div class="field">
+    <%= f.label :event %><br>
+    <%= f.text_field :event %>
+  </div>
+  <div class="field">
+    <%= f.label :whodunnit %><br>
+    <%= f.text_field :whodunnit %>
+  </div>
+  <div class="field">
+    <%= f.label :object %><br>
+    <%= f.text_field :object %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

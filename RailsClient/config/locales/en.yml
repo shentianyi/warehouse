@@ -239,3 +239,6 @@ en:
       sender: 'Sender'
       stocker: 'Orderer'
       picker: 'Picker'
+      shifter: 'shifter'
+      buyer: 'buyer'
+      inventoryer: 'inventoryer'

@@ -1,13 +1,13 @@
 #encoding: utf-8
 module V3
-  class WareHouseApi < Grape::API
-
+  class WareHouseApi < Base
 
     format :json
     rescue_from :all do |e|
       Rack::Response.new([e.message], 500).finish
     end
     namespace :whouse do
+
       desc 'Get WareHouse list.'
       get do
         # guard!
@@ -38,6 +38,8 @@ module V3
       end
       post :enter_stock do
         puts params.to_json
+        params[:user] = current_user
+        StorageOperationRecord.save_record(params, 'ENTRY')
         s=WhouseService.new.enter_stock(params)
         {result: 1, content: s}
       end
@@ -63,14 +65,20 @@ module V3
         params[:fromPosition]=params[:fromPosition].sub(/LO/, '') if params[:fromPosition].present?
 
         params[:partNr]=params[:partNr].sub(/P/, '') if params[:partNr].present?
-        puts "#{params.to_json}-----------"
         params[:user] = current_user
+        puts "#{params.to_json}-----------"
         begin
           params[:qty]=params[:qty].sub(/Q/, '').to_f if params[:qty].present?
           if params[:partNr].present?
             raise '请填写数量' unless params[:qty].present?
             params[:packageId]=nil
           end
+
+          msg = FileHandler::Excel::NStorageHandler.validate_move_row params
+          unless msg.result
+            return {result: 0, content: msg.content}
+          end
+
           NStorage.transaction do
             WhouseService.new.move(params)
           end
@@ -88,9 +96,15 @@ module V3
         # raise ''
         puts "===================#{params.to_json}"
         NStorage.transaction do
+          builder = current_user.blank? ? '' : current_user.id
+          move_list = MovementList.create(builder: builder, name: "#{builder}_#{DateTime.now.strftime("%H.%d.%m.%Y")}")
           JSON.parse(params[:moves]).each do |p|
             p.deep_symbolize_keys!
+            puts "----=============#{p}"
+            StorageOperationRecord.save_record(params, 'MOVE')
             WhouseService.new.move(p)
+            p[:movement_list_id] = move_list.id
+            MovementSource.create(p)
           end
         end
         {result: 1, content: 'move success'}

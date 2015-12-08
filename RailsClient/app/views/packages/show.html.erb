@@ -1,24 +1,46 @@
-<h1><%= @package.container_id%></h1>
+<h1><%= @package.container_id %></h1>
 <% ppresenter = PackagePresenter.new(@package) %>
-<span class="label label-primary"><%= @package.container_id%></span>
+<span class="label label-primary"><%= @package.container_id %></span>
 <h2>基础</h2>
-<h4>零件号: <small><%= PackageLabelRegex.part_prefix_string + @package.package.part_id %></small></h4>
-<h4>数量: <small><%= PackageLabelRegex.quantity_prefix_string + @package.package.quantity_str %></small></h4>
-<h4>目的地:<small><%= @package.destination.name if @package.destination%></small></h4>
-<h4>入库时间: <small><%= @package.package.fifo_time_display %></small></h4>
-<h4>上架库位: <small><%= ppresenter.position_nr%></small></h4>
-<h4>备注: <small><%= @package.remark %></small></h4>
-<h4>状态: <small><%= @package.state_display %></small></h4>
-<h4>所属托盘: <small><%= link_to @package.parent.container_id,forklift_path(@package.parent),:class => 'btn btn-default' if @package.parent %></small></h4>
-<h4>所属运单: <small><%= link_to @package.parent.parent.container_id,delivery_path(@package.parent.parent),:class => 'btn btn-default' if @package.parent && @package.parent.parent %></small></h4>
-<h4>创建信息: <small><%= "#{@package.user.name} 在 #{ppresenter.created_at} 创建于 #{@package.destination.name} "%></small></h4>
+<h4>零件号:
+  <small><%= PackageLabelRegex.part_prefix_string + @package.package.part_id %></small>
+</h4>
+<h4>数量:
+  <small><%= PackageLabelRegex.quantity_prefix_string + @package.package.quantity_str %></small>
+</h4>
+<h4>目的地:
+  <small><%= @package.destination.name if @package.destination %></small>
+</h4>
+<h4>入库时间:
+  <small><%= @package.package.fifo_time_display %></small>
+</h4>
+<h4>上架库位:
+  <small><%= ppresenter.position_nr %></small>
+</h4>
+<h4>备注:
+  <small><%= @package.remark %></small>
+</h4>
+<h4>状态:
+  <small><%= @package.state_display %></small>
+</h4>
+<h4>所属托盘:
+  <small><%= link_to @package.parent.container_id, forklift_path(@package.parent), :class => 'btn btn-default' if @package.parent %></small>
+</h4>
+<h4>所属运单:
+  <small><%= link_to @package.parent.parent.container_id, delivery_path(@package.parent.parent), :class => 'btn btn-default' if @package.parent && @package.parent.parent %></small>
+</h4>
+<h4>创建信息:
+  <small><%= "#{@package.user.name} 在 #{ppresenter.created_at} 创建于 #{@package.destination.name} " %></small>
+</h4>
 
 <h2>操作记录</h2>
 <ul>
-  <% @package.get_records.each do |r|%>
-  <li><%= r.display %></li>
+  <% @package.get_records.each do |r| %>
+      <li><%= r.display %></li>
   <% end %>
 </ul>
 
-<%= link_to '返回', packages_path,:class=>'btn btn-default' %>
-<%= link_to '编辑', edit_package_path, :class=>'btn btn-default'%>
+<%= link_to '返回', packages_path, :class => 'btn btn-default' %>
+<% if current_user.can_edit_inventory? %>
+    <%= link_to '编辑', edit_package_path, :class => 'btn btn-default' %>
+<% end %>

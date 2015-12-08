@@ -158,6 +158,7 @@ class LogisticsContainer<LocationContainer
         else
           params[:toPosition]='00 00 00'
         end
+        StorageOperationRecord.save_record(params, 'ENTRY')
         WhouseService.new.enter_stock(params)
       end
     end

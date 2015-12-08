@@ -8,23 +8,37 @@ class NStoragesController < ApplicationController
     @n_storages= NStorage.paginate(:page => params[:page])
   end
 
-  #def search
-  #  @n_storages=NStorage
-  #  if params[:partNr].present?
-  #    @n_storages=@n_storages.where("partNr like '%#{params[:partNr]}%' AND ware_house_id like '%#{params[:toWh]}%' ")
-   #   @partNr=params[:partNr]
-    #  @toWh=params[:toWh]
+#def search
+#  @n_storages=NStorage
+#  if params[:partNr].present?
+#    @n_storages=@n_storages.where("partNr like '%#{params[:partNr]}%' AND ware_house_id like '%#{params[:toWh]}%' ")
+#   @partNr=params[:partNr]
+#  @toWh=params[:toWh]
 
 #    end
- #   @n_storages=@n_storages.paginate(:page => params[:page])
-  #  render :index
- # end
-
+#   @n_storages=@n_storages.paginate(:page => params[:page])
+#  render :index
+# end
 
 
   def update
+    move_data = {
+        to_id: params[:n_storage][:ware_house_id],
+        toPosition: params[:n_storage][:position],
+        type_id: MoveType.find_by!(typeId: 'MOVE').id,
+        partNr: @storage.partNr,
+        fifo: @storage.fifo,
+        qty: @storage.qty,
+        from_id: @storage.ware_house_id,
+        fromPosition: @storage.position,
+        packageId: @storage.packageId,
+        remark: @storage.remarks,
+        employee_id: current_user
+    }
+    puts move_data
     respond_to do |format|
       if @storage.update(storage_params)
+        Movement.create!(move_data)
         format.html { redirect_to @storage, notice: 'Storage was successfully updated.' }
         format.json { render :show, status: :ok, location: @storage }
       else
@@ -42,7 +56,7 @@ class NStoragesController < ApplicationController
         file=params[:files][0]
         fd = FileData.new(data: file, oriName: file.original_filename, path: $tmp_file_path, pathName: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
         fd.save
-        msg = FileHandler::Excel::NStorageHandler.import(fd)
+        msg = FileHandler::Excel::NStorageHandler.import(fd, current_user)
       rescue => e
         msg.content = e.message
       end
@@ -58,7 +72,7 @@ class NStoragesController < ApplicationController
         file=params[:files][0]
         fd = FileData.new(data: file, oriName: file.original_filename, path: $tmp_file_path, pathName: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
         fd.save
-        msg = FileHandler::Excel::NStorageHandler.move(fd)
+        msg = FileHandler::Excel::NStorageHandler.move(fd, current_user)
       rescue => e
         msg.content = e.message
       end
@@ -109,12 +123,18 @@ class NStoragesController < ApplicationController
       end
     end
 
+    query = query.where(locked: false)
     if params.has_key? "negative"
       query = query.where("n_storages.qty < 0").select("n_storages.qty as total_qty, n_storages.*")
     else
       if params[:format] == 'xlsx'
         query = query.select("SUM(n_storages.qty) as total_qty, n_storages.*").group("n_storages.partNr, n_storages.ware_house_id, n_storages.position")
       else
+        if where_comdition.empty?
+          where_comdition += "WHERE locked = 0 "
+        else
+          where_comdition += "AND locked = 0 "
+        end
         query = NStorage.find_by_sql("select SUM(n_storages.qty) as total_qty, n_storages.* from n_storages #{where_comdition} group by n_storages.partNr, n_storages.ware_house_id, n_storages.position")
       end
     end
@@ -143,6 +163,6 @@ class NStoragesController < ApplicationController
 
   def storage_params
     #params[:order_item]
-    params.require(:n_storage).permit(:partNr, :packageId,:ware_house_id,:position,:qty)
+    params.require(:n_storage).permit(:partNr, :packageId, :ware_house_id, :position, :qty)
   end
 end

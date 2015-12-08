@@ -1,6 +1,7 @@
 <h1>Editing inventory_list_item</h1>
 
-<%= render 'form' %>
-
+<% unless SysConfigCache.inventory_enable_value=='true' && current_user.inventoryer? %>
+    <%= render 'form' %>
+<% end %>
 
 <%= link_to 'Back', inventory_list_items_path %>

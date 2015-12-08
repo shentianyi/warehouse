@@ -55,7 +55,9 @@
         <td><%= '是' if pick_item.is_emergency %></td>
         <td><%= pick_item.remark %></td>
         <td><%= pick_item.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_item.created_at%></td>
-        <td><%= link_to '编辑', edit_pick_item_path(pick_item) %></td>
+        <% if current_user.can_edit_inventory? %>
+            <td><%= link_to '编辑', edit_pick_item_path(pick_item) %></td>
+        <% end %>
       </tr>
   <% end %>
   </tbody>

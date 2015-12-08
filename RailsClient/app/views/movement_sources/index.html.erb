@@ -1,0 +1,45 @@
+<h1>Listing movement_sources</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Movement list</th>
+      <th>Fromwh</th>
+      <th>Fromposition</th>
+      <th>Packageid</th>
+      <th>Partnr</th>
+      <th>Qty</th>
+      <th>Fifo</th>
+      <th>Towh</th>
+      <th>Toposition</th>
+      <th>Employee</th>
+      <th>Remarks</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @movement_sources.each do |movement_source| %>
+      <tr>
+        <td><%= movement_source.movement_list_id %></td>
+        <td><%= movement_source.fromWh %></td>
+        <td><%= movement_source.fromPosition %></td>
+        <td><%= movement_source.packageId %></td>
+        <td><%= movement_source.partNr %></td>
+        <td><%= movement_source.qty %></td>
+        <td><%= movement_source.fifo %></td>
+        <td><%= movement_source.toWh %></td>
+        <td><%= movement_source.toPosition %></td>
+        <td><%= movement_source.employee_id %></td>
+        <td><%= movement_source.remarks %></td>
+        <td><%= link_to 'Show', movement_source %></td>
+        <td><%= link_to 'Edit', edit_movement_source_path(movement_source) %></td>
+        <td><%= link_to 'Destroy', movement_source, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Movement source', new_movement_source_path %>

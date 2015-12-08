@@ -21,7 +21,8 @@ class InventoryListItem < ActiveRecord::Base
     elsif !params[:unique_id].blank?
       query = NStorage.where(uniqueid: params[:unique_id]).first
     elsif !params[:part_id].blank? && !params[:position].blank?
-      query=nil
+      #XXXXXXXXXX
+      query=NStorage.where(partNr: params[:part_id], position: params[:position]).first
     else
       query = nil
     end
@@ -45,9 +46,9 @@ class InventoryListItem < ActiveRecord::Base
 
     part=Part.find_by_id(params[:part_id])
     if params[:need_convert]
-      params[:qty]=BigDecimal.new(params[:origin_qty].to_s)/BigDecimal.new(part.convert_unit.to_s)
+      params[:qty]=BigDecimal.new(params[:qty].to_s)/BigDecimal.new(part.convert_unit.to_s)
     else
-      params[:qty]=BigDecimal.new(params[:origin_qty].to_s)
+      params[:qty]=BigDecimal.new(params[:qty].to_s)
     end
 
     if params[:part_wire_mark].blank?
@@ -70,7 +71,6 @@ class InventoryListItem < ActiveRecord::Base
     if inventory_list_item.save!
       return inventory_list_item
     else
-
       return nil
     end
 
@@ -90,6 +90,7 @@ class InventoryListItem < ActiveRecord::Base
     puts '--------------------------------------'
     puts params.to_json
     puts '--------------------------------------'
+    StorageOperationRecord.save_record(params, 'ENTRY')
     WhouseService.new.enter_stock(params)
   end
 
@@ -125,7 +126,92 @@ class InventoryListItem < ActiveRecord::Base
     self.locked? ? 'Y' : 'N'
   end
 
+  # 盘点项手动入库后修改这个字段
   def in_stored_display
     self.in_stored? ? 'Y' : 'N'
+  end
+
+  def self.condition_search params
+    if params[:group_condition].blank?
+      items = InventoryListItem.where(params[:where_condition])
+    else
+      items = InventoryListItem.where(params[:where_condition]).group(params[:group_condition])
+    end
+    items
+  end
+
+  def self.condition_items params
+    msg=Message.new
+    msg.result = false
+
+    items = InventoryListItem.where(inventory_list_id: params[:inventory_list_id],  position: params[:position]).order(updated_at: :desc).offset(params[:page].to_i * params[:size].to_i).limit(params[:size].to_i)
+
+    records = []
+    items.each_with_index do |item, index|
+      record = {}
+      record[:id] = item.id
+      record[:part_id] = item.part_id
+      record[:package_id] = item.package_id
+      record[:qty] = item.qty
+      record[:fifo] = item.fifo.blank? ? '' : item.fifo.localtime.strftime('%Y-%m-%d')
+      record[:position] = item.position
+      record[:whouse_id] = item.whouse_id
+      records[index] = record
+    end
+
+    msg.result = true# if records.length>0
+    msg.content = records
+
+    return msg
+  end
+
+  def self.condition_positions params
+    msg=Message.new
+    msg.result = true
+
+    if params[:position]
+      items = InventoryListItem.where(position: params[:position], inventory_list_id: params[:inventory_list_id]).group(:position).select('*, count(*) as count').order(updated_at: :desc).offset(params[:page].to_i * params[:size].to_i).limit(params[:size].to_i)
+    else
+      items = InventoryListItem.where(inventory_list_id: params[:inventory_list_id]).group(:position).select('*, count(*) as count').order(updated_at: :desc).offset(params[:page].to_i * params[:size].to_i).limit(params[:size].to_i)
+    end
+
+    record = []
+    items.each_with_index do |item, index|
+      record[index] = {position: item.position, count: item.count}
+    end
+
+    msg.content = record
+
+    return msg
+  end
+
+  def self.search_condition_positions params
+    msg=Message.new
+    msg.result = false
+
+    items = InventoryListItem.where(position: params[:position], inventory_list_id: params[:inventory_list_id]).group(:position).select('*, count(*) as count').order(updated_at: :desc)
+
+    record = []
+    items.each_with_index do |item, index|
+      record[index] = {position: item.position, count: item.count}
+    end
+
+    # records = []
+    # items.each_with_index do |item, index|
+    #   record = {}
+    #   record[:id] = item.id
+    #   record[:part_id] = item.part_id
+    #   record[:package_id] = item.package_id
+    #   record[:qty] = item.qty
+    #   record[:fifo] = item.fifo.blank? ? '' : item.fifo.localtime.strftime('%Y-%m-%d')
+    #   record[:position] = item.position
+    #   record[:whouse_id] = item.whouse_id
+    #   records[index] = record
+    # end
+
+    msg.result = true if record.length>0
+    msg.content = record
+
+    return msg
   end
 end

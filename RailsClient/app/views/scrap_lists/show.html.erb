@@ -20,7 +20,10 @@
   <%= @scrap_list.builder %>
 </p>
 
-<%= link_to '报废移库', scrap_scrap_list_path, :class => 'btn btn-warning', data: {confirm: "确定报废?"} %>
+<% if current_user.can_edit_inventory? %>
+    <%= link_to '报废移库', scrap_scrap_list_path, :class => 'btn btn-warning', data: {confirm: "确定报废?"} %>
+<% end %>
+
 <br/>
 <p style="color:blue;font-weight: bold">
   共：<%= @scrap_list_items.count %>
@@ -57,10 +60,12 @@
         <td><%= scrap_list_item.IU %></td>
         <td><%= scrap_list_item.reason %></td>
         <td><%= scrap_list_item.name %></td>
-        <td><%= scrap_list_item.time.localtime %></td>
+        <td><%= scrap_list_item.time.blank? ? '' : scrap_list_item.time.localtime %></td>
         <td><%= ScrapListItemState.display(scrap_list_item.state) %></td>
         <!--<td><%= best_in_place scrap_list_item, :state, as: :select, collection: ScrapListItemState.list.map { |s| [s[1], s[0]] }.to_h %></td>-->
-        <td><%= link_to '删除', scrap_list_item, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        <% if current_user.can_edit_inventory? %>
+            <td><%= link_to '删除', scrap_list_item, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        <% end %>
       </tr>
   <% end %>
   </tbody>

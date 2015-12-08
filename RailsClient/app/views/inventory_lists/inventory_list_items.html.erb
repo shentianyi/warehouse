@@ -19,7 +19,7 @@
 
 
 <% if @inventory_list.has_un_stored_item %>
-    <%= link_to "开始入库", store_list_inventory_list_item_path(@inventory_list.id), class: "btn btn-warning", data: {confirm: "确定?"} %>
+    <%= link_to "开始入库", store_list_inventory_list_item_path(@inventory_list.id), class: "btn btn-warning", data: {confirm: "入库后将清空原有的库存记录以新的盘点结果作为库存记录"} %>
 <% end %>
 
 <div>
@@ -54,7 +54,7 @@
     <th>创建人</th>
     <th>是否在库存</th>
     <th>是否已锁定包装箱库存</th>
-    <th>是否已入库</th>
+    <th>是否盘点入库</th>
     <th>所属清单</th>
     <th colspan="2">&nbsp;</th>
   </tr>

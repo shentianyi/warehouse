@@ -1,7 +1,7 @@
 module V1
   class StorageAPI<Base
+    include APIGuard
     namespace :storages do
-
       post :move_store do
         ActiveRecord::Base.transaction do
           if forklift=Forklift.exists?(params[:id])
