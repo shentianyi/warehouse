@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151126075233) do
+ActiveRecord::Schema.define(version: 20151210022142) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -523,6 +523,7 @@ ActiveRecord::Schema.define(version: 20151126075233) do
     t.float    "unit_pack"
     t.string   "part_type_id"
     t.decimal  "convert_unit",            precision: 20, scale: 10, default: 1.0
+    t.string   "unit"
   end
 
   add_index "parts", ["id"], name: "index_parts_on_id", using: :btree
@@ -611,6 +612,9 @@ ActiveRecord::Schema.define(version: 20151126075233) do
     t.datetime "updated_at"
     t.text     "msg"
     t.integer  "order_state", default: 100
+    t.integer  "to_state"
+    t.string   "to_display"
+    t.string   "node_id"
   end
 
   create_table "records", force: true do |t|
