@@ -38,7 +38,7 @@ module V3
       end
       post :enter_stock do
         puts params.to_json
-        params[:user] = current_user
+        params[:employee_id] = 'PMS API CALL'
         StorageOperationRecord.save_record(params, 'ENTRY')
         s=WhouseService.new.enter_stock(params)
         {result: 1, content: s}
@@ -65,7 +65,7 @@ module V3
         params[:fromPosition]=params[:fromPosition].sub(/LO/, '') if params[:fromPosition].present?
 
         params[:partNr]=params[:partNr].sub(/P/, '') if params[:partNr].present?
-        params[:user] = current_user
+        params[:employee_id] = 'PMS API CALL'
         puts "#{params.to_json}-----------"
         begin
           params[:qty]=params[:qty].sub(/Q/, '').to_f if params[:qty].present?
@@ -96,12 +96,13 @@ module V3
         # raise ''
         puts "===================#{params.to_json}"
         NStorage.transaction do
-          builder = current_user.blank? ? '' : current_user.id
+          builder = current_user.blank? ? 'PMS API CALL' : current_user.id
           move_list = MovementList.create(builder: builder, name: "#{builder}_#{DateTime.now.strftime("%H.%d.%m.%Y")}")
           JSON.parse(params[:moves]).each do |p|
             p.deep_symbolize_keys!
             puts "----=============#{p}"
-            StorageOperationRecord.save_record(params, 'MOVE')
+            p[:employee_id] = 'PMS API CALL'
+            StorageOperationRecord.save_record(p, 'MOVE')
             WhouseService.new.move(p)
             p[:movement_list_id] = move_list.id
             MovementSource.create(p)
