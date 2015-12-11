@@ -37,14 +37,15 @@ module FileHandler
                 params={inventory_list_id: inventory_list_id,
                         whouse_id: row['仓库号'],
                         part_id: row['零件号'],
-                        fifo: row['FIFO'].present? ? row['FIFO'].to_time.utc : nil,
+                        fifo: row['FIFO'].present? ? Date.strptime(row['FIFO'], '%d.%m.%y').utc : Time.now.utc,
                         origin_qty: row['数量'].to_f,
+                        qty:row['数量'].to_f,
                         position: row['库位号'],
                         package_id: row['唯一码'],
                         part_form_mark: row['原材料/半成品/成品标记'],
                         need_convert: row['需要转换'].present? ? (row['需要转换']=='Y') : false
                 }
-                InventoryListItem.new_item(params)
+                InventoryListItem.new_item(params,false)
                 # end
               end
             end

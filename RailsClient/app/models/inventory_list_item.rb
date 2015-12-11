@@ -8,42 +8,43 @@ class InventoryListItem < ActiveRecord::Base
   validates :qty, :inventory_list_id, presence: true
   validates_inclusion_of :in_store, in: [true, false]
 
-  def self.new_item(params)
-    query = NStorage.new
-
-    # 根据参数组合情况获取nstorage start
-    if !params[:package_id].blank?
-      if InventoryListItem.where(package_id: params[:package_id],
-                                 inventory_list_id: params[:inventory_list_id]).first
-        raise '已盘点'
-      end
-      query = NStorage.where(packageId: params[:package_id]).first
-    elsif !params[:unique_id].blank?
-      query = NStorage.where(uniqueid: params[:unique_id]).first
-    elsif !params[:part_id].blank? && !params[:position].blank?
-      #XXXXXXXXXX
-      query=NStorage.where(partNr: params[:part_id], position: params[:position]).first
-    else
-      query = nil
-    end
+  def self.new_item(params, query=true)
     # 根据参数组合情况获取nstorage end
+    if query
+      query = NStorage.new
 
-    # 已入库，参数组合生成
-    if query.nil?
-      params[:current_whouse] = nil
-      params[:current_position] = nil
-      params[:in_store] = false
-    else
-      params[:current_whouse] = query.ware_house_id
-      params[:current_position] = query.position
-      params[:in_store] = true
-      params[:fifo]=query.fifo
-      params[:origin_qty] =params[:qty]=query.qty if params[:qty].blank?
-      if params[:part_id].blank?
-        params[:part_id] = query.partNr
+      # 根据参数组合情况获取nstorage start
+      if !params[:package_id].blank?
+        if InventoryListItem.where(package_id: params[:package_id],
+                                   inventory_list_id: params[:inventory_list_id]).first
+          raise '已盘点'
+        end
+        query = NStorage.where(packageId: params[:package_id]).first
+      elsif !params[:unique_id].blank?
+        query = NStorage.where(uniqueid: params[:unique_id]).first
+      elsif !params[:part_id].blank? && !params[:position].blank?
+        #XXXXXXXXXX
+        query=NStorage.where(partNr: params[:part_id], position: params[:position]).first
+      else
+        query = nil
+      end
+
+      # 已入库，参数组合生成
+      if query.nil?
+        params[:current_whouse] = nil if params[:current_whouse].blank?
+        params[:current_position] = nil
+        params[:in_store] = false if params[:current_position].blank?
+      else
+        params[:current_whouse] = query.ware_house_id if params[:current_whouse].blank?
+        params[:current_position] = query.position if params[:current_position].blank?
+        params[:in_store] = true
+        params[:fifo]=query.fifo if params[:fifo].blank?
+        params[:origin_qty] =params[:qty]=query.qty if params[:qty].blank?
+        if params[:part_id].blank?
+          params[:part_id] = query.partNr
+        end
       end
     end
-
     part=Part.find_by_id(params[:part_id])
     if params[:need_convert]
       params[:qty]=BigDecimal.new(params[:qty].to_s)/BigDecimal.new(part.convert_unit.to_s)
@@ -144,7 +145,7 @@ class InventoryListItem < ActiveRecord::Base
     msg=Message.new
     msg.result = false
 
-    items = InventoryListItem.where(inventory_list_id: params[:inventory_list_id],  position: params[:position]).order(updated_at: :desc).offset(params[:page].to_i * params[:size].to_i).limit(params[:size].to_i)
+    items = InventoryListItem.where(inventory_list_id: params[:inventory_list_id], position: params[:position]).order(updated_at: :desc).offset(params[:page].to_i * params[:size].to_i).limit(params[:size].to_i)
 
     records = []
     items.each_with_index do |item, index|
@@ -159,7 +160,7 @@ class InventoryListItem < ActiveRecord::Base
       records[index] = record
     end
 
-    msg.result = true# if records.length>0
+    msg.result = true # if records.length>0
     msg.content = records
 
     return msg
