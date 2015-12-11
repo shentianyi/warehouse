@@ -90,7 +90,8 @@ class WhouseService
     move_data[:remarks] = params[:remarks] if params[:remarks].present?
     move_data[:movement_list_id] = params[:movement_list_id] if params[:movement_list_id].present?
 
-    PaperTrail.whodunnit = params[:user].blank? ? '' : params[:user].id
+    user_id=params[:user].blank? ? params[:employee_id] : params[:user].id
+    PaperTrail.whodunnit = user_id
     if params[:uniqueId].present?
       #Move(uniqueId,toWh,toPosition,type)
       # find from wh
@@ -141,13 +142,13 @@ class WhouseService
       if params[:qty].to_f > storage.qty
         raise '移库量大于剩余量'
       elsif params[:qty].to_f == storage.qty
-          storage.update!(ware_house_id: toWh.id, position: params[:toPosition], created_at: Time.now)
-          move_data[:qty] = storage.qty
-          move_data[:from_id] = params[:fromWh]
-          move_data[:partNr] = storage.partNr
-          move_data[:fromPosition] = params[:fromPosition]
-          move_data[:packageId] = params[:packageId]
-          Movement.create!(move_data)
+        storage.update!(ware_house_id: toWh.id, position: params[:toPosition], created_at: Time.now)
+        move_data[:qty] = storage.qty
+        move_data[:from_id] = params[:fromWh]
+        move_data[:partNr] = storage.partNr
+        move_data[:fromPosition] = params[:fromPosition]
+        move_data[:packageId] = params[:packageId]
+        Movement.create!(move_data)
       else
         tostorage = NStorage.where(ware_house_id: toWh.id, partNr: params[:partNr], position: params[:toPosition], packageId: params[:packageId]).order("n_storages.qty asc").first
 
@@ -307,7 +308,7 @@ class WhouseService
         end
 
         #movement
-        remark = "系统添加备注信息：#{Time.now} 负库存产生【操作员：#{params[:user].id} -- 初始移库数量：#{params[:qty]}】"
+        remark = "系统添加备注信息：#{Time.now} 负库存产生【操作员：#{user_id} -- 初始移库数量：#{params[:qty]}】"
         move_data.update({from_id: params[:fromWh], fromPosition: params[:fromPosition], partNr: params[:partNr], qty: lastqty, remark: remark})
         Movement.create!(move_data)
 
