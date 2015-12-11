@@ -16,6 +16,10 @@ module FileHandler
           '零件号', '数量', '原材料/半成品/成品标记', '原材料线/非线标记'
       ]
 
+      TOTAL_ALL_WHOUSE_HEADERS=[
+          '零件号', '数量', '仓库'
+      ]
+
       def self.import(file, inventory_list_id)
         msg = Message.new
         book = Roo::Excelx.new file.full_path
@@ -85,6 +89,29 @@ module FileHandler
         msg.content =tmp_file
         msg
       end
+
+      def self.export_total_by_whouse(items)
+        msg=Message.new
+        tmp_file=full_tmp_path('盘点仓库汇总清单.xlsx')
+        p = Axlsx::Package.new
+        p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
+          sheet.add_row TOTAL_ALL_WHOUSE_HEADERS
+          items.all.each do |inventory_list_item|
+            sheet.add_row [
+                              inventory_list_item.current_whouse,
+                              inventory_list_item.part_id,
+                              inventory_list_item.qty
+                          ], types: [:string, :string, :string]
+          end
+        end
+        p.use_shared_strings = true
+        p.serialize(tmp_file)
+
+        msg.result =true
+        msg.content =tmp_file
+        msg
+      end
+
 
       def self.export_total(items)
         msg=Message.new

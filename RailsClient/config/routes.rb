@@ -53,6 +53,7 @@ Rails.application.routes.draw do
 
     collection do
       get :export_total
+      get :export_by_whouse
     end
   end
 
