@@ -103,7 +103,7 @@ module FileHandler
             data=[part_id]
             strings=[:string]
             whouses.each do |whouse_id|
-              data<<InventoryListItem.joins(:inventory_list).where(part_id: part_id, whouse_id: whouse_id, inventory_lists: {state: InventoryListState::PROCESSING}).select('sum(qty) as qty').qty
+              data<<InventoryListItem.joins(:inventory_list).where(part_id: part_id, whouse_id: whouse_id, inventory_lists: {state: InventoryListState::PROCESSING}).select('sum(qty) as qty').first.qty
               strings<<:string
             end
             sheet.add_row data, types: strings
