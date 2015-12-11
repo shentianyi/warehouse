@@ -5,7 +5,7 @@ class InventoryListItemsController < ApplicationController
   respond_to :html
 
   def index
-    @inventory_list_items = InventoryListItem.paginate(:page => params[:page])
+    @inventory_list_items = InventoryListItem.paginate(:page => params[:page],:per_page =>50).order(:created_at)
     respond_with(@inventory_list_items)
   end
 
