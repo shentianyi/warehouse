@@ -93,22 +93,32 @@ module V3
       end
 
       post :moves do
-        # raise ''
-        puts "===================#{params.to_json}"
-        NStorage.transaction do
-          builder = current_user.blank? ? 'PMS API CALL' : current_user.id
-          move_list = MovementList.create(builder: builder, name: "#{builder}_#{DateTime.now.strftime("%H.%d.%m.%Y")}")
-          JSON.parse(params[:moves]).each do |p|
-            p.deep_symbolize_keys!
-            puts "----=============#{p}"
-            p[:employee_id] = 'PMS API CALL'
-            StorageOperationRecord.save_record(p, 'MOVE')
-            WhouseService.new.move(p)
-            p[:movement_list_id] = move_list.id
-            MovementSource.create(p)
+        begin
+          # raise ''
+          puts "===================#{params.to_json}"
+          NStorage.transaction do
+            builder = current_user.blank? ? 'PMS API CALL' : current_user.id
+            move_list = MovementList.create(builder: builder, name: "#{builder}_#{DateTime.now.strftime("%Y.%m.%d.%H")}")
+            JSON.parse(params[:moves]).each do |p|
+              p.deep_symbolize_keys!
+              puts "----=============#{p}"
+              p[:employee_id] = 'PMS API CALL'
+              StorageOperationRecord.save_record(p, 'MOVE')
+              WhouseService.new.move(p)
+              p[:movement_list_id] = move_list.id
+              MovementSource.create(p)
+            end
           end
+        rescue => e
+          p '---------------------------------'
+          p e
+          puts e.backtrace
+          p '---------------------------------'
+
+          raise e.message
         end
         {result: 1, content: 'move success'}
+
       end
 
       desc 'Check Stock By package_id or uniq_id'
