@@ -10,9 +10,15 @@
               <input type="hidden" name="inventory_list_item[part_id_fuzzy]"/>
             </span>
 
+
+           <span>状态：
+             <%= select 'inventory_list', 'state', InventoryListState.menu, selected: @inventory_list_state, include_blank: true %>
+            </span>
+
             <span>仓库号：
               <%= select_tag('inventory_list_item[current_whouse]', options_from_collection_for_select(Whouse.all, :name, :id, @current_whouse), include_blank: true) %>
             </span>
+
 
             <span>库位号：
               <input type="text" name="inventory_list_item[current_position]" value="<%= @current_position %>"/>
@@ -28,7 +34,7 @@
   </form>
 </div>
 
-<%= link_to "新建盘点项", send("new_#{@model}_path"),:class=>'btn btn-default' %>
+<%= link_to "新建盘点项", send("new_#{@model}_path"), :class => 'btn btn-default' %>
 <div class="digg_pagination">
   <div class="page_info">
     <%= page_entries_info @inventory_list_items %>
