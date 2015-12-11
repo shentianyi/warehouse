@@ -22,7 +22,7 @@ module V1
         args[:package_id] = p.id
         args[:part_id] = "P#{p.part_id}"
         args[:qty] = p.quantity
-        args[:fifo] = p.fifo_time_display.blank? ? '' : Date.strptime(p.fifo_time_display.sub(/W\s*/, ''), '%d.%m.%y')
+        args[:fifo] =p.parsed_fifo# p.fifo_time_display.blank? ? '' : Date.strptime(p.fifo_time_display.sub(/W\s*/, ''), '%d.%m.%y')
         {result: '1', content: args}
       end
 

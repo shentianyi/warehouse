@@ -15,7 +15,8 @@ class ScrapListItem < ActiveRecord::Base
           qty: self.quantity,
           toWh: self.scrap_list.dse_warehouse,
           toPosition: 'BaofeiWeizhi',
-          fromWh: self.scrap_list.src_warehouse
+          fromWh: self.scrap_list.src_warehouse,
+          employee_id:self.scrap_list.builder
       }
       StorageOperationRecord.save_record(params, 'MOVE')
       NStorage.transaction do
