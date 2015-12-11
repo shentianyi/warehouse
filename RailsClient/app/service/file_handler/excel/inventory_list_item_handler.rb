@@ -17,7 +17,7 @@ module FileHandler
       ]
 
       TOTAL_ALL_WHOUSE_HEADERS=[
-          '零件号', '数量', '仓库'
+          '仓库', '零件号', '数量'
       ]
 
       def self.import(file, inventory_list_id)
@@ -98,7 +98,7 @@ module FileHandler
           sheet.add_row TOTAL_ALL_WHOUSE_HEADERS
           items.all.each do |inventory_list_item|
             sheet.add_row [
-                              inventory_list_item.current_whouse,
+                              inventory_list_item.whouse_id,
                               inventory_list_item.part_id,
                               inventory_list_item.qty
                           ], types: [:string, :string, :string]
