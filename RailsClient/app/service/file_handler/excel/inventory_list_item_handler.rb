@@ -103,8 +103,8 @@ module FileHandler
             data=[part_id]
             types=[:string]
             whouses.each do |whouse_id|
-              data<< ((item=InventoryListItem.joins(:inventory_list).where(part_id: part_id, whouse_id: whouse_id, inventory_lists: {state: InventoryListState::PROCESSING}).select('sum(qty) as qty').first).nil? ? 0 : item.qty)
-              types<<:float
+              data<< ((item=InventoryListItem.joins(:inventory_list).where(part_id: part_id, whouse_id: whouse_id, inventory_lists: {state: InventoryListState::PROCESSING}).select('sum(qty) as qty').first).nil? ? '0.0' : item.qty)
+              types<<:string
             end
             sheet.add_row data, types: types
           end
