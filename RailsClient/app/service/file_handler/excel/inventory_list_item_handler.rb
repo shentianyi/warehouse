@@ -43,13 +43,13 @@ module FileHandler
                         part_id: row['零件号'],
                         fifo: row['FIFO'].present? ? Date.strptime(row['FIFO'], '%d.%m.%y').to_time.utc : Time.now.utc,
                         origin_qty: row['数量'].to_f,
-                        qty:row['数量'].to_f,
+                        qty: row['数量'].to_f,
                         position: row['库位号'],
                         package_id: row['唯一码'],
                         part_form_mark: row['原材料/半成品/成品标记'],
                         need_convert: row['需要转换'].present? ? (row['需要转换']=='Y') : false
                 }
-                InventoryListItem.new_item(params,false)
+                InventoryListItem.new_item(params, false)
                 # end
               end
             end
@@ -90,18 +90,23 @@ module FileHandler
         msg
       end
 
-      def self.export_total_by_whouse(items)
+      def self.export_total_by_whouse
+        whouses=InventoryListItem.joins(:inventory_list).where(inventory_lists: {state: InventoryListState::PROCESSING}).pluck(:whouse_id).uniq.sort
+        parts=InventoryListItem.joins(:inventory_list).where(inventory_lists: {state: InventoryListState::PROCESSING}).pluck(:part_id).uniq.sort
+
         msg=Message.new
         tmp_file=full_tmp_path('盘点仓库汇总清单.xlsx')
         p = Axlsx::Package.new
         p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
-          sheet.add_row TOTAL_ALL_WHOUSE_HEADERS
-          items.all.each do |inventory_list_item|
-            sheet.add_row [
-                              inventory_list_item.whouse_id,
-                              inventory_list_item.part_id,
-                              inventory_list_item.qty
-                          ], types: [:string, :string, :string]
+          sheet.add_row ['零件号']+whouses
+          parts.each do |part_id|
+            data=[part_id]
+            strings=[:string]
+            whouses.each do |whouse_id|
+              data<<InventoryListItem.joins(:inventory_list).where(part_id: part_id, whouse_id: whouse_id, inventory_lists: {state: InventoryListState::PROCESSING}).select('sum(qty) as qty').qty
+              strings<<:string
+            end
+            sheet.add_row data, types: strings
           end
         end
         p.use_shared_strings = true

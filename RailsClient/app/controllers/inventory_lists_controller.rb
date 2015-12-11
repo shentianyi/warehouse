@@ -86,9 +86,7 @@ class InventoryListsController < ApplicationController
   end
 
   def export_by_whouse
-    msg = FileHandler::Excel::InventoryListItemHandler.export_total_by_whouse(
-        InventoryListItem.joins(:inventory_list).where(inventory_lists:{state:InventoryListState::PROCESSING}).order(:whouse_id).group('part_id,inventory_list_items.whouse_id').select('*,sum(qty) as qty')
-    )
+    msg = FileHandler::Excel::InventoryListItemHandler.export_total_by_whouse
     send_file msg.content
   end
     
