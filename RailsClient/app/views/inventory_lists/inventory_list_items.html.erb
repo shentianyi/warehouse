@@ -52,6 +52,7 @@
     <th>原材料线/非线标记</th>
     <th>需要转换</th>
     <th>创建人</th>
+    <th>创建时间</th>
     <th>是否在库存</th>
     <th>是否已锁定包装箱库存</th>
     <th>是否盘点入库</th>
@@ -94,6 +95,7 @@
         <% end %>
         <td><%= inventory_list_item.need_convert_display %></td>
         <td><%= inventory_list_item.user_id %></td>
+        <td><%= inventory_list_item.created_at.localtime %></td>
         <td><%= inventory_list_item.in_store_display %></td>
         <td><%= inventory_list_item.locked_display %></td>
         <td><%= inventory_list_item.in_stored_display %></td>

@@ -5,7 +5,7 @@ module FileHandler
           '仓库号', '零件号', 'FIFO', '数量', '库位号', '唯一码', '原材料/半成品/成品标记', '需要转换'
       ]
       DETAIL_HEADERS=[
-          'No.', '仓库号', '零件号', 'FIFO原', 'FIFO', '数量', '原数量', '盘点库位号', '唯一码', '目前仓库', '目前库位', '原材料/半成品/成品标记', '原材料线/非线标记', '需要转换', '是否已入库', '创建人', '是否在库存', '所属清单'
+          'No.', '仓库号', '零件号', 'FIFO原', 'FIFO', '数量', '原数量', '盘点库位号', '唯一码', '目前仓库', '目前库位', '原材料/半成品/成品标记', '原材料线/非线标记', '需要转换', '是否已入库', '创建人', '创建时间', '是否在库存', '所属清单'
       ]
 
       TOTAL_HEADERS=[
@@ -135,6 +135,7 @@ module FileHandler
                               inventory_list_item.need_convert_display,
                               inventory_list_item.in_stored_display,
                               inventory_list_item.user_id,
+                              inventory_list_item.created_at.localtime,
                               inventory_list_item.in_store_display,
                               inventory_list_item.inventory_list.name
                           ], types: [:string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string]
