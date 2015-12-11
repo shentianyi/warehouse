@@ -154,14 +154,14 @@ class WhouseService
 
         if tostorage.blank?
           #create n_storage remarks
-          storage_remarks = "从包装箱#{params[:packageId]}中移库#{params[:qty]}---"
+          storage_remarks = "#{Time.now.localtime}从包装箱#{params[:packageId]}中移库#{params[:qty]}---"
           data = {partNr: params[:partNr], qty: params[:qty], fifo: storage.fifo, ware_house_id: toWh.id, position: params[:toPosition], remarks: storage_remarks}
           NStorage.create!(data)
         else
           if (tostorage.qty.to_f + params[:qty].to_f) == 0
             tostorage.destroy!
           else
-            storage_remarks = "#{tostorage.remarks}从包装箱#{params[:packageId]}中移库#{params[:qty]}---"
+            storage_remarks = "#{Time.now.localtime}从包装箱#{params[:packageId]}中移库#{params[:qty]}---"
             tostorage.update!(remarks: storage_remarks, qty: tostorage.qty + params[:qty].to_f)
           end
         end
@@ -234,7 +234,7 @@ class WhouseService
                 if storage.packageId.blank?
                   tostorage.update!(qty: tostorage.qty + storage.qty)
                 else
-                  storage_remarks = "#{tostorage.remarks} #{Time.now}从包装箱#{storage.packageId}中移库#{storage.qty}---"
+                  storage_remarks = "#{Time.now.localtime}从包装箱#{storage.packageId}中移库#{storage.qty}---"
                   tostorage.update!(remarks: storage_remarks, qty: tostorage.qty + storage.qty)
                 end
               end
@@ -256,14 +256,14 @@ class WhouseService
                 if storage.packageId.blank?
                   tostorage.update!(qty: tostorage.qty + restqty)
                 else
-                  storage_remarks = "#{tostorage.remarks} #{Time.now}从包装箱#{storage.packageId}中移库#{restqty}---"
+                  storage_remarks = "#{Time.now.localtime}从包装箱#{storage.packageId}中移库#{restqty}---"
                   tostorage.update!(remarks: storage_remarks, qty: tostorage.qty + restqty)
                 end
               end
             else
               data = {partNr: storage.partNr, qty: restqty, fifo: storage.fifo, ware_house_id: toWh.id,
                       position: params[:toPosition]}
-              data[:remarks]="#{Time.now}从包装箱#{storage.packageId}中移库#{restqty}---" if !storage.packageId.blank?
+              data[:remarks]="#{Time.now.localtime}从包装箱#{storage.packageId}中移库#{restqty}---" if !storage.packageId.blank?
               NStorage.create!(data)
             end
 
