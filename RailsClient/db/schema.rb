@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151212051417) do
+ActiveRecord::Schema.define(version: 20151212092157) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -151,6 +151,7 @@ ActiveRecord::Schema.define(version: 20151212051417) do
     t.boolean  "need_convert",                                default: false
     t.boolean  "locked",                                      default: false
     t.boolean  "in_stored",                                   default: false
+    t.string   "remark"
   end
 
   create_table "inventory_lists", force: true do |t|

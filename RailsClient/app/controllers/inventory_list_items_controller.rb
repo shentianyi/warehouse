@@ -99,8 +99,12 @@ class InventoryListItemsController < ApplicationController
     @inventory_list=InventoryList.find_by_id(params[:id])
     InventoryListItem.transaction do
       @inventory_list.inventory_list_items.where(in_stored: false).each do |item|
-        item.enter_stock
-        item.update_attributes(in_stored: true)
+        message= item.enter_stock
+        if message.result
+          item.update_attributes(in_stored: true)
+        else
+          item.update_attributes(remark: message.content)
+        end
       end
     end
     @inventory_list_items=@inventory_list.inventory_list_items.paginate(:page => params[:page])
