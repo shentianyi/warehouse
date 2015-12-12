@@ -94,6 +94,9 @@ ActiveRecord::Base.transaction do
     SysConfig.create(code: 'INVENTORY_ENABLE', value: 'false', name: '是否开启盘点模式')
   end
 
+  unless SysConfig.find_by_code('HIDE_FINISHED_INVENTORY')
+    SysConfig.create(code: 'HIDE_FINISHED_INVENTORY', value: 'true', name: '是否隐藏结束的盘点单')
+  end
 
   #LED STATE
   unless LedState.find_by_state(LedLightState::NORMAL)
