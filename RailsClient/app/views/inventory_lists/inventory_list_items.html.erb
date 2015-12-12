@@ -18,7 +18,7 @@
 <p id="notice"><%= notice %></p>
 
 
-<% if @inventory_list.has_un_stored_item %>
+<% if @inventory_list.state==InventoryListState::PROCESSING && @inventory_list.has_un_stored_item %>
     <%= link_to "开始入库", store_list_inventory_list_item_path(@inventory_list.id), class: "btn btn-warning", data: {confirm: "入库后将清空原有的库存记录以新的盘点结果作为库存记录"} %>
 <% end %>
 

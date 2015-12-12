@@ -137,7 +137,7 @@ class InventoryListItemsController < ApplicationController
     unless params[:inventory_list][:state].blank?
       query=query.joins(:inventory_list).where({inventory_lists: {state: params[:inventory_list][:state]}})
       @inventory_list_state=params[:inventory_list][:state]
-    end
+    end if params[:inventory_list].present?
 
     if params.has_key? "download"
       send_data(query.to_xlsx(query),

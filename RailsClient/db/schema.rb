@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151210022142) do
+ActiveRecord::Schema.define(version: 20151212051417) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -368,8 +368,12 @@ ActiveRecord::Schema.define(version: 20151210022142) do
     t.datetime "updated_at"
     t.boolean  "locked",                                  default: false
     t.text     "remarks"
+    t.string   "lock_user_id"
+    t.string   "lock_remark"
+    t.datetime "lock_at"
   end
 
+  add_index "n_storages", ["locked"], name: "index_n_storages_on_locked", using: :btree
   add_index "n_storages", ["packageId"], name: "package_id_index", using: :btree
   add_index "n_storages", ["storageId"], name: "storage_id_unique", unique: true, using: :btree
   add_index "n_storages", ["uniqueId"], name: "unique_id_unique", unique: true, using: :btree
@@ -598,6 +602,21 @@ ActiveRecord::Schema.define(version: 20151210022142) do
   add_index "positions", ["id"], name: "index_positions_on_id", using: :btree
   add_index "positions", ["uuid"], name: "index_positions_on_uuid", using: :btree
   add_index "positions", ["whouse_id"], name: "index_positions_on_whouse_id", using: :btree
+
+  create_table "ptl_jobs", force: true do |t|
+    t.text     "params"
+    t.integer  "state",       default: 100
+    t.boolean  "is_delete",   default: false
+    t.boolean  "is_dirty",    default: true
+    t.boolean  "is_new",      default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.text     "msg"
+    t.integer  "order_state", default: 100
+    t.integer  "to_state"
+    t.string   "to_display"
+    t.string   "node_id"
+  end
 
   create_table "records", force: true do |t|
     t.string   "recordable_id"
