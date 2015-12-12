@@ -81,21 +81,29 @@ class InventoryListItem < ActiveRecord::Base
 
 
   def enter_stock
-    params={
-        partNr: self.part_id,
-        qty: self.qty,
-        fifo: self.fifo.present? ? self.fifo_display : nil,
-        packageId: self.package_id.present? ? self.package_id : nil,
-        toWh: self.whouse_id.present? ? self.whouse_id : nil,
-        toPosition: self.position.present? ? self.position : nil,
-        remarks: "盘点入库,盘点单：#{self.inventory_list.name}",
-        uniq: true
-    }
-    puts '--------------------------------------'
-    puts params.to_json
-    puts '--------------------------------------'
-    StorageOperationRecord.save_record(params, 'ENTRY')
-    WhouseService.new.enter_stock(params)
+    message=Message.new
+    begin
+      params={
+          partNr: self.part_id,
+          qty: self.qty,
+          fifo: self.fifo.present? ? self.fifo_display : nil,
+          packageId: self.package_id.present? ? self.package_id : nil,
+          toWh: self.whouse_id.present? ? self.whouse_id : nil,
+          toPosition: self.position.present? ? self.position : nil,
+          remarks: "盘点入库,盘点单：#{self.inventory_list.name}",
+          uniq: true
+      }
+      puts '--------------------------------------'
+      puts params.to_json
+      puts '--------------------------------------'
+      StorageOperationRecord.save_record(params, 'ENTRY')
+      WhouseService.new.enter_stock(params)
+      message.result=true
+    rescue => e
+      message.result=false
+      message.content=e.message
+    end
+    message
   end
 
   def fifo_display
