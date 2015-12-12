@@ -102,8 +102,8 @@
         <td><%= inventory_list_item.inventory_list.name %></td>
         <td><%= link_to 'Show', inventory_list_item %></td>
         <td>
-          <% unless inventory_list_item.in_stored? %>
-              <%= link_to 'Destroy', inventory_list_item, method: :delete, data: {confirm: 'Are you sure?'} %>
+          <% if current_user.admin? %>
+              <%= link_to '删除', inventory_list_item, method: :delete, data: {confirm: '确定删除?'} %>
           <% end %>
         </td>
       </tr>

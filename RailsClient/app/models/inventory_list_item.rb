@@ -8,6 +8,8 @@ class InventoryListItem < ActiveRecord::Base
   validates :qty, :inventory_list_id, presence: true
   validates_inclusion_of :in_store, in: [true, false]
 
+  has_paper_trail
+
   def self.new_item(params, query=true)
     # 根据参数组合情况获取nstorage end
     if query
