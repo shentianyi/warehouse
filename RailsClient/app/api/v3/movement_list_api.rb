@@ -79,6 +79,7 @@ module V3
         params[:fromWh]=params[:fromWh].sub(/LO/, '') if params[:fromWh].present?
         params[:fromPosition]=params[:fromPosition].sub(/LO/, '') if params[:fromPosition].present?
         params[:partNr]=params[:partNr].sub(/P/, '') if params[:partNr].present?
+        params[:user] = current_user
         puts "#{params.to_json}-----------"
 
         return {result: 0, content: "#{params[:movement_list_id]}移库单不存在！"} unless m=MovementList.find_by(id: params[:movement_list_id])
@@ -94,7 +95,8 @@ module V3
 
           msg = FileHandler::Excel::NStorageHandler.validate_move_row params
           if msg.result
-            MovementSource.save_record(params)
+            mmsg = MovementSource.save_record(params)
+            return {result: 0, content: mmsg.content}
           end
         rescue => e
           if params[:uniq].blank?
