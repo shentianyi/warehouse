@@ -5,9 +5,17 @@ class MovementSourcesController < ApplicationController
 
   def search
     @condition=params[@model]
-    query=MovementSource.joins(:movement_list)
-              .select("movement_sources.*, movement_lists.state as state")
-              .where("movement_lists.state != #{MovementListState::ENDING}")
+
+    if params[:state][:state].blank?
+      query=MovementSource.joins(:movement_list)
+                .select("movement_sources.*, movement_lists.state as state")
+    else
+      query=MovementSource.joins(:movement_list)
+                .select("movement_sources.*, movement_lists.state as state")
+                .where("movement_lists.state = #{params[:state][:state]}")
+      instance_variable_set("@state", params[:state][:state])
+    end
+
     @condition.each do |k, v|
       if (v.is_a?(Fixnum) || v.is_a?(String)) && !v.blank?
         puts @condition.has_key?(k+'_fuzzy')
@@ -46,8 +54,8 @@ class MovementSourcesController < ApplicationController
 
   def index
     @movement_sources = MovementSource.joins(:movement_list)
-                            .select("movement_sources.*, movement_lists.state as state")
-                            .where("movement_lists.state != #{MovementListState::ENDING}").paginate(:page => params[:page])
+                            .select("movement_sources.*, movement_lists.state as state").paginate(:page => params[:page])
+    # .where("movement_lists.state != #{MovementListState::ENDING}")
     # @movement_sources = MovementSource.all.paginate(:page => params[:page])
     respond_with(@movement_sources)
   end
@@ -81,11 +89,11 @@ class MovementSourcesController < ApplicationController
   end
 
   private
-    def set_movement_source
-      @movement_source = MovementSource.find(params[:id])
-    end
+  def set_movement_source
+    @movement_source = MovementSource.find(params[:id])
+  end
 
-    def movement_source_params
-      params.require(:movement_source).permit(:movement_list_id, :fromWh, :fromPosition, :packageId, :partNr, :qty, :fifo, :toWh, :toPosition, :employee_id, :remarks)
-    end
+  def movement_source_params
+    params.require(:movement_source).permit(:movement_list_id, :fromWh, :fromPosition, :packageId, :partNr, :qty, :fifo, :toWh, :toPosition, :employee_id, :remarks)
+  end
 end
