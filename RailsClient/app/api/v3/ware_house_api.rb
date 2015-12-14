@@ -108,6 +108,7 @@ module V3
               p[:movement_list_id] = move_list.id
               MovementSource.create(p)
             end
+            move_list.update(state: MovementListState::ENDING)
           end
         rescue => e
           p '---------------------------------'

@@ -88,6 +88,7 @@
     <th>目的仓库</th>
     <th>目的库位</th>
     <th>员工号</th>
+    <th>创建时间</th>
     <th>备注</th>
     <th>移库单状态</th>
     <th colspan="3"></th>
@@ -107,6 +108,7 @@
         <td><%= movement_source.toWh %></td>
         <td><%= movement_source.toPosition %></td>
         <td><%= movement_source.employee_id %></td>
+        <td><%= movement_source.created_at.localtime %></td>
         <td><%= movement_source.remarks %></td>
         <td><%= MovementListState.display movement_source.state.to_i %></td>
         <!--<td><%= link_to 'Show', movement_source %></td>-->
