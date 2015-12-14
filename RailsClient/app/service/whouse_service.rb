@@ -234,7 +234,7 @@ class WhouseService
                 if storage.packageId.blank?
                   tostorage.update!(qty: tostorage.qty + storage.qty)
                 else
-                  storage_remarks = "#{Time.now.localtime}从包装箱#{storage.packageId}中移库#{storage.qty}---"
+                  move_data[:remarks] = storage_remarks = "#{Time.now.localtime}从包装箱#{storage.packageId}中移库#{storage.qty}---"
                   tostorage.update!(remarks: storage_remarks, qty: tostorage.qty + storage.qty)
                 end
               end
@@ -256,14 +256,14 @@ class WhouseService
                 if storage.packageId.blank?
                   tostorage.update!(qty: tostorage.qty + restqty)
                 else
-                  storage_remarks = "#{Time.now.localtime}从包装箱#{storage.packageId}中移库#{restqty}---"
+                  move_data[:remarks] = storage_remarks = "#{Time.now.localtime}从包装箱#{storage.packageId}中移库#{restqty}---"
                   tostorage.update!(remarks: storage_remarks, qty: tostorage.qty + restqty)
                 end
               end
             else
               data = {partNr: storage.partNr, qty: restqty, fifo: storage.fifo, ware_house_id: toWh.id,
                       position: params[:toPosition]}
-              data[:remarks]="#{Time.now.localtime}从包装箱#{storage.packageId}中移库#{restqty}---" if !storage.packageId.blank?
+              move_data[:remarks] = data[:remarks]="#{Time.now.localtime}从包装箱#{storage.packageId}中移库#{restqty}---" if !storage.packageId.blank?
               NStorage.create!(data)
             end
 

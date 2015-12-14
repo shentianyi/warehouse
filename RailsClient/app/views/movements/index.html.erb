@@ -92,6 +92,7 @@
     <th>目的库位</th>
     <th>员工号</th>
     <th>备注</th>
+    <th>备注2</th>
     <th></th>
   </tr>
   </thead>
@@ -111,6 +112,7 @@
         <td><%= movement.toPosition if movement.toPosition %></td>
         <td><%= movement.employee_id if movement.employee_id %> </td>
         <td><%= movement.remarks if movement.remarks %> </td>
+        <td><%= movement.remark if movement.remark %> </td>
         <!--<td><%= link_to '编辑', :class => 'btn btn-default' %></td>-->
       </tr>
   <% end %>

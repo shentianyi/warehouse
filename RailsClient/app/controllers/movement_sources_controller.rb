@@ -42,7 +42,7 @@ class MovementSourcesController < ApplicationController
     end
 
     if params.has_key? "download"
-      send_data(query.to_xlsx(query),
+      send_data(entry_with_xlsx(query),
                 :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
                 :filename => @model.pluralize+".xlsx")
       #render :json => query.to_xlsx(query)
@@ -50,6 +50,37 @@ class MovementSourcesController < ApplicationController
       instance_variable_set("@#{@model.pluralize}", query.paginate(:page => params[:page]).all)
       render :index
     end
+  end
+
+  def entry_with_xlsx movement_sources
+    p = Axlsx::Package.new
+    wb = p.workbook
+    wb.add_worksheet(:name => "Basic Sheet") do |sheet|
+      sheet.add_row entry_header
+      movement_sources.each_with_index { |m, index|
+        sheet.add_row [
+                          index+1,
+                          m.movement_list_id,
+                          m.fromWh,
+                          m.fromPosition,
+                          m.packageId,
+
+                          m.partNr,
+                          m.qty,
+                          m.fifo,
+                          m.toWh,
+                          m.toPosition,
+                          m.employee_id,
+                          m.remarks
+                      ], :types => [:string]
+      }
+    end
+    p.to_stream.read
+  end
+
+  #:movement_list_id, :fromWh, :fromPosition, :packageId, :partNr, :qty, :fifo, :toWh, :toPosition, :employee_id, :remarks
+  def entry_header
+    ["编号", "移库单号", "源仓库", "源库位", "唯一码", "零件号", "数量", "FIFO", "目的仓库", "目的库位", "员工号", "备注"]
   end
 
   def index
