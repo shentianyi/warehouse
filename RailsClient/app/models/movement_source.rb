@@ -2,6 +2,9 @@ class MovementSource < ActiveRecord::Base
   belongs_to :movement_list
 
   def self.save_record(params)
+    msg = Message.new()
+    msg.result=false
+
     record = {
         toWh: params[:toWh],
         toPosition: params[:toPosition],
@@ -12,7 +15,12 @@ class MovementSource < ActiveRecord::Base
         movement_list_id: params[:movement_list_id],
         qty: params[:qty]
     }
+
+
     puts record
     MovementSource.create(record)
+
+    msg.result=true
+    msg
   end
 end

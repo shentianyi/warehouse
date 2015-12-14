@@ -4,7 +4,7 @@ class MovementSourcesController < ApplicationController
   respond_to :html
 
   def index
-    @movement_sources = MovementSource.all
+    @movement_sources = MovementSource.all.paginate(:page => params[:page])
     respond_with(@movement_sources)
   end
 
