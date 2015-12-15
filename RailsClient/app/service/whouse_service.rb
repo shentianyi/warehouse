@@ -140,7 +140,7 @@ class WhouseService
       puts "#{storage.qty}:#{params[:qty]}"
 
       if params[:qty].to_f > storage.qty
-        raise '移库量大于剩余量'
+        raise "移库量大于剩余量,唯一码#{params[:packageId]}"
       elsif params[:qty].to_f == storage.qty
         storage.update!(ware_house_id: toWh.id, position: params[:toPosition], created_at: Time.now)
         move_data[:qty] = storage.qty
@@ -234,7 +234,8 @@ class WhouseService
                 if storage.packageId.blank?
                   tostorage.update!(qty: tostorage.qty + storage.qty)
                 else
-                  move_data[:remarks] = storage_remarks = "#{Time.now.localtime}从包装箱#{storage.packageId}中移库#{storage.qty}---"
+                  move_data[:remarks] = "#{Time.now.localtime}从包装箱#{storage.packageId}中移库#{storage.qty}---"
+                  storage_remarks = "#{Time.now.localtime}从包装箱#{storage.packageId}中移库#{storage.qty}---#{tostorage.remarks}"
                   tostorage.update!(remarks: storage_remarks, qty: tostorage.qty + storage.qty)
                 end
               end
@@ -256,7 +257,8 @@ class WhouseService
                 if storage.packageId.blank?
                   tostorage.update!(qty: tostorage.qty + restqty)
                 else
-                  move_data[:remarks] = storage_remarks = "#{Time.now.localtime}从包装箱#{storage.packageId}中移库#{restqty}---"
+                  move_data[:remarks] = "#{Time.now.localtime}从包装箱#{storage.packageId}中移库#{restqty}---"
+                  storage_remarks = "#{Time.now.localtime}从包装箱#{storage.packageId}中移库#{restqty}---#{tostorage.remarks}"
                   tostorage.update!(remarks: storage_remarks, qty: tostorage.qty + restqty)
                 end
               end
