@@ -232,7 +232,7 @@ module FileHandler
           end
 
           if package && package.qty < row[:qty].to_f
-            msg.contents << "移库量大于剩余库存量!"
+            msg.contents << "移库量大于剩余库存量,唯一码#{row['packageId']}!"
           end
 
           if row[:fromWh].present?
