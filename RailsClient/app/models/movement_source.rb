@@ -19,12 +19,14 @@ class MovementSource < ActiveRecord::Base
         remarks: params[:remarks]
     }
 
-    m=MovementSource.where(toWh: params[:toWh],
-                           toPosition: params[:toPosition],
-                           fromWh: params[:fromWh],
-                           fromPosition: params[:fromPosition],
-                           packageId: params[:packageId]).first
-
+    m=nil
+    if params[:packageId].present?
+      m=MovementSource.where(toWh: params[:toWh],
+                             toPosition: params[:toPosition],
+                             fromWh: params[:fromWh],
+                             fromPosition: params[:fromPosition],
+                             packageId: params[:packageId]).first
+    end
     if m.blank?
       msg.result=true
       MovementSource.create(record)
