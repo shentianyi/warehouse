@@ -35,7 +35,7 @@ module FileHandler
 
                 row[:movement_list_id] = move_list.id
                 MovementSource.create(row)
-
+                move_list.update(state: MovementListState::ENDING)
               end
             end
             msg.result = true
@@ -77,7 +77,7 @@ module FileHandler
 
                 row[:user] = current_user
                 WhouseService.new.move(row)
-
+                move_list.update(state: MovementListState::ENDING)
               end
             end
             msg.result = true
