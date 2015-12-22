@@ -279,6 +279,16 @@ class WhouseService
 
       end
 
+      #negatives storage default position
+      default_position = ""
+      if params[:fromPosition].blank?
+        if storages.blank?
+          default_position = Part.find_by_id(params[:partNr]).default_position
+        else
+          default_position = storages.last.position
+        end
+      end
+
       if lastqty > 0
         #src
         # negatives_storages = NStorage.where(partNr: params[:partNr], ware_house_id: fromWh.id, position: params[:fromPosition])
@@ -292,7 +302,8 @@ class WhouseService
         if !negatives_storage.blank?
           negatives_storage.update!(qty: negatives_storage.qty - lastqty)
         else
-          data = {partNr: params[:partNr], qty: -lastqty, ware_house_id: fromWh.id, position: params[:fromPosition]||''}
+          data = {partNr: params[:partNr], qty: -lastqty, ware_house_id: fromWh.id, position: (params[:fromPosition].blank? ? default_position : params[:fromPosition])}
+          puts data
           NStorage.create!(data)
         end
 
