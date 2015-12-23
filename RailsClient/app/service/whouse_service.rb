@@ -35,7 +35,10 @@ class WhouseService
   def enter_stock(params)
     # raise '盘点模式,非超级管理员权限不可更改数据!' if (SysConfigCache.inventory_enable_value=='true' && !params[:user].supermanager?)
     # validate fifo
-    PaperTrail.whodunnit = params[:user].blank? ? '' : params[:user].id
+    # PaperTrail.whodunnit = params[:user].blank? ? '' : params[:user].id
+    user_id=params[:user].blank? ? params[:employee_id] : params[:user].id
+    PaperTrail.whodunnit = user_id
+
     puts '----------------------ss'
     fifo = validate_fifo_time(params[:fifo])
     # validate whId existing
@@ -43,6 +46,7 @@ class WhouseService
     raise '仓库未找到' unless wh
     # validate uniqueId
     raise 'uniqueId 已存在!' if params[:uniqueId].present? and NStorage.find_by(params[:uniqueId])
+
     if params[:packageId] and NStorage.find_by(packageId: params[:packageId], partNr: params[:partNr])
       raise "该唯一码#{params[:packageId]}已入库！"
     else
@@ -53,13 +57,12 @@ class WhouseService
       if params[:packageId].present?
         NStorage.create!(data)
       else
-        storage = NStorage.where(partNr: params[:partNr], fifo: fifo, ware_house_id: wh.id, position: params[:toPosition], packageId: nil).order("n_storages.qty asc").first
-        NStorage.transaction do
-          if storage
-            storage.update!(qty: storage.qty + params[:qty].to_f)
-          else
-            NStorage.create!(data)
-          end
+        storage = NStorage.where(partNr: params[:partNr], ware_house_id: wh.id, position: params[:toPosition], packageId: nil).order("n_storages.qty asc").first
+
+        if storage
+          storage.update!(qty: storage.qty + params[:qty].to_f)
+        else
+          NStorage.create!(data)
         end
       end
     end
@@ -70,9 +73,7 @@ class WhouseService
     data[:packageId] = params[:packageId] if params[:packageId].present?
     data[:employee_id] = params[:employee_id] if params[:employee_id].present?
     data[:remarks] = params[:remarks] if params[:remarks].present?
-    Movement.transaction do
-      Movement.create!(data)
-    end
+    Movement.create!(data)
   end
 
 
