@@ -30,11 +30,11 @@ module FileHandler
                   end
                 end
 
-                row[:user] = current_user
-                WhouseService.new.enter_stock(row)
-
                 row[:movement_list_id] = move_list.id
                 MovementSource.create(row)
+
+                row[:user] = current_user
+                WhouseService.new.enter_stock(row)
                 move_list.update(state: MovementListState::ENDING)
               end
             end
