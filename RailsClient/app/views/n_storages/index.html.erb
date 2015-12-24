@@ -81,9 +81,9 @@
         <td><%= storage.ware_house_id %></td>
         <td><%= storage.position %></td>
         <td><%= storage.remarks %></td>
-        <% if current_user.can_edit_inventory? %>
-            <td><%= link_to '编辑', edit_n_storage_path(storage), :class => 'btn btn-default' %></td>
-        <% end %>
+        <!--<% if current_user.can_edit_inventory? %>-->
+            <!--<td><%= link_to '编辑', edit_n_storage_path(storage), :class => 'btn btn-default' %></td>-->
+        <!--<% end %>-->
       </tr>
   <% end %>
   </tbody>
