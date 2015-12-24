@@ -44,6 +44,7 @@
   <thead>
   <tr>
     <th>No.</th>
+    <th>移库单名称</th>
     <th>移库单号</th>
     <th>状态</th>
     <th>清单</td>
@@ -60,6 +61,7 @@
   <% @movement_lists.each_with_index do |movement_list,i| %>
       <tr>
         <td><%= i+1%></td>
+        <td><%= movement_list.name %></td>
         <td><%= movement_list.id %></td>
         <td><%= MovementListState.display movement_list.state.to_i %></td>
         <td><%= link_to '清单列表',movement_sources_movement_list_path(movement_list) %><span class="badge pull-right"><%= movement_list.movement_sources.count%></td>

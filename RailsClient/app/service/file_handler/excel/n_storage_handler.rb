@@ -20,7 +20,7 @@ module FileHandler
           begin
             NStorage.transaction do
               builder = current_user.blank? ? '' : current_user.id
-              move_list = MovementList.create(builder: builder, name: "#{builder}_#{DateTime.now.strftime("%H.%d.%m.%Y")}")
+              move_list = MovementList.create(builder: builder, name: "#{builder}_#{DateTime.now.strftime("%H.%d.%m.%Y")}_F")
               2.upto(book.last_row) do |line|
                 row = {}
                 IMPORT_HEADERS.each_with_index do |k, i|
@@ -62,7 +62,7 @@ module FileHandler
           begin
             NStorage.transaction do
               builder = current_user.blank? ? '' : current_user.id
-              move_list = MovementList.create(builder: builder, name: "#{builder}_#{DateTime.now.strftime("%H.%d.%m.%Y")}")
+              move_list = MovementList.create(builder: builder, name: "#{builder}_#{DateTime.now.strftime("%H.%d.%m.%Y")}_File")
               2.upto(book.last_row) do |line|
                 row = {}
                 MOVE_HEADERS.each_with_index do |k, i|
