@@ -25,8 +25,8 @@ class Part < ActiveRecord::Base
     nr.sub(/^P/,'')
   end
 
-  def default_position
-    position = self.positions.first
+  def default_position wh
+    position = self.positions.where(whouse_id: wh).first
     if position
       default_position = position.detail
     else
