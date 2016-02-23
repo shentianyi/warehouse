@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   before_filter :configure_permitted_parameters, if: :devise_controller?
   before_filter :authenticate_user_from_token!
   before_filter :authenticate_user!
-  before_filter :inventory_lock!
+#  before_filter :inventory_lock!
   # before_filter :set_current_user
   #============
   # fix cancan "ActiveModel::ForbiddenAttributesError" with Rails 4

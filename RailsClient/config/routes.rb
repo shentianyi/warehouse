@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :tenants
+
   resources :movement_sources do
     collection do
       get :search

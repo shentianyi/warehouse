@@ -182,15 +182,17 @@ ActiveRecord::Schema.define(version: 20151212092157) do
     t.boolean  "is_dirty",      default: true
     t.boolean  "is_new",        default: true
     t.string   "modem_id"
-    t.string   "position"
+    t.string   "position_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "mac"
+    t.string   "led_display"
+    t.boolean  "is_valid",      default: true
   end
 
   add_index "leds", ["id"], name: "index_leds_on_id", using: :btree
   add_index "leds", ["modem_id"], name: "index_leds_on_modem_id", using: :btree
-  add_index "leds", ["position"], name: "index_leds_on_position", using: :btree
+  add_index "leds", ["position_id"], name: "index_leds_on_position_id", using: :btree
   add_index "leds", ["signal_id"], name: "index_leds_on_signal_id", using: :btree
 
   create_table "location_container_hierarchies", id: false, force: true do |t|
@@ -263,6 +265,7 @@ ActiveRecord::Schema.define(version: 20151212092157) do
     t.integer  "parent_id"
     t.integer  "status",                    default: 0
     t.string   "remark",                    default: ""
+    t.string   "ip_detail"
   end
 
   add_index "locations", ["destination_id"], name: "index_locations_on_destination_id", using: :btree
@@ -605,18 +608,15 @@ ActiveRecord::Schema.define(version: 20151212092157) do
   add_index "positions", ["whouse_id"], name: "index_positions_on_whouse_id", using: :btree
 
   create_table "ptl_jobs", force: true do |t|
-    t.text     "params"
-    t.integer  "state",       default: 100
-    t.boolean  "is_delete",   default: false
-    t.boolean  "is_dirty",    default: true
-    t.boolean  "is_new",      default: true
+    t.text     "params",      limit: 16777215
+    t.integer  "state",                        default: 100
+    t.boolean  "is_delete",                    default: false
+    t.boolean  "is_dirty",                     default: true
+    t.boolean  "is_new",                       default: true
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "msg"
-    t.integer  "order_state", default: 100
-    t.integer  "to_state"
-    t.string   "to_display"
-    t.string   "node_id"
+    t.text     "msg",         limit: 16777215
+    t.integer  "order_state",                  default: 100
   end
 
   create_table "records", force: true do |t|
