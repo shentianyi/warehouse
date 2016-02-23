@@ -1,12 +1,28 @@
 Rails.application.routes.draw do
 
-  resources :permission_group_items
+  resources :permission_group_items do
+    collection do
+      get :search
+    end
+  end
 
-  resources :user_permission_groups
+  resources :user_permission_groups do
+    collection do
+      get :search
+    end
+  end
 
-  resources :permissions
+  resources :permissions do
+    collection do
+      get :search
+    end
+  end
 
-  resources :permission_groups
+  resources :permission_groups do
+    collection do
+      get :search
+    end
+  end
 
   resources :movement_sources do
     collection do

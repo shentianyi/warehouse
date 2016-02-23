@@ -1,10 +1,11 @@
+# -*- coding: utf-8 -*-
 class PermissionsController < ApplicationController
   before_action :set_permission, only: [:show, :edit, :update, :destroy]
 
   respond_to :html
 
   def index
-    @permissions = Permission.all
+    @permissions = Permission.all.paginate(:page=> params[:page])
     respond_with(@permissions)
   end
 
