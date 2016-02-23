@@ -88,6 +88,16 @@ class UsersController < ApplicationController
     end
   end
 
+  def permissions
+    p '0000000000000000000000000000'
+    @user=User.find_by_id(params["format"])
+  end
+
+  def set_permissions
+    p '1111111111111111111111111111111'
+    render :permissions
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_user

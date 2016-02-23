@@ -65,6 +65,7 @@
         <% if current_user.admin? || current_user.manager? %>
             <td><%= link_to '删除', user, method: :delete, data: {confirm: 'Are you sure?'} ,:class=> 'btn btn-default'%></td>
         <%end%>
+        <td><%= link_to '权限', permissions_users_path(user),:class=> 'btn btn-default'%></td>
       </tr>
   <% end %>
   </tbody>

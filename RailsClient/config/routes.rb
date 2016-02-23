@@ -237,6 +237,13 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :users do
+    collection do
+      get :permissions
+      post :set_permissions
+    end
+  end
+
   [:locations, :whouses, :parts, :positions, :part_positions, :users, :deliveries, :forklifts,
    :packages, :part_types, :pick_item_filters, :orders, :modems, :leds].each do |model|
     resources model do
