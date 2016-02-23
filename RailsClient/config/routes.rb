@@ -21,6 +21,8 @@ Rails.application.routes.draw do
   resources :permission_groups do
     collection do
       get :search
+      match :add_permissions, to: :add_permissions, via: [:get, :post]
+      get :details
     end
   end
 

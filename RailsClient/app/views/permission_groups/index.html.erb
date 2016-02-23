@@ -1,11 +1,19 @@
-<h1>Listing permission_groups</h1>
+<h1>权限分组列表</h1>
 
-<table>
+<%= link_to "新建权限分组", send("new_#{@model}_path") ,:class=>'btn btn-default'%>
+
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @permission_groups %>
+  </div>
+  <%= will_paginate @permissions, :container => false %>
+</div>
+<table class="table table-bordered table-striped">
   <thead>
     <tr>
-      <th>Name</th>
-      <th>Description</th>
-      <th colspan="3"></th>
+      <th>名称</th>
+      <th>描述</th>
+      <th colspan="4"></th>
     </tr>
   </thead>
 
@@ -14,14 +22,17 @@
       <tr>
         <td><%= permission_group.name %></td>
         <td><%= permission_group.description %></td>
-        <td><%= link_to 'Show', permission_group %></td>
-        <td><%= link_to 'Edit', edit_permission_group_path(permission_group) %></td>
-        <td><%= link_to 'Destroy', permission_group, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to '详细', permission_group %></td>
+        <td><%= link_to '编辑', edit_permission_group_path(permission_group) %></td>
+        <td><%= link_to '删除', permission_group, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to '添加成员', edit_permission_group_path(permission_group) %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<br>
+<div class="digg_pagination">
+  <%= will_paginate @permission_groups, :container => false %>
+</div>
 
-<%= link_to 'New Permission group', new_permission_group_path %>
+<br>
