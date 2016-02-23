@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User:</strong>
+  <%= @user_permission_group.user %>
+</p>
+
+<p>
+  <strong>Permission group:</strong>
+  <%= @user_permission_group.permission_group %>
+</p>
+
+<%= link_to 'Edit', edit_user_permission_group_path(@user_permission_group) %> |
+<%= link_to 'Back', user_permission_groups_path %>

@@ -10,6 +10,8 @@ class User < ActiveRecord::Base
   has_many :pick_item_filters
   has_many :inventory_lists
   #has_many :inventory_list_items
+  has_many :user_permission_groups, dependent: :destroy
+  has_many :permission_groups, through: :user_permission_groups
 
   before_save :ensure_authentication_token!
 

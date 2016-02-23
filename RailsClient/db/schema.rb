@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151212092157) do
+ActiveRecord::Schema.define(version: 20160223033723) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -533,6 +533,30 @@ ActiveRecord::Schema.define(version: 20151212092157) do
   add_index "parts", ["user_id"], name: "index_parts_on_user_id", using: :btree
   add_index "parts", ["uuid"], name: "index_parts_on_uuid", using: :btree
 
+  create_table "permission_group_items", force: true do |t|
+    t.integer  "permission_id"
+    t.integer  "permission_group_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "permission_group_items", ["permission_group_id"], name: "index_permission_group_items_on_permission_group_id", using: :btree
+  add_index "permission_group_items", ["permission_id"], name: "index_permission_group_items_on_permission_id", using: :btree
+
+  create_table "permission_groups", force: true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "permissions", force: true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "pick_item_filters", force: true do |t|
     t.string   "user_id"
     t.string   "value"
@@ -780,6 +804,16 @@ ActiveRecord::Schema.define(version: 20151212092157) do
 
   add_index "sys_configs", ["code"], name: "index_sys_configs_on_code", using: :btree
   add_index "sys_configs", ["id"], name: "index_sys_configs_on_id", using: :btree
+
+  create_table "user_permission_groups", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "permission_group_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "user_permission_groups", ["permission_group_id"], name: "index_user_permission_groups_on_permission_group_id", using: :btree
+  add_index "user_permission_groups", ["user_id"], name: "index_user_permission_groups_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "uuid",                   limit: 36,                 null: false
