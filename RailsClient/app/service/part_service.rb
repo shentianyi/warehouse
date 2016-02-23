@@ -1,5 +1,5 @@
 class PartService
-  def self.validate_id id
+  def self.validate_id id,user
     !Part.find_by_id(id).nil?
   end
 

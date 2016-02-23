@@ -30,10 +30,10 @@ module Import
 
     def init_csv_cols
       csv_cols=[]
-      csv_cols<< Csv::CsvCol.new(field: 'detail', header: 'Position')
-      csv_cols<< Csv::CsvCol.new(field: 'whouse_id', header: 'Ware House',is_foreign: true,foreign: 'Whouse')
+      csv_cols<< Csv::CsvCol.new(field: 'nr', header: 'PositionNr')
+      csv_cols<< Csv::CsvCol.new(field: 'whouse_id', header: 'Ware House', is_foreign: true, foreign: 'Whouse')
       csv_cols<< Csv::CsvCol.new(field: $UPMARKER, header: $UPMARKER)
-      class_variable_set(:@@csv_cols,csv_cols)
+      class_variable_set(:@@csv_cols, csv_cols)
     end
 
     def csv_cols
@@ -41,14 +41,14 @@ module Import
     end
 
     def init_uniq_key
-      class_variable_set(:@@ukeys,%w(detail whouse_id))
+      class_variable_set(:@@ukeys, %w(detail whouse_id))
     end
 
     def import_csv(csv)
-      headers = [{field:'detail',header: 'Position'} ,
-                 {field:'detail_new',header: 'Position New' ,null:true},
-                 {field:'whouse_id',header:'Ware House',is_foreign: true,foreign: 'Whouse'},
-                 {field: $UPMARKER,header: $UPMARKER,null:true}]
+      headers = [{field: 'nr', header: 'Position Nr'},
+                 {field: 'nr_new', header: 'Position New Nr', null: true},
+                 {field: 'whouse_id', header: 'Warehouse Nr', is_foreign: true, foreign: 'Whouse'},
+                 {field: $UPMARKER, header: $UPMARKER, null: true}]
 
       msg=Message.new
       #begin
@@ -56,9 +56,6 @@ module Import
       CSV.foreach(csv.file_path, headers: true, col_sep: csv.col_sep, encoding: csv.encoding) do |row|
         row.strip
         line_no+=1
-        #if self.respond_to?(:csv_headers)
-        #  raise(ArgumentError, "#{headers.join(' /')} 为必须包含列!") unless headers.empty?
-        #end
 
         data={}
         headers.each do |col|
@@ -66,26 +63,25 @@ module Import
           data[col[:field]]=row[col[:header]]
         end
 
-        update_marker=(data.delete($UPMARKER).to_i==1)
-        p = Position.find_by_detail(data['detail'])
-        if update_marker
+        operator=data.delete($UPMARKER)
+        if warehouse=Warehouse.find_by_nr(data['whouse_id'])
+          data['whouse_id']=warehouse.id
+        end
+        p = Position.find_by_nr(data['nr'])
+        if operator=='update' || operator=='delete'
           if p
-            #update
-            if data['detail_new']
-              data['detail'] = data['detail_new']
+            if operator=='update'
+              if data['nr_new']
+                data['nr'] = data['nr_new']
+              end
+              data.delete('nr_new')
+              p.update(data)
+            else
+              p.destroy
             end
-            Position.trans_position
-            data.delete('detail_new')
-            p.update(data)
-          else
-            raise(ArgumentError, "行:#{line_no} Position 不存在对应的库位")
           end
         else
-          #new
-          if p
-            next
-          end
-          data.delete('detail_new')
+          data.delete('nr_new')
           Position.create(data)
         end
       end

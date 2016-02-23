@@ -77,7 +77,7 @@ class LocationsController < ApplicationController
     @location.location_destinations.where({is_default: true}).first.update({is_default: false})
 
     d = @location.location_destinations.where({destination_id: params[:destination_id]}).first
-    @location.update(destination_id:params[:destination_id])
+    @location.update(destination_id: params[:destination_id])
     if d.update({is_default: true})
       redirect_to destinations_location_path(@location), notice: '设置成功'
     else
@@ -115,18 +115,18 @@ class LocationsController < ApplicationController
   # DELETE /locations/1
   # DELETE /locations/1.json
   def destroy
-    if @location.is_base
-      respond_to do |format|
-        format.html { redirect_to locations_url, notice: '基础地点不可删除.' }
-        format.json { head :no_content }
-      end
-    else
-      @location.destroy
-      respond_to do |format|
-        format.html { redirect_to locations_url, notice: '地点删除成功.' }
-        format.json { head :no_content }
-      end
+    # if @location.is_base
+    #   respond_to do |format|
+    #     format.html { redirect_to locations_url, notice: '基础地点不可删除.' }
+    #     format.json { head :no_content }
+    #   end
+    # else
+    @location.destroy
+    respond_to do |format|
+      format.html { redirect_to locations_url, notice: '地点删除成功.' }
+      format.json { head :no_content }
     end
+    # end
   end
 
   private
@@ -138,6 +138,6 @@ class LocationsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def location_params
     #params[:location]
-    params.require(:location).permit(:name, :address, :tel, :id, :prefix, :suffix, :destination_id)
+    params.require(:location).permit(:name, :address, :tel, :id,:nr, :prefix, :suffix, :destination_id)
   end
 end

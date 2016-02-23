@@ -1,6 +1,6 @@
 format:
  :csv_splitor: ';'
- :update_marker: 'DOUPDATE'
+ :update_marker: 'Operator'
  :file_max_size: 20971520
  
 path:

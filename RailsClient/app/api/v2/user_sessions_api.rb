@@ -6,7 +6,7 @@ module V2
       # url: POST /user_sessions
       #=============
       post do
-        user = User.find_for_database_authentication(user_name: params[:user][:id])
+        user = User.find_for_database_authentication(nr: params[:user][:id])
         if user
           if user.valid_password?(params[:user][:password])
             warden.set_user user

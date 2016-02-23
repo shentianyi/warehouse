@@ -19,7 +19,7 @@
   <% @users.each_with_index do |user,index|%>
   <tr>
     <td><%= index+@users.offset+1%></td>
-    <td><%= user.id %></td>
+    <td><%= user.nr %></td>
     <td><%= user.name %></td>
     <td><%= Role.display(user.role_id)%></td>
   </tr>

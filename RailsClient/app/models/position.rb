@@ -9,24 +9,24 @@ class Position < ActiveRecord::Base
   validate :validate_save
 
   def display
-    "#{self.whouse.name} => #{self.detail}"
+    "#{self.whouse.name} => #{self.nr}"
   end
 
   def validate_save
     errors.add(:id, '编号不可为空') if self.id.blank?
   end
+  #
+  # def generate_id
+  #   "PS#{Time.now.to_milli}"
+  # end
 
-  def generate_id
-    "PS#{Time.now.to_milli}"
-  end
-
-  def self.trans_position
-    t= Time.now
-    h = t.strftime("%H").to_i
-    if h >= 19 && h < 7
-      t.strftime("%m %d 00")
-    else
-      t.strftime("%m %d 01")
-    end
-  end
+  # def self.trans_position
+  #   t= Time.now
+  #   h = t.strftime("%H").to_i
+  #   if h >= 19 && h < 7
+  #     t.strftime("%m %d 00")
+  #   else
+  #     t.strftime("%m %d 01")
+  #   end
+  # end
 end

@@ -4,11 +4,11 @@ module Extensions
     included do
       #set_primary_key 'id' rails 3
       #self.primary_key='id' # rails 4
-      default_scope { where(is_delete: false) }
+      #default_scope { where(is_delete: false) }
       validates_uniqueness_of :id
       after_initialize :generate_uuid
-      before_create :set_timestamps
-      before_update :reset_dirty_flag
+      # before_create :set_timestamps
+      # before_update :reset_dirty_flag
 
       def generate_uuid
         self.id = self.send(:generate_id) if self.id.nil? && self.respond_to?(:generate_id)
@@ -16,23 +16,23 @@ module Extensions
         self.uuid= SecureRandom.uuid if self.respond_to?(:uuid) and self.send(:uuid).nil?
       end
 
-      def set_timestamps
-        self.created_at = Time.now if self.created_at.nil?
-        self.updated_at = Time.now if self.updated_at.nil?
-      end
-
-      def reset_dirty_flag
-        if !self.is_dirty_changed? and self.changes.count>0
-          self.is_dirty=true
-        end
-      end
-
-      def destroy
-        # self.send(:destroy_dependent, self.id) if self.respond_to?(:destroy_dependent)
-        self.is_delete=true
-        self.is_dirty=true
-        self.save
-      end
+      # def set_timestamps
+      #   self.created_at = Time.now if self.created_at.nil?
+      #   self.updated_at = Time.now if self.updated_at.nil?
+      # end
+      #
+      # def reset_dirty_flag
+      #   if !self.is_dirty_changed? and self.changes.count>0
+      #     self.is_dirty=true
+      #   end
+      # end
+      #
+      # def destroy
+      #   # self.send(:destroy_dependent, self.id) if self.respond_to?(:destroy_dependent)
+      #   self.is_delete=true
+      #   self.is_dirty=true
+      #   self.save
+      # end
 
       def update_info
         if self.is_dirty

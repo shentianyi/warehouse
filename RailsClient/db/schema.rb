@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151212092157) do
+ActiveRecord::Schema.define(version: 20160223041006) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -182,17 +182,15 @@ ActiveRecord::Schema.define(version: 20151212092157) do
     t.boolean  "is_dirty",      default: true
     t.boolean  "is_new",        default: true
     t.string   "modem_id"
-    t.string   "position_id"
+    t.string   "position"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "mac"
-    t.string   "led_display"
-    t.boolean  "is_valid",      default: true
   end
 
   add_index "leds", ["id"], name: "index_leds_on_id", using: :btree
   add_index "leds", ["modem_id"], name: "index_leds_on_modem_id", using: :btree
-  add_index "leds", ["position_id"], name: "index_leds_on_position_id", using: :btree
+  add_index "leds", ["position"], name: "index_leds_on_position", using: :btree
   add_index "leds", ["signal_id"], name: "index_leds_on_signal_id", using: :btree
 
   create_table "location_container_hierarchies", id: false, force: true do |t|
@@ -265,12 +263,15 @@ ActiveRecord::Schema.define(version: 20151212092157) do
     t.integer  "parent_id"
     t.integer  "status",                    default: 0
     t.string   "remark",                    default: ""
-    t.string   "ip_detail"
+    t.integer  "tenant_id"
+    t.string   "nr"
   end
 
   add_index "locations", ["destination_id"], name: "index_locations_on_destination_id", using: :btree
   add_index "locations", ["id"], name: "index_locations_on_id", using: :btree
+  add_index "locations", ["nr"], name: "index_locations_on_nr", using: :btree
   add_index "locations", ["parent_id"], name: "index_locations_on_parent_id", using: :btree
+  add_index "locations", ["tenant_id"], name: "index_locations_on_tenant_id", using: :btree
   add_index "locations", ["uuid"], name: "index_locations_on_uuid", using: :btree
 
   create_table "modems", force: true do |t|
@@ -512,9 +513,11 @@ ActiveRecord::Schema.define(version: 20151212092157) do
     t.boolean  "is_new",     default: true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "nr"
   end
 
   add_index "part_types", ["id"], name: "index_part_types_on_id", using: :btree
+  add_index "part_types", ["nr"], name: "index_part_types_on_nr", using: :btree
 
   create_table "parts", force: true do |t|
     t.string   "uuid",         limit: 36,                                           null: false
@@ -529,9 +532,11 @@ ActiveRecord::Schema.define(version: 20151212092157) do
     t.string   "part_type_id"
     t.decimal  "convert_unit",            precision: 20, scale: 10, default: 1.0
     t.string   "unit"
+    t.string   "nr"
   end
 
   add_index "parts", ["id"], name: "index_parts_on_id", using: :btree
+  add_index "parts", ["nr"], name: "index_parts_on_nr", using: :btree
   add_index "parts", ["part_type_id"], name: "index_parts_on_part_type_id", using: :btree
   add_index "parts", ["user_id"], name: "index_parts_on_user_id", using: :btree
   add_index "parts", ["uuid"], name: "index_parts_on_uuid", using: :btree
@@ -601,23 +606,13 @@ ActiveRecord::Schema.define(version: 20151212092157) do
     t.boolean  "is_new",                default: true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "nr"
   end
 
   add_index "positions", ["id"], name: "index_positions_on_id", using: :btree
+  add_index "positions", ["nr"], name: "index_positions_on_nr", using: :btree
   add_index "positions", ["uuid"], name: "index_positions_on_uuid", using: :btree
   add_index "positions", ["whouse_id"], name: "index_positions_on_whouse_id", using: :btree
-
-  create_table "ptl_jobs", force: true do |t|
-    t.text     "params",      limit: 16777215
-    t.integer  "state",                        default: 100
-    t.boolean  "is_delete",                    default: false
-    t.boolean  "is_dirty",                     default: true
-    t.boolean  "is_new",                       default: true
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.text     "msg",         limit: 16777215
-    t.integer  "order_state",                  default: 100
-  end
 
   create_table "records", force: true do |t|
     t.string   "recordable_id"
@@ -781,6 +776,18 @@ ActiveRecord::Schema.define(version: 20151212092157) do
   add_index "sys_configs", ["code"], name: "index_sys_configs_on_code", using: :btree
   add_index "sys_configs", ["id"], name: "index_sys_configs_on_id", using: :btree
 
+  create_table "tenants", force: true do |t|
+    t.string   "name"
+    t.string   "code"
+    t.string   "address"
+    t.string   "email"
+    t.string   "tel"
+    t.string   "website"
+    t.integer  "type",       default: 300
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "users", force: true do |t|
     t.string   "uuid",                   limit: 36,                 null: false
     t.boolean  "is_delete",                         default: false
@@ -804,7 +811,7 @@ ActiveRecord::Schema.define(version: 20151212092157) do
     t.string   "authentication_token"
     t.integer  "role_id",                           default: 100,   null: false
     t.boolean  "is_sys",                            default: false
-    t.string   "user_name"
+    t.string   "nr"
     t.integer  "operation_mode",                    default: 0
   end
 
@@ -848,10 +855,12 @@ ActiveRecord::Schema.define(version: 20151212092157) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "position_pattern",            default: ""
+    t.string   "nr"
   end
 
   add_index "whouses", ["id"], name: "index_whouses_on_id", using: :btree
   add_index "whouses", ["location_id"], name: "index_whouses_on_location_id", using: :btree
+  add_index "whouses", ["nr"], name: "index_whouses_on_nr", using: :btree
   add_index "whouses", ["uuid"], name: "index_whouses_on_uuid", using: :btree
 
 end

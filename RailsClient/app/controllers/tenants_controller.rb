@@ -4,7 +4,7 @@ class TenantsController < ApplicationController
   respond_to :html
 
   def index
-    @tenants = Tenant.all
+    @tenants = Tenant.clients
     respond_with(@tenants)
   end
 

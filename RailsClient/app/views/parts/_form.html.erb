@@ -1,45 +1,45 @@
 <%= form_for(@part) do |f| %>
-  <% if @part.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@part.errors.count, "error") %> prohibited this part from being saved:</h2>
+    <% if @part.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@part.errors.count, "error") %> prohibited this part from being saved:</h2>
 
-      <ul>
-      <% @part.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+          <ul>
+            <% @part.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <p>
+      <%= f.label :nr, '零件号' %>
+      <%= f.text_field :nr %>
+    </p>
+
+    <p>
+      <%= f.label :part_type_id, '零件类型' %>
+      <%= f.select(:part_type_id, @part_types.collect { |p| [p.name, p.id] }, {include_blank: true}) %>
+    </p>
+
+    <p>
+      <%= f.label :unit, '零件单位' %>
+      <%= f.text_field :unit %>
+    </p>
+
+    <p>
+      <%= f.label :unit_pack, '单位包装量' %>
+      <%= f.text_field :unit_pack %>
+    </p>
+    <p>
+      <%= f.label :unit_pack, '盘点单位转换标准' %>
+      <%= f.text_field :convert_unit %>
+    </p>
+    <p>
+      <%= f.label :unit_pack, '是否已删除' %>
+      <%= f.check_box :is_delete %>
+    </p>
+
+    <div class="actions">
+      <%= f.submit value: '提 交', class: 'btn btn-primary btn-lg' %>
     </div>
-  <% end %>
-
-    <p>
-      <%= f.label :id,'零件号'%>
-      <%= f.text_field :id%>
-    </p>
-
-    <p>
-      <%= f.label :part_type_id,'零件类型'%>
-      <%=  f.select(:part_type_id,@part_types.collect {|p| [ p.name, p.id ] }, {include_blank: true})%>
-    </p>
-
-    <p>
-      <%= f.label :unit,'零件单位'%>
-      <%= f.text_field :unit%>
-    </p>
-
-    <p>
-      <%= f.label :unit_pack,'单位包装量'%>
-      <%= f.text_field :unit_pack%>
-    </p>
-    <p>
-      <%= f.label :unit_pack,'盘点单位转换标准'%>
-      <%= f.text_field :convert_unit%>
-    </p>
-    <p>
-      <%= f.label :unit_pack,'是否已删除'%>
-      <%=f.check_box :is_delete%>
-    </p>
-
-  <div class="actions">
-    <%= f.submit value: '提 交', class: 'btn btn-primary btn-lg' %>
-  </div>
 <% end %>

@@ -7,7 +7,7 @@ class CreateTenants < ActiveRecord::Migration
       t.string :email
       t.string :tel
       t.string :website
-      t.integer :type
+      t.integer :type, default: TenantType::CLIENT
 
       t.timestamps
     end

@@ -49,7 +49,7 @@ class DeliveryPresenter<Presenter
         state_display: self.state_display,
         can_delete: false, #notice
         user_id: self.user.id,
-        user_name: self.user.name,
+        user_nr: self.user.nr,
         source_id:self.source_location_id,
         source: @delivery.source.name,
         destination_id: self.des_location_id,

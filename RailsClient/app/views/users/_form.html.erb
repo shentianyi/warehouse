@@ -12,20 +12,11 @@
     <% end %>
 
     <p>
-      <%= f.label :id, '员工号' %>
+      <%= f.label :nr, '工 号' %>
       <% if current_user.admin? || current_user.manager? %>
-        <%= f.text_field :id%>
+          <%= f.text_field :nr %>
       <%else%>
-        <input type="text" name="id" readonly="" value="<%=current_user.id%>">
-      <%end%>
-    </p>
-
-    <p>
-      <%= f.label :user_name, '用户名' %>
-      <% if current_user.admin? || current_user.manager? %>
-          <%= f.text_field :user_name %>
-      <%else%>
-          <input type="text" name="id" readonly="" value="<%=current_user.user_name%>">
+          <input type="text" name="id" readonly="" value="<%=current_user.nr%>">
       <%end%>
     </p>
 
@@ -49,7 +40,6 @@
 
     <p>
       <%= f.label :operation_mode, '操作模式' %>
-
       <% if current_user.admin? || current_user.manager? %>
           <%= f.select(:operation_mode, OperationMode.list_menu, {include_blank: false})%>
       <%else%>
