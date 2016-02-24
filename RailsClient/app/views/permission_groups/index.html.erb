@@ -1,45 +1,145 @@
-<h2 class="col-md-3">Permission Groups</h2>
+<style>
+    body {
+        background-color: white;
+    }
+
+    .PerGroups {
+        width: 250px;
+        height: 180px;
+        background: #f2f2f2;
+        border-radius: 4px;
+        border: 1px solid #CCCCCC;
+        margin: 10px 0 0 10px;
+    }
+
+    .PerGroupsName {
+        font-size: 20px;
+        text-align: center;
+        padding: 5px 0 5px 0;
+        color: steelblue;
+    }
+
+    .PreGroupsDescription {
+        margin: -20px 0 0 0;
+        height: 90px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .PerGroupsIcon > a > i {
+        font-size: 2em;
+        margin: 15px 20px 0 20px;
+        cursor: pointer;
+    }
+
+    .PerGroupsIcon > a:hover {
+        background-color: #f2f2f2;
+    }
+
+    .modal {
+        top: 200px;
+    }
+</style>
+
+<!--<h2 class="col-md-3">Permission Groups</h2>-->
+<h2 class="col-md-3">权限分组列表</h2>
 
 <div class="col-md-9" style="text-align: right;">
-  <a href="/permission_groups/new">
-    <button class="btn btn-primary" style="width: 200px;margin: 15px 0 0 0;">
-      <i class="glyphicon glyphicon-plus" style="color: white;"></i> New
-    </button>
-  </a>
+  <button class="btn btn-primary" style="width: 200px;margin: 15px 0 0 0;" data-toggle="modal" data-target="#NewPermissionModal">
+    <i class="glyphicon glyphicon-plus" style="color: white;"></i> New Permission Groups
+  </button>
 </div>
 
 <div class="digg_pagination">
-  <div class="page_info" style="width: auto;text-align: left;height: 40px;margin: 60px 0 0 0">
+  <div class="page_info" style="width: auto;text-align: left;height: 40px;margin: 60px 0 0 0;padding: 10px 0 0 0;">
     <%= page_entries_info @permission_groups %>
   </div>
   <%= will_paginate @permissions, :container => false %>
 </div>
 
+<div class="modal fade" id="NewPermissionModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">New Permission Groups</h4>
+      </div>
+      <div class="modal-body">
+        <strong>Name:</strong> <input type="text" class="form-control" id="NewPermissionGroupName" autocomplete="off">
+        <strong>Description:</strong>
+
+        <textarea cols="66" rows="5" id="NewPermissionGroupDescription" aria-autocomplete="none">
+        </textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="NewPermissionGroups()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
-<table class="table table-bordered table-striped">
-  <thead>
-  <tr>
-    <th>名称</th>
-    <th>描述</th>
-    <th colspan="4"></th>
-  </tr>
-  </thead>
+<% @permission_groups.each do |permission_group| %>
+    <div class="PerGroups col-md-2">
+      <div class="PerGroupsName">
+        <%= permission_group.name %>
+      </div>
+      <hr style="border-color: #ccc;margin: 2px 0 20px 0;">
+      <div class="PreGroupsDescription">
+        <strong title="<%= permission_group.description %>"><%= permission_group.description %></strong>
+      </div>
+      <hr style="border-color: #ccc;margin: 0">
+      <div class="PerGroupsIcon">
 
-  <tbody>
-  <% @permission_groups.each do |permission_group| %>
-      <tr>
-        <td><%= permission_group.name %></td>
-        <td><%= permission_group.description %></td>
-        <td><%= link_to '详细', permission_group %></td>
-        <td><%= link_to '编辑', edit_permission_group_path(permission_group) %></td>
-        <td><%= link_to '删除', permission_group, method: :delete, data: {confirm: 'Are you sure?'} %></td>
-        <td><%= link_to '添加成员', edit_permission_group_path(permission_group) %></td>
-      </tr>
-  <% end %>
-  </tbody>
-</table>
+        <a href="<%= edit_permission_group_path(permission_group) %>">
+          <i class="glyphicon glyphicon-pencil" style="color: steelblue;" title="编辑该权限组"></i>
+        </a>
+
+        <a href="<%= edit_permission_group_path(permission_group) %>">
+          <i class="glyphicon glyphicon-cog" style="color: green;" title="修改改组权限"></i>
+        </a>
+
+        <a rel="nofollow" href="<%= permission_group_path(permission_group) %>" data-method="delete" data-confirm="Are you sure?">
+          <i class="glyphicon glyphicon-trash" style="color: darkred;" title="删除该权限组"></i>
+        </a>
+      </div>
+    </div>
+<% end %>
 
 <div class="digg_pagination">
   <%= will_paginate @permission_groups, :container => false %>
 </div>
+
+<script>
+    function NewPermissionGroups() {
+        var NewPermissionGroupsNameData = $('#NewPermissionGroupName').val();
+        var NewPermissionGroupsDescriptionData = $('#NewPermissionGroupDescription').val();
+
+        if (NewPermissionGroupsNameData == "") {
+            $('#NewPermissionGroupName').css({border: '2px solid darkred'});
+        } else {
+            $.ajax({
+                url: '/permission_groups',
+                data: {
+                    permission_group: {
+                        name: NewPermissionGroupsNameData,
+                        description: NewPermissionGroupsDescriptionData
+                    }
+                },
+                type: 'post',
+                success: function (data) {
+                },
+                error: function () {
+                    console.log("请求数据错误.无法链接到服务器.")
+                },
+                complete: function (xhr) {
+                    if (xhr.status == 304) return;
+                }
+            })
+        }
+        location.reload();
+        $('#NewPermissionModal').modal('hide');
+    }
+</script>
