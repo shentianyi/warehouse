@@ -1,27 +1,35 @@
-<h1>Listing permission_groups</h1>
+<div class="col-md-12">
+  <h2 class="col-md-3">Permission Groups</h2>
 
-<table>
+  <div class="col-md-9" style="text-align: right;">
+
+
+    <a href="/permission_groups/new">
+      <button class="btn btn-primary" style="width: 200px;margin: 15px 0 0 0;">
+        <i class="glyphicon glyphicon-plus" style="color: white;"></i> New
+      </button>
+    </a>
+  </div>
+</div>
+
+<table class="table table-bordered table-striped">
   <thead>
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-      <th colspan="3"></th>
-    </tr>
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th colspan="3"></th>
+  </tr>
   </thead>
 
   <tbody>
-    <% @permission_groups.each do |permission_group| %>
+  <% @permission_groups.each do |permission_group| %>
       <tr>
         <td><%= permission_group.name %></td>
         <td><%= permission_group.description %></td>
         <td><%= link_to 'Show', permission_group %></td>
         <td><%= link_to 'Edit', edit_permission_group_path(permission_group) %></td>
-        <td><%= link_to 'Destroy', permission_group, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Destroy', permission_group, method: :delete, data: {confirm: 'Are you sure?'} %></td>
       </tr>
-    <% end %>
+  <% end %>
   </tbody>
 </table>
-
-<br>
-
-<%= link_to 'New Permission group', new_permission_group_path %>

@@ -1,38 +1,81 @@
-<% if current_user.admin? || current_user.manager? %>
-<h2>员工列表</h2>
+<style>
+    .IconA {
+        margin: 0 10px;
+        font-size: 1.2em;
+    }
 
-<div>
-  <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+    .IconA:hover {
+        text-decoration: none;
+        background-color: white;
+    }
+</style>
+
+<% if current_user.admin? || current_user.manager? %>
+    <h3>员工列表</h3>
+    <hr style="margin: 0;">
+    <!--
+    <% if current_user.admin? %>
+        <%= link_to "新建员工", send("new_#{@model}_path"), :class => 'btn btn-primary col-md-4', :style => 'width:200px;margin:10px 0 0 0;color:white;' %>
+
+        <%= link_to "上传/更新员工", send("import_#{@model.pluralize}_path"), :class => 'btn btn-primary col-md-4', :style => 'width:200px;margin:10px 0 0 0;color:white;' %>
+
+        <%= link_to "下载员工列表", send("download_#{@model.pluralize}_path"), data: {confirm: 'Are you sure?'}, :class => 'btn btn-primary col-md-4', :style => 'width:200px;margin:10px 0 0 0;color:white;' %>
+    <% end %>
+    -->
+
+    <% if current_user.admin? %>
+        <%= link_to "新建员工", send("new_#{@model}_path"), :class => 'btn btn-default' %>
+        <%= link_to "上传/更新员工", send("import_#{@model.pluralize}_path"), :class => 'btn btn-default' %>
+        <%= link_to "下载", send("download_#{@model.pluralize}_path"), data: {confirm: 'Are you sure?'}, :class => 'btn btn-default' %>
+    <% end %>
+    <!-- <div style="margin: 55px 0 0 0;">
+      <hr>
+      <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+        <div>
+        <span class="col-md-3">员工号：
+                <input type="text" name="user[id]" value="<%= @id %>"/>
+                <input type="hidden" name="user[id_fuzzy]"/>
+              </span>
+
+              <span class="col-md-3">  所属地点：
+                <%= select_tag('user[location_id]', options_from_collection_for_select(Location.all, 'id', 'name', @location_id), include_blank: true) %>
+              </span>
+
+              <span class="col-md-3">  角色：
+                <%= select_tag('user[role_id]', options_for_select(Role.menu, @role_id), include_blank: true) %>
+              </span>
+          <input type="submit" value="查 找" class="btn btn-primary col-md-3"/>
+        </div>
+      </form>
+    </div>-->
     <div>
+      <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+        <div>
       <span>员工号：
         <input type="text" name="user[id]" value="<%= @id %>"/>
         <input type="hidden" name="user[id_fuzzy]"/>
       </span>
       <span>  所属地点：
-        <%=  select_tag('user[location_id]',options_from_collection_for_select(Location.all,'id','name',@location_id), include_blank: true)%>
+        <%= select_tag('user[location_id]', options_from_collection_for_select(Location.all, 'id', 'name', @location_id), include_blank: true) %>
       </span>
       <span>  角色：
-        <%=  select_tag('user[role_id]',options_for_select(Role.menu,@role_id), include_blank: true)%>
+        <%= select_tag('user[role_id]', options_for_select(Role.menu, @role_id), include_blank: true) %>
       </span>
-      <input type="submit" value="查 找" class="btn btn-primary"/>
+          <input type="submit" value="查 找" class="btn btn-primary"/>
+        </div>
+      </form>
     </div>
-  </form>
-</div>
 
-<% if current_user.admin?%>
-<%= link_to "新建员工", send("new_#{@model}_path") ,:class=>'btn btn-default'%>
-<%= link_to "上传/更新员工", send("import_#{@model.pluralize}_path") ,:class=>'btn btn-default'%>
-<%= link_to "下载", send("download_#{@model.pluralize}_path") ,data: { confirm: 'Are you sure?' },:class=>'btn btn-default'%>
-    <%end%>
-<div class="digg_pagination">
-  <div class="page_info">
-    <%= page_entries_info @users %>
-  </div>
-  <%= will_paginate @users, :container => false %>
-</div>
-<%end%>
+    <hr>
+    <div class="digg_pagination" style="margin: 45px 0 0 0 ;">
+      <div class="page_info" style="text-align: left;">
+        <%= page_entries_info @users %>
+      </div>
+      <%= will_paginate @users, :container => false %>
+    </div>
+<% end %>
 
-<table class="table table-bordered table-striped globle-table">
+<table class="table table-bordered table-striped">
   <thead>
   <tr>
     <th>序号</th>
@@ -48,24 +91,30 @@
   </thead>
 
   <tbody>
-  <% @users.each_with_index do |user,index| %>
+  <% @users.each_with_index do |user, index| %>
       <tr>
         <% if current_user.admin? || current_user.manager? || (current_user.id == user.id) %>
             <td><%= index+@users.offset+1 %>
             <td><%= user.id %>
-            <td><%= user.user_name%></td>
+            <td><%= user.user_name %></td>
             <td><%= user.name %>
             <td><%= OperationMode.display(user.operation_mode) %></td>
             <!--<td><%= user.current_sign_in_ip %></td>-->
-            <td><%= user.location.name if user.location%></td>
+            <td><%= user.location.name if user.location %></td>
             <td><%= user.role %></td>
-            <td><%= link_to '详细', user ,:class=> 'btn btn-default'%></td>
-            <td><%= link_to '编辑', edit_user_path(user) ,:class=> 'btn btn-default'%></td>
-        <%end%>
-        <% if current_user.admin? || current_user.manager? %>
-            <td><%= link_to '删除', user, method: :delete, data: {confirm: 'Are you sure?'} ,:class=> 'btn btn-default'%></td>
-        <%end%>
-        <td><%= link_to '权限', permissions_users_path(user),:class=> 'btn btn-default'%></td>
+            <td style="display: flex;">
+              <a href="/users/admin" class="IconA" title="查看详情"><i class="glyphicon glyphicon-eye-open" style="color: green;"> </i></a>
+
+              <a href="/users/admin/edit" class="IconA" title="编辑"><i class="glyphicon glyphicon-pencil" style="color:#4F94CD;"></i></a>
+
+              <a class="IconA" rel="nofollow" href="/users/admin" data-method="delete" data-confirm="Are you sure?" title="删除">
+                <i class="glyphicon glyphicon-trash" style="color:darkred;"></i>
+              </a>
+              <a href="/users/permissions.PACK_SYS_USER" class="IconA" title="权限">
+                <i class="glyphicon glyphicon-lock" style="color:#000;"></i>
+              </a>
+            </td>
+        <% end %>
       </tr>
   <% end %>
   </tbody>
@@ -74,5 +123,3 @@
   <%= will_paginate @users, :container => false %>
 </div>
 <br>
-
-
