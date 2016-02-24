@@ -43,8 +43,12 @@ class PermissionGroupsController < ApplicationController
 
   def add_permissions
     if request.post?
+      p @permission_group
       p "99999999999999999999999999999999999999999"
       @permissions=[]
+      p params
+      p params[:PermissionData]
+
     else
       p '1111111111111111111111111111111111111111111'
       p params
@@ -53,6 +57,7 @@ class PermissionGroupsController < ApplicationController
       @permission_group_items=@permission_group.permissions
       Permission.all.each do |p|
         @permissions<<{
+            id: p.id,
             name: p.name,
             status: @permission_group_items.include?(p)
         }
