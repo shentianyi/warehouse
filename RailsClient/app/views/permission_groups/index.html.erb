@@ -115,7 +115,11 @@
       </div>
       <hr style="border-color: #ccc;margin: 0">
       <div class="PerGroupsIcon">
-        <a onclick="UpdatePermissionGroups(<%= permission_group.id %>,<%= permission_group.name %>,<%= permission_group.description %>)">
+        <!-- <a onclick="ShowModal(<%= permission_group.id %>,'<%= permission_group.name %>','<%= permission_group.description %>')">
+          <i class="glyphicon glyphicon-pencil" style="color: steelblue;" title="编辑该权限组"></i>
+        </a>-->
+
+        <a href="<%= edit_permission_group_path(permission_group) %>">
           <i class="glyphicon glyphicon-pencil" style="color: steelblue;" title="编辑该权限组"></i>
         </a>
 
@@ -165,26 +169,42 @@
         }
     }
 
-    function UpdatePermissionGroups(url, name, description) {
+    function ShowModal(num, name, description) {
         $('#UpdatePermissionModal').modal('show');
-
         $('#UpdatePermissionGroupName').val(name);
         $('#UpdatePermissionGroupDescription').val(description);
+        $('#UpdatePermissionModal').attr('Num', num);
+    }
 
-        /* $.ajax({
-         url: '/permission_groups/' + url + '/edit',
-         type: 'get',
-         success: function (data) {
-         },
-         error: function () {
-         console.log("请求数据错误.无法链接到服务器.")
-         },
-         complete: function (xhr) {
-         if (xhr.status == 304) return;
-         }
-         });*/
-
-        /*  location.reload();
-         $('#UpdatePermissionModal').modal('hide');*/
+    function UpdatePermissionGroups() {
+        var UpdatePermissionGroupsName = $('#UpdatePermissionGroupName').val();
+        var UpdatePermissionGroupsDescription = $('#UpdatePermissionGroupDescription').val();
+        var UpdateNum = $('#UpdatePermissionModal').attr('num');
+        if (UpdatePermissionGroupsName == "") {
+            $('#UpdatePermissionGroupName').css({
+                border: '2px solid darkred'
+            });
+        } else {
+            $.ajax({
+                url: '/permission_groups/' + UpdateNum,
+                type: 'post',
+                data: {
+                    permission_group: {
+                        name: UpdatePermissionGroupsName,
+                        description: UpdatePermissionGroupsDescription
+                    }
+                },
+                success: function (data) {
+                },
+                error: function () {
+                    console.log("请求数据错误.无法链接到服务器.")
+                },
+                complete: function (xhr) {
+                    if (xhr.status == 304) return;
+                }
+            });
+//            location.reload();
+//            $('#UpdatePermissionModal').modal('hide');
+        }
     }
 </script>

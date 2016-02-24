@@ -95,14 +95,14 @@
             <td><%= user.location.name if user.location %></td>
             <td><%= user.role %></td>
             <td style="display: flex;">
-              <a href="/users/admin" class="IconA" title="详细"><i class="glyphicon glyphicon-eye-open" style="color: green;"> </i></a>
+              <a href="<%= user_path(user) %>" class="IconA" title="详细"><i class="glyphicon glyphicon-eye-open" style="color: green;"> </i></a>
 
-              <a href="/users/admin/edit" class="IconA" title="编辑"><i class="glyphicon glyphicon-pencil" style="color:#4F94CD;"></i></a>
+              <a href="<%= edit_user_path(user) %>" class="IconA" title="编辑"><i class="glyphicon glyphicon-pencil" style="color:#4F94CD;"></i></a>
 
-              <a class="IconA" rel="nofollow" href="/users/admin" data-method="delete" data-confirm="Are you sure?" title="删除">
+              <a class="IconA" rel="nofollow" href="<%= user_path(user) %>" data-method="delete" data-confirm="Are you sure?" title="删除">
                 <i class="glyphicon glyphicon-trash" style="color:darkred;"></i>
               </a>
-              <a href="/users/permissions.PACK_SYS_USER" class="IconA" title="权限">
+              <a href="<%= permissions_users_path(user) %>" class="IconA" title="权限">
                 <i class="glyphicon glyphicon-lock" style="color:#000;"></i>
               </a>
             </td>
