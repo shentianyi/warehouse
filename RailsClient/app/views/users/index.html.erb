@@ -8,60 +8,52 @@
         text-decoration: none;
         background-color: white;
     }
+
 </style>
 
 <% if current_user.admin? || current_user.manager? %>
     <h3>员工列表</h3>
     <hr style="margin: 0;">
-    <!--
     <% if current_user.admin? %>
-        <%= link_to "新建员工", send("new_#{@model}_path"), :class => 'btn btn-primary col-md-4', :style => 'width:200px;margin:10px 0 0 0;color:white;' %>
+        <div class="col-md-12">
+          <div class="col-md-4" style="text-align: center;">
+            <%= link_to "新建员工", send("new_#{@model}_path"), :class => 'btn btn-primary', :style => 'width:200px;margin:10px 0 0 0;color:white;' %>
+          </div>
 
-        <%= link_to "上传/更新员工", send("import_#{@model.pluralize}_path"), :class => 'btn btn-primary col-md-4', :style => 'width:200px;margin:10px 0 0 0;color:white;' %>
+          <div class="col-md-4">
+            <%= link_to "上传/更新员工", send("import_#{@model.pluralize}_path"), :class => 'btn btn-primary', :style => 'width:200px;margin:10px 0 0 0;color:white;' %>
+          </div>
 
-        <%= link_to "下载员工列表", send("download_#{@model.pluralize}_path"), data: {confirm: 'Are you sure?'}, :class => 'btn btn-primary col-md-4', :style => 'width:200px;margin:10px 0 0 0;color:white;' %>
+          <div class="col-md-4">
+            <%= link_to "下载员工列表", send("download_#{@model.pluralize}_path"), data: {confirm: 'Are you sure?'}, :class => 'btn btn-primary', :style => 'width:200px;margin:10px 0 0 0;color:white;' %>
+          </div>
+        </div>
     <% end %>
-    -->
-
-    <% if current_user.admin? %>
-        <%= link_to "新建员工", send("new_#{@model}_path"), :class => 'btn btn-default' %>
-        <%= link_to "上传/更新员工", send("import_#{@model.pluralize}_path"), :class => 'btn btn-default' %>
-        <%= link_to "下载", send("download_#{@model.pluralize}_path"), data: {confirm: 'Are you sure?'}, :class => 'btn btn-default' %>
-    <% end %>
-    <!-- <div style="margin: 55px 0 0 0;">
+    <div style="margin: 55px 0 0 0;">
       <hr>
       <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
         <div>
-        <span class="col-md-3">员工号：
+          <div class="col-md-3">
+              <span>员工号：
                 <input type="text" name="user[id]" value="<%= @id %>"/>
                 <input type="hidden" name="user[id_fuzzy]"/>
               </span>
+          </div>
 
-              <span class="col-md-3">  所属地点：
+          <div class="col-md-3">
+              <span>  所属地点：
                 <%= select_tag('user[location_id]', options_from_collection_for_select(Location.all, 'id', 'name', @location_id), include_blank: true) %>
               </span>
+          </div>
 
-              <span class="col-md-3">  角色：
+          <div class="col-md-3">
+              <span>  角色：
                 <%= select_tag('user[role_id]', options_for_select(Role.menu, @role_id), include_blank: true) %>
               </span>
-          <input type="submit" value="查 找" class="btn btn-primary col-md-3"/>
-        </div>
-      </form>
-    </div>-->
-    <div>
-      <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
-        <div>
-      <span>员工号：
-        <input type="text" name="user[id]" value="<%= @id %>"/>
-        <input type="hidden" name="user[id_fuzzy]"/>
-      </span>
-      <span>  所属地点：
-        <%= select_tag('user[location_id]', options_from_collection_for_select(Location.all, 'id', 'name', @location_id), include_blank: true) %>
-      </span>
-      <span>  角色：
-        <%= select_tag('user[role_id]', options_for_select(Role.menu, @role_id), include_blank: true) %>
-      </span>
-          <input type="submit" value="查 找" class="btn btn-primary"/>
+          </div>
+          <div class="col-md-3">
+            <input type="submit" value="查 找" class="btn btn-primary"/>
+          </div>
         </div>
       </form>
     </div>
@@ -103,7 +95,7 @@
             <td><%= user.location.name if user.location %></td>
             <td><%= user.role %></td>
             <td style="display: flex;">
-              <a href="/users/admin" class="IconA" title="查看详情"><i class="glyphicon glyphicon-eye-open" style="color: green;"> </i></a>
+              <a href="/users/admin" class="IconA" title="详细"><i class="glyphicon glyphicon-eye-open" style="color: green;"> </i></a>
 
               <a href="/users/admin/edit" class="IconA" title="编辑"><i class="glyphicon glyphicon-pencil" style="color:#4F94CD;"></i></a>
 
@@ -122,4 +114,4 @@
 <div class="digg_pagination">
   <%= will_paginate @users, :container => false %>
 </div>
-<br>
+<br></div>

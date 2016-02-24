@@ -1,10 +1,10 @@
 class PermissionGroupsController < ApplicationController
-  before_action :set_permission_group, only: [:show, :edit, :update, :destroy]
+  before_action :set_permission_group, only: [:show, :edit, :update, :destroy, :add_permissions]
 
   respond_to :html
 
   def index
-    @permission_groups = PermissionGroup.all
+    @permission_groups = PermissionGroup.all.paginate(:page=> params[:page])
     respond_with(@permission_groups)
   end
 
@@ -34,6 +34,18 @@ class PermissionGroupsController < ApplicationController
   def destroy
     @permission_group.destroy
     respond_with(@permission_group)
+  end
+
+  def details
+
+    p '0000000000000000000000000000000000'
+  end
+
+  def add_permissions
+    if request.post?
+      p "99999999999999999999999999999999999999999"
+      # render json: msg
+    end
   end
 
   private
