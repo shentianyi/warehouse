@@ -1,3 +1,6 @@
+<%= form_tag controller: 'permission_groups', action: 'add_permissions', method: 'post' do %>
+    <input type="submit" class="btn btn-warning" value="保存"/>
+
 <table class="table table-bordered table-striped">
   <thead>
   <tr>
@@ -17,3 +20,5 @@
   <% end %>
   </tbody>
 </table>
+
+<% end %>
