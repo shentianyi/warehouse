@@ -239,7 +239,7 @@ Rails.application.routes.draw do
     end
   end
 
-  [:locations, :whouses, :parts, :positions, :part_positions, :users, :deliveries, :forklifts,
+  [:locations, :whouses, :parts, :positions, :part_positions, :deliveries, :forklifts,
    :packages, :part_types, :pick_item_filters, :orders, :modems, :leds].each do |model|
     resources model do
       collection do
@@ -254,6 +254,11 @@ Rails.application.routes.draw do
 
   resources :users do
     collection do
+      post :do_import
+      get :import
+      get :download
+      get :template
+      get :search
       get :permissions
       post :set_permissions
     end
