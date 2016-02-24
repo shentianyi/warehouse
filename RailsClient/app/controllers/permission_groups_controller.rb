@@ -1,5 +1,5 @@
 class PermissionGroupsController < ApplicationController
-  before_action :set_permission_group, only: [:show, :edit, :update, :destroy, :add_permissions]
+  before_action :set_permission_group, only: [:show, :edit, :update, :destroy]
 
   respond_to :html
 
@@ -45,6 +45,19 @@ class PermissionGroupsController < ApplicationController
     if request.post?
       p "99999999999999999999999999999999999999999"
       # render json: msg
+    else
+      p 'gggggggggggggggggggggggggggggggggggggg'
+      p params
+      @permissions=[]
+      @permission_group=PermissionGroup.find_by_id(params["format"])
+      @permission_group_items=@permission_group.permissions
+      Permission.all.each do |p|
+        @permissions<<{
+            name: p.name,
+            status: @permission_group_items.include?(p)
+        }
+      end
+      @permissions
     end
   end
 
