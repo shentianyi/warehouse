@@ -44,7 +44,7 @@ class PermissionGroupsController < ApplicationController
   def add_permissions
     if request.post?
       p "99999999999999999999999999999999999999999"
-      # render json: msg
+      @permissions=[]
     else
       p '1111111111111111111111111111111111111111111'
       p params

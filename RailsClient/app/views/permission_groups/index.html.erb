@@ -80,6 +80,29 @@
   </div>
 </div>
 
+<div class="modal fade" id="UpdatePermissionModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Update Permission Groups</h4>
+      </div>
+      <div class="modal-body">
+        <strong>Name:</strong>
+        <input type="text" class="form-control" id="UpdatePermissionGroupName" autocomplete="off">
+        <strong>Description:</strong>
+
+        <textarea cols="66" rows="5" id="UpdatePermissionGroupDescription" aria-autocomplete="none">
+        </textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="UpdatePermissionGroups()">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <% @permission_groups.each do |permission_group| %>
     <div class="PerGroups col-md-2">
@@ -92,6 +115,9 @@
       </div>
       <hr style="border-color: #ccc;margin: 0">
       <div class="PerGroupsIcon">
+        <!-- <a onclick="ShowModal(<%= permission_group.id %>,'<%= permission_group.name %>','<%= permission_group.description %>')">
+          <i class="glyphicon glyphicon-pencil" style="color: steelblue;" title="编辑该权限组"></i>
+        </a>-->
 
         <a href="<%= edit_permission_group_path(permission_group) %>">
           <i class="glyphicon glyphicon-pencil" style="color: steelblue;" title="编辑该权限组"></i>
@@ -137,9 +163,48 @@
                 complete: function (xhr) {
                     if (xhr.status == 304) return;
                 }
-            })
+            });
+            location.reload();
+            $('#NewPermissionModal').modal('hide');
         }
-        location.reload();
-        $('#NewPermissionModal').modal('hide');
+    }
+
+    function ShowModal(num, name, description) {
+        $('#UpdatePermissionModal').modal('show');
+        $('#UpdatePermissionGroupName').val(name);
+        $('#UpdatePermissionGroupDescription').val(description);
+        $('#UpdatePermissionModal').attr('Num', num);
+    }
+
+    function UpdatePermissionGroups() {
+        var UpdatePermissionGroupsName = $('#UpdatePermissionGroupName').val();
+        var UpdatePermissionGroupsDescription = $('#UpdatePermissionGroupDescription').val();
+        var UpdateNum = $('#UpdatePermissionModal').attr('num');
+        if (UpdatePermissionGroupsName == "") {
+            $('#UpdatePermissionGroupName').css({
+                border: '2px solid darkred'
+            });
+        } else {
+            $.ajax({
+                url: '/permission_groups/' + UpdateNum,
+                type: 'post',
+                data: {
+                    permission_group: {
+                        name: UpdatePermissionGroupsName,
+                        description: UpdatePermissionGroupsDescription
+                    }
+                },
+                success: function (data) {
+                },
+                error: function () {
+                    console.log("请求数据错误.无法链接到服务器.")
+                },
+                complete: function (xhr) {
+                    if (xhr.status == 304) return;
+                }
+            });
+//            location.reload();
+//            $('#UpdatePermissionModal').modal('hide');
+        }
     }
 </script>
