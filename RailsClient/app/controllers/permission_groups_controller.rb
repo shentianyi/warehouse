@@ -46,7 +46,7 @@ class PermissionGroupsController < ApplicationController
       p "99999999999999999999999999999999999999999"
       # render json: msg
     else
-      p 'gggggggggggggggggggggggggggggggggggggg'
+      p '1111111111111111111111111111111111111111111'
       p params
       @permissions=[]
       @permission_group=PermissionGroup.find_by_id(params["format"])
