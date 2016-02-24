@@ -1,0 +1,27 @@
+<%= form_for(@part_client) do |f| %>
+    <% if @part_client.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@part_client.errors.count, "error") %> prohibited this part_client from being saved:</h2>
+
+          <ul>
+            <% @part_client.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="field">
+      <%= f.label :part_id %><br>
+      <%= f.text_field :part_id, value: @part_client.new_record? ? '' : @part_client.part.nr %>
+    </div>
+
+    <div class="field">
+      <%= f.label :client_part_nr %><br>
+      <%= f.text_field :client_part_nr %>
+    </div>
+    <%= f.hidden_field :client_tenant_id, value: @tenant.id %>
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+<% end %>

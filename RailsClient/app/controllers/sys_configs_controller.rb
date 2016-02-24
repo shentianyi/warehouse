@@ -4,7 +4,7 @@ class SysConfigsController < ApplicationController
   # GET /sys_configs
   # GET /sys_configs.json
   def index
-    @sys_configs = SysConfig.all
+    @sys_config_groups = SysConfig.group(:category).order(:index)
   end
 
   # GET /sys_configs/1
@@ -62,13 +62,13 @@ class SysConfigsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_sys_config
-      @sys_config = SysConfig.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_sys_config
+    @sys_config = SysConfig.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def sys_config_params
-      params.require(:sys_config).permit(:code, :value, :name)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def sys_config_params
+    params.require(:sys_config).permit(:code, :value, :name)
+  end
 end

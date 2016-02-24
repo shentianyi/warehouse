@@ -78,7 +78,7 @@ class ApplicationController < ActionController::Base
   end
 
   def get_print_server
-    @print_server="#{SysConfigCache.print_server_value}#{SysConfigCache.print_action_value}"
+    @print_server="#{SysConfigCache.print_server_value}/printer/print/"
   end
 
   def model

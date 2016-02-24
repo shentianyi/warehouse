@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160223041006) do
+ActiveRecord::Schema.define(version: 20160224075925) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -488,6 +488,16 @@ ActiveRecord::Schema.define(version: 20160223041006) do
   add_index "packages", ["user_id"], name: "index_packages_on_user_id", using: :btree
   add_index "packages", ["uuid"], name: "index_packages_on_uuid", using: :btree
 
+  create_table "part_clients", force: true do |t|
+    t.string   "part_id",          limit: 36
+    t.string   "client_part_nr"
+    t.integer  "client_tenant_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "part_clients", ["part_id"], name: "index_part_clients_on_parts_id", using: :btree
+
   create_table "part_positions", force: true do |t|
     t.string   "part_id"
     t.string   "position_id"
@@ -533,6 +543,7 @@ ActiveRecord::Schema.define(version: 20160223041006) do
     t.decimal  "convert_unit",            precision: 20, scale: 10, default: 1.0
     t.string   "unit"
     t.string   "nr"
+    t.string   "description"
   end
 
   add_index "parts", ["id"], name: "index_parts_on_id", using: :btree
@@ -766,11 +777,14 @@ ActiveRecord::Schema.define(version: 20160223041006) do
     t.string   "value"
     t.string   "name"
     t.string   "remark"
-    t.boolean  "is_delete",  default: false
-    t.boolean  "is_dirty",   default: true
-    t.boolean  "is_new",     default: true
+    t.boolean  "is_delete",   default: false
+    t.boolean  "is_dirty",    default: true
+    t.boolean  "is_new",      default: true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "category"
+    t.integer  "index"
+    t.string   "description"
   end
 
   add_index "sys_configs", ["code"], name: "index_sys_configs_on_code", using: :btree
@@ -786,6 +800,7 @@ ActiveRecord::Schema.define(version: 20160223041006) do
     t.integer  "type",       default: 300
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "short_name"
   end
 
   create_table "users", force: true do |t|

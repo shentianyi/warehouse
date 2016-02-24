@@ -1,6 +1,15 @@
 Rails.application.routes.draw do
 
-  resources :tenants
+	
+
+  resources :tenants do
+   resources :part_clients do 
+     match :import,to: :import,via:[:get,:post]
+   end
+  end
+
+
+  resources :part_clients
 
   resources :movement_sources do
     collection do

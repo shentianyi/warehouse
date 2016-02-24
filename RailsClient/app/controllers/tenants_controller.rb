@@ -23,12 +23,14 @@ class TenantsController < ApplicationController
   def create
     @tenant = Tenant.new(tenant_params)
     @tenant.save
-    respond_with(@tenant)
+    redirect_to action: :index
+	#respond_with(@tenant)
   end
 
   def update
     @tenant.update(tenant_params)
-    respond_with(@tenant)
+    redirect_to action: :index
+	#respond_with(@tenant)
   end
 
   def destroy
@@ -36,12 +38,13 @@ class TenantsController < ApplicationController
     respond_with(@tenant)
   end
 
+
   private
     def set_tenant
       @tenant = Tenant.find(params[:id])
     end
 
     def tenant_params
-      params.require(:tenant).permit(:name, :code, :address, :email, :tel, :website, :type)
+      params.require(:tenant).permit(:name, :code, :short_name,:address, :email, :tel, :website, :type)
     end
 end

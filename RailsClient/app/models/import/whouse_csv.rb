@@ -23,7 +23,7 @@ module Import
       Proc.new { |line, item|
         line<<item.nr
         line<<item.name
-        line<< item.location.present? ? item.location.nr : ''
+        line<< (item.location.present? ? item.location.nr : '')
       }
     end
 

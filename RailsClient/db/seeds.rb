@@ -11,7 +11,7 @@
 #create Admin User
 ActiveRecord::Base.transaction do
 
-  t=Tenant.create(name: '上海佳轩物流有限公司', code: 'SHJX', type: TenantType::SELF)
+  t=Tenant.create(name: '上海佳轩物流有限公司', code: 'SHJX', short_name: '简称', type: TenantType::SELF)
 
   # init location and admin
   l = Location.create(nr: 'Default', name: 'Default Location', is_base: true, tenant_id: t.id) unless (l=Location.find_by_id('Default'))
@@ -51,21 +51,27 @@ ActiveRecord::Base.transaction do
   end
 
   # init system config
-  unless SysConfig.find_by_code('PRINT_SERVER')
-    SysConfig.create(code: 'PRINT_SERVER', value: 'http://192.168.8.77:9000', name: '打印服务器地址')
+  # 数据配置
+  unless SysConfig.find_by_code('WEB_SHOW_CLIENT_PART_NR')
+    SysConfig.create(code: 'WEB_SHOW_CLIENT_PART_NR', category: '数据配置', index: 300, value: 'SHL', name: '网页显示客户零件号',description:'填写客户编码，多个以英文字逗号分隔')
   end
 
-  unless SysConfig.find_by_code('PRINT_ACTION')
-    SysConfig.create(code: 'PRINT_ACTION', value: '/printer/print/', name: '打印方法')
-  end
 
+  # 盘点配置
   unless SysConfig.find_by_code('INVENTORY_ENABLE')
-    SysConfig.create(code: 'INVENTORY_ENABLE', value: 'false', name: '是否开启盘点模式')
+    SysConfig.create(code: 'INVENTORY_ENABLE', category: '盘点配置', index: 900, value: 'false', name: '是否开启盘点模式')
   end
 
   unless SysConfig.find_by_code('HIDE_FINISHED_INVENTORY')
-    SysConfig.create(code: 'HIDE_FINISHED_INVENTORY', value: 'true', name: '是否隐藏结束的盘点单')
+    SysConfig.create(code: 'HIDE_FINISHED_INVENTORY', category: '盘点配置', index: 900, value: 'true', name: '是否隐藏结束的盘点单')
   end
+
+
+  # 打印服务配置
+  unless SysConfig.find_by_code('PRINT_SERVER')
+    SysConfig.create(code: 'PRINT_SERVER', value: 'http://192.168.8.77:9000', category: '打印服务配置', index: 1000, name: '打印服务器地址')
+  end
+
 
   # api v3
   MoveType.create!([{typeId: 'MOVE', short_desc: 'move type'},

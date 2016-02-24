@@ -74,7 +74,7 @@ module Import
 
           if header_count > count
             (header_count-count).times.each { |i| line[count+1+i] = "" }
-            line[header_count-1]=1
+            line[header_count-1]='update'
           end
           #
           f.puts line.join($CSVSP)

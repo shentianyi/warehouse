@@ -23,8 +23,8 @@ module Import
 
     def position_down_block
       Proc.new { |line, item|
-        line<<item.detail
-        line<<item.whouse_id
+        line<<item.nr
+        line<<(item.whouse.present? ? item.whouse.nr : '')
       }
     end
 
