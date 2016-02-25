@@ -52,7 +52,7 @@ class PermissionGroupsController < ApplicationController
       p_ids=[]
       params[:permission_data].each do |p|
         if p.last[:status]=='true'
-          p_ids<<p.last[:id]
+          p_ids<<p.last[:id].to_i
         end
       end
 

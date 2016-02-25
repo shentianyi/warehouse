@@ -95,7 +95,7 @@ class UsersController < ApplicationController
       pg_ids=[]
       params[:permission_groups_data].each do |p|
         if p.last[:status]=='true'
-          pg_ids<<p.last[:id]
+          pg_ids<<p.last[:id].to_i
         end
       end
 
