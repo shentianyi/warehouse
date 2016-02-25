@@ -38,11 +38,11 @@ class PermissionGroupsController < ApplicationController
 
   def permission_details
     p '0000000000000000000000000000000000'
-    p params
+    @permissions=[]
     if permission_group=PermissionGroup.find_by_id(params[:PermissionGroupsID])
-      @permissions=permission_group.permissions
-    else
-      @permissions=[]
+      permission_group.permissions.each do |p|
+        @permissions<<p.name
+      end
     end
     render :json => []
   end
