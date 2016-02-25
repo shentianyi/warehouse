@@ -36,9 +36,9 @@ class PermissionGroupsController < ApplicationController
     respond_with(@permission_group)
   end
 
-  def details
-
+  def permission_details
     p '0000000000000000000000000000000000'
+
   end
 
   def add_permissions
