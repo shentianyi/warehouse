@@ -44,7 +44,9 @@ class PermissionGroupsController < ApplicationController
         @permissions<<p.name
       end
     end
-    render :json => []
+
+    p @permissions
+    render :json => @permissions
   end
 
   def add_permissions

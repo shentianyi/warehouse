@@ -116,7 +116,7 @@
             complete: function (xhr) {
                 if (xhr.status == 304) return;
             }
-        })
+        });
     });
 
     var PermissionGroupsJSON = [];
@@ -128,22 +128,22 @@
             PermissionGroupsJSON.push({id: PerssionGroupsID, name: PerssionGroupsName, status: PerssionGroupsStatus});
         });
 
-        /* $.ajax({
-         url: '/user/permission_groups',
-         type: 'post',
-         data: {
-         UserID:
-        <%=@user.id %>,
-         PermissionGroupsData: PermissionGroupsJSON
-         },
-         success: function (data) {
-         location.reload();
-         },
-         error: function () {
-         },
-         complete: function (xhr) {
-         if (xhr.status == 304) return;
-         }
-         });*/
+        console.log(PermissionGroupsJSON);
+        $.ajax({
+            url: '/users/permission_groups',
+            type: 'post',
+            data: {
+                UserID: '<%=@user.id %>',
+                PermissionGroupsData: PermissionGroupsJSON
+            },
+            success: function (data) {
+                location.reload();
+            },
+            error: function () {
+            },
+            complete: function (xhr) {
+                if (xhr.status == 304) return;
+            }
+        });
     })
 </script>
