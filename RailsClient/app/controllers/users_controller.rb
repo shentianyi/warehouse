@@ -88,15 +88,24 @@ class UsersController < ApplicationController
     end
   end
 
-  def permissions
-    p '0000000000000000000000000000'
-    @user=User.find_by_id(params["format"])
+  def permission_groups
+
+
+
+    if request.post?
+      p "1111111111111111111111111111111111"
+      p params
+
+      render :permission_groups
+    else
+      p '0000000000000000000000000000'
+      p params
+      @user=User.find_by_id(params["format"])
+      @permission_groups=@user.permission_group_details
+      p @permission_groups
+    end
   end
 
-  def set_permissions
-    p '1111111111111111111111111111111'
-    render :permissions
-  end
 
   private
   # Use callbacks to share common setup or constraints between actions.

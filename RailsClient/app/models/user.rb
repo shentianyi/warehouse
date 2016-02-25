@@ -72,6 +72,24 @@ class User < ActiveRecord::Base
     self.location_destinations.pluck(:id)
   end
 
+  def permission_group_details
+    data=[]
+
+    permission_groups=self.permission_groups
+    puts permission_groups
+    puts '-------------------------------------------------------------------'
+    PermissionGroup.all.each do |p|
+      data<<{
+          id: p.id,
+          name: p.name,
+          desc: p.description,
+          status: permission_groups.include?(p)
+      }
+    end
+
+    data
+  end
+
   private
   def generate_authentication_token
     loop do
