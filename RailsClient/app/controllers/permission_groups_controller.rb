@@ -4,7 +4,7 @@ class PermissionGroupsController < ApplicationController
   respond_to :html
 
   def index
-    @permission_groups = PermissionGroup.all.paginate(:page=> params[:page])
+    @permission_groups = PermissionGroup.all.paginate(:page => params[:page])
     respond_with(@permission_groups)
   end
 
@@ -43,35 +43,34 @@ class PermissionGroupsController < ApplicationController
 
   def add_permissions
     if request.post?
-      p @permission_group
       p "99999999999999999999999999999999999999999"
-      @permissions=[]
-      p params
-      p params[:PermissionData]
+      p_ids=[]
+      params[:PermissionData].each do |p|
+        if p.last[:status]=='true'
+          p_ids<<p.last[:id]
+        end
+      end
 
+      @permission_group=PermissionGroup.find_by_id(params[:PermissionGroupID])
+      @permission_group.manage_permissions(p_ids)
+      @permissions=@permission_group.permission_details
+
+      render :add_permissions
     else
       p '1111111111111111111111111111111111111111111'
-      p params
-      @permissions=[]
       @permission_group=PermissionGroup.find_by_id(params["format"])
-      @permission_group_items=@permission_group.permissions
-      Permission.all.each do |p|
-        @permissions<<{
-            id: p.id,
-            name: p.name,
-            status: @permission_group_items.include?(p)
-        }
-      end
-      @permissions
+      @permissions=@permission_group.permission_details
+      p @permissions
     end
   end
 
   private
-    def set_permission_group
-      @permission_group = PermissionGroup.find(params[:id])
-    end
+  def set_permission_group
+    @permission_group = PermissionGroup.find(params[:id])
+  end
 
-    def permission_group_params
-      params.require(:permission_group).permit(:name, :description)
-    end
+  def permission_group_params
+    params.require(:permission_group).permit(:name, :description)
+  end
+
 end
