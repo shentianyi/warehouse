@@ -49,7 +49,7 @@
 </div>
 
 <div class="digg_pagination">
-  <div class="page_info" style="width: auto;text-align: left;height: 40px;margin: 60px 0 0 0;padding: 10px 0 0 0;">
+  <div class="page_info" style="width: auto;text-align: left;height: 40px;margin: 60px 0 0 0;padding: 10px 0 0 20px;">
     <%= page_entries_info @permission_groups %>
   </div>
   <%= will_paginate @permissions, :container => false %>
@@ -138,7 +138,7 @@
 <script>
 
     var ClientHeight = document.documentElement.clientHeight;
-    $('.modal').css({top: (ClientHeight - 700) / 2 + 'px'});
+    $('.modal').css({top: (ClientHeight - 600) / 2 + 'px'});
 
     function NewPermissionGroups() {
         var NewPermissionGroupsNameData = $('#NewPermissionGroupName').val();

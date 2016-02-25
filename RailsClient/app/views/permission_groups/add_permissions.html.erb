@@ -6,7 +6,7 @@
     .SavePermissions {
         width: 200px;
         font-size: 1.2em;
-        margin: 0 0 0 -37px;
+        margin: 10px 0 0 -37px;
     }
 
     a:hover {
@@ -16,10 +16,10 @@
 
 <div class="panel panel-primary" style="margin: 20px 15px 0 15px;">
   <div class="panel-body" style="text-align: left;display: flex">
-    <h4 class="col-md-1"><b>权限组名称:</b></h4>
-    <strong class="col-md-10" style="margin: 10px 0 0 -30px;"><%= @permission_group.name %> </strong>
+    <h4 class="col-md-2" style="text-align: center;"><b>权限组名称:</b></h4>
+    <strong class="col-md-9" style="margin: 10px 0 0 -30px;" title="<%= @permission_group.name %>"><%= @permission_group.name %> </strong>
     <a href="/permission_groups">
-      <button class="btn btn-success SavePermissions">
+      <button class="btn btn-success" style="margin: 0 20px 0 0;width: 200px;">
         <i class="glyphicon glyphicon-share-alt" style="transform: rotate(200deg)"></i>&emsp;返回
       </button>
     </a>
@@ -95,11 +95,11 @@
     function ShowPermission() {
         <% @permissions.each_with_index do |p| %>
         if (<%= p[:status] %>) {
-            $('<div class="col-md-1" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">' +
+            $('<div class="col-md-2" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">' +
                     '<input type="checkbox" class="CheckBox" id="<%= p[:id]%>" ischecked="true" checked><strong title="<%= p[:name] %>">' + '<%= p[:name] %>' + '</strong></input></div>').appendTo('#HasPermission').ready(function () {
             });
         } else {
-            $('<div class="col-md-1" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">' +
+            $('<div class="col-md-2" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">' +
                     '<input type="checkbox" class="CheckBox" id="<%= p[:id]%>" ischecked="false"> <strong title="<%= p[:name] %>">' + '<%= p[:name] %>' + '</strong></input></div>').appendTo('#NoPermission').ready(function () {
             });
         }

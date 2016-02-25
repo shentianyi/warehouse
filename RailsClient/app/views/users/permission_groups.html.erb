@@ -20,7 +20,7 @@
         border-right: 5px solid transparent;
         display: none;
         height: 0;
-        margin: -5px 0 0 20px;
+        margin: 0 0 0 60px;
         width: 0;
     }
 
@@ -37,17 +37,17 @@
 </style>
 
 <div class="panel panel-primary" style="margin: 20px 15px 0 15px;">
-  <div class="panel-body" style="text-align: center;padding: 20px 0 5px 0">
+  <div class="panel-body" style="text-align: center;">
     <div class="col-md-3">
       <strong>员工号:</strong>
       <strong style="overflow: hidden;text-overflow: ellipsis;" title="<%= @user.id %>">
         <%= @user.id %></strong>
     </div>
-    <div class="col-md-2">
+    <div class="col-md-3">
       <strong>姓名:</strong>
       <strong><%= @user.name %></strong>
     </div>
-    <div class="col-md-2">
+    <div class="col-md-3">
       <strong>所属地点:</strong>
       <strong><%= @user.location.name %></strong>
     </div>
@@ -55,11 +55,11 @@
       <strong>角色:</strong>
       <strong><%= @user.role %></strong>
     </div>
-    <a href="/users">
-      <button class="btn btn-success" style="width: 200px;margin: -10px 0 5px 46px;">
+    <!--<a href="/users">
+      <button class="btn btn-success" style="width: 200px;margin: -10px 0 5px 0;">
         <i class="glyphicon glyphicon-share-alt" style="transform: rotate(200deg)"></i>&emsp;返回
       </button>
-    </a>
+    </a>-->
   </div>
 </div>
 
@@ -102,11 +102,11 @@
 
     <% @permission_groups.each_with_index do |p| %>
     if (<%= p[:status] %>) {
-        $('<div class="col-md-1" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;font-size: 1.2em;">' +
+        $('<div class="col-md-2" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">' +
                 '<input type="checkbox" class="CheckBox" id="<%= p[:id]%>" ischecked="true" checked><strong class="CheckBoxName" title="<%= p[:name] %>">' + '<%= p[:name] %>' + '</strong></input></div>').appendTo('.HasPermissionGroups').ready(function () {
         });
     } else {
-        $('<div class="col-md-1" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;font-size: 1.2em;">' +
+        $('<div class="col-md-2" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">' +
                 '<input type="checkbox" class="CheckBox" id="<%= p[:id]%>" ischecked="false"> <strong class="CheckBoxName" title="<%= p[:name] %>">' + '<%= p[:name] %>' + '</strong></input></div>').appendTo('.NoPermissionGroups').ready(function () {
         });
     }
@@ -128,8 +128,6 @@
             e.cancelBubble = true;
         }
         var PermissionGroupsID = $(this).parent().children('input').attr('id');
-        var PermissionGroupsName = $(this).html();
-        var PermissionGroupsStatus = $(this).parent().children('input').attr('ischecked');
 
         $('.ShowPermissionTipsCaret').remove();
         $('.ShowPermissionTips').remove();
