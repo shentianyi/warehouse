@@ -92,7 +92,15 @@ class UsersController < ApplicationController
     if request.post?
       p "1111111111111111111111111111111111"
       p params
+      pg_ids=[]
+      params[:permission_groups_data].each do |p|
+        if p.last[:status]=='true'
+          pg_ids<<p.last[:id]
+        end
+      end
+
       @user=User.find_by_id(params[:user_id])
+      @user.manage_permission_groups(pg_ids)
       @permission_groups=@user.permission_group_details
 
       render :permission_groups
