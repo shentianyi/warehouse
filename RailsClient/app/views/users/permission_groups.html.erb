@@ -5,8 +5,10 @@
 
     .ShowPermissionTips {
         border-radius: 4px;
+        background: #f2f2f2;
         display: none;
-        background: black;
+        min-height: 40px;
+        color: #000;
     }
 </style>
 
@@ -82,36 +84,26 @@
     <% end %>
 
     $('.CheckBoxName').unbind().on('click', function () {
-        console.log($(this));
-        console.log($(this).html());
-        console.log($(this).parent());
-        console.log($(this).parent().children('input'));
-        console.log($(this).parent().children('input').attr('id'));
-        console.log($(this).parent().children('input').attr('ischecked'));
-
         var PermissionGroupsID = $(this).parent().children('input').attr('id');
         var PermissionGroupsName = $(this).html();
         var PermissionGroupsStatus = $(this).parent().children('input').attr('ischecked');
 
         $('.ShowPermissionTips').remove();
 
-        $('<div class="ShowPermissionTips" > </div>').appendTo($(this)).ready(function () {
-        });
-
-        $('.ShowPermissionTips').fadeIn(400);
-
         $.ajax({
             url: '/permission_groups/permission_details',
             type: 'get',
             data: {
-                PermissionGroupsID: PermissionGroupsID
+                permission_groups_id: PermissionGroupsID
             },
             success: function (data) {
-                console.log("Get Successful");
                 console.log(data);
+                $('<div class="ShowPermissionTips"> ' + data + ' </div>').appendTo($('#' + PermissionGroupsID).parent()).ready(function () {
+                });
+                $('.ShowPermissionTips').fadeIn(400);
             },
             error: function () {
-                console.log("Something error");
+                console.log("请求数据错误.无法链接到服务器.");
             },
             complete: function (xhr) {
                 if (xhr.status == 304) return;
@@ -133,8 +125,8 @@
             url: '/users/permission_groups',
             type: 'post',
             data: {
-                UserID: '<%=@user.id %>',
-                PermissionGroupsData: PermissionGroupsJSON
+                user_id: '<%=@user.id %>',
+                permission_groups_data: PermissionGroupsJSON
             },
             success: function (data) {
                 location.reload();

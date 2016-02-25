@@ -56,8 +56,8 @@
             url: '/permission_groups/add_permissions',
             type: 'post',
             data: {
-                PermissionGroupID: <%=@permission_group.id %>,
-                PermissionData: PermissionJSON
+                permission_group_id: <%=@permission_group.id %>,
+                permission_data: PermissionJSON
             },
             success: function (data) {
                 location.reload();

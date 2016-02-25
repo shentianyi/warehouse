@@ -38,7 +38,7 @@ class PermissionGroupsController < ApplicationController
 
   def permission_details
     @permissions=[]
-    if permission_group=PermissionGroup.find_by_id(params[:PermissionGroupsID])
+    if permission_group=PermissionGroup.find_by_id(params[:permission_groups_id])
       permission_group.permissions.each do |p|
         @permissions<<p.name
       end
@@ -56,7 +56,7 @@ class PermissionGroupsController < ApplicationController
         end
       end
 
-      @permission_group=PermissionGroup.find_by_id(params[:permission_Group_id])
+      @permission_group=PermissionGroup.find_by_id(params[:permission_group_id])
       @permission_group.manage_permissions(p_ids)
       @permissions=@permission_group.permission_details
 
