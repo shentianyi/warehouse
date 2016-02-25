@@ -1,27 +1,12 @@
-<%= form_tag controller: 'users', action: 'permission_groups', method: 'post' do %>
-    <input type="submit" class="btn btn-warning" value="保存"/>
-
-    <table class="table table-bordered table-striped table-hover">
-      <thead>
-      <tr>
-        <th></th>
-        <th>NO.</th>
-        <th>权限名称</th>
-        <th>是否勾选</th>
-        <th></th>
-      </tr>
-      </thead>
-
-      <tbody>
-
-      </tbody>
-    </table>
-
-<% end %>
-
 <style>
     .CheckBoxName {
         cursor: pointer;
+    }
+
+    .ShowPermissionTips {
+        border-radius: 4px;
+        display: none;
+        background: black;
     }
 </style>
 
@@ -47,7 +32,6 @@
   </div>
 </div>
 
-
 <div class="col-md-12" style="margin: 20px 0 0 0;">
   <div class="panel panel-info">
     <div class="panel-heading">
@@ -56,7 +40,7 @@
           <h3>Permission Groups</h3>
         </div>
         <div class="col-md-9" style="text-align: right;">
-          <button class="btn btn-primary" style="width: 200px;height:50px;margin: 5px 0 0 0;">保存</button>
+          <button class="btn btn-primary SavePermissionGroups" style="width: 200px;height:50px;margin: 5px 0 0 0;">保存</button>
         </div>
       </div>
     </div>
@@ -111,7 +95,7 @@
 
         $('.ShowPermissionTips').remove();
 
-        $('<div style="width: 200px;height: 100px;background: #000;display: none;" class="ShowPermissionTips" > </div>').appendTo($(this)).ready(function () {
+        $('<div class="ShowPermissionTips" > </div>').appendTo($(this)).ready(function () {
         });
 
         $('.ShowPermissionTips').fadeIn(400);
@@ -134,4 +118,32 @@
             }
         })
     });
+
+    var PermissionGroupsJSON = [];
+    $('.SavePermissionGroups').unbind().on('click', function () {
+        $('.CheckBox').each(function () {
+            var PerssionGroupsID = $(this).attr('id');
+            var PerssionGroupsName = $(this).parent().children('strong').html();
+            var PerssionGroupsStatus = $(this).attr('ischecked');
+            PermissionGroupsJSON.push({id: PerssionGroupsID, name: PerssionGroupsName, status: PerssionGroupsStatus});
+        });
+
+        /* $.ajax({
+         url: '/user/permission_groups',
+         type: 'post',
+         data: {
+         UserID:
+        <%=@user.id %>,
+         PermissionGroupsData: PermissionGroupsJSON
+         },
+         success: function (data) {
+         location.reload();
+         },
+         error: function () {
+         },
+         complete: function (xhr) {
+         if (xhr.status == 304) return;
+         }
+         });*/
+    })
 </script>
