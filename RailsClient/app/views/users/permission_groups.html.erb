@@ -117,7 +117,7 @@
         $('.ShowPermissionTips').fadeIn(400);
 
         $.ajax({
-            url: 'GetPermission',
+            url: '/permission_groups/permission_details',
             type: 'get',
             data: {
                 PermissionGroupsID: PermissionGroupsID
