@@ -7,7 +7,7 @@ module V1
       # login
       # params: email, passwd
       post :login do
-        user = User.find_for_database_authentication(user_name: params[:user][:id])
+        user = User.find_for_database_authentication(nr: params[:user][:id])
         if user
           if user.valid_password?(params[:user][:password])
             warden.set_user user
@@ -16,7 +16,10 @@ module V1
               # error!({result: 0, content: '盘点中...登陆锁定'}, 401)
               {result: 0, content: '盘点中...登陆锁定'}
             else
-              {result: 1, content: {role_id: current_user.role_id, location_id: current_user.location_id, location_name: current_user.location.name, operation_mode: current_user.operation_mode}}
+              {result: 1, content: {role_id: current_user.role_id,
+                                    location_id: current_user.location_id,
+                                    location_name: current_user.location.name,
+                                    operation_mode: current_user.operation_mode}}
             end
           else
             # error!({result: 0, content: '密码错误'}, 401)

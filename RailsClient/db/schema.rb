@@ -11,8 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160223033723) do
-
+ActiveRecord::Schema.define(version: 20160224075925) do
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
     t.string   "targetable_id"
@@ -263,11 +262,15 @@ ActiveRecord::Schema.define(version: 20160223033723) do
     t.integer  "parent_id"
     t.integer  "status",                    default: 0
     t.string   "remark",                    default: ""
+    t.integer  "tenant_id"
+    t.string   "nr"
   end
 
   add_index "locations", ["destination_id"], name: "index_locations_on_destination_id", using: :btree
   add_index "locations", ["id"], name: "index_locations_on_id", using: :btree
+  add_index "locations", ["nr"], name: "index_locations_on_nr", using: :btree
   add_index "locations", ["parent_id"], name: "index_locations_on_parent_id", using: :btree
+  add_index "locations", ["tenant_id"], name: "index_locations_on_tenant_id", using: :btree
   add_index "locations", ["uuid"], name: "index_locations_on_uuid", using: :btree
 
   create_table "modems", force: true do |t|
@@ -484,6 +487,16 @@ ActiveRecord::Schema.define(version: 20160223033723) do
   add_index "packages", ["user_id"], name: "index_packages_on_user_id", using: :btree
   add_index "packages", ["uuid"], name: "index_packages_on_uuid", using: :btree
 
+  create_table "part_clients", force: true do |t|
+    t.string   "part_id",          limit: 36
+    t.string   "client_part_nr"
+    t.integer  "client_tenant_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "part_clients", ["part_id"], name: "index_part_clients_on_parts_id", using: :btree
+
   create_table "part_positions", force: true do |t|
     t.string   "part_id"
     t.string   "position_id"
@@ -509,9 +522,11 @@ ActiveRecord::Schema.define(version: 20160223033723) do
     t.boolean  "is_new",     default: true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "nr"
   end
 
   add_index "part_types", ["id"], name: "index_part_types_on_id", using: :btree
+  add_index "part_types", ["nr"], name: "index_part_types_on_nr", using: :btree
 
   create_table "parts", force: true do |t|
     t.string   "uuid",         limit: 36,                                           null: false
@@ -526,9 +541,12 @@ ActiveRecord::Schema.define(version: 20160223033723) do
     t.string   "part_type_id"
     t.decimal  "convert_unit",            precision: 20, scale: 10, default: 1.0
     t.string   "unit"
+    t.string   "nr"
+    t.string   "description"
   end
 
   add_index "parts", ["id"], name: "index_parts_on_id", using: :btree
+  add_index "parts", ["nr"], name: "index_parts_on_nr", using: :btree
   add_index "parts", ["part_type_id"], name: "index_parts_on_part_type_id", using: :btree
   add_index "parts", ["user_id"], name: "index_parts_on_user_id", using: :btree
   add_index "parts", ["uuid"], name: "index_parts_on_uuid", using: :btree
@@ -622,9 +640,11 @@ ActiveRecord::Schema.define(version: 20160223033723) do
     t.boolean  "is_new",                default: true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "nr"
   end
 
   add_index "positions", ["id"], name: "index_positions_on_id", using: :btree
+  add_index "positions", ["nr"], name: "index_positions_on_nr", using: :btree
   add_index "positions", ["uuid"], name: "index_positions_on_uuid", using: :btree
   add_index "positions", ["whouse_id"], name: "index_positions_on_whouse_id", using: :btree
 
@@ -780,11 +800,14 @@ ActiveRecord::Schema.define(version: 20160223033723) do
     t.string   "value"
     t.string   "name"
     t.string   "remark"
-    t.boolean  "is_delete",  default: false
-    t.boolean  "is_dirty",   default: true
-    t.boolean  "is_new",     default: true
+    t.boolean  "is_delete",   default: false
+    t.boolean  "is_dirty",    default: true
+    t.boolean  "is_new",      default: true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "category"
+    t.integer  "index"
+    t.string   "description"
   end
 
   add_index "sys_configs", ["code"], name: "index_sys_configs_on_code", using: :btree
@@ -800,6 +823,18 @@ ActiveRecord::Schema.define(version: 20160223033723) do
   add_index "user_permission_groups", ["permission_group_id"], name: "index_user_permission_groups_on_permission_group_id", using: :btree
   add_index "user_permission_groups", ["user_id"], name: "index_user_permission_groups_on_user_id", using: :btree
 
+  create_table "tenants", force: true do |t|
+    t.string   "name"
+    t.string   "code"
+    t.string   "address"
+    t.string   "email"
+    t.string   "tel"
+    t.string   "website"
+    t.integer  "type",       default: 300
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "short_name"
+  end
   create_table "users", force: true do |t|
     t.string   "uuid",                   limit: 36,                 null: false
     t.boolean  "is_delete",                         default: false
@@ -823,7 +858,7 @@ ActiveRecord::Schema.define(version: 20160223033723) do
     t.string   "authentication_token"
     t.integer  "role_id",                           default: 100,   null: false
     t.boolean  "is_sys",                            default: false
-    t.string   "user_name"
+    t.string   "nr"
     t.integer  "operation_mode",                    default: 0
   end
 
@@ -867,10 +902,12 @@ ActiveRecord::Schema.define(version: 20160223033723) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "position_pattern",            default: ""
+    t.string   "nr"
   end
 
   add_index "whouses", ["id"], name: "index_whouses_on_id", using: :btree
   add_index "whouses", ["location_id"], name: "index_whouses_on_location_id", using: :btree
+  add_index "whouses", ["nr"], name: "index_whouses_on_nr", using: :btree
   add_index "whouses", ["uuid"], name: "index_whouses_on_uuid", using: :btree
 
 end

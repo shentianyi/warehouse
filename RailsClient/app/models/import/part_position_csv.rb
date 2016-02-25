@@ -21,19 +21,19 @@ module Import
 
     def part_position_down_block
       Proc.new { |line, item|
-        line<<item.part_id
-        line<<item.position_id
-        line<<item.sourceable_id
-        line<<item.position.detail if item.position
+        line<<item.part.nr
+        line<<item.position.nr
+        line<<item.sourceable.nr
+        line<<item.position.nr if item.position
         line<<item.position.whouse.name if item.position
       }
     end
 
     def init_csv_cols
       csv_cols=[]
-      csv_cols<< Csv::CsvCol.new(field: 'part_id', header: 'PartNr')
+      csv_cols<< Csv::CsvCol.new(field: 'part_id', header: 'PartNr', is_foreign: true, foreign:'Part')
       csv_cols<< Csv::CsvCol.new(field: 'position_id', header: 'Position', is_foreign: true, foreign:'Position')
-      csv_cols<< Csv::CsvCol.new(field: 'sourceable_id', header: 'LocationId',null:true)
+      csv_cols<< Csv::CsvCol.new(field: 'sourceable_id', header: 'LocationNr',null:true)
       csv_cols<< Csv::CsvCol.new(field: 'position', header: 'Position')
       csv_cols<< Csv::CsvCol.new(field: 'whouse', header: 'Warehouse')
       csv_cols<< Csv::CsvCol.new(field: $UPMARKER, header: $UPMARKER)

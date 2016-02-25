@@ -26,6 +26,14 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :tenants do
+   resources :part_clients do 
+     match :import,to: :import,via:[:get,:post]
+   end
+  end
+
+  resources :part_clients
+
   resources :movement_sources do
     collection do
       get :search
@@ -164,6 +172,7 @@ Rails.application.routes.draw do
     collection do
       #match :import, to: :import, via: [:get, :post]
       match :generate, to: :generate, via: [:get, :post]
+      match :generate_jiaxuan, to: :generate_jiaxuan, via: [:get, :post]
       match :receive, to: :receive, via: [:get, :post]
       get :search
     end

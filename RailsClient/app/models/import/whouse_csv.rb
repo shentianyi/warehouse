@@ -21,19 +21,19 @@ module Import
 
     def whouse_down_block
       Proc.new { |line, item|
-        line<<item.id
+        line<<item.nr
         line<<item.name
-        line<<item.location_id
+        line<< (item.location.present? ? item.location.nr : '')
       }
     end
 
     def init_csv_cols
       csv_cols=[]
-      csv_cols<< Csv::CsvCol.new(field: 'id', header: 'WarehouseNr')
+      csv_cols<< Csv::CsvCol.new(field: 'nr', header: 'Warehouse Nr')
       csv_cols<< Csv::CsvCol.new(field: 'name', header: 'Name')
-      csv_cols<< Csv::CsvCol.new(field: 'location_id', header: 'Location',is_foreign:true,foreign:'Location')
+      csv_cols<< Csv::CsvCol.new(field: 'location_id', header: 'Location', is_foreign: true, foreign: 'Location')
       csv_cols<< Csv::CsvCol.new(field: $UPMARKER, header: $UPMARKER)
-      class_variable_set(:@@csv_cols,csv_cols)
+      class_variable_set(:@@csv_cols, csv_cols)
     end
 
     def csv_cols
@@ -41,7 +41,7 @@ module Import
     end
 
     def init_uniq_key
-      class_variable_set(:@@ukeys,%w(id))
+      class_variable_set(:@@ukeys, %w(nr))
     end
   end
 end

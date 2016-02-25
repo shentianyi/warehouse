@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Parts:</strong>
+  <%= @part_client.parts %>
+</p>
+
+<p>
+  <strong>Client part nr:</strong>
+  <%= @part_client.client_part_nr %>
+</p>
+
+<p>
+  <strong>Client tenant:</strong>
+  <%= @part_client.client_tenant_id %>
+</p>
+
+<%= link_to 'Edit', edit_part_client_path(@part_client) %> |
+<%= link_to 'Back', part_clients_path %>

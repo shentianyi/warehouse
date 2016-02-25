@@ -26,7 +26,7 @@ module Import
 
     def init_csv_cols
       csv_cols=[]
-      csv_cols<< Csv::CsvCol.new(field: 'id', header: 'ID')
+      csv_cols<< Csv::CsvCol.new(field: 'nr', header: 'Nr')
       csv_cols<< Csv::CsvCol.new(field: 'name', header: 'Name')
       csv_cols<< Csv::CsvCol.new(field: $UPMARKER, header: $UPMARKER)
       class_variable_set(:@@csv_cols, csv_cols)
@@ -37,7 +37,7 @@ module Import
     end
 
     def init_uniq_key
-      class_variable_set(:@@ukeys,%w(id))
+      class_variable_set(:@@ukeys,%w(nr))
     end
   end
 end

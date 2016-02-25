@@ -1,1 +1,1 @@
-PartNr;Unit;UnitPack;PartType;ConvertUnit;DOUPDATE(0不更新，1更新);上传时，去除括号中注释
+PartNr;Unit;UnitPack;PartType;ConvertUnit;Description;Operator

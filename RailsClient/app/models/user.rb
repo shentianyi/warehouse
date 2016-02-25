@@ -15,11 +15,11 @@ class User < ActiveRecord::Base
 
   before_save :ensure_authentication_token!
 
-  validates_uniqueness_of :id, :user_name
+  validates_uniqueness_of :id, :nr
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
-         :authentication_keys => [:user_name]
+         :authentication_keys => [:nr]
 
   def ensure_authentication_token!
     if authentication_token.blank?

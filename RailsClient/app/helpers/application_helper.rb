@@ -30,7 +30,7 @@ module ApplicationHelper
 
   def search
     @condition=params[@model]
-    query=model.all#.unscoped
+    query=model.all #.unscoped
     @condition.each do |k, v|
       if (v.is_a?(Fixnum) || v.is_a?(String)) && !v.blank?
         puts @condition.has_key?(k+'_fuzzy')
@@ -76,8 +76,14 @@ module ApplicationHelper
   end
 
   def template
-    file_name="#{@model}_csv_upload_template.csv"
-    path=File.join($TEMPLATEPATH, file_name)
-    send_file path, :type => 'application/csv', :filename => file_name
+    if params[:extend].blank? || params[:extend]=='csv'
+      file_name="#{@model}_csv_upload_template.csv"
+      path=File.join($TEMPLATEPATH, file_name)
+      send_file path, :type => 'application/csv', :filename => file_name
+    else
+      file_name="#{@model}_excel_upload_template.excel"
+      path=File.join($TEMPLATEPATH, file_name)
+      send_file path, :filename => file_name
+    end
   end
 end

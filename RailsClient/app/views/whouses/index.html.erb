@@ -25,7 +25,7 @@
     <% @whouses.each_with_index do |whouse,index| %>
       <tr>
         <td><%= index +@whouses.offset+1%>
-        <td><%= whouse.id %> </td>
+        <td><%= whouse.nr %> </td>
         <td><%= whouse.name %></td>
         <td><%= whouse.location.name if whouse.location %></td>
         <td><%= link_to '库位列表',positions_whouse_path(whouse) %><span class="badge pull-right"><%= whouse.positions.count%></span></td>

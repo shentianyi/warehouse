@@ -1,6 +1,6 @@
 format:
  :csv_splitor: ';'
- :update_marker: 'DOUPDATE'
+ :update_marker: 'Operator'
  :file_max_size: 20971520
  
 path:
@@ -12,7 +12,6 @@ path:
  :import_parts_file_path: 'uploadfiles/parts'
  :import_part_positions_file_path: 'uploadfiles/part_positions'
  :import_fors_report_file_path: 'uploadfiles/fors_reports'
-
 
 api:
  auth:

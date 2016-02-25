@@ -15,9 +15,12 @@ module Import
           end
           data={}
           self.csv_cols.each do |col|
-            raise(ArgumentError, "行:#{line_no} #{col.header} 值constantize不可为空") if !col.null && row[col.header].blank?
-            if !col.is_foreign || (col.is_foreign && col.foreign.constantize.find_by_id(row[col.header]))
+           # raise(ArgumentError, "行:#{line_no} #{col.header} 值constantize不可为空") if !col.null && row[col.header].blank?
+            if !col.is_foreign || (col.is_foreign && (f=col.foreign.constantize.find_by_nr(row[col.header])))
               data[col.field]=row[col.header] unless row[col.header].blank?
+              if f.present?
+                data[col.field]=f.id
+              end
             end
           end
           query=nil
@@ -29,20 +32,20 @@ module Import
             end
           end
           # clean data
-          update_marker=(data.delete($UPMARKER).to_i==1)
+          operator=data.delete($UPMARKER)
 
           if query
             if item=self.unscoped.where(query).first
-              if update_marker
+              if operator=='update'
                 item.update(data)
-              else
-                #raise(ArgumentError, "行:#{line_no} 已经存在")
+              elsif operator=='delete'
+                item.destroy
               end
-            else
-           puts    self.create(data)
+            elsif operator=='new' || operator.blank?
+              puts self.create(data)
             end
-          else
-            puts  self.create(data)
+          elsif operator=='new' || operator.blank?
+            puts self.create(data)
           end
           msg.result=true
           msg.content='数据导入成功'
@@ -58,26 +61,26 @@ module Import
     def export_csv(path, query, user_agent)
       msg=Message.new
       #begin
-        File.open(path, 'wb', encoding: "#{Csv::CsvConfig.csv_write_encode(user_agent)}") do |f|
-          f.puts self.csv_headers.join($CSVSP)
-          items=query.nil? ? self.all : self.where(query).all
-          items.each do |item|
-            line=[]
-            proc=self.send("#{self.to_s.underscore}_down_block".to_sym)
-            proc.call(line, item)
-            #补齐不足的分号
-            count = line.count
-            header_count = self.csv_headers.count
+      File.open(path, 'wb', encoding: "#{Csv::CsvConfig.csv_write_encode(user_agent)}") do |f|
+        f.puts self.csv_headers.join($CSVSP)
+        items=query.nil? ? self.all : self.where(query).all
+        items.each do |item|
+          line=[]
+          proc=self.send("#{self.to_s.underscore}_down_block".to_sym)
+          proc.call(line, item)
+          #补齐不足的分号
+          count = line.count
+          header_count = self.csv_headers.count
 
-            if header_count > count
-              (header_count-count).times.each{|i| line[count+1+i] = ""}
-              line[header_count-1]=1
-            end
-            #
-            f.puts line.join($CSVSP)
+          if header_count > count
+            (header_count-count).times.each { |i| line[count+1+i] = "" }
+            line[header_count-1]='update'
           end
+          #
+          f.puts line.join($CSVSP)
         end
-        msg.result=true
+      end
+      msg.result=true
       #rescue => e
       #  msg.content =e.message
       #end
