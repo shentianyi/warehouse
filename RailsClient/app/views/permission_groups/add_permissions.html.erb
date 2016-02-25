@@ -69,10 +69,12 @@
     function ShowPermission() {
         <% @permissions.each_with_index do |p, index| %>
         if (<%= p[:status] %>) {
-            $('<div class="col-md-1"><input type="checkbox" class="CheckBox" id="<%= p[:id]%>" ischecked="true"> <strong>' + '<%= p[:name] %>' + '</strong></input></div>').appendTo('#HasPermission').ready(function () {
+            $('<div class="col-md-1" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">' +
+                    '<input type="checkbox" class="CheckBox" id="<%= p[:id]%>" ischecked="true"><strong title="<%= p[:name] %>">' + '<%= p[:name] %>' + '</strong></input></div>').appendTo('#HasPermission').ready(function () {
             });
         } else {
-            $('<div class="col-md-1"><input type="checkbox" class="CheckBox" id="<%= p[:id]%>" ischecked="false"> <strong>' + '<%= p[:name] %>' + '</strong></input></div>').appendTo('#NoPermission').ready(function () {
+            $('<div class="col-md-1" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">' +
+                    '<input type="checkbox" class="CheckBox" id="<%= p[:id]%>" ischecked="false"> <strong title="<%= p[:name] %>">' + '<%= p[:name] %>' + '</strong></input></div>').appendTo('#NoPermission').ready(function () {
             });
         }
         <% end %>
