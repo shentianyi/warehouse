@@ -2,45 +2,67 @@
     #HasPermission > strong, #NoPermission > strong {
         margin: -3px 10px 0 2px;
     }
+
+    .SavePermissions {
+        width: 200px;
+        font-size: 1.2em;
+        margin: 0 0 0 -37px;
+    }
+
+    a:hover {
+        background-color: white;
+    }
 </style>
 
-<h3 class="col-md-3">
-  Add Permission
-</h3>
-
-<div class="col-md-9" style="text-align: right;">
-  <button class="btn btn-primary SavePermissions" style="width: 200px;margin: 10px 0 0 0;">保存</button>
+<div class="panel panel-primary" style="margin: 20px 15px 0 15px;">
+  <div class="panel-body" style="text-align: left;display: flex">
+    <h4 class="col-md-1"><b>权限组名称:</b></h4>
+    <strong class="col-md-10" style="margin: 10px 0 0 -30px;"><%= @permission_group.name %> </strong>
+    <a href="/permission_groups">
+      <button class="btn btn-success SavePermissions">
+        <i class="glyphicon glyphicon-share-alt" style="transform: rotate(200deg)"></i>&emsp;返回
+      </button>
+    </a>
+  </div>
 </div>
-<!--
-<% @permissions.each_with_index do |p, index| %>
-    <tr>
-      <td><%= index+1 %>
-      <td><%= p[:name] %></td>
-      <td><%= p[:status] %></td>
-    </tr>
-<% end %>
--->
 
-<table class="table table-bordered">
-  <thead>
-  <tr>
-    <th>状态</th>
-    <th>Permissions</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr>
-    <td style="width: 200px;"><strong>已拥有权限组</strong></td>
-    <td id="HasPermission"></td>
-  </tr>
-  <tr>
-    <td style="width: 200px;"><strong>未拥有权限组</strong></td>
-    <td id="NoPermission"></td>
-  </tr>
-  </tbody>
-</table>
+<div class="col-md-12" style="margin: 20px 0 0 0;">
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <div class="panel-title" style="display: flex;">
+        <div class="col-md-3">
+          <h3>分配权限</h3>
+        </div>
+        <div class="col-md-9" style="text-align: right;">
+          <button class="btn btn-primary SavePermissions"><i class="glyphicon glyphicon-ok"></i>&emsp;保存</button>
+        </div>
+      </div>
+    </div>
+    <div class="panel-body" style="text-align: center;border-bottom: 1px solid #000000;">
+      <div class="col-md-2">
+        <h4>已拥有权限</h4>
+      </div>
+
+      <div class="col-md-9" id="HasPermission" style="border-left: 1px solid #CCCCCC;min-height: 60px;">
+      </div>
+    </div>
+
+    <div class="panel-body" style="text-align: center;">
+      <div class="col-md-2">
+        <h4>未拥有权限</h4>
+      </div>
+
+      <div class="col-md-9" id="NoPermission" style="border-left: 1px solid #CCCCCC;min-height: 60px;">
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
+    var ClientHeight = document.documentElement.clientHeight;
+    $('#HasPermission').css({height: (ClientHeight - 450) / 2 + 'px'});
+    $('#NoPermission').css({height: (ClientHeight - 450) / 2 + 'px'});
+
     ShowPermission();
 
     var PermissionJSON = [];

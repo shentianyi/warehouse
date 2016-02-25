@@ -15,8 +15,8 @@
     <h3>员工列表</h3>
     <hr style="margin: 0;">
     <% if current_user.admin? %>
-        <div class="col-md-12">
-          <div class="col-md-4" style="text-align: center;">
+        <div class="col-md-12" style="text-align: center;">
+          <div class="col-md-4">
             <%= link_to "新建员工", send("new_#{@model}_path"), :class => 'btn btn-primary', :style => 'width:200px;margin:10px 0 0 0;color:white;' %>
           </div>
 
