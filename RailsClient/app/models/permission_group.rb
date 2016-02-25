@@ -23,8 +23,6 @@ class PermissionGroup < ActiveRecord::Base
     data=[]
 
     permissions=self.permissions
-    puts permissions
-    puts '-------------------------------------------------------------------'
     Permission.all.each do |p|
       data<<{
           id: p.id,
@@ -32,7 +30,6 @@ class PermissionGroup < ActiveRecord::Base
           status: permissions.include?(p)
       }
     end
-
     data
   end
 end

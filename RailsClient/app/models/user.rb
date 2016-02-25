@@ -72,12 +72,25 @@ class User < ActiveRecord::Base
     self.location_destinations.pluck(:id)
   end
 
+  def manage_permission_groups ids
+    deletes=self.user_permission_groups.pluck(:permission_group_id) - ids
+    deletes.each do |d|
+      UserPermissionGroup.where(permission_group_id: d, user_id: self.id).first.destroy
+    end
+
+    creates=ids - self.user_permission_groups.pluck(:permission_group_id)
+    creates.each do |c|
+      up=UserPermissionGroup.new({permission_group_id: c, user_id: self.id})
+      if up.save
+        self.user_permission_groups<<up
+      end
+    end
+  end
+
   def permission_group_details
     data=[]
 
     permission_groups=self.permission_groups
-    puts permission_groups
-    puts '-------------------------------------------------------------------'
     PermissionGroup.all.each do |p|
       data<<{
           id: p.id,
@@ -86,7 +99,6 @@ class User < ActiveRecord::Base
           status: permission_groups.include?(p)
       }
     end
-
     data
   end
 

@@ -37,7 +37,6 @@ class PermissionGroupsController < ApplicationController
   end
 
   def permission_details
-    p '0000000000000000000000000000000000'
     @permissions=[]
     if permission_group=PermissionGroup.find_by_id(params[:PermissionGroupsID])
       permission_group.permissions.each do |p|
@@ -45,30 +44,26 @@ class PermissionGroupsController < ApplicationController
       end
     end
 
-    p @permissions
     render :json => @permissions
   end
 
   def add_permissions
     if request.post?
-      p "99999999999999999999999999999999999999999"
       p_ids=[]
-      params[:PermissionData].each do |p|
+      params[:permission_data].each do |p|
         if p.last[:status]=='true'
           p_ids<<p.last[:id]
         end
       end
 
-      @permission_group=PermissionGroup.find_by_id(params[:PermissionGroupID])
+      @permission_group=PermissionGroup.find_by_id(params[:permission_Group_id])
       @permission_group.manage_permissions(p_ids)
       @permissions=@permission_group.permission_details
 
       render :add_permissions
     else
-      p '1111111111111111111111111111111111111111111'
       @permission_group=PermissionGroup.find_by_id(params["format"])
       @permissions=@permission_group.permission_details
-      p @permissions
     end
   end
 
