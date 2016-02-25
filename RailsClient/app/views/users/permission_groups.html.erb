@@ -83,6 +83,14 @@
     }
     <% end %>
 
+    $(".CheckBox").click(function () {
+        if ($(this).attr('ischecked') == "true") {
+            $(this).attr('ischecked', 'false');
+        } else {
+            $(this).attr('ischecked', 'true');
+        }
+    });
+
     $('.CheckBoxName').unbind().on('click', function () {
         var PermissionGroupsID = $(this).parent().children('input').attr('id');
         var PermissionGroupsName = $(this).html();
