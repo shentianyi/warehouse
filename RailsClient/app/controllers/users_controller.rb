@@ -89,9 +89,6 @@ class UsersController < ApplicationController
   end
 
   def permission_groups
-
-
-
     if request.post?
       p "1111111111111111111111111111111111"
       p params

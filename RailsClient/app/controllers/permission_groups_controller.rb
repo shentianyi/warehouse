@@ -36,9 +36,15 @@ class PermissionGroupsController < ApplicationController
     respond_with(@permission_group)
   end
 
-  def details
-
+  def permission_details
     p '0000000000000000000000000000000000'
+    p params
+    if permission_group=PermissionGroup.find_by_id(params[:PermissionGroupsID])
+      @permissions=permission_group.permissions
+    else
+      @permissions=[]
+    end
+    render :json => []
   end
 
   def add_permissions

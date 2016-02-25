@@ -22,7 +22,7 @@ Rails.application.routes.draw do
     collection do
       get :search
       match :add_permissions, to: :add_permissions, via: [:get, :post]
-      get :details
+      get :permission_details
     end
   end
 
