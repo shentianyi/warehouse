@@ -18,3 +18,120 @@
     </table>
 
 <% end %>
+
+<style>
+    .CheckBoxName {
+        cursor: pointer;
+    }
+</style>
+
+<div class="panel panel-primary" style="margin: 20px 15px 0 15px;">
+  <div class="panel-body" style="text-align: center;">
+    <div class="col-md-3">
+      <strong>员工号:</strong>
+      <strong>
+        <%= @user.id %></strong>
+    </div>
+    <div class="col-md-3">
+      <strong>姓名:</strong>
+      <strong><%= @user.name %></strong>
+    </div>
+    <div class="col-md-3">
+      <strong>所属地点:</strong>
+      <strong><%= @user.location.name %></strong>
+    </div>
+    <div class="col-md-3">
+      <strong>角色:</strong>
+      <strong><%= @user.role %></strong>
+    </div>
+  </div>
+</div>
+
+
+<div class="col-md-12" style="margin: 20px 0 0 0;">
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <div class="panel-title" style="display: flex;">
+        <div class="col-md-3">
+          <h3>Permission Groups</h3>
+        </div>
+        <div class="col-md-9" style="text-align: right;">
+          <button class="btn btn-primary" style="width: 200px;height:50px;margin: 5px 0 0 0;">保存</button>
+        </div>
+      </div>
+    </div>
+    <div class="panel-body" style="text-align: center;border-bottom: 1px solid #000000;">
+      <div class="col-md-2">
+        <h4>已拥有权限</h4>
+      </div>
+
+      <div class="col-md-9 HasPermissionGroups" style="border-left: 1px solid #CCCCCC;min-height: 60px;">
+      </div>
+    </div>
+
+    <div class="panel-body" style="text-align: center;">
+      <div class="col-md-2">
+        <h4>未拥有权限</h4>
+      </div>
+
+      <div class="col-md-9 NoPermissionGroups" style="border-left: 1px solid #CCCCCC;min-height: 60px;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    var ClientHeight = document.documentElement.clientHeight;
+    $('.HasPermissionGroups').css({height: (ClientHeight - 450) / 2 + 'px'});
+    $('.NoPermissionGroups').css({height: (ClientHeight - 450) / 2 + 'px'});
+
+    <% @permission_groups.each_with_index do |p| %>
+    if (<%= p[:status] %>) {
+        $('<div class="col-md-1" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">' +
+                '<input type="checkbox" class="CheckBox" id="<%= p[:id]%>" ischecked="true" checked><strong class="CheckBoxName" title="<%= p[:name] %>">' + '<%= p[:name] %>' + '</strong></input></div>').appendTo('.HasPermissionGroups').ready(function () {
+        });
+    } else {
+        $('<div class="col-md-1" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">' +
+                '<input type="checkbox" class="CheckBox" id="<%= p[:id]%>" ischecked="false"> <strong class="CheckBoxName" title="<%= p[:name] %>">' + '<%= p[:name] %>' + '</strong></input></div>').appendTo('.NoPermissionGroups').ready(function () {
+        });
+    }
+    <% end %>
+
+    $('.CheckBoxName').unbind().on('click', function () {
+        console.log($(this));
+        console.log($(this).html());
+        console.log($(this).parent());
+        console.log($(this).parent().children('input'));
+        console.log($(this).parent().children('input').attr('id'));
+        console.log($(this).parent().children('input').attr('ischecked'));
+
+        var PermissionGroupsID = $(this).parent().children('input').attr('id');
+        var PermissionGroupsName = $(this).html();
+        var PermissionGroupsStatus = $(this).parent().children('input').attr('ischecked');
+
+        $('.ShowPermissionTips').remove();
+
+        $('<div style="width: 200px;height: 100px;background: #000;display: none;" class="ShowPermissionTips" > </div>').appendTo($(this)).ready(function () {
+        });
+
+        $('.ShowPermissionTips').fadeIn(400);
+
+        $.ajax({
+            url: 'GetPermission',
+            type: 'get',
+            data: {
+                PermissionGroupsID: PermissionGroupsID
+            },
+            success: function (data) {
+                console.log("Get Successful");
+                console.log(data);
+            },
+            error: function () {
+                console.log("Something error");
+            },
+            complete: function (xhr) {
+                if (xhr.status == 304) return;
+            }
+        })
+    });
+</script>
