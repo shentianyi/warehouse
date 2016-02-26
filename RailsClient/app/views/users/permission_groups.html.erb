@@ -20,8 +20,8 @@
         border-right: 5px solid transparent;
         display: none;
         height: 0;
-        margin: 0 0 0 60px;
-        width: 0;
+        margin: 0 0 0 90px;
+        width: 0;   
     }
 
     .SavePermissionGroups {
@@ -142,7 +142,7 @@
                 console.log(data);
                 if (data == "") {
                     $('<div class="ShowPermissionTipsCaret"></div>' +
-                            '<div class="ShowPermissionTips" style="padding: 10px 0 0 10px;"> Nothing </div>').appendTo($('#' + PermissionGroupsID).parent()).ready(function () {
+                            '<div class="ShowPermissionTips" style="padding: 10px 0 0 0;"> Nothing </div>').appendTo($('#' + PermissionGroupsID).parent()).ready(function () {
                     });
                     $('.ShowPermissionTipsCaret').fadeIn(400);
                     $('.ShowPermissionTips').fadeIn(400);
