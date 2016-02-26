@@ -1,7 +1,7 @@
 class Location < ActiveRecord::Base
   include Extensions::UUID
   include Import::LocationCsv
-
+  validates_uniqueness_of :nr, message: '不可重复'
   belongs_to :tenant
   has_many :users
   has_many :whouses, :dependent => :destroy

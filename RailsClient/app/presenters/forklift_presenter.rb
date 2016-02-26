@@ -1,5 +1,5 @@
 class ForkliftPresenter<Presenter
-  Delegators=[:id, :container_id, :destinationable_id, :destinationable, :created_at, :state, :user_id, :children,:descendants]
+  Delegators=[:id, :container_id, :destinationable_id, :destinationable, :created_at, :state, :user, :user_id, :children, :descendants]
   def_delegators :@forklift, *Delegators
 
   def initialize(forklift_lc)
@@ -16,7 +16,7 @@ class ForkliftPresenter<Presenter
   end
 
   def user_id
-    @forklift.user_id.blank? ? '' : @forklift.user_id
+    @forklift.user.blank? ? '' : @forklift.user.nr
   end
 
   def sum_packages
@@ -34,6 +34,11 @@ class ForkliftPresenter<Presenter
   def packages
     LogisticsContainerService.get_packages(@forklift)
   end
+
+
+  # def stocker_nr
+  #   self.stocker.present? ? self.stocker.nr : ''
+  # end
 
   def to_json
     {
