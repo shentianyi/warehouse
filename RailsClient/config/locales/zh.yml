@@ -195,6 +195,15 @@ zh:
     errors:
       <<: *errors
   activerecord:
+    models:
+      location: '地点'
+    attributes:
+      location:
+        nr: '编号'
+        name: '名称'
+        tenant_id: '所属公司'
+        address: '地址'
+        tel: '联系方式'
     errors:
       <<: *errors
   system:

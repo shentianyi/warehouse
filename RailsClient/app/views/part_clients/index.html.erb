@@ -15,7 +15,7 @@
         <td><%= part_client.part.nr %></td>
         <td><%= part_client.client_part_nr %></td>
         <td><%= link_to 'Edit', edit_tenant_part_client_path(part_client,{tenant_id:part_client.client_tenant_id}) %></td>
-        <td><%= link_to 'Destroy', part_client, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Destroy', "/tenants/#{part_client.client_tenant_id}/part_clients/#{part_client.id}", method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>

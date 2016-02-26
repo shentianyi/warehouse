@@ -1,7 +1,7 @@
 class PartClientsController < ApplicationController
   before_action :set_part_client, only: [:edit, :update, :destroy]
 
-  before_action :set_tenant, only: [:index, :new, :edit]
+  before_action :set_tenant, only: [:index, :new, :edit,:destroy]
   before_action :set_part_clients, only: [:index]
   before_action :prepare_tenant_client_part_params, only: [:create, :update]
 
@@ -43,8 +43,7 @@ class PartClientsController < ApplicationController
 
   def destroy
     @part_client.destroy
-    redirect_to tenant_part_clients_path
-
+    redirect_to  tenant_part_clients_path(@tenant),notice: '删除成功'
     #respond_with(@part_client)
   end
 

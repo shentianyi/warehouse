@@ -11,27 +11,27 @@
     <% end %>
 
     <p>
-      <%= f.label :nr, '编 号' %>
+      <%= f.label :nr %>
       <%= f.text_field :nr %>
     </p>
 
     <p>
-      <%= f.label :name, '名 称' %>
+      <%= f.label :name %>
       <%= f.text_field :name %>
     </p>
 
     <p>
-      <%= f.label :tenant_id, '所属公司' %>
+      <%= f.label :tenant_id %>
       <%= f.select(:tenant_id, Tenant.all.collect { |t| [t.name, t.id] }) %>
     </p>
 
     <p>
-      <%= f.label :address, '地 址' %>
+      <%= f.label :address%>
       <%= f.text_field :address %>
     </p>
 
     <p>
-      <%= f.label :tel, '联系方式' %>
+      <%= f.label :tel %>
       <%= f.text_field :tel %>
     </p>
 
