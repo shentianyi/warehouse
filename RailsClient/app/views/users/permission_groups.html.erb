@@ -21,27 +21,41 @@
         font-size: 1.2em;
     }
 
-    a:hover {
+    a:hover, a:active {
+        text-decoration: none;
         background-color: white;
+        color: black;
+        outline: none;
     }
 </style>
 
 <div class="panel panel-primary" style="margin: 20px 15px 0 15px;">
   <div class="panel-body" style="text-align: center;">
-    <div class="col-md-3">
+
+    <div class="col-md-2" style="border-right: 1px solid #ccc;">
+      <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+        <li class="active">管理</li>
+        <li>
+          <a href="/users">员工</a>
+        </li>
+        <li class="active">分配权限</li>
+      </ol>
+    </div>
+
+    <div class="col-md-3" style="margin: 20px 0 0 0;">
       <strong>员工号:</strong>
       <strong style="overflow: hidden;text-overflow: ellipsis;" title="<%= @user.id %>">
         <%= @user.id %></strong>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2" style="margin: 20px 0 0 0;">
       <strong>姓名:</strong>
       <strong><%= @user.name %></strong>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3" style="margin: 20px 0 0 0;">
       <strong>所属地点:</strong>
       <strong><%= @user.location.name %></strong>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2" style="margin: 20px 0 0 0;">
       <strong>角色:</strong>
       <strong><%= @user.role %></strong>
     </div>
