@@ -43,7 +43,7 @@
         <h4>已拥有权限</h4>
       </div>
 
-      <div class="col-md-9" id="HasPermission" style="border-left: 1px solid #CCCCCC;min-height: 60px;">
+      <div class="col-md-10" id="HasPermission" style="border-left: 1px solid #CCCCCC;min-height: 60px;">
       </div>
     </div>
 
@@ -52,7 +52,7 @@
         <h4>未拥有权限</h4>
       </div>
 
-      <div class="col-md-9" id="NoPermission" style="border-left: 1px solid #CCCCCC;min-height: 60px;">
+      <div class="col-md-10" id="NoPermission" style="border-left: 1px solid #CCCCCC;min-height: 60px;">
       </div>
     </div>
   </div>
@@ -95,11 +95,11 @@
     function ShowPermission() {
         <% @permissions.each_with_index do |p| %>
         if (<%= p[:status] %>) {
-            $('<div class="col-md-2" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">' +
+            $('<div class="col-md-1" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;border: 1px solid lightseagreen;background: lightseagreen;color: white;border-radius: 4px;margin:0 5px 5px 5px;text-align: left;">' +
                     '<input type="checkbox" class="CheckBox" id="<%= p[:id]%>" ischecked="true" checked><strong title="<%= p[:name] %>">' + '<%= p[:name] %>' + '</strong></input></div>').appendTo('#HasPermission').ready(function () {
             });
         } else {
-            $('<div class="col-md-2" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">' +
+            $('<div class="col-md-1" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;border: 1px solid steelblue;background: steelblue;color: white; border-radius: 4px;margin:0 5px 5px 5px;text-align: left;">' +
                     '<input type="checkbox" class="CheckBox" id="<%= p[:id]%>" ischecked="false"> <strong title="<%= p[:name] %>">' + '<%= p[:name] %>' + '</strong></input></div>').appendTo('#NoPermission').ready(function () {
             });
         }
