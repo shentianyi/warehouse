@@ -92,11 +92,11 @@
 
     <% @permission_groups.each_with_index do |p| %>
     if (<%= p[:status] %>) {
-        $('<div class="col-md-1" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;background: lightseagreen;color: white;border-radius: 4px;margin:0 5px 5px 5px;text-align: left;"">' +
+        $('<div class="col-md-1" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;background: lightseagreen;color: white;border-radius: 4px;margin:0 5px 5px 5px;text-align: left;min-height:40px;padding: 5px 0 0 10px;">' +
                 '<input type="checkbox" class="CheckBox" id="<%= p[:id]%>" ischecked="true" checked><strong class="CheckBoxName" title="<%= p[:name] %>">' + '<%= p[:name] %>' + '</strong></input></div>').appendTo('.HasPermissionGroups').ready(function () {
         });
     } else {
-        $('<div class="col-md-1" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;background: steelblue;color: white; border-radius: 4px;margin:0 5px 5px 5px;text-align: left;"">' +
+        $('<div class="col-md-1" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;background: steelblue;color: white; border-radius: 4px;margin:0 5px 5px 5px;text-align: left;min-height:40px;padding: 5px 0 0 10px;">' +
                 '<input type="checkbox" class="CheckBox" id="<%= p[:id]%>" ischecked="false"> <strong class="CheckBoxName" title="<%= p[:name] %>">' + '<%= p[:name] %>' + '</strong></input></div>').appendTo('.NoPermissionGroups').ready(function () {
         });
     }
@@ -131,6 +131,7 @@
             success: function (data) {
                 console.log(data);
                 if (data == "") {
+
                     $('<div class="ShowPermissionTips" style="padding: 10px 0 0 0;"> Nothing </div>').appendTo($('#' + PermissionGroupsID).parent()).ready(function () {
                     });
                     $('.ShowPermissionTipsCaret').fadeIn(400);
