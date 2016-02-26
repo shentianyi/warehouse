@@ -1,6 +1,19 @@
-<h2>编辑员工</h2>
+<style>
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+</style>
+
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li>
+      <a href="/users">员工列表</a>
+    </li>
+    <li class="active">编辑员工信息</li>
+  </ol>
+</div>
 
 <%= render 'form' %>
-
-<%= link_to '详细', @user %> |
-<%= link_to '返回', users_path %>
