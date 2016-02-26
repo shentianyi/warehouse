@@ -48,6 +48,24 @@ class PartClientsController < ApplicationController
     #respond_with(@part_client)
   end
 
+
+
+  def import
+    if request.post?
+      msg = Message.new
+      begin
+        file=params[:files][0]
+        fd = FileData.new(data: file, oriName: file.original_filename,
+                          path: $tmp_file_path,
+                          pathName: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
+        fd.save
+        msg = FileHandler::Excel::PartClientHandler.import(fd,params[:tenant_id])
+      rescue => e
+        msg.content = e.message
+      end
+      render json: msg
+    end
+  end
   private
   def set_tenant
     unless @tenant=Tenant.find_by_id(params[:tenant_id])
@@ -67,9 +85,6 @@ class PartClientsController < ApplicationController
     @tenant=Tenant.find_by_id(params[:part_client][:client_tenant_id])
     mp = part_client_params
 
-
-    p action_name
-
     if action_name=='create'
       @part_client=PartClient.new(mp)
       mp.keys.each { |k|
@@ -80,7 +95,6 @@ class PartClientsController < ApplicationController
     end
 
     if params[:part_client][:part_id].present? && (part=Part.find_by_nr(params[:part_client][:part_id]))
-     # @part_client.part =part
       @part_client.part_id=part.id
     else
       @part_client.errors.add(:part_id, '零件号不存在')

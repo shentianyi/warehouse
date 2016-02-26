@@ -50,7 +50,8 @@ class ScrapListItemsController < ApplicationController
       msg = Message.new
       begin
         file=params[:files][0]
-        fd = FileData.new(data: file, oriName: file.original_filename, path: $tmp_file_path, pathName: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
+        fd = FileData.new(data: file, oriName: file.original_filename,
+                          path: $tmp_file_path, pathName: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
         fd.save
         msg = FileHandler::Excel::ScrapListItemHandler.import(fd,session[:scrap_list_id])
       rescue => e

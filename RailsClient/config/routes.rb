@@ -27,9 +27,11 @@ Rails.application.routes.draw do
   end
 
   resources :tenants do
-   resources :part_clients do 
-     match :import,to: :import,via:[:get,:post]
-   end
+    resources :part_clients do
+      collection do
+        match :import, to: :import, via: [:get, :post]
+      end
+    end
   end
 
   resources :part_clients
