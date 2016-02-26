@@ -1,4 +1,7 @@
 class DeliveryService
+  JIAXUAN_HEADERS=[
+      :no, :forklift_id, :package_id, :no800, :cz_part_id, :sh_part_id, :qty, :unit, :batch
+  ]
 
   def self.dispatch(movable, destination, user)
     if movable.descendants.count == 0
@@ -44,7 +47,7 @@ class DeliveryService
 
       #设置forklift的状态
       movable.children.each { |c|
-        unless (m = ForkliftService.confirm_receive(c,user)).result
+        unless (m = ForkliftService.confirm_receive(c, user)).result
           return m
         end
       }
@@ -262,7 +265,7 @@ class DeliveryService
           if plc = LogisticsContainer.find_latest_by_container_id(book.cell(2, 1))
             plc.get_movable_service.receive(plc, default_receiver)
 
-            if  flc = plc.parent
+            if flc = plc.parent
               flc.get_movable_service.receive(flc, default_receiver)
 
               if dlc = flc.parent
@@ -281,4 +284,112 @@ class DeliveryService
     end
     return msg
   end
+
+  def self.send_jiaxuan_delivery file, user
+    msg=Message.new
+    begin
+      ActiveRecord::Base.transaction do
+        book=Roo::Excelx.new file
+
+        # generate delivery
+        # generate delivery container
+        source = Location.first
+        unless source
+          raise 'Destination not found!'
+        end
+
+        delivery = Delivery.create({
+                                       remark: '常州莱尼发运数据',
+                                       user_id: user.id,
+                                       location_id: source.id
+                                   })
+
+        # generate delivery location_container
+        destination = Location.last
+
+        unless destination
+          raise 'Destination not found!'
+        end
+        dlc = delivery.logistics_containers.build(source_location_id: source.id, des_location_id: destination.id, user_id: user.id, remark: '常州莱尼发运数据', state: MovableState::WAY)
+        dlc.destinationable = destination
+        dlc.save
+        # send dlc,create record for dlc
+        impl_time = Time.now
+        Record.create({recordable: dlc, impl_id: user.id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
+
+
+        # generate forklifts containers
+        forklifts={}
+        forklift_ids=[]
+
+        book.default_sheet=book.sheets.first
+        return nil if book.cell(2, 1).nil?
+        2.upto(book.last_row) do |line|
+          forklift_ids<<book.cell(line, 2).to_s.sub(/\.0/, '')
+        end
+
+        forklift_ids.uniq.each do |forklift_id|
+          forklift = Forklift.create({
+                                         id: forklift_id,
+                                         user_id: user.id,
+                                         location_id: source.id
+                                     })
+          #create forklift lc
+          flc = forklift.logistics_containers.build({source_location_id: source.id, des_location_id: destination.id, user_id: user.id, state: MovableState::WAY})
+          flc.destinationable = destination
+          flc.save
+          Record.create({recordable: flc, impl_id: user.id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
+          dlc.add(flc)
+          forklifts[forklift_id]=flc
+        end
+
+        # generate packages
+        2.upto(book.last_row) do |line|
+          row = {}
+          JIAXUAN_HEADERS.each_with_index do |k, i|
+            row[k] = book.cell(line, i+1).to_s.strip
+            if ['forklift_id', 'package_id', 'no800', 'cz_part_id', 'sh_part_id', 'batch'].include?(k.to_s)
+              row[k]=row[k].sub(/\.0/, '')
+            end
+          end
+
+          if plc = LogisticsContainer.find_latest_by_container_id(row[:package_id])
+            #if found and can copy
+            forklifts[row[:forklift_id]].add(plc)
+          else
+            #create container
+            package = Package.create({
+                                         id: row[:package_id],
+                                         location_id: source.id,
+                                         part_id: row[:cz_part_id],
+                                         user_id: user.id,
+                                         quantity: row[:qty],
+                                         state: PackageState::WAY
+                                     })
+            #create lc
+            plc = package.logistics_containers.build({
+                                                         source_location_id: source.id,
+                                                         des_location_id: destination.id,
+                                                         user_id: user.id,
+                                                         state: MovableState::WAY
+                                                     })
+            plc.destinationable = destination
+            plc.save
+            Record.create({recordable: plc, impl_id: user.id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
+            forklifts[row[:forklift_id]].add(plc)
+          end
+        end
+
+      end
+
+      msg.content ='处理成功'
+      msg.result =true
+    rescue => e
+      msg.result=false
+      msg.content = e.message
+    end
+
+    return msg
+  end
+
 end
