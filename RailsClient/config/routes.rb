@@ -126,7 +126,11 @@ Rails.application.routes.draw do
     end
   end
   resources :led_states
-  resources :sys_configs
+  resources :sys_configs do
+    collection do
+      match :jiaxuan_extra, to: :jiaxuan_extra, via: [:get, :post]
+    end
+  end
   resources :logistics_containers do
     collection do
       get :search

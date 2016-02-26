@@ -1,0 +1,32 @@
+<div class="config-panel">
+  <div>
+    <h4 class="bg-primary">
+      <span class='config-title'><%= @sys_configs.first.category %></span>
+    </h4>
+    <table class="table table-bordered table-striped globle-table">
+      <thead>
+      <tr>
+        <th>配置名称</th>
+        <th>代码</th>
+        <th>地点</th>
+        <th></th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <% @sys_configs.each do |sys_config| %>
+          <tr>
+            <td><%= sys_config.name %></td>
+            <td><%= sys_config.code %></td>
+            <% if sys_config.index == 1200 %>
+                <td title=<%= sys_config.description %>><%= Location.find_by_nr(sys_config.value).name %></td>
+            <% else %>
+                <td title=<%= sys_config.description %>><%= Tenant.find_by_code(sys_config.value).name %></td>
+            <% end %>
+          </tr>
+      <% end %>
+      </tbody>
+
+    </table>
+  </div>
+</div>

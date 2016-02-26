@@ -61,6 +61,10 @@ class SysConfigsController < ApplicationController
     end
   end
 
+  def jiaxuan_extra
+    @sys_configs = SysConfig.where(category: '佳轩扩展配置')
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_sys_config

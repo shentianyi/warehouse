@@ -72,6 +72,24 @@ ActiveRecord::Base.transaction do
     SysConfig.create(code: 'PRINT_SERVER', value: 'http://192.168.8.77:9000', category: '打印服务配置', index: 1000, name: '打印服务器地址')
   end
 
+  #佳轩扩展配置
+  unless SysConfig.find_by_code('JIAXUAN_EXTRA_SOURCE')
+    SysConfig.create(code: 'JIAXUAN_EXTRA_SOURCE', value: l.nr, category: '佳轩扩展配置', index: 1200, name: '发运地址')
+  end
+
+  unless SysConfig.find_by_code('JIAXUAN_EXTRA_DESTINATION')
+    SysConfig.create(code: 'JIAXUAN_EXTRA_DESTINATION', value: l.nr, category: '佳轩扩展配置', index: 1200, name: '接收地址')
+  end
+
+  unless SysConfig.find_by_code('JIAXUAN_EXTRA_SH_CUSTOM_CODE')
+    SysConfig.create(code: 'JIAXUAN_EXTRA_SH_CUSTOM', value: Tenant.first.code, category: '佳轩扩展配置', index: 1300, name: '上海客户编码')
+  end
+
+  unless SysConfig.find_by_code('JIAXUAN_EXTRA_CZ_CUSTOM_CODE')
+    SysConfig.create(code: 'JIAXUAN_EXTRA_CZ_CUSTOM', value: Tenant.last.code, category: '佳轩扩展配置', index: 1300, name: '常州客户编码')
+  end
+
+
 
   # api v3
   MoveType.create!([{typeId: 'MOVE', short_desc: 'move type'},

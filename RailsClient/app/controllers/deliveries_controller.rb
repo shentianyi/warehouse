@@ -109,9 +109,7 @@ class DeliveriesController < ApplicationController
         file=params[:files][0]
         data=FileData.new(data: file, oriName: file.original_filename, path: $DELIVERYPATH, pathName: "#{Time.now.strftime('%Y%m%d%H%M%S')}-#{file.original_filename}")
         data.saveFile
-        msg= DeliveryService.send_jiaxuan_delivery(data.full_path, current_user)
-        #msg.result =true
-        #msg.content= '导入成功'
+        msg=FileHandler::Excel::DeliveryHandler.send_jiaxuan_delivery(data, current_user)
       else
         msg.content='未选择文件或只能上传一个文件'
       end
