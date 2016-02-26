@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160224075925) do
+ActiveRecord::Schema.define(version: 20160226082611) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -496,7 +496,7 @@ ActiveRecord::Schema.define(version: 20160224075925) do
     t.datetime "updated_at"
   end
 
-  add_index "part_clients", ["part_id"], name: "index_part_clients_on_part_id", using: :btree
+  add_index "part_clients", ["part_id"], name: "index_part_clients_on_parts_id", using: :btree
 
   create_table "part_positions", force: true do |t|
     t.string   "part_id"
@@ -673,11 +673,12 @@ ActiveRecord::Schema.define(version: 20160224075925) do
     t.string   "name"
     t.string   "desc"
     t.integer  "type"
-    t.boolean  "is_delete",  default: false
-    t.boolean  "is_dirty",   default: true
-    t.boolean  "is_new",     default: true
+    t.boolean  "is_delete",   default: false
+    t.boolean  "is_dirty",    default: true
+    t.boolean  "is_new",      default: true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "match_value", default: true
   end
 
   add_index "regex_categories", ["id"], name: "index_regex_categories_on_id", using: :btree

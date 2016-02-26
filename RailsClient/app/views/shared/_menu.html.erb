@@ -94,8 +94,6 @@
       <li class="divider"></li>
       <li id='pick_item_filter_li'><a href="<%= pick_item_filters_path %>">员工择货规则</a></li>
       <li class="divider"></li>
-      <li id='modem_li'><a href="<%= modems_path %>">协调器</a></li>
-      <li id='led_li'><a href="<%= leds_path %>">LED</a></li>
       <li id='led_li'><a href="<%= permissions_path %>">权限列表</a></li>
       <li id='led_li'><a href="<%= permission_groups_path %>">权限分组</a></li>
     </ul>
@@ -127,12 +125,8 @@
     <a class="dropdown-toggle" data-toggle="dropdown" href="#">配置<span class="caret"></span></a>
     <ul class="dropdown-menu" role="setting">
       <li id='regex_li'><a href="<%= regex_categories_path %>">正则规范配置</a></li>
-<!--	  <li id='label_li'><a href="<%= labels_path %>">标签配置</a></li>
-	  <li id='sync_li'><a href="<%= syncs_path %>">同步配置</a></li>
-	  -->
 	  <li class="divider"></li>
       <li id='sys_config_li'><a href="<%= sys_configs_path %>">系统配置</a></li>
-	  <!--      <li id="led_state_li"><a href="<%= led_states_path %>">LED配置</a></li>-->
     </ul>
   </li>
   <li><a href="<%= destroy_user_session_path %>">｜注 销｜</a></li>

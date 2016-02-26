@@ -20,6 +20,8 @@ module FileHandler
                   row[k]=row[k].sub(/\.0/, '') if k=='零件号' || k=='客户零件号'
                 end
 
+                part=Part.find_by_nr(row['零件号'])
+
                 if row['Operator']=='update'
                   if pc= PartClient.where(
                       part_id: part.id, client_tenant_id: tenant_id).first
