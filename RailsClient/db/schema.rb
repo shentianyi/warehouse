@@ -73,6 +73,11 @@ ActiveRecord::Schema.define(version: 20160226082611) do
     t.string   "part_id_display"
     t.string   "quantity_display"
     t.string   "fifo_time_display"
+    t.string   "extra_800_no"
+    t.string   "extra_cz_part_id"
+    t.string   "extra_sh_part_id"
+    t.string   "extra_unit"
+    t.string   "extra_batch"
   end
 
   add_index "containers", ["current_positionable_id"], name: "index_containers_on_current_positionable_id", using: :btree

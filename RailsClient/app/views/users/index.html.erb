@@ -34,8 +34,8 @@
         <div>
           <div class="col-md-3">
               <span>员工号：
-                <input type="text" name="user[id]" value="<%= @id %>"/>
-                <input type="hidden" name="user[id_fuzzy]"/>
+                <input type="text" name="user[nr]" value="<%= @nr %>"/>
+                <input type="hidden" name="user[nr_fuzzy]"/>
               </span>
           </div>
 
@@ -84,8 +84,7 @@
       <tr>
         <% if current_user.admin? || current_user.manager? || (current_user.id == user.id) %>
             <td><%= index+@users.offset+1 %>
-            <td><%= user.id %>
-            <td><%= user.user_name %></td>
+            <td><%= user.nr %>
             <td><%= user.name %>
             <td><%= OperationMode.display(user.operation_mode) %></td>
             <!--<td><%= user.current_sign_in_ip %></td>-->
