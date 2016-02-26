@@ -12,6 +12,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 20160224075925) do
+
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
     t.string   "targetable_id"
@@ -495,7 +496,7 @@ ActiveRecord::Schema.define(version: 20160224075925) do
     t.datetime "updated_at"
   end
 
-  add_index "part_clients", ["part_id"], name: "index_part_clients_on_parts_id", using: :btree
+  add_index "part_clients", ["part_id"], name: "index_part_clients_on_part_id", using: :btree
 
   create_table "part_positions", force: true do |t|
     t.string   "part_id"
@@ -813,16 +814,6 @@ ActiveRecord::Schema.define(version: 20160224075925) do
   add_index "sys_configs", ["code"], name: "index_sys_configs_on_code", using: :btree
   add_index "sys_configs", ["id"], name: "index_sys_configs_on_id", using: :btree
 
-  create_table "user_permission_groups", force: true do |t|
-    t.integer  "user_id"
-    t.integer  "permission_group_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "user_permission_groups", ["permission_group_id"], name: "index_user_permission_groups_on_permission_group_id", using: :btree
-  add_index "user_permission_groups", ["user_id"], name: "index_user_permission_groups_on_user_id", using: :btree
-
   create_table "tenants", force: true do |t|
     t.string   "name"
     t.string   "code"
@@ -835,6 +826,17 @@ ActiveRecord::Schema.define(version: 20160224075925) do
     t.datetime "updated_at"
     t.string   "short_name"
   end
+
+  create_table "user_permission_groups", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "permission_group_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "user_permission_groups", ["permission_group_id"], name: "index_user_permission_groups_on_permission_group_id", using: :btree
+  add_index "user_permission_groups", ["user_id"], name: "index_user_permission_groups_on_user_id", using: :btree
+
   create_table "users", force: true do |t|
     t.string   "uuid",                   limit: 36,                 null: false
     t.boolean  "is_delete",                         default: false

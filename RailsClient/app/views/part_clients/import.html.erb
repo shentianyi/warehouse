@@ -1,0 +1,19 @@
+
+<script type="text/javascript">
+    $(function () {
+        data_upload("#item-data-uploader", 'xlsx');
+    });
+</script>
+
+<p id="notice"><%= notice %></p>
+
+<h3>导入数据</h3>
+<div>
+  选择数据文件：
+  <input id="item-data-uploader" type="file" name="files[]" data-url="<%=import_tenant_part_clients_path%>"/>
+
+  <div class="abstractblock" id="item-data-uploader-preview" style="display:none;"></div>
+
+</div>
+
+<div><a href="/files/download?folder=template&file=导入客户零件关系数据模板.xlsx">下载模板</a></div>
