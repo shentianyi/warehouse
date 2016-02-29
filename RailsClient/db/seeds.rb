@@ -81,11 +81,11 @@ ActiveRecord::Base.transaction do
     SysConfig.create(code: 'JIAXUAN_EXTRA_DESTINATION', value: l.nr, category: '佳轩扩展配置', index: 1200, name: '接收地址')
   end
 
-  unless SysConfig.find_by_code('JIAXUAN_EXTRA_SH_CUSTOM_CODE')
+  unless SysConfig.find_by_code('JIAXUAN_EXTRA_SH_CUSTOM')
     SysConfig.create(code: 'JIAXUAN_EXTRA_SH_CUSTOM', value: Tenant.first.code, category: '佳轩扩展配置', index: 1300, name: '上海客户编码')
   end
 
-  unless SysConfig.find_by_code('JIAXUAN_EXTRA_CZ_CUSTOM_CODE')
+  unless SysConfig.find_by_code('JIAXUAN_EXTRA_CZ_CUSTOM')
     SysConfig.create(code: 'JIAXUAN_EXTRA_CZ_CUSTOM', value: Tenant.last.code, category: '佳轩扩展配置', index: 1300, name: '常州客户编码')
   end
 

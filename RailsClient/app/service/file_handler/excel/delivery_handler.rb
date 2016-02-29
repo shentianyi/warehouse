@@ -82,11 +82,15 @@ module FileHandler
                   #if found and can copy
                   forklifts[row[:forklift_id]].add(plc)
                 else
+
+                  sh_custom=Tenant.find_by_code(SysConfigCache.jiaxuan_extra_sh_custom_value)
+                  sh_pc=PartClient.where(client_tenant_id: sh_custom.id, client_part_nr: row[:sh_part_id]).first
+
                   #create container
                   package = Package.create({
                                                id: row[:package_id],
                                                location_id: source.id,
-                                               part_id: row[:cz_part_id],
+                                               part_id: sh_pc.part_id,
                                                user_id: user.id,
                                                quantity: row[:qty],
                                                state: PackageState::WAY,
@@ -154,7 +158,7 @@ module FileHandler
             end
             # puts contents.join('-------')
 
-            mssg = validate_row(row, line)
+            mssg = validate_row(row)
             if mssg.result
               sheet.add_row row.values
             else
@@ -171,8 +175,7 @@ module FileHandler
         msg
       end
 
-      #:no, :, :, :no800, :cz_part_id, :sh_part_id, :qty, :unit, :batch
-      def self.validate_row(row, line)
+      def self.validate_row(row)
         msg = Message.new(contents: [])
 
         if row[:forklift_id].blank?
@@ -199,12 +202,26 @@ module FileHandler
           end
         end
 
-        # unless row[:cz_part_id].blank?
-        #   if Part.find_by_nr(row[:part_id]).blank?
-        #     msg.contents<<"零件号:#{row[:part_id]}不存在"
-        #   end
-        # end
+        if row[:sh_part_id].blank? || row[:cz_part_id].blank?
+          msg.contents<<"上海客户零件或者常州客户零件不能为空"
+        else
+          sh_custom=Tenant.find_by_code(SysConfigCache.jiaxuan_extra_sh_custom_value)
+          cz_custom=Tenant.find_by_code(SysConfigCache.jiaxuan_extra_cz_custom_value)
 
+          unless sh_pc=PartClient.where(client_tenant_id: sh_custom.id, client_part_nr: row[:sh_part_id]).first
+            msg.contents<<"没有找到对应的上海客户零件"
+          end
+
+          unless cz_pc=PartClient.where(client_tenant_id: cz_custom.id, client_part_nr: row[:cz_part_id]).first
+            msg.contents<<"没有找到对应的常州客户零件"
+          end
+
+          if sh_pc && cz_pc && (sh_pc.part_id==cz_pc.part_id)
+          else
+            msg.contents<<"上海客户零件和常州客户零件的对于关系不正确"
+          end
+
+        end
 
         unless msg.result=(msg.contents.size==0)
           msg.content=msg.contents.join('/')
