@@ -62,9 +62,18 @@ class SysConfigsController < ApplicationController
   end
 
   def jiaxuan_extra
+    @all_locations=[]
+    @all_customs=[]
+
     @locations = SysConfig.where(category: '佳轩扩展配置', index: 1200)
+    Location.all.each do |l|
+      @all_locations<<[l.id, l.name]
+    end
 
     @customs = SysConfig.where(category: '佳轩扩展配置', index: 1300)
+    Tenant.all.each do |t|
+      @all_customs<<[t.id, t.name]
+    end
   end
 
   private
