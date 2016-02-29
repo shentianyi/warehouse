@@ -62,24 +62,44 @@ class SysConfigsController < ApplicationController
   end
 
   def jiaxuan_extra
-    if request.post?
+    @all_locations=[]
+    @all_customs=[]
 
-
-    else
-      @all_locations=[]
-      @all_customs=[]
-
-      @locations = SysConfig.where(category: '佳轩扩展配置', index: 1200)
-      Location.all.each do |l|
-        @all_locations<<[l.id, l.name]
-      end
-
-      @customs = SysConfig.where(category: '佳轩扩展配置', index: 1300)
-      Tenant.all.each do |t|
-        @all_customs<<[t.id, t.name]
-      end
+    Location.all.each do |l|
+      @all_locations<<{id: l.id, name: l.name}
     end
 
+    Tenant.all.each do |t|
+      @all_customs<<{id: t.id, name: t.name}
+    end
+
+    if request.post?
+      p params
+
+      params[:location_config].each do |lc|
+        sc=SysConfig.find_by_code(lc.last[:location_code])
+        l=Location.find_by_id(lc.last[:location_id])
+        if sc && l
+          p sc
+          p l
+          sc.update_attributes(value: l.nr)
+        end
+      end
+
+      params[:custom_config].each do |cc|
+        sc=SysConfig.find_by_code(cc.last[:custom_code])
+        t=Tenant.find_by_id(cc.last[:location_id])
+        if sc && t
+          p sc
+          p t
+          sc.update_attributes(value: t.code)
+        end
+      end
+
+    else
+      @locations = SysConfig.where(category: '佳轩扩展配置', index: 1200)
+      @customs = SysConfig.where(category: '佳轩扩展配置', index: 1300)
+    end
     # SysConfig.where(category: '佳轩扩展配置', index: 1200).each do |sys_config|
     #   location_options=[]
     #   Location.all.each do |l|

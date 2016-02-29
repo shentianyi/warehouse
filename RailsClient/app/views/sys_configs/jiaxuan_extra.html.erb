@@ -1,55 +1,151 @@
-<div class="config-panel">
-  <div>
-    <h4 class="bg-primary">
-      <span class='config-title'><%= @locations.first.category %></span>
-    </h4>
-    <table class="table table-bordered table-striped globle-table">
-      <thead>
-      <tr>
-        <th>配置名称</th>
-        <th>代码</th>
-        <th>地点</th>
-        <th></th>
-      </tr>
-      </thead>
+<style>
+    .table > thead > tr > th, .table > tbody > tr > td {
+        text-align: center;
+    }
+</style>
 
-      <tbody>
-      <% @locations.each do |location| %>
-          <tr>
-            <td><%= location.name %></td>
-            <td><%= location.code %></td>
-            <td title=<%= location.description %>><%= Location.find_by_nr(location.value).name %></td>
-          </tr>
-      <% end %>
-      </tbody>
-
-    </table>
-  </div>
-
-  <div>
-    <h4 class="bg-primary">
-      <span class='config-title'><%= @customs.first.category %></span>
-    </h4>
-    <table class="table table-bordered table-striped globle-table">
-      <thead>
-      <tr>
-        <th>配置名称</th>
-        <th>代码</th>
-        <th>客户</th>
-        <th></th>
-      </tr>
-      </thead>
-
-      <tbody>
-      <% @customs.each do |customs| %>
-          <tr>
-            <td><%= customs.name %></td>
-            <td><%= customs.code %></td>
-            <td title=<%= customs.description %>><%= Tenant.find_by_code(customs.value).name %></td>
-          </tr>
-      <% end %>
-      </tbody>
-
-    </table>
+<div class="panel">
+  <div class="panel-heading" style="text-align: right;margin:0 20px;">
+    <button class="btn btn-primary SaveBtn" style="width: 200px;text-align: center;">
+      <i class="glyphicon glyphicon-ok"></i> 保存
+    </button>
   </div>
 </div>
+
+<div class="panel panel-primary" style="margin: 20px;">
+  <div class="panel-heading">
+    <h4><%= @locations.first.category %></h4>
+  </div>
+
+  <table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+      <th class="col-md-4">配置名称</th>
+      <th class="col-md-4">代码</th>
+      <th class="col-md-4">地点</th>
+    </tr>
+    </thead>
+    <% @locations.each do |location| %>
+        <tbody>
+        <tr>
+          <td><%= location.name %></td>
+          <td id="<%= location.code %>"><%= location.code %></td>
+          <td>
+            <select name="Location" id="<%= Location.find_by_nr(location.value).id %>">
+            </select>
+          </td>
+        </tr>
+        </tbody>
+    <% end %>
+  </table>
+</div>
+
+<div class="panel panel-primary" style="margin: 20px;">
+  <div class="panel-heading">
+    <h4><%= @customs.first.category %></h4>
+  </div>
+  <table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+      <th class="col-md-4">配置名称</th>
+      <th class="col-md-4">代码</th>
+      <th class="col-md-4">客户</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <% @customs.each do |customs| %>
+        <tr>
+          <td><%= customs.name %></td>
+          <td id="<%= customs.code %>"><%= customs.code %></td>
+          <td>
+            <select name="Tenant" id="<%= Tenant.find_by_code(customs.value).id %>">
+            </select>
+          </td>
+        </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
+</div>
+
+<% @all_locations.each do |location| %>
+    <script type="text/javascript" charset="utf-8">
+        $('<option value="<%= location[:id] %>" > <%= location[:name] %></option>').appendTo('[name=Location]').ready(function () {
+        });
+    </script>
+<% end %>
+
+<% @all_customs.each do |customs| %>
+    <script type="text/javascript" charset="utf-8">
+        $('<option value="<%= customs[:id] %>" > <%= customs[:name] %></option>').appendTo('[name=Tenant]').ready(function () {
+        });
+    </script>
+<% end %>
+
+<script type="text/javascript" charset="utf-8">
+    $('[name=Location]').each(function () {
+        var ID = $(this).attr('id');
+        $('#' + ID).find('option[value=' + ID + ']').attr('selected', true);
+    });
+
+    $('[name=Tenant]').each(function () {
+        var ID = $(this).attr('id');
+        $('#' + ID).find('option[value=' + ID + ']').attr('selected', true);
+    });
+
+    $('[name=Location]>option').click(function () {
+        $('[name=Location]>option').removeAttr('selected');
+        $(this).attr('selected', true);
+    });
+
+    $('[name=Tenant]>option').click(function () {
+        $('[name=Tenant]>option').removeAttr('selected');
+        $(this).attr('selected', true);
+    });
+
+    var LocationConfigArray = new Array();
+    var CustomConfigArray = new Array();
+
+    <% @locations.each do |location| %>
+    var SelectElem = $('#' + '<%= location.code %>').next('td').children('select').children('option');
+    var LocationID;
+    for (var i = 0; i < SelectElem.length; i++) {
+        if (SelectElem[i].getAttribute('selected') == "selected") {
+            LocationID = SelectElem[i].getAttribute('value');
+        }
+    }
+    console.log(SelectElem);
+    LocationConfigArray.push({location_code: '<%= location.code %>', location_id: LocationID});
+    <%end %>
+
+    <% @customs.each do |customs| %>
+    var SelectElem = $('#' + '<%= customs.code %>').next('td').children('select').children('option');
+    var CustomID;
+    for (var i = 0; i < SelectElem.length; i++) {
+        if (SelectElem[i].getAttribute('selected') == "selected") {
+            CustomID = SelectElem[i].getAttribute('value');
+        }
+    }
+    console.log(SelectElem);
+    CustomConfigArray.push({custom_code: '<%= customs.code %>', location_id: CustomID});
+    <%end %>
+    $('.SaveBtn').unbind().on('click', function () {
+        var LocationConfig = LocationConfigArray;
+        var CustomConfig = CustomConfigArray;
+        $.ajax({
+            url: '/sys_configs/jiaxuan_extra',
+            type: 'post',
+            data: {
+                location_config: LocationConfig,
+                custom_config: CustomConfig
+            },
+            success: function (data) {
+                console.log("Successful");
+            },
+            error: function () {
+                console.log("Something Error.");
+            }
+        })
+    })
+</script>
