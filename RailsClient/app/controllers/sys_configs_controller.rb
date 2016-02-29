@@ -63,7 +63,7 @@ class SysConfigsController < ApplicationController
 
   def jiaxuan_extra
     if request.post?
-      
+
 
     else
       @all_locations=[]
