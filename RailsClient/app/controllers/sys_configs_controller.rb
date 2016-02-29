@@ -62,7 +62,9 @@ class SysConfigsController < ApplicationController
   end
 
   def jiaxuan_extra
-    @sys_configs = SysConfig.where(category: '佳轩扩展配置')
+    @locations = SysConfig.where(category: '佳轩扩展配置', index: 1200)
+
+    @customs = SysConfig.where(category: '佳轩扩展配置', index: 1300)
   end
 
   private

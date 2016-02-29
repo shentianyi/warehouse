@@ -1,7 +1,7 @@
 <div class="config-panel">
   <div>
     <h4 class="bg-primary">
-      <span class='config-title'><%= @sys_configs.first.category %></span>
+      <span class='config-title'><%= @locations.first.category %></span>
     </h4>
     <table class="table table-bordered table-striped globle-table">
       <thead>
@@ -14,15 +14,38 @@
       </thead>
 
       <tbody>
-      <% @sys_configs.each do |sys_config| %>
+      <% @locations.each do |location| %>
           <tr>
-            <td><%= sys_config.name %></td>
-            <td><%= sys_config.code %></td>
-            <% if sys_config.index == 1200 %>
-                <td title=<%= sys_config.description %>><%= Location.find_by_nr(sys_config.value).name %></td>
-            <% else %>
-                <td title=<%= sys_config.description %>><%= Tenant.find_by_code(sys_config.value).name %></td>
-            <% end %>
+            <td><%= location.name %></td>
+            <td><%= location.code %></td>
+            <td title=<%= location.description %>><%= Location.find_by_nr(location.value).name %></td>
+          </tr>
+      <% end %>
+      </tbody>
+
+    </table>
+  </div>
+
+  <div>
+    <h4 class="bg-primary">
+      <span class='config-title'><%= @customs.first.category %></span>
+    </h4>
+    <table class="table table-bordered table-striped globle-table">
+      <thead>
+      <tr>
+        <th>配置名称</th>
+        <th>代码</th>
+        <th>客户</th>
+        <th></th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <% @customs.each do |customs| %>
+          <tr>
+            <td><%= customs.name %></td>
+            <td><%= customs.code %></td>
+            <td title=<%= customs.description %>><%= Tenant.find_by_code(customs.value).name %></td>
           </tr>
       <% end %>
       </tbody>
