@@ -62,18 +62,31 @@ class SysConfigsController < ApplicationController
   end
 
   def jiaxuan_extra
-    @all_locations=[]
-    @all_customs=[]
+    if request.post?
+      
 
-    @locations = SysConfig.where(category: '佳轩扩展配置', index: 1200)
-    Location.all.each do |l|
-      @all_locations<<[l.id, l.name]
+    else
+      @all_locations=[]
+      @all_customs=[]
+
+      @locations = SysConfig.where(category: '佳轩扩展配置', index: 1200)
+      Location.all.each do |l|
+        @all_locations<<[l.id, l.name]
+      end
+
+      @customs = SysConfig.where(category: '佳轩扩展配置', index: 1300)
+      Tenant.all.each do |t|
+        @all_customs<<[t.id, t.name]
+      end
     end
 
-    @customs = SysConfig.where(category: '佳轩扩展配置', index: 1300)
-    Tenant.all.each do |t|
-      @all_customs<<[t.id, t.name]
-    end
+    # SysConfig.where(category: '佳轩扩展配置', index: 1200).each do |sys_config|
+    #   location_options=[]
+    #   Location.all.each do |l|
+    #     location_options<<{id: l.id, name: l.name, status: l.nr==sys_config.value}
+    #   end
+    #   @all_locations<<{name: sys_config.name, code: sys_config.code, options: location_options}
+    # end
   end
 
   private
