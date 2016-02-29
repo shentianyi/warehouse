@@ -67,12 +67,12 @@ class SysConfigsController < ApplicationController
 
     @locations = SysConfig.where(category: '佳轩扩展配置', index: 1200)
     Location.all.each do |l|
-      @all_locations<<[l.id, l.name]
+      @all_locations<<{id: l.id, name: l.name}
     end
 
     @customs = SysConfig.where(category: '佳轩扩展配置', index: 1300)
     Tenant.all.each do |t|
-      @all_customs<<[t.id, t.name]
+      @all_customs<<{id: t.id, name: t.name}
     end
   end
 
