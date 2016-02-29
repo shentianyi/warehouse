@@ -37,15 +37,29 @@
     .PerGroupsIcon > a:hover {
         background-color: #f2f2f2;
     }
+
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
 </style>
 
-<!--<h2 class="col-md-3">Permission Groups</h2>-->
-<h2 class="col-md-3">权限分组列表</h2>
+<div class="panel panel-default">
+  <ol class="breadcrumb col-md-2" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">管理</li>
+    <li>
+      <a href="#">权限分组</a>
+    </li>
+    <li class="active">权限分组列表</li>
+  </ol>
 
-<div class="col-md-9" style="text-align: right;">
-  <button class="btn btn-primary" style="width: 200px;margin: 15px 0 0 0;" data-toggle="modal" data-target="#NewPermissionModal">
-    <i class="glyphicon glyphicon-plus" style="color: white;"></i> 新建权限组
-  </button>
+  <div class="col-md-10" style="text-align: right;">
+    <button class="btn btn-primary" style="width: 200px;margin: 15px 0 0 0;" data-toggle="modal" data-target="#NewPermissionModal">
+      <i class="glyphicon glyphicon-plus" style="color: white;"></i> 新建权限组
+    </button>
+  </div>
 </div>
 
 <div class="digg_pagination">
@@ -61,12 +75,12 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">New Permission Groups</h4>
+        <h4 class="modal-title">新建权限组</h4>
       </div>
       <div class="modal-body">
-        <strong>Name:</strong> <input type="text" class="form-control" id="NewPermissionGroupName" autocomplete="off">
-        <strong>Description:</strong>
-
+        <strong>组名:</strong> <input type="text" class="form-control" id="NewPermissionGroupName" autocomplete="off">
+        <br>
+        <strong>描述:</strong>
         <textarea cols="66" rows="5" id="NewPermissionGroupDescription" aria-autocomplete="none">
         </textarea>
       </div>

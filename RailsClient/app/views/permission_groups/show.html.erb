@@ -1,14 +1,58 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @permission_group.name %>
-</p>
+<style>
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+</style>
 
-<p>
-  <strong>Description:</strong>
-  <%= @permission_group.description %>
-</p>
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">管理</li>
+    <li>
+      <a href="/permission_groups">权限分组</a>
+    </li>
+    <li>
+      <a href="<%= edit_permission_group_path(@permission_group.id) %>">编辑权限分组</a>
+    </li>
+    <li class="active">权限组详情</li>
+  </ol>
+</div>
 
-<%= link_to 'Edit', edit_permission_group_path(@permission_group) %> |
-<%= link_to 'Back', permission_groups_path %>
+<div class="container panel_show_msg"
+     style="background: #EAEAEA;border-radius: 50px;padding: 10px 40px 10px 40px;box-shadow: 10px 10px 5px #ccc;margin-top: 20px;margin-bottom: 100px;">
+
+  <div class="panel-heading" style="display: flex; border-bottom: 1px dashed steelblue;">
+    <i class="glyphicon glyphicon-edit"
+       style="font-size: 3em;margin: 0 30px 0 0;color:steelblue;"></i>
+
+    <h3 style="margin: 5px 0 0 0">权限组
+      <span style="border: 1px solid steelblue;border-radius: 40px;background: steelblue;padding: 5px 20px;color: white;"><%= @permission_group.name %></span>
+    </h3>
+  </div>
+
+  <div class="panel-body">
+    <div class="panel panel-primary">
+      <div class="panel-heading" style="display: flex;height: 40px;">
+        <i class="glyphicon glyphicon-record" style="font-size: 1em;margin: 1px 10px 0 0;"></i>
+        <strong>基本信息</strong>
+      </div>
+
+      <div class="panel-body">
+        <div class="col-md-12" style="display: flex;">
+          <h4 style="white-space: nowrap;">组名:</h4>
+
+          <h4 style="margin-left: 30px;"><%= @permission_group.name %></h4>
+        </div>
+
+        <div class="col-md-12" style="display: flex;border-top: 1px dashed steelblue;">
+          <h4 style="white-space: nowrap;">描述:</h4>
+          <h4 style="margin-left: 30px;"> <%= @permission_group.description %></h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
