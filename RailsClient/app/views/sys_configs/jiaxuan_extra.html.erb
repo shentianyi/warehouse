@@ -94,39 +94,17 @@
         $('#' + ID).find('option[value=' + ID + ']').attr('selected', true);
     });
 
-    $('[name=Location]>option').click(function () {
-        $(this).parent().children('option').removeAttr('selected');
-        $(this).attr('selected', true);
-    });
-
-    $('[name=Tenant]>option').click(function () {
-        $(this).parent().children('option').removeAttr('selected');
-        $(this).attr('selected', true);
-    });
-
     $('.SaveBtn').unbind().on('click', function () {
         var LocationConfigArray = new Array();
         var CustomConfigArray = new Array();
 
         <% @locations.each do |location| %>
-        var SelectElem = $('#' + '<%= location.code %>').next('td').children('select').children('option');
-        var LocationID;
-        for (var i = 0; i < SelectElem.length; i++) {
-            if (SelectElem[i].getAttribute('selected') == "selected") {
-                LocationID = SelectElem[i].getAttribute('value');
-            }
-        }
+        var LocationID = $('#' + '<%= location.code %>').next('td').children('select').attr('value');
         LocationConfigArray.push({location_code: '<%= location.code %>', location_id: LocationID});
         <%end %>
 
         <% @customs.each do |customs| %>
-        var SelectElem = $('#' + '<%= customs.code %>').next('td').children('select').children('option');
-        var CustomID;
-        for (var i = 0; i < SelectElem.length; i++) {
-            if (SelectElem[i].getAttribute('selected') == "selected") {
-                CustomID = SelectElem[i].getAttribute('value');
-            }
-        }
+        var CustomID = $('#' + '<%= customs.code %>').next('td').children('select').attr('value');
         CustomConfigArray.push({custom_code: '<%= customs.code %>', location_id: CustomID});
         <%end %>
 
