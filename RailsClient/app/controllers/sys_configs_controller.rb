@@ -76,41 +76,12 @@ class SysConfigsController < ApplicationController
     end
 
     if request.post?
-      p params
-
       @locations=SysConfig.jiaxuan_extra_location_update(params[:location_config])
-      # params[:location_config].each do |lc|
-      #   sc=SysConfig.find_by_code(lc.last[:location_code])
-      #   l=Location.find_by_id(lc.last[:location_id])
-      #   if sc && l
-      #     p sc
-      #     p l
-      #     sc.update_attributes(value: l.nr)
-      #   end
-      # end
-
       @customs=SysConfig.jiaxuan_extra_custom_update(params[:custom_config])
-      # params[:custom_config].each do |cc|
-      #   sc=SysConfig.find_by_code(cc.last[:custom_code])
-      #   t=Tenant.find_by_id(cc.last[:location_id])
-      #   if sc && t
-      #     p sc
-      #     p t
-      #     sc.update_attributes(value: t.code)
-      #   end
-      # end
-
     else
       @locations = SysConfig.where(category: '佳轩扩展配置', index: 1200)
       @customs = SysConfig.where(category: '佳轩扩展配置', index: 1300)
     end
-    # SysConfig.where(category: '佳轩扩展配置', index: 1200).each do |sys_config|
-    #   location_options=[]
-    #   Location.all.each do |l|
-    #     location_options<<{id: l.id, name: l.name, status: l.nr==sys_config.value}
-    #   end
-    #   @all_locations<<{name: sys_config.name, code: sys_config.code, options: location_options}
-    # end
   end
 
   private

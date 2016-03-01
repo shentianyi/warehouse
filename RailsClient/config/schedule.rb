@@ -27,3 +27,7 @@ end
 #every 1.minute do
 #  runner 'script/test/test_delivery.rb'
 #end
+
+every 1.day,:at=>['12:31'] do
+  command "backup perform -t my_backup"
+end
