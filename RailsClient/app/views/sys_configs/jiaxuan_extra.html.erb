@@ -95,44 +95,44 @@
     });
 
     $('[name=Location]>option').click(function () {
-        $('[name=Location]>option').removeAttr('selected');
+        $(this).parent().children('option').removeAttr('selected');
         $(this).attr('selected', true);
     });
 
     $('[name=Tenant]>option').click(function () {
-        $('[name=Tenant]>option').removeAttr('selected');
+        $(this).parent().children('option').removeAttr('selected');
         $(this).attr('selected', true);
     });
 
-    var LocationConfigArray = new Array();
-    var CustomConfigArray = new Array();
-
-    <% @locations.each do |location| %>
-    var SelectElem = $('#' + '<%= location.code %>').next('td').children('select').children('option');
-    var LocationID;
-    for (var i = 0; i < SelectElem.length; i++) {
-        if (SelectElem[i].getAttribute('selected') == "selected") {
-            LocationID = SelectElem[i].getAttribute('value');
-        }
-    }
-    console.log(SelectElem);
-    LocationConfigArray.push({location_code: '<%= location.code %>', location_id: LocationID});
-    <%end %>
-
-    <% @customs.each do |customs| %>
-    var SelectElem = $('#' + '<%= customs.code %>').next('td').children('select').children('option');
-    var CustomID;
-    for (var i = 0; i < SelectElem.length; i++) {
-        if (SelectElem[i].getAttribute('selected') == "selected") {
-            CustomID = SelectElem[i].getAttribute('value');
-        }
-    }
-    console.log(SelectElem);
-    CustomConfigArray.push({custom_code: '<%= customs.code %>', location_id: CustomID});
-    <%end %>
     $('.SaveBtn').unbind().on('click', function () {
+        var LocationConfigArray = new Array();
+        var CustomConfigArray = new Array();
+
+        <% @locations.each do |location| %>
+        var SelectElem = $('#' + '<%= location.code %>').next('td').children('select').children('option');
+        var LocationID;
+        for (var i = 0; i < SelectElem.length; i++) {
+            if (SelectElem[i].getAttribute('selected') == "selected") {
+                LocationID = SelectElem[i].getAttribute('value');
+            }
+        }
+        LocationConfigArray.push({location_code: '<%= location.code %>', location_id: LocationID});
+        <%end %>
+
+        <% @customs.each do |customs| %>
+        var SelectElem = $('#' + '<%= customs.code %>').next('td').children('select').children('option');
+        var CustomID;
+        for (var i = 0; i < SelectElem.length; i++) {
+            if (SelectElem[i].getAttribute('selected') == "selected") {
+                CustomID = SelectElem[i].getAttribute('value');
+            }
+        }
+        CustomConfigArray.push({custom_code: '<%= customs.code %>', location_id: CustomID});
+        <%end %>
+
         var LocationConfig = LocationConfigArray;
         var CustomConfig = CustomConfigArray;
+
         $.ajax({
             url: '/sys_configs/jiaxuan_extra',
             type: 'post',
