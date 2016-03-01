@@ -69,13 +69,14 @@ class SysConfigsController < ApplicationController
       @all_locations<<{id: l.id, name: l.name}
     end
 
-    Tenant.all.each do |t|
+    Tenant.clients.each do |t|
       @all_customs<<{id: t.id, name: t.name}
     end
 
     if request.post?
       p params
 
+      raise 'sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss'
       params[:location_config].each do |lc|
         sc=SysConfig.find_by_code(lc.last[:location_code])
         l=Location.find_by_id(lc.last[:location_id])
