@@ -64,6 +64,8 @@ class SysConfigsController < ApplicationController
   def jiaxuan_extra
     @all_locations=[]
     @all_customs=[]
+    @locations=[]
+    @customs=[]
 
     Location.all.each do |l|
       @all_locations<<{id: l.id, name: l.name}
@@ -76,26 +78,27 @@ class SysConfigsController < ApplicationController
     if request.post?
       p params
 
-      raise 'sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss'
-      params[:location_config].each do |lc|
-        sc=SysConfig.find_by_code(lc.last[:location_code])
-        l=Location.find_by_id(lc.last[:location_id])
-        if sc && l
-          p sc
-          p l
-          sc.update_attributes(value: l.nr)
-        end
-      end
+      @locations=SysConfig.jiaxuan_extra_location_update(params[:location_config])
+      # params[:location_config].each do |lc|
+      #   sc=SysConfig.find_by_code(lc.last[:location_code])
+      #   l=Location.find_by_id(lc.last[:location_id])
+      #   if sc && l
+      #     p sc
+      #     p l
+      #     sc.update_attributes(value: l.nr)
+      #   end
+      # end
 
-      params[:custom_config].each do |cc|
-        sc=SysConfig.find_by_code(cc.last[:custom_code])
-        t=Tenant.find_by_id(cc.last[:location_id])
-        if sc && t
-          p sc
-          p t
-          sc.update_attributes(value: t.code)
-        end
-      end
+      @customs=SysConfig.jiaxuan_extra_custom_update(params[:custom_config])
+      # params[:custom_config].each do |cc|
+      #   sc=SysConfig.find_by_code(cc.last[:custom_code])
+      #   t=Tenant.find_by_id(cc.last[:location_id])
+      #   if sc && t
+      #     p sc
+      #     p t
+      #     sc.update_attributes(value: t.code)
+      #   end
+      # end
 
     else
       @locations = SysConfig.where(category: '佳轩扩展配置', index: 1200)

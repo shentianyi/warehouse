@@ -32,4 +32,40 @@ class SysConfig < ActiveRecord::Base
       false
     end
   end
+
+
+  def self.jiaxuan_extra_location_update config
+    data=[]
+
+    config.each do |lc|
+      sc=SysConfig.find_by_code(lc.last[:location_code])
+      l=Location.find_by_id(lc.last[:location_id])
+      if sc && l
+        p sc
+        p l
+        sc.update_attributes(value: l.nr)
+      end
+
+      data<<sc
+    end
+
+    data
+  end
+
+  def self.jiaxuan_extra_custom_update config
+    data=[]
+
+    config.each do |cc|
+      sc=SysConfig.find_by_code(cc.last[:custom_code])
+      t=Tenant.find_by_id(cc.last[:location_id])
+      if sc && t
+        p sc
+        p t
+        sc.update_attributes(value: t.code)
+      end
+      data<<sc
+    end
+
+    data
+  end
 end
