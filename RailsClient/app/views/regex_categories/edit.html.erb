@@ -32,10 +32,6 @@
         <tr>
           <td>规范名称</td>
           <td>规范代码</td>
-          <td>前缀字符串</td>
-          <td>前缀长度</td>
-          <td>后缀字符串</td>
-          <td>后缀长度</td>
           <td>正则表达式</td>
           <td>备注</td>
         </tr>
@@ -44,16 +40,8 @@
               <input type="hidden" class="id" value="<%= regex.id %>" name="regex[<%= i %>][id]" readonly/>
               <td><input type="text" class="name" value="<%= regex.name %>" name="regex[<%= i %>][name]" readonly/></td>
               <td><input type="text" class="code" value="<%= regex.code %>" name="regex[<%= i %>][code]" readonly/></td>
-              <td>
-                <input type="text" class="prefix_string" value="<%= regex.prefix_string %>" name="regex[<%= i %>][prefix_string]"/>
-              </td>
-              <td><span><%= regex.prefix_length %></span></td>
-              <td>
-                <input type="text" class="suffix_string" value="<%= regex.suffix_string %>" name="regex[<%= i %>][suffix_string]"/>
-              </td>
-              <td><span><%= regex.suffix_length %></span></td>
-              <td>
-                <input type="text" class="regex_string" value="<%= regex.regex_string %>" name="regex[<%= i %>][regex_string]"/>
+             <td>
+                <input type="text" style="width:500px;" class="regex_string" value="<%= regex.regex_string %>" name="regex[<%= i %>][regex_string]"/>
               </td>
               <td>
                 <input type="text" class="remark" value="<%= regex.remark %>" width="300px" name="regex[<%= i %>][remark]"/>

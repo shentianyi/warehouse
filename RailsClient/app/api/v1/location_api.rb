@@ -4,10 +4,9 @@ module V1
       guard_all!
 
       get :get_all do
-        msg = ApiMessage.new
         data = []
         current_user.location.location_destinations.each do |l|
-          data<<{name: l.destination.name, id: l.destination_id, is_default: l.is_default? ? 1 : 0}
+          data<<{name: l.destination.name,nr: l.destination.nr, id: l.destination_id, is_default: l.is_default? ? 1 : 0}
         end
         data
       end

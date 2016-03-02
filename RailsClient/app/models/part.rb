@@ -13,8 +13,8 @@ class Part < ActiveRecord::Base
   has_many :containers
   #has_many :inventory_list_items
 
-  def self.exists?(id)
-    Part.find_by_id(id)
+  def self.exists?(nr)
+    Part.find_by_nr(nr)
   end
 
   def is_wire?

@@ -11,32 +11,21 @@
 #create Admin User
 ActiveRecord::Base.transaction do
 
-  t=Tenant.create(name: '上海佳轩物流有限公司', code: 'SHJX', short_name: '简称', type: TenantType::SELF)
-
-  # init location and admin
-  l = Location.create(nr: 'Default', name: 'Default Location', is_base: true, tenant_id: t.id) unless (l=Location.find_by_id('Default'))
-
-  unless user=User.find_by_id('admin')
-    user = User.create({name: 'Admin', location_id: l.id,
-                        password: '123456@',
-                        password_confirmation: '123456@', role_id: 100, is_sys: true, nr: 'admin'})
-  end
-
   # init package label regex
   unless Regex.where(code: 'UNIQ', type: RegexType::PACKAGE_LABEL).first
-    Regex.create(name: '唯一码', code: 'UNIQ', prefix_string: 'WI', regex_string: '^WI\w+', type: RegexType::PACKAGE_LABEL)
+    Regex.create(name: '唯一码', code: 'UNIQ', prefix_string: 'WI', regex_string: '^(M|S)[A-Za-z0-9]+$', type: RegexType::PACKAGE_LABEL)
   end
   unless Regex.where(code: 'PART', type: RegexType::PACKAGE_LABEL).first
-    Regex.create(name: '零件号', code: 'PART', prefix_string: 'P', regex_string: '^P\w+', type: RegexType::PACKAGE_LABEL)
+    Regex.create(name: '零件号', code: 'PART', prefix_string: 'P', regex_string: '^[A-Za-z0-9]+$', type: RegexType::PACKAGE_LABEL)
   end
 
   unless Regex.where(code: 'QUANTITY', type: RegexType::PACKAGE_LABEL).first
-    Regex.create(name: '数量', code: 'QUANTITY', prefix_string: 'Q', regex_string: '^Q\d+\.?\d*$', type: RegexType::PACKAGE_LABEL)
+    Regex.create(name: '数量', code: 'QUANTITY', prefix_string: 'Q', regex_string: '^((\d+\.\d*[1-9]\d*)|(\d*[1-9]\d*\.\d+)|(\d*[1-9]\d*))$', type: RegexType::PACKAGE_LABEL)
   end
 
-  unless Regex.where(code: 'DATE', type: RegexType::PACKAGE_LABEL).first
-    Regex.create(name: '入库时间', code: 'DATE', prefix_string: 'W  ', regex_string: '^W\s*\S+', remark: 'W后有两个空格，请认真检测标签', type: RegexType::PACKAGE_LABEL)
-  end
+  # unless Regex.where(code: 'DATE', type: RegexType::PACKAGE_LABEL).first
+  #   Regex.create(name: '入库时间', code: 'DATE', prefix_string: 'W  ', regex_string: '^W\s*\S+', remark: 'W后有两个空格，请认真检测标签', type: RegexType::PACKAGE_LABEL)
+  # end
 
   unless Regex.where(code: 'ORDERITEM_PART', type: RegexType::ORDERITEM_LABEL).first
     Regex.create(name: '需求单零件号', code: 'ORDERITEM_PART', prefix_string: 'P', regex_string: '^P\w+', type: RegexType::ORDERITEM_LABEL)
@@ -60,6 +49,12 @@ ActiveRecord::Base.transaction do
     SysConfig.create(code: 'APP_SHOW_RECENT_DATA_DAYS', category: '数据配置', index: 300, value: '2', name: 'APP查看几天前数据', description: '填写数字，大于0的整数')
   end
 
+  #接收配置400
+
+  # 发运配置
+  unless SysConfig.find_by_code('CHECK_PACKAGE_IN_STOCK_FOR_DELIVERY')
+    SysConfig.create(code: 'CHECK_PACKAGE_IN_STOCK_FOR_DELIVERY', category: '发运配置', index: 500, value: 'true', name: '强制验证包装箱是否在库存', description: '如果验证,则不在库存不可以发货')
+  end
 
   # 盘点配置
   unless SysConfig.find_by_code('INVENTORY_ENABLE')

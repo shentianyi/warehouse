@@ -75,6 +75,7 @@ module V1
       # @deprecated
       # use validate_id instead
       post :validate do
+        p params
         if Package.id_valid?(params[:id])
           {result: 1, content: ''}
         else
