@@ -13,18 +13,20 @@ class Presenter
 =end
 
   def self.init_presenters params
-    params.map{|param| self.new(param)}
+    params.map { |param| self.new(param) }
   end
 
   def self.init_json_presenters params
-    params.map{|param| self.new(param).to_json}
+    params.map { |param| self.new(param).to_json }
   end
 
   def to_json
-    json={}
-    self.delegators.each do |dele|
-      json[dele]=self.send(dele)
+    if self.present?
+      json={}
+      self.delegators.each do |dele|
+        json[dele]=self.send(dele)
+      end
+      return json
     end
-    return json
   end
 end

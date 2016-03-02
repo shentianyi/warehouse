@@ -5,7 +5,7 @@
   <div class="panel-body">
     <h4>你好,<% if current_user %> <%= current_user.name%><%end%></h4>
     <% if current_user %>
-        <span class="label label-info"><%= current_user.id+","+current_user.location.name+","+Role.display(current_user.role_id)%></span>
+        <span class="label label-info"><%= current_user.nr+","+current_user.location.name+","+Role.display(current_user.role_id)%></span>
     <%end%>
   </div>
 </div>

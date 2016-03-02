@@ -12,7 +12,7 @@
   <small><%= fpresenter.created_at %></small>
 </h4>
 <h4>创建员工号:
-  <small><%= @forklift.user_id %></small>
+  <small><%= @forklift.user.nr %></small>
 </h4>
 <h4>创建员工:
   <small><%= @forklift.user.name %></small>
@@ -23,7 +23,7 @@
 <h4>目的地:
   <small><%= @forklift.destination.name if @forklift.destination %></small>
 </h4>
-<h4>所属运单:
+<h4>所属运单:f
   <small><%= link_to @forklift.parent.container_id, delivery_path(@forklift.parent), :class => "btn btn-default" if @forklift.parent %></small>
 </h4>
 <h4>备注:
@@ -36,7 +36,7 @@
 <h4>包装箱总数:
   <small><%= fpresenter.sum_packages %></small>
 </h4>
-<h4>已接收包装箱书:
+<h4>已接收包装箱数:
   <small><%= fpresenter.accepted_packages %></small>
 </h4>
 <h2>包装箱列表</h2>

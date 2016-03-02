@@ -53,7 +53,11 @@ ActiveRecord::Base.transaction do
   # init system config
   # 数据配置
   unless SysConfig.find_by_code('WEB_SHOW_CLIENT_PART_NR')
-    SysConfig.create(code: 'WEB_SHOW_CLIENT_PART_NR', category: '数据配置', index: 300, value: 'SHL', name: '网页显示客户零件号',description:'填写客户编码，多个以英文字逗号分隔')
+    SysConfig.create(code: 'WEB_SHOW_CLIENT_PART_NR', category: '数据配置', index: 300, value: 'SHL', name: '网页显示客户零件号', description: '填写客户编码，多个以英文字逗号分隔')
+  end
+
+  unless SysConfig.find_by_code('APP_SHOW_RECENT_DATA_DAYS')
+    SysConfig.create(code: 'APP_SHOW_RECENT_DATA_DAYS', category: '数据配置', index: 300, value: '2', name: 'APP查看几天前数据', description: '填写数字，大于0的整数')
   end
 
 
@@ -88,7 +92,6 @@ ActiveRecord::Base.transaction do
   unless SysConfig.find_by_code('JIAXUAN_EXTRA_CZ_CUSTOM')
     SysConfig.create(code: 'JIAXUAN_EXTRA_CZ_CUSTOM', value: Tenant.last.code, category: '佳轩扩展配置', index: 1300, name: '常州客户编码')
   end
-
 
 
   # api v3

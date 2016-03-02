@@ -501,7 +501,7 @@ ActiveRecord::Schema.define(version: 20160226082611) do
     t.datetime "updated_at"
   end
 
-  add_index "part_clients", ["part_id"], name: "index_part_clients_on_part_id", using: :btree
+  add_index "part_clients", ["part_id"], name: "index_part_clients_on_parts_id", using: :btree
 
   create_table "part_positions", force: true do |t|
     t.string   "part_id"
