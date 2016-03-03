@@ -1,5 +1,5 @@
 class LocationPresenter<Presenter
-  Delegators=[:id, :nr, :tenant_id, :name, :created_at, :updated_at]
+  Delegators=[:id, :nr, :tenant_id, :name, :created_at, :updated_at,:receive_mode]
   def_delegators :@location, *Delegators
 
   def initialize(location)

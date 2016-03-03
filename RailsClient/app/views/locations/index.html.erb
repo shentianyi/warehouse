@@ -17,11 +17,13 @@
     <th>编号</th>
     <th>名称</th>
     <th>目的地</th>
-    <th>接受仓库</th>
+    <th>接收仓库</th>
     <th>在途仓库</th>
+    <th>运单接收模式</th>
     <th>所有员工</th>
     <th>所有仓库</th>
     <th>所属公司</th>
+    <th>地址</th>
     <th colspan="4">&nbsp;</th>
   </tr>
   </thead>
@@ -40,16 +42,20 @@
           </ul>
         </td>
         <td>
-          <%=location.receive_whouse.name if location.receive_whouse%>
+          <%= location.receive_whouse.name if location.receive_whouse %>
         </td>
         <td>
-          <%=location.send_whouse.name if location.send_whouse%>
+          <%= location.send_whouse.name if location.send_whouse %>
+        </td>
+        <td>
+          <%= DeliveryReceiveMode.display(location.receive_mode) %>
         </td>
         <td><%= link_to '员工列表', users_location_path(location) %>
           <span class="badge pull-right"><%= location.users.count %></td>
         <td><%= link_to '仓库列表', whouses_location_path(location) %>
           <span class="badge pull-right"><%= location.whouses.count %></span></td>
         <td><%= location.tenant.name if location.tenant %></td>
+        <td><%= location.address %></td>
         <td><%= link_to '详细', location, :class => 'btn btn-default' %></td>
         <td><%= link_to '编辑', edit_location_path(location), :class => 'btn btn-default' %></td>
         <td><%= link_to '编辑目的地', destinations_location_path(location), :class => 'btn btn-default' %></td>

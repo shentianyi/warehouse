@@ -42,4 +42,13 @@ class BaseType
     select_options
   end
 
+
+  def self.to_select_list
+    data = []
+    self.constants.each do |c|
+      v = self.const_get(c.to_s)
+      data << [self.display(v),v]
+    end
+    data
+  end
 end

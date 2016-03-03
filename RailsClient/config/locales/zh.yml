@@ -206,6 +206,7 @@ zh:
         tel: '联系方式'
         receive_whouse_id: '接收仓库'
         send_whouse_id: '在途仓库'
+        receive_mode: '运单接收模式'
     errors:
       <<: *errors
   system:
