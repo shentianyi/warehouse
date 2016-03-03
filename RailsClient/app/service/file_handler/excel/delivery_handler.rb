@@ -6,6 +6,10 @@ module FileHandler
           :no, :forklift_id, :package_id, :no800, :cz_part_id, :sh_part_id, :qty, :unit, :batch
       ]
 
+      JIAXUAN_ZH_HEADERS=[
+          "序号", "运单号", "HU号", "800号", "常州零件号", "上海零件号", "数量", "单位", "批次号"
+      ]
+
 
       def self.send_jiaxuan_delivery file, user
         msg=Message.new
@@ -138,25 +142,19 @@ module FileHandler
 
         p = Axlsx::Package.new
         p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
-          sheet.add_row JIAXUAN_HEADERS+['Error Msg']
+          sheet.add_row JIAXUAN_ZH_HEADERS+['Error Msg']
           #validate file
           2.upto(book.last_row) do |line|
-            # if book.cell(line, 2).blank?
-            #   if !book.cell(line, 3).blank?
-            #     p book.cell(line, 3)
-            #   end
-            #   next
-            # end
+            if book.cell(line, 2).blank?
+              next
+            end
             row = {}
-            # contents=[]
             JIAXUAN_HEADERS.each_with_index do |k, i|
               row[k] = book.cell(line, i+1).to_s.strip
               if ['forklift_id', 'package_id', 'no800', 'cz_part_id', 'sh_part_id', 'batch'].include?(k.to_s)
                 row[k]=row[k] #.sub(/\.0/, '')
               end
-              # contents<<row[k]
             end
-            # puts contents.join('-------')
 
             mssg = validate_row(row)
             if mssg.result
