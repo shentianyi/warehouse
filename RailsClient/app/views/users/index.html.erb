@@ -9,22 +9,25 @@
         background-color: white;
     }
 
+    .table > thead > tr > th, .table > tbody > tr > td {
+        text-align: center;
+    }
 </style>
 
 <% if current_user.admin? || current_user.manager? %>
-    <h3>员工列表</h3>
-    <hr style="margin: 0;">
+    <!--<h3>员工列表</h3>-->
+    <!--<hr style="margin: 0;">-->
     <% if current_user.admin? %>
-        <div class="col-md-12">
-          <div class="col-md-4" style="text-align: center;">
+        <div class="col-md-12" style="text-align: center;">
+          <div class="col-md-3">
             <%= link_to "新建员工", send("new_#{@model}_path"), :class => 'btn btn-primary', :style => 'width:200px;margin:10px 0 0 0;color:white;' %>
           </div>
 
-          <div class="col-md-4">
+          <div class="col-md-3">
             <%= link_to "上传/更新员工", send("import_#{@model.pluralize}_path"), :class => 'btn btn-primary', :style => 'width:200px;margin:10px 0 0 0;color:white;' %>
           </div>
 
-          <div class="col-md-4">
+          <div class="col-md-3">
             <%= link_to "下载员工列表", send("download_#{@model.pluralize}_path"), data: {confirm: 'Are you sure?'}, :class => 'btn btn-primary', :style => 'width:200px;margin:10px 0 0 0;color:white;' %>
           </div>
         </div>
@@ -32,7 +35,7 @@
     <div style="margin: 55px 0 0 0;">
       <hr>
       <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
-        <div>
+        <div style="text-align: center;">
           <div class="col-md-3">
               <span>员工号：
                 <input type="text" name="user[id]" value="<%= @id %>"/>
@@ -52,7 +55,7 @@
               </span>
           </div>
           <div class="col-md-3">
-            <input type="submit" value="查 找" class="btn btn-primary"/>
+            <input type="submit" value="查 找" style="width: 200px;" class="btn btn-primary"/>
           </div>
         </div>
       </form>
@@ -60,7 +63,7 @@
 
     <hr>
     <div class="digg_pagination" style="margin: 45px 0 0 0 ;">
-      <div class="page_info" style="text-align: left;">
+      <div class="page_info" style="width: auto;text-align: left;height: 40px;margin: 40px 0 0 0;padding: 10px 0 0 20px;">
         <%= page_entries_info @users %>
       </div>
       <%= will_paginate @users, :container => false %>
@@ -78,7 +81,7 @@
     <!--<th>上次登陆IP</th>-->
     <th>所属地点</th>
     <th>角色</th>
-    <th colspan="3">&nbsp;</th>
+    <th colspan="3">操作</th>
   </tr>
   </thead>
 
@@ -94,7 +97,7 @@
             <!--<td><%= user.current_sign_in_ip %></td>-->
             <td><%= user.location.name if user.location %></td>
             <td><%= user.role %></td>
-            <td style="display: flex;">
+            <td>
               <a href="<%= user_path(user) %>" class="IconA" title="详细"><i class="glyphicon glyphicon-eye-open" style="color: green;"> </i></a>
 
               <a href="<%= edit_user_path(user) %>" class="IconA" title="编辑"><i class="glyphicon glyphicon-pencil" style="color:#4F94CD;"></i></a>
