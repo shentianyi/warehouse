@@ -2,6 +2,22 @@
 
 Rails.application.routes.draw do
 
+  resources :settings
+
+  resources :units do
+    collection do
+      get :search
+      match :import, action: :import, via: [:get, :post]
+    end
+  end
+
+  resources :colors do
+    collection do
+      get :search
+      match :import, action: :import, via: [:get, :post]
+    end
+  end
+
   resources :ptl_jobs
 
   resources :scrap_list_items do

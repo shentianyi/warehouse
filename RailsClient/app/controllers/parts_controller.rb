@@ -158,7 +158,7 @@ class PartsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def part_params
     #params[:part]
-    params.require(:part).permit(:id, :unit_pack, :customernum, :user_id, :part_type_id, :is_delete, :convert_unit)
+    params.require(:part).permit(:id, :unit_pack, :customernum, :user_id, :part_type_id, :is_delete, :convert_unit, :cross_section, :weight, :weight_range, :name)
   end
 
   def set_part_type

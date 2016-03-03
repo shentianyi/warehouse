@@ -29,6 +29,8 @@ module ApplicationHelper
   #end
 
   def search
+    file_name=@model.pluralize+".xlsx"
+
     @condition=params[@model]
     query=model.all#.unscoped
     @condition.each do |k, v|
@@ -47,6 +49,7 @@ module ApplicationHelper
       #query=query.where(Hash[k, v]) if v.is_a?(Range)
       if v.is_a?(Hash) && v.values.count==2 && v.values.uniq!=['']
         values=v.values.sort
+        file_name=@model.pluralize+values[0]+"--"+values[1]+".xlsx"
         values[0]=Time.parse(values[0]).utc.to_s if values[0].is_date? & values[0].include?('-')
         values[1]=Time.parse(values[1]).utc.to_s if values[1].is_date? & values[1].include?('-')
         query=query.where(Hash[k, (values[0]..values[1])])
@@ -56,10 +59,14 @@ module ApplicationHelper
       end
     end
 
+    if block_given?
+      query=(yield query)
+    end
+
     if params.has_key? "download"
       send_data(query.to_xlsx(query),
                 :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
-                :filename => @model.pluralize+".xlsx")
+                :filename => file_name)
       #render :json => query.to_xlsx(query)
     else
       instance_variable_set("@#{@model.pluralize}", query.paginate(:page => params[:page]).all)

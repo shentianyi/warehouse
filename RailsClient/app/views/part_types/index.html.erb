@@ -2,7 +2,7 @@
 
 <%= link_to "新建零件类型", send("new_#{@model}_path"),:class=>'btn btn-default' %>
 <%= link_to "上传/更新零件类型", send("import_#{@model.pluralize}_path"),:class=>'btn btn-default' %>
-<%= link_to "下载零件类型", send("download_#{@model.pluralize}_path"), data: { confirm: '确认删除?' },:class=>'btn btn-default' %>
+<%= link_to "下载零件类型", send("download_#{@model.pluralize}_path"), data: { confirm: '确认下载?' },:class=>'btn btn-default' %>
  <br/>
 <div class="digg_pagination">
   <div class="page_info">

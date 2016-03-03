@@ -41,4 +41,29 @@ class Part < ActiveRecord::Base
 
     return position
   end
+
+  def self.to_xlsx parts
+    p = Axlsx::Package.new
+
+    wb = p.workbook
+    wb.add_worksheet(:name => "sheet1") do |sheet|
+      sheet.add_row ["序号", "ID", "名称", "零件类型", "客户号", "单位包装量", "盘点单位转换标准", "截面", "重量",	 "重量误差"]
+      parts.each_with_index { |part, index|
+
+        sheet.add_row [
+                          index+1,
+                          part.id,
+                          part.name,
+                          part.part_type.blank? ? '' : part.part_type.id,
+                          part.customernum,
+                          part.unit_pack,
+                          part.convert_unit,
+                          part.cross_section,
+                          part.weight,
+                          part.weight_range
+                      ]
+      }
+    end
+    p.to_stream.read
+  end
 end

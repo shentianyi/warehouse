@@ -31,9 +31,13 @@ module Import
     def init_csv_cols
       csv_cols=[]
       csv_cols<< Csv::CsvCol.new(field: 'id', header: 'PartNr')
+      csv_cols<< Csv::CsvCol.new(field: 'name', header: 'Name')
       csv_cols<< Csv::CsvCol.new(field: 'unit_pack', header: 'UnitPack')
       csv_cols<< Csv::CsvCol.new(field: 'part_type_id', header: 'PartType', is_foreign: true, foreign: 'PartType')
       csv_cols<< Csv::CsvCol.new(field: 'convert_unit', header: 'ConvertUnit')
+      csv_cols<< Csv::CsvCol.new(field: 'cross_section', header: 'CrossSection')
+      csv_cols<< Csv::CsvCol.new(field: 'weight', header: 'Weight')
+      csv_cols<< Csv::CsvCol.new(field: 'weight_range', header: 'WeightRange')
       csv_cols<< Csv::CsvCol.new(field: $UPMARKER, header: $UPMARKER)
       class_variable_set(:@@csv_cols, csv_cols)
     end

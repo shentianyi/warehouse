@@ -137,4 +137,8 @@ ActiveRecord::Base.transaction do
   MoveType.create!([{typeId: 'MOVE', short_desc: 'move type'},
                     {typeId: 'ENTRY', short_desc: 'entey'}])
 
+
+  unless Setting.find_by_code(Setting::NO_NEED_WEIGHT_BOX_TYPES)
+    Setting.create(code: Setting::NO_NEED_WEIGHT_BOX_TYPES, value: 'P', name: '不需要称重扣减库存的料盒类型')
+  end
 end

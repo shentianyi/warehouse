@@ -7,6 +7,9 @@ module Import
       begin
         line_no=0
         CSV.foreach(csv.file_path, headers: true, col_sep: csv.col_sep, encoding: csv.encoding) do |row|
+          p row
+          p self.csv_headers
+          p '0------------------------------------------'
           row.strip
           line_no+=1
           if self.respond_to?(:csv_headers)

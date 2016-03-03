@@ -14,7 +14,8 @@
       <span>  零件类型：
            <%=  select_tag('part[part_type_id]',options_from_collection_for_select(@part_types,'id','name',@part_type_id), include_blank: true)%>
       </span>
-      <input type="submit" value="查 找" class="btn btn-primary"/>
+      <input type="submit" value="查 找" class="btn btn-primary" name="search"/>
+      <input type="submit" value="导出" class="btn btn-primary" name="download"/>
     </div>
 </form>
 </div>
@@ -38,6 +39,9 @@
     <th>序号</th>
     <th>零件号</th>
     <th>零件类型</th>
+    <th>截面</th>
+    <th>重量</th>
+    <th>重量误差</th>
     <th>单位包装量</th>
     <th>盘点单位转换标准</th>
     <th>所属库位</th>
@@ -53,6 +57,9 @@
         <td><%= index+@parts.offset+1 %>
         <td><%= part.id %></td>
         <td><%= part.part_type_id %></td>
+        <td><%= part.cross_section %>
+        <td><%= part.weight %></td>
+        <td><%= part.weight_range %></td>
         <td><%= part.unit_pack %></td>
         <td><%=part.convert_unit%></td>
         <td>

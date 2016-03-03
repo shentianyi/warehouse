@@ -36,4 +36,24 @@ class Position < ActiveRecord::Base
       t.strftime("%m %d 01")
     end
   end
+
+  def self.to_xlsx positions
+    p = Axlsx::Package.new
+
+    wb = p.workbook
+    wb.add_worksheet(:name => "sheet1") do |sheet|
+      sheet.add_row ["序号", "编码", "名称", "描述", "所属仓库"]
+      positions.each_with_index { |position, index|
+        warehouse=Warehouse.find_by_id(position.whouse_id)
+        sheet.add_row [
+                          index+1,
+                          position.id,
+                          position.detail,
+                          position.description,
+                          warehouse.blank? ? '' : warehouse.nr
+                      ]
+      }
+    end
+    p.to_stream.read
+  end
 end

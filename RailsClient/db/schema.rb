@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151013081022) do
+ActiveRecord::Schema.define(version: 20160302111411) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -52,6 +52,15 @@ ActiveRecord::Schema.define(version: 20151013081022) do
   add_index "attachments", ["attachable_id"], name: "index_attachments_on_attachable_id", using: :btree
   add_index "attachments", ["attachable_type"], name: "index_attachments_on_attachable_type", using: :btree
   add_index "attachments", ["id"], name: "index_attachments_on_id", using: :btree
+
+  create_table "colors", force: true do |t|
+    t.string   "nr"
+    t.string   "name"
+    t.string   "short_name"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "containers", force: true do |t|
     t.string   "custom_id",                 limit: 36
@@ -443,13 +452,16 @@ ActiveRecord::Schema.define(version: 20151013081022) do
   create_table "part_positions", force: true do |t|
     t.string   "part_id"
     t.string   "position_id"
-    t.boolean  "is_delete",       default: false
-    t.boolean  "is_dirty",        default: true
-    t.boolean  "is_new",          default: true
+    t.boolean  "is_delete",         default: false
+    t.boolean  "is_dirty",          default: true
+    t.boolean  "is_new",            default: true
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "sourceable_id"
     t.string   "sourceable_type"
+    t.float    "safe_stock"
+    t.string   "from_warehouse_id"
+    t.string   "from_position_id"
   end
 
   add_index "part_positions", ["id"], name: "index_part_positions_on_id", using: :btree
@@ -470,17 +482,21 @@ ActiveRecord::Schema.define(version: 20151013081022) do
   add_index "part_types", ["id"], name: "index_part_types_on_id", using: :btree
 
   create_table "parts", force: true do |t|
-    t.string   "uuid",         limit: 36,                                           null: false
+    t.string   "uuid",          limit: 36,                                           null: false
     t.string   "customernum"
     t.string   "user_id"
-    t.boolean  "is_delete",                                         default: false
-    t.boolean  "is_dirty",                                          default: true
-    t.boolean  "is_new",                                            default: true
+    t.boolean  "is_delete",                                          default: false
+    t.boolean  "is_dirty",                                           default: true
+    t.boolean  "is_new",                                             default: true
     t.datetime "created_at"
     t.datetime "updated_at"
     t.float    "unit_pack"
     t.string   "part_type_id"
-    t.decimal  "convert_unit",            precision: 20, scale: 10, default: 1.0
+    t.decimal  "convert_unit",             precision: 20, scale: 10, default: 1.0
+    t.string   "name"
+    t.float    "cross_section"
+    t.float    "weight"
+    t.float    "weight_range"
   end
 
   add_index "parts", ["id"], name: "index_parts_on_id", using: :btree
@@ -656,6 +672,15 @@ ActiveRecord::Schema.define(version: 20151013081022) do
     t.string   "name"
   end
 
+  create_table "settings", force: true do |t|
+    t.string   "name"
+    t.string   "value"
+    t.string   "code"
+    t.integer  "type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "state_logs", force: true do |t|
     t.string   "stateable_id"
     t.string   "stateable_type"
@@ -719,6 +744,15 @@ ActiveRecord::Schema.define(version: 20151013081022) do
 
   add_index "sys_configs", ["code"], name: "index_sys_configs_on_code", using: :btree
   add_index "sys_configs", ["id"], name: "index_sys_configs_on_id", using: :btree
+
+  create_table "units", force: true do |t|
+    t.string   "nr"
+    t.string   "name"
+    t.string   "short_name"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", force: true do |t|
     t.string   "uuid",                   limit: 36,                 null: false
