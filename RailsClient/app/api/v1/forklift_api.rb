@@ -24,7 +24,7 @@ module V1
       #@type
       get :get_by_time_and_state do
         args= {}
-        start_time = params[:start_time].nil? ? 48.hour.ago : params[:start_time]
+        start_time = params[:start_time].nil? ? SysConfig.app_show_recent_data_days.to_i.days.ago : params[:start_time]
         end_time = params[:end_time].nil? ? Time.now : params[:end_time]
 
         args[:state] = params[:state] if params[:state]
@@ -69,6 +69,8 @@ module V1
       #if not,return
       # add package
       post :check_package do
+
+        p params
         m = ApiMessage.new
 
         unless f=LogisticsContainer.exists?(params[:id])
@@ -100,15 +102,15 @@ module V1
         end
 
         if f.add(p)
-          if (params[:check_whouse].nil? || params[:check_whouse].to_i==1)
-            if PartService.get_part_by_id_whouse_id(pc.part_id, f.destinationable_id)
-              {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(p).to_json}
-            else
-              {result: 1, result_code: ResultCodeEnum::TargetNotInPosition, content: PackagePresenter.new(p).to_json}
-            end
-          else
+          # if (params[:check_whouse].nil? || params[:check_whouse].to_i==1)
+          #   if PartService.get_part_by_id_whouse_id(pc.part_id, f.destinationable_id)
+          #     {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(p).to_json}
+          #   else
+          #     {result: 1, result_code: ResultCodeEnum::TargetNotInPosition, content: PackagePresenter.new(p).to_json}
+          #   end
+          # else
             {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(p).to_json}
-          end
+          # end
         else
           {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::AddPackageFailed}
         end
@@ -129,6 +131,7 @@ module V1
       # @deprecated
       # * use api create package and add it forklift
       post :add_package do
+
         unless f=LogisticsContainer.exists?(params[:id])
           return {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::NotExit}
         end
@@ -152,15 +155,7 @@ module V1
           lc_p = res.object
           if f.add(lc_p)
             lc_p.update({destinationable: f.destinationable})
-            if (params[:check_whouse].nil? || params[:check_whouse].to_i==1)
-              if PartService.get_part_by_id_whouse_id(params[:part_id], f.destinationable_id)
-                {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(lc_p).to_json}
-              else
-                {result: 1, result_code: ResultCodeEnum::TargetNotInPosition, content: PackagePresenter.new(lc_p).to_json}
-              end
-            else
-              {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(lc_p).to_json}
-            end
+            {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(lc_p).to_json}
           else
             {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::AddPackageFailed}
           end
@@ -205,6 +200,7 @@ module V1
 
       # update forklift
       put do
+        p forklift_params
         args=forklift_params
         args.delete(:stocker_id)
         args[:destinationable_id] = args[:whouse_id] if args[:whouse_id]
@@ -218,14 +214,16 @@ module V1
           return {result: 0, content: ForkliftMessage::CannotUpdate}
         end
 
-        unless args[:destinationable_id].blank?
-          unless PartService.parts_in_whouse?(LogisticsContainerService.get_part_ids(f), args[:destinationable_id])
-            return {return: 0, content: ForkliftMessage::CannotUpdatePartsNotExistInWhouse}
-          end
+        unless location=Location.find_by_nr(args[:destinationable_id])
+          return {result: 0, content: ForkliftMessage::DestinationNotExist}
+        else
+          args[:destinationable]=location
         end
+        args.delete(:destinationable_id)
+
 
         if f.update_attributes(args)
-          if args[:destinationable_id]
+          if args[:destinationable].present?
             ps = LogisticsContainerService.get_all_packages(f)
             ps.each { |p| p.update({destinationable: f.destinationable}) }
             packages = PackagePresenter.init_presenters(ps).collect { |p| p.to_json }

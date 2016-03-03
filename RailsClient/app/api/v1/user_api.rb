@@ -19,7 +19,9 @@ module V1
               {result: 1, content: {role_id: current_user.role_id,
                                     location_id: current_user.location_id,
                                     location_name: current_user.location.name,
-                                    operation_mode: current_user.operation_mode}}
+                                    operation_mode: current_user.operation_mode,
+                                    location: LocationPresenter.new(current_user.location).to_json_with_destination
+              }}
             end
           else
             # error!({result: 0, content: '密码错误'}, 401)

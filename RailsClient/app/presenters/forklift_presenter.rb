@@ -7,8 +7,8 @@ class ForkliftPresenter<Presenter
     self.delegators = Delegators
   end
 
-  def destinationable_name
-    @forklift.destinationable.nil? ? '' : @forklift.destinationable.name
+  def destinationable_nr
+    @forklift.destinationable.nil? ? '' : @forklift.destinationable.nr
   end
 
   def created_at
@@ -47,7 +47,7 @@ class ForkliftPresenter<Presenter
         created_at: self.created_at,
         user_id: self.user_id,
         stocker_id: self.user_id,
-        whouse_id: self.destinationable_name,
+        whouse_id: self.destinationable_nr,
         sum_packages: self.sum_packages,
         accepted_packages: self.accepted_packages,
         state: self.state,

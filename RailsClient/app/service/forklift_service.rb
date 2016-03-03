@@ -55,9 +55,9 @@ class ForkliftService
 
   def self.create args, user
     msg = Message.new
-    whouse=nil
-    unless whouse=Whouse.find_by_id(args[:destinationable_id])
-      msg.content = ForkliftMessage::WarehouseNotExit
+    location=nil
+    unless location=Location.find_by_nr(args[:destinationable_id])
+      msg.content = ForkliftMessage::DestinationNotExist
       return msg
     end unless args[:destinationable_id].blank?
 
@@ -65,7 +65,7 @@ class ForkliftService
       forklift = Forklift.new(user_id: user.id, location_id: user.location_id)
       if forklift.save
         lc=forklift.logistics_containers.build(source_location_id: user.location_id, user_id: user.id)
-        lc.destinationable=whouse
+        lc.destinationable=location
         lc.save
 
         msg.result=true

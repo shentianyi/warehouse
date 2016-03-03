@@ -5,7 +5,7 @@ class LogisticsContainer<LocationContainer
   include CZ::Service
 
   alias_method :movable_state_display, :state_display
-  after_update :enter_store
+ # after_update :enter_store
 
 
   default_scope { where(type: LocationContainerType::LOGISTICS) }
@@ -17,7 +17,7 @@ class LogisticsContainer<LocationContainer
   belongs_to :delivery, foreign_key: :container_id
   has_many :records, :as => :recordable, dependent: :destroy
 
-  after_update :out_store
+  #after_update :out_store
 
   # def destroy
   #    self.package.destroy

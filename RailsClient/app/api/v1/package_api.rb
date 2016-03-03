@@ -51,7 +51,7 @@ module V1
       get :get_by_time_and_state do
         args = {}
 
-        start_time = params[:start_time].nil? ? 48.hour.ago : params[:start_time]
+        start_time = params[:start_time].nil? ? SysConfig.app_show_recent_data_days.to_i.days.ago : params[:start_time]
         end_time = params[:end_time].nil? ? Time.now : params[:end_time]
 
         args[:state] = params[:state] if params[:state]
@@ -75,6 +75,7 @@ module V1
       # @deprecated
       # use validate_id instead
       post :validate do
+        p params
         if Package.id_valid?(params[:id])
           {result: 1, content: ''}
         else

@@ -46,7 +46,7 @@ class LocationsController < ApplicationController
 
   def add_destination
     if @location.destinations.include?(Location.find_by_id(location_params[:destination_id]))
-      redirect_to destinations_location_path(@location), notice: '目的地未找到'
+      redirect_to destinations_location_path(@location), notice: '目的地已存在'
     end
 
     if @location.location_destinations.count == 0
@@ -138,6 +138,7 @@ class LocationsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def location_params
     #params[:location]
-    params.require(:location).permit(:name, :address, :tel, :id,:nr, :prefix, :suffix, :destination_id,:tenant_id)
+    params.require(:location).permit(:name, :address, :tel, :id,:nr,
+                                     :prefix, :suffix,:receive_whouse_id,:send_whouse_id, :destination_id,:tenant_id)
   end
 end

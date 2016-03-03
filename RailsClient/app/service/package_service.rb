@@ -48,10 +48,12 @@ class PackageService
     end
 
     #part_id
-    unless Part.exists?(args[:part_id])
+    unless part=Part.exists?(args[:part_id])
       #err_code 10001
       msg.content = PackageMessage::PartNotExit
       return msg
+    else
+      args[:part_id]=part.id
     end
 
     #create
@@ -113,5 +115,9 @@ class PackageService
     query=Package.joins(:logistics_containers).where(location_containers: {source_location_id: location_id, ancestry: nil})
     query=query.where(location_containers: {user_id: user_id}) if user_id
     query.select('containers.*,location_containers.*')
+  end
+
+  def self.check_validate_for_send(id,user)
+    # CHECK_PACKAGE_IN_STOCK_FOR_DELIVERY
   end
 end
