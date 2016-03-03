@@ -23,7 +23,7 @@
 <h4>目的地:
   <small><%= @forklift.destination.name if @forklift.destination %></small>
 </h4>
-<h4>所属运单:f
+<h4>所属运单:
   <small><%= link_to @forklift.parent.container_id, delivery_path(@forklift.parent), :class => "btn btn-default" if @forklift.parent %></small>
 </h4>
 <h4>备注:

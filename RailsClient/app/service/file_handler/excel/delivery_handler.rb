@@ -24,6 +24,19 @@ module FileHandler
               # generate delivery container
               source = Location.find_by_nr(SysConfigCache.jiaxuan_extra_source_value)
 
+              if source.blank?
+                raise '没有正确配置常州发运地址'
+              end
+
+              if (destination=source.default_destination).blank?
+                raise '常州莱尼没有配置默认发运地点'
+              end
+
+              if (cz_send_warehouse=source.send_whouse).blank?
+                raise '常州莱尼没有配置默认在途仓库'
+              end
+
+
               delivery = Delivery.create({
                                              remark: '常州莱尼发运数据',
                                              user_id: user.id,
@@ -31,7 +44,7 @@ module FileHandler
                                          })
 
               # generate delivery location_container
-              destination = Location.find_by_nr(SysConfigCache.jiaxuan_extra_destination_value)
+              # destination =source.default_location_destination #Location.find_by_nr(SysConfigCache.jiaxuan_extra_destination_value)
 
               dlc = delivery.logistics_containers.build(source_location_id: source.id, des_location_id: destination.id, user_id: user.id, remark: '常州莱尼发运数据', state: MovableState::WAY)
               dlc.destinationable = destination
