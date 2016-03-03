@@ -73,7 +73,7 @@ class PartClientsController < ApplicationController
   end
 
   def set_part_clients
-    @part_clients=@tenant.parts
+    @part_clients=@tenant.parts.paginate(:page=>params[:page])
   end
 
   def set_part_client

@@ -1,12 +1,13 @@
 ActiveRecord::Base.transaction do
 
-  t=Tenant.create(name: '上海佳轩物流有限公司', code: 'SHJX', short_name: '简称', type: TenantType::SELF)
-
+  if t=Tenant.find_by_code('SHJX')
+    t=Tenant.create(name: '上海佳轩物流有限公司', code: 'SHJX', short_name: '上海佳轩简称', type: TenantType::SELF)
+  end
   # init location and admin
   unless (jxlo=Location.find_by_id('SHJXLO'))
     jxlo = Location.create(nr: 'SHJXLO', name: ' 上海佳轩物流', is_base: true,
-                        tenant_id: t.id,
-                        address: '上海佳轩物流有限公司的地址')
+                           tenant_id: t.id,
+                           address: '上海佳轩物流有限公司的地址')
   end
 
   unless user=User.find_by_id('admin')
@@ -20,21 +21,21 @@ ActiveRecord::Base.transaction do
     shl=Tenant.create(name: '上海莱尼电器有限公司', code: 'SHL', short_name: '上海莱尼')
   end
 
-  unless czl=Tenant.find_by_code('czl')
+  unless czl=Tenant.find_by_code('CZL')
     czl=Tenant.create(name: '常州莱尼线束有限公司', code: 'CZL', short_name: '常州莱尼')
   end
 
   # init location
   unless (shllo=Location.find_by_id('SHLLO'))
     shllo = Location.create(nr: 'SHLLO', name: ' 上海莱尼', is_base: true,
-                        tenant_id: shl.id,
-                        address: '上海莱尼电器有限公司的地址')
+                            tenant_id: shl.id,
+                            address: '上海莱尼电器有限公司的地址')
   end
 
   unless (czllo=Location.find_by_id('CZLLO'))
     czllo = Location.create(nr: 'CZLLO', name: '常州莱尼', is_base: true,
-                           tenant_id: czl.id,
-                           address: '常州莱尼线束有限公司的地址')
+                            tenant_id: czl.id,
+                            address: '常州莱尼线束有限公司的地址')
   end
 
   # set as destination
@@ -46,5 +47,18 @@ ActiveRecord::Base.transaction do
   end
 
 
+  # init warehouse
+  # receive warehouse
+  unless rw=Whouse.find_by_nr('JXReceive')
+    rw=jxlo.whouses.create(nr: 'JXReceive', name: '佳轩接收仓库')
+  end
+  # send warehouse
+  unless sw=Whouse.find_by_nr('JXSend')
+    sw=jxlo.whouses.create(nr: 'JXSend', name: '佳轩发运仓库')
+  end
+
+  jxlo.receive_whouse=rw
+  jxlo.send_whouse=sw
+  jxlo.save
 
 end

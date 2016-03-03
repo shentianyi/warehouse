@@ -1,8 +1,14 @@
 <h1>客户零件列表</h1>
-
+<br/>
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @part_clients %>
+  </div>
+  <%= will_paginate @part_clients, :container => false %>
+</div>
 <table class="table table-bordered table-striped globle-table">
   <thead>
-    <tr>
+    <tr><th></th>
       <th>Part Nr</th>
       <th>Client part nr</th>
       <th colspan="2"></th>
@@ -10,8 +16,9 @@
   </thead>
 
   <tbody>
-    <% @part_clients.each do |part_client| %>
+    <% @part_clients.each_with_index do |part_client,i| %>
       <tr>
+        <td><%= i+1%></td>
         <td><%= part_client.part.nr %></td>
         <td><%= part_client.client_part_nr %></td>
         <td><%= link_to 'Edit', edit_tenant_part_client_path(part_client,{tenant_id:part_client.client_tenant_id}) %></td>
