@@ -27,7 +27,7 @@ class PackagePresenter<Presenter
   end
 
   def part_id_display
-    @package.part_id_display || ''
+    @package.part.blank? ? '' : @package.part.nr
   end
 
   def quantity_display

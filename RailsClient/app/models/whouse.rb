@@ -3,7 +3,7 @@ class Whouse < ActiveRecord::Base
   include Import::WhouseCsv
 
   belongs_to :location
-  
+
   has_many :positions, :dependent => :destroy
   has_many :part_positions, :through => :positions
   has_many :parts, :through => :part_positions
@@ -14,8 +14,15 @@ class Whouse < ActiveRecord::Base
   has_many :storages, as: :storable
   has_many :inventory_lists
 
+  has_one :default_position, -> { where(is_default: true) }, class_name: 'Position'
+
+  after_create :create_default_position
 
   def self.nr_by_regex(nr)
-    nr.sub(/^LO/,'')
+    nr.sub(/^LO/, '')
+  end
+
+  def create_default_position
+    self.positions.create(nr: self.nr, is_default: true)
   end
 end

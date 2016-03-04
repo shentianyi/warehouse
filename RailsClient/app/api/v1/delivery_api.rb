@@ -54,6 +54,18 @@ module V1
 
         {result: 1, content: ForkliftPresenter.init_json_presenters(dpresenger.forklifts)}
       end
+      get :packages do
+        msg = ApiMessage.new
+
+        unless lc = LogisticsContainer.exists?(params[:id])
+          return msg.set_false(DeliveryMessage::NotExist)
+        end
+
+
+        dpresenger = DeliveryPresenter.new(lc)
+
+        {result: 1, content: PackagePresenter.init_json_presenters(dpresenger.packages)}
+      end
 
       # check forklift
       # forklift id

@@ -56,10 +56,17 @@ class PositionsController < ApplicationController
   # DELETE /positions/1
   # DELETE /positions/1.json
   def destroy
-    @position.destroy
-    respond_to do |format|
-      format.html { redirect_to positions_url, notice: 'Position was successfully destroyed.' }
-      format.json { head :no_content }
+    if @position.is_default
+      respond_to do |format|
+        format.html { redirect_to positions_url, notice: '默认库位不可以删除.' }
+        format.json { head :no_content }
+      end
+    else
+      @position.destroy
+      respond_to do |format|
+        format.html { redirect_to positions_url, notice: 'Position was successfully destroyed.' }
+        format.json { head :no_content }
+      end
     end
   end
 

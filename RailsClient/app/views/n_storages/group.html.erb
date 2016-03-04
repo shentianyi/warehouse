@@ -77,13 +77,13 @@
   <% if @n_storages.present? %>
       <% @n_storages.each do |storage| %>
           <tr>
-            <td><%= storage.partNr %></td>
+            <td><%= storage.part.nr if storage.part.present? %></td>
             <td><%= storage.packageId %></td>
             <td><%= storage.total_qty %></td>
             <td><%= storage.fifo.localtime if storage.fifo %> </td>
             <td><%= storage.updated_at.localtime if storage.updated_at %> </td>
-            <td><%= storage.ware_house_id %></td>
-            <td><%= storage.position %></td>
+            <td><%= storage.whouse.nr if storage.whouse.present?  %></td>
+            <td><%= storage.position.nr if storage.position.present?   %></td>
             <!--<td><%= link_to '编辑', edit_n_storage_path(storage), :class => 'btn btn-default' %></td>-->
           </tr>
       <% end %>

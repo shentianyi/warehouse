@@ -5,7 +5,7 @@ class LogisticsContainer<LocationContainer
   include CZ::Service
 
   alias_method :movable_state_display, :state_display
- # after_update :enter_store
+  # after_update :enter_store
 
 
   default_scope { where(type: LocationContainerType::LOGISTICS) }
@@ -117,50 +117,41 @@ class LogisticsContainer<LocationContainer
     end
   end
 
-  def out_store
-    begin
-      if self.state==MovableState::WAY && self.container.is_package?
-        StoreContainer.out_store_by_container(container, self.source_location_id)
-      end
-      # rescue Exception=>e
-      #   puts e.message
-      #   false
-    end
-  end
+  # def out_store
+  #   begin
+  #     if self.state==MovableState::WAY && self.container.is_package?
+  #       StoreContainer.out_store_by_container(container, self.source_location_id)
+  #     end
+  #     # rescue Exception=>e
+  #     #   puts e.message
+  #     #   false
+  #   end
+  # end
+  #
+  # def enter_store
+  #   if self.container.type==ContainerType::PACKAGE && self.state_changed?
+  #     begin
+  #       enter_stock
+  #     rescue
+  #
+  #     end
+  #   end
+  # end
 
-  def enter_store
-    if self.container.type==ContainerType::PACKAGE && self.state_changed?
-      begin
-        enter_stock
-      rescue
-
-      end
+  def enter_stock(warehouse, position, fifo)
+    # if self.state==MovableState::CHECKED
+    if (package=self.package)
+      params={
+          partNr: package.part.id,
+          qty: package.quantity,
+          fifo: fifo,
+          packageId: package.id,
+          toWh: warehouse.id,
+          toPosition: position.id,
+          uniq: true,
+      }
+      WhouseService.new.enter_stock(params)
     end
-  end
-
-  def enter_stock
-    if self.state==MovableState::CHECKED
-      if (package=self.package)
-        toWh='3EX'
-        if self.destinationable && self.destinationable_type == Whouse.to_s
-          toWh=self.destinationable_id
-        end
-        params={
-            partNr: package.part_id,
-            qty: package.quantity,
-            fifo: package.parsed_fifo,
-            packageId: package.id,
-            toWh: toWh,
-            uniq: true
-        }
-        if position=PartService.get_position_by_whouse_id(package.part_id, self.destinationable_id)
-          params[:toPosition]=position.detail
-        else
-          params[:toPosition]='00 00 00'
-        end
-        StorageOperationRecord.save_record(params, 'ENTRY')
-        WhouseService.new.enter_stock(params)
-      end
-    end
+    # end
   end
 end

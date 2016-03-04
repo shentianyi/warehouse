@@ -31,6 +31,10 @@ class DeliveryPresenter<Presenter
     LogisticsContainerService.get_forklifts(@delivery)
   end
 
+  def packages
+    LogisticsContainerService.get_packages(@delivery)
+  end
+
   def user
     User.find_by_id(self.user_id)
   end

@@ -7,7 +7,8 @@ ActiveRecord::Base.transaction do
   unless (jxlo=Location.find_by_nr('SHJXLO'))
     jxlo = Location.create(nr: 'SHJXLO', name: ' 上海佳轩物流', is_base: true,
                            tenant_id: t.id,
-                           address: '上海佳轩物流有限公司的地址')
+                           address: '上海佳轩物流有限公司的地址',
+                           receive_mode: DeliveryReceiveMode::PACKAGE)
   end
 
   unless user=User.find_by_nr('admin')
@@ -29,7 +30,8 @@ ActiveRecord::Base.transaction do
   unless (shllo=Location.find_by_nr('SHLLO'))
     shllo = Location.create(nr: 'SHLLO', name: ' 上海莱尼', is_base: true,
                             tenant_id: shl.id,
-                            address: '上海莱尼电器有限公司的地址')
+                            address: '上海莱尼电器有限公司的地址',
+                            receive_mode: DeliveryReceiveMode::FORKLIFT)
   end
 
   unless (czllo=Location.find_by_nr('CZLLO'))

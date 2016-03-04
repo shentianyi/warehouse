@@ -1,5 +1,7 @@
 class NStorage < ActiveRecord::Base
-  belongs_to :ware_house, class_name: 'Whouse'
+  belongs_to :whouse, foreign_key: :ware_house_id
+  belongs_to :position, foreign_key: :position
+  belongs_to :part, foreign_key: :partNr
   default_scope { where(locked: false) }
 
   before_validation :validate
@@ -20,9 +22,10 @@ class NStorage < ActiveRecord::Base
     # end
   end
 
-  def whId
-    ware_house and ware_house.whId or nil
-  end
+  #
+  # def whId
+  #   whouse and whouse.id or nil
+  # end
 
   def self.generate_diff_report(inventory_list_id)
     condition = {}
@@ -81,14 +84,14 @@ class NStorage < ActiveRecord::Base
         if n_storage.id && n_storage.id != ""
           sheet.add_row [
                             index+1,
-                            n_storage.partNr,
-                            n_storage.ware_house_id,
-                            n_storage.position,
+                            n_storage.part.present? ? n_storage.part.nr : '',
+                            n_storage.whouse.present? ? n_storage.whouse.nr : '',
+                            n_storage.position.present? ? n_storage.position.nr : '',
                             n_storage.total_qty,
                             n_storage.fifo.present? ? n_storage.fifo.localtime.strftime("%Y-%m-%d %H:%M") : '',
                             n_storage.created_at.present? ? n_storage.created_at.localtime.strftime("%Y-%m-%d %H:%M") : '',
                             n_storage.packageId
-                        ]
+                        ], types: [:string, :string, :string, :string, :string, :string, :string,:string]
         end
       }
     end
@@ -107,14 +110,14 @@ class NStorage < ActiveRecord::Base
         if n_storage.id && n_storage.id != ""
           sheet.add_row [
                             index+1,
-                            n_storage.partNr,
+                            n_storage.part.present? ? n_storage.part.nr : '',
                             n_storage.packageId,
-                            n_storage.ware_house_id,
-                            n_storage.position,
+                            n_storage.whouse.present? ? n_storage.whouse.nr : '',
+                            n_storage.position.present? ? n_storage.position.nr : '',
                             n_storage.qty,
                             n_storage.fifo.present? ? n_storage.fifo.localtime.strftime("%Y-%m-%d %H:%M") : '',
                             n_storage.created_at.present? ? n_storage.created_at.localtime.strftime("%Y-%m-%d %H:%M") : ''
-                        ]
+                        ], types: [:string, :string, :string, :string, :string, :string, :string,:string]
         end
       }
     end

@@ -38,6 +38,7 @@
       <th>编号</th>
       <th>详细库位</th>
       <th>所属仓库</th>
+      <th>仓库默认库位</th>
       <th>零件列表</th>
       <th colspan="3">&nbsp;</th>
     </tr>
@@ -47,9 +48,10 @@
     <% @positions.each_with_index do |position,index| %>
       <tr>
         <td><%= index+@positions.offset+1 %>
-        <td><%= position.id%></td>
+        <td><%= position.nr%></td>
         <td><%= position.detail%></td>
         <td><%= position.whouse.nil? ? '' : position.whouse.name %></td>
+        <td><%= position.is_default%></td>
         <td><%= link_to '零件列表',parts_position_path(position)%><span class="badge pull-right"><%= position.parts.count %></span></td>
         <td><%= link_to '详细', position ,:class=>'btn btn-default'%></td>
         <td><%= link_to '编辑', edit_position_path(position),:class=>'btn btn-default' %></td>

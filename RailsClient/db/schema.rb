@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160303122219) do
+ActiveRecord::Schema.define(version: 20160304053245) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -650,6 +650,7 @@ ActiveRecord::Schema.define(version: 20160303122219) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "nr"
+    t.boolean  "is_default",            default: false
   end
 
   add_index "positions", ["id"], name: "index_positions_on_id", using: :btree

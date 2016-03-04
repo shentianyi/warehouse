@@ -126,6 +126,9 @@ module FileHandler
                                                            })
                   plc.destinationable = destination
                   plc.save
+
+                  plc.enter_stock(cz_send_warehouse,cz_send_warehouse.default_position,Time.now)
+
                   Record.create({recordable: plc, impl_id: user.id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
                   forklifts[row[:forklift_id]].add(plc)
                 end
