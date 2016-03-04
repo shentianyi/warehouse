@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160304053245) do
+ActiveRecord::Schema.define(version: 20160304061203) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -373,7 +373,7 @@ ActiveRecord::Schema.define(version: 20160304053245) do
     t.string   "partNr"
     t.datetime "fifo"
     t.decimal  "qty",           precision: 20, scale: 10
-    t.string   "position"
+    t.string   "position_id"
     t.string   "packageId"
     t.string   "uniqueId"
     t.string   "ware_house_id"

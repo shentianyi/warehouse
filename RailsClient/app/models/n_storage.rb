@@ -1,6 +1,6 @@
 class NStorage < ActiveRecord::Base
   belongs_to :whouse, foreign_key: :ware_house_id
-  belongs_to :position, foreign_key: :position
+  belongs_to :position#, foreign_key: :position
   belongs_to :part, foreign_key: :partNr
   default_scope { where(locked: false) }
 

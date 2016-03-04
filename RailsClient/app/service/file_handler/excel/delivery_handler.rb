@@ -168,7 +168,7 @@ module FileHandler
             JIAXUAN_HEADERS.each_with_index do |k, i|
               row[k] = book.cell(line, i+1).to_s.strip
               if ['forklift_id', 'package_id', 'no800', 'cz_part_id', 'sh_part_id', 'batch'].include?(k.to_s)
-                row[k]=row[k] #.sub(/\.0/, '')
+                row[k]=row[k].sub(/\.0/, '')
               end
             end
 
