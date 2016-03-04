@@ -44,4 +44,8 @@ class OrderItem < ActiveRecord::Base
         .select('order_items.part_id,SUM(order_items.box_quantity) as box_count,SUM(order_items.quantity) as total,order_items.whouse_id as whouse_id,order_items.state,order_items.user_id as user_id')
         .group('part_id,whouse_id,state').order("whouse_id DESC,part_id,state DESC").all
   end
+
+  def orderable_nr
+    @orderable_nr||= (self.orderable.present? ? self.orderable.nr : '')
+  end
 end

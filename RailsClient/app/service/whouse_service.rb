@@ -1,4 +1,55 @@
 class WhouseService
+  def self.move_by_car user, params
+    # begin
+    NStorage.transaction do
+      PickListService.validable_car_and_box(params) do |car, boxes|
+        if boxes.present?
+          boxes.each do |order_box|
+            p order_box
+            p order_box.can_move_store?
+            if order_box.can_move_store?
+              self.move({
+                            user_id: user.id,
+                            part_id: order_box.part_id,
+                            quantity: order_box.quantity,
+                            from_warehouse_id: order_box.source_warehouse_id,
+                            to_warehouse_id: order_box.warehouse_id,
+                            to_position_id: order_box.position_id,
+                            remarks: "RFID MOVE:#{order_box.nr}"
+                        })
+              order_box.update_attributes(status: OrderBoxStatus::INIT)
+            end
+          end
+        else
+          if pick=PickList.by_order_car(car)
+            pick.pick_items.each do |item|
+              if item.can_move_store? && (order_box=item.order_box)
+                qty=item.status==PickItemStatus::PICKED ? item.weight_qty : item.order_box.quantity
+                self.move({
+                              user_id: user.id,
+                              part_id: item.part_id,
+                              quantity: qty,
+                              from_warehouse_id: order_box.source_warehouse_id,
+                              to_warehouse_id: order_box.warehouse_id,
+                              to_position_id: order_box.position_id,
+                              remarks: "RFID MOVE:#{order_box.nr}"
+                          })
+                order_box.update_attributes(status: OrderBoxStatus::INIT)
+              end
+            end
+          end
+        end
+        car.update_attributes(status: OrderCarStatus::INIT)
+      end
+      {
+          meta: {
+              code: 200,
+              message: 'Move Success'
+          }
+      }
+    end
+  end
+
   def validate_fifo_time(fifo)
     return nil if fifo.blank?
     puts "---------------88888888888#{fifo}"

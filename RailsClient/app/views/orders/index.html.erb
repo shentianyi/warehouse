@@ -45,6 +45,7 @@
   <tr>
     <th>NO.</th>
     <th>订单号</th>
+    <th>料车号</th>
     <th>要货员</th>
     <th>要货地</th>
     <th>备货地</th>
@@ -62,6 +63,7 @@
       <tr>
         <td><%= index+@orders.offset+1 %></td>
         <td><%= order.id %></td>
+        <td><%= order.orderable.blank? ? '' : order.orderable.nr %></td>
         <td><%= order.user_id%></td>
         <td><%= order.source_location.name %></td>
         <td><%= order.source.name if order.source%></td>

@@ -1,5 +1,5 @@
 class OrderPresenter<Presenter
-  Delegators=[:id,:user_id,:created_at,:order_items,:handled,:remark]
+  Delegators=[:id,:user_id,:created_at,:order_items,:handled,:remark, :status, :orderable_id, :orderable_type]
   def_delegators :@order,*Delegators
 
   def initialize(order)
@@ -43,6 +43,17 @@ class OrderPresenter<Presenter
         remark: self.remark,
         has_out_of_stock: self.has_out_of_stock ? 1:0,
         order_items: items
+    }
+  end
+
+
+  def as_basic_info
+    {
+        id:  @order.id,
+        user: UserPresenter.new(User.find_by_id(@order.user_id)).as_basic_info,
+        status:@order.status,
+        order_car: OrderCarPresenter.new(@order.orderable).as_basic_info,
+        remarks: @order.remarks
     }
   end
 end

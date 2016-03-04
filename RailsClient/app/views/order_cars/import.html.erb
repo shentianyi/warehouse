@@ -1,0 +1,21 @@
+<h1>导入料车信息</h1>
+
+<script type="text/javascript">
+    $(function () {
+        data_upload("#item-data-uploader", 'xlsx');
+    });
+</script>
+
+<p id="notice"><%= notice %></p>
+
+<div>
+  选择数据文件：
+  <input id="item-data-uploader" type="file" name="files[]" data-url="/order_cars/import"/>
+
+  <div class="abstractblock" id="item-data-uploader-preview" style="display:none;"></div>
+
+</div>
+
+<div><a href="/files/download?folder=template&file=order_car.xlsx">下载模板</a></div>
+
+<%= link_to '返回', order_cars_path %>

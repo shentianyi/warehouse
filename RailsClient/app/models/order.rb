@@ -2,6 +2,8 @@ class Order < ActiveRecord::Base
   include Extensions::UUID
 
   belongs_to :user
+  belongs_to :whouse
+  belongs_to :orderable, :polymorphic => true
 
   has_many :order_items, :dependent => :destroy
   #发货地

@@ -78,4 +78,19 @@ class OrderItemService
   def self.update args
     true
   end
+
+  # require
+  #  nr:string
+  def self.details nr
+    if oc=OrderCar.find_by_nr(nr)
+      OrderCarPresenter.new(oc).as_basic_feedback
+    else
+      ApiMessage.new({
+                         meta: {
+                             code: 400,
+                             message: '未找到该料车'
+                         }
+                     })
+    end
+  end
 end

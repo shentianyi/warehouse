@@ -1,5 +1,5 @@
 class OrdersController < ApplicationController
-  before_action :set_order, only: [:show, :edit, :update, :destroy, :order_items]
+  before_action :set_order, only: [:show, :edit, :update, :destroy, :order_items, :exports]
 
   # GET /orders
   # GET /orders.json
@@ -157,6 +157,49 @@ class OrdersController < ApplicationController
     @order_items = @order.order_items.paginate(:page => params[:page])
   end
 
+  def exports
+    send_data(entry_with_xlsx(@order.order_items),
+              :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+              :filename => "需求单_#{@order.nr}_需求项.xlsx")
+  end
+
+  def entry_with_xlsx order_items
+    p = Axlsx::Package.new
+    wb = p.workbook
+    wb.add_worksheet(:name => "Basic Sheet") do |sheet|
+      sheet.add_row entry_header
+      order_items.each_with_index { |i, index|
+        sheet.add_row [
+                          index+1,
+                          "#{i.order.nr}",
+                          OrderItemStatus.display(i.status),
+                          i.user.blank? ? '' : i.user.nr,
+                          i.quantity,
+                          i.part.blank? ? '' : i.part.nr,
+                          i.is_emergency ? '是' : '否',
+                          i.orderable.blank? ? '' : "#{i.orderable.nr}",
+                          i.remarks
+                      ], :types => [:string, :string, :string, :string, :string, :string, :string, :string]
+      }
+    end
+    p.to_stream.read
+  end
+
+  def entry_header
+    ["编号", "择货单号", "状态", "创建者", "数量", "零件号", "是否加急", "料盒编号", "备注"]
+  end
+
+  def search
+    super { |query|
+      unless params[:order][:orderable_id].blank?
+        if order_car = OrderCar.find_by_nr(params[:order][:orderable_id])
+          query = query.unscope(where: :orderable_id).where(orderable_id: order_car.id)
+        end
+      end
+
+      query
+    }
+  end
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_order

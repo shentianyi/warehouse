@@ -13,10 +13,15 @@ class Whouse < ActiveRecord::Base
   has_many :source_containers, class_name: 'LocationContainer'
   has_many :storages, as: :storable
   has_many :inventory_lists
+  has_many :order_boxes, :dependent => :destroy
 
   include Import::WhouseCsv
 
   def self.nr_by_regex(nr)
     nr.sub(/^LO/,'')
+  end
+
+  def self.options
+    self.all.map { |r| [r.name, r.id] }
   end
 end

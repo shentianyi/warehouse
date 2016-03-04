@@ -2,6 +2,29 @@
 
 Rails.application.routes.draw do
 
+  resources :pick_orders
+
+  resources :order_cars do
+    collection do
+      get :search
+      match :import, action: :import, via: [:get, :post]
+    end
+  end
+
+  resources :order_boxes do
+    collection do
+      get :search
+      match :import, action: :import, via: [:get, :post]
+    end
+  end
+
+  resources :order_box_types do
+    collection do
+      get :search
+      match :import, action: :import, via: [:get, :post]
+    end
+  end
+
   resources :settings
 
   resources :units do
@@ -155,7 +178,7 @@ Rails.application.routes.draw do
       get :filters
       get :filt
       get :picklists
-
+      get :exports
       post :handle
     end
     member do
@@ -198,6 +221,16 @@ Rails.application.routes.draw do
 
   end
 
+  resources :part_positions do
+    collection do
+      post :do_import
+      get :download
+      get :template
+      get :search
+      match :import, action: :import, via: [:get, :post]
+    end
+  end
+
   resources :movements do
     collection do
       get :search
@@ -206,7 +239,7 @@ Rails.application.routes.draw do
 
   get 'orders/search', to: 'orders#search'
 
-  [:locations, :whouses, :parts, :positions, :part_positions, :users, :deliveries, :forklifts,
+  [:locations, :whouses, :parts, :positions, :users, :deliveries, :forklifts,
    :packages, :part_types, :pick_item_filters, :orders, :modems, :leds].each do |model|
     resources model do
       collection do

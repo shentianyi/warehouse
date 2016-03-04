@@ -37,6 +37,10 @@ class Position < ActiveRecord::Base
     end
   end
 
+  def self.options
+    self.all.map { |r| [r.id, r.id] }
+  end
+
   def self.to_xlsx positions
     p = Axlsx::Package.new
 
