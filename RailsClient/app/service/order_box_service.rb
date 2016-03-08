@@ -39,7 +39,7 @@ p '---------------------------------------------'
       box.update_attributes(status: OrderBoxStatus::PICKED)
     end
     if item=PickItem.find_by_id(pick_item_id)
-      item.update_attributes(status: PickItemStatus::PICKED,
+      item.update_attributes(state: PickItemStatus::PICKED,
                              weight: params[:weight],
                              weight_qty: params[:weight_qty],
                              weight_valid: params[:weight_valid])

@@ -22,7 +22,7 @@ module V4
 
       params do
         requires :id, type: Integer, desc: 'order box id'
-        requires :pick_item_id, type: Integer, desc: 'pick item id'
+        requires :pick_item_id, type: String, desc: 'pick item id'
         requires :weight, type: Float, desc: 'weight'
         requires :weight_qty, type: Float, desc: 'weight qty'
         requires :weight_valid, type: Boolean, desc: 'weight valid'

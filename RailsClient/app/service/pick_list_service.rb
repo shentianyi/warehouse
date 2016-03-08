@@ -124,9 +124,6 @@ class PickListService
           boxs<<box
         end
       end
-p '--------------------------------'
-      p boxs
-      p err_infos
 
       if err_infos.size==0
         if block_given?

@@ -8,7 +8,7 @@ class WhouseService
             p order_box
             p order_box.can_move_store?
             if order_box.can_move_store?
-              self.move({
+              WhouseService.new.move({
                             employee_id: user.id,
                             partNr: order_box.part_id,
                             qty: order_box.quantity,
@@ -24,8 +24,17 @@ class WhouseService
           if pick=PickList.by_order_car(car)
             pick.pick_items.each do |item|
               if item.can_move_store? && (order_box=item.order_box)
-                qty=item.status==PickItemStatus::PICKED ? item.weight_qty : item.order_box.quantity
-                self.move({
+                qty=item.state==PickItemStatus::PICKED ? item.weight_qty : item.order_box.quantity
+                p p={
+                  employee_id: user.id,
+                      partNr: item.part_id,
+                      qty: qty,
+                      fromWh: order_box.source_whouse_id,
+                      toWh: order_box.whouse_id,
+                      toPosition: order_box.position_id,
+                      remarks: "RFID MOVE:#{order_box.nr}"
+                }
+                WhouseService.new.move({
                               employee_id: user.id,
                               partNr: item.part_id,
                               qty: qty,

@@ -25,7 +25,8 @@ module APIGuard
     end
 
     def current_user
-      warden.user
+      #@warden.user
+      @current_user
     end
 
     def warden
@@ -35,6 +36,8 @@ module APIGuard
     def authenticate!
       unless warden.authenticate?
         return error!({result: 0}, 401)
+      else
+        @current_user= @warden.user
       end
     end
 
@@ -42,7 +45,6 @@ module APIGuard
 
       puts '----------------------------------------------1-'
       puts request.env['CONTENT_TYPE']
-
       puts '----------------------------------------------1-'
 
       I18n.locale=locale
@@ -220,7 +222,6 @@ module APIGuard
   #
 
   class NoAuthError<StandardError;
-    puts 'no auth error'
   end
   class BasicAuthError<StandardError;
   end
