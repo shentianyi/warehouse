@@ -1,13 +1,98 @@
-<h1><%= @user.nr%></h1>
+<style>
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+</style>
 
-<h4>姓名: <small><%= @user.name%></small></h4>
-<h4>工号： <small><%= @user.nr %></small></h4>
-<h4>操作模式： <small><%= OperationMode.display(@user.operation_mode) %></small></h4>
-<h4>上次登录IP: <small><%= @user.current_sign_in_ip%></small></h4>
-<h4>所属地点: <small><%= @user.location.name if @user.location%></small></h4>
-<h4>角色: <small><%= Role.display(@user.role_id) %></small></h4>
-<h4>邮箱: <small><%= @user.email %></small></h4>
-<h4>电话: <small><%= @user.tel %></small></h4>
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">管理</li>
+    <li>
+      <a href="/users">员工</a>
+    </li>
+    <li class="active">员工信息</li>
+  </ol>
+</div>
 
-<%= link_to '编辑', edit_user_path(@user),:class=>'btn btn-default' %> |
-<%= link_to '返回', users_path,:class=>'btn btn-default' %>
+<div class="container panel_show_msg"
+     style="background: #EAEAEA;border-radius: 50px;padding: 10px 40px 10px 40px;box-shadow: 10px 10px 5px #ccc;margin-top: 20px;margin-bottom: 100px;">
+
+  <div class="panel-heading" style="display: flex; border-bottom: 1px dashed steelblue;">
+    <i class="glyphicon glyphicon-user"
+       style="font-size: 3em;margin: 0 30px 0 0;color:steelblue;"></i>
+
+    <h3 style="margin: 5px 0 0 0">员工信息</h3>
+  </div>
+
+
+  <div class="panel-body">
+    <div class="panel panel-primary">
+      <div class="panel-heading" style="display: flex;height: 40px;">
+        <i class="glyphicon glyphicon-record" style="font-size: 1em;margin: 1px 10px 0 0;"></i>
+        <strong>基本信息</strong>
+      </div>
+
+      <div class="panel-body">
+        <div class="col-md-4" style="display: flex;">
+          <h4 style="white-space: nowrap;">员工号:</h4>
+          <h4 style="margin-left: 30px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" title="<%= @user.id %>">
+            <%= @user.id %></h4>
+        </div>
+
+        <div class="col-md-4" style="display: flex;">
+          <h4>姓名:</h4>
+          <h4 style="margin-left: 30px;"><%= @user.name %></h4>
+        </div>
+
+        <div class="col-md-4" style="display: flex;">
+          <h4>用户名:</h4>
+          <h4 style="margin-left: 30px;"><%= @user.user_name %></h4>
+        </div>
+      </div>
+      <hr style="border-top:1px dashed #ccc;margin: 0;">
+      <div class="panel-body">
+        <div class="col-md-4" style="display: flex;">
+          <h4>角色:</h4>
+          <h4 style="margin-left: 30px;"><%= Role.display(@user.role_id) %></h4>
+        </div>
+
+        <div class="col-md-4" style="display: flex;">
+          <h4>所属地点:</h4>
+          <h4 style="margin-left: 30px;"><%= @user.location.name if @user.location %></h4>
+        </div>
+
+        <div class="col-md-4" style="display: flex;">
+          <h4>操作模式:</h4>
+          <h4 style="margin-left: 30px;"><%= OperationMode.display(@user.operation_mode) %></h4>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading" style="display: flex;height: 40px;">
+        <i class="glyphicon glyphicon-record" style="font-size: 1em;margin: 1px 10px 0 0;"></i>
+        <span>附加信息</span>
+      </div>
+
+      <div class="panel-body">
+        <div class="col-md-4" style="display: flex;">
+          <h4>邮箱:</h4>
+          <h4 style="margin-left: 30px;"><%= @user.email %></h4>
+        </div>
+
+        <div class="col-md-4" style="display: flex;">
+          <h4>电话:</h4>
+          <h4 style="margin-left: 30px;"><%= @user.tel %></h4>
+        </div>
+
+        <div class="col-md-4" style="display: flex;">
+          <h4>上次登录IP:</h4>
+          <h4 style="margin-left: 30px;"><%= @user.current_sign_in_ip %></h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

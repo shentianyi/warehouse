@@ -1,25 +1,59 @@
 <%= form_for(@permission_group) do |f| %>
-  <% if @permission_group.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@permission_group.errors.count, "error") %> prohibited this permission_group from being saved:</h2>
+    <% if @permission_group.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@permission_group.errors.count, "error") %> prohibited this permission_group from being
+            saved:</h2>
 
-      <ul>
-      <% @permission_group.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+          <ul>
+            <% @permission_group.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="container panel_show_msg"
+         style="background: #EAEAEA;border-radius: 50px;padding: 10px 40px 10px 40px;box-shadow: 10px 10px 5px #ccc;margin-top: 20px;margin-bottom: 100px;">
+
+      <div class="panel-heading" style="display: flex; border-bottom: 1px dashed steelblue;">
+        <i class="glyphicon glyphicon-edit"
+           style="font-size: 3em;margin: 0 30px 0 0;color:steelblue;"></i>
+
+        <h3 style="margin: 5px 0 0 0">编辑权限组</h3>
+      </div>
+
+      <div class="panel-body">
+        <div class="panel panel-primary">
+          <div class="panel-heading" style="display: flex;height: 40px;">
+            <i class="glyphicon glyphicon-record" style="font-size: 1em;margin: 1px 10px 0 0;"></i>
+            <strong>基本信息</strong>
+          </div>
+
+          <div class="panel-body">
+            <div class="col-md-12" style="display: flex;">
+              <h4 style="white-space: nowrap;">组名:</h4>
+              <%= f.text_field :name, :class => 'form-control', :style => 'width:90%;margin-left:20px;' %>
+              </h4>
+            </div>
+
+            <div class="col-md-12" style="display: flex;">
+              <h4>描述:</h4>
+              <%= f.text_area :description, :class => 'form-control', :rows => 3, :cols => 30, :style => 'width:90%;margin-left:20px;height:200px;' %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr style="margin: 10px;border-top:1px dashed steelblue;">
+
+      <div class="col-md-11 actions" style="text-align: right;">
+        <button class="btn btn-primary" type="submit" style="width: 200px;height: 50px;font-size: 1.2em;">
+          <i class="glyphicon glyphicon-ok" style="margin-right: 20px;"></i>
+          更新权限组
+        </button>
+      </div>
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label :description %><br>
-    <%= f.text_field :description %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
 <% end %>
+
+
+
+

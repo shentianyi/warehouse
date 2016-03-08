@@ -145,7 +145,7 @@ class DeliveryService
         unless destination
           raise 'Destination not found!'
         end
-        dlc = delivery.logistic_containers.build(source_location_id: source.id, des_location_id: destination.id, user_id: user.id, remark: book.cell(2, 5), state: MovableState::WAY)
+        dlc = delivery.logistics_containers.build(source_location_id: source.id, des_location_id: destination.id, user_id: user.id, remark: book.cell(2, 5), state: MovableState::WAY)
         dlc.destinationable = destination
         dlc.save
         # send dlc,create record for dlc

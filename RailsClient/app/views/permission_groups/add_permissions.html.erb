@@ -1,24 +1,127 @@
-<%= form_tag controller: 'permission_groups', action: 'add_permissions', method: 'post' do %>
-    <input type="submit" class="btn btn-warning" value="保存"/>
+<style>
+    #HasPermission > strong, #NoPermission > strong {
+        margin: -3px 10px 0 2px;
+    }
 
-<table class="table table-bordered table-striped">
-  <thead>
-  <tr>
-    <th>序号</th>
-    <th>权限名称</th>
-    <th>状态</th>
-  </tr>
-  </thead>
+    .SavePermissions {
+        width: 200px;
+        font-size: 1.2em;
+        margin: 10px 0 0 -37px;
+    }
 
-  <tbody>
-  <% @permissions.each_with_index do |p, index| %>
-      <tr>
-        <td><%= index+1 %>
-        <td><%= p[:name] %></td>
-        <td><%= p[:status] %></td>
-      </tr>
-  <% end %>
-  </tbody>
-</table>
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+</style>
 
-<% end %>
+<div class="panel panel-primary" style="margin: 20px 15px 0 15px;">
+  <div class="panel-body" style="text-align: left;display: flex">
+    <div class="col-md-2" style="border-right: 1px solid #ccc;">
+      <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+        <li class="active">管理</li>
+        <li>
+          <a href="/permission_groups">权限分组</a>
+        </li>
+        <li class="active">分配权限</li>
+      </ol>
+    </div>
+
+    <div class="col-md-10" style="padding: 10px 0 0 0;">
+      <h4 class="col-md-2" style="text-align: center;"><b>权限组名称:</b></h4>
+      <strong class="col-md-10" style="margin: 10px 0 0 -30px;" title="<%= @permission_group.name %>">
+        <span style="border: 1px solid steelblue;padding: 5px 20px;background: steelblue;color: white;border-radius: 50px;font-size: 1.2em;"><%= @permission_group.name %></span></strong>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-12" style="margin: 20px 0 0 0;">
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <div class="panel-title" style="display: flex;">
+        <div class="col-md-3">
+          <h3>分配权限</h3>
+        </div>
+        <div class="col-md-9" style="text-align: right;">
+          <button class="btn btn-primary SavePermissions"><i class="glyphicon glyphicon-ok"></i>&emsp;保存</button>
+        </div>
+      </div>
+    </div>
+    <div class="panel-body" style="text-align: center;border-bottom: 1px solid #000000;">
+      <div class="col-md-2">
+        <h4>已拥有权限</h4>
+      </div>
+
+      <div class="col-md-10" id="HasPermission" style="border-left: 1px solid #CCCCCC;min-height: 60px;">
+      </div>
+    </div>
+
+    <div class="panel-body" style="text-align: center;">
+      <div class="col-md-2">
+        <h4>未拥有权限</h4>
+      </div>
+
+      <div class="col-md-10" id="NoPermission" style="border-left: 1px solid #CCCCCC;min-height: 60px;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    var ClientHeight = document.documentElement.clientHeight;
+    $('#HasPermission').css({height: (ClientHeight - 450) / 2 + 'px'});
+    $('#NoPermission').css({height: (ClientHeight - 450) / 2 + 'px'});
+
+    ShowPermission();
+
+    var PermissionJSON = [];
+    $('.SavePermissions').click(function () {
+        $('.CheckBox').each(function () {
+            var PerssionsID = $(this).attr('id');
+            var PerssionsName = $(this).parent().children('strong').html();
+            var PerssionsStatus = $(this).attr('ischecked');
+            PermissionJSON.push({id: PerssionsID, name: PerssionsName, status: PerssionsStatus});
+        });
+
+        $.ajax({
+            url: '/permission_groups/add_permissions',
+            type: 'post',
+            data: {
+                permission_group_id: <%=@permission_group.id %>,
+                permission_data: PermissionJSON
+            },
+            success: function (data) {
+                location.reload();
+            },
+            error: function () {
+            },
+            complete: function (xhr) {
+                if (xhr.status == 304) return;
+            }
+        });
+    });
+
+    function ShowPermission() {
+        <% @permissions.each_with_index do |p| %>
+        if (<%= p[:status] %>) {
+            $('<div class="col-md-1" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;border: 1px solid lightseagreen;background: lightseagreen;color: white;border-radius: 4px;margin:0 5px 5px 5px;text-align: left;height: 30px;padding: 5px 0 0 10px;">' +
+                    '<input type="checkbox" class="CheckBox" id="<%= p[:id]%>" ischecked="true" checked><strong title="<%= p[:name] %>">' + '<%= p[:name] %>' + '</strong></input></div>').appendTo('#HasPermission').ready(function () {
+            });
+        } else {
+            $('<div class="col-md-1" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;border: 1px solid steelblue;background: steelblue;color: white; border-radius: 4px;margin:0 5px 5px 5px;text-align: left;height: 30px;padding: 5px 0 0 10px;">' +
+                    '<input type="checkbox" class="CheckBox" id="<%= p[:id]%>" ischecked="false"> <strong title="<%= p[:name] %>">' + '<%= p[:name] %>' + '</strong></input></div>').appendTo('#NoPermission').ready(function () {
+            });
+        }
+        <% end %>
+
+        $(":checkbox").click(function () {
+            if ($(this).attr('ischecked') == "true") {
+                $(this).attr('ischecked', 'false');
+            } else {
+                $(this).attr('ischecked', 'true');
+            }
+        });
+    }
+</script>

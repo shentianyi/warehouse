@@ -17,6 +17,8 @@
         text-align: center;
         padding: 5px 0 5px 0;
         color: steelblue;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .PreGroupsDescription {
@@ -36,22 +38,32 @@
         background-color: #f2f2f2;
     }
 
-    .modal {
-        top: 200px;
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
     }
 </style>
 
-<!--<h2 class="col-md-3">Permission Groups</h2>-->
-<h2 class="col-md-3">权限分组列表</h2>
+<div class="panel panel-default">
+  <ol class="breadcrumb col-md-2" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">管理</li>
+    <li>
+      <a href="#">权限分组</a>
+    </li>
+    <li class="active">权限分组列表</li>
+  </ol>
 
-<div class="col-md-9" style="text-align: right;">
-  <button class="btn btn-primary" style="width: 200px;margin: 15px 0 0 0;" data-toggle="modal" data-target="#NewPermissionModal">
-    <i class="glyphicon glyphicon-plus" style="color: white;"></i> New Permission Groups
-  </button>
+  <div class="col-md-10" style="text-align: right;">
+    <button class="btn btn-primary" style="width: 200px;margin: 15px 0 0 0;" data-toggle="modal" data-target="#NewPermissionModal">
+      <i class="glyphicon glyphicon-plus" style="color: white;"></i> 新建权限组
+    </button>
+  </div>
 </div>
 
 <div class="digg_pagination">
-  <div class="page_info" style="width: auto;text-align: left;height: 40px;margin: 60px 0 0 0;padding: 10px 0 0 0;">
+  <div class="page_info" style="width: auto;text-align: left;height: 40px;margin: 60px 0 0 0;padding: 10px 0 0 20px;">
     <%= page_entries_info @permission_groups %>
   </div>
   <%= will_paginate @permissions, :container => false %>
@@ -63,12 +75,12 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">New Permission Groups</h4>
+        <h4 class="modal-title">新建权限组</h4>
       </div>
       <div class="modal-body">
-        <strong>Name:</strong> <input type="text" class="form-control" id="NewPermissionGroupName" autocomplete="off">
-        <strong>Description:</strong>
-
+        <strong>组名:</strong> <input type="text" class="form-control" id="NewPermissionGroupName" autocomplete="off">
+        <br>
+        <strong>描述:</strong>
         <textarea cols="66" rows="5" id="NewPermissionGroupDescription" aria-autocomplete="none">
         </textarea>
       </div>
@@ -92,7 +104,6 @@
         <strong>Name:</strong>
         <input type="text" class="form-control" id="UpdatePermissionGroupName" autocomplete="off">
         <strong>Description:</strong>
-
         <textarea cols="66" rows="5" id="UpdatePermissionGroupDescription" aria-autocomplete="none">
         </textarea>
       </div>
@@ -106,7 +117,7 @@
 
 <% @permission_groups.each do |permission_group| %>
     <div class="PerGroups col-md-2">
-      <div class="PerGroupsName">
+      <div class="PerGroupsName" title="<%= permission_group.name %>">
         <%= permission_group.name %>
       </div>
       <hr style="border-color: #ccc;margin: 2px 0 20px 0;">
@@ -139,6 +150,10 @@
 </div>
 
 <script>
+
+    var ClientHeight = document.documentElement.clientHeight;
+    $('.modal').css({top: (ClientHeight - 600) / 2 + 'px'});
+
     function NewPermissionGroups() {
         var NewPermissionGroupsNameData = $('#NewPermissionGroupName').val();
         var NewPermissionGroupsDescriptionData = $('#NewPermissionGroupDescription').val();

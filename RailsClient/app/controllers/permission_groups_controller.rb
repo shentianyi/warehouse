@@ -4,7 +4,7 @@ class PermissionGroupsController < ApplicationController
   respond_to :html
 
   def index
-    @permission_groups = PermissionGroup.all.paginate(:page=> params[:page])
+    @permission_groups = PermissionGroup.all.paginate(:page => params[:page])
     respond_with(@permission_groups)
   end
 
@@ -36,37 +36,44 @@ class PermissionGroupsController < ApplicationController
     respond_with(@permission_group)
   end
 
-  def details
+  def permission_details
+    @permissions=[]
+    if permission_group=PermissionGroup.find_by_id(params[:permission_groups_id])
+      permission_group.permissions.each do |p|
+        @permissions<<p.name
+      end
+    end
 
-    p '0000000000000000000000000000000000'
+    render :json => @permissions
   end
 
   def add_permissions
     if request.post?
-      p "99999999999999999999999999999999999999999"
-      # render json: msg
-    else
-      p 'gggggggggggggggggggggggggggggggggggggg'
-      p params
-      @permissions=[]
-      @permission_group=PermissionGroup.find_by_id(params["format"])
-      @permission_group_items=@permission_group.permissions
-      Permission.all.each do |p|
-        @permissions<<{
-            name: p.name,
-            status: @permission_group_items.include?(p)
-        }
+      p_ids=[]
+      params[:permission_data].each do |p|
+        if p.last[:status]=='true'
+          p_ids<<p.last[:id].to_i
+        end
       end
-      @permissions
+
+      @permission_group=PermissionGroup.find_by_id(params[:permission_group_id])
+      @permission_group.manage_permissions(p_ids)
+      @permissions=@permission_group.permission_details
+
+      render :add_permissions
+    else
+      @permission_group=PermissionGroup.find_by_id(params["format"])
+      @permissions=@permission_group.permission_details
     end
   end
 
   private
-    def set_permission_group
-      @permission_group = PermissionGroup.find(params[:id])
-    end
+  def set_permission_group
+    @permission_group = PermissionGroup.find(params[:id])
+  end
 
-    def permission_group_params
-      params.require(:permission_group).permit(:name, :description)
-    end
+  def permission_group_params
+    params.require(:permission_group).permit(:name, :description)
+  end
+
 end
