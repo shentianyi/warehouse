@@ -37,7 +37,7 @@ class PickItemService
         ApiMessage.new({
                            meta: {code: 200},
                            data:
-                               PickListItemPresenter.as_details(pick.pick_items)
+                               PickItemPresenter.as_details(pick.pick_items)
                        })
       else
         ApiMessage.new({meta: {code: 400, error_message: 'NO Pick To do'}})

@@ -114,6 +114,7 @@ class PickListService
     if car=OrderCar.find_by_id(params[:order_car_id])
       err_infos=[]
       boxs=nil
+      p params
       if params[:order_box_ids].present?
         boxs=[]
         params[:order_box_ids].each do |box_id|
@@ -123,6 +124,9 @@ class PickListService
           boxs<<box
         end
       end
+p '--------------------------------'
+      p boxs
+      p err_infos
 
       if err_infos.size==0
         if block_given?

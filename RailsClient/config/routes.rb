@@ -2,6 +2,7 @@
 
 Rails.application.routes.draw do
 
+  use_doorkeeper
   resources :pick_orders
 
   resources :order_cars do

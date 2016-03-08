@@ -8,7 +8,9 @@ class OrderItem < ActiveRecord::Base
 	#belongs_to :source, class_name: "Location"
 	belongs_to :part
 	belongs_to :part_type
-  has_many :pick_items
+
+  belongs_to :orderable, :polymorphic => true
+  has_many :pick_items, :dependent => :destroy
 
   after_create :led_state_change
 

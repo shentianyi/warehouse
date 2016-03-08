@@ -1,6 +1,6 @@
-module V1
+module V4
   class PickAPI < Base
-    guard_all!
+    token_guard_all!
 
     namespace :picks do
       params do

@@ -1,6 +1,6 @@
-module V1
+module V4
   class WarehouseAPI<Base
-    guard_all!
+    token_guard_all!
 
     namespace :warehouses do
       params do

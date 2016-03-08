@@ -16,8 +16,8 @@ class PositionPresenter<Presenter
     else
       {
           id: @position.id,
-          nr: @position.nr,
-          name: @position.name
+          nr: @position.id,
+          name: @position.detail
       }
     end
   end

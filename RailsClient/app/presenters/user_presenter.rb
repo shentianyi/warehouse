@@ -34,8 +34,7 @@ class UserPresenter<Presenter
               message:'Signed Success'
           },
           data: {
-              id: @user.id,
-              nr: @user.nr,
+              nr: @user.id,
               email: @user.email,
               name: @user.name,
               token: @user.access_token.token

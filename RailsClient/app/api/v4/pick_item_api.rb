@@ -1,5 +1,7 @@
-module V1
+module V4
   class PickItemAPI<Base
+    token_guard_all!
+
     namespace :pick_items do
 
 

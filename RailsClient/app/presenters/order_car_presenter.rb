@@ -36,7 +36,7 @@ class OrderCarPresenter<Presenter
               id: @order_car.id,
               nr: @order_car.nr,
               rfid_nr: @order_car.rfid_nr,
-              whouse_id: @order_car.whouse_id,
+              warehouse_id: @order_car.whouse_id,
               status: @order_car.status
           }
       }

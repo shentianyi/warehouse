@@ -41,12 +41,12 @@ class OrderBoxPresenter<Presenter
         warehouse: WhousePresenter.new(Whouse.find_by_id(@order_box.whouse_id)).as_basic_info,
         position: PositionPresenter.new(@order_box.position).as_basic_info,
         #出货仓库
-        source_whouse: WhousePresenter.new(Whouse.find_by_id(@order_box.source_whouse_id)).as_basic_info,
+        source_warehouse: WhousePresenter.new(Whouse.find_by_id(@order_box.source_whouse_id)).as_basic_info,
 
         part: PartPresenter.new(Part.find_by_id(@order_box.part_id)).as_basic_info,
         quantity: @order_box.quantity,
         stock: NStorageService.stock(@order_box.source_whouse_id, @order_box.part_id),
-        positions: NStorageService.positions(@order_box.source_whouse_id, @order_box.part_id).uniq.pluck(:nr)
+        positions: NStorageService.positions(@order_box.source_whouse_id, @order_box.part_id).uniq.pluck(:id)
     }
   end
 
@@ -57,7 +57,7 @@ class OrderBoxPresenter<Presenter
         nr: @order_box.nr,
         quantity: @order_box.quantity,
         status:@order_box.status,
-        positions: NStorageService.positions(@order_box.source_whouse_id, @order_box.part_id).uniq.pluck(:nr),
+        positions: NStorageService.positions(@order_box.source_whouse_id, @order_box.part_id).uniq.pluck(:id),
         weight: @order_box.order_box_type.weight || 0,
         order_box_type: with_type ? OrderBoxTypePresenter.new(@order_box.order_box_type).as_basic_info : nil
     }

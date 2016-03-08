@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160304070123) do
+ActiveRecord::Schema.define(version: 20160307064434) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -392,6 +392,49 @@ ActiveRecord::Schema.define(version: 20160304070123) do
   add_index "n_storages", ["uniqueId"], name: "unique_id_unique", unique: true, using: :btree
   add_index "n_storages", ["ware_house_id"], name: "index_n_storages_on_ware_house_id", using: :btree
 
+  create_table "oauth_access_grants", force: true do |t|
+    t.integer  "resource_owner_id", null: false
+    t.integer  "application_id",    null: false
+    t.string   "token",             null: false
+    t.integer  "expires_in",        null: false
+    t.text     "redirect_uri",      null: false
+    t.datetime "created_at",        null: false
+    t.datetime "revoked_at"
+    t.string   "scopes"
+  end
+
+  add_index "oauth_access_grants", ["token"], name: "index_oauth_access_grants_on_token", unique: true, using: :btree
+
+  create_table "oauth_access_tokens", force: true do |t|
+    t.integer  "resource_owner_id"
+    t.integer  "application_id"
+    t.string   "token",             null: false
+    t.string   "refresh_token"
+    t.integer  "expires_in"
+    t.datetime "revoked_at"
+    t.datetime "created_at",        null: false
+    t.string   "scopes"
+  end
+
+  add_index "oauth_access_tokens", ["refresh_token"], name: "index_oauth_access_tokens_on_refresh_token", unique: true, using: :btree
+  add_index "oauth_access_tokens", ["resource_owner_id"], name: "index_oauth_access_tokens_on_resource_owner_id", using: :btree
+  add_index "oauth_access_tokens", ["token"], name: "index_oauth_access_tokens_on_token", unique: true, using: :btree
+
+  create_table "oauth_applications", force: true do |t|
+    t.string   "name",                      null: false
+    t.string   "uid",                       null: false
+    t.string   "secret",                    null: false
+    t.text     "redirect_uri",              null: false
+    t.string   "scopes",       default: "", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "owner_id"
+    t.string   "owner_type"
+  end
+
+  add_index "oauth_applications", ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type", using: :btree
+  add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
+
   create_table "operation_logs", force: true do |t|
     t.string   "item_type"
     t.string   "item_id"
@@ -656,12 +699,17 @@ ActiveRecord::Schema.define(version: 20160304070123) do
     t.datetime "updated_at"
     t.string   "order_item_id"
     t.integer  "state",                 default: 0
+    t.string   "position_id"
+    t.float    "weight"
+    t.float    "weight_qty"
+    t.boolean  "weight_valid"
   end
 
   add_index "pick_items", ["destination_whouse_id"], name: "index_pick_items_on_destination_whouse_id", using: :btree
   add_index "pick_items", ["id"], name: "index_pick_items_on_id", using: :btree
   add_index "pick_items", ["order_item_id"], name: "index_pick_items_on_order_item_id", using: :btree
   add_index "pick_items", ["pick_list_id"], name: "index_pick_items_on_pick_list_id", using: :btree
+  add_index "pick_items", ["position_id", "weight_valid"], name: "index_pick_items_on_position_id_and_weight_valid", using: :btree
 
   create_table "pick_lists", force: true do |t|
     t.string   "user_id"
@@ -673,10 +721,12 @@ ActiveRecord::Schema.define(version: 20160304070123) do
     t.datetime "updated_at"
     t.text     "order_ids"
     t.text     "remark"
+    t.string   "whouse_id"
   end
 
   add_index "pick_lists", ["id"], name: "index_pick_lists_on_id", using: :btree
   add_index "pick_lists", ["user_id"], name: "index_pick_lists_on_user_id", using: :btree
+  add_index "pick_lists", ["whouse_id"], name: "index_pick_lists_on_whouse_id", using: :btree
 
   create_table "pick_orders", force: true do |t|
     t.string   "order_id"

@@ -46,6 +46,6 @@ class PickItem < ActiveRecord::Base
 
 
   def can_move_store?
-    self.status==PickItemStatus::PICKED || (self.status==PickItemStatus::PICKING && self.order_box.order_box_type && Setting.not_need_weight_box_type_values.include?(self.order_box.order_box_type.name))
+    self.state==PickItemStatus::PICKED || (self.state==PickItemStatus::PICKING && self.order_box.order_box_type && Setting.not_need_weight_box_type_values.include?(self.order_box.order_box_type.name))
   end
 end

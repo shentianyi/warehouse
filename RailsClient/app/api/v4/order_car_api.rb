@@ -1,6 +1,6 @@
-module V1
+module V4
   class OrderCarAPI < Base
-    guard_all!
+    token_guard_all!
 
     namespace :order_cars do
       params do

@@ -1,6 +1,6 @@
 module V4
 class OrderAPI < Base
-    guard_all!
+  token_guard_all!
 
     namespace :orders do
       params do

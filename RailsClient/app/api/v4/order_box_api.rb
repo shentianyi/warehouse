@@ -1,6 +1,6 @@
-module V1
+module V4
   class OrderBoxAPI < Base
-    guard_all!
+    token_guard_all!
 
     namespace :order_boxes do
       params do
@@ -28,6 +28,8 @@ module V1
         requires :weight_valid, type: Boolean, desc: 'weight valid'
       end
       post :weight do
+        p params
+        p '0-------------------------------'
         OrderBoxService.weight_box(params)
       end
 

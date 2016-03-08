@@ -3,7 +3,7 @@ class UserService
   #  nr:string
   #  password: string
   def self.sign_in params
-    UserPresenter.new(if (user=User.find_for_database_authentication(nr: params[:nr])) && user.valid_password?(params[:password])
+    UserPresenter.new(if (user=User.find_for_database_authentication(id: params[:id])) && user.valid_password?(params[:password])
                         user
                       else
                         nil

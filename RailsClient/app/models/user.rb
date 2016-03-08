@@ -10,6 +10,7 @@ class User < ActiveRecord::Base
   has_many :pick_item_filters
   has_many :inventory_lists
   #has_many :inventory_list_items
+  has_many :access_tokens, class_name: 'Doorkeeper::AccessToken', foreign_key: :resource_owner_id
   
   before_save :ensure_authentication_token!
 
@@ -60,6 +61,24 @@ class User < ActiveRecord::Base
 
   def location_destination_ids
     self.location_destinations.pluck(:id)
+  end
+
+  def access_token
+    access_tokens.where(application_id: System.default_app.id,
+                        revoked_at: nil).where('date_add(created_at,interval expires_in second) > ?', Time.now.utc).
+        order('created_at desc').
+        limit(1).
+        first || generate_access_token
+  end
+
+  # private
+  # generate token
+  def generate_access_token
+    if System.default_app
+      Doorkeeper::AccessToken.create!(application_id: System.default_app.id,
+                                      resource_owner_id: self.id,
+                                      expires_in: Doorkeeper.configuration.access_token_expires_in)
+    end
   end
 
   private

@@ -1,4 +1,4 @@
-module V1
+module V4
   class UserAPI < Base
     namespace :user_sessions do
       guard_locale!
@@ -9,7 +9,7 @@ module V1
         requires :password, type: String, desc: 'user password'
       end
       post do
-        UserService.sign_in(id: params[:id],
+        UserService.sign_in(id: params[:nr],
                             password: params[:password])
       end
 
