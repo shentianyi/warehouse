@@ -197,12 +197,12 @@ class NStoragesController < ApplicationController
     end
   end
 
-  def by_whouse1
-    @n_storages= NStorage.where(ware_house_id: 'WE87', position: 'WE87-1').paginate(:page => params[:page])
+  def by_whouse_we87
+    @n_storages= NStorage.where(ware_house_id: 'WE87').paginate(:page => params[:page])
   end
 
-  def by_whouse2
-    @n_storages= NStorage.where(ware_house_id: 'WE87', position: 'WE87-2').paginate(:page => params[:page])
+  def by_whouse_pa
+    @n_storages= NStorage.where(ware_house_id: 'PA').paginate(:page => params[:page])
   end
 
   private

@@ -1,5 +1,4 @@
-<h2>仓库PA库存详细</h2>
-
+<h2>仓库WE87库存详细</h2>
 
 <div>
   <form method="get" action="<%= search_by_whouse_n_storages_path %>">
@@ -14,7 +13,11 @@
               <input type="text" name="n_storage[packageId]" value="<%= @packageId %>"/>
               <input type="hidden" name="n_storage[packageId_fuzzy]"/>
             </span>
-          <input type="hidden" name="n_storage[ware_house_id]" value="PA" />
+            <input type="hidden" name="n_storage[ware_house_id]" value="WE87"/>
+            <span>库位号：
+              <input type="text" name="n_storage[position]" value="<%= @position %>"/>
+              <input type="hidden" name="n_storage[position_fuzzy]"/>
+            </span>
         </div>
         <div>
             <span>

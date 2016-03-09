@@ -18,7 +18,7 @@
 
     <p>
       <%= f.label :part_type_id,'零件类型'%>
-      <%=  f.select(:part_type_id,@part_types.collect {|p| [ p.name, p.id ] }, {include_blank: true})%>
+      <%=  f.select(:part_type_id,PartType.all.collect {|p| [ p.name, p.id ] }, {include_blank: true})%>
     </p>
 
     <p>

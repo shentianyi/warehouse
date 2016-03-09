@@ -14,7 +14,11 @@
               <input type="text" name="n_storage[packageId]" value="<%= @packageId %>"/>
               <input type="hidden" name="n_storage[packageId_fuzzy]"/>
             </span>
-          <input type="hidden" name="n_storage[ware_house_id]" value="PA" />
+            <input type="hidden" name="n_storage[ware_house_id]" value="PA" />
+            <span>库位号：
+              <input type="text" name="n_storage[position]" value="<%= @position %>"/>
+              <input type="hidden" name="n_storage[position_fuzzy]"/>
+            </span>
         </div>
         <div>
             <span>
