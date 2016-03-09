@@ -21,8 +21,10 @@
     }
 
     .up_search {
-        text-align: center;
+        text-align: right;
         cursor: pointer;
+        margin-bottom: 10px;
+        margin-top: -40px;
     }
 
     .table > thead > tr > th, .table > tbody > tr > td {
@@ -55,31 +57,39 @@
     </div>
 
     <div class="col-sm-12">
-      <div class="col-sm-3">
+      <div class="col-sm-4">
         更新日期：
         <input type="text" name="n_storage[updated_at][start]" class="datepicker" value="<%= @updated_at_start %>"/>
         ~ <input type="text" name="n_storage[updated_at][end]" class="datepicker" value="<%= @updated_at_end %>"/>
       </div>
-      <div class="col-sm-3">
+      <div class="col-sm-4">
         FIFO：
         <input type="text" name="n_storage[fifo][start]" class="datepicker" value="<%= @fifo_start %>"/>
         ~ <input type="text" name="n_storage[fifo][end]" class="datepicker" value="<%= @fifo_end %>"/>
       </div>
-      <div class="col-sm-3">
+      <div class="col-sm-4">
         库存量：
         <input type="number" name="n_storage[qty][start]" value="<%= @qty_start %>"/>
         ~ <input type="number" name="n_storage[qty][end]" value="<%= @qty_end %>"/>
       </div>
-      <div class="col-sm-3">
-        <input type="submit" value="查找" class="btn btn-primary" name="search" style="width: 100px;"/>
-        <input type="submit" value="导出" class="btn btn-primary" name="download" style="width: 100px;"/>
+    </div>
+
+    <div class="col-sm-12">
+      <div class="col-sm-4">
+        <input type="submit" value="查找" class="btn btn-primary" name="search" style="width: 200px;"/>
+      </div>
+      <div class="col-sm-4">
+        <input type="submit" value="导出" class="btn btn-primary" name="download" style="width: 200px;"/>
       </div>
     </div>
   </form>
 </div>
 
-<div class="col-sm-12 up_search">
-  <i class=" glyphicon glyphicon-chevron-up" title="收起搜索条件"></i>
+<div class="col-sm-12" style="margin-bottom: -30px;">
+  <div class="col-sm-8"></div>
+  <div class="col-sm-4 up_search">
+    <i class=" glyphicon glyphicon-chevron-up" title="收起搜索条件"></i>
+  </div>
 </div>
 
 <div class="col-sm-12">

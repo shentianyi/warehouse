@@ -15,8 +15,14 @@
     .table > thead > tr > th, .table > tbody > tr > td {
         text-align: center;
     }
+
+    .up_search {
+        text-align: center;
+        cursor: pointer;
+        margin: -10px 0 -5px 0;
+    }
 </style>
-<div>
+<div class="all-search">
   <form method="get" action="<%= exports_n_storages_path %>">
     <div class="col-sm-12">
       <div class="col-sm-4">
@@ -69,6 +75,11 @@
     </div>
   </form>
 </div>
+
+<div class="col-sm-12 up_search">
+  <i class=" glyphicon glyphicon-chevron-up" title="收起搜索条件"></i>
+</div>
+
 <% if @n_storages.present? %>
     <div class="digg_pagination">
       <div class="page_info">
@@ -121,4 +132,17 @@
         });
     });
     init_check();
+
+    $('.up_search').click(function () {
+        var this_arrow = $(this);
+        $('.all-search').slideToggle(300, function () {
+            if (this_arrow.children('i').hasClass('glyphicon-chevron-up')) {
+                this_arrow.children('i').attr('class', 'glyphicon glyphicon-chevron-down');
+                this_arrow.children('i').attr('title', '展开搜索条件');
+            } else {
+                this_arrow.children('i').attr('class', 'glyphicon glyphicon-chevron-up');
+                this_arrow.children('i').attr('title', '收起搜索条件');
+            }
+        });
+    })
 </script>

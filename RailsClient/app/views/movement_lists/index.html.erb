@@ -1,77 +1,125 @@
-<h2>移库单列表</h2>
-<div>
+<style>
+    .col-sm-12 {
+        height: 40px;
+        line-height: 40px;
+    }
+
+    .col-sm-12:first-child {
+        margin-top: 20px;
+    }
+
+    .digg_pagination .page_info {
+        text-align: left;
+        width: auto;
+        margin-left: -20px;
+        margin-right: -20px;
+    }
+
+    .digg_pagination {
+        background: transparent;
+    }
+
+    .up_search {
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > td {
+        text-align: center;
+    }
+
+    .label {
+        font-size: 1em;
+    }
+
+    select {
+        min-width: 150px;
+    }
+</style>
+<div class="all-search">
   <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
-    <div>
-      <div>
-        <div>
-            <span>移库单号：
-              <input type="text" name="movement_list[id]" value="<%= @id %>"/>
-              <input type="hidden" name="movement_list[id_fuzzy]"/>
-            </span>
+    <div class="col-sm-12">
+      <div class="col-sm-4">
+        移库单号：
+        <input type="text" name="movement_list[id]" value="<%= @id %>"/>
+        <input type="hidden" name="movement_list[id_fuzzy]"/>
+      </div>
+      <div class="col-sm-4">
+        状态：
+        <%= select 'movement_list', 'state', MovementListState.menu, selected: @state, include_blank: true %>
+      </div>
+      <div class="col-sm-4">
+        创建人：
+        <input type="text" name="movement_list[builder]" value="<%= @builder %>"/>
+      </div>
+    </div>
 
-            <span>状态：
-              <%= select 'movement_list', 'state', MovementListState.menu, selected: @state, include_blank: true %>
-            </span>
+    <div class="col-sm-12">
+      <div class="col-sm-6">
+        创建日期：
+        <input type="text" name="movement_list[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
+        ~ <input type="text" name="movement_list[created_at][end]" class="datepicker" value="<%= @created_at_end %>"/>
+      </div>
 
-            <span>创建人：
-              <input type="text" name="movement_list[builder]" value="<%= @builder %>"/>
-            </span>
-        </div>
-        <div>
-            <span>
-              创建日期：
-              <input type="text" name="movement_list[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
-              ~  <input type="text" name="movement_list[created_at][end]" class="datepicker" value="<%= @created_at_end %>"/>
-            </span>
-        </div>
-        <div>
-          <input type="submit" value="查找" class="btn btn-primary" name="search"/>
-        </div>
+      <div class="col-sm-6">
+        <input type="submit" value="查找" class="btn btn-primary" name="search" style="width: 200px;"/>
       </div>
     </div>
   </form>
 </div>
 
-
-<div class="digg_pagination">
-  <div class="page_info">
-    <%= page_entries_info @movement_lists %>
-  </div>
-  <%= will_paginate @movement_lists, :container => false %>
+<div class="col-sm-12 up_search">
+  <i class=" glyphicon glyphicon-chevron-up" title="收起搜索条件"></i>
 </div>
 
-<table class="table table-bordered table-striped globle-table">
+<div class="col-sm-12">
+  <div class="digg_pagination">
+    <div class="page_info">
+      <%= page_entries_info @movement_lists %>
+    </div>
+    <%= will_paginate @movement_lists, :container => false %>
+  </div>
+</div>
+
+<table class="table table-bordered table-striped">
   <thead>
   <tr>
     <th>No.</th>
     <th>移库单名称</th>
     <th>移库单号</th>
     <th>状态</th>
-    <th>清单</td>
-    <th>导出</td>
+    <th>清单
+    </td>
+    <th>导出
+    </td>
     <th>创建人</th>
     <th>创建时间</th>
     <th>备注</th>
-    <th colspan="4"></th>
-    <th colspan="3"></th>
+    <!--<th colspan="4"></th>-->
+    <!--<th colspan="3"></th>-->
   </tr>
   </thead>
 
   <tbody>
-  <% @movement_lists.each_with_index do |movement_list,i| %>
+  <% @movement_lists.each_with_index do |movement_list, i| %>
       <tr>
-        <td><%= i+1%></td>
+        <td><%= i+1 %></td>
         <td><%= movement_list.name %></td>
         <td><%= movement_list.id %></td>
         <td><%= MovementListState.display movement_list.state.to_i %></td>
-        <td><%= link_to '清单列表',movement_sources_movement_list_path(movement_list) %><span class="badge pull-right"><%= movement_list.movement_sources.count%></td>
-        <td><%= link_to '导出移库单详细',exports_movement_lists_path(movement_list) %></td>
+        <td>
+          <%= link_to content_tag(:span, '清单列表', :class => 'label label-primary'), movement_sources_movement_list_path(movement_list) %>
+
+          <span class="badge pull-right"><%= movement_list.movement_sources.count %></td>
+        <td>
+          <%= link_to content_tag(:span, '导出移库单详细', :class => 'label label-primary'), exports_movement_lists_path(movement_list) %>
+        </td>
         <td><%= movement_list.builder %></td>
         <td><%= movement_list.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
         <td><%= movement_list.remarks %></td>
         <!--<td><%= link_to '详细', movement_list %></td>-->
         <!--<td><%= link_to '编辑', edit_movement_list_path(movement_list) %></td>-->
-        <!--<td><%= link_to '删除', movement_list, method: :delete, data: { confirm: 'Are you sure?' } %></td>-->
+        <!--<td><%= link_to '删除', movement_list, method: :delete, data: {confirm: 'Are you sure?'} %></td>-->
       </tr>
   <% end %>
   </tbody>
@@ -89,4 +137,16 @@
             format: 'Y-m-d H:i'
         });
     });
+    $('.up_search').click(function () {
+        var this_arrow = $(this);
+        $('.all-search').slideToggle(300, function () {
+            if (this_arrow.children('i').hasClass('glyphicon-chevron-up')) {
+                this_arrow.children('i').attr('class', 'glyphicon glyphicon-chevron-down');
+                this_arrow.children('i').attr('title', '展开搜索条件');
+            } else {
+                this_arrow.children('i').attr('class', 'glyphicon glyphicon-chevron-up');
+                this_arrow.children('i').attr('title', '收起搜索条件');
+            }
+        });
+    })
 </script>

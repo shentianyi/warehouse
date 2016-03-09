@@ -1,5 +1,8 @@
-<h1>导入移库数据</h1>
-
+<style>
+    .container {
+        width: 60%;
+    }
+</style>
 <script type="text/javascript">
     $(function () {
         data_upload("#item-data-uploader", 'xlsx');
@@ -8,12 +11,28 @@
 
 <p id="notice"><%= notice %></p>
 
-<div>
-  选择数据文件：
-  <input id="item-data-uploader" type="file" name="files[]" data-url="/n_storages/move"/>
+<div class="container">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <div class="panel-title">
+        导入移库数据
+      </div>
+    </div>
 
-  <div class="abstractblock" id="item-data-uploader-preview" style="display:none;"></div>
+    <div class="panel-body">
+      <div style="margin: 10px;">
+        请选择数据文件：
+        <hr style="border-bottom: 1px dashed #000;margin: 5px 0 10px 0;">
 
+        <input id="item-data-uploader" type="file" name="files[]" data-url="/n_storages/move"/>
+
+        <div class="abstractblock" id="item-data-uploader-preview" style="display:none;"></div>
+      </div>
+      <hr style="border-bottom: 1px dashed #000000;margin: 5px 0 0 5px;">
+
+      <div style="margin: 10px 0 0 0;" class="col-sm-12">
+        <a href="/files/download?folder=template&file=移库数据模板.xlsx">下载移库模板</a>
+      </div>
+    </div>
+  </div>
 </div>
-
-<div><a href="/files/download?folder=template&file=移库数据模板.xlsx">下载移库模板</a></div>

@@ -1,51 +1,87 @@
+<style>
+    .col-sm-4 {
+        display: flex;
+        margin: 10px 0 10px 0;
+    }
+
+    .col-sm-4 > label {
+        width: 150px;
+    }
+
+    select {
+        width: 150px;
+    }
+</style>
+
 <%= form_for(@inventory_list_item) do |f| %>
-  <% if @inventory_list_item.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@inventory_list_item.errors.count, "error") %> prohibited this inventory_list from being saved:</h2>
+    <% if @inventory_list_item.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@inventory_list_item.errors.count, "error") %> prohibited this inventory_list from being
+            saved:</h2>
 
-      <ul>
-      <% @inventory_list_item.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+          <ul>
+            <% @inventory_list_item.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <div class="panel-title">
+          新建盘点项
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="col-sm-12">
+          <div class="col-sm-4">
+            <%= f.label :package_id, "包装号" %><br>
+            <%= f.text_field :package_id %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.label :unique_id, "唯一号" %><br>
+            <%= f.text_field :unique_id %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.label :part_id %><br>
+            <%= f.text_field :part_id %>
+          </div>
+
+        </div>
+
+        <div class="col-sm-12">
+          <div class="col-sm-4">
+            <%= f.label :qty %><br>
+            <%= f.text_field :qty %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.label :position %><br>
+            <%= f.text_field :position %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.label :current_whouse %><br>
+            <%= f.select(:current_whouse, Whouse.all.collect { |w| [w.id, w.name] }, {include_blank: false}) %>
+          </div>
+        </div>
+
+        <div class="col-sm-12">
+          <div class="col-sm-4">
+            <%= f.label :current_position %><br>
+            <%= f.text_field :current_position %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.label :in_store %><br>
+            <%= f.select(:in_store, [['否', false], [' 是', true]], {include_blank: false}) %>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-footer">
+        <div class="actions">
+          <!--<%= f.submit %>-->
+          <input type="submit" value="新增Inventory list item" name="commit" class="btn btn-primary">
+        </div>
+      </div>
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :package_id, "包装号" %><br>
-    <%= f.text_field :package_id %>
-  </div>
- <div class="field">
-   <%= f.label :unique_id, "唯一号" %><br>
-   <%= f.text_field :unique_id %>
- </div>
-  <div class="field">
-    <%= f.label :part_id %><br>
-    <%= f.text_field :part_id %>
-  </div>
-  <div class="field">
-    <%= f.label :qty %><br>
-    <%= f.text_field :qty %>
-  </div>
-  <div class="field">
-    <%= f.label :position %><br>
-    <%= f.text_field :position %>
-  </div>
-  <div class="field">
-    <%= f.label :current_whouse %><br>
-    <%= f.select(:current_whouse, Whouse.all.collect{|w| [w.id, w.name]}, { include_blank: false}) %>
-  </div>
-  <div class="field">
-    <%= f.label :current_position %><br>
-    <%= f.text_field :current_position %>
-  </div>
-  
-  <div class="field">
-    <%= f.label :in_store %><br>
-    <%= f.select(:in_store, [['否', false], [' 是', true]], { include_blank: false}) %>
-  </div>
-	  
-  <div class="actions">
-    <%= f.submit %>
-  </div>
 <% end %>
