@@ -56,4 +56,15 @@ class PickItem < ActiveRecord::Base
     p.to_stream.read
   end
 
+  def pick_position
+    p_n=[]
+    storages=NStorage.where(ware_house_id: 'PA', partNr: self.part_id)
+    storages.each do |storage|
+      p_n<<"#{storage.position}/#{storage.qty}"
+    end
+
+    p_n.join("\n")
+
+  end
+
 end
