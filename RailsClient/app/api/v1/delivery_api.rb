@@ -294,6 +294,16 @@ module V1
           return {result: 0, content: DeliveryMessage::ReceiveFailed}
         end
 
+        # if dp = DeliveryPresenter.new(d)
+        #   dp.forklifts.each do |f|
+        #     if fp=ForkliftPresenter.new(f)
+        #       fp.packages.each do |p|
+                p.update(state: MovableState::CHECKED)
+        #       end
+        #     end
+        #   end
+        # end
+
         return {result: 1, content: DeliveryMessage::ReceiveSuccess}
 
         #if LogisticsContainerService.end_receive(d, current_user)

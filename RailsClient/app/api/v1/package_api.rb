@@ -209,6 +209,9 @@ module V1
 
         lc.update(destinationable: warehouse)
 
+        lc.update(state:MovableState::CHECKED)
+
+
         return msg.set_true(MovableMessage::Success)
       end
 
