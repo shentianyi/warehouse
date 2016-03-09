@@ -28,6 +28,7 @@ class OrderBoxesController < ApplicationController
   end
 
   def update
+
     @order_box.update(order_box_params)
     respond_with(@order_box)
   end
@@ -60,7 +61,7 @@ class OrderBoxesController < ApplicationController
 
     def order_box_params
       p '999999999999999999999999999999999'
-      p @order
+      p @order_box
       params.require(:order_box).permit(:nr, :rfid_nr, :status, :part_id, :quantity, :order_box_type_id, :whouse_id, :source_whouse_id)
     end
 end
