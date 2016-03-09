@@ -1,75 +1,156 @@
-<h2>运单列表</h2>
-<div>
+<style>
+    .col-sm-12 {
+        height: 40px;
+    }
+
+    .col-sm-12:first-child {
+        margin-top: 20px;
+    }
+
+    select {
+        min-width: 150px;
+    }
+
+    .digg_pagination .page_info {
+        text-align: left;
+        width: auto;
+        margin-left: -20px;
+        margin-right: -20px;
+    }
+
+    .digg_pagination {
+        background: transparent;
+    }
+
+    .up_search {
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .IconA {
+        margin: 0 10px;
+        font-size: 1.2em;
+    }
+
+    .IconA:hover {
+        text-decoration: none;
+        background-color: white;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > td {
+        text-align: center;
+    }
+</style>
+
+
+<div class="all-search">
   <form method="get" action="<%= send("search_logistics_containers_path") %>">
-    <div>
-      <div>
-        <span>运单号：
-          <input type="text" name="delivery[container_id]" value="<%= @delivery_container_id %>"/>
-          <input type="hidden" name="delivery[container_id_fuzzy]"/>
-        </span>
-        <span>创建员工号：
-          <input type="text" name="delivery[user_id]" value="<%= @delivery_user_id %>"/>
-          <input type="hidden" name="delivery[user_id_fuzzy]"/>
-        </span>
-        </span>
-        <span>运单状态：
-          <%= select 'delivery', 'state', MovableState.state, selected: @delivery_state, include_blank: true %>
-        </span>
-        <span>发送地：
-          <%= select_tag('delivery[source_location_id]', options_from_collection_for_select(Location.all, 'id', 'name', @delivery_source_location_id), include_blank: true) %>
-        </span>
-        <span> 目的地：
-          <%= select_tag('delivery[des_location_id]', options_from_collection_for_select(Location.all, 'id', 'name', @delivery_des_location_id), include_blank: true) %>
-        </span>
+    <div class="col-sm-12">
+      <div class="col-sm-3">
+        运单号：
+        <input type="text" name="delivery[container_id]" value="<%= @delivery_container_id %>"/>
+        <input type="hidden" name="delivery[container_id_fuzzy]"/>
       </div>
-      <div>
-        <span>
-          创建日期：
-          <input type="text" name="delivery[created_at][start]" class="datepicker" value="<%= @delivery_created_at_start %>"/>
-          ~  <input type="text" name="delivery[created_at][end]" class="datepicker" value="<%= @delivery_created_at_end %>"/>
-        </span>
+
+      <div class="col-sm-3">
+        创建员工号：
+        <input type="text" name="delivery[user_id]" value="<%= @delivery_user_id %>"/>
+        <input type="hidden" name="delivery[user_id_fuzzy]"/>
       </div>
-      <div>
-        <h4>根据操作记录</h4>
-        <span>
-          员工号：
-          <input type="text" name="records[impl_id]" value="<%= @records_impl_id %>"/>
-          <input type="hidden" name="records[impl_id_fuzzy]"/>
-        </span>
-        <span>
-          操作:
-          <%= select 'records', 'impl_user_type', ImplUserType.list_action_menu, selected: @records_impl_user_type, include_blank: true %>
-        </span>
-        </span>
-        <span>
-          时间：
-          <input type="text" name="records[impl_time][start]" class="datepicker" value="<%= @records_impl_time_start %>"/>
-          ~  <input type="text" name="records[impl_time][end]" class="datepicker" value="<%= @records_impl_time_end %>"/>
-        </span>
+
+      <div class="col-sm-3">
+        运单状态：
+        <%= select 'delivery', 'state', MovableState.state, selected: @delivery_state, include_blank: true %>
       </div>
-      <div>
+    </div>
+
+    <div class="col-sm-12">
+      <div class="col-sm-3">
+        发送地：
+        <%= select 'delivery', 'state', MovableState.state, selected: @delivery_state, include_blank: true %>
+      </div>
+
+      <div class="col-sm-3">
+        目的地：
+        <%= select_tag('delivery[des_location_id]', options_from_collection_for_select(Location.all, 'id', 'name', @delivery_des_location_id), include_blank: true) %>
+      </div>
+      <div class="col-sm-6">
+        创建日期：
+        <input type="text" name="delivery[created_at][start]" class="datepicker" value="<%= @delivery_created_at_start %>"/>
+        ~
+        <input type="text" name="delivery[created_at][end]" class="datepicker" value="<%= @delivery_created_at_end %>"/>
+      </div>
+    </div>
+
+    <div class="col-sm-12">
+      <div class="col-sm-10">
+        <h4 style="margin-top: 0;">
+          根据操作记录
+          <hr style="border-bottom: 1px dashed #000;margin: -10px 0 0 120px">
+        </h4>
+      </div>
+
+      <div class="col-sm-2" style="text-align: right;">
         <input type="hidden" value="delivery" name="model"/>
         <input type="hidden" value="records" name="tables"/><!--使用分号隔开，这里的表应该与上面的参数一致-->
-        <input type="submit" value="查 找" class="btn btn-primary"/>
+        <input type="submit" value="查 找" class="btn btn-primary" style="width: 150px;height: 50px;margin-top: -20px;"/>
+      </div>
+    </div>
+
+    <div class="col-sm-12" style="border-bottom: 1px solid #CCCCCC;">
+      <div class="col-sm-3">
+        员工号：
+        <input type="text" name="records[impl_id]" value="<%= @records_impl_id %>"/>
+        <input type="hidden" name="records[impl_id_fuzzy]"/>
+      </div>
+      <div class="col-sm-3">
+        操 作：
+        <%= select 'records', 'impl_user_type', ImplUserType.list_action_menu, selected: @records_impl_user_type, include_blank: true %>
+      </div>
+      <div class="col-sm-6">
+        时  间：
+        <input type="text" name="records[impl_time][start]" class="datepicker" value="<%= @records_impl_time_start %>"/>
+        ~ <input type="text" name="records[impl_time][end]" class="datepicker" value="<%= @records_impl_time_end %>"/>
       </div>
     </div>
   </form>
 </div>
-<br/>
-<input type="button" value="打印发运单" class='btn btn-warning' onclick="print_delivery_list();"/>
-<input type="button" value="打印接收确认单" class='btn btn-info' onclick="print_delivery_confirm_list();"/>
-<input type="button" value="打印未接收清单" class='btn btn-success' onclick="print_delivery_unrece_list();"/>
-<input type="button" value="打印接收清单" class='btn btn-primary' onclick="print_delivery_reve_list();"/>
-<% if current_user.can_edit_inventory? %>
-    <h3><%= link_to '导入离线运单', import_logistics_containers_path, :class => "btn btn-warning" %></h3>
-<% end %>
-<div class="digg_pagination">
-  <div class="page_info">
-    <%= page_entries_info @deliveries %>
-  </div>
-  <%= will_paginate @deliveries, :container => false %>
+
+<div class="col-sm-12 up_search">
+  <i class=" glyphicon glyphicon-chevron-up" title="收起搜索条件"></i>
 </div>
-<table class="table table-striped table-condensed table-hover">
+
+
+<div class="col-sm-12" style="margin-bottom: 10px; ">
+  <div class="col-sm-2">
+    <input type="button" value="打印发运单" class='btn btn-warning' onclick="print_delivery_list();"/>
+  </div>
+  <div class="col-sm-2">
+    <input type="button" value="打印接收确认单" class='btn btn-info' onclick="print_delivery_confirm_list();"/>
+  </div>
+  <div class="col-sm-2">
+    <input type="button" value="打印未接收清单" class='btn btn-success' onclick="print_delivery_unrece_list();"/>
+  </div>
+  <div class="col-sm-2">
+    <input type="button" value="打印接收清单" class='btn btn-primary' onclick="print_delivery_reve_list();"/>
+  </div>
+  <div class="col-sm-2">
+    <% if current_user.can_edit_inventory? %>
+        <%= link_to '导入离线运单', import_logistics_containers_path, :class => "btn btn-warning", :style => 'color:white;' %>
+    <% end %>
+  </div>
+</div>
+
+<div class="col-sm-12">
+  <div class="digg_pagination">
+    <div class="page_info">
+      <%= page_entries_info @deliveries %>
+    </div>
+    <%= will_paginate @deliveries, :container => false %>
+  </div>
+</div>
+
+<table class="table table-striped table-bordered table-hover">
   <thead>
   <tr>
     <th></th>
@@ -86,7 +167,7 @@
     <!--操作-->
     <th>最新记录</th>
     <!--操作-->
-    <th colspan="3">&nbsp;</th>
+    <th colspan="3">操作</th>
   </tr>
   </thead>
 
@@ -102,16 +183,21 @@
         <td><%= delivery.destination.name %></td>
         <td><%= delivery.remark %></td>
         <td>
-          <%= link_to delivery_presenter.forklifts.count, forklifts_delivery_path(delivery), class: 'btn btn-default' %>
+          <%= link_to delivery_presenter.forklifts.count, forklifts_delivery_path(delivery), style: 'border-radius:10px;padding:5px 20px 5px 20px;background:steelblue;color:white;', :title => '托清单数' %>
         </td>
         <td>
           <%= delivery.get_records.last.display %>
         </td>
-        <td><%= link_to '详细', {controller: 'deliveries', action: 'show', id: delivery.id}, class: 'btn btn-default' %></td>
-        <% if current_user.can_edit_inventory? %>
-            <td><%= link_to '编辑', {controller: 'deliveries', action: 'edit', id: delivery.id}, class: 'btn btn-default' %></td>
-        <% end %>
-        <td><%= link_to '导出数据', {controller: 'logistics_containers', action: 'export', id: delivery.id}, class: 'btn btn-default' %></td>
+
+        <td>
+          <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-eye-open', :style => 'color:green;'), {controller: 'deliveries', action: 'show', id: delivery.id}, :class => 'IconA', :title => '运单详情' %>
+
+          <% if current_user.can_edit_inventory? %>
+              <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-pencil', :style => 'color:#4F94CD;'), {controller: 'deliveries', action: 'edit', id: delivery.id}, class: 'IconA', :title => '编辑运单' %>
+          <% end %>
+
+          <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-log-out'), {controller: 'logistics_containers', action: 'export', id: delivery.id}, class: 'IconA', :title => '导出运单' %>
+        </td>
       </tr>
   <% end %>
   </tbody>
@@ -119,7 +205,7 @@
 <div class="digg_pagination">
   <%= will_paginate @deliveries, :container => false %>
 </div>
-<br>
+
 <script>
     $(function () {
         $(".datepicker").datetimepicker({
@@ -128,4 +214,17 @@
         });
     });
     init_check();
+
+    $('.up_search').click(function () {
+        var this_arrow = $(this);
+        $('.all-search').slideToggle(300, function () {
+            if (this_arrow.children('i').hasClass('glyphicon-chevron-up')) {
+                this_arrow.children('i').attr('class', 'glyphicon glyphicon-chevron-down');
+                this_arrow.children('i').attr('title', '展开搜索条件');
+            } else {
+                this_arrow.children('i').attr('class', 'glyphicon glyphicon-chevron-up');
+                this_arrow.children('i').attr('title', '收起搜索条件');
+            }
+        });
+    })
 </script>

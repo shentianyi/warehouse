@@ -1,78 +1,162 @@
-<h1><%= @forklift.container_id %></h1>
-<% fpresenter = ForkliftPresenter.new(@forklift) %>
-<span class="label label-primary"><%= @forklift.container_id %></span>
-<h2>基础</h2>
-<h4>状态:
-  <small><%= @forklift.state_display %></small>
-</h4>
-<h4>所属运单:
-  <small><%= @forklift.parent_id if @forklift.parent %></small>
-</h4>
-<h4>创建时间:
-  <small><%= fpresenter.created_at %></small>
-</h4>
-<h4>创建员工号:
-  <small><%= @forklift.user.nr %></small>
-</h4>
-<h4>创建员工:
-  <small><%= @forklift.user.name %></small>
-</h4>
-<h4>创建地:
-  <small><%= @forklift.source.name %></small>
-</h4>
-<h4>目的地:
-  <small><%= @forklift.destination.name if @forklift.destination %></small>
-</h4>
-<h4>所属运单:
-  <small><%= link_to @forklift.parent.container_id, delivery_path(@forklift.parent), :class => "btn btn-default" if @forklift.parent %></small>
-</h4>
-<h4>备注:
-  <small><%= @forklift.remark %></small>
-</h4>
+<style>
+    .col-sm-12 {
+        height: 40px;
+        line-height: 40px;
+    }
 
-<h4>备货仓库:
-  <small><%= @forklift.destinationable.name if @forklift.destinationable %></small>
-</h4>
-<h4>包装箱总数:
-  <small><%= fpresenter.sum_packages %></small>
-</h4>
-<h4>已接收包装箱数:
-  <small><%= fpresenter.accepted_packages %></small>
-</h4>
-<h2>包装箱列表</h2>
-<% @packages = fpresenter.packages %>
-<table class="table table-bordered table-striped globle-table table-hover">
-  <thead>
-  <tr>
-    <td>NO.</td>
-    <td>唯一号</td>
-    <td>零件号</td>
-    <td>数量</td>
-    <td>上架库位</td>
-    <td>状态</td>
-  </tr>
-  </thead>
-  <tbody>
-  <% @packages.each_with_index do |package, index| %>
-      <% ppresenter = PackagePresenter.new(package) %>
-      <tr>
-        <td><%= index+1 %></td>
-        <td><%= link_to package.container_id, package_path(package), :class => 'btn btn-default' %></td>
-        <td><%= package.package.part_id %></td>
-        <td><%= package.package.quantity_str %></td>
-        <td><%= ppresenter.position_nr %></td>
-        <td><%= package.state_display %></td>
-      </tr>
-  <% end %>
-  </tbody>
-</table>
-<h2>操作记录</h2>
-<ul>
-  <% @forklift.get_records.each do |r| %>
-      <li><%= r.display %></li>
-  <% end %>
-</ul>
-<%= link_to '返回', forklifts_path, :class => 'btn btn-default' %>
-<% if current_user.can_edit_inventory? %>
-    <%= link_to '编辑', edit_forklift_path, :class => 'btn btn-default' %>
-<% end %>
+    .table > thead > tr > th, .table > tbody > tr > td {
+        text-align: center;
+    }
+
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+
+    .label {
+        font-size: 1em;
+    }
+</style>
+
+<% fpresenter = ForkliftPresenter.new(@forklift) %>
+
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">发运流程</li>
+    <li>
+      <a href="/forklifts" title="返回托盘">托盘</a>
+    </li>
+    <li class="active">
+      <span class="label label-primary"><%= @forklift.container_id %></span>
+
+      <% if current_user.can_edit_inventory? %>
+          <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-pencil'), edit_forklift_path, :style => 'color:steelblue;margin-left:10px;', :title => "编辑托盘" %>
+      <% end %>
+    </li>
+  </ol>
+</div>
+
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <div class="panel-title">
+      基础
+    </div>
+  </div>
+  <div class="panel-body">
+    <div class="col-sm-12">
+      <div class="col-sm-4">
+        状态:
+        <%= @forklift.state_display %>
+      </div>
+      <div class="col-sm-4">
+        所属运单:
+        <%= @forklift.parent_id if @forklift.parent %>
+      </div>
+      <div class="col-sm-4">
+        创建时间:
+        <%= fpresenter.created_at %>
+      </div>
+    </div>
+
+    <div class="col-sm-12">
+      <div class="col-sm-4">
+        创建员工号:
+        <%= @forklift.user.nr %>
+      </div>
+      <div class="col-sm-4">
+        创建员工:
+        <%= @forklift.user.name %>
+      </div>
+      <div class="col-sm-4">
+        创建地:
+        <%= @forklift.source.name %>
+      </div>
+    </div>
+
+    <div class="col-sm-12">
+      <div class="col-sm-4">
+        目的地:
+        <%= @forklift.destination.name if @forklift.destination %>
+      </div>
+      <div class="col-sm-4">
+        所属运单:
+        <%= link_to content_tag(:span, @forklift.parent.container_id, :class => 'label label-primary'), delivery_path(@forklift.parent) if @forklift.parent %>
+      </div>
+      <div class="col-sm-4">
+        备注:
+        <%= @forklift.remark %>
+      </div>
+    </div>
+
+    <div class="col-sm-12">
+      <div class="col-sm-4">
+        备货仓库:
+        <%= @forklift.destinationable.name if @forklift.destinationable %>
+      </div>
+      <div class="col-sm-4">
+        包装箱总数:
+        <%= fpresenter.sum_packages %>
+      </div>
+      <div class="col-sm-4">
+        已接收包装箱数:
+        <%= fpresenter.accepted_packages %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <div class="panel-title">
+      包装箱列表
+    </div>
+  </div>
+
+  <% @packages = fpresenter.packages %>
+  <table class="table table-bordered table-striped table-hover">
+    <thead>
+    <tr>
+      <th>NO.</th>
+      <th>唯一号</th>
+      <th>零件号</th>
+      <th>数量</th>
+      <th>上架库位</th>
+      <th>状态</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @packages.each_with_index do |package, index| %>
+        <% ppresenter = PackagePresenter.new(package) %>
+        <tr>
+          <td><%= index+1 %></td>
+          <td>
+
+            <%= link_to content_tag(:span, package.container_id, :class => 'label label-primary'), package_path(package) %>
+          </td>
+          <td><%= package.package.part_id %></td>
+          <td><%= package.package.quantity_str %></td>
+          <td><%= ppresenter.position_nr %></td>
+          <td><%= package.state_display %></td>
+        </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="panel-title">
+      操作记录
+    </div>
+  </div>
+
+  <div class="panel-body">
+    <% @forklift.get_records.each do |r| %>
+        <div class="col-sm-4">
+          <%= r.display %>
+        </div>
+    <% end %>
+  </div>
+</div>

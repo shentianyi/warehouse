@@ -1,28 +1,69 @@
-<h2><%= @delivery.container_id %>托清单列表</h2>
-<br/>
+<style>
+    .label {
+        font-size: 1em;
+    }
+
+    .digg_pagination .page_info {
+        text-align: left;
+        width: auto;
+        margin-left: -20px;
+        margin-right: -20px;
+    }
+
+    .digg_pagination {
+        background: transparent;
+    }
+
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > td {
+        text-align: center;
+    }
+</style>
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">发运流程</li>
+    <li>
+      <a href="/deliveries" title="返回托盘">托盘</a>
+    </li>
+    <li class="active">
+      <span class="label label-primary"><%= @delivery.container_id %></span>
+    </li>
+  </ol>
+</div>
+
 <div class="digg_pagination">
   <div class="page_info">
     <%= page_entries_info @forklifts %>
   </div>
   <%= will_paginate @forklifts, :container => false %>
 </div>
-<table class="table table-bordered table-striped globle-table table-hover">
+
+
+<table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
-    <td>NO.</td>
-    <td>托清单号</td>
-    <td>状态</td>
-    <td>备货仓库</td>
-    <td>包装箱总数</td>
-    <td>已接收箱数</td>
+    <th>NO.</th>
+    <th>托清单号</th>
+    <th>状态</th>
+    <th>备货仓库</th>
+    <th>包装箱总数</th>
+    <th>已接收箱数</th>
   </tr>
   </thead>
   <tbody>
   <% @forklifts.each_with_index do |f, index| %>
-  <% fpresenter = ForkliftPresenter.new(f) %>
+      <% fpresenter = ForkliftPresenter.new(f) %>
       <tr>
-        <td><%= index+@forklifts.offset+1%></td>
-        <td><%= link_to f.container_id,forklift_path(f), :class => "btn btn-default"%></td>
+        <td><%= index+@forklifts.offset+1 %></td>
+        <td>
+          <%= link_to content_tag(:span, f.container_id, :class => 'label label-primary'), forklift_path(f) %>
+        </td>
         <td><%= f.state_display %></td>
         <td><%= f.destinationable.name %></td>
         <td><%= fpresenter.sum_packages %></td>
@@ -31,7 +72,7 @@
   <% end %>
   </tbody>
 </table>
+
 <div class="digg_pagination">
   <%= will_paginate @forklifts, :container => false %>
 </div>
-<%= link_to '返回', deliveries_path, :class => "btn btn-default btn-lg" %>

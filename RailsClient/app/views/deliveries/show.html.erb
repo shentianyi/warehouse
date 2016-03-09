@@ -1,67 +1,127 @@
+<style>
+    .col-sm-12 {
+        height: 40px;
+        line-height: 40px;
+    }
+
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > td {
+        text-align: center;
+    }
+
+    .label {
+        font-size: 1em;
+    }
+</style>
+
 <% dp = DeliveryPresenter.new(@delivery) %>
 <!--基础-->
-<h2>基础</h2>
-<h1><%= @delivery.container_id %></h1>
-<span class="label label-primary"><%= @delivery.container_id %></span>
-<h4>状态:
-  <small><%= dp.state_display %></small>
-</h4>
-<h4>创建时间:
-  <small><%= dp.created_at %></small>
-</h4>
-<h4>创建员工号:
-  <small><%= @delivery.user_id %></small>
-</h4>
-<h4>创建员工:
-  <small><%= @delivery.user.name %></small>
-</h4>
-<h4>创建地:
-  <small><%= @delivery.source.name %></small>
-</h4>
-<h4>备注:
-  <small><%= @delivery.remark %></small>
-</h4>
-<h4>目的地:
-  <small><%= @delivery.destination.name if @delivery.destination %></small>
-</h4>
-<h2>托清单列表</h2>
-<% @forklifts = dp.forklifts %>
-<table class="table table-bordered table-striped globle-table table-hover">
-  <thead>
-  <tr>
-    <td>NO.</td>
-    <td>托清单号</td>
-    <td>状态</td>
-    <td>备货仓库</td>
-    <td>包装箱总数</td>
-    <td>已接收箱数</td>
-  </tr>
-  </thead>
-  <tbody>
-  <% @forklifts.each_with_index do |f, index| %>
-      <% fpresenter = ForkliftPresenter.new(f) %>
-      <tr>
-        <td><%= index+1 %></td>
-        <td><%= link_to f.container_id, forklift_path(f), :class => "btn btn-default" %></td>
-        <td><%= f.state_display %></td>
-        <td><%= f.destinationable.name if f.destinationable %></td>
-        <td><%= fpresenter.sum_packages %></td>
-        <td><%= fpresenter.accepted_packages %></td>
-      </tr>
-  <% end %>
-  </tbody>
-</table>
-<h2>操作记录</h2>
-<ul>
-  <% @delivery.get_records.each do |r| %>
-      <li>
-        <h4>
-          <small><%= r.display %></small>
-        </h4>
-      </li>
-  <% end %>
-</ul>
-<%= link_to '返回', deliveries_path, :class => 'btn btn-default' %>
-<% if current_user.can_edit_inventory? %>
-    <%= link_to '编辑', edit_delivery_path(@delivery), :class => 'btn btn-default' %>
-<% end %>
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">发运流程</li>
+    <li>
+      <a href="/deliveries" title="返回运单">运单</a>
+    </li>
+    <li class="active">
+      <span class="label label-primary"><%= @delivery.container_id %></span>
+      <% if current_user.can_edit_inventory? %>
+          <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-pencil'), edit_delivery_path(@delivery), :style => 'color:steelblue;margin-left:10px;', :title => "编辑运单" %>
+      <% end %>
+    </li>
+  </ol>
+</div>
+
+<!-- 展示运单状态-->
+
+<div class="panel panel-default">
+  <div class="panel-body">
+    <div class="col-sm-12" style="border-bottom: 1px dashed #999;">
+      <div class="col-sm-3">
+        状态:
+        <%= dp.state_display %>
+      </div>
+      <div class="col-sm-3">
+        创建时间:
+        <%= dp.created_at %>
+      </div>
+      <div class="col-sm-6">
+        创建员工号:
+        <%= @delivery.user_id %>
+      </div>
+    </div>
+
+    <div class="col-sm-12">
+      <div class="col-sm-3">创建员工:
+        <%= @delivery.user.name %>
+      </div>
+      <div class="col-sm-3">创建地:
+        <%= @delivery.source.name %>
+      </div>
+      <div class="col-sm-3">备注:
+        <%= @delivery.remark %>
+      </div>
+      <div class="col-sm-3">目的地:
+        <%= @delivery.destination.name if @delivery.destination %>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <div class="panel-title">
+      托清单列表
+    </div>
+  </div>
+
+  <% @forklifts = dp.forklifts %>
+  <table class="table table-bordered table-striped table-hover">
+    <thead>
+    <tr>
+      <th>NO.</th>
+      <th>托清单号</th>
+      <th>状态</th>
+      <th>备货仓库</th>
+      <th>包装箱总数</th>
+      <th>已接收箱数</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @forklifts.each_with_index do |f, index| %>
+        <% fpresenter = ForkliftPresenter.new(f) %>
+        <tr>
+          <td><%= index+1 %></td>
+          <td>
+            <%= link_to content_tag(:span, f.container_id, :class => "label label-primary"), forklift_path(f) %>
+          </td>
+          <td><%= f.state_display %></td>
+          <td><%= f.destinationable.name if f.destinationable %></td>
+          <td><%= fpresenter.sum_packages %></td>
+          <td><%= fpresenter.accepted_packages %></td>
+        </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="panel panel-info">
+  <div class="panel-heading">
+    <div class="panel-title">
+      操作记录
+    </div>
+  </div>
+  <div class="panel-body">
+    <div class="col-sm-3">
+      <% @delivery.get_records.each do |r| %>
+          <%= r.display %>
+      <% end %>
+    </div>
+  </div>
+</div>

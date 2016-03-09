@@ -42,15 +42,6 @@
                 </div>
 
                 <div class="col-md-12" style="display: flex;">
-                  <%= f.label :user_name, '用户名' %>
-                  <% if current_user.admin? || current_user.manager? %>
-                      <%= f.text_field :user_name, :class => 'form-control', :style => 'width:60%;margin:-10px 0 20px 30px;' %>
-                  <% else %>
-                      <input type="text" name="id" readonly="" class="form-control" style="margin: -10px 0 20px 30px;" value="<%= current_user.user_name %>">
-                  <% end %>
-                </div>
-
-                <div class="col-md-12" style="display: flex;">
                   <%= f.label :name, '姓 名' %>
                   <% if current_user.admin? || current_user.manager? %>
                       <%= f.text_field :name, :class => 'form-control', :style => 'width:60%;margin:-10px 0 10px 30px;' %>
@@ -79,10 +70,6 @@
                 <div class="col-md-12" style="display: flex;">
                   <%= f.label :password_confirmation, '确认密码' %>
                   <%= f.password_field :password_confirmation, :class => 'form-control', :style => 'width:60%;margin:0 0 10px 30px;' %>
-                </div>
-
-                <div class="col-md-12" style="text-align: center;color: darkred;border-top: 1px dotted #000;">
-                  <h4>密&emsp;码&emsp;必&emsp;须&emsp;填&emsp;写</h4>
                 </div>
               </div>
             </div>

@@ -1,6 +1,22 @@
-<h1>编辑托盘清单</h1>
+<style>
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+</style>
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">发运流程</li>
+    <li>
+      <a href="/forklifts" title="返回托盘">托盘</a>
+    </li>
+    <li class="active">
+      编辑托盘清单
+      <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-eye-open', :style => 'color:green;'), forklift_path(@forklift), :title => '查看托盘清单' %>
+    </li>
+  </ol>
+</div>
 
 <%= render 'form' %>
-
-<%= link_to '详细', forklift_path(@forklift) ,:class=>'btn btn-default'%> |
-<%= link_to '返回', forklifts_path,:class=>'btn btn-default' %>
