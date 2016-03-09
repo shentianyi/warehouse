@@ -199,10 +199,14 @@ Rails.application.routes.draw do
       match :import, to: :import, via: [:get, :post]
       match :move, to: :move, via: [:get, :post]
       match :group, to: :group, via: [:get, :post]
+      match :by_whouse1, to: :by_whouse1, via: [:get, :post]
+      match :by_whouse2, to: :by_whouse2, via: [:get, :post]
+
       # get :panel
       # get :search_storage
       get :summary
       get :exports
+      get :search_by_whouse
     end
 
   end

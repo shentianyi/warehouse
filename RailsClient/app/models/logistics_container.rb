@@ -141,9 +141,31 @@ class LogisticsContainer<LocationContainer
   def enter_stock
     if self.state==MovableState::CHECKED
       if (package=self.package)
-        toWh='3EX'
-        if self.destinationable && self.destinationable_type == Whouse.to_s
-          toWh=self.destinationable_id
+        # toWh='3EX'
+        # if self.destinationable && self.destinationable_type == Whouse.to_s
+        #   toWh=self.destinationable_id
+        # end
+        # params={
+        #     partNr: package.part_id,
+        #     qty: package.quantity,
+        #     fifo: package.parsed_fifo,
+        #     packageId: package.id,
+        #     toWh: toWh,
+        #     uniq: true
+        # }
+        # if position=PartService.get_position_by_whouse_id(package.part_id, self.destinationable_id)
+        #   params[:toPosition]=position.detail
+        # else
+        #   params[:toPosition]='00 00 00'
+        # end
+
+        #用于 leoni 收集数据
+        p package
+        toWh='WE87'
+        if package.logistics_containers.first.parent.blank?
+          to_position='WE87-1'
+        else
+          to_position='WE87-2'
         end
         params={
             partNr: package.part_id,
@@ -151,13 +173,9 @@ class LogisticsContainer<LocationContainer
             fifo: package.parsed_fifo,
             packageId: package.id,
             toWh: toWh,
+            toPosition: to_position,
             uniq: true
         }
-        if position=PartService.get_position_by_whouse_id(package.part_id, self.destinationable_id)
-          params[:toPosition]=position.detail
-        else
-          params[:toPosition]='00 00 00'
-        end
         StorageOperationRecord.save_record(params, 'ENTRY')
         WhouseService.new.enter_stock(params)
       end
