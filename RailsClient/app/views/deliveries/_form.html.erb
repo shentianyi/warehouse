@@ -19,7 +19,7 @@
 
     <p>
       <%= f.label :des_location_id, '目的地' %>
-      <%= f.select(:des_location_id, Location.collect { |l| [l.name, l.id] }, {include_blank: false}) %>
+      <%= f.select(:des_location_id, Location.all.collect { |l| [l.name, l.id] }, {include_blank: false}) %>
     </p>
 
     <p>

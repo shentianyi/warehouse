@@ -53,15 +53,6 @@ ActiveRecord::Schema.define(version: 20160304061203) do
   add_index "attachments", ["attachable_type"], name: "index_attachments_on_attachable_type", using: :btree
   add_index "attachments", ["id"], name: "index_attachments_on_id", using: :btree
 
-  create_table "colors", force: true do |t|
-    t.string   "nr"
-    t.string   "name"
-    t.string   "short_name"
-    t.string   "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "containers", force: true do |t|
     t.string   "custom_id",                 limit: 36
     t.integer  "type"
@@ -196,17 +187,15 @@ ActiveRecord::Schema.define(version: 20160304061203) do
     t.boolean  "is_dirty",      default: true
     t.boolean  "is_new",        default: true
     t.string   "modem_id"
-    t.string   "position_id"
+    t.string   "position"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "mac"
-    t.string   "led_display"
-    t.boolean  "is_valid",      default: true
   end
 
   add_index "leds", ["id"], name: "index_leds_on_id", using: :btree
   add_index "leds", ["modem_id"], name: "index_leds_on_modem_id", using: :btree
-  add_index "leds", ["position_id"], name: "index_leds_on_position_id", using: :btree
+  add_index "leds", ["position"], name: "index_leds_on_position", using: :btree
   add_index "leds", ["signal_id"], name: "index_leds_on_signal_id", using: :btree
 
   create_table "location_container_hierarchies", id: false, force: true do |t|
@@ -284,7 +273,6 @@ ActiveRecord::Schema.define(version: 20160304061203) do
     t.string   "send_whouse_id"
     t.string   "receive_whouse_id"
     t.integer  "receive_mode",                 default: 100
-    t.string   "ip_detail"
   end
 
   add_index "locations", ["destination_id"], name: "index_locations_on_destination_id", using: :btree
@@ -516,21 +504,18 @@ ActiveRecord::Schema.define(version: 20160304061203) do
     t.datetime "updated_at"
   end
 
-  add_index "part_clients", ["part_id"], name: "index_part_clients_on_parts_id", using: :btree
+  add_index "part_clients", ["part_id"], name: "index_part_clients_on_part_id", using: :btree
 
   create_table "part_positions", force: true do |t|
     t.string   "part_id"
     t.string   "position_id"
-    t.boolean  "is_delete",         default: false
-    t.boolean  "is_dirty",          default: true
-    t.boolean  "is_new",            default: true
+    t.boolean  "is_delete",       default: false
+    t.boolean  "is_dirty",        default: true
+    t.boolean  "is_new",          default: true
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "sourceable_id"
     t.string   "sourceable_type"
-    t.float    "safe_stock"
-    t.string   "from_warehouse_id"
-    t.string   "from_position_id"
   end
 
   add_index "part_positions", ["id"], name: "index_part_positions_on_id", using: :btree
@@ -553,21 +538,17 @@ ActiveRecord::Schema.define(version: 20160304061203) do
   add_index "part_types", ["nr"], name: "index_part_types_on_nr", using: :btree
 
   create_table "parts", force: true do |t|
-    t.string   "uuid",          limit: 36,                                           null: false
+    t.string   "uuid",         limit: 36,                                           null: false
     t.string   "customernum"
     t.string   "user_id"
-    t.boolean  "is_delete",                                          default: false
-    t.boolean  "is_dirty",                                           default: true
-    t.boolean  "is_new",                                             default: true
+    t.boolean  "is_delete",                                         default: false
+    t.boolean  "is_dirty",                                          default: true
+    t.boolean  "is_new",                                            default: true
     t.datetime "created_at"
     t.datetime "updated_at"
     t.float    "unit_pack"
     t.string   "part_type_id"
-    t.decimal  "convert_unit",             precision: 20, scale: 10, default: 1.0
-    t.string   "name"
-    t.float    "cross_section"
-    t.float    "weight"
-    t.float    "weight_range"
+    t.decimal  "convert_unit",            precision: 20, scale: 10, default: 1.0
     t.string   "unit"
     t.string   "nr"
     t.string   "description"
@@ -760,15 +741,6 @@ ActiveRecord::Schema.define(version: 20160304061203) do
     t.string   "name"
   end
 
-  create_table "settings", force: true do |t|
-    t.string   "name"
-    t.string   "value"
-    t.string   "code"
-    t.integer  "type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "state_logs", force: true do |t|
     t.string   "stateable_id"
     t.string   "stateable_type"
@@ -863,15 +835,6 @@ ActiveRecord::Schema.define(version: 20160304061203) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "short_name"
-  end
-
-  create_table "units", force: true do |t|
-    t.string   "nr"
-    t.string   "name"
-    t.string   "short_name"
-    t.string   "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "user_permission_groups", force: true do |t|
