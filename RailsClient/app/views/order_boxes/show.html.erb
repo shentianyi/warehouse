@@ -40,5 +40,10 @@
   <%= @order_box.order_box_type.name %>
 </p>
 
+<p>
+  <strong>Order box position:</strong>
+  <%= @order_box.position_id %>
+</p>
+
 <%= link_to 'Edit', edit_order_box_path(@order_box) %> |
 <%= link_to 'Back', order_boxes_path %>
