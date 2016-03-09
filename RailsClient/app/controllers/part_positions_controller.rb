@@ -76,36 +76,6 @@ class PartPositionsController < ApplicationController
     end
   end
 
-  def search
-    super { |query|
-      # unless params[:part_position][:part_id].blank?
-      #   if part = Part.find_by_nr(params[:part_position][:part_id])
-      #     query = query.unscope(where: :part_id).where(part_id: part.id)
-      #   end
-      # end
-      #
-      unless params[:part_position][:position_id].blank?
-        if position = Position.find_by_detail(params[:part_position][:position_id])
-          query = query.unscope(where: :position_id).where(position_id: position.id)
-        end
-      end
-      #
-      # unless params[:part_position][:from_position_id].blank?
-      #   if part = Position.find_by_nr(params[:part_position][:from_position_id])
-      #     query = query.unscope(where: :from_position_id).where(from_position_id: part.id)
-      #   end
-      # end
-      #
-      # unless params[:part_position][:from_warehouse_id].blank?
-      #   if part = Warehouse.find_by_nr(params[:part_position][:from_warehouse_id])
-      #     query = query.unscope(where: :from_warehouse_id).where(from_warehouse_id: part.id)
-      #   end
-      # end
-
-      query
-    }
-  end
-
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_part_position

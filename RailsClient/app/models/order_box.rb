@@ -7,7 +7,7 @@ class OrderBox < ActiveRecord::Base
 
   has_many :order_items, :as => :orderable, :dependent => :destroy
 
-  # before_save :set_default_position
+  before_save :set_default_position
 
   validates_presence_of :nr, :message => "料盒编号编号不能为空!"
   validates_uniqueness_of :nr, :message => "料盒编号不能重复!"
@@ -18,8 +18,7 @@ class OrderBox < ActiveRecord::Base
 
   def set_default_position
     if self.position.blank?
-      p '9999999999999999900000000000000000000000000000'
-      if p=self.whouse.positions.where(whouse_id: self.whouse_id).first
+      if p=self.whouse.positions.first
         self.position=p
       end
     end
