@@ -31,7 +31,7 @@
     <li class="active">
       <span class="label label-primary"><%= @forklift.container_id %></span>
 
-      <% if current_user.can_edit_inventory? %>
+      <% if current_user.permission?(:operate_delivery) %>
           <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-pencil'), edit_forklift_path, :style => 'color:steelblue;margin-left:10px;', :title => "编辑托盘" %>
       <% end %>
     </li>

@@ -48,8 +48,10 @@
         <ul class="dropdown-menu" role="manage">
           <li><a href="<%= n_storages_path %>">详细库存查询</a></li>
           <li><a href="<%= group_n_storages_path %>">库存汇总查询</a></li>
-          <li><a href="<%= import_n_storages_path %>">文件入库</a></li>
-          <li><a href="<%= move_n_storages_path %>">文件移库</a></li>
+          <% if current_user.permission?(:operate_storage) %>
+              <li><a href="<%= import_n_storages_path %>">文件入库</a></li>
+              <li><a href="<%= move_n_storages_path %>">文件移库</a></li>
+          <% end %>
           <li><a href="<%= movements_path %>">库存移动记录查询</a></li>
           <li><a href="<%= storage_operation_records_path %>">库存操作记录</a></li>
         </ul>

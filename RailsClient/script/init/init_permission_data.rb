@@ -72,8 +72,8 @@ unless Permission.find_by_name("operate_order_delete")
   Permission.create(name: "operate_order_delete", description: "要货删除权限")
 end
 
-unless Permission.find_by_name("operate_delivery_edit")
-  Permission.create(name: "operate_delivery_edit", description: "发运编辑权限")
+unless Permission.find_by_name("operate_delivery")
+  Permission.create(name: "operate_delivery", description: "发运编辑权限")
 end
 
 unless Permission.find_by_name("operate_storage")

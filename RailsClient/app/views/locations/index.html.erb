@@ -1,7 +1,9 @@
 <h2>地点列表</h2>
 
-<%= link_to "新建地点", send("new_#{@model}_path"), :class => 'btn btn-default' %>
-<%= link_to "上传/更新地点", send("import_#{@model.pluralize}_path"), :class => 'btn btn-default' %>
+<% if current_user.permission?(:operate_basic_info_create) %>
+    <%= link_to "新建地点", send("new_#{@model}_path"), :class => 'btn btn-default' %>
+    <%= link_to "上传/更新地点", send("import_#{@model.pluralize}_path"), :class => 'btn btn-default' %>
+<% end %>
 <%= link_to "下载", send("download_#{@model.pluralize}_path"), data: {confirm: 'Are you sure?'}, :class => 'btn btn-default' %>
 
 <div class="digg_pagination">
@@ -57,9 +59,13 @@
         <td><%= location.tenant.name if location.tenant %></td>
         <td><%= location.address %></td>
         <td><%= link_to '详细', location, :class => 'btn btn-default' %></td>
-        <td><%= link_to '编辑', edit_location_path(location), :class => 'btn btn-default' %></td>
-        <td><%= link_to '编辑目的地', destinations_location_path(location), :class => 'btn btn-default' %></td>
-        <td><%= link_to '删除', location, method: :delete, data: {confirm: '确认删除?'}, :class => 'btn btn-default' %></td>
+        <% if current_user.permission?(:operate_basic_info_edit) %>
+            <td><%= link_to '编辑', edit_location_path(location), :class => 'btn btn-default' %></td>
+            <td><%= link_to '编辑目的地', destinations_location_path(location), :class => 'btn btn-default' %></td>
+        <% end %>
+        <% if current_user.permission?(:operate_basic_info_delete) %>
+            <td><%= link_to '删除', location, method: :delete, data: {confirm: '确认删除?'}, :class => 'btn btn-default' %></td>
+        <% end %>
       </tr>
   <% end %>
   </tbody>

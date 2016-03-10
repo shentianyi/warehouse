@@ -30,7 +30,7 @@
     </li>
     <li class="active">
       <span class="label label-primary"><%= @delivery.container_id %></span>
-      <% if current_user.can_edit_inventory? %>
+      <% if current_user.permission?(:operate_delivery) %>
           <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-pencil'), edit_delivery_path(@delivery), :style => 'color:steelblue;margin-left:10px;', :title => "编辑运单" %>
       <% end %>
     </li>

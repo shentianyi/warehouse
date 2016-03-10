@@ -121,7 +121,7 @@
   <i class=" glyphicon glyphicon-chevron-up" title="收起搜索条件"></i>
 </div>
 
-<% if current_user.can_edit_inventory? %>
+<% if current_user.permission?(:operate_delivery) %>
     <%= link_to '导入离线包装箱', import_logistics_containers_path, :class => "btn btn-warning", :style => 'color:white;margin:-10px 0 10px 20px;' %>
 <% end %>
 
@@ -174,7 +174,7 @@
 
               <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-eye-open', :style => 'color:green;'), package_path(package), :class => 'IconA', :title => '查看包装箱详情' %>
 
-              <% if current_user.can_edit_inventory? %>
+              <% if current_user.permission?(:operate_delivery) %>
 
                   <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-pencil', :style => 'color:#4F94CD;'), edit_package_path(package), :class => 'IconA', :title => '编辑包装箱' %>
 

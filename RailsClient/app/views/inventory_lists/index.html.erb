@@ -40,9 +40,11 @@
 </style>
 
 <div class="col-sm-12">
-  <div class="col-sm-4">
-    <%= link_to "新建盘点", send("new_#{@model}_path"), :class => 'btn btn-default' %>
-  </div>
+  <% if current_user.permission?(:operate_inventory_create) %>
+      <div class="col-sm-4">
+        <%= link_to "新建盘点", send("new_#{@model}_path"), :class => 'btn btn-default' %>
+      </div>
+  <% end %>
   <div class="col-sm-4">
     <%= link_to "导出 汇总", export_total_inventory_lists_path, class: "btn btn-default", data: {confirm: "数据量较大，确定导出?"} %>
   </div>

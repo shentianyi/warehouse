@@ -176,7 +176,7 @@
         <td>
           <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-eye-open', :style => 'color:green;'), forklift_path(forklift), :title => '托清单详情', :class => 'IconA' %>
 
-          <% if current_user.can_edit_inventory? %>
+          <% if current_user.permission?(:operate_delivery) %>
               <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-pencil', :style => 'color:#4F94CD;'), edit_forklift_path(forklift), :class => 'IconA', :title => '编辑托清单' if current_user.admin? %>
           <% end %>
 

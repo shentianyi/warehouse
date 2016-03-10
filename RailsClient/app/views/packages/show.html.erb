@@ -26,7 +26,7 @@
     </li>
     <li class="active">
       <span class="label label-primary"><%= @package.container_id %></span>
-      <% if current_user.can_edit_inventory? %>
+      <% if current_user.permission?(:operate_delivery) %>
           <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-pencil'), edit_package_path, :style => 'color:steelblue;margin-left:10px;', :title => "编辑包装箱" %>
       <% end %>
     </li>
