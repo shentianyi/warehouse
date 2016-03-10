@@ -63,7 +63,7 @@ class PickItem < ActiveRecord::Base
       p_n<<"#{storage.position}/#{storage.qty}"
     end
 
-    p_n.join("\n")
+    p_n.join("<br />")
 
   end
 

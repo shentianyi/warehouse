@@ -60,7 +60,8 @@
             <% end %></td>
           <td><%= '是' if pick_item.is_emergency %></td>
           <td><%= pick_item.remark %></td>
-          <td><%= pick_item.pick_position%></td>
+          <td id="demo"><%= pick_item.pick_position %></td>
+          <td><button type="button" onclick="myFunction(<% pick_item.part_id %>)">点击这里</button></td>
         </tr>
     <% end %>
     </tbody>
@@ -72,6 +73,12 @@
 <%end%>
 
 <script type="text/javascript">
+    function myFunction(ss)
+    {
+        x=document.getElementById("demo")
+        x.innerHTML=ss
+    }
+
 	$(document).ready(function(){
         init_check();
         $("body").on("change","#check-all-unprinted",function(){
