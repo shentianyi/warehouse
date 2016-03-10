@@ -11,7 +11,7 @@
         <div>
           <div>
             <span class="label label-info">地点:</span>
-            <%= select_tag(:source_location_id, options_for_select(Location.collect { |l| [l.name, l.id] }, @source_location_id), include_blank: false) %>
+            <%= select_tag(:source_location_id, options_for_select(Location.all.collect { |l| [l.name, l.id] }, @source_location_id), include_blank: false) %>
 
             <span class="label label-info">要货时间:</span>
             <input type="text" name="date_start" class="datepicker" value="<%= @date_start %>"/>

@@ -19,13 +19,15 @@
     <!--<hr style="margin: 0;">-->
     <% if current_user.admin? %>
         <div class="col-md-12" style="text-align: center;">
-          <div class="col-md-3">
-            <%= link_to "新建员工", send("new_#{@model}_path"), :class => 'btn btn-primary', :style => 'width:200px;margin:10px 0 0 0;color:white;' %>
-          </div>
+          <% if current_user.permission?(:operate_basic_info_create) %>
+              <div class="col-md-3">
+                <%= link_to "新建员工", send("new_#{@model}_path"), :class => 'btn btn-primary', :style => 'width:200px;margin:10px 0 0 0;color:white;' %>
+              </div>
 
-          <div class="col-md-3">
-            <%= link_to "上传/更新员工", send("import_#{@model.pluralize}_path"), :class => 'btn btn-primary', :style => 'width:200px;margin:10px 0 0 0;color:white;' %>
-          </div>
+              <div class="col-md-3">
+                <%= link_to "上传/更新员工", send("import_#{@model.pluralize}_path"), :class => 'btn btn-primary', :style => 'width:200px;margin:10px 0 0 0;color:white;' %>
+              </div>
+          <% end %>
           <div class="col-md-3">
             <%= link_to "下载员工列表", send("download_#{@model.pluralize}_path"), data: {confirm: 'Are you sure?'}, :class => 'btn btn-primary', :style => 'width:200px;margin:10px 0 0 0;color:white;' %>
           </div>
@@ -96,14 +98,21 @@
             <td>
               <a href="<%= user_path(user) %>" class="IconA" title="详细"><i class="glyphicon glyphicon-eye-open" style="color: green;"> </i></a>
 
-              <a href="<%= edit_user_path(user) %>" class="IconA" title="编辑"><i class="glyphicon glyphicon-pencil" style="color:#4F94CD;"></i></a>
+              <% if current_user.permission?(:operate_basic_info_edit) %>
+                  <a href="<%= edit_user_path(user) %>" class="IconA" title="编辑"><i class="glyphicon glyphicon-pencil" style="color:#4F94CD;"></i></a>
+              <% end %>
 
-              <a class="IconA" rel="nofollow" href="<%= user_path(user) %>" data-method="delete" data-confirm="Are you sure?" title="删除">
-                <i class="glyphicon glyphicon-trash" style="color:darkred;"></i>
-              </a>
-              <a href="<%= permission_groups_users_path(user) %>" class="IconA" title="权限">
-                <i class="glyphicon glyphicon-lock" style="color:#000;"></i>
-              </a>
+              <% if current_user.permission?(:operate_basic_info_delete) %>
+                  <a class="IconA" rel="nofollow" href="<%= user_path(user) %>" data-method="delete" data-confirm="Are you sure?" title="删除">
+                    <i class="glyphicon glyphicon-trash" style="color:darkred;"></i>
+                  </a>
+              <% end %>
+
+              <% if current_user.permission?(:manage_permission) %>
+                  <a href="<%= permission_groups_users_path(user) %>" class="IconA" title="权限">
+                    <i class="glyphicon glyphicon-lock" style="color:#000;"></i>
+                  </a>
+              <% end %>
             </td>
         <% end %>
       </tr>
