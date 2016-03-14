@@ -81,4 +81,20 @@ ActiveRecord::Base.transaction do
   shllo.receive_whouse=shrw
   shllo.save
 
+
+
+  #佳轩扩展配置
+  unless SysConfig.find_by_code('JIAXUAN_EXTRA_SOURCE')
+    SysConfig.create(code: 'JIAXUAN_EXTRA_SOURCE', value: czllo.nr, category: '佳轩扩展配置', index: 1200, name: '发运地址')
+  end
+
+  unless SysConfig.find_by_code('JIAXUAN_EXTRA_SH_CUSTOM')
+    SysConfig.create(code: 'JIAXUAN_EXTRA_SH_CUSTOM', value: shl.code,category: '佳轩扩展配置', index: 1300, name: '上海客户编码')
+  end
+
+  unless SysConfig.find_by_code('JIAXUAN_EXTRA_CZ_CUSTOM')
+    SysConfig.create(code: 'JIAXUAN_EXTRA_CZ_CUSTOM', value: czl.code, category: '佳轩扩展配置', index: 1300, name: '常州客户编码')
+  end
+
+
 end
