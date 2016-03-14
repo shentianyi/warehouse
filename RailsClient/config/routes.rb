@@ -22,7 +22,7 @@ Rails.application.routes.draw do
     collection do
       get :search
       match :add_permissions, to: :add_permissions, via: [:get, :post]
-      get :details
+      get :permission_details
     end
   end
 
@@ -274,8 +274,7 @@ Rails.application.routes.draw do
       get :download
       get :template
       get :search
-      get :permissions
-      post :set_permissions
+      match :permission_groups, to: :permission_groups, via: [:get, :post]
     end
   end
 

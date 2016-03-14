@@ -13,12 +13,15 @@
       </span>
       <input type="submit" value="查 找" class="btn btn-primary"/>
     </div>
-</form>
+  </form>
 </div>
 
-<%= link_to "新建零件", send("new_#{@model}_path") ,:class=>'btn btn-default'%>
-<%= link_to "上传/更新零件", send("import_#{@model.pluralize}_path") ,:class=>'btn btn-default'%>
-<%= link_to "下载零件", send("download_#{@model.pluralize}_path"),data: { confirm: 'Are you sure?' },:class=>'btn btn-default' %>
+<% if current_user.permission?(:operate_basic_info_create) %>
+    <%= link_to "新建零件", send("new_#{@model}_path"), :class => 'btn btn-default' %>
+    <%= link_to "上传/更新零件", send("import_#{@model.pluralize}_path"), :class => 'btn btn-default' %>
+<% end %>
+<%= link_to "下载零件", send("download_#{@model.pluralize}_path"), data: {confirm: 'Are you sure?'}, :class => 'btn btn-default' %>
+
 <br>
 <div class="digg_pagination">
   <div class="page_info">
@@ -48,11 +51,15 @@
         <td><%= part.part_type.name if part.part_type %></td>
         <td><%= part.unit %></td>
         <td><%= part.unit_pack %></td>
-        <td><%=part.convert_unit%></td>
-        <td><%=part.description%></td>
-        <td><%= link_to '详细', part ,:class=>'btn btn-default'%></td>
-        <td><%= link_to '编辑', edit_part_path(part) ,:class=>'btn btn-default'%></td>
-        <td><%= link_to '删除', part, method: :delete, data: {confirm: '确认删除?'} ,:class=>'btn btn-default'%></td>
+        <td><%= part.convert_unit %></td>
+        <td><%= part.description %></td>
+        <td><%= link_to '详细', part, :class => 'btn btn-default' %></td>
+        <% if current_user.permission?(:operate_basic_info_edit) %>
+            <td><%= link_to '编辑', edit_part_path(part), :class => 'btn btn-default' %></td>
+        <% end %>
+        <% if current_user.permission?(:operate_basic_info_delete) %>
+            <td><%= link_to '删除', part, method: :delete, data: {confirm: '确认删除?'}, :class => 'btn btn-default' %></td>
+        <% end %>
       </tr>
   <% end %>
   </tbody>

@@ -14,7 +14,7 @@
 <span class="label label-info">报表类型:</span>
 <%= select_tag(:type,options_for_select(ReportType.list,@type),include_blank: false)%>
 <span class="label label-info">地点:</span>
-<%= select_tag(:location_id, options_for_select(Location.collect { |l| [l.name, l.id] }, @location_id), include_blank: false) %>
+<%= select_tag(:location_id, options_for_select(Location.all.collect { |l| [l.name, l.id] }, @location_id), include_blank: false) %>
   <span class="label label-info">创建时间:</span>
 <input id="date-start" type="text" name="date_start" class="datepicker" value="<%= @date_start %>"/>
 ~ <input id="date-end" type="text" name="date_end" class="datepicker" value="<%= @date_end %>"/>

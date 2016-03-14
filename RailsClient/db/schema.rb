@@ -838,7 +838,7 @@ ActiveRecord::Schema.define(version: 20160304061203) do
   end
 
   create_table "user_permission_groups", force: true do |t|
-    t.integer  "user_id"
+    t.string   "user_id"
     t.integer  "permission_group_id"
     t.datetime "created_at"
     t.datetime "updated_at"

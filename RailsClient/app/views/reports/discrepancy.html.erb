@@ -26,18 +26,20 @@
           }
       </script>
       <% if current_user.can_edit_inventory? %>
-          <div>
-            <span>上传报表：</span>
-            <input id="item-data-uploader" type="file" name="files[]" data-url="/reports/upload_file">
+          <% if current_user.permission?(:operate_report_upload) %>
+              <div>
+                <span>上传报表：</span>
+                <input id="item-data-uploader" type="file" name="files[]" data-url="/reports/upload_file">
 
-            <div class="abstractblock" id="item-data-uploader-preview" style="<%= "display:none" if @file.nil? %>;">
-              <% if @file %>
-                  <span>文件：<%= @file["data"]["original_filename"] %></span>
-                  <br>
-                  <span info>文件上传成功</span>
-              <% end %>
-            </div>
-          </div>
+                <div class="abstractblock" id="item-data-uploader-preview" style="<%= "display:none" if @file.nil? %>;">
+                  <% if @file %>
+                      <span>文件：<%= @file["data"]["original_filename"] %></span>
+                      <br>
+                      <span info>文件上传成功</span>
+                  <% end %>
+                </div>
+              </div>
+          <% end %>
       <% end %>
     </div>
     <div>
@@ -46,7 +48,7 @@
           <span class="label label-info">报表类型:</span>
           <%= select_tag(:type, options_for_select(ReportType.list, @type), include_blank: false) %>
           <span class="label label-info">地点:</span>
-          <%= select_tag(:location_id, options_for_select(Location.collect { |l| [l.name, l.id] }, @location_id), include_blank: false) %>
+          <%= select_tag(:location_id, options_for_select(Location.all.collect { |l| [l.name, l.id] }, @location_id), include_blank: false) %>
           <span class="label label-info">时间范围:</span>
           <input type="text" name="received_date_start" class="datepicker" value="<%= @date_start %>"/>
           ~ <input type="text" name="received_date_end" class="datepicker" value="<%= @date_end %>"/>

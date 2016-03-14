@@ -1,7 +1,7 @@
 <%= form_for(@user, html: {class: 'form-line'}) do |f| %>
     <% if @user.errors.any? %>
         <div id="error_explanation">
-          <h2><%= pluralize(@user.errors.count, "error") %> prohibited this location from being saved:</h2>
+          <h2><%= pluralize(@user.errors.count, "个") %> 错误如下:</h2>
 
           <ul>
             <% @user.errors.full_messages.each do |message| %>
@@ -11,72 +11,141 @@
         </div>
     <% end %>
 
-    <p>
-      <%= f.label :nr, '工 号' %>
-      <% if current_user.admin? || current_user.manager? %>
-          <%= f.text_field :nr %>
-      <%else%>
-          <input type="text" name="id" readonly="" value="<%=current_user.nr%>">
-      <%end%>
-    </p>
+    <div class="container panel"
+         style="background: #EAEAEA;border-radius: 50px;padding: 10px 40px 30px 40px;box-shadow: 10px 10px 5px #ccc;">
 
-    <p>
-      <%= f.label :name, '姓 名' %>
-      <% if current_user.admin? || current_user.manager? %>
-          <%= f.text_field :name %>
-      <%else%>
-          <input type="text" name="id" readonly="" value="<%=current_user.name%>">
-      <%end%>
-    </p>
+      <div class="panel-heading" style="display: flex; border-bottom: 3px dashed steelblue;">
+        <i class="glyphicon glyphicon-pencil"
+           style="font-size: 3em;margin: 0 30px 0 0;color:steelblue;"></i>
 
-    <p>
-      <%= f.label :password, '密 码' %>
-      <%= f.password_field :password %>
-    </p>
-    <p>
-      <%= f.label :password_confirmation, '确认密码' %>
-      <%= f.password_field :password_confirmation %>
-    </p>
+        <h3 style="margin: 10px 0 0 0">详细信息</h3>
+      </div>
 
-    <p>
-      <%= f.label :operation_mode, '操作模式' %>
-      <% if current_user.admin? || current_user.manager? %>
-          <%= f.select(:operation_mode, OperationMode.list_menu, {include_blank: false})%>
-      <%else%>
-          <input type="text" name="id" readonly="" value="<%= OperationMode.display(current_user.operation_mode) %>">
-      <%end%>
-    </p>
+      <div class="panel-body">
+        <div>
+          <div class="col-md-6">
+            <div class="panel panel-primary">
 
-    <p>
-      <%= f.label :role_id, '角 色' %>
+              <div class="panel-heading" style="display: flex;height: 40px;">
+                <i class="glyphicon glyphicon-user" style="font-size: 1em;margin: 1px 10px 0 0;"></i>
+                <span>用户信息</span>
+              </div>
 
-      <% if current_user.admin? || current_user.manager? %>
-          <%= f.select(:role_id, Role.menu, {include_blank: false}) %>
-      <%else%>
-          <input type="text" name="id" readonly="" value="<%= Role.display(current_user.role_id) %>">
-      <%end%>
-    </p>
+              <div class="panel-body">
+                <div class="col-md-12" style="display: flex;">
+                  <%= f.label :id, '员工号' %>
+                  <% if current_user.admin? || current_user.manager? %>
+                      <%= f.text_field :id, :class => 'form-control', :style => 'width:60%;margin:-10px 0 20px 30px;' %>
+                  <% else %>
+                      <input type="text" name="id" style="margin:-10px 0 20px 30px;" class="form-control" readonly="" value="<%= current_user.id %>">
+                  <% end %>
+                </div>
 
-    <p>
-      <%= f.label :location_id, '地 点' %>
-      <% if current_user.admin? || current_user.manager? %>
-          <%= f.select(:location_id, Location.all.collect { |l| [l.name, l.id] }, {include_blank: false}) %>
-      <%else%>
-          <input type="text" name="id" readonly="" value="<%= Location.find(current_user.location_id).name %>">
-      <%end%>
-    </p>
+                <div class="col-md-12" style="display: flex;">
+                  <%= f.label :name, '姓 名' %>
+                  <% if current_user.admin? || current_user.manager? %>
+                      <%= f.text_field :name, :class => 'form-control', :style => 'width:60%;margin:-10px 0 10px 30px;' %>
+                  <% else %>
+                      <input type="text" name="id" readonly="" class="form-control" style="margin: -10px 0 10px 30px;" value="<%= current_user.name %>">
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
 
-    <p>
-      <%= f.label :email, '邮 箱' %>
-      <%= f.email_field :email %>
-    </p>
+          <div class="col-md-6">
+            <div class="panel panel-primary">
 
-    <p>
-      <%= f.label :tel, '电 话' %>
-      <%= f.text_field :tel %>
-    </p>
+              <div class="panel-heading" style="display: flex;height: 40px;">
+                <i class="glyphicon glyphicon-lock" style="font-size: 1em;margin: 1px 10px 0 0;"></i>
+                <span>修改密码</span>
+              </div>
 
-    <div class="actions">
-      <%= f.submit value: '提 交', class: 'btn btn-primary btn-lg' %>
+              <div class="panel-body">
+                <div class="col-md-12" style="display: flex;">
+                  <%= f.label :password, '密  码' %>
+                  <%= f.password_field :password, :class => 'form-control', :style => 'width:60%;margin:-10px 0 10px 30px;' %>
+                </div>
+
+                <div class="col-md-12" style="display: flex;">
+                  <%= f.label :password_confirmation, '确认密码' %>
+                  <%= f.password_field :password_confirmation, :class => 'form-control', :style => 'width:60%;margin:0 0 10px 30px;' %>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <div class="panel panel-info">
+              <div class="panel-heading" style="display: flex;height: 40px;">
+                <i class="glyphicon glyphicon-record" style="font-size: 1em;margin: 1px 10px 0 0;"></i>
+                <span>附加信息</span>
+              </div>
+
+              <div class="panel-body" style="padding-top: 40px;padding-bottom: 30px;">
+                <div class="col-md-4" style="display: flex;">
+                  <%= f.label :operation_mode, '操作模式' %>
+
+                  <% if current_user.admin? || current_user.manager? %>
+                      <%= f.select(:operation_mode, OperationMode.list_menu, {include_blank: false}, :class => 'col-md-6', :style => 'margin:-10px 0 0 30px;') %>
+                  <% else %>
+                      <input type="text" name="id" readonly="" class="col-md-6" style="margin: -10px 0 0 30px;" value="<%= OperationMode.display(current_user.operation_mode) %>">
+                  <% end %>
+                </div>
+
+                <div class="col-md-4" style="display: flex;">
+                  <%= f.label :role_id, '角色' %>
+
+                  <% if current_user.admin? || current_user.manager? %>
+                      <%= f.select(:role_id, Role.menu, {include_blank: false}, :class => 'col-md-6', :style => 'margin:-10px 0 0 30px;') %>
+                  <% else %>
+                      <input type="text" name="id" readonly="" class="col-md-6" style="margin: -10px 0 0 30px;" value="<%= Role.display(current_user.role_id) %>">
+                  <% end %>
+                </div>
+
+                <div class="col-md-4" style="display: flex;">
+                  <%= f.label :location_id, '地 点' %>
+                  <% if current_user.admin? || current_user.manager? %>
+                      <%= f.select(:location_id, Location.all.collect { |l| [l.name, l.id] }, {include_blank: false}, :class => 'col-md-6', :style => 'margin:-10px 0 0 30px;') %>
+                  <% else %>
+                      <input type="text" name="id" readonly="" class="col-md-6" style="margin: -10px 0 0 30px;" value="<%= Location.find(current_user.location_id).name %>">
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <div class="panel panel-default">
+              <div class="panel-heading" style="display: flex;height: 40px;">
+                <i class="glyphicon glyphicon-book" style="font-size: 1em;margin: 1px 10px 0 0;"></i>
+                <span>联系方式</span>
+              </div>
+
+              <div class="panel-body">
+                <div class="col-md-6" style="display: flex;">
+                  <%= f.label :email, '邮 箱', :style => 'margin-top:10px;' %>
+                  <%= f.email_field :email, :class => 'form-control', :style => 'width:60%;margin:0 0 10px 30px;' %>
+                </div>
+
+                <div class="col-md-6" style="display: flex;">
+                  <%= f.label :tel, '电 话', :style => 'margin-top:10px;' %>
+                  <%= f.text_field :tel, :class => 'form-control', :style => 'width:60%;margin:0 0 10px 30px;' %>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <hr style="margin: -10px 0 20px 0;border-top: 3px dashed steelblue;">
+
+      <div class="col-md-11 actions" style="text-align: right;">
+        <button class="btn btn-primary" type="submit" style="width: 200px;height: 50px;font-size: 1.2em;">
+          <i class="glyphicon glyphicon-ok" style="margin-right: 20px;"></i>
+          完成
+        </button>
+      </div>
     </div>
 <% end %>

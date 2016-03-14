@@ -1,32 +1,27 @@
-<h1>择货单列表</h1>
-
-<div>
-  <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
-    <div>
-      <div>
-        <span>择货单号：
-          <input type="text" name="pick_list[id]" value="<%= @id %>"/>
-          <input type="hidden" name="pick_list[id_fuzzy]"/>
-        </span>
-        <span>择货员工：
-          <input type="text" name="pick_list[user_id]" value="<%= @user_id %>"/>
-          <input type="hidden" name="pick_list[user_id_fuzzy]"/>
-        </span>
-      </div>
-      <div>
-        <span>
-        创建日期：
-          <input type="text" name="pick_list[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
-          ~  <input type="text" name="pick_list[created_at][end]" class="datepicker" value="<%= @created_at_end %>"/>
-        </span>
-      </div>
-      <div>
-        <input type="submit" value="查 找" class="btn btn-primary"/>
-      </div>
+<form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+  <div class="col-sm-12">
+    <div class="col-sm-3">
+      择货单号：
+      <input type="text" name="pick_list[id]" value="<%= @id %>"/>
+      <input type="hidden" name="pick_list[id_fuzzy]"/>
     </div>
-  </form>
-</div>
-<br/>
+    <div class="col-sm-3">
+      择货员工：
+      <input type="text" name="pick_list[user_id]" value="<%= @user_id %>"/>
+      <input type="hidden" name="pick_list[user_id_fuzzy]"/>
+    </div>
+
+    <div class="sm-6">
+      创建日期：
+      <input type="text" name="pick_list[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
+      ~
+      <input type="text" name="pick_list[created_at][end]" class="datepicker" value="<%= @created_at_end %>"/>
+    </div>
+  </div>
+  <input type="submit" value="查 找" class="btn btn-primary"/>
+  </div>
+</form>
+
 <input type="button" value="打印择货单" class='btn btn-warning' onclick="print_pick_list();"/>
 <div class="digg_pagination">
   <div class="page_info">

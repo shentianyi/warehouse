@@ -1,11 +1,63 @@
-<div class="panel">
-  <div class="panel-header">
-    <h3>欢迎使用，精密物料控制系统</h3>
+<style>
+    .welcome_sentence {
+        height: 200px;
+        width: 100%;
+        text-align: center;
+        line-height: 200px;
+        font-size: 4em;
+        background: white;
+        text-shadow: 2px 2px 10px #999;
+    }
+
+    .welcome_user_message {
+        margin-top: 20px;
+        text-align: center;
+        height: 280px;
+        background: white;
+    }
+
+    .welcome_user_name {
+        padding: 40px 0 20px 0;
+        font-size: 4em;
+        text-shadow: 2px 2px 10px #999;
+    }
+
+    .welcome_user_property {
+        width: 300px;
+        height: 100px;
+        background: steelblue;
+        border-radius: 20px;
+        line-height: 100px;
+        color: #fefefe;
+        font-size: 30px;
+        margin-right: 40px;
+    }
+</style>
+
+<div class="welcome_sentence">
+  欢迎使用,精密物料管理系统
+</div>
+
+<div class="welcome_user_message">
+  <div class="welcome_user_name">
+    你好,
+    <% if current_user %> <%= current_user.name %>
+    <% end %>
   </div>
-  <div class="panel-body">
-    <h4>你好,<% if current_user %> <%= current_user.name%><%end%></h4>
-    <% if current_user %>
-        <span class="label label-info"><%= current_user.nr+","+current_user.location.name+","+Role.display(current_user.role_id)%></span>
-    <%end%>
+
+  <hr style="border-bottom: 1px dashed #999;">
+
+  <div class="container" style="display: flex;">
+    <div class="welcome_user_property">
+      <%= current_user.nr %>
+    </div>
+
+    <div class="welcome_user_property">
+      <%= current_user.location.name %>
+    </div>
+
+    <div class="welcome_user_property">
+      <%= Role.display(current_user.role_id) %>
+    </div>
   </div>
 </div>

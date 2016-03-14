@@ -11,26 +11,37 @@
         </div>
     <% end %>
 
-    <p>
-      <%= f.label :state, '状 态' %>
-      <%= f.select(:state, MovableState.state, {include_blank: false}) %>
-    </p>
-    <p>*状态可以被修改，但是依然需要使用移动设备进行接收，否则不会产生操作记录</p>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="col-sm-12" style="margin-left: 15px;">
+          <%= f.label :state, '状 态' %>
+          <%= f.select(:state, MovableState.state, {include_blank: false}, :style => 'width:150px;') %>
 
-    <p>
-      <%= f.label :des_location_id, '目的地' %>
-      <%= f.select(:des_location_id, Location.collect { |l| [l.name, l.id] }, {include_blank: false}) %>
-    </p>
+          <span style="color: red;">*状态可以被修改，但是依然需要使用移动设备进行接收，否则不会产生操作记录</span>
+        </div>
 
-    <p>
-      <%= f.label :remark, '备 注' %>
-      <%= f.text_field :remark %>
-    </p>
+        <div class="col-sm-12" style="margin-top: 10px;">
+          <div class="col-sm-6">
+            <%= f.label :des_location_id, '目的地' %>
+            <%= f.select(:des_location_id, Location.all.collect { |l| [l.name, l.id] }, {include_blank: false}, :style => 'width:150px;') %>
+          </div>
+          <div class="col-sm-6">
+            <%= f.label :remark, '备 注' %>
+            <%= f.text_field :remark, :style => 'width:300px;' %>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <div class="actions">
-      <%= f.submit value: '提 交', class: 'btn btn-primary btn-lg' %>
+    <div class="col-sm-12">
+      <div class="col-sm-3" style="background: white;margin-left: -20px; margin-top: -20px;height: 50px;border-bottom-right-radius: 20px;box-shadow: 2px 4px 4px #999; ">
+        <div class="actions" style="text-align: center;">
+          <%= f.submit value: '提 交', class: 'btn btn-primary', :style => 'width:200px;margin-top:5px;' %>
+        </div>
+      </div>
     </div>
 <% end %>
+
 <script type="text/javascript">
     $(".datepicker").datetimepicker({
         lang: 'ch',

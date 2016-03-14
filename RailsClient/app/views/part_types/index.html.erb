@@ -1,9 +1,11 @@
 <h2>零件类型列表</h2>
 
-<%= link_to "新建零件类型", send("new_#{@model}_path"),:class=>'btn btn-default' %>
-<%= link_to "上传/更新零件类型", send("import_#{@model.pluralize}_path"),:class=>'btn btn-default' %>
-<%= link_to "下载零件类型", send("download_#{@model.pluralize}_path"), data: { confirm: '确认删除?' },:class=>'btn btn-default' %>
- <br/>
+<% if current_user.permission?(:operate_basic_info_create) %>
+    <%= link_to "新建零件类型", send("new_#{@model}_path"), :class => 'btn btn-default' %>
+    <%= link_to "上传/更新零件类型", send("import_#{@model.pluralize}_path"), :class => 'btn btn-default' %>
+<% end %>
+<%= link_to "下载零件类型", send("download_#{@model.pluralize}_path"), data: {confirm: '确认删除?'}, :class => 'btn btn-default' %>
+<br/>
 <div class="digg_pagination">
   <div class="page_info">
     <%= page_entries_info @part_types %>
@@ -13,24 +15,28 @@
 <table class="table table-bordered table-striped globle-table">
 
   <thead>
-    <tr>
-      <th></th>
-      <th>编号</th>
-      <th>名称</th>
-      <th colspan="3"></th>
-    </tr>
+  <tr>
+    <th></th>
+    <th>编号</th>
+    <th>名称</th>
+    <th colspan="3"></th>
+  </tr>
   </thead>
 
   <tbody>
-    <% @part_types.each_with_index do |part_type,i| %>
+  <% @part_types.each_with_index do |part_type, i| %>
       <tr>
         <td><%= i+@part_types.offset+1 %>
         <td><%= part_type.nr %></td>
         <td><%= part_type.name %></td>
-        <td><%= link_to '编辑', edit_part_type_path(part_type) ,:class=>'btn btn-default'%></td>
-        <td><%= link_to '删除', part_type, method: :delete, data: { confirm: '确认删除?' } ,:class=>'btn btn-default'%></td>
+        <% if current_user.permission?(:operate_basic_info_edit) %>
+            <td><%= link_to '编辑', edit_part_type_path(part_type), :class => 'btn btn-default' %></td>
+        <% end %>
+        <% if current_user.permission?(:operate_basic_info_delete) %>
+            <td><%= link_to '删除', part_type, method: :delete, data: {confirm: '确认删除?'}, :class => 'btn btn-default' %></td>
+        <% end %>
       </tr>
-    <% end %>
+  <% end %>
   </tbody>
 </table>
 
