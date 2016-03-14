@@ -1,18 +1,70 @@
-<h2>地点列表</h2>
+<style>
+    .col-sm-12 {
+        height: 40px;
+    }
 
-<% if current_user.permission?(:operate_basic_info_create) %>
-    <%= link_to "新建地点", send("new_#{@model}_path"), :class => 'btn btn-default' %>
-    <%= link_to "上传/更新地点", send("import_#{@model.pluralize}_path"), :class => 'btn btn-default' %>
-<% end %>
-<%= link_to "下载", send("download_#{@model.pluralize}_path"), data: {confirm: 'Are you sure?'}, :class => 'btn btn-default' %>
+    .digg_pagination .page_info {
+        text-align: left;
+        width: auto;
+        margin-left: -20px;
+        margin-right: -20px;
+    }
 
-<div class="digg_pagination">
-  <div class="page_info">
-    <%= page_entries_info @locations %>
+    .digg_pagination {
+        background: transparent;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > td {
+        text-align: center;
+    }
+
+    .label {
+        font-size: 1em;
+    }
+
+    .IconA {
+        margin: 0 10px;
+        font-size: 1.2em;
+    }
+
+    .IconA:hover {
+        text-decoration: none;
+        background-color: white;
+    }
+
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+</style>
+
+<div class="col-sm-12" style="margin-top: 10px;">
+  <% if current_user.permission?(:operate_basic_info_create) %>
+      <div class="col-sm-4">
+        <%= link_to "新建地点", send("new_#{@model}_path"), :class => 'btn btn-primary', :style => 'width:150px;color:white;' %>
+      </div>
+      <div class="col-sm-4">
+        <%= link_to "上传/更新地点", send("import_#{@model.pluralize}_path"), :class => 'btn btn-primary', :style => 'width:150px;color:white;' %>
+      </div>
+
+  <% end %>
+  <div class="col-sm-4">
+    <%= link_to "下载", send("download_#{@model.pluralize}_path"), data: {confirm: 'Are you sure?'}, :class => 'btn btn-primary', :style => 'width:150px;color:white;' %>
   </div>
-  <%= will_paginate @locations, :container => false %>
 </div>
-<table class="table table-bordered table-striped globle-table">
+
+<div class="col-sm-12">
+  <div class="digg_pagination">
+    <div class="page_info">
+      <%= page_entries_info @locations %>
+    </div>
+    <%= will_paginate @locations, :container => false %>
+  </div>
+</div>
+
+<table class="table table-bordered table-striped">
   <thead>
   <tr>
     <th>序号</th>
@@ -26,7 +78,7 @@
     <th>所有仓库</th>
     <th>所属公司</th>
     <th>地址</th>
-    <th colspan="4">&nbsp;</th>
+    <th colspan="4">操作</th>
   </tr>
   </thead>
 
@@ -52,20 +104,33 @@
         <td>
           <%= DeliveryReceiveMode.display(location.receive_mode) %>
         </td>
-        <td><%= link_to '员工列表', users_location_path(location) %>
-          <span class="badge pull-right"><%= location.users.count %></td>
-        <td><%= link_to '仓库列表', whouses_location_path(location) %>
-          <span class="badge pull-right"><%= location.whouses.count %></span></td>
+        <td>
+          <%= link_to content_tag(:span, '员工列表', :class => 'label label-primary'), users_location_path(location) %>
+          <span class="badge"><%= location.users.count %></span>
+        </td>
+        <td>
+          <%= link_to content_tag(:span, '仓库列表', :class => 'label label-primary'), whouses_location_path(location) %>
+          <span class="badge"><%= location.whouses.count %></span>
+
+        </td>
         <td><%= location.tenant.name if location.tenant %></td>
         <td><%= location.address %></td>
-        <td><%= link_to '详细', location, :class => 'btn btn-default' %></td>
-        <% if current_user.permission?(:operate_basic_info_edit) %>
-            <td><%= link_to '编辑', edit_location_path(location), :class => 'btn btn-default' %></td>
-            <td><%= link_to '编辑目的地', destinations_location_path(location), :class => 'btn btn-default' %></td>
-        <% end %>
-        <% if current_user.permission?(:operate_basic_info_delete) %>
-            <td><%= link_to '删除', location, method: :delete, data: {confirm: '确认删除?'}, :class => 'btn btn-default' %></td>
-        <% end %>
+        <td>
+
+          <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-eye-open', :style => 'color:green;'), location, :class => 'IconA', :title => '详细' %>
+
+          <% if current_user.permission?(:operate_basic_info_edit) %>
+              <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-pencil', :style => 'color:#4F94CD;'), edit_location_path(location), :class => 'IconA', :title => '编辑' %>
+
+              <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-edit'), destinations_location_path(location), :class => 'IconA', :title => '编辑目的地' %>
+
+          <% end %>
+          <% if current_user.permission?(:operate_basic_info_delete) %>
+
+              <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-trash', :style => 'color:darkred;'), location, method: :delete, data: {confirm: '确认删除?'}, :class => 'IconA', :title => '删除' %>
+
+          <% end %>
+        </td>
       </tr>
   <% end %>
   </tbody>

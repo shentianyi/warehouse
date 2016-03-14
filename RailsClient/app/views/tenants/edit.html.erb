@@ -1,6 +1,22 @@
-<h1>编辑客户</h1>
+<style>
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+</style>
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">管理</li>
+    <li>
+      <a href="/tenants" title="返回客户">客户</a>
+    </li>
+    <li class="active">
+      编辑客户
+      <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-eye-open', :style => 'color:green;'), @tenant, :title => '查看客户信息' %>
+    </li>
+  </ol>
+</div>
 
 <%= render 'form' %>
-
-<%= link_to 'Show', @tenant %> |
-<%= link_to 'Back', tenants_path %>

@@ -1,35 +1,55 @@
+<style>
+    .col-sm-12 {
+        height: 40px;
+    }
+
+    select {
+        width: 150px;
+    }
+
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+</style>
 <%= form_for(@inventory_list) do |f| %>
-  <% if @inventory_list.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@inventory_list.errors.count, "error") %> prohibited this inventory_list from being saved:</h2>
+    <% if @inventory_list.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@inventory_list.errors.count, "error") %> prohibited this inventory_list from being
+            saved:</h2>
 
-      <ul>
-      <% @inventory_list.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+          <ul>
+            <% @inventory_list.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="panel panel-primary">
+      <div class="panel-body">
+        <div class="col-sm-12" style="border-bottom: 1px dashed #000;">
+          <div class="col-sm-4">
+            <%= f.label :name, "名称" %>
+            <%= f.text_field :name %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.label :state %>
+            <%= f.select(:state, InventoryListState.menu, {include_blank: false}) %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.label :whouse_id %>
+            <%= f.select(:whouse_id, Whouse.all.collect { |w| [w.name, w.id] }, {include_blank: false}) %>
+          </div>
+        </div>
+
+        <div class="col-sm-12">
+          <div class="actions">
+            <input type="submit" class="btn btn-primary" value="更新Inventory list" name="commit" style="margin-top: 10px;">
+          </div>
+        </div>
+      </div>
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :name, "名称" %><br>
-    <%= f.text_field :name %>
-  </div>
- <div class="field">
-   <%= f.label :state %><br>
-   <%= f.select(:state, InventoryListState.menu, { include_blank: false}) %>
- </div>
-  <div class="field">
-    <%= f.label :whouse_id %><br>
-    <%= f.select(:whouse_id, Whouse.all.collect{|w| [w.name, w.id]}, { include_blank: false}) %>
-  </div>
-  <!-- 
-  <div class="field">
-    <%= f.label :user_id %><br>
-    <%= f.text_field :user_id %>
-  </div>
-	  -->
-  <div class="actions">
-    <%= f.submit %>
-  </div>
 <% end %>

@@ -11,17 +11,27 @@
         </div>
     <% end %>
 
-    <div class="field">
-      <%= f.label :part_id %><br>
-      <%= f.text_field :part_id, value: @part_client.new_record? ? '' : @part_client.part.nr %>
-    </div>
 
-    <div class="field">
-      <%= f.label :client_part_nr %><br>
-      <%= f.text_field :client_part_nr %>
-    </div>
-    <%= f.hidden_field :client_tenant_id, value: @tenant.id %>
-    <div class="actions">
-      <%= f.submit %>
+    <div class="panel panel-primary">
+      <div class="panel-body">
+        <div class="col-sm-12" style="margin-bottom: 20px;">
+          <div class="col-sm-6">
+            <%= f.label :part_id %>
+            <%= f.text_field :part_id, value: @part_client.new_record? ? '' : @part_client.part.nr %>
+          </div>
+          <div class="col-sm-6">
+            <%= f.label :client_part_nr %>
+            <%= f.text_field :client_part_nr %>
+          </div>
+        </div>
+
+        <%= f.hidden_field :client_tenant_id, value: @tenant.id %>
+
+        <div class="col-sm-12" style="border-top: 1px dashed #000;">
+          <div class="actions">
+            <%= f.submit '完成', :class => 'btn btn-primary', :style => 'width:200px;margin-top:20px;' %>
+          </div>
+        </div>
+      </div>
     </div>
 <% end %>

@@ -1,37 +1,77 @@
-<h1>需求单项目列表</h1>
-<br/>
-<div>
-  <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
-    <div>
-      <span>项目号：
-        <input type="text" name="order_item[id]" value="<%= @id %>"/>
-        <input type="hidden" name="order_item[id_fuzzy]"/>
-      </span>
-      <span>创建员工工号：
-          <input type="text" name="order_item[user_id]" value="<%= @user_id %>"/>
-          <input type="hidden" name="order_item[user_id_fuzzy]"/>
-        </span>
-      <span>所属订单号：
-          <input type="text" name="order_item[order_id]" value="<%= @order_id %>"/>
-          <input type="hidden" name="order_item[order_id_fuzzy]"/>
-        </span>
+<style>
+    .col-sm-12 {
+        height: 40px;
+    }
+
+    .col-sm-12:first-child {
+        margin-top: 20px;
+    }
+
+    .digg_pagination .page_info {
+        text-align: left;
+        width: auto;
+        margin-left: -20px;
+        margin-right: -20px;
+    }
+
+    .digg_pagination {
+        background: transparent;
+    }
+
+    .IconA {
+        margin: 0 10px;
+        font-size: 1.2em;
+    }
+
+    .IconA:hover {
+        text-decoration: none;
+        background-color: white;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > td {
+        text-align: center;
+    }
+</style>
+
+<form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+  <div class="col-sm-12">
+    <div class="col-sm-4">
+      项目号：
+      <input type="text" name="order_item[id]" value="<%= @id %>"/>
+      <input type="hidden" name="order_item[id_fuzzy]"/>
     </div>
-    <div>
-        <span>
-        创建日期：
-          <input type="text" name="order_item[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
-          ~  <input type="text" name="order_item[created_at][end]" class="datepicker" value="<%= @created_at_end %>"/>
-        </span>
+    <div class="col-sm-4">
+      创建员工工号：
+      <input type="text" name="order_item[user_id]" value="<%= @user_id %>"/>
+      <input type="hidden" name="order_item[user_id_fuzzy]"/>
     </div>
-    <input type="submit" value="查 找" class="btn btn-primary"/>
-  </form>
-</div>
-<br/>
-<div class="digg_pagination">
-  <div class="page_info">
-    <%= page_entries_info @order_items %>
+    <div class="col-sm-4">
+      所属订单号：
+      <input type="text" name="order_item[order_id]" value="<%= @order_id %>"/>
+      <input type="hidden" name="order_item[order_id_fuzzy]"/>
+    </div>
   </div>
-  <%= will_paginate @order_items, :container => false %>
+
+  <div class="col-sm-12">
+    <div class="col-sm-6">
+      创建日期：
+      <input type="text" name="order_item[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
+      ~ <input type="text" name="order_item[created_at][end]" class="datepicker" value="<%= @created_at_end %>"/>
+    </div>
+
+    <div class="col-sm-3">
+      <input type="submit" value="查 找" class="btn btn-primary" style="width: 200px;"/>
+    </div>
+  </div>
+</form>
+
+<div class="col-sm-12">
+  <div class="digg_pagination">
+    <div class="page_info">
+      <%= page_entries_info @order_items %>
+    </div>
+    <%= will_paginate @order_items, :container => false %>
+  </div>
 </div>
 
 <table class="table table-bordered table-striped table-hover">
@@ -48,7 +88,7 @@
     <th>数量</th>
     <th>是否加急</th>
     <th>是否已完成</th>
-    <th colspan="2"></th>
+    <th colspan="2">操作</th>
   </tr>
   </thead>
 
@@ -84,8 +124,10 @@
           <% end %>
         </td>
         <% if current_user.can_edit_inventory? %>
-            <td><%= link_to '详细', order_item, :class => 'btn btn-default' %></td>
-            <td><%= link_to '编辑', edit_order_item_path(order_item), :class => 'btn btn-default' %></td>
+            <td>
+              <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-eye-open', :style => 'color:green;'), order_item, :class => 'IconA', :title => '详情' %>
+              <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-pencil', :style => 'color:#4F94CD;'), edit_order_item_path(order_item), :class => 'IconA', :title => '编辑' %>
+            </td>
         <% end %>
       </tr>
   <% end %>

@@ -1,51 +1,70 @@
 <div class="panel panel-warning">
-  <div class="panel-heading">
-    <h2>收发货报表</h2>
-    收货与发货的统计报表.
+  <div class="panel-heading" style="display: flex;">
+    <h3>收发货报表</h3>
+    <h5 style="margin-top: 25px;margin-left: 20px;">收货与发货的统计报表.</h5>
   </div>
 </div>
-<div class="panel-body">
-  <br/>
 <!--Form-->
-<form method="get" path="<%= reports_reports_path%>">
-  <span>零件号：
-              <input type="text" name="part_id" value="<%= @part_id %>"/>
-            </span>
-<span class="label label-info">报表类型:</span>
-<%= select_tag(:type,options_for_select(ReportType.list,@type),include_blank: false)%>
-<span class="label label-info">地点:</span>
-<%= select_tag(:location_id, options_for_select(Location.all.collect { |l| [l.name, l.id] }, @location_id), include_blank: false) %>
-  <span class="label label-info">创建时间:</span>
-<input id="date-start" type="text" name="date_start" class="datepicker" value="<%= @date_start %>"/>
-~ <input id="date-end" type="text" name="date_end" class="datepicker" value="<%= @date_end %>"/>
-  <span class="label label-info">显示方式:</span>
-  <%= select_tag :format, options_for_select([["Web", "html"],["Excel File(MS 07 or later)", "xlsx"]], "html") %>
-  <input type="submit" value="汇总" class="btn btn-warning" name="commit" onclick="submitForm()"/>
-  <input type="submit" value="详细" class="btn btn-warning" name="commit" onclick="submitForm()"/>
+<form method="get" path="<%= reports_reports_path %>">
+  <div class="panel-body">
+    <div class="col-sm-12" style="border-bottom: 1px dashed #000;margin-top: -20px;height: 40px;">
+      <div class="col-sm-3">
+        零件号：
+        <input type="text" name="part_id" value="<%= @part_id %>"/>
+      </div>
+      <div class="col-sm-3">
+        <span class="label label-info">报表类型:</span>
+        <%= select_tag(:type, options_for_select(ReportType.list, @type), include_blank: false, :style => 'min-width:150px;') %>
+      </div>
+      <div class="col-sm-3">
+        <span class="label label-info">地点:</span>
+        <%= select_tag(:location_id, options_for_select(Location.all.collect { |l| [l.name, l.id] }, @location_id), include_blank: false) %>
+      </div>
+      <div class="col-sm-3">
+        <span class="label label-info">显示方式:</span>
+        <%= select_tag :format, options_for_select([["Web", "html"], ["Excel File(MS 07 or later)", "xlsx"]], "html") %>
+      </div>
+    </div>
+
+    <div class="col-sm-12" style="margin-top: 15px;">
+      <div class="col-sm-6">
+        <span class="label label-info">创建时间:</span>
+        <input id="date-start" type="text" name="date_start" class="datepicker" value="<%= @date_start %>"/>
+        ~ <input id="date-end" type="text" name="date_end" class="datepicker" value="<%= @date_end %>"/>
+      </div>
+      <div class="col-sm-3">
+        <input type="submit" style="width: 150px;" value="汇总" class="btn btn-warning" name="commit" onclick="submitForm()"/>
+      </div>
+      <div class="col-sm-3">
+        <input type="submit" style="width: 150px;" value="详细" class="btn btn-warning" name="commit" onclick="submitForm()"/>
+      </div>
+    </div>
+  </div>
 </form>
-</div>
+
 <!--Form-->
-<div class="alert alert-success" role="alert">
-  <p><%= @title%></p>
+<div class="alert alert-success" role="alert" style="margin-bottom: 5px;">
+  <p><%= @title %></p>
 </div>
+
 <div id="result">
   <%= render "result" %>
 </div>
 
 <% content_for :javascript_includes do %>
-  <%= javascript_include_tag "bootstrap-select" %>
-  <%= javascript_include_tag "treport" %>
+    <%= javascript_include_tag "bootstrap-select" %>
+    <%= javascript_include_tag "treport" %>
 <% end %>
 
 <script>
-  $(document).ready(function(){
-    $(".datepicker").datetimepicker({
-      lang: 'ch',
-      format: 'Y-m-d H:i'
-    });
+    $(document).ready(function () {
+        $(".datepicker").datetimepicker({
+            lang: 'ch',
+            format: 'Y-m-d H:i'
+        });
 
-    $('.selectpicker').selectpicker();
-    $('.selectpicker').selectpicker('val', 'Mustard');
-    $('.selectpicker').selectpicker('render');
-  });
+        $('.selectpicker').selectpicker();
+        $('.selectpicker').selectpicker('val', 'Mustard');
+        $('.selectpicker').selectpicker('render');
+    });
 </script>

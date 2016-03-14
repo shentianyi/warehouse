@@ -1,3 +1,13 @@
+<style>
+    .col-sm-12 {
+        height: 40px;
+    }
+
+    select {
+        min-width: 150px;
+    }
+</style>
+
 <%= form_for(@location) do |f| %>
     <% if @location.errors.any? %>
         <div id="error_explanation">
@@ -10,47 +20,53 @@
         </div>
     <% end %>
 
-    <p>
-      <%= f.label :nr %>
-      <%= f.text_field :nr %>
-    </p>
 
-    <p>
-      <%= f.label :name %>
-      <%= f.text_field :name %>
-    </p>
+    <div class="panel panel-primary">
+      <div class="panel-body">
+        <div class="col-sm-12">
+          <div class="col-sm-4">
+            <%= f.label :nr %>
+            <%= f.text_field :nr %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.label :name %>
+            <%= f.text_field :name %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.label :tenant_id %>
+            <%= f.select(:tenant_id, Tenant.all.collect { |t| [t.name, t.id] }) %>
+          </div>
+        </div>
 
-    <p>
-      <%= f.label :tenant_id %>
-      <%= f.select(:tenant_id, Tenant.all.collect { |t| [t.name, t.id] }) %>
-    </p>
+        <div class="col-sm-12">
+          <div class="col-sm-4">
+            <%= f.label :address %>
+            <%= f.text_field :address %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.label :tel %>
+            <%= f.text_field :tel %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.label :receive_whouse_id %>
+            <%= f.select(:receive_whouse_id, @location.whouses.all.collect { |l| [l.name, l.id] }, {include_blank: false}) %>
+          </div>
+        </div>
+        <div class="col-sm-12" style="border-bottom: 1px dashed #000;">
+          <div class="col-sm-4">
+            <%= f.label :send_whouse_id %>
+            <%= f.select(:send_whouse_id, @location.whouses.all.collect { |l| [l.name, l.id] }, {include_blank: false}) %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.label :receive_mode, '运单接收模式' %>
+            <%= f.select(:receive_mode, DeliveryReceiveMode.to_select_list, {include_blank: false}) %>
+          </div>
+        </div>
 
-    <p>
-      <%= f.label :address %>
-      <%= f.text_field :address %>
-    </p>
-
-    <p>
-      <%= f.label :tel %>
-      <%= f.text_field :tel %>
-    </p>
-
-    <p>
-      <%= f.label :receive_whouse_id %>
-      <%= f.select(:receive_whouse_id, @location.whouses.all.collect { |l| [l.name, l.id] }, {include_blank: false}) %>
-    </p>
-
-    <p>
-      <%= f.label :send_whouse_id %>
-      <%= f.select(:send_whouse_id, @location.whouses.all.collect { |l| [l.name, l.id] }, {include_blank: false}) %>
-    </p>
-
-    <p>
-      <%= f.label :receive_mode, '运单接收模式' %>
-      <%= f.select(:receive_mode, DeliveryReceiveMode.to_select_list, {include_blank: false}) %>
-    </p>
-    <div class="actions">
-      <%= f.submit value: '提 交', class: 'btn btn-primary btn-lg' %>
+        <div class="actions">
+          <%= f.submit value: '提 交', class: 'btn btn-primary', :style => 'width:200px;margin-top:20px;' %>
+        </div>
+      </div>
     </div>
 <% end %>
 

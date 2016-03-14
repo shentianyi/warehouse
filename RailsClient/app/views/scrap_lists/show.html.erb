@@ -1,34 +1,72 @@
+<style>
+    .table > thead > tr > th, .table > tbody > tr > td {
+        text-align: center;
+    }
+
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+</style>
+
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @scrap_list.name %>
-</p>
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">报废生成</li>
+    <li>
+      <a href="/scrap_lists" title="返回报废单">报废单</a>
+    </li>
+    <li class="active">
+      报废详情
+    </li>
+  </ol>
+</div>
 
-<p>
-  <strong>源仓库:</strong>
-  <%= @scrap_list.src_warehouse %>
-</p>
+<div class="panel panel-primary">
+  <div class="panel-body">
+    <div class="col-sm-12">
+      <div class="col-sm-3">
+        <strong>Name:</strong>
+        <%= @scrap_list.name %>
+      </div>
+      <div class="col-sm-3">
+        <strong>源仓库:</strong>
+        <%= @scrap_list.src_warehouse %>
+      </div>
+      <div class="col-sm-3">
+        <strong>目的仓库:</strong>
+        <%= @scrap_list.dse_warehouse %>
+      </div>
+      <div class="col-sm-3">
+        <strong>创建者:</strong>
+        <%= @scrap_list.builder %>
+      </div>
+    </div>
+  </div>
+</div>
 
-<p>
-  <strong>目的仓库:</strong>
-  <%= @scrap_list.dse_warehouse %>
-</p>
+<div class="panel panel-primary">
+  <div class="panel-body">
+    <div class="col-sm-12">
+      <div class="col-sm-3">
+        <% if current_user.can_edit_inventory? %>
+            <%= link_to '报废移库', scrap_scrap_list_path, :class => 'btn btn-warning', data: {confirm: "确定报废?"}, :style => 'width:150px;' %>
+        <% end %>
+      </div>
 
-<p>
-  <strong>创建者:</strong>
-  <%= @scrap_list.builder %>
-</p>
+      <div class="col-sm-9">
+        <p style="color:blue;font-weight: bold;margin-top: 5px;">
+          共：<%= @scrap_list_items.count %>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
 
-<% if current_user.can_edit_inventory? %>
-    <%= link_to '报废移库', scrap_scrap_list_path, :class => 'btn btn-warning', data: {confirm: "确定报废?"} %>
-<% end %>
-
-<br/>
-<p style="color:blue;font-weight: bold">
-  共：<%= @scrap_list_items.count %>
-</p>
-<table class="table table-bordered table-striped globle-table">
+<table class="table table-bordered table-striped">
   <thead>
   <tr>
     <th>NO.</th>
@@ -41,7 +79,7 @@
     <th>登记人</th>
     <th>登记时间</th>
     <th>状态</th>
-    <th></th>
+    <th>操作</th>
   </tr>
   </thead>
 
@@ -64,12 +102,11 @@
         <td><%= ScrapListItemState.display(scrap_list_item.state) %></td>
         <!--<td><%= best_in_place scrap_list_item, :state, as: :select, collection: ScrapListItemState.list.map { |s| [s[1], s[0]] }.to_h %></td>-->
         <% if current_user.can_edit_inventory? %>
-            <td><%= link_to '删除', scrap_list_item, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+            <td>
+              <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-trash', :style => 'color:darkred;'), scrap_list_item, method: :delete, data: {confirm: 'Are you sure?'}, :title => '删除', :class => 'IconA' %>
+            </td>
         <% end %>
       </tr>
   <% end %>
   </tbody>
 </table>
-
-
-<%= link_to 'Back', scrap_lists_path %>

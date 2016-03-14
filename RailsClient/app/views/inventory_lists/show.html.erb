@@ -1,24 +1,61 @@
+<style>
+    .col-sm-12 {
+        height: 40px;
+    }
+
+    .col-sm-12:first-child {
+        margin-top: 20px;
+    }
+
+    .col-sm-6 {
+        font-size: 1.4em;
+    }
+
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+</style>
+
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @inventory_list.name %>
-</p>
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">材料盘点</li>
+    <li>
+      <a href="/inventory_lists" title="返回盘点单清单">盘点单清单</a>
+    </li>
+    <li class="active">
+      查看盘点单清单
+      <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-pencil', :style => 'color:#4F94CD;'), edit_inventory_list_path(@inventory_list) %>
+    </li>
+  </ol>
+</div>
 
-<p>
-  <strong>State:</strong>
-  <%= InventoryListState.display @inventory_list.state %>
-</p>
+<div class="panel panel-primary">
+  <div class="panel-body">
+    <div class="col-sm-12">
+      <div class="col-sm-6">
+        <strong>Name:</strong>
+        <%= @inventory_list.name %>
+      </div>
+      <div class="col-sm-6">
+        <strong>State:</strong>
+        <%= InventoryListState.display @inventory_list.state %>
+      </div>
+    </div>
 
-<p>
-  <strong>Whouse:</strong>
-  <%= @inventory_list.whouse_id %>
-</p>
-
-<p>
-  <strong>User:</strong>
-  <%= @inventory_list.user_id %>
-</p>
-
-<%= link_to '编辑', edit_inventory_list_path(@inventory_list) %> |
-<%= link_to '返回', inventory_lists_path %>
+    <div class="col-sm-12">
+      <div class="col-sm-6">
+        <strong>Whouse:</strong>
+        <%= @inventory_list.whouse_id %>
+      </div>
+      <div class="col-sm-6">
+        <strong>User:</strong>
+        <%= @inventory_list.user_id %>
+      </div>
+    </div>
+  </div>
+</div>
