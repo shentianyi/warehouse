@@ -122,25 +122,31 @@ class LogisticsContainer<LocationContainer
       source_location=self.source_location
       destinationable=self.destinationable
       if self.state==MovableState::CHECKED
-        WhouseService.new.move({
-                                   partNr: package.part.id,
-                                   qty: package.quantity,
-                                   packageId: package.id,
-                                   fromWh: source_location.send_whouse.id,
-                                   toWh: destinationable.receive_whouse.id,
-                                   toPosition: destinationable.receive_whouse.default_position.id,
-                                   uniq: true
-                               })
+        begin
+          WhouseService.new.move({
+                                     partNr: package.part.id,
+                                     qty: package.quantity,
+                                     packageId: package.id,
+                                     fromWh: source_location.send_whouse.id,
+                                     toWh: destinationable.receive_whouse.id,
+                                     toPosition: destinationable.receive_whouse.default_position.id,
+                                     uniq: true
+                                 })
+        rescue
+        end
       elsif (self.state==MovableState::REJECTED && self.state_was==MovableState::CHECKED)
-        WhouseService.new.move({
-                                   partNr: package.part.id,
-                                   qty: package.quantity,
-                                   packageId: package.id,
-                                   fromWh: destinationable.receive_whouse.id,
-                                   toWh: source_location.send_whouse.id,
-                                   toPosition: source_location.send_whouse.default_position.id,
-                                   uniq: true
-                               })
+        begin
+          WhouseService.new.move({
+                                     partNr: package.part.id,
+                                     qty: package.quantity,
+                                     packageId: package.id,
+                                     fromWh: destinationable.receive_whouse.id,
+                                     toWh: source_location.send_whouse.id,
+                                     toPosition: source_location.send_whouse.default_position.id,
+                                     uniq: true
+                                 })
+        rescue
+        end
       end
     end
   end
