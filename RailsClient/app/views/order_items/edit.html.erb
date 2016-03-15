@@ -1,6 +1,23 @@
-<h1>Editing order_item</h1>
+<style>
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+</style>
+
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">要货流程</li>
+    <li>
+      <a href="/order_items" title="返回需求单项目">需求单项目</a>
+    </li>
+    <li class="active">
+      编辑需求单项目
+      <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-eye-open', :style => 'color:green;'), @order_item, :title => '查看需求单项目详情' %>
+    </li>
+  </ol>
+</div>
 
 <%= render 'form' %>
-
-<%= link_to '详细', @order_item,:class=>'btn btn-default' %> |
-<%= link_to '返回', order_items_path,:class=>'btn btn-default' %>

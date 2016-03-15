@@ -1,36 +1,71 @@
-<h2><%= @order.id%>订单项目列表</h2>
-<br/>
+<style>
+    .digg_pagination .page_info {
+        text-align: left;
+        width: auto;
+        margin-left: -20px;
+        margin-right: -20px;
+    }
+
+    .digg_pagination {
+        background: transparent;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > td {
+        text-align: center;
+    }
+
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+</style>
+
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">要货流程</li>
+    <li>
+      <a href="/orders" title="返回需求单">需求单</a>
+    </li>
+    <li class="active">
+      订单项目列表<span class="label label-primary"><%= @order.id %></span>
+    </li>
+  </ol>
+</div>
+
 <div class="digg_pagination">
   <div class="page_info">
     <%= page_entries_info @order_items %>
   </div>
   <%= will_paginate @order_items, :container => false %>
 </div>
-<table class="table table-bordered table-striped globle-table table-hover">
+
+<table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
-    <td>NO.</td>
-    <td>项目号</td>
-    <td>零件号</td>
-    <td>箱数</td>
-    <td>包装数量</td>
-    <td>状态</td>
+    <th>NO.</th>
+    <th>项目号</th>
+    <th>零件号</th>
+    <th>箱数</th>
+    <th>包装数量</th>
+    <th>状态</th>
   </tr>
   </thead>
   <tbody>
-  <% @order_items.each_with_index do |order,index|%>
+  <% @order_items.each_with_index do |order, index| %>
       <tr>
-        <td><%= index+@order_items.offset+1%></td>
+        <td><%= index+@order_items.offset+1 %></td>
         <td><%= order.id %></td>
         <td><%= OrderItemLabelRegex.part_prefix_string+order.part_id %></td>
         <td><%= order.box_quantity %></td>
         <td><%= OrderItemLabelRegex.quantity_prefix_string + order.quantity.to_s %></td>
-        <td><%= OrderItemState.display(order.state )%></td>
+        <td><%= OrderItemState.display(order.state) %></td>
       </tr>
-  <% end%>
+  <% end %>
   </tbody>
 </table>
+
 <div class="digg_pagination">
   <%= will_paginate @order_items, :container => false %>
 </div>
-<%= link_to '返回', orders_path ,:class => "btn btn-default btn-lg" %>

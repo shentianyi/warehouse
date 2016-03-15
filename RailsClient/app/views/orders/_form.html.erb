@@ -1,25 +1,43 @@
+<style>
+    .col-sm-12:first-child {
+        height: 40px;
+        border-bottom: 1px dashed #000;
+        margin-top: 20px;
+    }
+</style>
+
+
 <%= form_for(@order) do |f| %>
-  <% if @order.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@order.errors.count, "error") %> prohibited this order from being saved:</h2>
+    <% if @order.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@order.errors.count, "error") %> prohibited this order from being saved:</h2>
 
-      <ul>
-      <% @order.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-    <p>
-      <%= f.label :handled,'是否已处理'%>
-      <%=f.check_box :handled%>
-    </p>
+          <ul>
+            <% @order.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
 
-    <p>
-      <%= f.label :is_delete,'是否已删除'%>
-      <%=f.check_box :is_delete%>
-    </p>
-    <div class="actions">
-      <%= f.submit value: '提 交', class: 'btn btn-primary btn-lg' %>
+    <div class="panel panel-primary">
+      <div class="panel-body">
+        <div class="col-sm-12" style="border-bottom: 1px dashed #000;">
+          <div class="col-sm-6">
+            <%= f.label :handled, '是否已处理' %>
+            <%= f.check_box :handled %>
+          </div>
+          <div class="col-sm-6">
+            <%= f.label :is_delete, '是否已删除' %>
+            <%= f.check_box :is_delete %>
+          </div>
+        </div>
+
+        <div class="col-sm-12">
+          <div class="actions">
+            <%= f.submit value: '提 交', class: 'btn btn-primary', :style => 'width:200px;margin-top:20px;' %>
+          </div>
+        </div>
+      </div>
     </div>
 <% end %>

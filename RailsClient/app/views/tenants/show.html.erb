@@ -1,34 +1,63 @@
+<style>
+    .col-sm-12 {
+        height: 40px;
+        font-size: 1.2em;
+        line-height: 40px;
+    }
+
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+</style>
+
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @tenant.name %>
-</p>
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">管理</li>
+    <li>
+      <a href="/tenants" title="返回客户">客户</a>
+    </li>
+    <li class="active">
+      客户信息详情
+      <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-pencil', :style => 'color:#4F94CD;'), edit_tenant_path(@tenant), :title => '编辑客户信息' %>
+    </li>
+  </ol>
+</div>
 
-<p>
-  <strong>Code:</strong>
-  <%= @tenant.code %>
-</p>
+<div class="panel panel-primary">
+  <div class="panel-body">
+    <div class="col-sm-12" style="border-bottom: 1px dashed #ccc;">
+      <div class="col-sm-4">
+        <strong>Name:</strong>
+        <%= @tenant.name %>
+      </div>
+      <div class="col-sm-4">
+        <strong>Code:</strong>
+        <%= @tenant.code %>
+      </div>
+      <div class="col-sm-4">
+        <strong>Address:</strong>
+        <%= @tenant.address %>
+      </div>
+    </div>
 
-<p>
-  <strong>Address:</strong>
-  <%= @tenant.address %>
-</p>
-
-<p>
-  <strong>Email:</strong>
-  <%= @tenant.email %>
-</p>
-
-<p>
-  <strong>Tel:</strong>
-  <%= @tenant.tel %>
-</p>
-
-<p>
-  <strong>Website:</strong>
-  <%= @tenant.website %>
-</p>
-
-<%= link_to 'Edit', edit_tenant_path(@tenant) %> |
-<%= link_to 'Back', tenants_path %>
+    <div class="col-sm-12">
+      <div class="col-sm-4">
+        <strong>Email:</strong>
+        <%= @tenant.email %>
+      </div>
+      <div class="col-sm-4">
+        <strong>Tel:</strong>
+        <%= @tenant.tel %>
+      </div>
+      <div class="col-sm-4">
+        <strong>Website:</strong>
+        <%= @tenant.website %>
+      </div>
+    </div>
+  </div>
+</div>

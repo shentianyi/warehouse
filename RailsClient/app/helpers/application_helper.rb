@@ -77,7 +77,30 @@ module ApplicationHelper
 
   def template
     if params[:extend].blank? || params[:extend]=='csv'
-      file_name="#{@model}_csv_upload_template.csv"
+      # file_name="#{@model}_csv_upload_template.csv"
+      case @model
+        when "part"
+          file_name="上传零件模版.csv"
+        when "led"
+          file_name="上传LED灯模版.csv"
+        when "location"
+          file_name="上传地点信息模版.csv"
+        when "modem"
+          file_name="上传modem模版.csv"
+        when "part_position"
+          file_name="上传零件位置模版.csv"
+        when "part_type"
+          file_name="上传零件类型模版.csv"
+        when "pick_item_filter"
+          file_name="上传择货项模版.csv"
+        when "position"
+          file_name="上传库位模版.csv"
+        when "user"
+          file_name="上传用户模版.csv"
+        when "whouse"
+          file_name="上传仓库模版.csv"
+      end
+
       path=File.join($TEMPLATEPATH, file_name)
       send_file path, :type => 'application/csv', :filename => file_name
     else

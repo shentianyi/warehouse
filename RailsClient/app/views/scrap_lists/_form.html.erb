@@ -1,32 +1,55 @@
-<%= form_for(@scrap_list) do |f| %>
-  <% if @scrap_list.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@scrap_list.errors.count, "error") %> prohibited this scrap_list from being saved:</h2>
+<style>
+    .col-sm-12 {
+        height: 40px;
+    }
 
-      <ul>
-      <% @scrap_list.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+</style>
+<%= form_for(@scrap_list) do |f| %>
+    <% if @scrap_list.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@scrap_list.errors.count, "error") %> prohibited this scrap_list from being saved:</h2>
+
+          <ul>
+            <% @scrap_list.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="panel panel-primary">
+      <div class="panel-body">
+        <div class="col-sm-12">
+          <div class="col-sm-6">
+            <%= f.label :name, "名称/备注" %>
+            <%= f.text_field :name %>
+          </div>
+          <div class="col-sm-6">
+            <%= f.label :src_warehouse, "源仓库" %>
+            <%= f.select(:src_warehouse, Whouse.all.collect { |w| [w.nr, w.nr] }, {include_blank: true}) %>
+          </div>
+        </div>
+        <div class="col-sm-12" style="border-bottom: 1px dashed #000;">
+          <div class="col-sm-6">
+            <%= f.label :dse_warehouse, "目的仓库" %>
+            <%= f.select(:dse_warehouse, Whouse.all.collect { |w| [w.nr, w.nr] }, {include_blank: true}) %>
+          </div>
+          <div class="col-sm-6">
+            <%= f.label :builder, "创建者" %>
+            <%= f.text_field :builder %>
+          </div>
+        </div>
+        <div class="col-sm-12" style="margin-top: 20px;">
+          <div class="actions">
+            <input type="submit" class="btn btn-primary" value="新增Scrap list" name="commit">
+          </div>
+        </div>
+      </div>
     </div>
-  <% end %>
-    <div class="field">
-      <%= f.label :name, "名称/备注" %><br>
-      <%= f.text_field :name %>
-    </div>
-  <div class="field">
-    <%= f.label :src_warehouse, "源仓库" %><br>
-    <%= f.select(:src_warehouse, Whouse.all.collect {|w| [w.nr, w.nr]}, {include_blank: true})%>
-  </div>
-  <div class="field">
-    <%= f.label :dse_warehouse, "目的仓库" %><br>
-    <%= f.select(:dse_warehouse, Whouse.all.collect {|w| [w.nr, w.nr]}, {include_blank: true})%>
-  </div>
-  <div class="field">
-    <%= f.label :builder, "创建者" %><br>
-    <%= f.text_field :builder %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
 <% end %>

@@ -19,6 +19,7 @@
     .digg_pagination .page_info {
         text-align: left;
         width: auto;
+        margin: -10px -20px -30px -20px;
     }
 
     a:hover, a:active {
@@ -125,12 +126,15 @@
     <%= link_to '导入离线包装箱', import_logistics_containers_path, :class => "btn btn-warning", :style => 'color:white;margin:-10px 0 10px 20px;' %>
 <% end %>
 
-<div class="digg_pagination">
-  <div class="page_info">
-    <%= page_entries_info @packages %>
+<div class="col-sm-12">
+  <div class="digg_pagination">
+    <div class="page_info">
+      <%= page_entries_info @packages %>
+    </div>
+    <%= will_paginate @packages, :container => false %>
   </div>
-  <%= will_paginate @packages, :container => false %>
 </div>
+
 <table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>

@@ -1,46 +1,61 @@
+<style>
+    .col-sm-12 {
+        height: 40px;
+    }
+</style>
+
 <%= form_for(@tenant) do |f| %>
-  <% if @tenant.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@tenant.errors.count, "error") %> prohibited this tenant from being saved:</h2>
+    <% if @tenant.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@tenant.errors.count, "error") %> prohibited this tenant from being saved:</h2>
 
-      <ul>
-      <% @tenant.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+          <ul>
+            <% @tenant.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="panel panel-primary">
+      <div class="panel-body">
+        <div class="col-sm-12" style="border-bottom: 1px dashed #ccc;">
+          <div class="col-sm-3">
+            <%= f.label :name %>
+            <%= f.text_field :name %>
+          </div>
+          <div class="col-sm-3">
+            <%= f.label :code %>
+            <%= f.text_field :code %>
+          </div>
+          <div class="col-sm-3">
+            <%= f.label :short_name %>
+            <%= f.text_field :short_name %>
+          </div>
+          <div class="col-sm-3">
+            <%= f.label :address %>
+            <%= f.text_field :address %>
+          </div>
+        </div>
+
+        <div class="col-sm-12" style="margin-top: 20px;border-bottom: 1px solid #000;">
+          <div class="col-sm-3">
+            <%= f.label :email %>
+            <%= f.text_field :email %>
+          </div>
+          <div class="col-sm-3">
+            <%= f.label :tel %>
+            <%= f.text_field :tel %>
+          </div>
+          <div class="col-sm-3">
+            <%= f.label :website %>
+            <%= f.text_field :website %>
+          </div>
+        </div>
+
+        <div class="col-sm-12">
+          <input type="submit" value="完成" name="commit" class="btn btn-primary" style="margin-top: 10px;width:200px;">
+        </div>
+      </div>
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label :code %><br>
-    <%= f.text_field :code %>
-  </div>
-    <div class="field">
-      <%= f.label :short_name %><br>
-      <%= f.text_field :short_name %>
-    </div>
-  <div class="field">
-    <%= f.label :address %><br>
-    <%= f.text_field :address %>
-  </div>
-  <div class="field">
-    <%= f.label :email %><br>
-    <%= f.text_field :email %>
-  </div>
-  <div class="field">
-    <%= f.label :tel %><br>
-    <%= f.text_field :tel %>
-  </div>
-  <div class="field">
-    <%= f.label :website %><br>
-    <%= f.text_field :website %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit %>
-  </div>
 <% end %>

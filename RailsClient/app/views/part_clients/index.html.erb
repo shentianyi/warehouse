@@ -1,18 +1,74 @@
-<h1>客户零件列表</h1>
-<br/>
-<div class="digg_pagination">
-  <div class="page_info">
-    <%= page_entries_info @part_clients %>
-  </div>
-  <%= will_paginate @part_clients, :container => false %>
+<style>
+    .digg_pagination .page_info {
+        text-align: left;
+        width: auto;
+        margin-left: -20px;
+        margin-right: -20px;
+    }
+
+    .digg_pagination {
+        background: transparent;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > td {
+        text-align: center;
+    }
+
+    .IconA {
+        margin: 0 10px;
+        font-size: 1.2em;
+    }
+
+    .IconA:hover {
+        text-decoration: none;
+        background-color: white;
+    }
+
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+</style>
+
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">管理</li>
+    <li>
+      <a href="/tenants" title="返回客户">客户</a>
+    </li>
+    <li class="active">
+      客户零件列表
+    </li>
+  </ol>
 </div>
-<table class="table table-bordered table-striped globle-table">
+
+<div class="panel panel-primary">
+  <div class="panel-body">
+    <% if current_user.permission?(:operate_basic_info_create) %>
+        <%= link_to "导入客户零件", import_tenant_part_clients_path, :title => '导入客户零件', :class => 'btn btn-primary', :style => 'width:150px;color:white;' %>
+        <%= link_to 'New Part client', new_tenant_part_client_path, :title => '新建客户零件', :class => 'btn btn-warning', :style => 'width:150px;margin-left:50px;color:white;' %>
+    <% end %>
+  </div>
+</div>
+
+<div class="col-sm-12">
+  <div class="digg_pagination">
+    <div class="page_info">
+      <%= page_entries_info @part_clients %>
+    </div>
+    <%= will_paginate @part_clients, :container => false %>
+  </div>
+</div>
+
+<table class="table table-bordered table-striped">
   <thead>
   <tr>
-    <th></th>
+    <th>No.</th>
     <th>Part Nr</th>
     <th>Client part nr</th>
-    <th colspan="2"></th>
+    <th colspan="2">操作</th>
   </tr>
   </thead>
 
@@ -22,20 +78,16 @@
         <td><%= i+1 %></td>
         <td><%= part_client.part.nr %></td>
         <td><%= part_client.client_part_nr %></td>
-        <% if current_user.permission?(:operate_basic_info_edit) %>
-            <td><%= link_to 'Edit', edit_tenant_part_client_path(part_client, {tenant_id: part_client.client_tenant_id}) %></td>
-        <% end %>
-        <% if current_user.permission?(:operate_basic_info_delete) %>
-            <td><%= link_to 'Destroy', "/tenants/#{part_client.client_tenant_id}/part_clients/#{part_client.id}", method: :delete, data: {confirm: 'Are you sure?'} %></td>
-        <% end %>
+        <td>
+          <% if current_user.permission?(:operate_basic_info_edit) %>
+              <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-pencil', :style => 'color:#4F94CD;'), edit_tenant_part_client_path(part_client, {tenant_id: part_client.client_tenant_id}), :class => 'IconA', :title => '编辑零件' %>
+          <% end %>
+
+          <% if current_user.permission?(:operate_basic_info_delete) %>
+              <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-trash', :style => 'color:darkred;'), "/tenants/#{part_client.client_tenant_id}/part_clients/#{part_client.id}", method: :delete, data: {confirm: 'Are you sure?'}, :class => 'IconA', :title => '删除零件' %>
+          <% end %>
+        </td>
       </tr>
   <% end %>
   </tbody>
 </table>
-
-<% if current_user.permission?(:operate_basic_info_create) %>
-    <br>
-    <%= link_to "导入客户零件", import_tenant_part_clients_path %>
-    </br>
-    <%= link_to 'New Part client', new_tenant_part_client_path %>
-<% end %>
