@@ -87,6 +87,10 @@ class LogisticsContainerService
     lc.descendants.joins(:package).count
   end
 
+  def self.count_all_forklifts(lc)
+    lc.descendants.joins(:forklift).count
+  end
+
   #---------------------------
   def self.get_all_accepted_packages(lc)
     get_all_packages_by_state(lc,MovableState::CHECKED)

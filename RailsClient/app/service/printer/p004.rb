@@ -22,6 +22,7 @@ module Printer
       end
 
       packages=LogisticsContainerService.get_all_rejected_packages(d)
+
       packages.each do |p|
         f=p.parent
         forklift_id = f.nil? ? ' ':f.container_id
@@ -32,6 +33,7 @@ module Printer
         end
         self.data_set <<(heads+bodies)
       end
+
     end
   end
 end
