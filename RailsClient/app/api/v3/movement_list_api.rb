@@ -74,18 +74,18 @@ module V3
         optional :qty, type: String, desc: 'quantity'
       end
       post :validate_movement do
-        params[:toWh]=params[:toWh].sub(/LO/, '')
-        params[:toPosition]=params[:toPosition].sub(/LO/, '')
-        params[:fromWh]=params[:fromWh].sub(/LO/, '') if params[:fromWh].present?
-        params[:fromPosition]=params[:fromPosition].sub(/LO/, '') if params[:fromPosition].present?
-        params[:partNr]=params[:partNr].sub(/P/, '') if params[:partNr].present?
+        params[:toWh]=params[:toWh] #.sub(/LO/, '')
+        params[:toPosition]=params[:toPosition] #.sub(/LO/, '')
+        params[:fromWh]=params[:fromWh] if params[:fromWh].present?
+        params[:fromPosition]=params[:fromPosition] if params[:fromPosition].present?
+        params[:partNr]=params[:partNr] if params[:partNr].present?
         params[:user] = current_user
         puts "#{params.to_json}-----------"
 
         return {result: 0, content: "#{params[:movement_list_id]}移库单不存在！"} unless m=MovementList.find_by(id: params[:movement_list_id])
 
         begin
-          params[:qty]=params[:qty].sub(/Q/, '').to_f if params[:qty].present?
+          params[:qty]=params[:qty].to_f if params[:qty].present?
           if params[:partNr].blank? && params[:packageId].blank?
             raise '请填写零件号或者唯一码'
           end

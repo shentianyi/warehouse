@@ -19,16 +19,16 @@ module V1
         optional :fifo, type: String
       end
       post :move do
-        params[:toWh]=params[:toWh].sub(/LO/, '')
-        params[:toPosition]=params[:toPosition].sub(/LO/, '')
-        params[:fromWh]=params[:fromWh].sub(/LO/, '') if params[:fromWh].present?
-        params[:fromPosition]=params[:fromPosition].sub(/LO/, '') if params[:fromPosition].present?
+        params[:toWh]=params[:toWh] #.sub(/LO/, '')
+        params[:toPosition]=params[:toPosition] #.sub(/LO/, '')
+        params[:fromWh]=params[:fromWh] if params[:fromWh].present?
+        params[:fromPosition]=params[:fromPosition] if params[:fromPosition].present?
 
-        params[:partNr]=params[:partNr].sub(/P/, '') if params[:partNr].present?
+        params[:partNr]=params[:partNr] if params[:partNr].present?
         params[:user] = current_user
         puts "#{params.to_json}-----------"
         begin
-          params[:qty]=params[:qty].sub(/Q/, '').to_f if params[:qty].present?
+          params[:qty]=params[:qty] if params[:qty].present?
           if params[:partNr].present?
             raise '请填写数量' unless params[:qty].present?
             params[:packageId]=nil
@@ -50,6 +50,38 @@ module V1
           end
         end
         {result: 1, content: '移库成功'}
+      end
+
+
+      post :enter do
+        msg=Message.new
+        if warehouse=current_user.location.whouses.where(nr: params[:warehouse]).first
+          if position=warehouse.positions.where(nr: params[:position]).first
+            if (lc=LogisticsContainer.find_by_container_id(params[:package])) && (package=lc.package)
+              begin
+                WhouseService.new.move({
+                                           partNr: package.part.id,
+                                           qty: package.quantity,
+                                           packageId: package.id,
+                                           fromWh: current_user.location.receive_whouse.id,
+                                           toWh: warehouse.id,
+                                           toPosition: position.id,
+                                           uniq: true
+                                       })
+                msg.result=true
+              rescue => e
+                msg.content=e.message
+              end
+            else
+              msg.content='唯一码不存在'
+            end
+          else
+            msg.content='库位不存在'
+          end
+        else
+          msg.content='仓库不存在'
+        end
+        msg
       end
     end
   end

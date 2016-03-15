@@ -132,7 +132,7 @@ class WhouseService
       end
 
       puts "############{storage.to_json}"
-      raise "源仓库#{params[:fromWh]}不存在该唯一码#{params[:packageId]}！" if storage.nil? || storage.qty < 0
+      raise "源仓库不存在该唯一码#{params[:packageId]}！" if storage.nil? || storage.qty < 0
       if params[:qty].blank?
         params[:qty]=storage.qty
       end
