@@ -51,10 +51,6 @@
         <%= @forklift.state_display %>
       </div>
       <div class="col-sm-4">
-        所属运单:
-        <%= @forklift.parent_id if @forklift.parent %>
-      </div>
-      <div class="col-sm-4">
         创建时间:
         <%= fpresenter.created_at %>
       </div>
@@ -135,7 +131,7 @@
 
             <%= link_to content_tag(:span, package.container_id, :class => 'label label-primary'), package_path(package) %>
           </td>
-          <td><%= package.package.part_id %></td>
+          <td><%= package.package.part.nr %></td>
           <td><%= package.package.quantity_str %></td>
           <td><%= ppresenter.position_nr %></td>
           <td><%= package.state_display %></td>
