@@ -5,12 +5,15 @@ class LogisticsContainersController < ApplicationController
   #*2014-11-26 需要重写这段代码，太冗余了。
   #*需要重写,可以join不同的表查询,那么需要注明还要哪些表来进行查询
   def search
+    puts params
+    puts '11111111111111111111111111111111111111111111111'
     model = params[:model]
     @condition=params[model.to_sym]
     query = LogisticsContainer.uniq
 
     joins = ["location_containers"]
     args = [model]
+    puts "---------model: #{args}-----------------------#{model}"
 
     #if params[:tables]
     tables = params[:tables].nil? ? [] : params[:tables].split(';')
@@ -31,6 +34,7 @@ class LogisticsContainersController < ApplicationController
       puts "#{table},#{arg}"
       condition = params[arg.to_sym]
       puts condition
+      p '----------------------------------------------1'
       condition.each do |k, v|
         if (v.is_a?(Fixnum) || v.is_a?(String)) && !v.blank?
           if condition.has_key?(k+'_fuzzy')
@@ -41,6 +45,9 @@ class LogisticsContainersController < ApplicationController
           puts "--#{arg}_#{k}"
           instance_variable_set("@#{arg}_#{k}", v)
         end
+
+        puts hash_conditions
+        p '----------------------------------------------222222'
         if v.is_a?(Hash) && v.values.count==2 && v.values.uniq!=['']
           values=v.values.sort
           values[0]=Time.parse(values[0]).utc.to_s if values[0].is_date?
@@ -56,6 +63,8 @@ class LogisticsContainersController < ApplicationController
     #puts "=================="
     #puts hash_conditions
 
+    puts hash_conditions
+    p '----------------------------------------------'
     query=query.where(hash_conditions)
 
     query.first

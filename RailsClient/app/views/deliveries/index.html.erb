@@ -66,13 +66,14 @@
     <div class="col-sm-12">
       <div class="col-sm-3">
         发送地：
-        <%= select 'delivery', 'state', MovableState.state, selected: @delivery_state, include_blank: true %>
+        <%= select_tag('delivery[source_location_id]', options_from_collection_for_select(Location.all, 'id', 'name', @delivery_source_location_id), include_blank: true) %>
       </div>
 
       <div class="col-sm-3">
         目的地：
         <%= select_tag('delivery[des_location_id]', options_from_collection_for_select(Location.all, 'id', 'name', @delivery_des_location_id), include_blank: true) %>
       </div>
+
       <div class="col-sm-6">
         创建日期：
         <input type="text" name="delivery[created_at][start]" class="datepicker" value="<%= @delivery_created_at_start %>"/>

@@ -42,7 +42,7 @@
       </div>
       <div class="col-sm-3">
         仓库号：
-        <%= select_tag('n_storage[ware_house_id]', options_from_collection_for_select(Whouse.all, :name, :id, @ware_house_id), include_blank: true) %>
+        <%= select_tag('n_storage[ware_house_id]', options_from_collection_for_select(Whouse.all, :id, :name, @ware_house_id), include_blank: true) %>
       </div>
       <div class="col-sm-3">
         库位号：

@@ -52,14 +52,11 @@
       </div>
       <div class="col-sm-6">
         创建员工号:
-        <%= @delivery.user_id %>
+        <%= @delivery.user.blank? ? '' : @delivery.user.nr %>
       </div>
     </div>
 
     <div class="col-sm-12">
-      <div class="col-sm-3">创建员工:
-        <%= @delivery.user.name %>
-      </div>
       <div class="col-sm-3">创建地:
         <%= @delivery.source.name %>
       </div>

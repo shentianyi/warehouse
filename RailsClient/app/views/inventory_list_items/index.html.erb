@@ -41,7 +41,7 @@
       </div>
       <div class="col-sm-3">
         仓库号：
-        <%= select_tag('inventory_list_item[whouse_id]', options_from_collection_for_select(Whouse.all, :name, :id, @whouse_id), include_blank: true) %>
+        <%= select_tag('inventory_list_item[whouse_id]', options_from_collection_for_select(Whouse.all, :id, :name, @whouse_id), include_blank: true) %>
       </div>
       <div class="col-sm-3">
         库位号：
