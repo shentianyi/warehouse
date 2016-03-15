@@ -106,8 +106,9 @@ class OrdersController < ApplicationController
 
     end
 
+    puts '------------------------2-------------------'
     @orders = Order.where(id:params[:order_ids])
-
+puts '-------------------------------------------'
     render partial:'item'
   end
 

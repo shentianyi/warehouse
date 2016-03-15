@@ -22,7 +22,7 @@ class PickItemService
       if query
         query= OrderItem.where(query)
         query=query.where(order_id: order_ids)
-        return query
+        return query||[]
         #.group(:part_id,:whouse_id)
         #.select('order_items.*,sum(order_items.quantity) as quantity')
       end
