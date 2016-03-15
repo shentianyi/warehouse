@@ -1,30 +1,66 @@
-<div class="config-panel">
-  <div>
-    <% @sys_config_groups.each do |group| %>
-        <h4 class="bg-primary">
-          <span class='config-title'><%= group.category %></span>
-        </h4>
-        <table class="table table-bordered table-striped globle-table">
-          <thead>
-          <tr>
-            <th>配置名称</th>
-            <th>代码</th>
-            <th>值</th>
-            <th></th>
-          </tr>
-          </thead>
+<style>
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
 
-          <tbody>
-          <% SysConfig.where(category: group.category).order(:index).each do |sys_config| %>
-              <tr>
-                <td><%= sys_config.name %></td>
-                <td><%= sys_config.code %></td>
-				<td title=<%=sys_config.description%>><%= sys_config.value %></td>
-                <td><%= link_to '编辑', edit_sys_config_path(sys_config), :class => 'btn btn-default' %></td>
-              </tr>
-          <% end %>
-          </tbody>
-        </table>
-    <% end %>
-  </div>
+    .table > thead > tr > th, .table > tbody > tr > td {
+        text-align: center;
+    }
+
+    .IconA {
+        margin: 0 10px;
+        font-size: 1.2em;
+    }
+
+    .IconA:hover {
+        text-decoration: none;
+        background-color: white;
+    }
+</style>
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">管理</li>
+    <li class="active">
+      配置
+    </li>
+    <li class="active">
+      系统配置
+    </li>
+  </ol>
 </div>
+<% @sys_config_groups.each do |group| %>
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <div class='panel-title'>
+          <strong><%= group.category %></strong>
+        </div>
+      </div>
+
+      <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+          <th>配置名称</th>
+          <th>代码</th>
+          <th>值</th>
+          <th>操作</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <% SysConfig.where(category: group.category).order(:index).each do |sys_config| %>
+            <tr>
+              <td><%= sys_config.name %></td>
+              <td><%= sys_config.code %></td>
+              <td title=<%= sys_config.description %>><%= sys_config.value %></td>
+              <td>
+                <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-pencil', :style => 'color:#4F94CD;'), edit_sys_config_path(sys_config), :title => '编辑', :class => 'IconA' %>
+              </td>
+            </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+<% end %>

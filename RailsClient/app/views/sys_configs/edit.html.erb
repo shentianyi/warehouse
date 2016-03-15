@@ -1,4 +1,14 @@
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">管理</li>
+    <li>
+      <%= link_to '系统配置', sys_configs_path, :title => '返回系统配置' %>
+    </li>
+    <li class="active">
+      编辑系统配置
+    </li>
+  </ol>
+</div>
 
 <%= render 'form' %>
 
-<%= link_to '返回', sys_configs_path %>

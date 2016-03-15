@@ -1,6 +1,15 @@
-<h1>Editing permission</h1>
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">管理</li>
+    <li>
+      <%= link_to '权限列表', permissions_path, :title => '返回权限列表' %>
+    </li>
+    <li class="active">
+      查看权限列表
+      <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-eye-open', :style => 'color:green;'), @permission, :title => '查看权限列表详情' %>
+    </li>
+  </ol>
+</div>
 
 <%= render 'form' %>
 
-<%= link_to 'Show', @permission %> |
-<%= link_to 'Back', permissions_path %>

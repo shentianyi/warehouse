@@ -1,26 +1,78 @@
-<h2>零件列表</h2>
+<style>
+    .col-sm-12 {
+        height: 40px;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > td {
+        text-align: center;
+    }
+
+    .IconA {
+        margin: 0 10px;
+        font-size: 1.2em;
+    }
+
+    .IconA:hover {
+        text-decoration: none;
+        background-color: white;
+    }
+
+    .digg_pagination .page_info {
+        text-align: left;
+        width: auto;
+    }
+
+    .digg_pagination {
+        background: transparent;
+    }
+
+</style>
+
 <% if @msg && !@msg.result %>
     <div class="error">
       <%= @msg.content %>
     </div>
 <% end %>
-<div>
-  <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
-    <div>
-      <span>零件号：
-        <input type="text" name="part[nr]" value="<%= @nr %>"/>
-        <input type="hidden" name="part[nr_fuzzy]"/>
-      </span>
-      <input type="submit" value="查 找" class="btn btn-primary"/>
-    </div>
-  </form>
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">管理</li>
+    <li class="active">
+      基础信息设置
+    </li>
+    <li class="active">
+      零件
+    </li>
+  </ol>
 </div>
-
-<% if current_user.permission?(:operate_basic_info_create) %>
-    <%= link_to "新建零件", send("new_#{@model}_path"), :class => 'btn btn-default' %>
-    <%= link_to "上传/更新零件", send("import_#{@model.pluralize}_path"), :class => 'btn btn-default' %>
-<% end %>
-<%= link_to "下载零件", send("download_#{@model.pluralize}_path"), data: {confirm: 'Are you sure?'}, :class => 'btn btn-default' %>
+<form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+  <div class="panel panel-primary">
+    <div class="panel-body">
+      <div class="col-sm-12" style="border-bottom: 1px dashed #000;">
+        <div class="col-sm-4">
+          零件号：
+          <input type="text" name="part[nr]" value="<%= @nr %>"/>
+          <input type="hidden" name="part[nr_fuzzy]"/>
+        </div>
+        <div class="col-sm-4">
+          <input type="submit" value="查 找" class="btn btn-primary" style="width: 150px;"/>
+        </div>
+      </div>
+      <div class="col-sm-12" style="margin-top: 20px;">
+        <% if current_user.permission?(:operate_basic_info_create) %>
+            <div class="col-sm-4">
+              <%= link_to "新建零件", send("new_#{@model}_path"), :class => 'btn btn-primary', :style => 'width: 150px;color:white' %>
+            </div>
+            <div class="col-sm-4">
+              <%= link_to "上传/更新零件", send("import_#{@model.pluralize}_path"), :class => 'btn btn-primary', :style => 'width: 150px;color:white' %>
+            </div>
+        <% end %>
+        <div class="col-sm-4">
+          <%= link_to "下载零件", send("download_#{@model.pluralize}_path"), data: {confirm: 'Are you sure?'}, :class => 'btn btn-primary', :style => 'width: 150px;color:white' %>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
 
 <br>
 <div class="digg_pagination">
@@ -39,7 +91,7 @@
     <th>单位包装量</th>
     <th>盘点单位转换标准</th>
     <th>产品描述</th>
-    <th colspan="3"></th>
+    <th colspan="3">操作</th>
   </tr>
   </thead>
 
@@ -53,13 +105,15 @@
         <td><%= part.unit_pack %></td>
         <td><%= part.convert_unit %></td>
         <td><%= part.description %></td>
-        <td><%= link_to '详细', part, :class => 'btn btn-default' %></td>
-        <% if current_user.permission?(:operate_basic_info_edit) %>
-            <td><%= link_to '编辑', edit_part_path(part), :class => 'btn btn-default' %></td>
-        <% end %>
-        <% if current_user.permission?(:operate_basic_info_delete) %>
-            <td><%= link_to '删除', part, method: :delete, data: {confirm: '确认删除?'}, :class => 'btn btn-default' %></td>
-        <% end %>
+        <td>
+          <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-eye-open', :style => 'color:green;'), part, :class => 'IconA', :title => '详细' %>
+          <% if current_user.permission?(:operate_basic_info_edit) %>
+              <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-pencil', :style => 'color:#4F94CD;'), edit_part_path(part), :class => 'IconA', :title => '编辑' %>
+          <% end %>
+          <% if current_user.permission?(:operate_basic_info_delete) %>
+              <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-trash', :style => 'color:darkred;'), part, method: :delete, data: {confirm: '确认删除?'}, :class => 'IconA', :title => '删除' %>
+          <% end %>
+        </td>
       </tr>
   <% end %>
   </tbody>

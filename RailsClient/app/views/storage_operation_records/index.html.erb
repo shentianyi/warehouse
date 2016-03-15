@@ -3,10 +3,6 @@
         height: 40px;
     }
 
-    .col-sm-12:first-child {
-        margin-top: 20px;
-    }
-
     .digg_pagination .page_info {
         text-align: left;
         width: auto;
@@ -28,6 +24,18 @@
         text-align: center;
     }
 </style>
+
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">库存管理</li>
+    <li class="active">
+      库存查询
+    </li>
+    <li class="active">
+      库存操作记录
+    </li>
+  </ol>
+</div>
 
 <div class="all-search">
   <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">

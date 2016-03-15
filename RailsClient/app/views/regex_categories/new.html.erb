@@ -1,4 +1,15 @@
-<h1>新建正则规范</h1>
+<style>
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > td {
+        text-align: center;
+    }
+</style>
 
 <%= form_for(@regex_category) do |f| %>
     <% if @regex_category.errors.any? %>
@@ -13,29 +24,49 @@
           </ul>
         </div>
     <% end %>
-    <div class="field">
-      <p>
-        <%= f.label :type, '类型：' %>
-        <%= f.select(:type, RegexType.types.collect { |l| [RegexType.display(l), l] }, {include_blank: false}, {onchange: 'render_regex_template()'}) %>
-      </p>
+
+    <div class="panel panel-default">
+      <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+        <li class="active">管理</li>
+        <li>
+          <%= link_to '正则规范配置', regex_categories_path, :title => '返回正则规范配置' %>
+        </li>
+        <li class="active">
+          新建正则规范
+        </li>
+      </ol>
     </div>
-    <div class="field">
-      <%= f.label :name, '名称：' %>
-      <%= f.text_field :name %>
+
+
+    <div class="panel panel-primary">
+      <div class="panel-body">
+        <div class="col-sm-12">
+          <div class="col-sm-4">
+            <%= f.label :type, '类型：' %>
+            <%= f.select(:type, RegexType.types.collect { |l| [RegexType.display(l), l] }, {include_blank: false}, {onchange: 'render_regex_template()'}) %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.label :name, '名称：' %>
+            <%= f.text_field :name %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.label :desc, '描述：' %>
+            <%= f.text_field :desc %>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="field">
-      <%= f.label :desc, '描述：' %>
-      <%= f.text_field :desc %>
-    </div>
+
     <div id="regex-template">
       <%= render 'pack_label_regex' %>
     </div>
+
+
     <div class="actions">
-      <%= f.submit %>
+      <input type="submit" value="新增Regex category" name="commit" class="btn btn-primary" style="margin-left: 20px;">
     </div>
 <% end %>
 
-<%= link_to '返回', regex_categories_path %>
 
 
 <script type="text/javascript">

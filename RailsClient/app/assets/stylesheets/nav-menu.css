@@ -1,0 +1,229 @@
+ul > li > a:hover {
+    text-decoration: none;
+}
+
+.clearfix:before,
+.clearfix:after {
+    display: table;
+    content: " ";
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+.boxed {
+    background: #fff;
+    -webkit-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.boxed-blue {
+    background: #1c588f;
+}
+
+.boxed-dark {
+    background: #142439;
+}
+
+.boxed-light {
+    background: #e5eff6;
+}
+
+.boxed.red-line {
+    border-top: 4px solid #c9376e;
+}
+
+.boxed.green-line {
+    border-top: 4px solid #9cd70e;
+}
+
+.boxed.blue-line {
+    border-top: 4px solid #4bb4e8;
+}
+
+/*-----------------------------------*/
+/* Navigation */
+/*-----------------------------------*/
+
+/* Main Menu */
+/*-----------------------------------*/
+
+/* Level 0 */
+.menu {
+    margin-top: -20px;
+    background: #fefefe;
+    z-index: 1000;
+}
+
+.ie8 .menu {
+    filter: none;
+    background: #fefefe;
+}
+
+/* IE8 understands dropdown feature only without gradient */
+.menu a:hover, .menu a.hover {
+    color: #fff !important;
+}
+
+.menu li {
+    position: relative;
+}
+
+.menu > li {
+    float: left;
+    width: 12.5%;
+}
+
+.menu > li:hover, .menu > li.hover {
+    /*border-top-color: #9cd70e;*/
+    z-index: 1;
+}
+
+.menu > li > a {
+    display: block;
+    font-size: 15px;
+    /*font-weight: 700;*/
+    color: black;
+    text-align: center;
+    text-transform: uppercase;
+    line-height: 18px;
+    padding: 15px 5px;
+    /*text-shadow: 0 1px 1px rgba(45, 118, 158, 0.5);*/
+    /*border-top: 2px solid #3484bd;*/
+    /*border-left: 1px solid #4b9cce;*/
+    /*border-right: 1px solid #1e86b5;*/
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.menu > li:first-child > a {
+    border-left-color: transparent;
+}
+
+.menu > li:last-child > a {
+    border-right-color: transparent;
+}
+
+.menu > li:hover > a,
+.menu > li.hover > a {
+    background: steelblue;
+    border: none;
+    /*border-top: 2px solid #4aa3d2;*/
+    /*-webkit-box-shadow: 0 2px 4px rgba(21, 80, 94, 0.75);*/
+    /*box-shadow: 0 2px 4px rgba(21, 80, 94, 0.75);*/
+    border-radius: 10px;
+}
+
+/* Level 1+ */
+.menu ul {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+    z-index: 9499;
+    width: 100%;
+    min-width: 100px;
+}
+
+.menu > li:hover > ul, .menu > li.hover > ul {
+    top: 45px;
+    left: 0;
+}
+
+.menu ul li a {
+    display: block;
+    border-top: 1px solid transparent;
+    border-bottom: 1px dashed #CCCCCC;
+    background: #398fc7;
+    font-size: 13px;
+    color: #fff;
+    text-align: center;
+    text-transform: uppercase;
+    line-height: 16px;
+    padding: 10px 5px;
+    border-radius: 10px;
+}
+
+.menu ul li:first-child > a {
+    border-top: none;
+}
+
+.menu ul li:last-child > a {
+    border-bottom: none;
+}
+
+.menu ul li:hover > a, .menu ul li.hover > a {
+    background: #52b1dd;
+    border-color: #408aaf;
+}
+
+.menu ul li:hover:before, .menu ul li.hover:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 3px;
+    background: #c9376e;
+}
+
+/* Level 2+ */
+.menu ul li:hover > ul, .menu ul li.hover > ul {
+    position: absolute;
+    top: 1px;
+    left: 100%;
+    width: 101%;
+    padding-left: 1%;
+}
+
+/* Main Menu style 2 */
+/*-----------------------------------*/
+
+.menu.style2 ul {
+    display: none;
+}
+
+.menu.style2 {
+    background: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.menu.style2 > li {
+    border-top: 3px solid #4bb4e8;
+    border-bottom: 3px solid #4bb4e8;
+}
+
+.menu.style2 > li:hover, .menu.style2 > li.hover {
+    border-top-color: #9cd70e;
+    border-bottom-color: #9cd70e;
+    z-index: 1;
+}
+
+.menu.style2 > li > a {
+    padding: 18px 5px 16px 0;
+    border: none;
+    border-left: 1px solid #062D52;
+    -webkit-box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.08);
+    box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.08);
+}
+
+.menu.style2 > li:last-child > a {
+    border-right: 1px solid #062D52;
+    box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.08), 1px 0 0 rgba(255, 255, 255, 0.08);
+    margin-right: 1px;
+}
+
+.menu.style2 > li:hover > a,
+.menu.style2 > li.hover > a {
+    background: none;
+}
+
+.menu.style2 .menu-icon {
+    display: inline-block;
+    margin: 0 3px 3px 0;
+    vertical-align: middle;
+}

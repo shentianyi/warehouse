@@ -1,6 +1,23 @@
-<h1>编辑地点</h1>
+<style>
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+</style>
+
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">管理</li>
+    <li>
+      <%= link_to '地点', locations_path %>
+    </li>
+    <li class="active">
+      编辑地点
+      <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-eye-open', :style => 'color:green;'), @location, :title => '查看详情' %>
+    </li>
+  </ol>
+</div>
 
 <%= render 'form' %>
-
-<%= link_to '详细', @location ,:class=>"btn btn-default" %> |
-<%= link_to '返回', locations_path, :class=>"btn btn-default" %>

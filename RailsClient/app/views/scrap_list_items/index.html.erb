@@ -3,10 +3,6 @@
         height: 40px;
     }
 
-    .col-sm-12:first-child {
-        margin-top: 20px;
-    }
-
     .digg_pagination .page_info {
         text-align: left;
         width: auto;
@@ -23,6 +19,17 @@
     }
 </style>
 
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">库存管理</li>
+    <li class="active">
+      报废生成
+    </li>
+    <li class="active">
+      报废项
+    </li>
+  </ol>
+</div>
 
 <form method="get" action="<%= send("search_scrap_list_items_path") %>">
   <div class="col-sm-12" style="border-bottom: 1px dashed #000;">

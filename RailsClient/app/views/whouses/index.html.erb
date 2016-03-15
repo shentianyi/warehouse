@@ -1,17 +1,74 @@
-<h2>仓库列表</h2>
+<style>
+    .IconA {
+        margin: 0 10px;
+        font-size: 1.2em;
+    }
 
-<% if current_user.permission?(:operate_basic_info_create) %>
-    <%= link_to "新建分仓库", send("new_#{@model}_path"), :class => 'btn btn-default' %>
-    <%= link_to "上传/更新分仓库", send("import_#{@model.pluralize}_path"), :class => 'btn btn-default' %>
-<% end %>
-<%= link_to "下载", send("download_#{@model.pluralize}_path"), data: {confirm: 'Are you sure?'}, :class => 'btn btn-default' %>
-<div class="digg_pagination">
-  <div class="page_info">
-    <%= page_entries_info @whouses %>
-  </div>
-  <%= will_paginate @whouses, :container => false %>
+    .IconA:hover {
+        text-decoration: none;
+        background-color: white;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > td {
+        text-align: center;
+    }
+
+    .digg_pagination .page_info {
+        text-align: left;
+        width: auto;
+        margin-left: -20px;
+        margin-right: -20px;
+    }
+
+    .digg_pagination {
+        background: transparent;
+    }
+
+    .label {
+        font-size: 1em;
+    }
+</style>
+
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">管理</li>
+    <li class="active">
+      基础信息设置
+    </li>
+    <li class="active">
+      仓库
+    </li>
+  </ol>
 </div>
-<table class="table table-bordered table-striped globle-table">
+<div class="panel panel-primary">
+  <div class="panel-body">
+    <div class="col-sm-12">
+      <% if current_user.permission?(:operate_basic_info_create) %>
+          <div class="col-sm-4">
+            <%= link_to "新建分仓库", send("new_#{@model}_path"), :class => 'btn btn-primary', :style => 'color:white;width:150px;' %>
+          </div>
+
+          <div class="col-sm-4">
+            <%= link_to "上传/更新分仓库", send("import_#{@model.pluralize}_path"), :class => 'btn btn-primary', :style => 'color:white;width:150px;' %>
+          </div>
+      <% end %>
+      <div class="col-sm-4">
+        <%= link_to "下载", send("download_#{@model.pluralize}_path"), data: {confirm: 'Are you sure?'}, :class => 'btn btn-primary', :style => 'color:white;width:150px;' %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-sm-12">
+  <div class="digg_pagination">
+    <div class="page_info">
+      <%= page_entries_info @whouses %>
+    </div>
+    <%= will_paginate @whouses, :container => false %>
+  </div>
+</div>
+
+<table class="table table-bordered table-striped">
   <thead>
   <tr>
     <th>序号</th>
@@ -19,7 +76,7 @@
     <th>名称</th>
     <th>所属地点</th>
     <th>库位</th>
-    <th colspan="3">&nbsp;</th>
+    <th colspan="3">操作</th>
   </tr>
   </thead>
 
@@ -30,20 +87,24 @@
         <td><%= whouse.nr %> </td>
         <td><%= whouse.name %></td>
         <td><%= whouse.location.name if whouse.location %></td>
-        <td><%= link_to '库位列表', positions_whouse_path(whouse) %>
-          <span class="badge pull-right"><%= whouse.positions.count %></span></td>
-        <td><%= link_to '详细', whouse, :class => "btn btn-default" %></td>
-        <% if current_user.permission?(:operate_basic_info_edit) %>
-            <td><%= link_to '编辑', edit_whouse_path(whouse), :class => "btn btn-default" %></td>
-        <% end %>
-        <% if current_user.permission?(:operate_basic_info_delete) %>
-            <td><%= link_to '删除', whouse, method: :delete, data: {confirm: '确认删除?'}, :class => "btn btn-default" %></td>
-        <% end %>
+        <td>
+          <%= link_to content_tag(:span, '库位列表', :class => 'label label-primary'), positions_whouse_path(whouse) %>
+          <span class="badge"><%= whouse.positions.count %></span>
+        </td>
+        <td>
+          <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-eye-open', :style => 'color:green;'), whouse, :class => "IconA", :title => '详细' %>
+          <% if current_user.permission?(:operate_basic_info_edit) %>
+              <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-pencil', :style => 'color:#4F94CD;'), edit_whouse_path(whouse), :class => "IconA", :title => '编辑' %>
+          <% end %>
+          <% if current_user.permission?(:operate_basic_info_delete) %>
+              <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-trash', :style => 'color:darkred;'), whouse, method: :delete, data: {confirm: '确认删除?'}, :class => "IconA", :title => '删除' %>
+          <% end %>
+        </td>
       </tr>
   <% end %>
   </tbody>
 </table>
+
 <div class="digg_pagination">
   <%= will_paginate @whouses, :container => false %>
 </div>
-<br>

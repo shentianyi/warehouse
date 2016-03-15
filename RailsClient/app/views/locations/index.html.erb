@@ -40,7 +40,19 @@
     }
 </style>
 
-<div class="col-sm-12" style="margin-top: 10px;">
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">管理</li>
+    <li class="active">
+      基础信息设置
+    </li>
+    <li class="active">
+      地点
+    </li>
+  </ol>
+</div>
+
+<div class="col-sm-12" style="margin-top: -10px;">
   <% if current_user.permission?(:operate_basic_info_create) %>
       <div class="col-sm-4">
         <%= link_to "新建地点", send("new_#{@model}_path"), :class => 'btn btn-primary', :style => 'width:150px;color:white;' %>
@@ -89,9 +101,11 @@
         <td><%= location.nr %></td>
         <td><%= location.name %></td>
         <td>
-          <ul>
+          <ul style="text-align: left;">
             <% location.destinations.each do |d| %>
-                <li><%= d.name %></li>
+                <li style="margin-bottom: 5px;">
+                  <span class="label label-info"><%= d.name %></span>
+                </li>
             <% end %>
           </ul>
         </td>
@@ -116,26 +130,20 @@
         <td><%= location.tenant.name if location.tenant %></td>
         <td><%= location.address %></td>
         <td>
-
           <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-eye-open', :style => 'color:green;'), location, :class => 'IconA', :title => '详细' %>
-
           <% if current_user.permission?(:operate_basic_info_edit) %>
               <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-pencil', :style => 'color:#4F94CD;'), edit_location_path(location), :class => 'IconA', :title => '编辑' %>
-
               <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-edit'), destinations_location_path(location), :class => 'IconA', :title => '编辑目的地' %>
-
           <% end %>
           <% if current_user.permission?(:operate_basic_info_delete) %>
-
               <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-trash', :style => 'color:darkred;'), location, method: :delete, data: {confirm: '确认删除?'}, :class => 'IconA', :title => '删除' %>
-
           <% end %>
         </td>
       </tr>
   <% end %>
   </tbody>
 </table>
-<br>
+
 <div class="digg_pagination">
   <%= will_paginate @locations, :container => false %>
 </div>

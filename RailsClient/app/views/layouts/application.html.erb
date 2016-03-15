@@ -8,11 +8,7 @@
 </head>
 <body>
 
-<% if current_user.employee? %>
-    <%= render "shared/employee_menu" %>
-<% else %>
-    <%= render "shared/menu" %>
-<% end %>
+<%= render "shared/menu" %>
 
 <p class="notice alert"><%= notice %><%= alert %></p>
 

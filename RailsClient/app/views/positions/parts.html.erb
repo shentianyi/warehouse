@@ -1,28 +1,70 @@
-<h2><%= @position.detail%>零件列表</h2>
-<br/>
-<div class="digg_pagination">
-  <div class="page_info">
-    <%= page_entries_info @parts %>
-  </div>
-  <%= will_paginate @parts, :container => false %>
+<style>
+    .digg_pagination .page_info {
+        text-align: left;
+        width: auto;
+        margin-left: -20px;
+        margin-right: -20px;
+    }
+
+    .digg_pagination {
+        background: transparent;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > td {
+        text-align: center;
+    }
+
+    .label {
+        font-size: 1em;
+    }
+
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+</style>
+
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">管理</li>
+    <li>
+      <%= link_to '库位', positions_path %>
+    </li>
+    <li class="active">
+      <span class="label label-primary"><%= @position.detail %></span> 零件列表
+    </li>
+  </ol>
 </div>
-<table class="table table-bordered table-striped globle-table table-hover">
+
+<div class="col-sm-12">
+  <div class="digg_pagination">
+    <div class="page_info">
+      <%= page_entries_info @parts %>
+    </div>
+    <%= will_paginate @parts, :container => false %>
+  </div>
+</div>
+
+<table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
-    <td>NO.</td>
-    <td>零件号</td>
+    <th>NO.</th>
+    <th>零件号</th>
   </tr>
   </thead>
   <tbody>
-  <% @parts.each_with_index do |part,index|%>
+  <% @parts.each_with_index do |part, index| %>
       <tr>
-        <td><%= index+@parts.offset+1%></td>
+        <td><%= index+@parts.offset+1 %></td>
         <td><%= part.id %></td>
       </tr>
-  <% end%>
+  <% end %>
   </tbody>
 </table>
+
 <div class="digg_pagination">
   <%= will_paginate @parts, :container => false %>
 </div>
-<%= link_to '返回', positions_path ,:class => "btn btn-default btn-lg" %>
+

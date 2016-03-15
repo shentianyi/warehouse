@@ -1,125 +1,14 @@
-<script type="text/javascript" charset="utf-8">
-    $(function () {
-        $("#menu").menu();
-    });
-</script>
+<style>
+    #main-menu {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
 
-<ul class="menu boxed clearfix">
-  <li id="welcome_li"><a href="/"><i class="glyphicon glyphicon-home"></i> &nbsp;主页</a></li>
-
-  <li>
-    <a href="#">运输管理 &nbsp;<i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:black;"></i></a>
-    <ul>
-      <% if current_user.permission?(:view_pick) %>
-          <li><a href="<%= panel_orders_path %>">要货需求</a></li>
-      <% end %>
-
-      <% if current_user.permission?(:view_order) %>
-          <li><a href="<%= orders_path %>">需求单</a></li>
-      <% end %>
-
-      <% if current_user.permission?(:view_pick) %>
-          <li><a href="<%= pick_panel_orders_path %>">择货需求</a></li>
-      <% end %>
-
-      <% if current_user.permission?(:view_pick) %>
-          <li><a href="<%= pick_lists_path %>">择货单</a></li>
-      <% end %>
-
-      <% if current_user.permission?(:view_delivery) %>
-          <li><a href="">发运流程&nbsp;
-            <i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:white;transform: rotate(-90deg);"></i>
-          </a>
-            <ul>
-              <li><a href="<%= deliveries_path %>">运 单</a></li>
-              <li><a href="<%= forklifts_path %>">托 盘</a></li>
-              <li><a href="<%= packages_path %>">包装箱</a></li>
-            </ul>
-          </li>
-      <% end %>
-    </ul>
-  </li>
-
-  <li>
-    <a href="#">库存管理 &nbsp;<i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:black;"></i></a>
-    <ul>
-      <% if current_user.permission?(:view_inventory_list) %>
-          <li><a href="#">材料盘点&nbsp;
-            <i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:white;transform: rotate(-90deg);"></i>
-          </a>
-            <ul>
-              <li><a href="<%= inventory_lists_path %>">盘点单清单</a></li>
-              <li><a href="<%= inventory_list_items_path %>">盘点项列表</a></li>
-            </ul>
-          </li>
-      <% end %>
-
-      <% if current_user.permission?(:view_scrap) %>
-          <li><a href="#">报废生成&nbsp;
-            <i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:white;transform: rotate(-90deg);"></i>
-          </a>
-            <ul>
-              <li><a href="<%= scrap_lists_path %>">报废单</a></li>
-              <li><a href="<%= scrap_list_items_path %>">报废项</a></li>
-            </ul>
-          </li>
-      <% end %>
-
-      <li><a href="#">移库管理&nbsp;
-        <i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:white;transform: rotate(-90deg);"></i>
-      </a>
-        <ul>
-          <% if current_user.permission?(:view_storage) %>
-              <% if current_user.permission?(:operate_storage) %>
-                  <li><a href="<%= move_n_storages_path %>">文件移库</a></li>
-              <% end %>
-          <% end %>
-
-          <% if current_user.permission?(:view_movement_list) %>
-              <li><a href="<%= movement_lists_path %>">移库单</a></li>
-              <li><a href="<%= movement_sources_path %>">移库项列表</a></li>
-          <% end %>
-
-          <% if current_user.permission?(:view_storage) %>
-              <li><a href="<%= movements_path %>">库存移动记录查询</a></li>
-          <% end %>
-        </ul>
-      </li>
-
-      <% if current_user.permission?(:view_storage) %>
-          <% if current_user.permission?(:operate_storage) %>
-              <li><a href="<%= import_n_storages_path %>">文件入库</a></li>
-          <% end %>
-      <% end %>
-
-      <li><a href="#">库存查询&nbsp;
-        <i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:white;transform: rotate(-90deg);"></i>
-      </a>
-        <ul>
-          <% if current_user.permission?(:view_storage) %>
-              <li><a href="<%= n_storages_path %>">详细库存查询</a></li>
-              <li><a href="<%= group_n_storages_path %>">库存汇总查询</a></li>
-              <li><a href="<%= storage_operation_records_path %>">库存操作记录</a></li>
-          <% end %>
-        </ul>
-      </li>
-    </ul>
-  </li>
-
-  <li><a href="#">报表 &nbsp;<i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:black;"></i></a>
-    <ul>
-      <% if current_user.permission?(:view_report) %>
-          <li><a href="<%= reports_reports_path %>">收发货报表</a></li>
-          <li><a href="<%= reports_discrepancy_path %>">收发货差异报表</a></li>
-          <li><a href="<%= reports_orders_report_path %>">要货报表</a></li>
-      <% end %>
-    </ul>
-  </li>
-</ul>
-
-
-
-
+    #main-menu li {
+        display: inline;
+    }
+</style>
 
 <ul id="main-menu" class="nav nav-pills">
   <Li id="welcome_li"><a href="/">首 页</a></li>

@@ -1,25 +1,46 @@
+<style>
+    .col-sm-12 {
+        height: 60px;
+        font-size: 1.2em;
+        line-height: 50px;
+    }
+
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+</style>
 <%= form_for(@permission) do |f| %>
-  <% if @permission.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@permission.errors.count, "error") %> prohibited this permission from being saved:</h2>
+    <% if @permission.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@permission.errors.count, "error") %> prohibited this permission from being saved:</h2>
 
-      <ul>
-      <% @permission.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+          <ul>
+            <% @permission.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="panel panel-primary">
+      <div class="panel-body">
+        <div class="col-sm-12" style="border-bottom: 1px dashed #000;">
+          <div class="col-sm-6">
+            <%= f.label :name %>
+            <%= f.text_field :name %>
+          </div>
+          <div class="col-sm-6">
+            <%= f.label :description %>
+            <%= f.text_field :description %>
+          </div>
+        </div>
+
+        <div class="actions">
+          <%= f.submit '提交', :class => 'btn btn-primary', :style => 'width:150px;color:white;margin-top:20px;margin-left:30px;' %>
+        </div>
+      </div>
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label :description %><br>
-    <%= f.text_field :description %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
 <% end %>

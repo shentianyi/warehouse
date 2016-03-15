@@ -1,8 +1,7 @@
 <div class="panel panel-primary form-signin-panel" style="background: #f2f2f2;border: none;text-align: center;">
-  <div class="panel-heading" style="border-top-right-radius: 20px;border-top-left-radius: 20px;">
+  <div class="panel-heading" style="border-top-right-radius: 10px;border-top-left-radius: 10px;">
     <h2 class="panel-title">精密物料控制系统</h2>
   </div>
-
   <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: {class: 'form-horizontal form-signin', role: 'form'}) do |f| %>
       <p>
         <span class="alert error" style="box-shadow: none;"><%= alert %></span>
@@ -30,7 +29,7 @@
             </div>
         <% end %>
         <div class="col-sm-8">
-          <%= f.submit value: '登 录', class: 'btn btn-primary btn-lg', style: 'width:200px;' %>
+          <%= f.submit value: '登 录', class: 'btn btn-primary', style: 'width:200px;' %>
         </div>
       </div>
   <% end %>

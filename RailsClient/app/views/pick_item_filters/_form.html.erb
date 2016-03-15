@@ -1,29 +1,45 @@
+<style>
+    .col-sm-12 {
+        height: 60px;
+        border-bottom: 1px dashed #000;
+        line-height: 50px;
+    }
+</style>
+
 <%= form_for(@pick_item_filter) do |f| %>
-  <% if @pick_item_filter.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@pick_item_filter.errors.count, "error") %> prohibited this pick_item_filter from being saved:</h2>
+    <% if @pick_item_filter.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@pick_item_filter.errors.count, "error") %> prohibited this pick_item_filter from being
+            saved:</h2>
 
-      <ul>
-      <% @pick_item_filter.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+          <ul>
+            <% @pick_item_filter.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
 
-  <div class="field">
-    <%= f.label :user_id,'员工号' %><br>
-    <%= f.text_field :user_id %>
-  </div>
-    <div class="field">
-      <%= f.label :filterable_type,'筛选类型' %><br>
-      <%=  f.select(:filterable_type, @types)%>
-    </div>
-  <div class="field">
-    <%= f.label :filterable_id,'值' %><br>
-    <%= f.text_field :filterable_id %>
-  </div>
-    <div class="actions">
-      <%= f.submit value: '提 交', class: 'btn btn-primary btn-lg' %>
+    <div class="panel panel-primary">
+      <div class="panel-body">
+        <div class="col-sm-12">
+          <div class="col-sm-4">
+            <%= f.label :user_id, '员工号' %>
+            <%= f.text_field :user_id %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.label :filterable_type, '筛选类型' %>
+            <%= f.select(:filterable_type, @types) %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.label :filterable_id, '值' %>
+            <%= f.text_field :filterable_id %>
+          </div>
+        </div>
+
+        <div class="actions">
+          <%= f.submit value: '提 交', class: 'btn btn-primary', :style => 'width:150px;color:white;margin-top:20px;' %>
+        </div>
+      </div>
     </div>
 <% end %>

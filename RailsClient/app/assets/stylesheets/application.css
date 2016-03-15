@@ -18,10 +18,10 @@
  *=require bootstrap-select
  *=require panel
  *=require pick_panel
+ *=require nav-menu
  *=require_tree .
  */
 
-input[readonly]
-{
-    background-color:lightgrey;
+input[readonly] {
+    background-color: lightgrey;
 }

@@ -1,6 +1,33 @@
-<h1><%= @whouse.name%></h1>
-<span class="label label-primary"><%= @whouse.nr%></span>
+<style>
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+</style>
 
-<h4>所属地点: <small><%= @whouse.location.name %></small></h4>
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">管理</li>
+    <li>
+      <%= link_to '仓库', whouses_path, :title => '返回仓库' %>
+    </li>
+    <li class="active">
+      仓库详情
+    </li>
+  </ol>
+</div>
 
-<%= link_to '返回', whouses_path ,:class=>'btn btn-default'%>
+<div class="panel panel-primary">
+  <div class="panel panel-heading">
+    <div class="panel-title" style="display: flex;">
+      <h3><%= @whouse.name %></h3>
+      <span class="label label-info" style="height: 30px;line-height: 25px;margin-top: 20px;margin-left: 10px;"><%= @whouse.nr %></span>
+    </div>
+  </div>
+  <div class="panel-body" style="font-size: 1.4em;">
+    所属地点:
+    <%= @whouse.location.name %>
+  </div>
+</div>
