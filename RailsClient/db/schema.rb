@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160304061203) do
+ActiveRecord::Schema.define(version: 20160315021258) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -538,20 +538,22 @@ ActiveRecord::Schema.define(version: 20160304061203) do
   add_index "part_types", ["nr"], name: "index_part_types_on_nr", using: :btree
 
   create_table "parts", force: true do |t|
-    t.string   "uuid",         limit: 36,                                           null: false
+    t.string   "uuid",          limit: 36,                                           null: false
     t.string   "customernum"
     t.string   "user_id"
-    t.boolean  "is_delete",                                         default: false
-    t.boolean  "is_dirty",                                          default: true
-    t.boolean  "is_new",                                            default: true
+    t.boolean  "is_delete",                                          default: false
+    t.boolean  "is_dirty",                                           default: true
+    t.boolean  "is_new",                                             default: true
     t.datetime "created_at"
     t.datetime "updated_at"
     t.float    "unit_pack"
     t.string   "part_type_id"
-    t.decimal  "convert_unit",            precision: 20, scale: 10, default: 1.0
+    t.decimal  "convert_unit",             precision: 20, scale: 10, default: 1.0
     t.string   "unit"
     t.string   "nr"
     t.string   "description"
+    t.float    "safe_qty",                                           default: 0.0
+    t.integer  "safe_qty_type",                                      default: 100
   end
 
   add_index "parts", ["id"], name: "index_parts_on_id", using: :btree

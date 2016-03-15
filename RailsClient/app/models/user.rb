@@ -32,10 +32,14 @@ class User < ActiveRecord::Base
     if Role::RoleMethods.include?(method_name)
       Role.send(method_name, self.role_id)
     elsif method_name.match(/permission?/)
-      if self.permissions.where(name: args[0].to_s).blank?
-        false
-      else
+      if self.admin?
         true
+      else
+        if self.permissions.where(name: args[0].to_s).blank?
+          false
+        else
+          true
+        end
       end
     else
       super

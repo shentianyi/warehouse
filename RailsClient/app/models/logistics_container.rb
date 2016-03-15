@@ -5,7 +5,7 @@ class LogisticsContainer<LocationContainer
   include CZ::Service
 
   alias_method :movable_state_display, :state_display
-  # after_update :enter_store
+  after_update :check_move_stock
 
 
   default_scope { where(type: LocationContainerType::LOGISTICS) }
@@ -117,26 +117,39 @@ class LogisticsContainer<LocationContainer
     end
   end
 
-  # def out_store
-  #   begin
-  #     if self.state==MovableState::WAY && self.container.is_package?
-  #       StoreContainer.out_store_by_container(container, self.source_location_id)
-  #     end
-  #     # rescue Exception=>e
-  #     #   puts e.message
-  #     #   false
-  #   end
-  # end
-  #
-  # def enter_store
-  #   if self.container.type==ContainerType::PACKAGE && self.state_changed?
-  #     begin
-  #       enter_stock
-  #     rescue
-  #
-  #     end
-  #   end
-  # end
+  def check_move_stock
+    if (package=self.package)
+      source_location=self.source_location
+      destinationable=self.destinationable
+      if self.state==MovableState::CHECKED
+        begin
+          WhouseService.new.move({
+                                     partNr: package.part.id,
+                                     qty: package.quantity,
+                                     packageId: package.id,
+                                     fromWh: source_location.send_whouse.id,
+                                     toWh: destinationable.receive_whouse.id,
+                                     toPosition: destinationable.receive_whouse.default_position.id,
+                                     uniq: true
+                                 })
+        rescue
+        end
+      elsif (self.state==MovableState::REJECTED && self.state_was==MovableState::CHECKED)
+        begin
+          WhouseService.new.move({
+                                     partNr: package.part.id,
+                                     qty: package.quantity,
+                                     packageId: package.id,
+                                     fromWh: destinationable.receive_whouse.id,
+                                     toWh: source_location.send_whouse.id,
+                                     toPosition: source_location.send_whouse.default_position.id,
+                                     uniq: true
+                                 })
+        rescue
+        end
+      end
+    end
+  end
 
   def enter_stock(warehouse, position, fifo)
     # if self.state==MovableState::CHECKED
@@ -154,4 +167,5 @@ class LogisticsContainer<LocationContainer
     end
     # end
   end
+
 end

@@ -20,14 +20,14 @@ set :output, {:error => 'log/cron_error_log.log', :standard => 'log/cron_log.log
 
 # Learn more: http://github.com/javan/whenever
 
-every 2.minute do
-  rake 'sync:execute'
-end
+# every 2.minute do
+#   rake 'sync:execute'
+# end
 
 #every 1.minute do
 #  runner 'script/test/test_delivery.rb'
 #end
 
-every 1.day,:at=>['12:31'] do
-  command "backup perform -t my_backup"
+every 1.day,:at=>['9:47'] do
+  command "backup perform -t jiaxuan_backup -c /home/lzd/p/warehouse/RailsClient/config/backup/jiaxuan_config.rb"
 end

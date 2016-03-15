@@ -115,7 +115,7 @@ ul > li > a:hover {
     /*border-top: 2px solid #4aa3d2;*/
     /*-webkit-box-shadow: 0 2px 4px rgba(21, 80, 94, 0.75);*/
     /*box-shadow: 0 2px 4px rgba(21, 80, 94, 0.75);*/
-    border-radius: 10px;
+    /*border-radius: 10px;*/
 }
 
 /* Level 1+ */
@@ -144,7 +144,7 @@ ul > li > a:hover {
     text-transform: uppercase;
     line-height: 16px;
     padding: 10px 5px;
-    border-radius: 10px;
+    /*border-radius: 10px;*/
 }
 
 .menu ul li:first-child > a {

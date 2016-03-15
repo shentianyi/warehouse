@@ -29,6 +29,7 @@
         </div>
     <% end %>
 
+<<<<<<< HEAD
     <div class="panel panel-primary">
       <div class="panel-body">
         <div class="col-sm-12">
@@ -69,6 +70,46 @@
           <%= f.submit value: '提 交', class: 'btn btn-primary', :style => 'width:150px;color:white;margin-top:20px;' %>
         </div>
       </div>
+=======
+    <p>
+      <%= f.label :nr, '零件号' %>
+      <%= f.text_field :nr %>
+    </p>
+
+    <p>
+      <%= f.label :part_type_id, '零件类型' %>
+      <%= f.select(:part_type_id, @part_types.collect { |p| [p.name, p.id] }, {include_blank: true}) %>
+    </p>
+
+    <p>
+      <%= f.label :unit, '零件单位' %>
+      <%= f.text_field :unit %>
+    </p>
+
+    <p>
+      <%= f.label :unit_pack, '单位包装量' %>
+      <%= f.text_field :unit_pack %>
+    </p>
+    <p>
+      <%= f.label :convert_unit, '盘点单位转换标准' %>
+      <%= f.text_field :convert_unit %>
+    </p>
+    <p>
+      <%= f.label :safe_qty, '安全库存量' %>
+      <%= f.text_field :safe_qty %>
+    </p>
+    <p>
+      <%= f.label :description, '产品描述' %>
+      <%= f.text_field :description %>
+    </p>
+    <p>
+      <%= f.label :unit_pack, '是否已删除' %>
+      <%= f.check_box :is_delete %>
+    </p>
+
+    <div class="actions">
+      <%= f.submit value: '提 交', class: 'btn btn-primary btn-lg' %>
+>>>>>>> 81de19a825276079169bba42b4cc46cd63817e02
     </div>
 
 
