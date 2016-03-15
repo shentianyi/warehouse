@@ -63,7 +63,7 @@ class PickItem < ActiveRecord::Base
 
     part.positions.each do |pp|
       po<<"#{pp.id}"
-      storages=NStorage.where(position: pp.id, partNr: self.part_id)
+      storages=NStorage.where(position: pp.detail, partNr: self.part_id).group(:position)
       storages.each do |storage|
         p_n<<"#{storage.position}/#{storage.qty}"
       end
