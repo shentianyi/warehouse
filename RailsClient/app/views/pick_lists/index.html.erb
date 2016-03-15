@@ -45,6 +45,8 @@
         <th>NO.</th>
         <th>择货单号</th>
         <th>择货员工号</th>
+        <th>要货员工号</th>
+        <th>要货项目</th>
         <th>创建时间</th>
         <th>状态</th>
         <th></th>
@@ -60,6 +62,8 @@
             <td><%= index+@pick_lists.offset+1 %></td>
             <td><%= pick_list.id %></td>
             <td><%= pick_list.user_id %></td>
+            <td><%= pick_list.pick_items.blank? ? '' : pick_list.pick_items.first.user_id %></td>
+            <td><%= pick_list.pick_items.blank? ? '' : pick_list.pick_items.first.destination_whouse.name %></td>
             <td><%= pick_list.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %></td>
             <td><%= pick_list.state %></td>
             <td><%= link_to '详细', pick_list_path(id: pick_list, show: true) %></td>

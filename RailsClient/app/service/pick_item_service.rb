@@ -27,5 +27,6 @@ class PickItemService
         #.select('order_items.*,sum(order_items.quantity) as quantity')
       end
     end
+    []
   end
 end

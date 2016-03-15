@@ -60,17 +60,12 @@
             <% end %></td>
           <td><%= '是' if pick_item.is_emergency %></td>
           <td><%= pick_item.remark %></td>
-          <td id="demo"><%= pick_item.pick_position %></td>
-          <td><button type="button" onclick="myFunction(<% pick_item.part_id %>)">点击这里</button></td>
+          <td><%= pick_item.pick_position %></td>
         </tr>
     <% end %>
     </tbody>
   </table>
 </div>
-
-<% content_for :javascript_includes do %>
-    <%= javascript_include_tag "pickitem-manage" %>
-<%end%>
 
 <script type="text/javascript">
     function myFunction(ss)

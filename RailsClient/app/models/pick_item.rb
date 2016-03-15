@@ -36,7 +36,7 @@ class PickItem < ActiveRecord::Base
     p = Axlsx::Package.new
     wb = p.workbook
     wb.add_worksheet(:name => "sheet1") do |sheet|
-      sheet.add_row ["序号", "择货单号", "零件号", "数量", "箱数", "要货员工号", "要货项目", "要货库位", "是否加急","备注"]
+      sheet.add_row ["序号", "择货单号", "零件号", "数量", "箱数", "要货员工号", "要货项目", "要货库位", "是否加急", "备注"]
       pick_items.each_with_index { |pick_item, index|
         pp = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id)
         sheet.add_row [
@@ -58,13 +58,16 @@ class PickItem < ActiveRecord::Base
 
   def pick_position
     p_n=[]
-    storages=NStorage.where(ware_house_id: 'PA', partNr: self.part_id)
-    storages.each do |storage|
-      p_n<<"#{storage.position}/#{storage.qty}"
+    part = Part.find_by_id(self.part_id)
+
+    part.part_positions.each do |pp|
+      storages=NStorage.where(position: pp.position.id, partNr: self.part_id)
+      storages.each do |storage|
+        p_n<<"#{storage.position}/#{storage.qty}"
+      end
     end
 
-    p_n.join("<br />")
-
+    p_n.join("-----")
   end
 
 end
