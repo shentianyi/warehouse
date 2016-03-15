@@ -1,8 +1,19 @@
-<h1><%= @part.nr%></h1>
-<h4>零件类型: <small><%= @part.part_type.name if @part.part_type %></small></h4>
-<h4>零件单位: <small><%= @part.unit %></small></h4>
-<h4>单位包装量: <small><%= @part.unit_pack %></small></h4>
-<h4>描述: <small><%= @part.description %></small></h4>
+<h1><%= @part.nr %></h1>
+<h4>零件类型:
+  <small><%= @part.part_type.name if @part.part_type %></small>
+</h4>
+<h4>零件单位:
+  <small><%= @part.unit %></small>
+</h4>
+<h4>单位包装量:
+  <small><%= @part.unit_pack %></small>
+</h4>
+<h4>安全库存量:
+  <small><%= @part.safe_qty %></small>
+</h4>
+<h4>描述:
+  <small><%= @part.description %></small>
+</h4>
 <p>
   <string>库位:</string>
 <ul>
@@ -10,10 +21,10 @@
       <li>
         <string><%= pp.position.whouse.name %></string>
         <string><%= pp.position.nr %></string>
-        <string><<<%= pp.sourceable.name if pp.sourceable%></string>
+        <string><<<%= pp.sourceable.name if pp.sourceable %></string>
         <button type="button" class="btn btn-default" onclick="Manage.part.del_position('<%= pp.id.to_s %>',this)">Delete</button>
       </li>
   <% end %>
 </ul>
 </p>
-<%= link_to '返回', parts_path ,:class=>'btn btn-default'%>
+<%= link_to '返回', parts_path, :class => 'btn btn-default' %>
