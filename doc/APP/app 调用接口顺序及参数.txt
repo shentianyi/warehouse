@@ -1,0 +1,13 @@
+一、登陆
+1. 登陆：
+ POST "/api/v1/users/login/"
+ 
+2. 登陆后调用
+  GET "/api/v1/locations/get_all"
+  GET "/api/v1/regexes/labels"
+
+二、托清单
+1. 刚进入页面：加载查看个人 
+ GET "/api/v1/forklifts/get_by_time_and_state?state[]=0&state[]=1&state[]=2&state[]=3&state[]=4&type=0"
+2. 点击查看全部：
+ GET "/api/v1/forklifts/get_by_time_and_state?all=1&state[]=0&state[]=1&state[]=2&state[]=3&state[]=4&type=0" 
