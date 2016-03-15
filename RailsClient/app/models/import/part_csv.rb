@@ -38,7 +38,7 @@ module Import
       csv_cols<< Csv::CsvCol.new(field: 'unit_pack', header: 'UnitPack', null: true)
       csv_cols<< Csv::CsvCol.new(field: 'part_type_id', header: 'PartType', is_foreign: true, foreign: 'PartType', null: true)
       csv_cols<< Csv::CsvCol.new(field: 'convert_unit', header: 'ConvertUnit', null: true)
-      csv_cols<< Csv::CsvCol.new(field: 'safe_qty', header: 'SafeQty', null: true)
+      csv_cols<< Csv::CsvCol.new(field: 'safe_qty', header: 'SafeQty')
       csv_cols<< Csv::CsvCol.new(field: 'description', header: 'Description', null: true)
       csv_cols<< Csv::CsvCol.new(field: $UPMARKER, header: $UPMARKER)
       class_variable_set(:@@csv_cols, csv_cols)
