@@ -58,10 +58,12 @@ class PickItem < ActiveRecord::Base
 
   def pick_position
     p_n=[]
+    po=[]
     part = Part.find_by_id(self.part_id)
 
-    part.part_positions.each do |pp|
-      storages=NStorage.where(position: pp.position.id, partNr: self.part_id)
+    part.positions.each do |pp|
+      po<<"#{pp.id}"
+      storages=NStorage.where(position: pp.id, partNr: self.part_id)
       storages.each do |storage|
         p_n<<"#{storage.position}/#{storage.qty}"
       end
