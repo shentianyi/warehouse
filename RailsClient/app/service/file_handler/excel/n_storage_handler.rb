@@ -226,6 +226,82 @@ module FileHandler
         msg = Message.new(contents: [])
         StorageOperationRecord.save_record(row, 'MOVE')
 
+        if row[:toWh].blank?
+          msg.contents << "目的仓库号不能为空!"
+        end
+
+        if row[:toPosition].blank?
+          msg.contents << "目的库位号不能为空!"
+        end
+
+        if row[:fromWh].present?
+          src_warehouse = Whouse.find_by_nr(row[:fromWh])
+          unless src_warehouse
+            msg.contents << "源仓库号:#{row[:fromWh]} 不存在!"
+          end
+        end
+
+        if row[:toWh].present?
+          dse_warehouse = Whouse.find_by_nr(row[:toWh])
+          unless dse_warehouse
+            msg.contents << "目的仓库号:#{row[:toWh]} 不存在!"
+          end
+        end
+
+        positions = []
+        if row[:packageId].present? && row[:partNr].blank?
+        else
+          part_id = Part.find_by_nr(row[:partNr])
+          if part_id
+            part_id.positions.each do |position|
+              positions += ["#{position.nr}"]
+            end
+          else
+            msg.contents << "零件号:#{row[:partNr]} 不存在!"
+          end
+        end
+
+        if row[:fifo].present?
+          begin
+            row[:fifo].to_time
+          rescue => e
+            msg.contents << "FIFO: #{row[:fifo]} 错误!"
+          end
+        end
+
+        if row[:fromPosition].present?
+          from_position = Position.find_by_nr(row[:fromPosition])
+          unless from_position
+            msg.contents << "源位置:#{row[:fromPosition]} 不存在!"
+          end
+        end
+
+        if from_position && part_id
+          unless positions.include?(row[:fromPosition])
+            msg.contents << "零件号:#{row[:partNr]} 不在源库位号:#{row[:fromPosition]}上!"
+          end
+        end
+
+        if row[:toPosition].present?
+          to_position = Position.find_by_nr(row[:toPosition])
+          unless to_position
+            msg.contents << "目的库位号:#{row[:toPosition]} 不存在!"
+          end
+        end
+
+        if to_position && part_id
+          unless positions.include?(row[:toPosition])
+            msg.contents << "零件号:#{row[:partNr]}不在目的库位号:#{row[:toPosition]}上!"
+          end
+        end
+
+        if row[:employee_id].present?
+          employee_id = User.find_by_nr(row[:employee_id])
+          unless employee_id
+            msg.contents << "员工号:#{row[:employee_id].sub(/\.0/, '')} 不存在!"
+          end
+        end
+
         if row[:packageId].present?
           unless package = NStorage.exists_package?(row[:packageId])
             msg.contents << "唯一码:#{row['packageId']} 不存在!"
@@ -235,8 +311,8 @@ module FileHandler
             msg.contents << "移库量大于剩余库存量,唯一码#{row['packageId']}!"
           end
 
-          if row[:fromWh].present?
-            storage = NStorage.find_by(packageId: row[:packageId], ware_house_id: row[:fromWh])
+          if src_warehouse.present?
+            storage = NStorage.find_by(packageId: row[:packageId], ware_house_id: src_warehouse.id)
             unless storage
               msg.contents << "源仓库#{row[:fromWh]}不存在该唯一码#{row[:packageId]}！"
             end
@@ -256,81 +332,6 @@ module FileHandler
 
         end
 
-        if row[:toWh].blank?
-          msg.contents << "目的仓库号不能为空!"
-        end
-
-        if row[:toPosition].blank?
-          msg.contents << "目的库位号不能为空!"
-        end
-
-        if row[:fromWh].present?
-          src_warehouse = Whouse.find_by_id(row[:fromWh])
-          unless src_warehouse
-            msg.contents << "源仓库号:#{row[:fromWh]} 不存在!"
-          end
-        end
-
-        if row[:toWh].present?
-          dse_warehouse = Whouse.find_by_id(row[:toWh])
-          unless dse_warehouse
-            msg.contents << "目的仓库号:#{row[:toWh]} 不存在!"
-          end
-        end
-
-        positions = []
-        if row[:packageId].present? && row[:partNr].blank?
-        else
-          part_id = Part.find_by_id(row[:partNr])
-          if part_id
-            part_id.positions.each do |position|
-              positions += ["#{position.detail}"]
-            end
-          else
-            msg.contents << "零件号:#{row[:partNr]} 不存在!"
-          end
-        end
-
-        if row[:fifo].present?
-          begin
-            row[:fifo].to_time
-          rescue => e
-            msg.contents << "FIFO: #{row[:fifo]} 错误!"
-          end
-        end
-
-        if row[:fromPosition].present?
-          from_position = Position.find_by(detail: row[:fromPosition])
-          unless from_position
-            msg.contents << "源位置:#{row[:fromPosition]} 不存在!"
-          end
-        end
-
-        if from_position && part_id
-          unless positions.include?(row[:fromPosition])
-            msg.contents << "零件号:#{row[:partNr]} 不在源库位号:#{row[:fromPosition]}上!"
-          end
-        end
-
-        if row[:toPosition].present?
-          to_position = Position.find_by(detail: row[:toPosition])
-          unless to_position
-            msg.contents << "目的库位号:#{row[:toPosition]} 不存在!"
-          end
-        end
-
-        if to_position && part_id
-          unless positions.include?(row[:toPosition])
-            msg.contents << "零件号:#{row[:partNr]}不在目的库位号:#{row[:toPosition]}上!"
-          end
-        end
-
-        if row[:employee_id].present?
-          employee_id = User.find(row[:employee_id])
-          unless employee_id
-            msg.contents << "员工号:#{row[:employee_id].sub(/\.0/, '')} 不存在!"
-          end
-        end
 
         unless msg.result=(msg.contents.size==0)
           msg.content=msg.contents.join('/')

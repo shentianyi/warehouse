@@ -138,10 +138,10 @@
         <a class="dropdown-toggle " data-toggle="dropdown" href="#">扩展<span class="caret"></span></a>
         <ul class="dropdown-menu" role="manage">
           <% if current_user.permission?(:jiaxuan_extra_export) %>
-              <li><a href="<%= generate_jiaxuan_deliveries_path %>">导入佳轩发运数据</a></li>
+              <li><a href="<%= generate_jiaxuan_deliveries_path %>">导入常州发运佳轩数据</a></li>
           <% end %>
           <% if current_user.permission?(:jiaxuan_extra_config) %>
-              <li><a href="<%= jiaxuan_extra_sys_configs_path %>">佳轩扩展配置</a></li>
+              <li><a href="<%= jiaxuan_extra_sys_configs_path %>">扩展配置</a></li>
           <% end %>
         </ul>
       </li>
