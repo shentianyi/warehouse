@@ -18,6 +18,7 @@
     <input type='text' id="user-id-text" value="<%= current_user.id %>"/>
     <a class='btn btn-xs btn-primary' id="change-user-id">更改</a>
   </div>
+
   <% if current_user.can_edit_inventory? %>
       <a class='btn btn-warning btn-sm' id="create-select">创建择货单</a>
   <% end %>
