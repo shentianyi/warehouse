@@ -129,7 +129,6 @@ class LogisticsContainer<LocationContainer
   end
 
   def enter_store
-    puts '1111111111111111111111111111111111111111111111'
     p self
     if self.container.type==ContainerType::PACKAGE && self.state_changed?
       begin
@@ -165,7 +164,9 @@ class LogisticsContainer<LocationContainer
         #用于 leoni 收集数据
         p package
         toWh='WE87'
+        #判断唯一码是否存在？
         if package.logistics_containers.first.parent.blank?
+          #绑定包装箱
           to_position='WE87-1'
         else
           to_position='WE87-2'

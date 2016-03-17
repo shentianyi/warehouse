@@ -89,10 +89,15 @@ class OrderService
     order.user = current_user
     order.source_location_id = current_user.location_id
     order.remark = no_parts_to_string(args[:nopart_items])
+    # order.handled=true
     ActiveRecord::Base.transaction do
       begin
         if order.save
           #save success
+          #CREATE PICK
+          pick=PickList.new(state: PickStatus::INIT)
+          pick.user=current_user
+
           args[:order_items].each do |item|
             part = OrderItemService.verify_part_id(item[:part_id], current_user)
             part_position = OrderItemService.verify_department(item[:department], item[:part_id])
@@ -101,9 +106,26 @@ class OrderService
 
             if item = OrderItemService.new(part_position, part, quantity, item[:is_emergency], box_quantity, current_user)
               item.order = order
-              item.save
+              item.handled=true
+              if item.save
+                pick_item=PickItem.new(
+                    user_id: current_user.id,
+                    destination_whouse_id: item.whouse_id,
+                    part_id: item.part_id,
+                    quantity: item.quantity,
+                    state: PickStatus::INIT
+                )
+                if position=Position.where(whouse_id: item.whouse_id, id: PartPosition.where(part_id: item.part_id).pluck(:position_id)).first
+                  pick_item.position=position
+                end
+                pick_item.order_item=item
+                pick.pick_items<<pick_item
+                pick.orders<<order
+              end
             end
           end
+
+          pick.save
         else
           return nil
         end

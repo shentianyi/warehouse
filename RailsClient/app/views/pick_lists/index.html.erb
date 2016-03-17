@@ -55,7 +55,7 @@
         <td><%= pick_list.id %></td>
         <td><%= pick_list.user_id %></td>
         <td><%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at%></td>
-        <td><%= pick_list.state %></td>
+        <td><%= PickItemStatus.display(pick_list.state) %></td>
         <td><%= link_to '详细', pick_list_path(id: pick_list, show: true) %></td>
       </tr>
   <% end %>
