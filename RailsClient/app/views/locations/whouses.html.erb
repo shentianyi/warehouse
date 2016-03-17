@@ -1,30 +1,72 @@
-<h2><%= @location.name%>仓库列表</h2>
-<br/>
-<div class="digg_pagination">
-  <div class="page_info">
-    <%= page_entries_info @whouses %>
-  </div>
-  <%= will_paginate @whouses, :container => false %>
+<style>
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > td {
+        text-align: center;
+    }
+
+    .label {
+        font-size: 1em;
+    }
+
+    .digg_pagination .page_info {
+        text-align: left;
+        width: auto;
+        margin-left: -20px;
+        margin-right: -20px;
+    }
+
+    .digg_pagination {
+        background: transparent;
+    }
+</style>
+
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">管理</li>
+    <li>
+      <%= link_to '地点', locations_path %>
+    </li>
+    <li class="active">
+      <span class="label label-primary"><%= @location.name %></span>
+      仓库列表
+    </li>
+  </ol>
 </div>
-<table class="table table-bordered table-striped globle-table table-hover">
+
+<div class="col-sm-12">
+  <div class="digg_pagination">
+    <div class="page_info">
+      <%= page_entries_info @whouses %>
+    </div>
+    <%= will_paginate @whouses, :container => false %>
+  </div>
+</div>
+
+<table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
-    <td>NO.</td>
-    <td>编号</td>
-    <td>名称</td>
+    <th>NO.</th>
+    <th>编号</th>
+    <th>名称</th>
   </tr>
   </thead>
   <tbody>
-  <% @whouses.each_with_index do |w,index|%>
+  <% @whouses.each_with_index do |w, index| %>
       <tr>
-        <td><%= index+1+@whouses.offset%></td>
+        <td><%= index+1+@whouses.offset %></td>
         <td><%= w.id %></td>
         <td><%= w.name %></td>
       </tr>
-  <% end%>
+  <% end %>
   </tbody>
 </table>
+
 <div class="digg_pagination">
   <%= will_paginate @whouses, :container => false %>
 </div>
-<%= link_to '返回', locations_path ,:class => "btn btn-default btn-lg" %>

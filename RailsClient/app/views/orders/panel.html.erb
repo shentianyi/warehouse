@@ -1,14 +1,24 @@
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">运输管理</li>
+    <li class="active">
+      要货需求
+    </li>
+  </ol>
+</div>
+
 <!--<p style="padding-left:30px;">择货员工号：<input type="text" id="user-id-text" class="panel-input-o" value="<%= current_user.id %>" /></p>-->
 <!--<div id="filters">-->
 <!--</div>-->
 <div class='panel-header'>
-  <p>需求面板</p>
+  <p>要货需求面板</p>
 
   <div class="choose-employee">
     <label>当前使用员工:</label>
     <input type='text' id="user-id-text" value="<%= current_user.id %>"/>
     <a class='btn btn-xs btn-primary' id="change-user-id">更改</a>
   </div>
+
   <% if current_user.can_edit_inventory? %>
       <a class='btn btn-warning btn-sm' id="create-select">创建择货单</a>
   <% end %>

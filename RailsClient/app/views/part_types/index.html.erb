@@ -1,25 +1,73 @@
-<h2>零件类型列表</h2>
+<style>
+    .IconA {
+        margin: 0 10px;
+        font-size: 1.2em;
+    }
 
-<% if current_user.permission?(:operate_basic_info_create) %>
-    <%= link_to "新建零件类型", send("new_#{@model}_path"), :class => 'btn btn-default' %>
-    <%= link_to "上传/更新零件类型", send("import_#{@model.pluralize}_path"), :class => 'btn btn-default' %>
-<% end %>
-<%= link_to "下载零件类型", send("download_#{@model.pluralize}_path"), data: {confirm: '确认删除?'}, :class => 'btn btn-default' %>
-<br/>
-<div class="digg_pagination">
-  <div class="page_info">
-    <%= page_entries_info @part_types %>
-  </div>
-  <%= will_paginate @part_types, :container => false %>
+    .IconA:hover {
+        text-decoration: none;
+        background-color: white;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > td {
+        text-align: center;
+    }
+
+    .digg_pagination .page_info {
+        text-align: left;
+        width: auto;
+        margin-left: -20px;
+        margin-right: -20px;
+    }
+
+    .digg_pagination {
+        background: transparent;
+    }
+
+</style>
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">管理</li>
+    <li class="active">
+      基础信息设置
+    </li>
+    <li class="active">
+      零件类型
+    </li>
+  </ol>
 </div>
-<table class="table table-bordered table-striped globle-table">
+<div class="panel panel-primary">
+  <div class="panel-body">
+    <% if current_user.permission?(:operate_basic_info_create) %>
+        <div class="col-sm-4">
+          <%= link_to "新建零件类型", send("new_#{@model}_path"), :class => 'btn btn-primary', :style => 'color:white;width:150px;' %>
+        </div>
+        <div class="col-sm-4">
+          <%= link_to "上传/更新零件类型", send("import_#{@model.pluralize}_path"), :class => 'btn btn-primary', :style => 'color:white;width:150px;' %>
+        </div>
+    <% end %>
+    <div class="col-sm-4">
+      <%= link_to "下载零件类型", send("download_#{@model.pluralize}_path"), data: {confirm: '确认下载?'}, :class => 'btn btn-primary', :style => 'color:white;width:150px;' %>
+    </div>
+  </div>
+</div>
 
+<div class="col-sm-12">
+  <div class="digg_pagination">
+    <div class="page_info">
+      <%= page_entries_info @part_types %>
+    </div>
+    <%= will_paginate @part_types, :container => false %>
+  </div>
+</div>
+
+<table class="table table-bordered table-striped">
   <thead>
   <tr>
     <th></th>
     <th>编号</th>
     <th>名称</th>
-    <th colspan="3"></th>
+    <th colspan="3">操作</th>
   </tr>
   </thead>
 
@@ -30,10 +78,14 @@
         <td><%= part_type.nr %></td>
         <td><%= part_type.name %></td>
         <% if current_user.permission?(:operate_basic_info_edit) %>
-            <td><%= link_to '编辑', edit_part_type_path(part_type), :class => 'btn btn-default' %></td>
+            <td>
+              <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-pencil', :style => 'color:#4F94CD;'), edit_part_type_path(part_type), :class => 'IconA', :title => '编辑' %>
+            </td>
         <% end %>
         <% if current_user.permission?(:operate_basic_info_delete) %>
-            <td><%= link_to '删除', part_type, method: :delete, data: {confirm: '确认删除?'}, :class => 'btn btn-default' %></td>
+            <td>
+              <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-trash', :style => 'color:darkred;'), part_type, method: :delete, data: {confirm: '确认删除?'}, :class => 'IconA', :title => '删除' %>
+            </td>
         <% end %>
       </tr>
   <% end %>

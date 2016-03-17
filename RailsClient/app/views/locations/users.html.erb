@@ -1,32 +1,73 @@
-<h2><%= @location.name%>用户列表</h2>
-<br/>
-<div class="digg_pagination">
-  <div class="page_info">
-    <%= page_entries_info @users %>
-  </div>
-  <%= will_paginate @users, :container => false %>
+<style>
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > td {
+        text-align: center;
+    }
+
+    .label {
+        font-size: 1em;
+    }
+
+    .digg_pagination .page_info {
+        text-align: left;
+        width: auto;
+        margin-left: -20px;
+        margin-right: -20px;
+    }
+
+    .digg_pagination {
+        background: transparent;
+    }
+</style>
+
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">管理</li>
+    <li>
+      <%= link_to '地点', locations_path %>
+    </li>
+    <li class="active">
+      <span class="label label-primary"><%= @location.name %></span>
+      员工列表
+    </li>
+  </ol>
 </div>
-<table class="table table-bordered table-striped globle-table table-hover">
+
+<div class="col-sm-12">
+  <div class="digg_pagination">
+    <div class="page_info">
+      <%= page_entries_info @users %>
+    </div>
+    <%= will_paginate @users, :container => false %>
+  </div>
+</div>
+
+<table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
-    <td>NO.</td>
-    <td>工号</td>
-    <td>姓名</td>
-    <td>角色</td>
+    <th>NO.</th>
+    <th>工号</th>
+    <th>姓名</th>
+    <th>角色</th>
   </tr>
   </thead>
   <tbody>
-  <% @users.each_with_index do |user,index|%>
-  <tr>
-    <td><%= index+@users.offset+1%></td>
-    <td><%= user.nr %></td>
-    <td><%= user.name %></td>
-    <td><%= Role.display(user.role_id)%></td>
-  </tr>
-  <% end%>
+  <% @users.each_with_index do |user, index| %>
+      <tr>
+        <td><%= index+@users.offset+1 %></td>
+        <td><%= user.nr %></td>
+        <td><%= user.name %></td>
+        <td><%= Role.display(user.role_id) %></td>
+      </tr>
+  <% end %>
   </tbody>
 </table>
 <div class="digg_pagination">
   <%= will_paginate @users, :container => false %>
 </div>
-<%= link_to '返回', locations_path ,:class => "btn btn-default btn-lg" %>

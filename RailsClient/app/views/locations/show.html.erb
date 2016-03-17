@@ -1,14 +1,63 @@
-<h1><%= @location.name%></h1>
-<span class="label label-primary"><%= @location.nr%></span>
+<style>
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
 
-<h4>地 址: <small><%= @location.address%></small></h4>
-<h4>联系方式: <small><%= @location.tel%></small></h4>
-<h4>目的地: <small>
-  <ul>
-    <% @location.destinations.each do |d|%>
-        <li><span class="label label-default"><%= d.name %></span></li>
-    <% end %>
-  </ul>
-</small></h4>
+    .label {
+        font-size: 1em;
+    }
 
-<%= link_to '返回', locations_path ,:class=>"btn btn-default"%>
+    .col-sm-6 {
+        font-size: 1.2em;
+    }
+
+    .col-sm-12 {
+        height: 40px;
+    }
+</style>
+
+
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">管理</li>
+    <li class="active">基础信息设置</li>
+    <li>
+      <%= link_to '地点', locations_path %>
+    </li>
+    <li class="active">
+      地点详情
+    </li>
+  </ol>
+</div>
+
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <div class="panel-title" style="display: flex;">
+      <h4><%= @location.name %></h4>
+      <span class="label label-info" style="line-height: 25px;height: 30px;margin-top: 5px;margin-left: 20px;"><%= @location.nr %></span>
+    </div>
+  </div>
+  <div class="panel-body">
+    <div class="col-sm-12" style="border-bottom: 1px dashed #000;">
+      <div class="col-sm-6">
+        地 址:<%= @location.address %>
+      </div>
+      <div class="col-sm-6">
+        联系方式:<%= @location.tel %>
+      </div>
+    </div>
+    <div class="col-sm-12" style="margin-top: 20px;">
+      <div class="col-sm-6" style="display: flex;">
+        目的地:
+        <ul style="display: flex;">
+          <% @location.destinations.each do |d| %>
+              <li style="margin-left: 10px;"><span class="label label-info"><%= d.name %></span></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

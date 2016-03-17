@@ -1,5 +1,23 @@
-<h2>新建仓库</h2>
+<style>
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+</style>
+
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">管理</li>
+    <li>
+      <%= link_to '仓库', whouses_path, :title => '返回仓库' %>
+    </li>
+    <li class="active">
+      新建仓库
+    </li>
+  </ol>
+</div>
 
 <%= render 'form' %>
 
-<%= link_to '返回', whouses_path %>

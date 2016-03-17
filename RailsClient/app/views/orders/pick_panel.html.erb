@@ -1,8 +1,17 @@
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">运输管理</li>
+    <li class="active">
+      择货需求
+    </li>
+  </ol>
+</div>
+
 <!--<p style="padding-left:30px;">择货员工号：<input type="text" id="user-id-text" class="panel-input-o" value="<%= current_user.id %>" /></p>-->
 <!--<div id="filters">-->
 <!--</div>-->
 <div class='panel-header'>
-  <p>择货面板</p>
+  <p>择货需求面板</p>
 
   <div class="choose-employee">
     <!--<label>当前使用员工:</label>
@@ -34,23 +43,23 @@
 
 <!--Create Picklist Div-->
 <!--<div class="outer-scene" id="outer-scene">-->
-  <!--<div class="inner-create">-->
-    <!--<div class="inner-header">-->
-      <!--<h3>创建择货单</h3>-->
-      <!--<i class="glyphicon glyphicon-remove" id="close-scene"></i>-->
-    <!--</div>-->
-    <!--<div class="inner-body">-->
-      <!--<div class="left">-->
-        <!--<div class="filter-result">-->
-          <!--<ul id='order-list-panel-inner'>-->
-          <!--</ul>-->
-        <!--</div>-->
-      <!--</div>-->
-      <!--<div class="right">-->
-        <!--<input type="button" class="btn btn-primary" value="生成择货单 " onclick="pm.build_pick_list();"/>-->
-      <!--</div>-->
-    <!--</div>-->
-  <!--</div>-->
+<!--<div class="inner-create">-->
+<!--<div class="inner-header">-->
+<!--<h3>创建择货单</h3>-->
+<!--<i class="glyphicon glyphicon-remove" id="close-scene"></i>-->
+<!--</div>-->
+<!--<div class="inner-body">-->
+<!--<div class="left">-->
+<!--<div class="filter-result">-->
+<!--<ul id='order-list-panel-inner'>-->
+<!--</ul>-->
+<!--</div>-->
+<!--</div>-->
+<!--<div class="right">-->
+<!--<input type="button" class="btn btn-primary" value="生成择货单 " onclick="pm.build_pick_list();"/>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
 <!--</div>-->
 <% content_for :javascript_includes do %>
     <%= javascript_include_tag "panel-manage" %>
@@ -91,14 +100,14 @@
             var lists = [];
             $("#panel-list").removeClass("choose-active");
             $("#pick-list-history").addClass("choose-active");
-            $("input.print-check").prop("checked",false);
-            $(this).find("input.print-check").prop("checked",true);
+            $("input.print-check").prop("checked", false);
+            $(this).find("input.print-check").prop("checked", true);
             lists.push($(this).attr("picklist"));
             $.get('/orders/pickitems', {picklist_ids: lists}, function (data) {
                 $('.order-content-div').html(data);
             }, 'html');
             //
-            $(".order-checkbox").prop("checked",false);
+            $(".order-checkbox").prop("checked", false);
 
         }).on('click', "#order-list-panel li", function () {
             var i = $(this).find("input");
@@ -185,17 +194,17 @@
                     }
                 }
             });
-        }).on("click","#search-picklists",function(){
+        }).on("click", "#search-picklists", function () {
             var start = $("#picklist-start").val();
             var end = $("#picklist-end").val();
-            $.get("/orders/picklists",{start:start,end:end},function(data){
+            $.get("/orders/picklists", {start: start, end: end}, function (data) {
                 $("#pick-list").html(data);
-            },"html");
+            }, "html");
         });
     });
 
     $(".datepicker").datetimepicker({
-        lang:'ch',
+        lang: 'ch',
         format: 'Y-m-d H:i'
     });
 

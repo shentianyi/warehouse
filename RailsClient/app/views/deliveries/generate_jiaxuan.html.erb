@@ -1,5 +1,9 @@
-<h1>导入常州发运佳轩数据</h1>
-
+<style>
+    a:hover {
+        background-color: white;
+        color: black;
+    }
+</style>
 <script type="text/javascript">
     $(function () {
         data_upload("#item-data-uploader", 'xlsx');
@@ -8,12 +12,54 @@
 
 <p id="notice"><%= notice %></p>
 
-<div>
-  选择数据文件：
-  <input id="item-data-uploader" type="file" name="files[]" data-url="/deliveries/generate_jiaxuan"/>
-
-  <div class="abstractblock" id="item-data-uploader-preview" style="display:none;"></div>
-
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">管理</li>
+    <li class="active">
+      配置
+    </li>
+    <li class="active">
+      导入常州发运佳轩数据
+    </li>
+  </ol>
 </div>
 
-<div><a href="/files/download?folder=template&file=导入佳轩发运数据模版.xlsx">下载模板</a></div>
+
+<div class="container panel_show_msg"
+     style="background: #EAEAEA;border-radius: 50px;padding: 10px 40px 10px 40px;box-shadow: 10px 10px 5px #ccc;margin-top: 20px;margin-bottom: 100px;">
+
+  <div class="panel-heading" style="display: flex; border-bottom: 1px dashed steelblue;">
+    <i class="glyphicon glyphicon-import"
+       style="font-size: 3em;margin: 0 30px 0 0;color:steelblue;"></i>
+
+    <h3 style="margin: 5px 0 0 0">
+      常州发运佳轩数据
+    </h3>
+  </div>
+
+  <div class="panel-body">
+    <div class="panel panel-primary">
+      <div class="panel-heading" style="display: flex;height: 40px;">
+        <i class="glyphicon glyphicon-record" style="font-size: 1em;margin: 1px 10px 0 0;"></i>
+        <strong>上传常州发运佳轩数据</strong>
+      </div>
+
+      <div class="panel-body">
+        <div class="col-md-12" style="display: flex;">
+          <h4 style="white-space: nowrap;">选择数据文件:</h4>
+          </h4>
+        </div>
+
+        <div class="col-md-12" style="display: flex;">
+          <input id="item-data-uploader" type="file" name="files[]" data-url="/deliveries/generate_jiaxuan"/>
+
+          <div class="abstractblock" id="item-data-uploader-preview" style="display:none;"></div>
+        </div>
+
+        <div class="col-sm-12" style="border-top: 1px dashed #000;margin-top:20px;padding-top: 10px;">
+          <a href="/files/download?folder=template&file=导入佳轩发运数据模版.xlsx">下载模板</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

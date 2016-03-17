@@ -3,10 +3,6 @@
         height: 40px;
     }
 
-    .col-sm-12:first-child {
-        margin-top: 20px;
-    }
-
     select {
         min-width: 150px;
     }
@@ -41,6 +37,15 @@
         text-align: center;
     }
 </style>
+
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">运输管理</li>
+    <li class="active">运输管理</li>
+    <li class="active">发运流程</li>
+    <li class="active">运单</li>
+  </ol>
+</div>
 
 <div class="all-search">
   <form method="get" action="<%= send("search_logistics_containers_path") %>">
@@ -121,7 +126,7 @@
 </div>
 
 
-<div class="col-sm-12" style="margin-bottom: 10px; ">
+<div class="col-sm-12" style="margin-bottom: 10px;margin-top: -20px; ">
   <div class="col-sm-2">
     <input type="button" value="打印发运单" class='btn btn-warning' onclick="print_delivery_list();"/>
   </div>

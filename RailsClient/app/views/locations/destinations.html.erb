@@ -1,30 +1,75 @@
-<h2><%= @location.name %>的目的地</h2>
-<%= form_for @location,method: :post,url: {action: 'add_destination'} do |f|%>
-    <p>
-      <%= f.label :destination_id, '目的地'%>
-      <%= f.select(:destination_id, Location.where.not(id: (@location.destinations.ids)).collect { |l| [l.name,l.id] },{include_blank: false})%>
-    </p>
+<style>
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
 
-    <div class="actions">
-      <%= f.submit value: '提 交', class: 'btn btn-primary btn-lg' %>
+    .table > thead > tr > th, .table > tbody > tr > td {
+        text-align: center;
+    }
+
+    .IconA {
+        margin: 0 10px;
+        font-size: 1.2em;
+    }
+
+    .IconA:hover {
+        text-decoration: none;
+        background-color: white;
+    }
+</style>
+
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">管理</li>
+    <li>
+      <%= link_to '地点', locations_path %>
+    </li>
+    <li class="active">
+      目的地列表
+    </li>
+  </ol>
+</div>
+
+<%= form_for @location, method: :post, url: {action: 'add_destination'} do |f| %>
+    <div class="panel panel-primary">
+      <div class="panel-body" style="margin-top: 10px;">
+        <div class="col-sm-12">
+          <div class="col-sm-4">
+            <%= f.label :destination_id, '目的地' %>
+            <%= f.select(:destination_id, Location.where.not(id: (@location.destinations.ids)).collect { |l| [l.name, l.id] }, {include_blank: false}, :style => 'min-width:150px;') %>
+          </div>
+          <div class="col-sm-4">
+            <div class="actions">
+              <%= f.submit value: '提 交', class: 'btn btn-primary', :style => 'width:200px;' %>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-<%end %>
-<table class="table table-bordered table-striped globle-table">
+<% end %>
+
+<table class="table table-bordered table-striped">
   <thead>
   <tr>
     <th>地点</th>
     <th>是否默认地址</th>
-    <th colspan="2"></th>
+    <th colspan="2">操作</th>
   </tr>
   </thead>
   <tbody>
   <% @location.location_destinations.each do |ld| %>
-  <tr>
-    <td><%= ld.destination.name%></td>
-    <td><%= ld.is_default %></td>
-    <td><%= link_to '删除',remove_destination_location_path(@location,ld.destination),method: :delete, data:{confirm: '确认删除？'},:class=> 'btn btn-default' %></td>
-    <td><%= link_to '设为默认',set_default_destination_location_path(@location,ld.destination),method: :post,:class=> 'btn btn-default' %></td>
-  </tr>
+      <tr>
+        <td><%= ld.destination.name %></td>
+        <td><%= ld.is_default %></td>
+        <td>
+          <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-trash', :style => 'color:darkred;'), remove_destination_location_path(@location, ld.destination), method: :delete, data: {confirm: '确认删除？'}, :title => '删除', :class => 'IconA' %>
+
+          <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-flag'), set_default_destination_location_path(@location, ld.destination), method: :post, :class => 'IconA', :title => '设为默认' %>
+        </td>
+      </tr>
   <% end %>
   </tbody>
 </table>
