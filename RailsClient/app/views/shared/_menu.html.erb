@@ -39,8 +39,10 @@
     <a class="dropdown-toggle " data-toggle="dropdown" href="#">库存管理<span class="caret"></span></a>
     <ul class="dropdown-menu" role="manage">
       <li><a href="<%= n_storages_path %>">详细库存查询</a></li>
+      <li><a href="<%= by_whouse_we87_n_storages_path %>">仓库WE87库存详细</a></li>
+      <li><a href="<%= by_whouse_pa_n_storages_path %>">仓库PA库存详细</a></li>
       <li><a href="<%= group_n_storages_path %>">库存汇总查询</a></li>
-      <li><a href="<%= import_n_storages_path %>">库存文件导入</a></li>
+      <li><a href="<%= import_n_storages_path %>">文件入库</a></li>
       <li><a href="<%= move_n_storages_path %>">文件移库</a></li>
       <li><a href="<%= movements_path %>">库存移动记录查询</a></li>
       <!--<li><a href="<%= panel_storages_path(part_type_id:(PartType.first.id if PartType.first))%>">库存</a></li>-->

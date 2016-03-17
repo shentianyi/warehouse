@@ -25,8 +25,7 @@ module APIGuard
     end
 
     def current_user
-      #@warden.user
-      @current_user
+      @current_user ||= warden.user
     end
 
     def warden
@@ -37,7 +36,7 @@ module APIGuard
       unless warden.authenticate?
         return error!({result: 0}, 401)
       else
-        @current_user= @warden.user
+        @current_user= warden.user
       end
     end
 

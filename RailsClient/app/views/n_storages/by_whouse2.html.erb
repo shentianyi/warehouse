@@ -1,0 +1,84 @@
+<h2>仓库WE87-2库存详细</h2>
+
+
+<div>
+  <form method="get" action="<%= search_by_whouse_n_storages_path %>">
+    <div>
+      <div>
+        <div>
+            <span>零件号：
+              <input type="text" name="n_storage[partNr]" value="<%= @partNr %>"/>
+              <input type="hidden" name="n_storage[partNr_fuzzy]"/>
+            </span>
+            <span>唯一码：
+              <input type="text" name="n_storage[packageId]" value="<%= @packageId %>"/>
+              <input type="hidden" name="n_storage[packageId_fuzzy]"/>
+            </span>
+          <input type="hidden" name="n_storage[ware_house_id]" value="WE87" />
+          <input type="hidden" name="n_storage[position]" value="WE87-2" />
+        </div>
+        <div>
+            <span>
+              更新日期：
+              <input type="text" name="n_storage[updated_at][start]" class="datepicker" value="<%= @updated_at_start %>"/>
+              ~  <input type="text" name="n_storage[updated_at][end]" class="datepicker" value="<%= @updated_at_end %>"/>
+            </span>
+            <span>
+              FIFO：
+              <input type="text" name="n_storage[fifo][start]" class="datepicker" value="<%= @fifo_start %>"/>
+              ~  <input type="text" name="n_storage[fifo][end]" class="datepicker" value="<%= @fifo_end %>"/>
+            </span>
+        </div>
+        <div>
+          <input type="submit" value="查找" class="btn btn-primary" name="search"/>
+          <input type="submit" value="导出" class="btn btn-primary" name="download"/>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+
+
+
+
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @n_storages %>
+  </div>
+  <%= will_paginate @n_storages, :container => false %>
+</div>
+<table class="table table-striped table-condensed table-hover">
+  <thead>
+  <tr>
+    <th>NO.</th>
+    <th>零件号</th>
+    <th>唯一码</th>
+    <th>库存量</th>
+    <th>FIFO</th>
+    <th>更新日期</th>
+    <th>仓库号</th>
+    <th>库位号</th>
+    <th>备注</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @n_storages.each_with_index do |storage, i| %>
+      <tr>
+        <td><%= i+@n_storages.offset+1 %></td>
+        <td><%= storage.partNr %></td>
+        <td><%= storage.packageId %></td>
+        <td><%= storage.qty %></td>
+        <td><%= storage.fifo.localtime if storage.fifo %> </td>
+        <td><%= storage.updated_at.localtime if storage.updated_at %> </td>
+        <td><%= storage.ware_house_id %></td>
+        <td><%= storage.position %></td>
+        <td><%= storage.remarks %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+<div class="digg_pagination">
+  <%= will_paginate @n_storages, :container => false %>
+</div>

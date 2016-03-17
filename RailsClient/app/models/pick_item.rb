@@ -48,4 +48,18 @@ class PickItem < ActiveRecord::Base
   def can_move_store?
     self.state==PickItemStatus::PICKED || (self.state==PickItemStatus::PICKING && self.order_box.order_box_type && Setting.not_need_weight_box_type_values.include?(self.order_box.order_box_type.name))
   end
+
+  def pick_position
+    pick_storages=[]
+    part = Part.find_by_id(self.part_id)
+
+    part.positions.each do |pp|
+      storages=NStorage.select("SUM(n_storages.qty) as total_qty, n_storages.position").where(position: pp.detail, partNr: self.part_id).group(:position)
+      storages.each do |storage|
+        pick_storages<<"#{storage.position}/#{storage.total_qty}"
+      end
+    end
+
+    pick_storages.join("-----")
+  end
 end

@@ -132,6 +132,56 @@ class NStoragesController < ApplicationController
     end
   end
 
+  def search_by_whouse
+    @condition=params[@model]
+    query=model.all #.unscoped
+    @condition.each do |k, v|
+      if (v.is_a?(Fixnum) || v.is_a?(String)) && !v.blank?
+        puts @condition.has_key?(k+'_fuzzy')
+        if @condition.has_key?(k+'_fuzzy')
+          query=query.where("#{k} like ?", "%#{v}%")
+        else
+          query=query.where(Hash[k, v])
+        end
+        instance_variable_set("@#{k}", v)
+      end
+      #if v.is_a?(Array) && !v.empty?
+      #  query= v.size==1 ? query.where(Hash[k, v[0]]) : query.in(Hash[k, v]
+      #end
+      #query=query.where(Hash[k, v]) if v.is_a?(Range)
+      if v.is_a?(Hash) && v.values.count==2 && v.values.uniq!=['']
+        values=v.values.sort
+        values[0]=Time.parse(values[0]).utc.to_s if values[0].is_date? & values[0].include?('-')
+        values[1]=Time.parse(values[1]).utc.to_s if values[1].is_date? & values[1].include?('-')
+        query=query.where(Hash[k, (values[0]..values[1])])
+        v.each do |kk, vv|
+          instance_variable_set("@#{k}_#{kk}", vv)
+        end
+      end
+    end
+
+    if params.has_key? "download"
+      send_data(query.to_xlsx(query),
+                :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+                :filename => @model.pluralize+".xlsx")
+      #render :json => query.to_xlsx(query)
+    else
+      instance_variable_set("@#{@model.pluralize}", query.paginate(:page => params[:page]))
+      if params[:n_storage][:position]=='WE87-1'
+        render :by_whouse1
+      else
+        render :by_whouse2
+      end
+    end
+  end
+
+  def by_whouse_we87
+    @n_storages= NStorage.where(ware_house_id: 'WE87').paginate(:page => params[:page])
+  end
+
+  def by_whouse_pa
+    @n_storages= NStorage.where(ware_house_id: 'PA').paginate(:page => params[:page])
+  end
 
   private
 # Use callbacks to share common setup or constraints between actions.

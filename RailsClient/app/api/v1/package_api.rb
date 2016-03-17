@@ -171,11 +171,14 @@ module V1
         unless warehouse = destination.whouses.where(id: params[:whouse_id]).first
           return msg.set_false(PackageMessage::WarehouseNotInLocation)
         end
-        lc.update(destinationable: warehouse)
 
         unless (r = PackageService.dispatch(lc, destination, current_user)).result
           return msg.set_false(r.content)
         end
+
+        lc.update(destinationable: warehouse)
+
+        lc.update(state:MovableState::CHECKED)
 
         return msg.set_true(MovableMessage::Success)
       end

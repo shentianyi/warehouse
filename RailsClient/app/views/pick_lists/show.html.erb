@@ -30,6 +30,7 @@
       <th>要货库位</th>
       <th>是否加急</th>
       <th>备注</th>
+      <th>择货位置</th>
     </tr>
     </thead>
     <tbody>
@@ -58,6 +59,7 @@
             <% end %></td>
           <td><%= '是' if pick_item.is_emergency %></td>
           <td><%= pick_item.remark %></td>
+          <td><%= pick_item.pick_position %></td>
         </tr>
     <% end %>
     </tbody>
