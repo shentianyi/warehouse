@@ -205,6 +205,9 @@ class OrdersController < ApplicationController
     puts params
     puts '-------------------------------------2'
 
+    OrderService.move_stock_by_finish_pick(params[:pick_list_id], current_user)
+
+    render nothing: true
   end
 
 

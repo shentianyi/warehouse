@@ -96,6 +96,7 @@ class OrderService
           #save success
           #CREATE PICK
           pick=PickList.new(state: PickStatus::INIT)
+          #TODO择货员？？？
           pick.user=current_user
 
           args[:order_items].each do |item|
@@ -109,6 +110,7 @@ class OrderService
               item.handled=true
               if item.save
                 pick_item=PickItem.new(
+                    #TODO择货员？？？
                     user_id: current_user.id,
                     destination_whouse_id: item.whouse_id,
                     part_id: item.part_id,
@@ -210,6 +212,30 @@ class OrderService
     # end
   end
 
+  def self.move_stock_by_finish_pick id, user
+    if pick = PickList.find_by_id(id)
+      pick.update_attribute(:is_delete, true)
+      pick.pick_items.each do |pick_item|
+        pick_item.update_attribute(:is_delete, true)
+        pick_item.order_item.update_attribute(:handled, true) if pick_item.order_item
+
+        #move stock
+        WhouseService.new.move({
+                                   employee_id: user.id,
+                                   partNr: pick_item.part_id,
+                                   qty: pick_item.quantity,
+                                   fromWh: order_box.source_whouse_id,
+                                   toWh: order_box.whouse_id,
+                                   toPosition: order_box.position_id,
+                                   remarks: "MOVE FROM PICK: #{pick_item.remark}"
+                               })
+      end
+
+      pick.orders.each do |order|
+        order.update_attribute(:handled, true)
+      end
+    end
+  end
 
   private
   def self.validable_car_and_box params
