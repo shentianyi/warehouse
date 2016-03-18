@@ -1,0 +1,128 @@
+<ul id="main-menu" class="nav nav-pills">
+  <Li id="welcome_li"><a href="/">首 页</a></li>
+  <!--<li id="welcome_li"><a href="<%= panel_orders_path %>">需求面板</a></li>-->
+  <li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">面板<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="manage">
+      <li id='panel_li'><a href="<%= panel_orders_path %>">需求</a></li>
+      <li id='pick_panel_li'><a href="<%= pick_panel_orders_path %>">择货</a></li>
+    </ul>
+  </li>
+  <li id="notification"><a href="<%= notifications_path %>">通知面板</a></li>
+
+  <li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">择货流程<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="manage">
+      <li id='pick_li'><a href="<%= pick_lists_path %>">择货单</a></li>
+      <li id='pick_item_li'><a href="<%= pick_items_path %>">择货单项目</a></li>
+    </ul>
+  </li>
+
+  <li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">要货流程<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="manage">
+      <li id='order_li'><a href="<%= orders_path %>">需求单</a></li>
+      <li id='order_item_li'><a href="<%= order_items_path %>">需求单项目</a></li>
+    </ul>
+  </li>
+
+  <li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">发运流程<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="send">
+      <li id='delivery_li'><a href="<%= deliveries_path %>">运 单</a></li>
+      <li id='forklift_li'><a href="<%= forklifts_path %>">托 盘</a></li>
+      <li id='package_li'><a href="<%= packages_path %>">包装箱</a></li>
+    </ul>
+  </li>
+
+  <li class="dropdown">
+    <a class="dropdown-toggle " data-toggle="dropdown" href="#">库存管理<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="manage">
+      <li><a href="<%= n_storages_path %>">详细库存查询</a></li>
+      <li><a href="<%= group_n_storages_path %>">库存汇总查询</a></li>
+      <li><a href="<%= import_n_storages_path %>">库存文件导入</a></li>
+      <li><a href="<%= move_n_storages_path %>">文件移库</a></li>
+      <li><a href="<%= movements_path %>">库存移动记录查询</a></li>
+      <!--<li><a href="<%= panel_storages_path(part_type_id:(PartType.first.id if PartType.first))%>">库存</a></li>-->
+    </ul>
+  </li>
+  <li class="dropdown">
+    <a class="dropdown-toggle " data-toggle="dropdown" href="#">材料盘点<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="manage">
+      <li><a href="<%= inventory_lists_path %>">盘点清单</a></li>
+    </ul>
+  </li>
+
+  <li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">报表<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="reporter">
+      <li id="reports_reports"><a href="<%= reports_reports_path %>">收发货报表</a></li>
+      <li id="reports_reports"><a href="<%= reports_discrepancy_path %>">收发货差异报表</a></li>
+      <li id="reports_order_report"><a href="<%= reports_orders_report_path %>">要货报表</a></li>
+    </ul>
+  </li>
+
+  <li class="dropdown">
+    <a class="dropdown-toggle " data-toggle="dropdown" href="#">报废生成<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="manage">
+      <li><a href="<%= scrap_lists_path %>">报废单</a></li>
+      <li><a href="<%= scrap_list_items_path %>">报废项</a></li>
+    </ul>
+  </li>
+
+  <li class="dropdown">
+    <a class="dropdown-toggle " data-toggle="dropdown" href="#">管理<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="manage">
+      <li id='location_li'><a href="<%= locations_path %>">地 点</a></li>
+      <li id='user_li'><a href="<%= users_path %>">员 工</a></li>
+      <li id='whouse_li'><a href="<%= whouses_path %>">仓 库</a></li>
+      <li id='position_li'><a href="<%= positions_path %>">库 位</a></li>
+      <li class="divider"></li>
+      <li id='part_type_li'><a href="<%= part_types_path %>">零件类型</a></li>
+      <li id='part_li'><a href="<%= parts_path %>">零件</a></li>
+      <li class="divider"></li>
+      <li id='pick_item_filter_li'><a href="<%= pick_item_filters_path %>">员工择货规则</a></li>
+      <li class="divider"></li>
+      <li id='modem_li'><a href="<%= modems_path %>">协调器</a></li>
+      <li id='led_li'><a href="<%= leds_path %>">LED</a></li>
+      <li class="divider"></li>
+      <li id='order_car_li'><a href="<%= order_cars_path %>">料车信息</a></li>
+      <li id='order_box_li'><a href="<%= order_boxes_path %>">料盒信息</a></li>
+      <li id='order_box_type_li'><a href="<%= order_box_types_path %>">料盒类型信息</a></li>
+      <li class="divider"></li>
+      <li id='part_position_li'><a href="<%= part_positions_path %>">零件位置信息</a></li>
+      <li id='unit_li'><a href="<%= units_path %>">零件单位信息</a></li>
+      <li id='color_li'><a href="<%= colors_path %>">零件颜色信息</a></li>
+    </ul>
+  </li>
+
+  <li class="dropdown">
+    <a class="dropdown-toggle " data-toggle="dropdown" href="#">应急处理<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="manage">
+      <li><a href="<%= generate_deliveries_path %>">导入发运数据</a></li>
+      <li><a href="<%= receive_deliveries_path %>">导入接收数据</a></li>
+    </ul>
+  </li>
+
+  <li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">配置<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="setting">
+      <li id='regex_li'><a href="<%= regex_categories_path %>">正则规范配置</a></li>
+      <li id='label_li'><a href="<%= labels_path %>">标签配置</a></li>
+      <li id='sync_li'><a href="<%= syncs_path %>">同步配置</a></li>
+      <li class="divider"></li>
+      <li id='sys_config_li'><a href="<%= sys_configs_path %>">系统配置</a></li>
+      <!--<li id="led_state_li"><a href="<%= led_states_path %>">LED配置</a></li>-->
+    </ul>
+  </li>
+
+  <li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">PTL任务<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="manage">
+      <li><a href="<%= ptl_jobs_path %>">任务列表</a></li>
+    </ul>
+  </li>
+
+
+  <li><a href="<%= destroy_user_session_path %>">｜注 销｜</a></li>
+</ul>
