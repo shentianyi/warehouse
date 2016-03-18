@@ -200,6 +200,14 @@ class OrdersController < ApplicationController
       query
     }
   end
+
+  def finish_pick
+    puts params
+    puts '-------------------------------------2'
+
+  end
+
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_order

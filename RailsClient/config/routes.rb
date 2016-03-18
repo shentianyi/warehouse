@@ -181,6 +181,7 @@ Rails.application.routes.draw do
       get :picklists
       get :exports
       post :handle
+      post :finish_pick
     end
     member do
       get :order_items

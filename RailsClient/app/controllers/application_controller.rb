@@ -33,6 +33,9 @@ class ApplicationController < ActionController::Base
   protected
 
   def layout_by_resource
+    puts '-------------------------------------------'
+    puts request.env['HTTP_USER_AGENT']
+    puts '-------------------------------------------'
     if devise_controller?
       "no_authorization"
     else
