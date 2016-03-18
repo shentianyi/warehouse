@@ -19,9 +19,9 @@ class OrderService
     start_time = days.days.ago.at_beginning_of_day.utc
     end_time = Time.now.at_end_of_day.utc
     if user_id.nil?
-      find({created_at:(start_time..end_time),handled: handled, source_location_id: location_ids})
+      find({created_at: (start_time..end_time), handled: handled, source_location_id: location_ids})
     else
-      find({created_at: (start_time..end_time),user_id: user_id, handled: handled, source_id: location_ids})
+      find({created_at: (start_time..end_time), user_id: user_id, handled: handled, source_id: location_ids})
     end
   end
 
@@ -32,7 +32,7 @@ class OrderService
   # @order_ids
   # @filters
   #-------------
-  def self.orders_by_filters user_id,orders,filters = nil
+  def self.orders_by_filters user_id, orders, filters = nil
     user = User.find_by_id user_id
     if user.nil?
       return []
@@ -45,7 +45,7 @@ class OrderService
     ids = order_items.collect { |oi|
       oi.order_id
     }.uniq
-    find({id:ids},{id:orders})
+    find({id: ids}, {id: orders})
   end
 
   #=============
@@ -77,7 +77,7 @@ class OrderService
   # find
   # @params{}
   #=============
-  def self.find condition,not_condition = {}
+  def self.find condition, not_condition = {}
     Order.where(condition).where.not(not_condition).all
   end
 
@@ -98,6 +98,7 @@ class OrderService
           pick=PickList.new(state: PickStatus::INIT)
           #TODO择货员？？？
           pick.user=current_user
+          pick.remark="AUTO CREATE BY ORDER"
 
           args[:order_items].each do |item|
             part = OrderItemService.verify_part_id(item[:part_id], current_user)
@@ -115,7 +116,8 @@ class OrderService
                     destination_whouse_id: item.whouse_id,
                     part_id: item.part_id,
                     quantity: item.quantity,
-                    state: PickStatus::INIT
+                    state: PickStatus::INIT,
+                    remark: "AUTO CREATE BY ORDER"
                 )
                 if position=Position.where(whouse_id: item.whouse_id, id: PartPosition.where(part_id: item.part_id).pluck(:position_id)).first
                   pick_item.position=position
@@ -144,13 +146,13 @@ class OrderService
   #=============
   def self.exits? id
     #search({id: id}).first
-    find({id:id}).first
+    find({id: id}).first
   end
 
   def self.no_parts_to_string items
     remark = ""
     puts items
-    items.each {|item|
+    items.each { |item|
       puts item
       remark += "零件:"+item[:part_id]+",数量:"+item[:quantity].to_s+",箱数:"+item[:box_quantity].to_s+",部门:"+item[:department]+",是否加急:"+item[:is_emergency].to_s+"\n"
     } if items
@@ -168,8 +170,8 @@ class OrderService
     condition[:created_at] = Time.parse(1.day.ago.strftime("%Y-%m-%d 7:00:00")).utc..Time.now.utc
     condition["orders.source_id"] = user.location_id
     OrderItem.joins(:order).where(condition)
-    .select("COUNT(order_items.part_id) as count,order_items.whouse_id as wid")
-    .group("order_items.whouse_id").all
+        .select("COUNT(order_items.part_id) as count,order_items.whouse_id as wid")
+        .group("order_items.whouse_id").all
   end
 
   # require
@@ -198,7 +200,7 @@ class OrderService
           {
               meta: {
                   code: 200,
-                  message:'Signed Success'
+                  message: 'Signed Success'
               },
               data: OrderPresenter.new(order).as_basic_info
           }
@@ -213,26 +215,35 @@ class OrderService
   end
 
   def self.move_stock_by_finish_pick id, user
-    if pick = PickList.find_by_id(id)
-      pick.update_attribute(:is_delete, true)
-      pick.pick_items.each do |pick_item|
-        pick_item.update_attribute(:is_delete, true)
-        pick_item.order_item.update_attribute(:handled, true) if pick_item.order_item
+    PickList.transaction do
+      if pick = PickList.find_by_id(id)
+        pick.update_attribute(:is_delete, true)
+        pick.pick_items.each do |pick_item|
+          pick_item.update_attribute(:is_delete, true)
+          pick_item.order_item.update_attribute(:handled, true) if pick_item.order_item
 
-        #move stock
-        WhouseService.new.move({
-                                   employee_id: user.id,
-                                   partNr: pick_item.part_id,
-                                   qty: pick_item.quantity,
-                                   # fromWh: order_box.source_whouse_id,
-                                   # toWh: order_box.whouse_id,
-                                   # toPosition: order_box.position_id,
-                                   remarks: "MOVE FROM PICK: #{pick_item.remark}"
-                               })
-      end
+          #move stock
+          if from_wh=Whouse.find_by_id('PA')
+            WhouseService.new.move({
+                                       employee_id: user.id,
+                                       partNr: pick_item.part_id,
+                                       qty: pick_item.quantity,
+                                       fromWh: from_wh.id,
+                                       toWh: pick_item.destination_whouse_id,
+                                       toPosition: pick_item.position_id,
+                                       remarks: "MOVE FROM PICK: #{pick_item.remark}"
+                                   })
+          else
+            raise "WAREHOUSE PA Not Found"
+          end
 
-      pick.orders.each do |order|
-        order.update_attribute(:handled, true)
+        end
+
+        pick.orders.each do |order|
+          order.update_attribute(:handled, true)
+        end
+      else
+        raise "Pick List #{id} Not Found"
       end
     end
   end
