@@ -224,9 +224,9 @@ class OrderService
                                    employee_id: user.id,
                                    partNr: pick_item.part_id,
                                    qty: pick_item.quantity,
-                                   fromWh: order_box.source_whouse_id,
-                                   toWh: order_box.whouse_id,
-                                   toPosition: order_box.position_id,
+                                   # fromWh: order_box.source_whouse_id,
+                                   # toWh: order_box.whouse_id,
+                                   # toPosition: order_box.position_id,
                                    remarks: "MOVE FROM PICK: #{pick_item.remark}"
                                })
       end
