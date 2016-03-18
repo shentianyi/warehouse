@@ -64,6 +64,9 @@ gem 'whenever'
 gem 'rest-client'
 gem 'oauth'
 
+# # #backup
+# gem 'backup', '~> 4.2', '>= 4.2.3'
+
 gem 'will_paginate', '~> 3.0.6'
 
 # for cache

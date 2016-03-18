@@ -29,5 +29,5 @@ set :output, {:error => 'log/cron_error_log.log', :standard => 'log/cron_log.log
 #end
 
 every 1.day,:at=>['9:47'] do
-  command "backup perform -t jiaxuan_backup -c /home/lzd/p/warehouse/RailsClient/config/backup/jiaxuan_config.rb"
+  command "backup perform -t jiaxuan_backup"
 end
