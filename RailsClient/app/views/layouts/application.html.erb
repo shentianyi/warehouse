@@ -18,17 +18,6 @@
 <input type="hidden" value="<%= @model %>_li" id='active_li'/>
 <input type="hidden" value="<%= @print_server %>" id='print-server-hidden'/>
 
-<script type="text/javascript">
-    $(function () {
-        $("#main-menu li").removeClass('active');
-        $('#' + $('#active_li').val()).addClass('active');
-        jQuery(".best_in_place").best_in_place();
-        $('.best_in_place').bind("ajax:success", function () {
-            $(this).closest('tr').effect('highlight');
-        });
-    });
-</script>
-
 <%= yield :javascript_includes %>
 
 <%= render :partial => "shared/handling_msg_box", :locals => {:handlemsg => "处理中..."} %>

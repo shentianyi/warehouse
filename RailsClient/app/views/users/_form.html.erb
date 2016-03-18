@@ -33,11 +33,11 @@
 
               <div class="panel-body">
                 <div class="col-md-12" style="display: flex;">
-                  <%= f.label :id, '员工号' %>
+                  <%= f.label :nr, '员工号' %>
                   <% if current_user.admin? || current_user.manager? %>
-                      <%= f.text_field :id, :class => 'form-control', :style => 'width:60%;margin:-10px 0 20px 30px;' %>
+                      <%= f.text_field :nr, :class => 'form-control', :style => 'width:60%;margin:-10px 0 20px 30px;' %>
                   <% else %>
-                      <input type="text" name="id" style="margin:-10px 0 20px 30px;" class="form-control" readonly="" value="<%= current_user.id %>">
+                      <input type="text" name="nr" style="margin:-10px 0 20px 30px;" class="form-control" readonly="" value="<%= current_user.nr %>">
                   <% end %>
                 </div>
 
