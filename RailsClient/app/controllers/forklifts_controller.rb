@@ -5,7 +5,7 @@ class ForkliftsController < ApplicationController
   # GET /forklifts
   # GET /forklifts.json
   def index
-    @forklifts = ForkliftService.search(nil).order(created_at: :desc).paginate(:page=>params[:page])#all
+    @forklifts = ForkliftService.search(nil,true,current_user.location).order(created_at: :desc).paginate(:page=>params[:page])#all
     #@forklifts = @forklifts.paginate(:page=>params[:page])
   end
 

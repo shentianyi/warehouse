@@ -59,12 +59,14 @@ class LogisticsContainersController < ApplicationController
     puts hash_conditions
 
 
-    if params[:containers][:part_id].present?
+    if params[:containers].present? && params[:containers][:part_id].present?
       hash_conditions[:containers]={part_id: Part.where("nr like ?",  "%#{params[:containers][:part_id]}%").pluck(:id)}
       instance_variable_set("@container_part_id", params[:containers][:part_id])
     end
     # query.first
     query=query.where(hash_conditions)
+
+    query=query.where('des_location_id=? or source_location_id=?', current_user.location.id, current_user.location.id)
     instance_variable_set("@#{model.pluralize}", query.paginate(:page => params[:page]).all.order(created_at: :desc))
 
     # puts "---------------------"

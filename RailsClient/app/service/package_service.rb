@@ -21,12 +21,31 @@ class PackageService
   #=============
   #search packages
   #=============
-  def self.search condition
-    if condition && condition['records.impl_time']
-      LogisticsContainer.joins(:package).joins(:records).where(condition)
-    else
-      LogisticsContainer.joins(:package).where(condition)
-    end.distinct
+  # def self.search condition
+  #   if condition && condition['records.impl_time']
+  #     LogisticsContainer.joins(:package).joins(:records).where(condition)
+  #   else
+  #     LogisticsContainer.joins(:package).where(condition)
+  #   end.distinct
+  # end
+
+  def self.search(condition, controlled=false, location=nil)
+    # if condition && condition['records.impl_time']
+    #   LogisticsContainer.joins(:forklift).joins(:records).where(condition)
+    # else
+    #   LogisticsContainer.joins(:forklift).where(condition)
+    # end.distinct
+
+    q= if condition && condition['records.impl_time']
+         LogisticsContainer.joins(:package).joins(:records).where(condition)
+       else
+         LogisticsContainer.joins(:package).where(condition)
+       end
+
+    if controlled && location
+      q=q.where('des_location_id=? or source_location_id=?', location.id, location.id)
+    end
+    q.distinct
   end
 
   #=============

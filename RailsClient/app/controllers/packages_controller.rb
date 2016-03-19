@@ -5,7 +5,7 @@ class PackagesController < ApplicationController
   # GET /packages
   # GET /packages.json
   def index
-    @packages = PackageService.search(nil).order(created_at: :desc).paginate(:page => params[:page]) #all
+    @packages = PackageService.search(nil,true,current_user.location).order(created_at: :desc).paginate(:page => params[:page]) #all
     #@packages = @packages.paginate(:page=>params[:page])
   end
 
