@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160315021258) do
+ActiveRecord::Schema.define(version: 20160319090849) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -701,7 +701,7 @@ ActiveRecord::Schema.define(version: 20160315021258) do
     t.string   "prefix_string"
     t.integer  "type"
     t.integer  "suffix_length",     default: 0
-    t.integer  "suffix_string"
+    t.string   "suffix_string"
     t.string   "regex_string",      default: ""
     t.string   "regexable_id"
     t.string   "regexable_type"
