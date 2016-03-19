@@ -31,7 +31,8 @@ ActiveRecord::Base.transaction do
     shllo = Location.create(nr: 'SHLLO', name: ' 上海莱尼', is_base: true,
                             tenant_id: shl.id,
                             address: '上海莱尼电器有限公司的地址',
-                            receive_mode: DeliveryReceiveMode::FORKLIFT)
+                            receive_mode: DeliveryReceiveMode::FORKLIFT,
+                            order_source_location_id:jxlo.id)
   end
 
   unless (czllo=Location.find_by_nr('CZLLO'))

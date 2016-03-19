@@ -11,18 +11,20 @@ module V1
       end
 
       post :verify do
+        p params
         unless part = OrderItemService.verify_part_id(params[:part_id], current_user)
           return {result: 0, error_code: ErrorCode.part.not_exist, content: OrderItemMessage::PartIDError}
         end
 
-        unless part_position = OrderItemService.verify_department(params[:department], params[:part_id])
-          return {result: 0, error_code: ErrorCode.default, content: OrderItemMessage::DepartmentError}
+        unless location = OrderItemService.verify_location(current_user)
+          return {result: 0, error_code: ErrorCode.default, content: OrderItemMessage::OrderLocationError}
         end
+
         unless quantity = OrderItemService.verify_quantity(params[:quantity])
           return {result: 0, error_code: ErrorCode.default, content: OrderItemMessage::QuantityError}
         end
 
-        unless item = OrderItemService.new(part_position, part, quantity, false, 0, current_user)
+        unless item = OrderItemService.new( location,part, quantity, false, 0, current_user)
           return {result: 0, error_code: ErrorCode.default, content: OrderItemMessage::VerifyFailed}
         end
 

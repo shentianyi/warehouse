@@ -7,4 +7,6 @@ module OrderItemMessage
   NotFound = '未找到'
   DeleteSuccess = '删除成功'
   UpdateFailed = '修改失败'
+
+  OrderLocationError = '未设置要货地点'
 end
