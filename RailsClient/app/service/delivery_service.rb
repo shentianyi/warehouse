@@ -280,4 +280,9 @@ class DeliveryService
     end
     return msg
   end
+
+
+  def self.enter_stock user,lc,warehouse,position ,fifo
+    raise '禁止以运单入库'
+  end
 end

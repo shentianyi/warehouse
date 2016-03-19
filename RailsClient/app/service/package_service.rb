@@ -117,7 +117,38 @@ class PackageService
     query.select('containers.*,location_containers.*')
   end
 
-  def self.check_validate_for_send(id,user)
+  def self.check_validate_for_send(id, user)
     # CHECK_PACKAGE_IN_STOCK_FOR_DELIVERY
+  end
+
+  def self.enter_stock user, lc, warehouse, position, fifo
+    if package=lc.package
+      if storage=NStorage.find_by_packageId(package.id)
+        WhouseService.new.move({
+                                   partNr: package.part_id,
+                                   qty: package.quantity,
+                                   packageId: package.id,
+                                   fromWh: storage.ware_house_id,
+                                   toWh: warehouse.id,
+                                   toPosition: position.id,
+                                   fifo: fifo,
+                                   user:user
+                               })
+      else
+        WhouseService.new.enter_stock({
+                                          partNr: package.part_id,
+                                          qty: package.quantity,
+                                          fifo: fifo,
+                                          packageId: package.id,
+                                          toWh: warehouse.id,
+                                          toPosition: position.id,
+                                          user:user
+                                      })
+      end
+      return true
+    else
+      raise "唯一码:#{params[:container_id]}不存在"
+    end
+    false
   end
 end

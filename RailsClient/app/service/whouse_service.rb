@@ -143,7 +143,12 @@ class WhouseService
       if params[:qty].to_f > storage.qty
         raise "移库量大于剩余量,唯一码#{params[:packageId]}"
       elsif params[:qty].to_f == storage.qty
-        storage.update!(ware_house_id: toWh.id, position_id: params[:toPosition], created_at: Time.now)
+        p={ware_house_id: toWh.id, position_id: params[:toPosition], created_at: Time.now}
+        if params[:fifo].present?
+          p[:fifo]=params[:fifo]
+        end
+        storage.update!(p)
+
         move_data[:qty] = storage.qty
         move_data[:from_id] = params[:fromWh]
         move_data[:partNr] = storage.partNr
