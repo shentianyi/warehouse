@@ -4,10 +4,10 @@ class Regex < ActiveRecord::Base
   belongs_to :regexable, polymorphic: true
   belongs_to :regex_category
 
-  before_save :count_fix_length
-
-  def count_fix_length
-    self.prefix_length=self.prefix_string.length unless self.prefix_string.nil?
-    self.suffix_length=self.suffix_string.length unless self.suffix_string.nil?
-  end
+  # before_save :count_fix_length
+  #
+  # def count_fix_length
+  #   self.prefix_length=self.prefix_string.length unless self.prefix_string.nil?
+  #   self.suffix_length=self.suffix_string.length unless self.suffix_string.nil?
+  # end
 end

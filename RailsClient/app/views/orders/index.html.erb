@@ -51,11 +51,11 @@
       <input type="text" name="order[id]" value="<%= @id %>"/>
       <input type="hidden" name="order[id_fuzzy]"/>
     </div>
-    <div class="col-sm-4">
-      创建员工工号：
-      <input type="text" name="order[user_id]" value="<%= @user_id %>"/>
-      <input type="hidden" name="order[user_id_fuzzy]"/>
-    </div>
+    <!--<div class="col-sm-4">-->
+      <!--创建员工工号：-->
+      <!--<input type="text" name="order[user_id]" value="<%= @user_id %>"/>-->
+      <!--<input type="hidden" name="order[user_id_fuzzy]"/>-->
+    <!--</div>-->
     <div class="col-sm-4">
       备货地：
       <%= select_tag('order[source_id]', options_from_collection_for_select(Location.all, 'id', 'name', @source_id), include_blank: true) %>
@@ -108,7 +108,7 @@
       <tr>
         <td><%= index+@orders.offset+1 %></td>
         <td><%= order.id %></td>
-        <td><%= order.user_id %></td>
+        <td><%= order.user.nr %></td>
         <td><%= order.source_location.name %></td>
         <td><%= order.source.name if order.source %></td>
         <td>

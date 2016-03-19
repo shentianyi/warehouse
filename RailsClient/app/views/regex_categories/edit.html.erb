@@ -33,6 +33,7 @@
           <td>规范名称</td>
           <td>规范代码</td>
           <td>正则表达式</td>
+          <th>去除正则式</th>
           <td>备注</td>
         </tr>
         <% @regexes.each_with_index do |regex, i| %>
@@ -42,7 +43,9 @@
               <td><input type="text" class="code" value="<%= regex.code %>" name="regex[<%= i %>][code]" readonly/></td>
              <td>
                 <input type="text" style="width:500px;" class="regex_string" value="<%= regex.regex_string %>" name="regex[<%= i %>][regex_string]"/>
-              </td>
+              </td>  <td>
+              <input type="text" style="width:500px;" class="suffix_string" value="<%= regex.suffix_string %>" name="regex[<%= i %>][suffix_string]"/>
+            </td>
               <td>
                 <input type="text" class="remark" value="<%= regex.remark %>" width="300px" name="regex[<%= i %>][remark]"/>
               </td>

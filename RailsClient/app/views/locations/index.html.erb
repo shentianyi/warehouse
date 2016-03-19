@@ -71,7 +71,8 @@
     <th>序号</th>
     <th>编号</th>
     <th>名称</th>
-    <th>目的地</th>
+    <th>目的地点</th>
+    <th>要货地点(发货地点)</th>
     <th>接收仓库</th>
     <th>在途仓库</th>
     <th>运单接收模式</th>
@@ -97,6 +98,9 @@
                 </li>
             <% end %>
           </ul>
+        </td>
+        <td>
+          <%= location.order_source_location.name if location.order_source_location %>
         </td>
         <td>
           <%= location.receive_whouse.name if location.receive_whouse %>

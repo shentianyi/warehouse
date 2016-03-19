@@ -25,7 +25,7 @@
         <div class="col-sm-12">
           <div class="col-sm-4">
             <%= f.label :user_id, '员工号' %>
-            <%= f.text_field :user_id %>
+            <%= f.select(:user_id,current_user.location.users.all.collect { |l| [l.name, l.id] }, {include_blank: false}) %>
           </div>
           <div class="col-sm-4">
             <%= f.label :filterable_type, '筛选类型' %>
@@ -33,7 +33,7 @@
           </div>
           <div class="col-sm-4">
             <%= f.label :filterable_id, '值' %>
-            <%= f.text_field :filterable_id %>
+            <%= f.select(:filterable_id, current_user.location.tenant.locations.all.collect { |l| [l.name, l.id] }, {include_blank: false})%>
           </div>
         </div>
 

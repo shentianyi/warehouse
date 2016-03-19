@@ -2,7 +2,7 @@
 <div class="header">
   <p id="pick-list" pick_id = "<%= @pick_list.id %>">择货单号：<%= @pick_list.id %></p>
 
-  <p>择货员工号：<%= @pick_list.user_id %></p>
+  <p>择货员工号：<%= @pick_list.user.nr %></p>
 
   <p>生成时间：<%= @pick_list.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></p>
 
@@ -25,10 +25,9 @@
       <th>NO.</th>
       <th>零件号</th>
       <th>数量</th>
-      <th>箱数</th>
+      <th>包装量</th>
       <th>要货员工号</th>
-      <th>要货项目</th>
-      <th>要货库位</th>
+      <th>要货地点</th>
       <th>是否加急</th>
       <th>备注</th>
     </tr>
@@ -49,14 +48,11 @@
             </div>
           </td>
           <td><%= index+1 %></td>
-          <td><%= pick_item.part_id %></td>
+          <td><%= pick_item.part.nr %></td>
           <td><%= pick_item.quantity %></td>
           <td><%= pick_item.box_quantity %></td>
-          <td><%= pick_item.user_id %></td>
-          <td><%= pick_item.destination_whouse.name %></td>
-          <td>
-            <% if pp = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id) %><%= pp.position.detail %>
-            <% end %></td>
+          <td><%= pick_item.order_user.nr %></td>
+          <td><%= pick_item.source_location.name if pick_item.source_location %></td>
           <td><%= '是' if pick_item.is_emergency %></td>
           <td><%= pick_item.remark %></td>
         </tr>
