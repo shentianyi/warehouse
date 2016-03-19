@@ -3,6 +3,10 @@ class PartService
     !Part.find_by_nr(id).nil?
   end
 
+  def self.validate_user_part nr,user
+    Part.find_by_for_user(user,nr)
+  end
+
   #=============
   #verify package
   #check if parts in this warehouse

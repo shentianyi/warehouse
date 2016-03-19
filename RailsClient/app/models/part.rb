@@ -22,7 +22,7 @@ class Part < ActiveRecord::Base
   end
 
   def self.nr_by_regex(nr)
-    nr.sub(/^P/,'')
+    nr.sub(/^P/, '')
   end
 
   def default_position wh
@@ -31,6 +31,28 @@ class Part < ActiveRecord::Base
       default_position = position.detail
     else
       " "
+    end
+  end
+
+  def nr_for_user(user)
+    tenant= user.location.tenant
+    if tenant.type==LocationType::CLIENT
+      if cpart=tenant.parts.find_by_part_id(self.id)
+        cpart.client_part_nr
+      end
+    else
+      self.nr
+    end
+  end
+
+  def self.find_by_for_user(user, nr)
+    tenant= user.location.tenant
+    if tenant.type==LocationType::CLIENT
+      if cpart=tenant.parts.find_by_client_part_nr(nr)
+        cpart.part
+      end
+    else
+      self.find_by_nr(nr)
     end
   end
 end

@@ -101,7 +101,7 @@ class OrderService
         if order.save
           #save success
           args[:order_items].each do |item|
-            part = OrderItemService.verify_part_id(item[:part_id], current_user)
+            part = OrderItemService.verify_user_part(item[:part_id], current_user)
             location = OrderItemService.verify_location(current_user)
             quantity = item[:quantity]
             box_quantity = item[:box_quantity]

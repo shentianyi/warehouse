@@ -1,5 +1,5 @@
 class OrderItemPresenter<Presenter
-  Delegators=[:id,:order_id,:location_id,:whouse_id,:user_id,:part,:part_id,:part_type_id,:quantity,:is_emergency,:box_quantity,:is_finished,:out_of_stock,:handled]
+  Delegators=[:id,:order_id,:order,:location_id,:whouse_id,:user_id,:user,:part,:part_id,:part_type_id,:quantity,:is_emergency,:box_quantity,:is_finished,:out_of_stock,:handled]
   def_delegators :@order_item,*Delegators
 
   def initialize(order_item)
@@ -16,19 +16,21 @@ class OrderItemPresenter<Presenter
   end
 
   def whouse
-    if self.whouse_id
-      Whouse.find_by_id(self.whouse_id).name
-    else
-      ''
-    end
+    # if self.whouse_id
+    #   Whouse.find_by_id(self.whouse_id).name
+    # else
+    #   ''
+    # end
   end
 
+  # 要货地点
+  def order_location
+    self.user.location
+  end
+
+  # 发货地点
   def source
-    # if self.part_id && self.whouse_id
-    #   OrderItemService.verify_department(self.whouse_id,self.part_id).sourceable
-    # else
-    #   nil
-    # end
+       OrderItemService.verify_location(self.user)
   end
 
   def creator
@@ -55,20 +57,22 @@ class OrderItemPresenter<Presenter
     # end
   end
 
+
+
   def uniq_id
     self.location_id + self.part_id + self.is_emergency.to_s
   end
 
-  def to_json
+  def to_json(user)
     {
         id:self.id,
         order_id: self.order_id,
         location_id: self.location,
-        whouse_id: self.whouse,
+        whouse_id: self.order_location ? self.order_location.name : '',
         source_id: self.source ? self.source.id : '',
         source: self.source ? self.source.name : '',
         user_id: self.creator,
-        part_id:   self.part.nr,
+        part_id:  self.part.nr_for_user(user) ,
         part_type_id: self.part_type,
         is_emergency: self.is_emergency ? 1:0,
         quantity: self.quantity.to_s,

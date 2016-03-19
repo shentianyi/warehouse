@@ -7,10 +7,10 @@ class OrderPresenter<Presenter
     self.delegators = Delegators
   end
 
-  def items
+  def items(user=nil)
     items = []
     self.order_items.each{|item|
-      items << OrderItemPresenter.new(item).to_json
+      items << OrderItemPresenter.new(item).to_json(user)
     }
     items
   end
@@ -34,7 +34,7 @@ class OrderPresenter<Presenter
     }
   end
 
-  def to_json_with_order_items
+  def to_json_with_order_items(user=nil)
     {
         id: self.id,
         user_id: self.user_id,
@@ -42,7 +42,7 @@ class OrderPresenter<Presenter
         handled: self.handled ? 1 : 0,
         remark: self.remark,
         has_out_of_stock: self.has_out_of_stock ? 1:0,
-        order_items: items
+        order_items: items(user)
     }
   end
 end

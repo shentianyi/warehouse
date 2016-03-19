@@ -12,7 +12,7 @@ module V1
 
       post :verify do
         p params
-        unless part = OrderItemService.verify_part_id(params[:part_id], current_user)
+        unless part = OrderItemService.verify_user_part(params[:part_id], current_user)
           return {result: 0, error_code: ErrorCode.part.not_exist, content: OrderItemMessage::PartIDError}
         end
 
@@ -28,7 +28,7 @@ module V1
           return {result: 0, error_code: ErrorCode.default, content: OrderItemMessage::VerifyFailed}
         end
 
-        return {result: 1, content: OrderItemPresenter.new(item).to_json}
+        return {result: 1, content: OrderItemPresenter.new(item).to_json(current_user)}
       end
 
       delete do

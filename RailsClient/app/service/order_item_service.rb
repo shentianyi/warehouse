@@ -53,6 +53,10 @@ class OrderItemService
     end
   end
 
+  def self.verify_user_part part_nr,current_user
+    PartService.validate_user_part(part_nr,current_user)
+  end
+
   #=============
   #verify quantity,
   #need to know
