@@ -121,13 +121,13 @@ class PackageService
     # CHECK_PACKAGE_IN_STOCK_FOR_DELIVERY
   end
 
-  def self.enter_stock user, lc, warehouse, position, fifo
+  def self.enter_stock user, lc, warehouse, position, fifo,raise_error=true
     if package=lc.package
       if storage=NStorage.find_by_packageId(package.id)
         if position==storage.position
           raise '唯一码已入库，不可重复'
         else
-          if storage.whouse.location==user.localtion
+          if storage.whouse.location==user.location
             WhouseService.new.move({
                                        partNr: package.part_id,
                                        qty: package.quantity,
@@ -139,7 +139,7 @@ class PackageService
                                        user: user
                                    })
           else
-            raise '唯一码不在这个地点，不可入库'
+            raise '唯一码未被接受，不可入库' if raise_error
           end
         end
       else
