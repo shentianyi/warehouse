@@ -97,7 +97,7 @@ module V3
           # raise ''
           puts "===================#{params.to_json}"
           NStorage.transaction do
-            builder = current_user.blank? ? 'PMS API CALL' : current_user.id
+            builder = current_user.blank? ? 'PMS API CALL' : current_user.nr
             move_list = MovementList.create(builder: builder, name: "#{builder}_#{DateTime.now.strftime("%Y.%m.%d.%H")}")
             JSON.parse(params[:moves]).each do |p|
               p.deep_symbolize_keys!

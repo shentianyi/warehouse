@@ -42,7 +42,7 @@ class WhouseService
     puts '----------------------ss'
     fifo = validate_fifo_time(params[:fifo])
     # validate whId existing
-    wh = Whouse.find_by(id: params[:toWh])
+    wh = Whouse.find_by(nr: params[:toWh])
     raise '仓库未找到' unless wh
     # validate uniqueId
     raise 'uniqueId 已存在!' if params[:uniqueId].present? and NStorage.find_by(params[:uniqueId])
@@ -83,7 +83,7 @@ class WhouseService
     puts '----------------------------------------------------------------------'
     type = MoveType.find_by!(typeId: 'MOVE')
 
-    toWh = Whouse.find_by(id: params[:toWh])
+    toWh = Whouse.find_by(nr: params[:toWh])
     raise "目的仓库#{toWh}未找到" unless toWh
     # validate_position(toWh, params[:toPosition])
     move_data = {to_id: toWh.id, toPosition: params[:toPosition], type_id: type.id}
@@ -189,7 +189,7 @@ class WhouseService
 
       # Move(partNr, qty, fromWh,fromPosition,toWh,toPosition,type)
       # Move(partNr, qty, fifo,fromWh,fromPosition,toWh,toPosition,type)
-      fromWh = Whouse.find_by(id: params[:fromWh])
+      fromWh = Whouse.find_by(nr: params[:fromWh])
       raise "源仓库:#{fromWh}未找到" unless fromWh
 
       #raise "移库数量必须大于零" if  params[:qty].to_f < 0
@@ -289,7 +289,7 @@ class WhouseService
       default_position = ""
       if params[:fromPosition].blank?
         if storages.blank?
-          default_position = Part.find_by_id(params[:partNr]).default_position(fromWh.id)
+          default_position = Part.find_by_nr(params[:partNr]).default_position(fromWh.id)
         else
           default_position = storages.last.position
         end

@@ -55,6 +55,7 @@ class MovementListsController < ApplicationController
     wb.add_worksheet(:name => "Basic Sheet") do |sheet|
       sheet.add_row entry_header
       movement_sources.each_with_index { |m, index|
+        employee=User.find_by_id(m.employee_id)
         sheet.add_row [
                           index+1,
                           m.movement_list_id,
@@ -68,7 +69,7 @@ class MovementListsController < ApplicationController
                           m.partNr,
                           m.qty,
                           m.fifo,
-                          m.employee_id,
+                          employee.nr,
                           m.remarks
                       ], :types => [:string]
       }

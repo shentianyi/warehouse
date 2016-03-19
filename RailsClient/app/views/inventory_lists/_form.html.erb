@@ -41,7 +41,7 @@
           </div>
           <div class="col-sm-4">
             <%= f.label :whouse_id %>
-            <%= f.select(:whouse_id, Whouse.all.collect { |w| [w.name, w.id] }, {include_blank: false}) %>
+            <%= f.select(:whouse_id, Whouse.all.collect { |w| [w.nr, w.nr] }, {include_blank: false}) %>
           </div>
         </div>
 

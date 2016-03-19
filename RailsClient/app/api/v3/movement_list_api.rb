@@ -37,11 +37,12 @@ module V3
         optional :remarks, type: String
       end
       post do
-        if params[:user_id] && User.find_by(id: params[:user_id]).blank?
+        user=User.find_by(nr: params[:user_id])
+        if params[:user_id] && user.blank?
           return {result: 0, content: "#{params[:user_id]}用户不存在！"}
         end
 
-        movement_list = MovementList.new(builder: params[:user_id], name: "#{params[:user_id]}_#{DateTime.now.strftime("%H.%d.%m.%Y")}", remarks: params[:remarks])
+        movement_list = MovementList.new(builder: params[:user_id], name: "#{user.nr}_#{DateTime.now.strftime("%H.%d.%m.%Y")}", remarks: params[:remarks])
         if movement_list.save
           {result: 1, content: {id: movement_list.id, created_at: movement_list.created_at, count: 0, state: MovementListState::BEGINNING}}
         else

@@ -2,7 +2,8 @@ class InventoryListItem < ActiveRecord::Base
   #belongs_to :package
   #belongs_to :part
   # belongs_to :position
-  #belongs_to :user
+  belongs_to :user
+  belongs_to :whouse
   belongs_to :inventory_list
 
   validates :qty, :inventory_list_id, presence: true
@@ -47,7 +48,7 @@ class InventoryListItem < ActiveRecord::Base
         end
       end
     end
-    part=Part.find_by_id(params[:part_id])
+    part=Part.find_by_nr(params[:part_id])
     if params[:need_convert]
       params[:qty]=BigDecimal.new(params[:qty].to_s)/BigDecimal.new(part.convert_unit.to_s)
     else

@@ -105,7 +105,7 @@ class PartsController < ApplicationController
   # GET /parts/template_position
   # GET /parts/template_position.json
   def template_position
-    file_name="part_position_csv_upload_template.csv"
+    file_name="上传零件位置模版.csv"
     path=File.join($TEMPLATEPATH, file_name)
     send_file path, :type => 'application/csv', :filename => file_name
   end

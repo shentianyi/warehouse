@@ -228,17 +228,17 @@ module FileHandler
           end
         end
 
-        position = Position.find_by(detail: row['库位号'])
+        position = Position.find_by(nr: row['库位号'])
         unless position
           msg.contents << "库位号:#{row['库位号']} 不存在!"
         end
 
-        src_warehouse = Whouse.find_by_name(row['仓库号'])
+        src_warehouse = Whouse.find_by_nr(row['仓库号'])
         unless src_warehouse
           msg.contents << "仓库号:#{row['仓库号']} 不存在!"
         end
 
-        part_id = Part.find_by_id(row['零件号'])
+        part_id = Part.find_by_nr(row['零件号'])
         unless part_id
           msg.contents << "零件号:#{row['零件号']} 不存在!"
         end
@@ -269,18 +269,18 @@ module FileHandler
           end
         end
 
-        position = Position.find_by(detail: row[:position])
+        position = Position.find_by(nr: row[:position])
         unless position
           msg.contents << "库位号:#{row[:position]} 不存在!"
         end
 
         if row[:whouse_id].present?
-          unless src_warehouse = Whouse.find_by_name(row[:whouse_id])
+          unless src_warehouse = Whouse.find_by_nr(row[:whouse_id])
             msg.contents << "仓库号:#{row[:whouse_id]} 不存在!"
           end
         end
 
-        part_id = Part.find_by_id(row[:part_id])
+        part_id = Part.find_by_nr(row[:part_id])
         unless part_id
           msg.contents << "零件号:#{row[:part_id]} 不存在!"
         end
