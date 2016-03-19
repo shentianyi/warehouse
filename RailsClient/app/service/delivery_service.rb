@@ -80,7 +80,7 @@ class DeliveryService
       LogisticsContainer.joins(:delivery).joins(:records).where(condition)
     else
       LogisticsContainer.joins(:delivery).where(condition)
-    end
+    end.distinct
   end
 
   def self.import_by_file path
