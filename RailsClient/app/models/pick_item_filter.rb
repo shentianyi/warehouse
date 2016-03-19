@@ -7,8 +7,9 @@ class PickItemFilter < ActiveRecord::Base
   validate :validate_save
 
                   @@filter_types={
-                      PartType:{name:'PartType',display:'零件类型'},
-                      Whouse:{name:'Whouse',display:'项 目'}
+                      # PartType:{name:'PartType',display:'零件类型'},
+                      # Whouse:{name:'Whouse',display:'项 目'},
+                      Location:{name:'Location',display:'地点'}
                   }
 
   def self.filter_types
@@ -28,6 +29,8 @@ class PickItemFilter < ActiveRecord::Base
 
           puts '--------------------------------'
           puts errors.to_json
+        elsif self.filterable_type=='Location'
+          # errors.add(:filterable_id,'地点不存在') unless user.location.tenant.locations.where(id:self.filterable_id).count>0
         end
       else
         errors.add(:filterable_id,'筛选值不存在')

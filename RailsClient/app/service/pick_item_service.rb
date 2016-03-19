@@ -1,6 +1,6 @@
 class PickItemService
   def self.get_order_items user_id, order_ids,filters = nil
-    puts "#{order_ids}--------#{user_id}"
+    puts "#{order_ids}--------#{user_id}---#{filters}"
     if user=User.find_by_id(user_id)
       if filters
         pick_item_filters=user.pick_item_filters.where(id:filters)
