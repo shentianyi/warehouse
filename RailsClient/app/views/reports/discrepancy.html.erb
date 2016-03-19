@@ -30,8 +30,8 @@
     </script>
     <% if current_user.can_edit_inventory? %>
         <% if current_user.permission?(:operate_report_upload) %>
-            <div>
-              <span>上传报表：</span>
+            <div style="display: flex;">
+              <span style="margin-top: 5px;">上传报表：</span>
               <input id="item-data-uploader" type="file" name="files[]" data-url="/reports/upload_file">
 
               <div class="abstractblock" id="item-data-uploader-preview" style="<%= "display:none" if @file.nil? %>;">
@@ -46,7 +46,7 @@
     <% end %>
 
     <form method="get" action="<%= reports_discrepancy_path %>">
-      <div class="col-sm-12" style="border-bottom: 1px dashed #000;height: 40px;">
+      <div class="col-sm-12" style="border-bottom: 1px dashed #000;height: 40px; border-top: 1px solid #000;margin-top: 5px;padding-top: 5px;">
         <div class="col-sm-4">
           <span class="label label-info">报表类型:</span>
           <%= select_tag(:type, options_for_select(ReportType.list, @type), include_blank: false, :style => 'min-width:150px;') %>
