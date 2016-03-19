@@ -37,7 +37,7 @@ module V3
         optional :remarks, type: String
       end
       post do
-        user=User.find_by(nr: params[:user_id])
+        user=User.find_by(id: params[:user_id])
         if params[:user_id] && user.blank?
           return {result: 0, content: "#{params[:user_id]}用户不存在！"}
         end
@@ -97,7 +97,8 @@ module V3
           msg = FileHandler::Excel::NStorageHandler.validate_move_row params
           if msg.result
             mmsg = MovementSource.save_record(params)
-            return {result: 0, content: mmsg.content}
+          else
+            return {result: 0, content: msg.content}
           end
         rescue => e
           if params[:uniq].blank?
@@ -141,11 +142,17 @@ module V3
             NStorage.transaction do
               params[:movements].each_with_index do |movement, index|
                 puts movement
-                args[:toWh] = movement[:toWh]
-                args[:toPosition] = movement[:toPosition]
-                args[:fromWh] = movement[:fromWh].present? ? movement[:fromWh] : nil
-                args[:fromPosition] = movement[:fromPosition].present? ? movement[:fromPosition] : nil
-                args[:partNr] = movement[:partNr].present? ? movement[:partNr] : nil
+                part=Part.find_by_nr(movement[:partNr])
+                fromWh=Whouse.find_by_nr(movement[:fromWh])
+                fromPosition=Position.find_by_nr(movement[:fromPosition])
+                toWh=Whouse.find_by_nr(movement[:toWh])
+                toPosition=Position.find_by_nr(movement[:toPosition])
+
+                args[:toWh] = toWh.id
+                args[:toPosition] = toPosition.id
+                args[:fromWh] = fromWh.blank? ? nil : fromWh.id
+                args[:fromPosition] = fromPosition.blank? ? nil : fromPosition.id
+                args[:partNr] = part.blank? ? nil : part.id
                 args[:qty] = movement[:qty].present? ? movement[:qty].to_f : nil
                 args[:packageId] = movement[:packageId].present? ? movement[:packageId] : nil
 

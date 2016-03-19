@@ -38,16 +38,14 @@
       <div class="col-sm-3">
         零件号：
         <input type="text" name="n_storage[partNr]" value="<%= @partNr %>"/>
-        <input type="hidden" name="n_storage[partNr_fuzzy]"/>
       </div>
       <div class="col-sm-3">
         仓库号：
-        <%= select_tag('n_storage[ware_house_id]', options_from_collection_for_select(Whouse.all, :id, :name, @ware_house_id), include_blank: true) %>
+        <%= select_tag('n_storage[ware_house_id]', options_from_collection_for_select(Whouse.all, :nr, :name, @ware_house_id), include_blank: true) %>
       </div>
       <div class="col-sm-3">
         库位号：
-        <input type="text" name="n_storage[position]" value="<%= @position %>"/>
-        <input type="hidden" name="n_storage[position_fuzzy]"/>
+        <input type="text" name="n_storage[position_id]" value="<%= @position_id %>"/>
       </div>
       <div class="col-sm-3">
         唯一码：
@@ -125,7 +123,7 @@
         <td><%= storage.qty %></td>
         <td><%= storage.fifo.localtime if storage.fifo %> </td>
         <td><%= storage.updated_at.localtime if storage.updated_at %> </td>
-        <td><%= storage.whouse.nr if storage.whouse.present? %></td>
+        <td><%= storage.whouse.name if storage.whouse.present? %></td>
         <td><%= storage.position.nr if storage.position.present? %></td>
         <td><%= storage.remarks %></td>
         <!--

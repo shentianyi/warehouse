@@ -17,6 +17,7 @@ class Movement < ActiveRecord::Base
       sheet.add_row ["序号", "零件号", "包装号", "唯一码", "移动量", "类型", "FIFO", "创建时间", "源仓库号", "源库位号", "目的仓库号", "目的库位号", "员工号", "备注"]
       list.each_with_index { |movement, index|
         if movement.id
+          employee=User.find_by_id(movement.employee_id)
           sheet.add_row [
                             index+1,
                             movement.partNr,
@@ -30,7 +31,7 @@ class Movement < ActiveRecord::Base
                             movement.fromPosition,
                             movement.to_id,
                             movement.toPosition,
-                            movement.employee_id,
+                            employee.nr,
                             movement.remarks
                         ]
         end

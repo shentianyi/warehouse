@@ -5,7 +5,7 @@
       <div>
         <span>
           仓库：
-          <%= select_tag('storage[storable_id]', options_from_collection_for_select(Whouse.all, 'id', 'name', @storable_id), include_blank: true) %>
+          <%= select_tag('storage[storable_id]', options_from_collection_for_select(Whouse.all, 'nr', 'name', @storable_id), include_blank: true) %>
         </span>
         <span>零件号：
           <input type="text" name="storage[part_id]" value="<%= @part_id %>"/>

@@ -56,6 +56,10 @@ module ApplicationHelper
       end
     end
 
+    if block_given?
+      query=(yield query)
+    end
+
     if params.has_key? "download"
       send_data(query.to_xlsx(query),
                 :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",

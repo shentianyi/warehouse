@@ -30,6 +30,14 @@ module FileHandler
                   end
                 end
 
+                part=Part.find_by_nr(row[:partNr])
+                toWh=Whouse.find_by_nr(row[:toWh])
+                toPosition=Position.find_by_nr(row[:toPosition])
+
+                row[:partNr]=part.id
+                row[:toWh]=toWh.id
+                row[:toPosition]=toPosition.id
+
                 row[:movement_list_id] = move_list.id
                 MovementSource.create(row)
 
@@ -71,6 +79,18 @@ module FileHandler
                     row[k] = row[k].sub(/\.0/, '')
                   end
                 end
+
+                part=Part.find_by_nr(row[:partNr])
+                fromWh=Whouse.find_by_nr(row[:fromWh])
+                fromPosition=Position.find_by_nr(row[:fromPosition])
+                toWh=Whouse.find_by_nr(row[:toWh])
+                toPosition=Position.find_by_nr(row[:toPosition])
+
+                row[:partNr]=part.id
+                row[:fromWh]=fromWh.id
+                row[:fromPosition]=fromPosition.id
+                row[:toWh]=toWh.id
+                row[:toPosition]=toPosition.id
 
                 row[:movement_list_id] = move_list.id
                 MovementSource.create(row)
@@ -139,14 +159,14 @@ module FileHandler
           end
         end
 
-        src_warehouse = Whouse.find_by_id(row[:toWh])
+        src_warehouse = Whouse.find_by_nr(row[:toWh])
         unless src_warehouse
           msg.contents << "目的仓库号:#{row[:toWh]} 不存在!"
         end
 
         if row[:packageId].present? && row[:partNr].blank?
         else
-          part_id = Part.find_by_id(row[:partNr])
+          part_id = Part.find_by_nr(row[:partNr])
           unless part_id
             msg.contents << "零件号:#{row[:partNr]} 不存在!"
           end
@@ -169,15 +189,15 @@ module FileHandler
         end
 
         if row[:toPosition].present?
-          position = Position.find_by(detail: row[:toPosition])
+          position = Position.find_by(nr: row[:toPosition])
           unless position
             msg.contents << "目的库位号:#{row[:toPosition]} 不存在!"
           end
         end
 
         if row[:employee_id].present?
-          employee_id = User.find(row[:employee_id])
-          unless employee_id
+          employee = User.find_by_nr(row[:employee_id])
+          unless employee
             msg.contents << "员工号:#{row[:employee_id].sub(/\.0/, '')} 不存在!"
           end
         end
@@ -288,16 +308,16 @@ module FileHandler
             msg.contents << "目的库位号:#{row[:toPosition]} 不存在!"
           end
         end
-
-        if to_position && part_id
-          unless positions.include?(row[:toPosition])
-            msg.contents << "零件号:#{row[:partNr]}不在目的库位号:#{row[:toPosition]}上!"
-          end
-        end
+        #
+        # if to_position && part_id
+        #   unless positions.include?(row[:toPosition])
+        #     msg.contents << "零件号:#{row[:partNr]}不在目的库位号:#{row[:toPosition]}上!"
+        #   end
+        # end
 
         if row[:employee_id].present?
-          employee_id = User.find_by_nr(row[:employee_id])
-          unless employee_id
+          employee = User.find_by_nr(row[:employee_id])
+          unless employee
             msg.contents << "员工号:#{row[:employee_id].sub(/\.0/, '')} 不存在!"
           end
         end

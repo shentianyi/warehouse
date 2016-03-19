@@ -51,7 +51,7 @@
     <div class="col-sm-12" style="border-bottom: 1px dashed #999;">
       <div class="col-sm-3">
         源仓库号：
-        <%= select_tag('movement[from_id]', options_from_collection_for_select(Whouse.all, :name, :id, @from_id), include_blank: true) %>
+        <%= select_tag('movement[from_id]', options_from_collection_for_select(Whouse.all, :nr, :name, @from_id), include_blank: true) %>
       </div>
       <div class="col-sm-3">
         源库位号：
@@ -60,7 +60,7 @@
       </div>
       <div class="col-sm-3">
         目的仓库号：
-        <%= select_tag('movement[to_id]', options_from_collection_for_select(Whouse.all, :name, :id, @to_id), include_blank: true) %>
+        <%= select_tag('movement[to_id]', options_from_collection_for_select(Whouse.all, :nr, :name, @to_id), include_blank: true) %>
       </div>
       <div class="col-sm-3">
         目的库位号：
@@ -140,16 +140,38 @@
   <% @movements.each_with_index do |movement, i| %>
       <tr>
         <td><%= i+@movements.offset+1 %></td>
-        <td><%= movement.partNr if movement.partNr %></td>
+        <% if part=Part.find_by_id(movement.partNr) %>
+            <td><%= part.nr %></td>
+        <% else %>
+            <td></td>
+        <% end %>
         <td><%= movement.packageId if movement.packageId %></td>
         <td><%= movement.qty %></td>
         <td><%= MoveType.find(movement.type_id).typeId if movement.type_id %> </td>
         <td><%= movement.fifo.localtime if movement.fifo %> </td>
         <td><%= movement.created_at.localtime if movement.created_at %></td>
-        <td><%= movement.from_id if movement.from_id %></td>
-        <td><%= movement.fromPosition if movement.fromPosition %></td>
-        <td><%= movement.to_id if movement.to_id %></td>
-        <td><%= movement.toPosition if movement.toPosition %></td>
+
+        <% if fromWh=Whouse.find_by_id(movement.from_id) %>
+            <td><%=  fromWh.nr %></td>
+        <% else %>
+            <td></td>
+        <% end %>
+        <% if fromPosition=Position.find_by_id(movement.fromPosition) %>
+            <td><%=  fromPosition.nr %></td>
+        <% else %>
+            <td></td>
+        <% end %>
+        <% if toWh=Whouse.find_by_id(movement.to_id) %>
+            <td><%=  toWh.nr %></td>
+        <% else %>
+            <td></td>
+        <% end %>
+        <% if toPosition=Position.find_by_id(movement.toPosition) %>
+            <td><%=  toPosition.nr %></td>
+        <% else %>
+            <td></td>
+        <% end %>
+
         <td><%= movement.employee_id if movement.employee_id %> </td>
         <td><%= movement.remarks if movement.remarks %> </td>
         <td><%= movement.remark if movement.remark %> </td>

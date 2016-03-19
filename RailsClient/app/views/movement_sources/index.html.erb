@@ -62,7 +62,7 @@
     <div class="col-sm-12">
       <div class="col-sm-3">
         源仓库号：
-        <%= select_tag('movement_source[fromWh]', options_from_collection_for_select(Whouse.all, :name, :id, @fromWh), include_blank: true) %>
+        <%= select_tag('movement_source[fromWh]', options_from_collection_for_select(Whouse.all, :nr, :name, @fromWh), include_blank: true) %>
       </div>
       <div class="col-sm-3">
         源库位号：
@@ -71,7 +71,7 @@
       </div>
       <div class="col-sm-3">
         目的仓库号：
-        <%= select_tag('movement_source[toWh]', options_from_collection_for_select(Whouse.all, :name, :id, @toWh), include_blank: true) %>
+        <%= select_tag('movement_source[toWh]', options_from_collection_for_select(Whouse.all, :nr, :name, @toWh), include_blank: true) %>
       </div>
       <div class="col-sm-3">
         目的库位号：
@@ -159,7 +159,11 @@
         <td><%= movement_source.fifo %></td>
         <td><%= movement_source.toWh %></td>
         <td><%= movement_source.toPosition %></td>
-        <td><%= movement_source.employee_id %></td>
+        <% if u=User.find_by_id(movement_source.employee_id) %>
+            <td><%= u.nr %></td>
+        <% else %>
+            <td></td>
+        <% end %>
         <td><%= movement_source.created_at.localtime %></td>
         <td><%= movement_source.remarks %></td>
         <td><%= MovementListState.display movement_source.state.to_i %></td>

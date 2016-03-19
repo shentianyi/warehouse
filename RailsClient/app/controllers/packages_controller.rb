@@ -41,6 +41,12 @@ class PackagesController < ApplicationController
   end
 =end
 
+  # def search
+  #   super { |query|
+
+  #   }
+  # end
+
   def download_quantity
     file_name= 'packages_quantities_'+Time.now.strftime('%Y%m%d%H%M%S')+'.csv'
     path=File.join($DOWNLOADPATH, file_name)

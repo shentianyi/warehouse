@@ -80,9 +80,35 @@ class NStoragesController < ApplicationController
     end
   end
 
+  def search
+    super { |query|
+      if part=Part.find_by_nr(params[:n_storage][:partNr])
+        query=query.unscope(where: :partNr).where(partNr: part.id)
+      end
+
+      if whouse=Whouse.find_by_nr(params[:n_storage][:ware_house_id])
+        query=query.unscope(where: :ware_house_id).where(ware_house_id: whouse.id)
+      end
+      if position=Position.find_by_nr(params[:n_storage][:position_id])
+        query=query.unscope(where: :position_id).where(position_id: position.id)
+      end
+
+      query
+    }
+  end
+
   def exports
     @condition=params[@model]
     puts @condition
+    if part=Part.find_by_nr(@condition[:partNr])
+      @condition[:partNr]=part.id
+    end
+    if whouse=Whouse.find_by_nr(@condition[:ware_house_id])
+      @condition[:ware_house_id]=whouse.id
+    end
+    if position=Position.find_by_nr(@condition[:position_id])
+      @condition[:position_id]=position.id
+    end
     query=model.unscoped
     where_comdition = ""
 
@@ -123,6 +149,10 @@ class NStoragesController < ApplicationController
       end
     end
 
+    instance_variable_set("@partNr", part.nr) if part
+    instance_variable_set("@ware_house_id", whouse.name) if whouse
+    instance_variable_set("@position_id", position.nr) if position
+
     query = query.where(locked: false)
     if params.has_key? "negative"
       query = query.where("n_storages.qty < 0").select("n_storages.qty as total_qty, n_storages.*")
@@ -135,7 +165,7 @@ class NStoragesController < ApplicationController
         else
           where_comdition += "AND locked = 0 "
         end
-        query = NStorage.find_by_sql("select SUM(n_storages.qty) as total_qty, n_storages.* from n_storages #{where_comdition} group by n_storages.partNr, n_storages.ware_house_id, n_storages.position")
+        query = NStorage.find_by_sql("select SUM(n_storages.qty) as total_qty, n_storages.* from n_storages #{where_comdition} group by n_storages.partNr, n_storages.ware_house_id, n_storages.position_id")
       end
     end
 
