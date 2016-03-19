@@ -35,11 +35,11 @@ module V1
           args[:user_id] = current_user.id if params[:all].nil?
         else
           args['records.impl_time'] = start_time..end_time
-          args['records.impl_user_type'] = ImplUserType::RECEIVER
+          # args['records.impl_user_type'] = ImplUserType::RECEIVER
           args[:des_location_id] = current_user.location_id
         end
 
-        args[:ancestry]= nil
+      #  args[:ancestry]= nil
 
         {result: 1, content: ForkliftPresenter.init_json_presenters(ForkliftService.search(args).order(created_at: :desc).all)}
       end

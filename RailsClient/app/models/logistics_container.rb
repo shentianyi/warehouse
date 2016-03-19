@@ -110,7 +110,7 @@ class LogisticsContainer<LocationContainer
   # 重寫了Movable::state_display
   # movable_state_display 重新調用了Movable::state_display
   def state_display
-    if self.state == MovableState::CHECKED && (LogisticsContainerService.get_all_packages(self).count > LogisticsContainerService.get_all_accepted_packages(self).count)
+    if self.state == MovableState::CHECKED && (LogisticsContainerService.get_all_packages(self).count > LogisticsContainerService.get_all_accepted_packages(self).count) && (LogisticsContainerService.get_all_accepted_packages(self).count>0)
       '部分接收'
     else
       movable_state_display
