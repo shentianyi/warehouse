@@ -83,7 +83,7 @@ class ForkliftService
       LogisticsContainer.joins(:forklift).joins(:records).where(condition)
     else
       LogisticsContainer.joins(:forklift).where(condition)
-    end
+    end.distinct
   end
 
 
