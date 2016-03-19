@@ -37,6 +37,7 @@ class DeliveryService
   #兼容以前的接口
   def self.confirm_receive movable, user
     ActiveRecord::Base.transaction do
+
       unless (m = movable.get_movable_service.check(movable, user)).result
         return m
       end
@@ -79,7 +80,7 @@ class DeliveryService
       LogisticsContainer.joins(:delivery).joins(:records).where(condition)
     else
       LogisticsContainer.joins(:delivery).where(condition)
-    end
+    end.distinct
   end
 
   def self.import_by_file path
@@ -279,5 +280,10 @@ class DeliveryService
       msg.content = e.message
     end
     return msg
+  end
+
+
+  def self.enter_stock user,lc,warehouse,position ,fifo
+    raise '禁止以运单入库'
   end
 end

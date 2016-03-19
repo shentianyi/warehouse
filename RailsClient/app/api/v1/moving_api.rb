@@ -55,31 +55,26 @@ module V1
 
       post :enter do
         msg=Message.new
-        if warehouse=current_user.location.whouses.where(nr: params[:warehouse]).first
-          if position=warehouse.positions.where(nr: params[:position]).first
-            if (lc=LogisticsContainer.find_by_container_id(params[:package])) && (package=lc.package)
-              begin
-                WhouseService.new.move({
-                                           partNr: package.part.id,
-                                           qty: package.quantity,
-                                           packageId: package.id,
-                                           fromWh: current_user.location.receive_whouse.id,
-                                           toWh: warehouse.id,
-                                           toPosition: position.id,
-                                           uniq: true
-                                       })
-                msg.result=true
-              rescue => e
-                msg.content=e.message
+        begin
+          if warehouse=current_user.location.whouses.where(nr: params[:warehouse]).first
+            if position=warehouse.positions.where(nr: params[:position]).first
+              if (lc=LogisticsContainer.find_by_container_id(params[:container]))
+                if msg.result=lc.get_service.enter_stock(current_user,lc,warehouse, position,Time.now.utc)
+                  msg.content='入库成功'
+                else
+                  msg.content='入库失败'
+                end
+              else
+                msg.content='扫描码不存在'
               end
             else
-              msg.content='唯一码不存在'
+              msg.content='库位不存在'
             end
           else
-            msg.content='库位不存在'
+            msg.content='仓库不存在'
           end
-        else
-          msg.content='仓库不存在'
+        rescue => e
+          msg.content=e.message
         end
         msg
       end

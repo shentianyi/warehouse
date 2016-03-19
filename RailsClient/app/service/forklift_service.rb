@@ -41,9 +41,10 @@ class ForkliftService
         return m
       end
 
-      lc.descendants.each{|d|
+
+      lc.descendants.each { |d|
         if d.state == MovableState::ARRIVED
-          unless (m = d.get_movable_service.reject(d,user)).result
+          unless (m = d.get_movable_service.reject(d, user)).result
             return m
           end
         end
@@ -82,6 +83,21 @@ class ForkliftService
       LogisticsContainer.joins(:forklift).joins(:records).where(condition)
     else
       LogisticsContainer.joins(:forklift).where(condition)
+    end.distinct
+  end
+
+
+  def self.enter_stock user, lc, warehouse, position, fifo
+    ActiveRecord::Base.transaction do
+      if forklift=lc.forklift
+        lc.descendants.each { |d|
+           PackageService.enter_stock(user,d,warehouse,position,fifo)
+        }
+       return true
+      else
+        raise "托盘:#{params[:container_id]}不存在"
+      end
     end
+    return false
   end
 end

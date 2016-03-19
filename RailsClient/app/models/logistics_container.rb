@@ -110,7 +110,7 @@ class LogisticsContainer<LocationContainer
   # 重寫了Movable::state_display
   # movable_state_display 重新調用了Movable::state_display
   def state_display
-    if self.state == MovableState::CHECKED && (LogisticsContainerService.get_all_packages(self).count > LogisticsContainerService.get_all_accepted_packages(self).count)
+    if self.state == MovableState::CHECKED && (LogisticsContainerService.get_all_packages(self).count > LogisticsContainerService.get_all_accepted_packages(self).count) && (LogisticsContainerService.get_all_accepted_packages(self).count>0)
       '部分接收'
     else
       movable_state_display
@@ -123,28 +123,30 @@ class LogisticsContainer<LocationContainer
       destinationable=self.destinationable
       if self.state==MovableState::CHECKED
         begin
-          WhouseService.new.move({
-                                     partNr: package.part.id,
-                                     qty: package.quantity,
-                                     packageId: package.id,
-                                     fromWh: source_location.send_whouse.id,
-                                     toWh: destinationable.receive_whouse.id,
-                                     toPosition: destinationable.receive_whouse.default_position.id,
-                                     uniq: true
-                                 })
+          if NStorage.where(ware_house_id: source_location.send_whouse.id, packageId: package.id).first
+            WhouseService.new.move({
+                                       partNr: package.part.id,
+                                       qty: package.quantity,
+                                       packageId: package.id,
+                                       fromWh: source_location.send_whouse.id,
+                                       toWh: destinationable.receive_whouse.id,
+                                       toPosition: destinationable.receive_whouse.default_position.id
+                                   })
+          end
         rescue
         end
       elsif (self.state==MovableState::REJECTED && self.state_was==MovableState::CHECKED)
         begin
-          WhouseService.new.move({
-                                     partNr: package.part.id,
-                                     qty: package.quantity,
-                                     packageId: package.id,
-                                     fromWh: destinationable.receive_whouse.id,
-                                     toWh: source_location.send_whouse.id,
-                                     toPosition: source_location.send_whouse.default_position.id,
-                                     uniq: true
-                                 })
+          if NStorage.where(ware_house_id: destinationable.receive_whouse.id, packageId: package.id).first
+            WhouseService.new.move({
+                                       partNr: package.part.id,
+                                       qty: package.quantity,
+                                       packageId: package.id,
+                                       fromWh: destinationable.receive_whouse.id,
+                                       toWh: source_location.send_whouse.id,
+                                       toPosition: source_location.send_whouse.default_position.id
+                                   })
+          end
         rescue
         end
       end
@@ -160,8 +162,7 @@ class LogisticsContainer<LocationContainer
           fifo: fifo,
           packageId: package.id,
           toWh: warehouse.id,
-          toPosition: position.id,
-          uniq: true,
+          toPosition: position.id
       }
       WhouseService.new.enter_stock(params)
     end
