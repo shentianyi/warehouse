@@ -37,12 +37,12 @@ class DeliveryService
   #兼容以前的接口
   def self.confirm_receive movable, user
     ActiveRecord::Base.transaction do
+
       unless (m = movable.get_movable_service.check(movable, user)).result
         return m
       end
 
       #设置forklift的状态
-
       movable.children.each { |c|
         unless (m = ForkliftService.confirm_receive(c, user)).result
           return m
