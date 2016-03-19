@@ -53,7 +53,7 @@
       </div>
       <div class="col-sm-4">
         源仓库号：
-        <%= select_tag('storage_operation_record[fromWh]', options_from_collection_for_select(Whouse.all, :name, :id, @fromWh), include_blank: true) %>
+        <%= select_tag('storage_operation_record[fromWh]', options_from_collection_for_select(Whouse.all, :nr, :nr, @fromWh), include_blank: true) %>
       </div>
     </div>
 
@@ -65,7 +65,7 @@
       </div>
       <div class="col-sm-4">
         目的仓库号：
-        <%= select_tag('storage_operation_record[toWh]', options_from_collection_for_select(Whouse.all, :name, :id, @toWh), include_blank: true) %>
+        <%= select_tag('storage_operation_record[toWh]', options_from_collection_for_select(Whouse.all, :nr, :nr, @toWh), include_blank: true) %>
       </div>
       <div class="col-sm-4">
         目的库位号：
@@ -137,7 +137,7 @@
         <td><%= storage_operation_record.packageId %></td>
         <td><%= MoveType.find(storage_operation_record.type_id).typeId if storage_operation_record.type_id %></td>
         <td><%= storage_operation_record.remarks %></td>
-        <td><%= storage_operation_record.employee_id %></td>
+        <td><%= storage_operation_record.user.blank? ? '': storage_operation_record.user.nr%></td>
       </tr>
   <% end %>
   </tbody>

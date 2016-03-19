@@ -77,7 +77,11 @@
         <td><%= movement.fromPosition if movement.fromPosition %></td>
         <td><%= movement.toWh if movement.toWh %></td>
         <td><%= movement.toPosition if movement.toPosition %></td>
-        <td><%= movement.employee_id if movement.employee_id %> </td>
+        <% if u=User.find_by_id(movement.employee_id) %>
+            <td><%= u.nr %></td>
+        <% else %>
+            <td></td>
+        <% end %>
         <td><%= movement.remarks if movement.remarks %> </td>
         <td><%= movement.movement_list_id %> </td>
         <td><%= MovementListState.display movement.movement_list.state.to_i %> </td>

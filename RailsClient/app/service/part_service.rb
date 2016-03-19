@@ -1,6 +1,6 @@
 class PartService
   def self.validate_id id,user
-    !Part.find_by_id(id).nil?
+    !Part.find_by_nr(id).nil?
   end
 
   #=============
@@ -48,14 +48,17 @@ class PartService
         data['sourceable_type']='Location'
       end
 
-      if p = Position.find_by_detail(data['position'])
+      if p = Position.find_by_nr(data['position'])
         data.delete('position')
         data['position_id'] = p.id
       else
         raise(ArgumentError, "行:#{line_no} Position 不存在对应的库位")
       end
 
-      unless Part.find_by_id(data['part_id'])
+      if part=Part.find_by_nr(data['part_id'])
+        data.delete('part_id')
+        data['part_id'] = part.id
+      else
         raise(ArgumentError, "行:#{line_no} ,#{data['part_id']} 零件不存在")
       end
 
@@ -75,7 +78,7 @@ class PartService
           PartPosition.create(data)
         when 1
           #update
-          if  p_new = Position.find_by_detail(data['position_new'])
+          if  p_new = Position.find_by_nr(data['position_new'])
             data['position_id'] = p_new.id
           else
             #

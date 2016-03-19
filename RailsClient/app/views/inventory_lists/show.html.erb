@@ -51,11 +51,11 @@
     <div class="col-sm-12">
       <div class="col-sm-6">
         <strong>Whouse:</strong>
-        <%= @inventory_list.whouse_id %>
+        <%= @inventory_list.whouse.blank? ? '' : @inventory_list.whouse.nr %>
       </div>
       <div class="col-sm-6">
         <strong>User:</strong>
-        <%= @inventory_list.user_id %>
+        <%= @inventory_list.user.blank? ? '' : @inventory_list.user.nr %>
       </div>
     </div>
   </div>

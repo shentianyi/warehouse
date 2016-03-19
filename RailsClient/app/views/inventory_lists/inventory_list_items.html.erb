@@ -121,7 +121,13 @@
   <% @inventory_list_items.each_with_index do |inventory_list_item, i| %>
       <tr>
         <td><%= @page_start+i+1 %></td>
-        <td><%= inventory_list_item.whouse_id %></td>
+
+        <% if w=Whouse.find_by_nr(inventory_list_item.whouse_id) %>
+            <td><%= w.nr %></td>
+        <% else %>
+            <td></td>
+        <% end %>
+
         <% unless inventory_list_item.in_stored? %>
             <td><%= best_in_place inventory_list_item, :part_id, as: :input %></td>
             <td><%= best_in_place inventory_list_item, :fifo_display, as: :input, display_as: :fifo_display %></td>
@@ -150,7 +156,7 @@
             <td><%= inventory_list_item.part_wire_mark %></td>
         <% end %>
         <td><%= inventory_list_item.need_convert_display %></td>
-        <td><%= inventory_list_item.user_id %></td>
+        <td><%= inventory_list_item.user.blank? ? '' : inventory_list_item.user.nr %></td>
         <td><%= inventory_list_item.created_at.localtime %></td>
         <td><%= inventory_list_item.in_store_display %></td>
         <td><%= inventory_list_item.locked_display %></td>

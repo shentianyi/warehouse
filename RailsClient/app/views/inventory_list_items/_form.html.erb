@@ -36,12 +36,8 @@
       <div class="panel-body">
         <div class="col-sm-12">
           <div class="col-sm-4">
-            <%= f.label :package_id, "包装号" %><br>
+            <%= f.label :package_id, "唯一号" %><br>
             <%= f.text_field :package_id %>
-          </div>
-          <div class="col-sm-4">
-            <%= f.label :unique_id, "唯一号" %><br>
-            <%= f.text_field :unique_id %>
           </div>
           <div class="col-sm-4">
             <%= f.label :part_id %><br>
@@ -61,7 +57,7 @@
           </div>
           <div class="col-sm-4">
             <%= f.label :current_whouse %><br>
-            <%= f.select(:current_whouse, Whouse.all.collect { |w| [w.id, w.name] }, {include_blank: false}) %>
+            <%= f.select(:current_whouse, Whouse.all.collect { |w| [w.nr, w.nr] }, {include_blank: false}) %>
           </div>
         </div>
 

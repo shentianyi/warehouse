@@ -35,11 +35,11 @@
   <div class="col-sm-12" style="border-bottom: 1px dashed #000;">
     <div class="col-sm-4">
       源仓库号：
-      <%= select_tag(:src_warehouse, options_from_collection_for_select(Whouse.all, :name, :id, @src_warehouse), include_blank: true) %>
+      <%= select_tag(:src_warehouse, options_from_collection_for_select(Whouse.all, :nr, :nr, @src_warehouse), include_blank: true) %>
     </div>
     <div class="col-sm-4">
       目的仓库号：
-      <%= select_tag(:dse_warehouse, options_from_collection_for_select(Whouse.all, :name, :id, @dse_warehouse), include_blank: true) %>
+      <%= select_tag(:dse_warehouse, options_from_collection_for_select(Whouse.all, :nr, :nr, @dse_warehouse), include_blank: true) %>
     </div>
     <div class="col-sm-4">
       <span class="label label-info">显示方式:</span>

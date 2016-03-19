@@ -1,4 +1,5 @@
 class StorageOperationRecord < ActiveRecord::Base
+  belongs_to :user, foreign_key: :employee_id# :dependent => :destroy
 
   def self.save_record(params, type)
     record = {

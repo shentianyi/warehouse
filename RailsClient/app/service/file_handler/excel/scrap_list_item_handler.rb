@@ -88,12 +88,12 @@ module FileHandler
           msg.contents << "登记时间:#{row['登记时间']} 不可为空!"
         end
 
-        src_warehouse = Whouse.find_by_name(row['源仓库'])
+        src_warehouse = Whouse.find_by_nr(row['源仓库'])
         unless src_warehouse
           msg.contents << "源仓库:#{row['源仓库']} 不存在!"
         end
 
-        dse_warehouse = Whouse.find_by_name(row['目的仓库'])
+        dse_warehouse = Whouse.find_by_nr(row['目的仓库'])
         unless dse_warehouse
           msg.contents << "目的仓库:#{row['目的仓库']} 不存在!"
         end
@@ -108,7 +108,7 @@ module FileHandler
         #   msg.contents << "登记人:#{row['登记人']} not found!"
         # end
 
-        part_id = Part.find_by_id(row['零件号'])
+        part_id = Part.find_by_nr(row['零件号'])
         unless part_id
           msg.contents << "零件号:#{row['零件号']} 不存在!"
         end
