@@ -42,6 +42,7 @@ class DeliveryService
       end
 
       #设置forklift的状态
+
       movable.children.each { |c|
         unless (m = ForkliftService.confirm_receive(c, user)).result
           return m

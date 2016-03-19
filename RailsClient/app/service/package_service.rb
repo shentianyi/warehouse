@@ -124,16 +124,24 @@ class PackageService
   def self.enter_stock user, lc, warehouse, position, fifo
     if package=lc.package
       if storage=NStorage.find_by_packageId(package.id)
-        WhouseService.new.move({
-                                   partNr: package.part_id,
-                                   qty: package.quantity,
-                                   packageId: package.id,
-                                   fromWh: storage.ware_house_id,
-                                   toWh: warehouse.id,
-                                   toPosition: position.id,
-                                   fifo: fifo,
-                                   user:user
-                               })
+        if position==storage.position
+          raise '唯一码已入库，不可重复'
+        else
+          if storage.whouse.location==user.localtion
+            WhouseService.new.move({
+                                       partNr: package.part_id,
+                                       qty: package.quantity,
+                                       packageId: package.id,
+                                       fromWh: storage.ware_house_id,
+                                       toWh: warehouse.id,
+                                       toPosition: position.id,
+                                       fifo: fifo,
+                                       user: user
+                                   })
+          else
+            raise '唯一码不在这个地点，不可入库'
+          end
+        end
       else
         WhouseService.new.enter_stock({
                                           partNr: package.part_id,
@@ -142,7 +150,7 @@ class PackageService
                                           packageId: package.id,
                                           toWh: warehouse.id,
                                           toPosition: position.id,
-                                          user:user
+                                          user: user
                                       })
       end
       return true
