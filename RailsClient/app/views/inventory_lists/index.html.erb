@@ -21,6 +21,13 @@
     .table > thead > tr > th, .table > tbody > tr > td {
         text-align: center;
     }
+    
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
 </style>
 
 <div class="panel panel-default">
@@ -35,7 +42,7 @@
   </ol>
 </div>
 
-<div class="col-sm-12">
+<div class="col-sm-12" style="margin-bottom: 20px;">
   <% if current_user.permission?(:operate_inventory_create) %>
       <div class="col-sm-4">
         <%= link_to "新建盘点", send("new_#{@model}_path"), :class => 'btn btn-default' %>

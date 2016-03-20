@@ -7,6 +7,13 @@
     .table > thead > tr > th, .table > tbody > tr > td {
         text-align: center;
     }
+    
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
 </style>
 
 <div class="panel panel-default">
@@ -45,7 +52,7 @@
       </div>
     </div>
 
-    <div class="col-sm-12" style="margin-bottom: 10px;">
+    <div class="col-sm-12" style="margin-bottom: 10px;margin-bottom: 20px;">
       <div class="col-sm-4">
         是否入库(0-否，1-是)：
         <input type="text" name="inventory_list_item[in_stored]" value="<%= @in_stored %>"/>

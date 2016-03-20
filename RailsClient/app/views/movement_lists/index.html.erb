@@ -20,6 +20,13 @@
     select {
         min-width: 150px;
     }
+    
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
 </style>
 
 <div class="panel panel-default">
@@ -69,7 +76,7 @@
   <i class=" glyphicon glyphicon-chevron-up" title="收起搜索条件"></i>
 </div>
 
-<div class="col-sm-12" style="margin-bottom: 20px">
+<div class="col-sm-12" style="margin-bottom: 20px;margin-top: 10px;">
   <div class="digg_pagination">
     <div class="page_info">
       <%= page_entries_info @movement_lists %>
