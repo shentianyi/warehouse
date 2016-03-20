@@ -1,8 +1,8 @@
-<h3>择货单:<%= @picklist.id%></h3>
-<%@picklist.order_ids.split(";").each do |order|%>
+<h3>择货单:<%= @picklist.id %></h3>
+<% @picklist.order_ids.split(";").each do |order| %>
     <span class="label label-info"><%= order %></span>
-<%end%>
-<p><%= @picklist.remark%></p>
+<% end %>
+<p><%= @picklist.remark %></p>
 <input type="button" value="打印" class='btn btn-warning' onclick="print_pick_list();"/>
 <table class="table table-bordered table-striped table-hover">
   <thead>
@@ -25,32 +25,36 @@
   </thead>
   <tbody>
   <% if @pickitems %>
-      <% @pickitems.each_with_index do |pi,index| %>
+      <% @pickitems.each_with_index do |pi, index| %>
           <tr class="pickitem">
-            <td><%= index+1%></td>
+            <td><%= index+1 %></td>
             <td><%= pi.part_id %></td>
             <td><%= pi.quantity %></td>
             <td><%= pi.box_quantity %></td>
-            <td><%= pi.user_id%></td>
-            <td><%= pi.destination_whouse.name %></td>
+            <td><%= pi.user_id %></td>
+            <% if w=Whouse.find_by_id(pi.destination_whouse_id) %>
+                <td><%= w.name %></td>
+            <% else %>
+                <td></td>
+            <% end %>
             <td>
               <% if pp = OrderItemService.verify_department(pi.destination_whouse_id, pi.part_id) %><%= pp.position.detail %>
               <% end %>
             </td>
             <td>
               <% if pi.order_item %>
-              <input type="checkbox" disabled class="pickitem-checkbox" <%= 'checked' if pi.is_emergency %> />
-                  <%end%>
+                  <input type="checkbox" disabled class="pickitem-checkbox" <%= 'checked' if pi.is_emergency %> />
+              <% end %>
             </td>
             <td>
-              <%if pi.order_item%>
+              <% if pi.order_item %>
                   <input type="checkbox" class="outofstock-checkbox" value="<%= pi.order_item_id %>" <%= 'checked' if pi.is_out_of_stock %> />
-              <%end %>
+              <% end %>
             </td>
             <td>
-              <%if pi.order_item %>
+              <% if pi.order_item %>
                   <input type="checkbox" class="finishpick-checkbox" value="<%= pi.order_item_id %>" <%= 'checked' if pi.is_finished %> />
-                <% end%>
+              <% end %>
             </td>
             <td><%= pi.remark %></td>
           </tr>
@@ -59,11 +63,11 @@
   </tbody>
 </table>
 <script type="text/javascript">
-  $(document).ready(function(){
-      if($(".pickitem").length == $(".finishpick-checkbox:checked").length){
-          $("#finish-all-pickitems").prop("checked",true);
-      }else{
-          $("#finish-all-pickitems").prop("checked",false);
-      }
-  });
+    $(document).ready(function () {
+        if ($(".pickitem").length == $(".finishpick-checkbox:checked").length) {
+            $("#finish-all-pickitems").prop("checked", true);
+        } else {
+            $("#finish-all-pickitems").prop("checked", false);
+        }
+    });
 </script>

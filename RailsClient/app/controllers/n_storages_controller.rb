@@ -158,7 +158,7 @@ class NStoragesController < ApplicationController
       query = query.where("n_storages.qty < 0").select("n_storages.qty as total_qty, n_storages.*")
     else
       if params[:format] == 'xlsx'
-        query = query.select("SUM(n_storages.qty) as total_qty, n_storages.*").group("n_storages.partNr, n_storages.ware_house_id, n_storages.position")
+        query = query.select("SUM(n_storages.qty) as total_qty, n_storages.*").group("n_storages.partNr, n_storages.ware_house_id, n_storages.position_id")
       else
         if where_comdition.empty?
           where_comdition += "WHERE locked = 0 "

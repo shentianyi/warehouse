@@ -5,7 +5,7 @@
   <small><%= @order.user.name %></small>
 </h4>
 <h4>要货员工号:
-  <small><%= @order.user_id %></small>
+  <small><%= @order.user.blank? ? '' : @order.user.nr %></small>
 </h4>
 <h4>备货地:
   <small><%= @order.source.name if @order.source %></small>

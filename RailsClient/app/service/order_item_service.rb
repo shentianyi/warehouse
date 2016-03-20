@@ -36,8 +36,20 @@ class OrderItemService
   #verify department exits?
   #and part exits in this position?
   #=============
-  def self.verify_department pos
-     Whouse.find_by_nr(pos)
+  # def self.verify_department pos
+  #    Whouse.find_by_nr(pos)
+  # end
+  def self.verify_department pos,part_id
+    unless whouse = Whouse.find_by_id(pos)
+      return nil
+    end
+
+    #dose this part in this position?
+    unless pp = whouse.part_positions.where(part_id: part_id).first
+      return nil
+    end
+
+    return pp
   end
 
   def self.verify_location user
