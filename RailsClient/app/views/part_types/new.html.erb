@@ -1,5 +1,25 @@
-<h2>新建零件类型</h2>
+<style type="text/css">
+	a:hover,a:active{
+		text-decoration: none;
+		color: black;
+		background-color: white;
+		outline: none;
+	}
+</style>
+
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">管理</li>
+    <li class="active">
+      基础信息设置
+    </li>
+    <li>
+      <%= link_to '零件类型', part_types_path%>
+    </li>
+    <li class="active">
+      新建零件类型
+    </li>
+  </ol>
+</div>
 
 <%= render 'form' %>
-
-<%= link_to '返回', part_types_path %>
