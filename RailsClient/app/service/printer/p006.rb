@@ -18,9 +18,9 @@ module Printer
       # pick_items=p.pick_items.where(state: PickItemState::PRINTING).order(state: :asc, is_emergency: :desc)
       pick_items=p.pick_items.select("SUM(pick_items.quantity) as total, pick_items.*").group("part_id").order(state: :asc, is_emergency: :desc)
 
-      if pick_items.count == 0
-        pick_items = p.pick_items.order(state: :asc, is_emergency: :desc)
-      end
+      # if pick_items.count == 0
+      #   pick_items = p.pick_items.order(state: :asc, is_emergency: :desc)
+      # end
 
       pick_items.each do |i|
 
@@ -28,9 +28,8 @@ module Printer
             leoni_nr: i.part_id,
             czleoni_nr: i.part_id,
             ask_qty: i.quantity,
-            position: i.box_quantity,
-            kucun: i.destination_whouse_id,
-            send_nr: i.quantity,
+            position: NStorageService.get_positions(i.part_id),
+            kucun: NStorageService.get_total_stock(i.part_id),
             remark: i.remark||' '
         }
 
