@@ -28,10 +28,18 @@
       <% @pickitems.each_with_index do |pi, index| %>
           <tr class="pickitem">
             <td><%= index+1 %></td>
-            <td><%= pi.part_id %></td>
+            <% if p=Part.find_by_id(pi.part_id) %>
+                <td><%= p.nr %></td>
+            <% else %>
+                <td></td>
+            <% end %>
             <td><%= pi.quantity %></td>
             <td><%= pi.box_quantity %></td>
-            <td><%= pi.user_id %></td>
+            <% if u=Part.find_by_id(pi.user_id) %>
+                <td><%= u.nr %></td>
+            <% else %>
+                <td></td>
+            <% end %>
             <% if w=Whouse.find_by_id(pi.destination_whouse_id) %>
                 <td><%= w.name %></td>
             <% else %>
