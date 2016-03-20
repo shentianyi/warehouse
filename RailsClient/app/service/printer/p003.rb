@@ -1,28 +1,32 @@
 # print accepted
 module Printer
   class P003<Base
-    HEAD=[:id, :receive_addr, :user, :receive_date]
-    BODY=[:forklift_id, :quantity, :receive_qty, :status, :whouse]
+    HEAD=[:forklist_nr, :create_date]
+    BODY=[:jx_batchnr, :shleoninr, :czleoninr, :qty, :unit, :num_buckle, :remark]
 
     def generate_data
       d=LogisticsContainer.find(self.id)
-      dp=DeliveryPresenter.new(d)
+      dp=ForkliftPresenter.new(d)
 
-      head={id: d.container_id,
-            receive_addr: d.des_location.nil? ? '' : d.des_location.address,
-            user: dp.received_user,
-            receive_date: dp.received_date}
+      head={
+          forklist_nr: d.container_id,
+          create_date: dp.created_at.localtime.strftime('%Y.%m.%d %H:%M')
+      }
       heads=[]
       HEAD.each do |k|
         heads<<{Key: k, Value: head[k]}
       end
-      forklifts=LogisticsContainerService.get_forklifts(d)
-      forklifts.each do |f|
-        body={forklift_id: f.container_id,
-              quantity: LogisticsContainerService.count_all_packages(f),
-              receive_qty: LogisticsContainerService.count_accepted_packages(f),
-              status: f.state_display,
-              whouse: f.destinationable.nil? ? '' : f.destinationable.name}
+      packages=LogisticsContainerService.get_packages(d)
+      packages.each do |ps|
+        body={
+            jx_batchnr: ps.package.extra_batch.to_s,
+            shleoninr: ps.package.extra_sh_part_id.to_s,
+            czleoninr: ps.package.extra_cz_part_id.to_s,
+            qty: ps.package.quantity.to_s,
+            unit: ps.package.extra_unit.to_s,
+            num_buckle: 1,
+            remark: ps.package.remark.to_s
+        }
         bodies=[]
         BODY.each do |k|
           bodies<<{Key: k, Value: body[k]}

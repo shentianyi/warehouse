@@ -64,7 +64,7 @@ module Import
         end
 
         operator=data.delete($UPMARKER)
-        if warehouse=Warehouse.find_by_nr(data['whouse_id'])
+        if warehouse=Whouse.find_by_nr(data['whouse_id'])
           data['whouse_id']=warehouse.id
         end
         p = Position.find_by_nr(data['nr'])

@@ -1,2 +1,1 @@
-LocationNr;Name;Address;Telephone;Destination;Operator
-
+LocationNr;Name;Address;Telephone;Destination;要货地点;接收仓库;在途仓库;所属公司;Operator

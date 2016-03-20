@@ -75,6 +75,16 @@ class PositionsController < ApplicationController
     @parts = @position.parts.paginate(:page=>params[:page])
   end
 
+  def search
+    super { |query|
+      if whouse=Whouse.find_by_nr(params[:position][:whouse_id])
+        query=query.unscope(where: :whouse_id).where(whouse_id: whouse.id)
+      end
+
+      query
+    }
+  end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.

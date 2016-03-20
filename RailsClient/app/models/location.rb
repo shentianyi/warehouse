@@ -2,6 +2,8 @@ class Location < ActiveRecord::Base
   include Extensions::UUID
   include Import::LocationCsv
   validates_uniqueness_of :nr, message: '不可重复'
+  validates_presence_of :name, :message => "名称不能为空!"
+
   belongs_to :tenant
   has_many :users
   has_many :whouses, :dependent => :destroy
