@@ -1,7 +1,7 @@
 # print pick list
 module Printer
   class P006<Base
-    HEAD=[:id, :user_id, :created_at]
+    HEAD=[:pl_nr, :user_id, :created_at]
     BODY=[:part_id, :quantity, :box_quantity,:whouse_id, :is_emergency, :remark]
 
     def generate_data
