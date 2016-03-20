@@ -87,7 +87,7 @@
                   <%= f.label :operation_mode, '操作模式' %>
 
                   <% if current_user.admin? || current_user.manager? %>
-                      <%= f.select(:operation_mode, OperationMode.list_menu, {include_blank: false}, :class => 'col-md-6', :style => 'margin:-10px 0 0 30px;') %>
+                      <%= f.select(:operation_mode, OperationMode.list_menu, {include_blank: false}, :class => 'col-md-6', :style => 'margin:0 0 0 30px;') %>
                   <% else %>
                       <input type="text" name="id" readonly="" class="col-md-6" style="margin: -10px 0 0 30px;" value="<%= OperationMode.display(current_user.operation_mode) %>">
                   <% end %>
@@ -97,7 +97,7 @@
                   <%= f.label :role_id, '角色' %>
 
                   <% if current_user.admin? || current_user.manager? %>
-                      <%= f.select(:role_id, Role.menu, {include_blank: false}, :class => 'col-md-6', :style => 'margin:-10px 0 0 30px;') %>
+                      <%= f.select(:role_id, Role.menu, {include_blank: false}, :class => 'col-md-6', :style => 'margin:0 0 0 30px;') %>
                   <% else %>
                       <input type="text" name="id" readonly="" class="col-md-6" style="margin: -10px 0 0 30px;" value="<%= Role.display(current_user.role_id) %>">
                   <% end %>
@@ -106,9 +106,9 @@
                 <div class="col-md-4" style="display: flex;">
                   <%= f.label :location_id, '地 点' %>
                   <% if current_user.admin? || current_user.manager? %>
-                      <%= f.select(:location_id, Location.all.collect { |l| [l.name, l.id] }, {include_blank: false}, :class => 'col-md-6', :style => 'margin:-10px 0 0 30px;') %>
+                      <%= f.select(:location_id, Location.all.collect { |l| [l.name, l.id] }, {include_blank: false}, :class => 'col-md-6', :style => 'margin:0 0 0 30px;') %>
                   <% else %>
-                      <input type="text" name="id" readonly="" class="col-md-6" style="margin: -10px 0 0 30px;" value="<%= Location.find(current_user.location_id).name %>">
+                      <input type="text" name="id" readonly="" class="col-md-6" style="margin: 0 0 0 30px;" value="<%= Location.find(current_user.location_id).name %>">
                   <% end %>
                 </div>
               </div>
