@@ -139,6 +139,8 @@ class LocationsController < ApplicationController
   def location_params
     #params[:location]
     params.require(:location).permit(:name, :address, :tel, :id,:nr,
-                                     :prefix, :suffix,:receive_whouse_id,:send_whouse_id,:order_source_location_id,:receive_mode, :destination_id,:tenant_id)
+                                     :prefix, :suffix,:receive_whouse_id,:send_whouse_id,
+                                     :order_source_location_id,:receive_mode, :destination_id,:tenant_id,
+    :is_open_safe_qty,:safe_qty_emails)
   end
 end

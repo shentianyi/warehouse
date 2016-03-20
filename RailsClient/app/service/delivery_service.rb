@@ -75,17 +75,17 @@ class DeliveryService
     LogisticsContainer.joins(:delivery).where(conditions).order(created_at: :desc)
   end
 
-  def self.search(condition,controlled=false,location=nil)
-   q= if condition && condition['records.impl_time']
-      LogisticsContainer.joins(:delivery).joins(:records).where(condition)
-    else
-      LogisticsContainer.joins(:delivery).where(condition)
-      end
+  def self.search(condition, controlled=false, location=nil)
+    q= if condition && condition['records.impl_time']
+         LogisticsContainer.joins(:delivery).joins(:records).where(condition)
+       else
+         LogisticsContainer.joins(:delivery).where(condition)
+       end
 
-   if controlled && location
-     q=q.where('des_location_id=? or source_location_id=?',location.id,location.id)
-   end
-   q.distinct
+    if controlled && location
+      q=q.where('des_location_id=? or source_location_id=?', location.id, location.id)
+    end
+    q.distinct
   end
 
   def self.import_by_file path
@@ -288,7 +288,7 @@ class DeliveryService
   end
 
 
-  def self.enter_stock user,lc,warehouse,position ,fifo
+  def self.enter_stock user, lc, warehouse, position, fifo
     raise '禁止以运单入库'
   end
 end

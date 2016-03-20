@@ -80,6 +80,7 @@
     <th>所有仓库</th>
     <th>所属公司</th>
     <th>地址</th>
+    <th>开启库存预警</th>
     <th colspan="4">操作</th>
   </tr>
   </thead>
@@ -122,6 +123,7 @@
         </td>
         <td><%= location.tenant.name if location.tenant %></td>
         <td><%= location.address %></td>
+        <td><%= location.is_open_safe_qty ? '是' : '否' %></td>
         <td>
           <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-eye-open', :style => 'color:green;'), location, :class => 'IconA', :title => '详细' %>
           <% if current_user.permission?(:operate_basic_info_edit) %>

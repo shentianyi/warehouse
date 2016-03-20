@@ -43,9 +43,6 @@ ActiveRecord::Base.transaction do
 
   # set as destination
   unless ps= jxlo.location_destinations.where(destination_id: shllo.id).first
-    p '---------------------------------------'
-    p ps
-    p '---------------------------------------'
     jxlo.add_destination(shllo)
   end
   unless czllo.location_destinations.where(destination_id: jxlo.id).first
