@@ -149,6 +149,23 @@ class LogisticsContainer<LocationContainer
           end
         rescue
         end
+      elsif (self.state==MovableState::WAY && self.state_was==MovableState::INIT)
+        # begin
+          if ns= NStorage.where(packageId: package.id).first
+            WhouseService.new.move({
+                                       partNr: package.part.id,
+                                       qty: package.quantity,
+                                       packageId: package.id,
+                                       fromWh: ns.ware_house_id,
+                                       toWh: source_location.send_whouse.id,
+                                       toPosition: source_location.send_whouse.default_position.id
+                                   })
+          else
+            self.enter_stock(source_location.send_whouse,source_location.send_whouse.default_position,Time.now)
+          end
+        # rescue
+        #
+        # end
       end
     end
   end

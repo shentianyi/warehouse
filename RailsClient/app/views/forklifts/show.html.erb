@@ -132,7 +132,7 @@
 
             <%= link_to content_tag(:span, package.container_id, :class => 'label label-primary'), package_path(package) %>
           </td>
-          <td><%= package.package.part.nr %></td>
+          <td><%= package.package.part.nr_for_user(current_user) %></td>
           <td><%= package.package.quantity_str %></td>
           <td><%= ppresenter.position_nr %></td>
           <td><%= package.state_display %></td>

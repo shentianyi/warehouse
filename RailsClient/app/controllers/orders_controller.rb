@@ -97,13 +97,12 @@ class OrdersController < ApplicationController
   end
 
   def items
-    if params[:user_id].blank?
+    unless  user=User.find_by_nr(params[:user_id])
       @order_items=OrderItem.where(order_id: params[:order_ids]).order(is_emergency: :desc)
       #.group(:part_id,:whouse_id)
       #.select('order_items.*,sum(order_items.quantity) as quantity')
     else
-      @order_items=PickItemService.get_order_items(params[:user_id], params[:order_ids]).order(is_emergency: :desc)||[]
-
+      @order_items=PickItemService.get_order_items(user.id, params[:order_ids]).order(is_emergency: :desc)||[]
     end
 
     @orders = Order.where(id: params[:order_ids])

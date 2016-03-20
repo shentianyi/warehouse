@@ -18,24 +18,30 @@ class PackagePresenter<Presenter
   end
   #需要明确，logistics_container的package的destination应该是warehouse而不是position
   def position_nr
-    if self.position
-      return self.position.display
-    elsif @logistics_container.destinationable
-      return @logistics_container.destinationable.name
-    end
-    ''
+    # if self.position
+    #   return self.position.display
+    # elsif @logistics_container.destinationable
+    #   return @logistics_container.destinationable.name
+    # end
+    # ''
+
+    @package.storage_position_display || ''
   end
 
-  def part_id_display
-    @package.part.blank? ? '' : @package.part.nr
+  def part_id_display(user=nil)
+    if user
+    @package.part.blank? ? '' : @package.part.nr_for_user(user)
+    else
+
+      end
   end
 
   def quantity_display
-    @package.quantity_display || ''
+    @package.quantity.to_s#_display || ''
   end
 
   def fifo_time_display
-    @package.fifo_time_display || ''
+    @package.storage_fifo_display || ''
   end
 
   def created_at
@@ -60,12 +66,16 @@ class PackagePresenter<Presenter
     pos
   end
 
-  def to_json
+  def self.init_json_presenters params,user
+    params.map { |param| self.new(param).to_json(user) }
+  end
+
+  def to_json(user)
     {
         id: self.id,
         container_id: self.container_id,
         quantity_display: self.quantity_display,
-        part_id_display: self.part_id_display,
+        part_id_display: self.part_id_display(user),
         quantity: @package.quantity,
         fifo_time_display: self.fifo_time_display,
         user_id: self.user_id,

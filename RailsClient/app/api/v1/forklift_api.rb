@@ -98,7 +98,7 @@ module V1
         p.package=pc
 
         unless p.can_add_to_container?
-          return {result: 0, result_code: ResultCodeEnum::Failed, content: PackageMessage::InOtherForklift}
+          return {result: 0, result_code: ResultCodeEnum::Failed, content: PackageMessage::WasBound}
         end
 
         if f.add(p)
@@ -109,7 +109,7 @@ module V1
           #     {result: 1, result_code: ResultCodeEnum::TargetNotInPosition, content: PackagePresenter.new(p).to_json}
           #   end
           # else
-            {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(p).to_json}
+            {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(p).to_json(current_user)}
           # end
         else
           {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::AddPackageFailed}
@@ -123,7 +123,7 @@ module V1
 
         fpresenter = ForkliftPresenter.new(f)
 
-        {result: 1, content: PackagePresenter.init_json_presenters(fpresenter.packages)}
+        {result: 1, content: PackagePresenter.init_json_presenters(fpresenter.packages,current_user)}
       end
 
       # add package

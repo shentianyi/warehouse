@@ -3,7 +3,7 @@ class Package<Container
   has_many :part_positions, through: :part
   has_many :positions, through: :part
   #has_many :inventory_list_items
-  
+
   default_scope { where(type: ContainerType::PACKAGE) }
 
   def self.id_valid?(id)
@@ -36,11 +36,27 @@ class Package<Container
     if self.fifo_time_display
       begin
         return Date.strptime(self.fifo_time_display.sub(/W\s*/, ''), '%d.%m.%y')
-        rescue => e
+      rescue => e
         return Time.now
       end
     end
     return Time.now
+  end
+
+  def storage_fifo_display
+    @storage_fifo_display ||= if storage=NStorage.find_by_packageId(self.id)
+                                storage.fifo.present? ? storage.fifo.strftime('%d.%m.%y') : ''
+                              else
+                                ''
+                              end
+  end
+
+  def storage_position_display
+    @storage_position_display ||= if storage=NStorage.find_by_packageId(self.id)
+                                storage.position.present? ?  storage.position.nr : ''
+                              else
+                                ''
+                              end
   end
 
   def self.generate_report_condition(type, start_t, end_t, location_id, part_id)
