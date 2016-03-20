@@ -23,8 +23,8 @@
       <tr>
         <td><%= index+@packages.offset+1%></td>
         <td><%= link_to package.container_id,package_path(package),:class=>'btn btn-default' %></td>
-        <td><%= PackageLabelRegex.part_prefix_string+package.package.part_id %></td>
-        <td><%= PackageLabelRegex.quantity_prefix_string + package.package.quantity_str %></td>
+        <td><%=  package.package.part.nr_for_user(current_user) %></td>
+        <td><%=  package.package.quantity_str %></td>
         <td><%= ppresenter.position_nr %></td>
         <td><%= package.state_display%></td>
       </tr>

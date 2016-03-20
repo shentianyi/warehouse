@@ -159,7 +159,7 @@
           <tr>
             <td><%= index+@packages.offset+1 %></td>
             <td><%= package.container_id %></td>
-            <td><%= package.package.part.nr if package.package %></td>
+            <td><%= package.package.part.nr_for_user(current_user) if package.package %></td>
             <td><%= package.package.quantity_str if package.package %></td>
             <td><%= package.package.fifo_time_display if package.package %></td>
             <td><%= package.remark %></td>

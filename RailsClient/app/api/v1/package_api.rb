@@ -68,7 +68,7 @@ module V1
 
        # args[:ancestry]= nil
 
-        {result: 1, content: PackagePresenter.init_json_presenters(PackageService.search(args).order(created_at: :desc).all)}
+        {result: 1, content: PackagePresenter.init_json_presenters(PackageService.search(args).order(created_at: :desc).all,current_user)}
       end
 
       # validate package id
@@ -98,7 +98,7 @@ module V1
       #=============
       post do
         m = PackageService.create package_params, current_user
-        m.result ? {result: 1, content: PackagePresenter.new(m.object).to_json} : {result: 0, content: m.content}
+        m.result ? {result: 1, content: PackagePresenter.new(m.object).to_json(current_user)} : {result: 0, content: m.content}
       end
 
       #=============
