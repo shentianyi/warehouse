@@ -20,7 +20,7 @@
     .label {
         font-size: 1em;
     }
-    
+
     a:hover, a:active {
         text-decoration: none;
         background-color: white;
@@ -55,7 +55,7 @@
           <input type="hidden" name="position[detail_fuzzy]"/>
         </div>
         <div class="col-sm-4">
-          所属部门：
+          所属仓库：
           <%= select_tag('position[whouse_id]', options_from_collection_for_select(Whouse.all, 'nr', 'name', @whouse_id), include_blank: true) %>
         </div>
         <div class="col-sm-4">
