@@ -2,7 +2,7 @@
 module Printer
   class P006<Base
     HEAD=[:pl_nr, :created_date]
-    BODY=[:leoni_nr, :czleoni_nr, :ask_qty, :position, :kucun, :send_nr, :remark]
+    BODY=[:leoni_nr, :czleoni_nr, :ask_qty, :position, :kucun, :remark]
 
     def generate_data
       p=PickList.find_by_id(self.id)
