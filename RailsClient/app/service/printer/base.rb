@@ -5,9 +5,12 @@ module Printer
     def initialize(id=nil, code=nil)
       if code.blank?
         self.code=self.class.name
+      else
+        self.code=code
       end
       self.data_set =[]
       self.id=id
+
       generate_data
     end
   end

@@ -1,8 +1,8 @@
 # print pick list
 module Printer
   class P006<Base
-    HEAD=[:pl_nr, :created_date]
-    BODY=[:leoni_nr, :czleoni_nr, :ask_qty, :position, :kucun, :remark]
+    HEAD=[:pl_nr, :create_date]
+    BODY=[:leoni_nr, :jx_nr, :ask_qty, :position, :kucun, :remark]
 
     def generate_data
       p=PickList.find_by_id(self.id)
@@ -24,12 +24,16 @@ module Printer
 
       pick_items.each do |i|
 
+        jx_part=Part.find_by_id(i.part_id)
+        if jx_part
+          sh_part= jx_part.part_clients.where(client_tenant_id: Tenant.find_by_code('CZL').id).first
+        end
         body= {
-            leoni_nr: i.part_id,
-            czleoni_nr: i.part_id,
+            leoni_nr: sh_part.blank? ? '' : sh_part.client_part_nr,
+            jx_nr: jx_part.blank? ? '' : jx_part.nr,
             ask_qty: i.quantity,
-            position: NStorageService.get_positions(i.part_id),
-            kucun: NStorageService.get_total_stock(i.part_id),
+            position: NStorageService.get_positions(i.part_id,p.user.location),
+            kucun: NStorageService.get_total_stock_count(i.part_id,p.user.location),
             remark: i.remark||' '
         }
 
@@ -37,8 +41,8 @@ module Printer
         BODY.each do |k|
           bodies<<{Key: k, Value: body[k]}
         end
-        self.data_set <<(heads+bodies)
         i.update(state: PickItemState::PRINTED)
+        self.data_set <<(heads+bodies)
       end
     end
   end
