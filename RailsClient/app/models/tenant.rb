@@ -10,4 +10,9 @@ class Tenant < ActiveRecord::Base
   has_many :parts, class_name:'PartClient',foreign_key: :client_tenant_id
 
   scope :clients, -> { where(type: TenantType::CLIENT) }
+
+
+  def self.find_by_nr(code)
+    self.find_by_code(code)
+  end
 end

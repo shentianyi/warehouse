@@ -15,12 +15,15 @@ module Import
           end
           data={}
           self.csv_cols.each do |col|
+            # p col
+            # p col.foreign.constantize
            # raise(ArgumentError, "行:#{line_no} #{col.header} 值constantize不可为空") if !col.null && row[col.header].blank?
             if !col.is_foreign || (col.is_foreign && (f=col.foreign.constantize.find_by_nr(row[col.header])))
               data[col.field]=row[col.header] unless row[col.header].blank?
               if f.present?
                 data[col.field]=f.id
               end
+
             end
           end
           query=nil

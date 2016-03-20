@@ -21,7 +21,7 @@ module Import
 
     def location_down_block
       Proc.new { |line, item|
-        line<<item.id
+        line<<item.nr
         line<<item.name
         line<<item.address
         line<<item.tel
@@ -35,7 +35,7 @@ module Import
 
     def init_csv_cols
       csv_cols=[]
-      csv_cols<< Csv::CsvCol.new(field: 'id', header: 'LocationNr')
+      csv_cols<< Csv::CsvCol.new(field: 'nr', header: 'LocationNr')
       csv_cols<< Csv::CsvCol.new(field: 'name', header: 'Name')
       csv_cols<< Csv::CsvCol.new(field: 'address', header: 'Address')
       csv_cols<< Csv::CsvCol.new(field: 'tel', header: 'Telephone', null:true)
