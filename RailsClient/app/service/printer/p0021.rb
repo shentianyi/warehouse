@@ -2,7 +2,7 @@
 module Printer
   class P0021<Base
     HEAD=[:delivery_nr, :delivery_date, :from_addr, :to_addr, :totalnr_forklift, :totalnr_mupan, :num_paperbox, :totalnr_nps]
-    BODY=[:forklift_nr, :hu_nr, :eighthundred_nr, :part_nr, :lesspn, :total_qty, :batch_nr]
+    BODY=[:forklift_nr, :batch_nr, :part_nr, :czleoni_partnr, :total_qty, :unit, :num_bucket, :remark]
 
 
     def generate_data
@@ -33,12 +33,13 @@ module Printer
           bodies=[]
           body={
               forklift_nr: f.container_id.to_s,
-              hu_nr: ps.package.id.to_s,
-              eighthundred_nr: ps.package.extra_800_no.to_s,
+              batch_nr: ps.package.extra_batch.to_s,
+              part_nr: ps.package.extra_sh_part_id.to_s,
+              czleoni_partnr: ps.package.extra_cz_part_id.to_s,
               total_qty: ps.package.quantity.to_s,
-              part_nr: part.blank? ? '' : part.nr.to_s,
-              lesspn: ps.package.extra_sh_part_id.to_s,
-              batch_nr: ps.package.extra_batch.to_s
+              unit: ps.package.extra_unit.to_s,
+              num_bucket: 1,
+              remark: ps.package.remark.to_s
           }
           p '----------------------------------------'
           p body
