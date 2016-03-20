@@ -10,6 +10,8 @@ class Part < ActiveRecord::Base
   has_many :packages
   has_many :storages
 
+  has_many :part_clients
+
   has_many :containers
   #has_many :inventory_list_items
 

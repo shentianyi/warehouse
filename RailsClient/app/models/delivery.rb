@@ -4,4 +4,5 @@ class Delivery < Container
   def generate_id
     "D#{Time.now.strftime('%y%m%d%H%M%S')}"
   end
+
 end

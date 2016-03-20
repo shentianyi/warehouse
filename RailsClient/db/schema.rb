@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160319102917) do
+ActiveRecord::Schema.define(version: 20160320095305) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -283,6 +283,8 @@ ActiveRecord::Schema.define(version: 20160319102917) do
     t.string   "receive_whouse_id"
     t.integer  "receive_mode",                        default: 100
     t.string   "order_source_location_id"
+    t.boolean  "is_open_safe_qty",                    default: false
+    t.text     "safe_qty_emails"
   end
 
   add_index "locations", ["destination_id"], name: "index_locations_on_destination_id", using: :btree

@@ -67,8 +67,23 @@
           </div>
         </div>
 
+        <div class="col-sm-12">
+          <div class="col-sm-4">
+            <%= f.label :is_open_safe_qty, '开启库存预警' %>
+            <%= f.check_box :is_open_safe_qty %>
+          </div>
+
+        </div>
+
+        <div class="col-sm-12">
+          <div class="col-sm-4">
+            <%= f.label :safe_qty_emails, '库存预警通知邮件(多个以英文逗号分隔)' %>
+            <%= f.text_area :safe_qty_emails, :style => 'width:400px;height:100px' %>
+          </div>
+        </div>
+
         <div class="actions">
-          <%= f.submit value: '提 交', class: 'btn btn-primary', :style => 'width:200px;margin-top:20px;' %>
+          <%= f.submit value: '提 交', class: 'btn btn-primary', :style => 'width:200px;margin-top:100px;' %>
         </div>
       </div>
     </div>

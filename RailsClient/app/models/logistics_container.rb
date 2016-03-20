@@ -6,6 +6,7 @@ class LogisticsContainer<LocationContainer
 
   alias_method :movable_state_display, :state_display
   after_update :check_move_stock
+  after_update :check_safe_stock
 
 
   default_scope { where(type: LocationContainerType::LOGISTICS) }
@@ -151,18 +152,18 @@ class LogisticsContainer<LocationContainer
         end
       elsif (self.state==MovableState::WAY && self.state_was==MovableState::INIT)
         # begin
-          if ns= NStorage.where(packageId: package.id).first
-            WhouseService.new.move({
-                                       partNr: package.part.id,
-                                       qty: package.quantity,
-                                       packageId: package.id,
-                                       fromWh: ns.ware_house_id,
-                                       toWh: source_location.send_whouse.id,
-                                       toPosition: source_location.send_whouse.default_position.id
-                                   })
-          else
-            self.enter_stock(source_location.send_whouse,source_location.send_whouse.default_position,Time.now)
-          end
+        if ns= NStorage.where(packageId: package.id).first
+          WhouseService.new.move({
+                                     partNr: package.part.id,
+                                     qty: package.quantity,
+                                     packageId: package.id,
+                                     fromWh: ns.ware_house_id,
+                                     toWh: source_location.send_whouse.id,
+                                     toPosition: source_location.send_whouse.default_position.id
+                                 })
+        else
+          self.enter_stock(source_location.send_whouse, source_location.send_whouse.default_position, Time.now)
+        end
         # rescue
         #
         # end
@@ -185,5 +186,39 @@ class LogisticsContainer<LocationContainer
     end
     # end
   end
+
+
+  def check_safe_stock
+
+    if self.source_location.is_open_safe_qty
+      if delivery = self.delivery
+        if self.state_was==MovableState::INIT && self.state==MovableState::WAY
+
+          emails=self.source_location.safe_qty_emails.split(',')
+          if emails.count>0
+            packages= LogisticsContainerService.get_packages(self)
+            if packages.count>0
+              parts=[]
+
+              packages.each do |pack|
+                part=pack.package.part
+                part_count=NStorage.where(partNr: part.id,
+                                          ware_house_id: (self.source_location.whouses.pluck(:id)-[self.source_location.send_whouse.id])).count
+                if part_count<=part.safe_qty
+                  parts<<part
+                end
+              end
+              if parts.count>0
+                OrderMailer.notify(emails, parts).deliver
+              end
+            end
+          end
+        end
+      end
+
+
+    end
+  end
+
 
 end
