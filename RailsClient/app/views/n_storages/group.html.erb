@@ -17,6 +17,13 @@
         cursor: pointer;
         margin: -10px 0 -5px 0;
     }
+
+     a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
 </style>
 
 <div class="panel panel-default">
@@ -87,12 +94,14 @@
 </div>
 
 <% if @n_storages.present? %>
-    <div class="digg_pagination">
-      <div class="page_info">
-        <%= page_entries_info @n_storages %>
+  <div class="col-sm-12" style="margin-bottom: 20px;">
+      <div class="digg_pagination">
+        <div class="page_info">
+          <%= page_entries_info @n_storages %>
+        </div>
+        <%= will_paginate @n_storages, :container => false %>
       </div>
-      <%= will_paginate @n_storages, :container => false %>
-    </div>
+  </div>
 <% end %>
 
 <table class="table table-striped table-bordered table-hover">

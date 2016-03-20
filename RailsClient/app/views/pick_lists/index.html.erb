@@ -1,11 +1,7 @@
 <style>
     .col-sm-12 {
         height: 40px;
-        margin-top: 20px;
-    }
-
-    .col-sm-12:first-child {
-        margin-top: 0;
+        /*margin-top: 20px;*/
     }
 
     .table > thead > tr > th, .table > tbody > tr > td {
@@ -29,21 +25,18 @@
   </ol>
 </div>
 
-<div class="col-sm-12">
   <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
-    <div class="col-sm-12" style="border-bottom: 1px dashed #000;">
+    <div class="col-sm-12" style="border-bottom: 1px dashed #000;margin-top:10px;">
       <div class="col-sm-3">
         择货单号：
         <input type="text" name="pick_list[id]" value="<%= @id %>"/>
         <input type="hidden" name="pick_list[id_fuzzy]"/>
       </div>
-
       <!--<div class="col-sm-3">-->
         <!--择货员工：-->
         <!--<input type="text" name="pick_list[user_id]" value="<%= @user_id %>"/>-->
         <!--<input type="hidden" name="pick_list[user_id_fuzzy]"/>-->
       <!--</div>-->
-
       <div class="col-sm-5">
         创建日期：
         <input type="text" name="pick_list[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
@@ -56,10 +49,9 @@
       </div>
     </div>
   </form>
-</div>
 
 <%= form_tag controller: 'pick_lists', action: 'export', method: 'post' do %>
-    <div class="col-sm-12">
+    <div class="col-sm-12" style="margin-top: 10px;">
       <div class="col-sm-3">
         <input type="button" value="打印择货单" style="width: 200px;" class='btn btn-warning' onclick="print_pick_list();"/>
       </div>
@@ -67,8 +59,8 @@
         <input type="submit" class="btn btn-warning" value="导出EXCEL" style="width: 200px;"/>
       </div>
     </div>
-
-    <div class="col-sm-12">
+<% end %>
+    <div class="col-sm-12" style="margin-top: 20px;">
       <div class="digg_pagination">
         <div class="page_info">
           <%= page_entries_info @pick_lists %>
@@ -76,8 +68,6 @@
         <%= will_paginate @pick_lists, :container => false %>
       </div>
     </div>
-
-    <div class="col-sm-12" style="height: auto;padding: 0;">
       <table class="table table-bordered table-striped table-hover">
         <thead>
         <tr>
@@ -107,8 +97,6 @@
         <% end %>
         </tbody>
       </table>
-    </div>
-<% end %>
 
 <div class="digg_pagination">
   <%= will_paginate @pick_lists, :container => false %>

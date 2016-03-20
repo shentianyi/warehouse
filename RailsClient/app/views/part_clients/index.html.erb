@@ -38,12 +38,12 @@
   <div class="panel-body">
     <% if current_user.permission?(:operate_basic_info_create) %>
         <%= link_to "导入客户零件", import_tenant_part_clients_path, :title => '导入客户零件', :class => 'btn btn-primary', :style => 'width:150px;color:white;' %>
-        <%= link_to 'New Part client', new_tenant_part_client_path, :title => '新建客户零件', :class => 'btn btn-warning', :style => 'width:150px;margin-left:50px;color:white;' %>
+        <%= link_to '新建客户零件', new_tenant_part_client_path, :title => '新建客户零件', :class => 'btn btn-warning', :style => 'width:150px;margin-left:50px;color:white;' %>
     <% end %>
   </div>
 </div>
 
-<div class="col-sm-12">
+<div class="col-sm-12" style="margin-bottom: 20px;">
   <div class="digg_pagination">
     <div class="page_info">
       <%= page_entries_info @part_clients %>
@@ -55,9 +55,9 @@
 <table class="table table-bordered table-striped">
   <thead>
   <tr>
-    <th>No.</th>
-    <th>Part Nr</th>
-    <th>Client part nr</th>
+    <th>序号</th>
+    <th>零件号</th>
+    <th>客户零件号</th>
     <th colspan="2">操作</th>
   </tr>
   </thead>
