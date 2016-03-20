@@ -36,7 +36,6 @@
       <div class="col-sm-4">
         零件号：
         <input type="text" name="n_storage[partNr]" value="<%= @partNr %>"/>
-        <input type="hidden" name="n_storage[partNr_fuzzy]"/>
       </div>
       <div class="col-sm-4">
         仓库号：
@@ -44,8 +43,7 @@
       </div>
       <div class="col-sm-4">
         库位号：
-        <input type="text" name="n_storage[position]" value="<%= @position %>"/>
-        <input type="hidden" name="n_storage[position_fuzzy]"/>
+        <input type="text" name="n_storage[position_id]" value="<%= @position_id %>"/>
       </div>
     </div>
     <div class="col-sm-12">
@@ -119,7 +117,7 @@
             <td><%= storage.total_qty %></td>
             <td><%= storage.fifo.localtime if storage.fifo %> </td>
             <td><%= storage.updated_at.localtime if storage.updated_at %> </td>
-            <td><%= storage.whouse.nr if storage.whouse.present? %></td>
+            <td><%= storage.whouse.name if storage.whouse.present? %></td>
             <td><%= storage.position.nr if storage.position.present? %></td>
             <!--<td><%= link_to '编辑', edit_n_storage_path(storage), :class => 'btn btn-default' %></td>-->
           </tr>

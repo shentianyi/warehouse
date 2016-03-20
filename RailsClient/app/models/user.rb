@@ -113,6 +113,9 @@ class User < ActiveRecord::Base
     data
   end
 
+  def is_client_user?
+    self.location.tenant.type==TenantType::CLIENT
+  end
   private
   def generate_authentication_token
     loop do

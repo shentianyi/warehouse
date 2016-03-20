@@ -5,7 +5,7 @@ class PackagesController < ApplicationController
   # GET /packages
   # GET /packages.json
   def index
-    @packages = PackageService.search(nil).order(created_at: :desc).paginate(:page => params[:page]) #all
+    @packages = PackageService.search(nil,true,current_user.location).order(created_at: :desc).paginate(:page => params[:page]) #all
     #@packages = @packages.paginate(:page=>params[:page])
   end
 
@@ -40,6 +40,12 @@ class PackagesController < ApplicationController
     end
   end
 =end
+
+  # def search
+  #   super { |query|
+
+  #   }
+  # end
 
   def download_quantity
     file_name= 'packages_quantities_'+Time.now.strftime('%Y%m%d%H%M%S')+'.csv'

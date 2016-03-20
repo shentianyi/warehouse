@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160319090849) do
+ActiveRecord::Schema.define(version: 20160319102917) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -254,25 +254,31 @@ ActiveRecord::Schema.define(version: 20160319090849) do
   add_index "location_destinations", ["location_id"], name: "index_location_destinations_on_location_id", using: :btree
 
   create_table "locations", force: true do |t|
-    t.string   "uuid",              limit: 36,                 null: false
+    t.string   "uuid",                     limit: 36,                 null: false
     t.string   "name"
-    t.boolean  "is_delete",                    default: false
-    t.boolean  "is_dirty",                     default: true
-    t.boolean  "is_new",                       default: true
+    t.boolean  "is_delete",                           default: false
+    t.boolean  "is_dirty",                            default: true
+    t.boolean  "is_new",                              default: true
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "address"
     t.string   "tel"
-    t.boolean  "is_base",                      default: false
+    t.boolean  "is_base",                             default: false
     t.string   "destination_id"
     t.integer  "parent_id"
+<<<<<<< HEAD
     t.integer  "status",                       default: 0
     t.string   "remark",                       default: ""
+=======
+    t.integer  "status",                              default: 0
+    t.string   "remark",                              default: ""
+>>>>>>> b7e836efab18a00d1f7071039b7372af1ddf852b
     t.integer  "tenant_id"
     t.string   "nr"
     t.string   "send_whouse_id"
     t.string   "receive_whouse_id"
-    t.integer  "receive_mode",                 default: 100
+    t.integer  "receive_mode",                        default: 100
+    t.string   "order_source_location_id"
   end
 
   add_index "locations", ["destination_id"], name: "index_locations_on_destination_id", using: :btree

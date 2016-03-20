@@ -27,6 +27,9 @@ class PickListsController < ApplicationController
   # POST /pick_lists.json
   def create
     msg=Message.new
+    if user=User.find_by_nr(params[:user_id])
+      params[:user_id]=user.id
+    end
     pick_list=PickListService.covert_order_to_pick_list(params[:user_id], params[:order_ids])
     if pick_list
       msg.result = true

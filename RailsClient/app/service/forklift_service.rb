@@ -78,12 +78,23 @@ class ForkliftService
     return msg
   end
 
-  def self.search(condition)
-    if condition && condition['records.impl_time']
-      LogisticsContainer.joins(:forklift).joins(:records).where(condition)
-    else
-      LogisticsContainer.joins(:forklift).where(condition)
-    end.distinct
+  def self.search(condition, controlled=false, location=nil)
+    # if condition && condition['records.impl_time']
+    #   LogisticsContainer.joins(:forklift).joins(:records).where(condition)
+    # else
+    #   LogisticsContainer.joins(:forklift).where(condition)
+    # end.distinct
+
+    q= if condition && condition['records.impl_time']
+         LogisticsContainer.joins(:forklift).joins(:records).where(condition)
+       else
+         LogisticsContainer.joins(:forklift).where(condition)
+       end
+
+    if controlled && location
+      q=q.where('des_location_id=? or source_location_id=?', location.id, location.id)
+    end
+    q.distinct
   end
 
 
@@ -91,9 +102,9 @@ class ForkliftService
     ActiveRecord::Base.transaction do
       if forklift=lc.forklift
         lc.descendants.each { |d|
-           PackageService.enter_stock(user,d,warehouse,position,fifo)
+          PackageService.enter_stock(user, d, warehouse, position, fifo)
         }
-       return true
+        return true
       else
         raise "托盘:#{params[:container_id]}不存在"
       end

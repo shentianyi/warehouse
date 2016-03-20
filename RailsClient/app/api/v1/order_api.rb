@@ -40,7 +40,7 @@ module V1
         unless order = OrderService.exits?(params[:id])
           return {result: 0, content: OrderMessage::NotFound}
         end
-        return {result: 1, content: {order: OrderPresenter.new(order).to_json_with_order_items}}
+        return {result: 1, content: {order: OrderPresenter.new(order).to_json_with_order_items(current_user)}}
       end
 
       #=============
@@ -49,7 +49,10 @@ module V1
       #verified
       #=============
       post do
-        unless order = OrderService.create_with_items({order: order_params, order_items: params[:order_items], nopart_items: params[:no_part_items]}, current_user)
+        unless order = OrderService.create_with_items({order: order_params,
+                                                       order_items: params[:order_items],
+                                                       nopart_items: params[:no_part_items]},
+                                                      current_user)
           return {result: 0, content: OrderMessage::CreatedFailed}
         end
 

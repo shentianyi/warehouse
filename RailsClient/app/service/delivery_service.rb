@@ -75,12 +75,17 @@ class DeliveryService
     LogisticsContainer.joins(:delivery).where(conditions).order(created_at: :desc)
   end
 
-  def self.search(condition)
-    if condition && condition['records.impl_time']
+  def self.search(condition,controlled=false,location=nil)
+   q= if condition && condition['records.impl_time']
       LogisticsContainer.joins(:delivery).joins(:records).where(condition)
     else
       LogisticsContainer.joins(:delivery).where(condition)
-    end.distinct
+      end
+
+   if controlled && location
+     q=q.where('des_location_id=? or source_location_id=?',location.id,location.id)
+   end
+   q.distinct
   end
 
   def self.import_by_file path

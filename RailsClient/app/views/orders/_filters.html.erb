@@ -1,6 +1,6 @@
 <!--<h4>filters</h4>-->
 <!--<ul>-->
   <% @filters.each do |f| %>
-    <option value="<%= f.id %>"><%= f.filter_type_display %>:<%= f.filterable_id %></option>
+    <option value="<%= f.id%>"><%= f.filter_type_display %>:<%= f.filterable.name %></option>
   <% end %>
 <!--</ul>-->

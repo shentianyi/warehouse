@@ -12,6 +12,9 @@ class LocationPresenter<Presenter
     if @location.default_destination
       json[:destination]=LocationPresenter.new(@location.default_destination).to_json
     end
+    if @location.order_source_location
+    json[:order_source_location]=LocationPresenter.new(@location.order_source_location).to_json
+    end
     json
   end
 end

@@ -80,16 +80,16 @@ class OrdersController < ApplicationController
   end
 
   def panel_list
-    @orders=OrderService.get_orders_by_days(current_user.location_destination_ids).where.not(id:params[:orders]).order(created_at: :asc).all
+    @orders=OrderService.get_orders_by_days(current_user.location_destination_ids).where.not(id: params[:orders]).order(created_at: :asc).all
     #@orders = OrderService.get_orders_by_user(current_user.id).where.not(id:params[:orders]).order(created_at: :asc).all
-    render partial:'list'
+    render partial: 'list'
   end
 
   def handle
     orders=[]
     params[:orders].each do |id|
       if order=Order.find_by_id(id)
-        order.update(handled:params[:handled])
+        order.update(handled: params[:handled])
         orders<<order.id
       end
     end
@@ -102,26 +102,31 @@ class OrdersController < ApplicationController
       #.group(:part_id,:whouse_id)
       #.select('order_items.*,sum(order_items.quantity) as quantity')
     else
-      @order_items=PickItemService.get_order_items(params[:user_id],params[:order_ids]).order(is_emergency: :desc)||[]
+      @order_items=PickItemService.get_order_items(params[:user_id], params[:order_ids]).order(is_emergency: :desc)||[]
 
     end
 
-    @orders = Order.where(id:params[:order_ids])
+    @orders = Order.where(id: params[:order_ids])
 
-    render partial:'item'
+    render partial: 'item'
   end
 
   def filters
     @filters = []
-    if user = User.find_by_id(params[:user])
+    if user = User.find_by_nr(params[:user])
       @filters = user.pick_item_filters
     end
-    render partial:'filters'
+    render partial: 'filters'
   end
 
   def filt
-    @orders = OrderService.orders_by_filters(params[:user_id],params[:orders],params[:filters])
-    render partial:'list'
+    @orders = if user = User.find_by_nr(params[:user_id])
+                OrderService.orders_by_filters(user.id, params[:orders], params[:filters])
+              else
+                []
+              end
+
+    render partial: 'list'
   end
 
   def picklists
@@ -141,16 +146,16 @@ class OrdersController < ApplicationController
       }
       @picklists = PickList.where(condition).all.order(created_at: :desc)
     else
-      @picklists = PickListService.find_by_days(user)#PickList.where(user_id:params[:user_id]).order(created_at: :desc)
+      @picklists = PickListService.find_by_days(user) #PickList.where(user_id:params[:user_id]).order(created_at: :desc)
     end
 
-    render partial:'picklists'
+    render partial: 'picklists'
   end
 
   def pickitems
     @picklist= PickList.find(params[:picklist_ids].first)
     @pickitems = PickItem.where(pick_list_id: params[:picklist_ids])
-    render partial:'pickitems'
+    render partial: 'pickitems'
   end
 
   def order_items
@@ -165,6 +170,6 @@ class OrdersController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def order_params
-    params.require(:order).permit(:id, :user_id,:handled,:is_delete)
+    params.require(:order).permit(:id, :user_id, :handled, :is_delete)
   end
 end

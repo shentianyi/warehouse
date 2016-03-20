@@ -10,12 +10,15 @@ class ScrapListItem < ActiveRecord::Base
     #     fromWh:'3EX'
     # }
     if self.state==ScrapListItemState::UNHANDLED
+      part=Part.find_by_nr(self.part_id)
+      toWh=Whouse.find_by_nr(self.scrap_list.dse_warehouse)
+      fromWh=Whouse.find_by_nr(self.scrap_list.src_warehouse)
       params={
-          partNr: self.part_id,
+          partNr: part.id,
           qty: self.quantity,
-          toWh: self.scrap_list.dse_warehouse,
+          toWh: toWh.id,
           toPosition: 'BaofeiWeizhi',
-          fromWh: self.scrap_list.src_warehouse,
+          fromWh: fromWh.id,
           employee_id:self.scrap_list.builder
       }
       StorageOperationRecord.save_record(params, 'MOVE')

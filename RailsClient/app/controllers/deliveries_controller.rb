@@ -9,7 +9,7 @@ class DeliveriesController < ApplicationController
   # GET /deliveries
   # GET /deliveries.json
   def index
-    @deliveries= DeliveryService.search(nil).order(created_at: :desc).paginate(:page => params[:page])
+    @deliveries= DeliveryService.search(nil,true,current_user.location).order(created_at: :desc).paginate(:page => params[:page])
   end
 
   # GET /deliveries/1
@@ -50,11 +50,11 @@ class DeliveriesController < ApplicationController
       if @delivery.update(delivery_params)
 
         if delivery_params.has_key? :state
-          @delivery.descendants.each{|d| d.update({state: delivery_params[:state],is_dirty:true})}
+          @delivery.descendants.each { |d| d.update({state: delivery_params[:state], is_dirty: true}) }
         end
 
         if delivery_params.has_key? :des_location_id
-          @delivery.descendants.each{|d| d.update({des_location_id: delivery_params[:des_location_id],is_dirty:true})}
+          @delivery.descendants.each { |d| d.update({des_location_id: delivery_params[:des_location_id], is_dirty: true}) }
         end
 
         # 注意修改了状态的后果
@@ -137,12 +137,12 @@ class DeliveriesController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_delivery
-    @delivery = DeliveryService.search({id:params[:id]}).first
+    @delivery = DeliveryService.search({id: params[:id]}).first
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def delivery_params
-    params.require(:logistics_container).permit(:state, :remark,:des_location_id)
+    params.require(:logistics_container).permit(:state, :remark, :des_location_id)
   end
 
   def get_states

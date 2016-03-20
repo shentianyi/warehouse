@@ -5,7 +5,7 @@ ActiveRecord::Base.transaction do
   end
   # init location and admin
   unless (jxlo=Location.find_by_nr('SHJXLO'))
-    jxlo = Location.create(nr: 'SHJXLO', name: ' 上海佳轩物流', is_base: true,
+    jxlo = Location.create(nr: 'SHJXLO', name: '上海佳轩物流', is_base: true,
                            tenant_id: t.id,
                            address: '上海佳轩物流有限公司的地址',
                            receive_mode: DeliveryReceiveMode::PACKAGE)
@@ -28,10 +28,11 @@ ActiveRecord::Base.transaction do
 
   # init location
   unless (shllo=Location.find_by_nr('SHLLO'))
-    shllo = Location.create(nr: 'SHLLO', name: ' 上海莱尼', is_base: true,
+    shllo = Location.create(nr: 'SHLLO', name: '上海莱尼', is_base: true,
                             tenant_id: shl.id,
                             address: '上海莱尼电器有限公司的地址',
-                            receive_mode: DeliveryReceiveMode::FORKLIFT)
+                            receive_mode: DeliveryReceiveMode::FORKLIFT,
+                            order_source_location_id:jxlo.id)
   end
 
   unless (czllo=Location.find_by_nr('CZLLO'))
