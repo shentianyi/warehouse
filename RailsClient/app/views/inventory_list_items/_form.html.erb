@@ -43,14 +43,13 @@
             <%= f.label :part_id %><br>
             <%= f.text_field :part_id %>
           </div>
-
-        </div>
-
-        <div class="col-sm-12">
           <div class="col-sm-4">
             <%= f.label :qty %><br>
             <%= f.text_field :qty %>
           </div>
+        </div>
+
+        <div class="col-sm-12">
           <div class="col-sm-4">
             <%= f.label :position %><br>
             <%= f.text_field :position %>
@@ -59,13 +58,13 @@
             <%= f.label :current_whouse %><br>
             <%= f.select(:current_whouse, Whouse.all.collect { |w| [w.nr, w.nr] }, {include_blank: false}) %>
           </div>
-        </div>
-
-        <div class="col-sm-12">
-          <div class="col-sm-4">
+           <div class="col-sm-4">
             <%= f.label :current_position %><br>
             <%= f.text_field :current_position %>
           </div>
+        </div>
+
+        <div class="col-sm-12">
           <div class="col-sm-4">
             <%= f.label :in_store %><br>
             <%= f.select(:in_store, [['否', false], [' 是', true]], {include_blank: false}) %>
@@ -76,7 +75,7 @@
       <div class="panel-footer">
         <div class="actions">
           <!--<%= f.submit %>-->
-          <input type="submit" value="新增Inventory list item" name="commit" class="btn btn-primary">
+          <input type="submit" value="新增盘点项列表" name="commit" class="btn btn-primary">
         </div>
       </div>
     </div>
