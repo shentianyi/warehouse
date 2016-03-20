@@ -89,7 +89,6 @@
               <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-import', :style => 'color:black'), new_scrap_list_item_path(id: scrap_list.id), :title => '导入报废', :class => 'IconA' %>
 
               <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-trash', :style => 'color:darkred;'), scrap_list, method: :delete, data: {confirm: 'Are you sure?'}, :title => '删除', :class => 'IconA' %>
-
           <% end %>
 
         </td>

@@ -40,7 +40,8 @@
           </div>
           <div class="col-sm-3">
             <%= f.label :code, '代码' %>:
-            <%= f.label :code, @sys_config.code %>
+            <!-- <%= f.label :code, @sys_config.code%> -->
+            <label for="sys_config_code" style="width: 200px;overflow: hidden;text-overflow: ellipsis;" title="<%= @sys_config.code%>"> <%= @sys_config.code%> </label>
           </div>
           <div class="col-sm-3">
             <%= f.label :value, '值' %>:

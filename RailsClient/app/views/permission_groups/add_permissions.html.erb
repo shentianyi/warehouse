@@ -71,10 +71,6 @@
 </div>
 
 <script>
-    var ClientHeight = document.documentElement.clientHeight;
-    $('#HasPermission').css({height: (ClientHeight - 450) / 2 + 'px'});
-    $('#NoPermission').css({height: (ClientHeight - 450) / 2 + 'px'});
-
     ShowPermission();
 
     var PermissionJSON = [];
@@ -107,11 +103,11 @@
     function ShowPermission() {
         <% @permissions.each_with_index do |p| %>
         if (<%= p[:status] %>) {
-            $('<div class="col-md-1" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;border: 1px solid lightseagreen;background: lightseagreen;color: white;border-radius: 4px;margin:0 5px 5px 5px;text-align: left;height: 30px;padding: 5px 0 0 10px;">' +
+            $('<div class="col-md-2" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;border: 1px solid lightseagreen;background: lightseagreen;color: white;border-radius: 4px;margin:0 5px 5px 5px;text-align: left;height: 30px;padding: 5px 0 0 10px;">' +
                     '<input type="checkbox" class="CheckBox" id="<%= p[:id]%>" ischecked="true" checked><strong title="<%= p[:description] %>">' + '<%= p[:description] %>' + '</strong></input></div>').appendTo('#HasPermission').ready(function () {
             });
         } else {
-            $('<div class="col-md-1" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;border: 1px solid steelblue;background: steelblue;color: white; border-radius: 4px;margin:0 5px 5px 5px;text-align: left;height: 30px;padding: 5px 0 0 10px;">' +
+            $('<div class="col-md-2" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;border: 1px solid steelblue;background: steelblue;color: white; border-radius: 4px;margin:0 5px 5px 5px;text-align: left;height: 30px;padding: 5px 0 0 10px;">' +
                     '<input type="checkbox" class="CheckBox" id="<%= p[:id]%>" ischecked="false"> <strong title="<%= p[:description] %>">' + '<%= p[:description] %>' + '</strong></input></div>').appendTo('#NoPermission').ready(function () {
             });
         }
