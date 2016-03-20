@@ -3,17 +3,6 @@
         font-size: 1em;
     }
 
-    .digg_pagination .page_info {
-        text-align: left;
-        width: auto;
-        margin-left: -20px;
-        margin-right: -20px;
-    }
-
-    .digg_pagination {
-        background: transparent;
-    }
-
     a:hover, a:active {
         text-decoration: none;
         background-color: white;
@@ -38,13 +27,14 @@
   </ol>
 </div>
 
-<div class="digg_pagination">
-  <div class="page_info">
-    <%= page_entries_info @forklifts %>
+<div class="col-sm-12">
+  <div class="digg_pagination">
+    <div class="page_info">
+      <%= page_entries_info @forklifts %>
+    </div>
+    <%= will_paginate @forklifts, :container => false %>
   </div>
-  <%= will_paginate @forklifts, :container => false %>
 </div>
-
 
 <table class="table table-bordered table-striped table-hover">
   <thead>

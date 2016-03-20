@@ -12,6 +12,13 @@
     .table > thead > tr > th, .table > tbody > tr > td {
         text-align: center;
     }
+
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
 </style>
 
 <div class="panel panel-default">
@@ -72,12 +79,13 @@
       </form>
     </div>
 
-    <hr>
-    <div class="digg_pagination">
-      <div class="page_info" style="margin: 40px 0 0 0;">
-        <%= page_entries_info @users %>
+    <div class="col-sm-12">
+      <div class="digg_pagination" style="margin-top: 10px;">
+        <div class="page_info">
+          <%= page_entries_info @users %>
+        </div>
+        <%= will_paginate @users, :container => false %>
       </div>
-      <%= will_paginate @users, :container => false %>
     </div>
 <% end %>
 

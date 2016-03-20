@@ -118,7 +118,7 @@
     <ul>
       <% if current_user.permission?(:view_report) %>
           <li><a href="<%= reports_reports_path %>">收发货报表</a></li>
-          <li><a href="<%= reports_discrepancy_path %>">收发货差异报表</a></li>
+          <!-- <li><a href="<%= reports_discrepancy_path %>">收发货差异报表</a></li> -->
           <li><a href="<%= reports_orders_report_path %>">要货报表</a></li>
       <% end %>
     </ul>
@@ -134,12 +134,12 @@
     </ul>
   </li>
 
-  <li>
+  <!-- <li>
     <a href="#">消息 &nbsp;<i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:black;"></i></a>
     <ul>
       <li id="notification"><a href="<%= notifications_path %>">通知面板</a></li>
     </ul>
-  </li>
+  </li> -->
 
   <li>
     <a href="#">管理 &nbsp;<i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:black;"></i></a>

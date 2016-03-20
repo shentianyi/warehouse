@@ -18,6 +18,12 @@
     .table > thead > tr > th, .table > tbody > tr > td {
         text-align: center;
     }
+      a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
 </style>
 
 <div class="panel panel-default">
@@ -83,14 +89,14 @@
   </form>
 </div>
 
-<div class="col-sm-12" style="margin-bottom: -30px;">
+<div class="col-sm-12">
   <div class="col-sm-8"></div>
   <div class="col-sm-4 up_search">
     <i class=" glyphicon glyphicon-chevron-up" title="收起搜索条件"></i>
   </div>
 </div>
 
-<div class="col-sm-12">
+<div class="col-sm-12" style="margin-top: -10px;margin-bottom: 20px;">
   <div class="digg_pagination">
     <div class="page_info">
       <%= page_entries_info @n_storages %>

@@ -16,6 +16,13 @@
     .label {
         font-size: 1em;
     }
+    
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
 </style>
 
 <div class="panel panel-default">
@@ -48,7 +55,7 @@
   </div>
 </div>
 
-<div class="col-sm-12">
+<div class="col-sm-12" style="margin-top: 10px;">
   <div class="digg_pagination">
     <div class="page_info">
       <%= page_entries_info @whouses %>
