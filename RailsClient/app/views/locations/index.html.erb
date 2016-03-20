@@ -41,7 +41,7 @@
   </ol>
 </div>
 
-<div class="col-sm-12" style="margin-top: -10px;">
+<div class="col-sm-12" style="margin-top: -10px;margin-bottom: 20px;">
   <% if current_user.permission?(:operate_basic_info_create) %>
       <div class="col-sm-4">
         <%= link_to "新建地点", send("new_#{@model}_path"), :class => 'btn btn-primary', :style => 'width:150px;color:white;' %>
@@ -111,18 +111,18 @@
         <td>
           <%= DeliveryReceiveMode.display(location.receive_mode) %>
         </td>
-        <td>
+        <td style="white-space: nowrap;">
           <%= link_to content_tag(:span, '员工列表', :class => 'label label-primary'), users_location_path(location) %>
           <span class="badge"><%= location.users.count %></span>
         </td>
-        <td>
+        <td style="white-space: nowrap;">
           <%= link_to content_tag(:span, '仓库列表', :class => 'label label-primary'), whouses_location_path(location) %>
           <span class="badge"><%= location.whouses.count %></span>
 
         </td>
         <td><%= location.tenant.name if location.tenant %></td>
         <td><%= location.address %></td>
-        <td>
+        <td style="white-space: nowrap;">
           <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-eye-open', :style => 'color:green;'), location, :class => 'IconA', :title => '详细' %>
           <% if current_user.permission?(:operate_basic_info_edit) %>
               <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-pencil', :style => 'color:#4F94CD;'), edit_location_path(location), :class => 'IconA', :title => '编辑' %>

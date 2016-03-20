@@ -74,7 +74,8 @@ ul > li > a:hover {
 
 .menu > li {
     float: left;
-    width: 12.5%;
+    /*width: 12.5%;*/
+    width:14.2857143%;
 }
 
 .menu > li:hover, .menu > li.hover {
