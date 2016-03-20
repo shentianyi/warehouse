@@ -1,9 +1,9 @@
 <h3>需求单</h3>
 
 <p>
-  <%@orders.each do |o|%>
-  <%= o.remark%>
-  <%end%>
+  <% @orders.each do |o| %>
+      <%= o.remark %>
+  <% end %>
 </p>
 <table class="table table-bordered table-striped globle-table">
   <thead>
@@ -13,8 +13,7 @@
     <th>数量</th>
     <th>箱数</th>
     <th>要货员工号</th>
-    <th>要货项目</th>
-    <th>要货库位</th>
+    <th>要货地点</th>
     <th>是否加急</th>
     <th>是否缺货</th>
     <th>是否已完成备货</th>
@@ -23,31 +22,30 @@
   </thead>
 
   <tbody>
-  <% @order_items.each_with_index do |order_item,index| %>
+  <% @order_items.each_with_index do |order_item, index| %>
       <tr>
-        <td><%= index+1%></td>
-        <td><%= order_item.part_id %></td>
+        <td><%= index+1 %></td>
+        <td><%= order_item.part.nr_for_user(current_user) %></td>
         <td><%= order_item.quantity %></td>
         <td><%= order_item.box_quantity %></td>
-        <td><%= order_item.user_id %></td>
-        <td><%= order_item.whouse.name %></td>
-        <td><%if pp = OrderItemService.verify_department(order_item.whouse_id,order_item.part_id) %><%= pp.position.detail%><%end%></td>
+        <td><%= order_item.user.nr if order_item.user %></td>
+        <td><%= order_item.user.location.nr if order_item.user && order_item.user.location %></td>
         <td>
-          <input type="checkbox" disabled <%='checked' if order_item.is_emergency%>/>
+          <input type="checkbox" disabled <%= 'checked' if order_item.is_emergency %>/>
         </td>
         <td>
           <input type="checkbox" disabled <%= 'checked' if order_item.out_of_stock %>"/>
         </td>
         <td>
-          <input type="checkbox" disabled value="<%= order_item.id%>" <%= 'checked' if order_item.is_finished%> class="itemfinished-checkbox"/>
+          <input type="checkbox" disabled value="<%= order_item.id %>" <%= 'checked' if order_item.is_finished %> class="itemfinished-checkbox"/>
         </td>
-        <td><%=order_item.remark%></td>
+        <td><%= order_item.remark %></td>
       </tr>
   <% end %>
   </tbody>
 </table>
 <script type="text/javascript">
-  $(document).ready(function(){
-      $('body')
-  });
+    $(document).ready(function () {
+        $('body')
+    });
 </script>

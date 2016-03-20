@@ -266,13 +266,8 @@ ActiveRecord::Schema.define(version: 20160319102917) do
     t.boolean  "is_base",                             default: false
     t.string   "destination_id"
     t.integer  "parent_id"
-<<<<<<< HEAD
-    t.integer  "status",                       default: 0
-    t.string   "remark",                       default: ""
-=======
     t.integer  "status",                              default: 0
     t.string   "remark",                              default: ""
->>>>>>> b7e836efab18a00d1f7071039b7372af1ddf852b
     t.integer  "tenant_id"
     t.string   "nr"
     t.string   "send_whouse_id"
