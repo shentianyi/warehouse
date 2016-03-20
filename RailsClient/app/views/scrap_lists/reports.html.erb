@@ -1,12 +1,23 @@
-<div class="panel panel-warning">
-  <div class="panel-heading" style="">
-    <h2>实际使用量报表</h2>
-    实际使用量的统计报表.
+<style type="text/css">
+   .table > thead > tr > th, .table > tbody > tr > td {
+        text-align: center;
+    }
     
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+</style>
+
+<div class="panel panel-warning">
+  <div class="panel-heading" style="display: flex;">
+     <h3>实际使用量报表</h3>
+    <h5 style="margin-top: 25px;margin-left: 20px;">实际使用量的统计报表.</h5>
   </div>
 </div>
 <div class="panel-body">
-  <br/>
   <!--Form-->
   <form method="get" path="<%= scrap_lists_reports_path%>">
     <span class="label label-info">创建时间:</span>

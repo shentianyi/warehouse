@@ -1,9 +1,32 @@
+<style type="text/css">
+  a:hover,a:active{
+    text-decoration: none;
+    color: black;
+    background-color: white;
+    outline: none;
+  }
+</style>
+
 <p id="notice"><%= notice %></p>
+
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">管理</li>
+    <li class="active">
+      基础信息设置
+    </li>
+    <li>
+      <%= link_to '零件类型', part_types_path%>
+    </li>
+    <li class="active">
+      查看零件类型
+	<%= link_to content_tag(:i,'',:class=>'glyphicon glyphicon-pencil'), edit_part_type_path(@part_type), :style => 'color:steelblue;margin-left:10px;', :title => "编辑零件类型"  %> |
+    </li>
+  </ol>
+</div>
 
 <p>
   <strong>Name:</strong>
   <%= @part_type.name %>
 </p>
 
-<%= link_to 'Edit', edit_part_type_path(@part_type),:class=>'btn btn-default' %> |
-<%= link_to 'Back', part_types_path ,:class=>'btn btn-default'%>
