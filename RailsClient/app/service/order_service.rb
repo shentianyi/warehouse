@@ -86,6 +86,11 @@ class OrderService
   #create order with order items
   #=============
   def self.create_with_items args, current_user
+
+    p '-----------------'
+
+  p  args[:order_items]
+    p '-------------------'
     if args[:order][:source_id].blank?
       if l=OrderItemService.verify_location(current_user)
         args[:order][:source_id]=l.id
