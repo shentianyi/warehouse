@@ -34,7 +34,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :part_clients
+  resources :part_clients do
+    collection do
+      get :search
+    end
+  end
 
   resources :movement_sources do
     collection do
