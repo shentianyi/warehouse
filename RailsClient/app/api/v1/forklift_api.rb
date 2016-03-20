@@ -155,7 +155,7 @@ module V1
           lc_p = res.object
           if f.add(lc_p)
             lc_p.update({destinationable: f.destinationable})
-            {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(lc_p).to_json}
+            {result: 1, result_code: ResultCodeEnum::Success, content: PackagePresenter.new(lc_p).to_json(current_user)}
           else
             {result: 0, result_code: ResultCodeEnum::Failed, content: ForkliftMessage::AddPackageFailed}
           end
