@@ -16,11 +16,11 @@
       <div class="panel-body">
         <div class="col-sm-12" style="margin-bottom: 20px;">
           <div class="col-sm-6">
-            <%= f.label :part_id %>
+            <%= f.label :part_id ,"零件号"%>
             <%= f.text_field :part_id, value: @part_client.new_record? ? '' : @part_client.part.nr %>
           </div>
           <div class="col-sm-6">
-            <%= f.label :client_part_nr %>
+            <%= f.label :client_part_nr,"客户零件号" %>
             <%= f.text_field :client_part_nr %>
           </div>
         </div>

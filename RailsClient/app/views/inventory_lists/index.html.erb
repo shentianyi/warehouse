@@ -45,7 +45,7 @@
 <div class="col-sm-12" style="margin-bottom: 20px;">
   <% if current_user.permission?(:operate_inventory_create) %>
       <div class="col-sm-4">
-        <%= link_to "新建盘点", send("new_#{@model}_path"), :class => 'btn btn-primary' %>
+        <%= link_to "新建盘点", send("new_#{@model}_path"), :class => 'btn btn-primary',:style=>'color:white' %>
       </div>
   <% end %>
   <div class="col-sm-4">
