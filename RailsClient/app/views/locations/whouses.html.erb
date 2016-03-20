@@ -48,7 +48,7 @@
   </div>
 </div>
 
-<table class="table table-bordered table-striped table-hover">
+<table class="table table-bordered table-striped">
   <thead>
   <tr>
     <th>NO.</th>
@@ -60,7 +60,7 @@
   <% @whouses.each_with_index do |w, index| %>
       <tr>
         <td><%= index+1+@whouses.offset %></td>
-        <td><%= w.id %></td>
+        <td><%= w.nr %></td>
         <td><%= w.name %></td>
       </tr>
   <% end %>

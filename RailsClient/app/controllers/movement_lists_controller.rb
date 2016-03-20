@@ -55,21 +55,26 @@ class MovementListsController < ApplicationController
     wb.add_worksheet(:name => "Basic Sheet") do |sheet|
       sheet.add_row entry_header
       movement_sources.each_with_index { |m, index|
+        fromWh=Whouse.find_by_id(m.fromWh)
+        fromPosition=Position.find_by_id(m.fromPosition)
+        toWh=Whouse.find_by_id(m.toWh)
+        toPosition=Position.find_by_id(m.toPosition)
+        partNr=Part.find_by_id(m.partNr)
         employee=User.find_by_id(m.employee_id)
         sheet.add_row [
                           index+1,
                           m.movement_list_id,
 
-                          m.fromWh,
-                          m.fromPosition,
-                          m.toWh,
-                          m.toPosition,
+                          (fromWh.blank? ? '' : fromWh.name),
+                          (fromPosition.blank? ? '' : fromPosition.nr),
+                          (toWh.blank? ? '' : toWh.name),
+                          (toPosition.blank? ? '' : toPosition.nr),
                           m.packageId,
 
-                          m.partNr,
+                          (partNr.blank? ? '' : partNr.nr),
                           m.qty,
                           m.fifo,
-                          employee.nr,
+                          (employee.blank? ? '' : employee.nr),
                           m.remarks
                       ], :types => [:string]
       }

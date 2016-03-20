@@ -19,8 +19,7 @@ module FileHandler
         if validate_msg.result
           begin
             NStorage.transaction do
-              builder = current_user.blank? ? '' : current_user.nr
-              move_list = MovementList.create(builder: builder, name: "#{builder}_#{DateTime.now.strftime("%H.%d.%m.%Y")}_F")
+              move_list = MovementList.create(builder: current_user.id, name: "#{current_user.nr}_#{DateTime.now.strftime("%H.%d.%m.%Y")}_F")
               2.upto(book.last_row) do |line|
                 row = {}
                 IMPORT_HEADERS.each_with_index do |k, i|
@@ -30,13 +29,18 @@ module FileHandler
                   end
                 end
 
-                part=Part.find_by_nr(row[:partNr])
-                toWh=Whouse.find_by_nr(row[:toWh])
-                toPosition=Position.find_by_nr(row[:toPosition])
-
-                row[:partNr]=part.id
-                row[:toWh]=toWh.id
-                row[:toPosition]=toPosition.id
+                if part=Part.find_by_nr(row[:partNr])
+                  row[:partNr]=part.id
+                end
+                if toWh=Whouse.find_by_nr(row[:toWh])
+                  row[:toWh]=toWh.id
+                end
+                if toPosition=Position.find_by_nr(row[:toPosition])
+                  row[:toPosition]=toPosition.id
+                end
+                if employee=User.find_by_id(row[:employee_id])
+                  row[:employee_id]=employee.id
+                end
 
                 row[:movement_list_id] = move_list.id
                 MovementSource.create(row)
@@ -69,8 +73,7 @@ module FileHandler
         if validate_msg.result
           begin
             NStorage.transaction do
-              builder = current_user.blank? ? '' : current_user.nr
-              move_list = MovementList.create(builder: builder, name: "#{builder}_#{DateTime.now.strftime("%H.%d.%m.%Y")}_File")
+              move_list = MovementList.create(builder: current_user.id, name: "#{current_user.nr}_#{DateTime.now.strftime("%H.%d.%m.%Y")}_File")
               2.upto(book.last_row) do |line|
                 row = {}
                 MOVE_HEADERS.each_with_index do |k, i|
@@ -80,17 +83,24 @@ module FileHandler
                   end
                 end
 
-                part=Part.find_by_nr(row[:partNr])
-                fromWh=Whouse.find_by_nr(row[:fromWh])
-                fromPosition=Position.find_by_nr(row[:fromPosition])
-                toWh=Whouse.find_by_nr(row[:toWh])
-                toPosition=Position.find_by_nr(row[:toPosition])
-
-                row[:partNr]=part.id
-                row[:fromWh]=fromWh.id
-                row[:fromPosition]=fromPosition.id
-                row[:toWh]=toWh.id
-                row[:toPosition]=toPosition.id
+                if part=Part.find_by_nr(row[:partNr])
+                  row[:partNr]=part.id
+                end
+                if toWh=Whouse.find_by_nr(row[:toWh])
+                  row[:toWh]=toWh.id
+                end
+                if toPosition=Position.find_by_nr(row[:toPosition])
+                  row[:toPosition]=toPosition.id
+                end
+                if employee=User.find_by_id(row[:employee_id])
+                  row[:employee_id]=employee.id
+                end
+                if fromWh=Whouse.find_by_nr(row[:fromWh])
+                  row[:fromWh]=fromWh.id
+                end
+                if fromPosition=Position.find_by_nr(row[:fromPosition])
+                  row[:fromPosition]=fromPosition.id
+                end
 
                 row[:movement_list_id] = move_list.id
                 MovementSource.create(row)
@@ -151,7 +161,7 @@ module FileHandler
 
       def self.validate_import_row(row, line)
         msg = Message.new(contents: [])
-        StorageOperationRecord.save_record(row, 'ENTRY')
+        # StorageOperationRecord.save_record(row, 'ENTRY')
 
         if row[:packageId].present?
           unless packageId = Container.exists?(row[:packageId])
@@ -244,7 +254,7 @@ module FileHandler
 
       def self.validate_move_row(row)
         msg = Message.new(contents: [])
-        StorageOperationRecord.save_record(row, 'MOVE')
+        # StorageOperationRecord.save_record(row, 'MOVE')
 
         if row[:toWh].blank?
           msg.contents << "目的仓库号不能为空!"
@@ -296,11 +306,11 @@ module FileHandler
           end
         end
 
-        if from_position && part_id
-          unless positions.include?(row[:fromPosition])
-            msg.contents << "零件号:#{row[:partNr]} 不在源库位号:#{row[:fromPosition]}上!"
-          end
-        end
+        # if from_position && part_id
+        #   unless positions.include?(row[:fromPosition])
+        #     msg.contents << "零件号:#{row[:partNr]} 不在源库位号:#{row[:fromPosition]}上!"
+        #   end
+        # end
 
         if row[:toPosition].present?
           to_position = Position.find_by_nr(row[:toPosition])
@@ -335,6 +345,13 @@ module FileHandler
             storage = NStorage.find_by(packageId: row[:packageId], ware_house_id: src_warehouse.id)
             unless storage
               msg.contents << "源仓库#{row[:fromWh]}不存在该唯一码#{row[:packageId]}！"
+            end
+          end
+
+          if from_position.present?
+            storage = NStorage.find_by(packageId: row[:packageId], position_id: from_position.id)
+            unless storage
+              msg.contents << "源库位#{row[:fromPosition]}不存在该唯一码#{row[:packageId]}！"
             end
           end
 

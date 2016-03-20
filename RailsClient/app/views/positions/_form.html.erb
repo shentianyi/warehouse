@@ -2,8 +2,6 @@
     <% if @position.errors.any? %>
         <div id="error_explanation">
           <h2><%= pluralize(@position.errors.count, "error") %> prohibited this position from being saved:</h2>
-
-<<<<<<< HEAD
           <ul>
             <% @position.errors.full_messages.each do |message| %>
                 <li><%= message %></li>
@@ -11,24 +9,15 @@
           </ul>
         </div>
     <% end %>
-=======
-      <ul>
-      <% @position.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
     <p>
-      <%= f.label :nr,'编 号'%>
-      <%= f.text_field :nr%>
+      <%= f.label :nr, '编 号' %>
+      <%= f.text_field :nr %>
     </p>
 
     <p>
-      <%= f.label :detail,'详细位置'%>
-      <%= f.text_field :detail%>
+      <%= f.label :detail, '详细位置' %>
+      <%= f.text_field :detail %>
     </p>
->>>>>>> 81de19a825276079169bba42b4cc46cd63817e02
 
     <div class="panel panel-primary">
       <div class="panel-body">

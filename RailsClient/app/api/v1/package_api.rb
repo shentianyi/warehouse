@@ -38,6 +38,8 @@ module V1
         args[:package_id] = storage.packageId
         args[:part_id] = storage.part.nr
         args[:qty] = storage.qty
+        args[:whouse_id] = storage.ware_house_id
+        args[:position_id] = storage.position_id
         args[:fifo] = storage.fifo.blank? ? '' : storage.fifo.localtime
         {result: '1', content: args}
       end

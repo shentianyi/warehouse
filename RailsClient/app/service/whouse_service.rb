@@ -87,7 +87,9 @@ class WhouseService
     raise "目的仓库#{toWh}未找到" unless toWh
     # validate_position(toWh, params[:toPosition])
     move_data = {to_id: toWh.id, toPosition: params[:toPosition], type_id: type.id}
-    move_data[:employee_id] = params[:employee_id] if params[:employee_id].present?
+    if employee=User.find_by_nr(params[:employee_id])
+      move_data[:employee_id]=employee.id
+    end
     move_data[:remarks] = params[:remarks] if params[:remarks].present?
     move_data[:movement_list_id] = params[:movement_list_id] if params[:movement_list_id].present?
 

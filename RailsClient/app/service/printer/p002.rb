@@ -1,17 +1,17 @@
 # print delivery
 module Printer
   class P002<Base
-    HEAD=[:id, :total_nr, :numOfMP, :nps, :send_addr, :receive_addr, :delivery_date]
-    BODY=[:forklift_id, :HU_Nr, :eighthundred_nr, :quantity, :Part_nr, :less_nr, :batch_nr]
+    HEAD=[:delivery_nr, :delivery_date, :from_addr, :to_addr, :totalnr_forklift, :totalnr_mupan, :num_paperbox, :totalnr_nps]
+    BODY=[:forklift_nr, :hu_nr, :eighthundred_nr, :part_nr, :lesspn, :total_qty, :batch_nr]
 
 
     def generate_data
       d=LogisticsContainer.find(self.id)
       dp=DeliveryPresenter.new(d)
 
-      head={id: d.container_id,
+      head={delivery_nr: d.container_id,
             total_nr: LogisticsContainerService.count_all_forklifts(d).to_s,
-            numOfMP: LogisticsContainerService.count_all_forklifts(d).to_s,
+            totalnr_mupan: LogisticsContainerService.count_all_forklifts(d).to_s,
             nps: LogisticsContainerService.count_all_packages(d).to_s,
             send_addr: d.source_location.nil? ? '' : d.source_location.address.to_s,
             receive_addr: d.des_location.nil? ? '' : d.des_location.address.to_s,
