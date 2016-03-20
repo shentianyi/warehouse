@@ -93,32 +93,31 @@ module V3
       end
 
       post :moves do
-        begin
-          # raise ''
-          puts "===================#{params.to_json}"
-          NStorage.transaction do
-            builder = current_user.blank? ? 'PMS API CALL' : current_user.nr
-            move_list = MovementList.create(builder: builder, name: "#{builder}_#{DateTime.now.strftime("%Y.%m.%d.%H")}")
-            JSON.parse(params[:moves]).each do |p|
-              p.deep_symbolize_keys!
-              puts "----=============#{p}"
-              p[:employee_id] = 'PMS API CALL'
-              StorageOperationRecord.save_record(p, 'MOVE')
-              WhouseService.new.move(p)
-              p[:movement_list_id] = move_list.id
-              MovementSource.create(p)
-            end
-            move_list.update(state: MovementListState::ENDING)
-          end
-        rescue => e
-          p '---------------------------------'
-          p e
-          puts e.backtrace
-          p '---------------------------------'
-
-          raise e.message
-        end
-        {result: 1, content: 'move success'}
+        # begin
+        #   # raise ''
+        #   puts "===================#{params.to_json}"
+        #   NStorage.transaction do
+        #     move_list = MovementList.create(builder: current_user.id, name: "#{current_user.nr}_#{DateTime.now.strftime("%Y.%m.%d.%H")}")
+        #     JSON.parse(params[:moves]).each do |p|
+        #       p.deep_symbolize_keys!
+        #       puts "----=============#{p}"
+        #       p[:employee_id] = 'PMS API CALL'
+        #       StorageOperationRecord.save_record(p, 'MOVE')
+        #       WhouseService.new.move(p)
+        #       p[:movement_list_id] = move_list.id
+        #       MovementSource.create(p)
+        #     end
+        #     move_list.update(state: MovementListState::ENDING)
+        #   end
+        # rescue => e
+        #   p '---------------------------------'
+        #   p e
+        #   puts e.backtrace
+        #   p '---------------------------------'
+        #
+        #   raise e.message
+        # end
+        # {result: 1, content: 'move success'}
 
       end
 

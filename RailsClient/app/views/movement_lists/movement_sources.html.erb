@@ -68,15 +68,36 @@
   <% @movement_sources.each_with_index do |movement, i| %>
       <tr>
         <td><%= @page_start+i+1 %></td>
-        <td><%= movement.partNr if movement.partNr %></td>
+        <% if partNr=Part.find_by_id(movement.partNr) %>
+            <td><%=  partNr.nr %></td>
+        <% else %>
+            <td></td>
+        <% end %>
         <td><%= movement.packageId if movement.packageId %></td>
         <td><%= movement.qty %></td>
         <td><%= movement.fifo.localtime if movement.fifo %> </td>
         <td><%= movement.created_at.localtime if movement.created_at %></td>
-        <td><%= movement.fromWh if movement.fromWh %></td>
-        <td><%= movement.fromPosition if movement.fromPosition %></td>
-        <td><%= movement.toWh if movement.toWh %></td>
-        <td><%= movement.toPosition if movement.toPosition %></td>
+
+        <% if fromWh=Whouse.find_by_id(movement.fromWh) %>
+            <td><%=  fromWh.name %></td>
+        <% else %>
+            <td></td>
+        <% end %>
+        <% if fromPosition=Position.find_by_id(movement.fromPosition) %>
+            <td><%=  fromPosition.nr %></td>
+        <% else %>
+            <td></td>
+        <% end %>
+        <% if toWh=Whouse.find_by_id(movement.toWh) %>
+            <td><%=  toWh.name %></td>
+        <% else %>
+            <td></td>
+        <% end %>
+        <% if toPosition=Position.find_by_id(movement.toPosition) %>
+            <td><%=  toPosition.nr %></td>
+        <% else %>
+            <td></td>
+        <% end %>
         <% if u=User.find_by_id(movement.employee_id) %>
             <td><%= u.nr %></td>
         <% else %>

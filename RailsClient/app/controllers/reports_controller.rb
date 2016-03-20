@@ -9,7 +9,14 @@ class ReportsController < ApplicationController
     @title = ''
     @commit_value = params[:commit]
 
-    @packages = Package.generate_report_data(@type,@date_start,@date_end,@location_id,@commit_value,@part_id)
+    part=Part.find_by_nr(params[:part_id])
+    part_id = part.blank? ? nil : part.id
+
+    location=Location.find_by_nr(@location_id)
+    location_id=location.blank? ? nil : location.id
+
+
+    @packages = Package.generate_report_data(@type,@date_start,@date_end,@location_id,@commit_value,part_id)
     #render :json=> @packages
     @title = ReportsHelper.gen_title(@type,@date_start,@date_end,@location_id)
     respond_to do |format|

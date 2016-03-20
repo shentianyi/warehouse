@@ -45,7 +45,6 @@
       <div class="col-sm-3">
         零件号：
         <input type="text" name="movement_source[partNr]" value="<%= @partNr %>"/>
-        <input type="hidden" name="movement_source[partNr_fuzzy]"/>
       </div>
       <div class="col-sm-3">
         唯一码：
@@ -67,7 +66,6 @@
       <div class="col-sm-3">
         源库位号：
         <input type="text" name="movement_source[fromPosition]" value="<%= @fromPosition %>"/>
-        <input type="hidden" name="movement_source[fromPosition_fuzzy]"/>
       </div>
       <div class="col-sm-3">
         目的仓库号：
@@ -76,7 +74,6 @@
       <div class="col-sm-3">
         目的库位号：
         <input type="text" name="movement_source[toPosition]" value="<%= @toPosition %>"/>
-        <input type="hidden" name="movement_source[toPosition_fuzzy]"/>
       </div>
     </div>
 
@@ -151,14 +148,38 @@
   <% @movement_sources.each do |movement_source| %>
       <tr>
         <td><%= movement_source.movement_list_id %></td>
-        <td><%= movement_source.fromWh %></td>
-        <td><%= movement_source.fromPosition %></td>
+
+        <% if fromWh=Whouse.find_by_id(movement_source.fromWh) %>
+            <td><%=  fromWh.name %></td>
+        <% else %>
+            <td></td>
+        <% end %>
+        <% if fromPosition=Position.find_by_id(movement_source.fromPosition) %>
+            <td><%=  fromPosition.nr %></td>
+        <% else %>
+            <td></td>
+        <% end %>
+
         <td><%= movement_source.packageId %></td>
-        <td><%= movement_source.partNr %></td>
+        <% if partNr=Part.find_by_id(movement_source.partNr) %>
+            <td><%=  partNr.nr %></td>
+        <% else %>
+            <td></td>
+        <% end %>
         <td><%= movement_source.qty %></td>
         <td><%= movement_source.fifo %></td>
-        <td><%= movement_source.toWh %></td>
-        <td><%= movement_source.toPosition %></td>
+
+        <% if toWh=Whouse.find_by_id(movement_source.toWh) %>
+            <td><%=  toWh.name %></td>
+        <% else %>
+            <td></td>
+        <% end %>
+        <% if toPosition=Position.find_by_id(movement_source.toPosition) %>
+            <td><%=  toPosition.nr %></td>
+        <% else %>
+            <td></td>
+        <% end %>
+
         <% if u=User.find_by_id(movement_source.employee_id) %>
             <td><%= u.nr %></td>
         <% else %>

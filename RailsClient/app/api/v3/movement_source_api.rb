@@ -20,13 +20,19 @@ module V3
         else
           movement_sources.each_with_index do |movement_source, index|
             record = {}
+            toWh=Whouse.find_by_id(movement_source.toWh)
+            toPosition=Position.find_by_id(movement_source.toPosition)
+            fromWh=Whouse.find_by_id(movement_source.fromWh)
+            fromPosition=Position.find_by_id(movement_source.fromPosition)
+            partNr=Part.find_by_id(movement_source.partNr)
+
             record[:id] = movement_source.id
-            record[:toWh] = movement_source.toWh
-            record[:toPosition] = movement_source.toPosition
-            record[:partNr] = movement_source.partNr
+            record[:toWh] = toWh.blank? ? '' : toWh.nr
+            record[:toPosition] = toPosition.blank? ? '' : toPosition.nr
+            record[:partNr] = partNr.blank? ? '' : partNr.nr
             record[:fifo] = movement_source.fifo
-            record[:fromWh] = movement_source.fromWh
-            record[:fromPosition] = movement_source.fromPosition
+            record[:fromWh] = fromWh.blank? ? '' : fromWh.nr
+            record[:fromPosition] = fromPosition.blank? ? '' : fromPosition.nr
             record[:packageId] = movement_source.packageId
             record[:qty] = movement_source.qty
             args[index] = record

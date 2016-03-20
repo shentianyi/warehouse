@@ -27,6 +27,7 @@ class PermissionGroup < ActiveRecord::Base
       data<<{
           id: p.id,
           name: p.name,
+          description: p.description,
           status: permissions.include?(p)
       }
     end

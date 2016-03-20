@@ -18,10 +18,18 @@
   <% @packages.each_with_index do |p, index| %>
       <tr>
         <td><%= index+1 %></td>
-        <td><%= p['part_id'] %></td>
+        <% if part=Part.find_by_id(p['part_id']) %>
+            <td><%= part.nr %></td>
+        <% else %>
+            <td></td>
+        <% end %>
         <td><%= p['count'] %></td>
         <td><%= p['box'] %></td>
-        <td><%= p['whouse'] %></td>
+        <% if location=Location.find_by_id(p['whouse']) %>
+            <td><%=  location.name %></td>
+        <% else %>
+            <td></td>
+        <% end %>
         <td><%= MovableState.display(p['state']) %></td>
       </tr>
   <% end %>

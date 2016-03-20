@@ -34,6 +34,14 @@
               <li id='delivery_li'><a href="<%= deliveries_path %>">运 单</a></li>
               <li id='forklift_li'><a href="<%= forklifts_path %>">托 盘</a></li>
               <li id='package_li'><a href="<%= packages_path %>">包装箱</a></li>
+              <% if current_user.permission?(:view_extra) %>
+                  <% if current_user.permission?(:jiaxuan_extra_export) %>
+                      <li><a href="<%= generate_jiaxuan_deliveries_path %>">导入常州发运佳轩数据</a></li>
+                  <% end %>
+                  <% if current_user.permission?(:jiaxuan_extra_config) %>
+                      <li><a href="<%= jiaxuan_extra_sys_configs_path %>">扩展配置</a></li>
+                  <% end %>
+              <% end %>
             </ul>
           </li>
       <% end %>
@@ -169,15 +177,6 @@
           <li>
             <a href="#">配置&nbsp;<i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:white;transform: rotate(-90deg);"></i></a>
             <ul>
-              <% if current_user.permission?(:view_extra) %>
-                  <% if current_user.permission?(:jiaxuan_extra_export) %>
-                      <li><a href="<%= generate_jiaxuan_deliveries_path %>">导入常州发运佳轩数据</a></li>
-                  <% end %>
-                  <% if current_user.permission?(:jiaxuan_extra_config) %>
-                      <li><a href="<%= jiaxuan_extra_sys_configs_path %>">扩展配置</a></li>
-                  <% end %>
-              <% end %>
-
               <% if current_user.permission?(:view_configuration) %>
                   <li id='regex_li'><a href="<%= regex_categories_path %>">正则规范配置</a></li>
                   <li id='sys_config_li'><a href="<%= sys_configs_path %>">系统配置</a></li>

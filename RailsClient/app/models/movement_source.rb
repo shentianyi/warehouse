@@ -5,6 +5,22 @@ class MovementSource < ActiveRecord::Base
     msg = Message.new()
     msg.result=false
 
+    if part=Part.find_by_nr(params[:partNr])
+      params[:partNr]=part.id
+    end
+    if toWh=Whouse.find_by_nr(params[:toWh])
+      params[:toWh]=toWh.id
+    end
+    if toPosition=Position.find_by_nr(params[:toPosition])
+      params[:toPosition]=toPosition.id
+    end
+    if fromWh=Whouse.find_by_nr(params[:fromWh])
+      params[:fromWh]=fromWh.id
+    end
+    if fromPosition=Position.find_by_nr(params[:fromPosition])
+      params[:fromPosition]=fromPosition.id
+    end
+
     record = {
         toWh: params[:toWh],
         toPosition: params[:toPosition],

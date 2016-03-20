@@ -31,12 +31,10 @@
       <div class="col-sm-3">
         零件号：
         <input type="text" name="movement[partNr]" value="<%= @partNr %>"/>
-        <input type="hidden" name="movement[partNr_fuzzy]"/>
       </div>
       <div class="col-sm-3">
         唯一码：
         <input type="text" name="movement[packageId]" value="<%= @packageId %>"/>
-        <input type="hidden" name="movement[packageId_fuzzy]"/>
       </div>
       <div class="col-sm-3">
         类型：
@@ -56,7 +54,6 @@
       <div class="col-sm-3">
         源库位号：
         <input type="text" name="movement[fromPosition]" value="<%= @fromPosition %>"/>
-        <input type="hidden" name="movement[fromPosition_fuzzy]"/>
       </div>
       <div class="col-sm-3">
         目的仓库号：
@@ -65,7 +62,6 @@
       <div class="col-sm-3">
         目的库位号：
         <input type="text" name="movement[toPosition]" value="<%= @toPosition %>"/>
-        <input type="hidden" name="movement[toPosition_fuzzy]"/>
       </div>
     </div>
 
@@ -152,7 +148,7 @@
         <td><%= movement.created_at.localtime if movement.created_at %></td>
 
         <% if fromWh=Whouse.find_by_id(movement.from_id) %>
-            <td><%=  fromWh.nr %></td>
+            <td><%=  fromWh.name %></td>
         <% else %>
             <td></td>
         <% end %>
@@ -162,7 +158,7 @@
             <td></td>
         <% end %>
         <% if toWh=Whouse.find_by_id(movement.to_id) %>
-            <td><%=  toWh.nr %></td>
+            <td><%=  toWh.name %></td>
         <% else %>
             <td></td>
         <% end %>
@@ -171,8 +167,11 @@
         <% else %>
             <td></td>
         <% end %>
-
-        <td><%= movement.employee_id if movement.employee_id %> </td>
+        <% if employee=User.find_by_id(movement.employee_id) %>
+            <td><%=  employee.nr %></td>
+        <% else %>
+            <td></td>
+        <% end %>
         <td><%= movement.remarks if movement.remarks %> </td>
         <td><%= movement.remark if movement.remark %> </td>
         <!--<td><%= link_to '编辑', :class => 'btn btn-default' %></td>-->

@@ -41,6 +41,22 @@ class MovementSourcesController < ApplicationController
       end
     end
 
+    if part=Part.find_by_nr(@condition[:partNr])
+      query=query.unscope(where: :partNr).where(partNr: part.id)
+    end
+    if toWh=Whouse.find_by_nr(@condition[:toWh])
+      query=query.unscope(where: :toWh).where(toWh: toWh.id)
+    end
+    if toPosition=Position.find_by_nr(@condition[:toPosition])
+      query=query.unscope(where: :toPosition).where(toPosition: toPosition.id)
+    end
+    if fromWh=Whouse.find_by_nr(@condition[:fromWh])
+      query=query.unscope(where: :fromWh).where(fromWh: fromWh.id)
+    end
+    if fromPosition=Position.find_by_nr(@condition[:fromPosition])
+      query=query.unscope(where: :fromPosition).where(fromPosition: fromPosition.id)
+    end
+
     if params.has_key? "download"
       send_data(entry_with_xlsx(query),
                 :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
@@ -58,19 +74,26 @@ class MovementSourcesController < ApplicationController
     wb.add_worksheet(:name => "Basic Sheet") do |sheet|
       sheet.add_row entry_header
       movement_sources.each_with_index { |m, index|
+        fromWh=Whouse.find_by_id(m.fromWh)
+        fromPosition=Position.find_by_id(m.fromPosition)
+        toWh=Whouse.find_by_id(m.toWh)
+        toPosition=Position.find_by_id(m.toPosition)
+        partNr=Part.find_by_id(m.partNr)
+        employee=User.find_by_id(m.employee_id)
         sheet.add_row [
                           index+1,
                           m.movement_list_id,
-                          m.fromWh,
-                          m.fromPosition,
+
+                          (fromWh.blank? ? '' : fromWh.name),
+                          (fromPosition.blank? ? '' : fromPosition.nr),
+                          (toWh.blank? ? '' : toWh.name),
+                          (toPosition.blank? ? '' : toPosition.nr),
                           m.packageId,
 
-                          m.partNr,
+                          (partNr.blank? ? '' : partNr.nr),
                           m.qty,
                           m.fifo,
-                          m.toWh,
-                          m.toPosition,
-                          m.employee_id,
+                          (employee.blank? ? '' : employee.nr),
                           m.remarks
                       ], :types => [:string]
       }

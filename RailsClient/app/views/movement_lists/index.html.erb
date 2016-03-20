@@ -38,8 +38,8 @@
     <div class="col-sm-12">
       <div class="col-sm-4">
         移库单号：
-        <input type="text" name="movement_list[id]" value="<%= @id %>"/>
-        <input type="hidden" name="movement_list[id_fuzzy]"/>
+        <input type="text" name="movement_list[name]" value="<%= @name %>"/>
+        <input type="hidden" name="movement_list[name_fuzzy]"/>
       </div>
       <div class="col-sm-4">
         状态：
@@ -111,7 +111,11 @@
         <td>
           <%= link_to content_tag(:span, '导出移库单详细', :class => 'label label-primary'), exports_movement_lists_path(movement_list) %>
         </td>
-        <td><%= movement_list.builder %></td>
+        <% if builder=User.find_by_id(movement_list.builder) %>
+            <td><%= builder.nr %></td>
+        <% else %>
+            <td></td>
+        <% end %>
         <td><%= movement_list.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
         <td><%= movement_list.remarks %></td>
         <!--<td><%= link_to '详细', movement_list %></td>-->

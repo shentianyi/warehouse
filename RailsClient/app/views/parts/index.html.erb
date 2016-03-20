@@ -55,9 +55,9 @@
             <div class="col-sm-4">
               <%= link_to "上传/更新零件", send("import_#{@model.pluralize}_path"), :class => 'btn btn-primary', :style => 'width: 150px;color:white' %>
             </div>
-            <div class="col-sm-4">
-              <%= link_to "上传/更新零件位置", parts_import_positions_path, :class => 'btn btn-primary', :style => 'width: 150px;color:white' %>
-            </div>
+            <!--<div class="col-sm-4">-->
+              <!--<%= link_to "上传/更新零件位置", parts_import_positions_path, :class => 'btn btn-primary', :style => 'width: 150px;color:white' %>-->
+            <!--</div>-->
         <% end %>
         <div class="col-sm-4">
           <%= link_to "下载零件", send("download_#{@model.pluralize}_path"), data: {confirm: 'Are you sure?'}, :class => 'btn btn-primary', :style => 'width: 150px;color:white' %>
