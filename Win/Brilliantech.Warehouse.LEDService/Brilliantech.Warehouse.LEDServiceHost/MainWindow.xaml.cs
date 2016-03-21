@@ -191,9 +191,7 @@ namespace Brilliantech.Warehouse.LEDServiceHost
                 PTLTCPClient newClient = new PTLTCPClient();
                
                 newClient.NetWork = server.EndAcceptTcpClient(o);
-              //  tcpClientList.Add(newClient);
-              //  BindClientList();
-
+ 
                 ClientListUpdated.BeginInvoke(true, newClient, null, null);
 
                 newClient.NetWork.GetStream().BeginRead(newClient.buffer, 0, newClient.buffer.Length, new AsyncCallback(TCPCallBack), newClient);
@@ -201,9 +199,11 @@ namespace Brilliantech.Warehouse.LEDServiceHost
             }
             catch (ObjectDisposedException ex)
             { //监听被关闭
+                LogUtil.Logger.Error(ex.Message);
             }
             catch (Exception ex)
             {
+                LogUtil.Logger.Error(ex.Message);
                 MessageBox.Show(ex.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -250,47 +250,23 @@ namespace Brilliantech.Warehouse.LEDServiceHost
         /// <param name="data"></param>
         private void TCPClient_DataReceived(object sender, byte[] data)
         {
-            
-            //Thread t = new Thread(new ThreadStart(delegate
-            //{
-
-            //    ClientDataTB.Dispatcher.Invoke(new Action(delegate
-            //    {
-            //string returnStr = "";
-            //if (data != null)
-            //{
-            //    for (int i = 0; i < data.Length; i++)
-            //    {
-            //        returnStr += data[i].ToString("X2");
-            //    }
-            //}
-
             LogUtil.Logger.Info("【接到】TCPClient消息字符: ");
             LogUtil.Logger.Info(data);
             StreamReader sr = new StreamReader(new MemoryStream(data));
             string message = string.Empty;
             try
             {
-                message = BitConverter.ToString(data).Replace("-","");
+                message = BitConverter.ToString(data).Replace("-", "");
             }
             catch (Exception convertException)
             {
                 LogUtil.Logger.Error("字符转换错误：" + convertException.Message);
             }
-            //System.Text.Encoding.Default.GetString(data);
-            //BitConverter.ToString(data);//sr.ReadToEnd();
-            //        ClientDataTB.AppendText(message);
-            //        ClientDataTB.AppendText("\n");
-            //        ClientDataTB.SelectionStart = ClientDataTB.Text.Length;
 
             LogUtil.Logger.Info("【接到】TCPClient消息: " + message);
             /// 是使用HTTP想WMS服务器(Linux)发送消息
-           new LedRestService(message).Send();
+            new LedRestService(message).Send();
 
-            //    }), null);
-            //}));
-
-            //t.Start();
         }
 
         /// <summary>
@@ -331,30 +307,7 @@ namespace Brilliantech.Warehouse.LEDServiceHost
 
         public static bool SendData(byte[] data)
         {
-            //string StringOut = "";
-            //foreach (byte InByte in data)
-            //{
-            //    StringOut  += String.Format("{0:X2} ", InByte);
-            //}
-
-            //LogUtil.Logger.Info("【发送16bit】TCPServer消息: " + StringOut);
-
-
-            //string[] ByteStrings;
-            //ByteStrings = StringOut.Split(" ".ToCharArray());
-            //byte[] ByteOut;
-            //ByteOut = new byte[ByteStrings.Length - 1];
-            //for (int i = 0; i < ByteStrings.Length; i++)
-            //{
-            //    ByteOut[i] = Convert.ToByte(("0x" + ByteStrings[i]));
-            //}
-
-
-
-
             string message = StringHelper.GetString(data);
-
-
 
             byte[] returnBytes = new byte[message.Length / 2];
             for (int i = 0; i < returnBytes.Length; i++)
@@ -368,9 +321,9 @@ namespace Brilliantech.Warehouse.LEDServiceHost
             {
                 try
                 {
-                  
-                     LogUtil.Logger.Info("【发送】TCPServer消息: " + message);
-                     client.NetWork.GetStream().Write(returnBytes, 0, returnBytes.Length);
+
+                    LogUtil.Logger.Info("【发送】TCPServer消息: " + message);
+                    client.NetWork.GetStream().Write(returnBytes, 0, returnBytes.Length);
                 }
                 catch (Exception e)
                 {

@@ -75,14 +75,14 @@ namespace Brilliantech.Warehouse.PrintServiceLib
                 req.RequestFormat = DataFormat.Json;
                 req.AddParameter("code", code);
                 req.AddParameter("id", id);
-                Printer printer = PrinterConfig.Find(code);
-
+                
                 //  var data = new ApiClient().Execute<RecordSet>(req);
                 var res = new ApiClient().Execute(req);
-                var data = parse<RecordSet>(res.Content);
-                if (data != null && data.Count > 0)
+                var data = parse<PrintData>(res.Content);
+                if (data != null && data.data_set.Count > 0)
                 {
-                    printer.Print(data,printer_name,copy);
+                    Printer printer = PrinterConfig.Find(data.code);
+                    printer.Print(data.data_set,printer_name,copy);
                     msg.Result = true;
                     msg.Content = "打印成功";
                 }

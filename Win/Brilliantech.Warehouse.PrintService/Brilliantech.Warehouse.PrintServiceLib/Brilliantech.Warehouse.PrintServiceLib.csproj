@@ -71,6 +71,7 @@
     <Compile Include="IPrintService.cs" />
     <Compile Include="Model\ApiClient.cs" />
     <Compile Include="Model\Msg.cs" />
+    <Compile Include="Model\PrintData.cs" />
     <Compile Include="Model\Printer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PrintService.cs" />
@@ -82,6 +83,7 @@
     <None Include="Ini\api.ini" />
     <None Include="Ini\printers.ini" />
     <None Include="Template\DeliveryList.tff" />
+    <None Include="Template\DeliveryListCZToJX.tff" />
     <None Include="Template\DeliveryReceivedList.tff" />
     <None Include="Template\DeliveryUnReceivedList.tff" />
     <None Include="Template\ForkliftList.tff" />
