@@ -220,7 +220,7 @@ class WhouseService
           tostorage = NStorage.where(ware_house_id: toWh.id, partNr: params[:partNr], position: params[:toPosition]).order("n_storages.qty asc").first
           # update parameters of movement creation
           move_data.update({from_id: storage.ware_house_id, fromPosition: storage.position,
-                            fifo: storage.fifo, partNr: storage.partNr})
+                            fifo: storage.fifo, partNr: storage.partNr, remarks: ''})
 
           if restqty.to_f >= storage.qty.to_f
 
