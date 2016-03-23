@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nr:</strong>
+  <%= @package_type.nr %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @package_type.name %>
+</p>
+
+<%= link_to 'Edit', edit_package_type_path(@package_type) %> |
+<%= link_to 'Back', package_types_path %>

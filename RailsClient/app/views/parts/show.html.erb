@@ -38,6 +38,9 @@
       <div class="col-sm-6">
         零件单位:<%= @part.unit %>
       </div>
+      <div class="col-sm-6">
+        包装类型:<%= @part.package_type.name if @part.package_type %>
+      </div>
     </div>
 
     <div class="col-sm-12">

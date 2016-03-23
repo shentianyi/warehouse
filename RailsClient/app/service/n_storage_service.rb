@@ -5,7 +5,7 @@ class NStorageService
     positions=[]
 
     ids= NStorage.where(partNr: part_id,
-                        ware_house_id: (location.whouses.pluck(:id)-[location.send_whouse.id])).pluck(:position_id).uniq
+                        ware_house_id: (location.whouses.pluck(:id)-[location.send_whouse.id])).order(fifo: :asc).pluck(:position_id).uniq
     ids.each do |id|
       if p=Position.find_by_id(id)
         positions<<p.nr

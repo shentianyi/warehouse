@@ -36,6 +36,10 @@ module FileHandler
                 raise '常州莱尼没有配置默认在途仓库'
               end
 
+              #calc wooden box nps count
+              wooden_count=0
+              box_count=0
+              nps_count=0
 
               delivery = Delivery.create({
                                              remark: '常州莱尼发运数据',
@@ -103,6 +107,14 @@ module FileHandler
                   sh_custom=Tenant.find_by_code(SysConfigCache.jiaxuan_extra_sh_custom_value)
                   sh_pc=PartClient.where(client_tenant_id: sh_custom.id, client_part_nr: row[:sh_part_id]).first
 
+                  if sh_pc.part.package_type_is_wooden?
+                    wooden_count+=1
+                  elsif sh_pc.part.package_type_is_box?
+                    box_count+=1
+                  else
+                    nps_count+=1
+                  end
+
                   #create container
                   package = Package.create({
                                                id: row[:package_id],
@@ -127,13 +139,16 @@ module FileHandler
                   plc.destinationable = destination
                   plc.save
 
-                  plc.enter_stock(cz_send_warehouse,cz_send_warehouse.default_position,Time.now)
+                  plc.enter_stock(cz_send_warehouse, cz_send_warehouse.default_position, Time.now)
 
                   Record.create({recordable: plc, impl_id: user.id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
                   forklifts[row[:forklift_id]].add(plc)
                 end
               end
 
+              delivery.update_attributes(extra_wooden_count: wooden_count,
+                                         extra_box_count: box_count,
+                                         extra_nps_count: nps_count)
             end
 
             msg.content ='处理成功'

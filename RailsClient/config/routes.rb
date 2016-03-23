@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :package_types
+
   resources :permission_group_items do
     collection do
       get :search

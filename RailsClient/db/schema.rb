@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160322110848) do
+ActiveRecord::Schema.define(version: 20160323065108) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -78,6 +78,9 @@ ActiveRecord::Schema.define(version: 20160322110848) do
     t.string   "extra_sh_part_id"
     t.string   "extra_unit"
     t.string   "extra_batch"
+    t.integer  "extra_wooden_count",                   default: 0
+    t.integer  "extra_box_count",                      default: 0
+    t.integer  "extra_nps_count",                      default: 0
   end
 
   add_index "containers", ["current_positionable_id"], name: "index_containers_on_current_positionable_id", using: :btree
@@ -471,6 +474,13 @@ ActiveRecord::Schema.define(version: 20160322110848) do
   add_index "package_positions", ["package_id"], name: "index_package_positions_on_package_id", using: :btree
   add_index "package_positions", ["position_id"], name: "index_package_positions_on_position_id", using: :btree
 
+  create_table "package_types", force: true do |t|
+    t.string   "nr"
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "packages", force: true do |t|
     t.string   "uuid",                              null: false
     t.string   "part_id"
@@ -541,22 +551,23 @@ ActiveRecord::Schema.define(version: 20160322110848) do
   add_index "part_types", ["nr"], name: "index_part_types_on_nr", using: :btree
 
   create_table "parts", force: true do |t|
-    t.string   "uuid",          limit: 36,                                           null: false
+    t.string   "uuid",            limit: 36,                                           null: false
     t.string   "customernum"
     t.string   "user_id"
-    t.boolean  "is_delete",                                          default: false
-    t.boolean  "is_dirty",                                           default: true
-    t.boolean  "is_new",                                             default: true
+    t.boolean  "is_delete",                                            default: false
+    t.boolean  "is_dirty",                                             default: true
+    t.boolean  "is_new",                                               default: true
     t.datetime "created_at"
     t.datetime "updated_at"
     t.float    "unit_pack"
     t.string   "part_type_id"
-    t.decimal  "convert_unit",             precision: 20, scale: 10, default: 1.0
+    t.decimal  "convert_unit",               precision: 20, scale: 10, default: 1.0
     t.string   "unit"
     t.string   "nr"
     t.string   "description"
-    t.float    "safe_qty",                                           default: 0.0
-    t.integer  "safe_qty_type",                                      default: 100
+    t.float    "safe_qty",                                             default: 0.0
+    t.integer  "safe_qty_type",                                        default: 100
+    t.integer  "package_type_id"
   end
 
   add_index "parts", ["id"], name: "index_parts_on_id", using: :btree
