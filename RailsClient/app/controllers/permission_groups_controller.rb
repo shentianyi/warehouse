@@ -40,7 +40,7 @@ class PermissionGroupsController < ApplicationController
     @permissions=[]
     if permission_group=PermissionGroup.find_by_id(params[:permission_groups_id])
       permission_group.permissions.each do |p|
-        @permissions<<p.name
+        @permissions<<p.description
       end
     end
 

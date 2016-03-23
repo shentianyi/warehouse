@@ -89,7 +89,7 @@ class OrderService
 
     p '-----------------'
 
-  p  args[:order_items]
+    p args[:order_items]
     p '-------------------'
     if args[:order][:source_id].blank?
       if l=OrderItemService.verify_location(current_user)

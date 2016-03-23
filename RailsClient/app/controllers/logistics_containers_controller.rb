@@ -71,8 +71,14 @@ class LogisticsContainersController < ApplicationController
 
     # puts "---------------------"
     # puts query.paginate(:page => params[:page]).all.order(created_at: :desc).to_json
-    render "#{model.pluralize}/index"
-    #render :json => 1
+
+    if params.has_key? "download"
+      send_data(DeliveryService.to_xlsx(query),
+                :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+                :filename => model.pluralize+".xlsx")
+    else
+      render "#{model.pluralize}/index"
+    end
   end
 
   def export

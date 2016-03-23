@@ -209,7 +209,7 @@ Rails.application.routes.draw do
       get :filters
       get :filt
       get :picklists
-
+      match :import, to: :import, via: [:get, :post]
       post :handle
     end
     member do
