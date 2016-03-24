@@ -108,8 +108,8 @@
       <tr>
         <td><%= index+@orders.offset+1 %></td>
         <td><%= order.id %></td>
-        <td><%= order.user.nr %></td>
-        <td><%= order.source_location.name %></td>
+        <td><%= order.user.blank? ? '' : order.user.nr %></td>
+        <td><%= order.source_location.blank? ? '' : order.source_location.name %></td>
         <td><%= order.source.name if order.source %></td>
         <td>
           <% if order.is_emergency %>

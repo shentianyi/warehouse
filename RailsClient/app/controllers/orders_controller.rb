@@ -161,6 +161,21 @@ class OrdersController < ApplicationController
     @order_items = @order.order_items.paginate(:page => params[:page])
   end
 
+  def import
+    if request.post?
+      msg = Message.new
+      begin
+        file=params[:files][0]
+        fd = FileData.new(data: file, oriName: file.original_filename, path: $tmp_file_path, pathName: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
+        fd.save
+        msg = FileHandler::Excel::OrderHandler.import(fd, current_user)
+      rescue => e
+        msg.content = e.message
+      end
+      render json: msg
+    end
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_order

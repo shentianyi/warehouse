@@ -134,6 +134,8 @@ module V1
           return msg.set_false(MovableMessage::TargetNotExist)
         end
         if (r = p.get_movable_service.check(p, current_user)).result
+          p r
+          p '---------------------------------'
           return msg.set_true(r.content)
         else
           return msg.set_false(r.content)

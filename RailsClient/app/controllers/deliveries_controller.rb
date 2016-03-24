@@ -142,7 +142,7 @@ class DeliveriesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def delivery_params
-    params.require(:logistics_container).permit(:state, :remark, :des_location_id)
+    params.require(:logistics_container).permit(:state, :remark, :des_location_id, :extra_nps_count, :extra_wooden_count, :extra_box_count)
   end
 
   def get_states

@@ -9,6 +9,7 @@ class Part < ActiveRecord::Base
   has_many :whouses, :through => :positions
   has_many :packages
   has_many :storages
+  belongs_to :package_type
 
   has_many :part_clients
 
@@ -25,6 +26,14 @@ class Part < ActiveRecord::Base
 
   def self.nr_by_regex(nr)
     nr.sub(/^P/, '')
+  end
+
+  def package_type_is_wooden?
+    self.package_type.nr=='wooden'
+  end
+
+  def package_type_is_box?
+    self.package_type.nr=='box'
   end
 
   def default_position wh

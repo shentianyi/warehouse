@@ -88,6 +88,7 @@
     <th>零件类型</th>
     <th>零件单位</th>
     <th>单位包装量</th>
+    <th>包装类型</th>
     <th>盘点单位转换标准</th>
     <th>安全库存量</th>
     <th>产品描述</th>
@@ -103,6 +104,7 @@
         <td><%= part.part_type.name if part.part_type %></td>
         <td><%= part.unit %></td>
         <td><%= part.unit_pack %></td>
+        <td><%= part.package_type.name if part.package_type %></td>
         <td><%= part.convert_unit %></td>
         <td><%= part.safe_qty %></td>
         <td><%= part.description %></td>
