@@ -8,7 +8,7 @@ module Printer
       p=PickList.find_by_id(self.id)
       head={
           pl_nr: p.id,
-          created_date: p.created_at.localtime.strftime('%Y.%m.%d %H:%M:%S')
+          create_date: p.created_at.localtime.strftime('%Y.%m.%d %H:%M:%S')
       }
       heads=[]
       HEAD.each do |k|
