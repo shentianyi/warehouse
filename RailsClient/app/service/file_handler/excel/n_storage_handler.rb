@@ -133,23 +133,20 @@ module FileHandler
         msg = Message.new(contents: [])
         StorageOperationRecord.save_record(row, 'ENTRY')
 
-        if row[:packageId].present?
-          unless packageId = Container.exists?(row[:packageId])
-            msg.contents << "唯一码:#{row['packageId']} 不存在!"
-          end
-        end
+        # if row[:packageId].present?
+        #   unless packageId = Container.exists?(row[:packageId])
+        #     msg.contents << "唯一码:#{row['packageId']} 不存在!"
+        #   end
+        # end
 
         src_warehouse = Whouse.find_by_id(row[:toWh])
         unless src_warehouse
           msg.contents << "目的仓库号:#{row[:toWh]} 不存在!"
         end
 
-        if row[:packageId].present? && row[:partNr].blank?
-        else
-          part_id = Part.find_by_id(row[:partNr])
-          unless part_id
-            msg.contents << "零件号:#{row[:partNr]} 不存在!"
-          end
+        part_id = Part.find_by_id(row[:partNr])
+        unless part_id
+          msg.contents << "零件号:#{row[:partNr]} 不存在!"
         end
 
         if row[:packageId].present?
@@ -278,15 +275,9 @@ module FileHandler
           end
         end
 
-        positions = []
-        if row[:packageId].present? && row[:partNr].blank?
-        else
-          part_id = Part.find_by_id(row[:partNr])
-          if part_id
-            part_id.positions.each do |position|
-              positions += ["#{position.detail}"]
-            end
-          else
+        unless row[:partNr].blank?
+          part = Part.find_by_id(row[:partNr])
+          unless part
             msg.contents << "零件号:#{row[:partNr]} 不存在!"
           end
         end
@@ -306,11 +297,11 @@ module FileHandler
           end
         end
 
-        if from_position && part_id
-          unless positions.include?(row[:fromPosition])
-            msg.contents << "零件号:#{row[:partNr]} 不在源库位号:#{row[:fromPosition]}上!"
-          end
-        end
+        # if from_position && part_id
+        #   unless positions.include?(row[:fromPosition])
+        #     msg.contents << "零件号:#{row[:partNr]} 不在源库位号:#{row[:fromPosition]}上!"
+        #   end
+        # end
 
         if row[:toPosition].present?
           to_position = Position.find_by(detail: row[:toPosition])
@@ -319,11 +310,11 @@ module FileHandler
           end
         end
 
-        if to_position && part_id
-          unless positions.include?(row[:toPosition])
-            msg.contents << "零件号:#{row[:partNr]}不在目的库位号:#{row[:toPosition]}上!"
-          end
-        end
+        # if to_position && part_id
+        #   unless positions.include?(row[:toPosition])
+        #     msg.contents << "零件号:#{row[:partNr]}不在目的库位号:#{row[:toPosition]}上!"
+        #   end
+        # end
 
         if row[:employee_id].present?
           employee_id = User.find(row[:employee_id])

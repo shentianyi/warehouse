@@ -47,7 +47,8 @@ class WhouseService
     # validate uniqueId
     raise 'uniqueId 已存在!' if params[:uniqueId].present? and NStorage.find_by(params[:uniqueId])
 
-    if params[:packageId] and NStorage.find_by(packageId: params[:packageId], partNr: params[:partNr])
+    # if params[:packageId] and NStorage.find_by(packageId: params[:packageId], partNr: params[:partNr])
+    if params[:packageId] and NStorage.find_by(packageId: params[:packageId])
       raise "该唯一码#{params[:packageId]}已入库！"
     else
       data = {partNr: params[:partNr], qty: params[:qty], fifo: fifo, ware_house_id: wh.id, position: params[:toPosition]}

@@ -41,6 +41,7 @@
     <th>零件单位</th>
     <th>单位包装量</th>
     <th>盘点单位转换标准</th>
+    <th>描述</th>
     <th>所属库位</th>
     <td>超市要货来源</td>
     <th>是否已删除</th>
@@ -57,6 +58,7 @@
         <td><%= part.unit %></td>
         <td><%= part.unit_pack %></td>
         <td><%=part.convert_unit%></td>
+        <td><%=part.description%></td>
         <td>
           <p>
             <%part.positions.each do |p|%>

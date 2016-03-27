@@ -95,8 +95,7 @@ module V3
 
           msg = FileHandler::Excel::NStorageHandler.validate_move_row params
           if msg.result
-            mmsg = MovementSource.save_record(params)
-            return {result: 0, content: mmsg.content}
+            msg = MovementSource.save_record(params)
           end
         rescue => e
           if params[:uniq].blank?
