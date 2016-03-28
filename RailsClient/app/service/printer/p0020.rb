@@ -15,9 +15,9 @@ module Printer
           from_addr: d.source_location.nil? ? '' : d.source_location.name.to_s,
           to_addr: d.des_location.nil? ? '' : d.des_location.name.to_s,
           totalnr_forklift: LogisticsContainerService.count_all_forklifts(d).to_s,
-          totalnr_mupan: LogisticsContainerService.count_all_forklifts(d).to_s,
-          num_paperbox: LogisticsContainerService.count_all_packages(d).to_s,
-          totalnr_nps: LogisticsContainerService.count_all_packages(d).to_s
+          totalnr_mupan: d.delivery.extra_wooden_count.to_s,
+          num_paperbox: d.delivery.extra_box_count.to_s,
+          totalnr_nps: d.delivery.extra_nps_count.to_s
       }
       heads=[]
       HEAD.each do |k|
