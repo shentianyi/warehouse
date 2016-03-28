@@ -41,31 +41,57 @@
     </div>
 <% else %>
     <style>
-        .mui-content, .mui-content-padded {
-            margin-top: 20px;
+
+        .mui-bar-nav ~ .mui-content {
+            padding-top: 0;
+        }
+
+        .mui-content {
+            margin-top: 40px;
         }
 
         .mui-input-row {
             margin-top: 10px;
         }
 
+        .login-title {
+            background: steelblue;
+            color: white;
+            height: 50px;
+            line-height: 50px;
+            margin-bottom: -10px;
+            font-size: 1.2em;
+            text-align: center;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+
+        .mui-content-padded {
+            margin: 0;
+        }
+
+        .mui-input-group input, .mui-input-group input textarea {
+            background-color: steelblue;
+        }
     </style>
 
     <header class="mui-bar mui-bar-nav">
       <h1 class="mui-title">登录</h1>
     </header>
 
-    <span class="alert error"><%= alert %></span>
-
     <div class="mui-content">
+      <div class="login-title">
+        精密物料控制系统
+      </div>
+
       <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: {class: 'mui-input-group', role: 'form'}) do |f| %>
           <div class="mui-input-row">
-            <%= f.label :user_name, content_tag(:i, '', :class => 'glyphicon glyphicon-user', :style => 'color:green;') %>
+            <%= f.label :user_name, '员工号' %>
             <%= f.text_field :user_name, autofocus: true, class: 'mui-input-clear mui-input', placeholder: "请输入员工号" %>
           </div>
 
           <div class="mui-input-row">
-            <%= f.label :password, '密 码', class: 'col-sm-2 control-label' %>
+            <%= f.label :password, '密码' %>
             <%= f.password_field :password, autocomplete: "off", class: 'mui-input-clear mui-input', type: 'password', placeholder: "请输入密码" %>
           </div>
 
@@ -73,7 +99,7 @@
               <ul class="mui-table-view mui-table-view-chevron">
                 <li class="mui-table-view-cell">
                   自动登录
-                  <div id="autoLogin" class="mui-switch" aria-readonly="true">
+                  <div id="autoLogin" class="mui-switch mui-switch-blue mui-active">
                     <div class="mui-switch-handle"></div>
                   </div>
                 </li>
@@ -81,7 +107,7 @@
           <% end %>
 
           <div class="mui-content-padded">
-            <%= f.submit '登 录', class: 'mui-btn mui-btn-block mui-btn-primary' %>
+            <%= f.submit '登 录', class: 'mui-btn mui-btn-block mui-btn-primary login-in' %>
           </div>
       <% end %>
     </div>
@@ -92,5 +118,16 @@
         oMeta.setAttribute('name', 'viewport');
         oMeta.setAttribute('content', 'width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no');
         document.getElementsByTagName('head')[0].appendChild(oMeta);
+
+        $('.login-in').click(function () {
+            document.addEventListener('tap', function () {
+                var alert_msg = "<%= alert %>";
+                if (alert_msg == "") {
+                    mui.toast("loading....");
+                } else {
+                    mui.toast(alert_msg);
+                }
+            });
+        });
     </script>
 <% end %>

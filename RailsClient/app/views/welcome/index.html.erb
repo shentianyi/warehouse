@@ -1,11 +1,17 @@
-<div class="panel">
-  <div class="panel-header">
-    <h3>欢迎使用，精密物料控制系统</h3>
-  </div>
-  <div class="panel-body">
-    <h4>你好,<% if current_user %> <%= current_user.name%><%end%></h4>
-    <% if current_user %>
-        <span class="label label-info"><%= current_user.id+","+current_user.location.name+","+Role.display(current_user.role_id)%></span>
-    <%end%>
-  </div>
-</div>
+<% if @request_from == 'Pc' %>
+    <div class="panel">
+      <div class="panel-header">
+        <h3>欢迎使用，精密物料控制系统</h3>
+      </div>
+      <div class="panel-body">
+        <h4>你好,
+          <% if current_user %> <%= current_user.name %>
+          <% end %></h4>
+        <% if current_user %>
+            <span class="label label-info"><%= current_user.id+","+current_user.location.name+","+Role.display(current_user.role_id) %></span>
+        <% end %>
+      </div>
+    </div>
+<% else %>
+    <h3>欢迎使用精密物料控制系统</h3>
+<% end %>

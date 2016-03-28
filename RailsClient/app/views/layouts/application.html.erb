@@ -2,32 +2,60 @@
 <html>
 <head>
   <title>精密物料控制系统</title>
-  <!--<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>-->
   <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
-<% if current_user.employee? %>
-    <%= render "shared/employee_menu" %>
-<% else %>
-    <%= render "shared/menu" %>
-<% end %>
-<p class="notice alert"><%= notice %><%= alert %></p>
-<%= yield %>
-</body>
-<input type="hidden" value="<%= @model %>_li" id='active_li'/>
-<input type="hidden" value="<%= @print_server %>" id='print-server-hidden'/>
-<script type="text/javascript">
-    $(function () {
-        $("#main-menu li").removeClass('active');
-        $('#' + $('#active_li').val()).addClass('active');
-        jQuery(".best_in_place").best_in_place();
-        $('.best_in_place').bind("ajax:success", function () {
-            $(this).closest('tr').effect('highlight');
+<% if @request_from == 'Pc' %>
+    <% if current_user.employee? %>
+        <%= render "shared/employee_menu" %>
+    <% else %>
+        <%= render "shared/menu" %>
+    <% end %>
+
+    <p class="notice alert"><%= notice %><%= alert %></p>
+    <%= yield %>
+
+    <input type="hidden" value="<%= @model %>_li" id='active_li'/>
+    <input type="hidden" value="<%= @print_server %>" id='print-server-hidden'/>
+    <script type="text/javascript">
+        $(function () {
+            $("#main-menu li").removeClass('active');
+            $('#' + $('#active_li').val()).addClass('active');
+            jQuery(".best_in_place").best_in_place();
+            $('.best_in_place').bind("ajax:success", function () {
+                $(this).closest('tr').effect('highlight');
+            });
         });
-    });
-</script>
-<%= yield :javascript_includes %>
-<%= render :partial => "shared/handling_msg_box", :locals => {:handlemsg => "处理中..."} %>
+    </script>
+    <%= yield :javascript_includes %>
+    <%= render :partial => "shared/handling_msg_box", :locals => {:handlemsg => "处理中..."} %>
+
+<% else %>
+
+    <script type="text/javascript" charset="utf-8">
+        var oMeta = document.createElement('meta');
+        oMeta.charset = 'utf-8';
+        oMeta.setAttribute('name', 'viewport');
+        oMeta.setAttribute('content', 'width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no');
+        document.getElementsByTagName('head')[0].appendChild(oMeta);
+
+        document.addEventListener('tap', function () {
+            var alert_msg = "<%= alert %>";
+            if (alert_msg == "") {
+                mui.toast("loading....");
+            } else {
+                mui.toast(alert_msg);
+            }
+        });
+    </script>
+
+    <%= render 'shared/menu_1' %>
+
+    <%= yield %>
+
+    <%= render :partial => "shared/handling_msg_box", :locals => {:handlemsg => "处理中..."} %>
+<% end %>
+</body>
 </html>

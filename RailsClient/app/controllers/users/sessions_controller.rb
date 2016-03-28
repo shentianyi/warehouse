@@ -11,7 +11,7 @@ class Users::SessionsController<Devise::SessionsController
     sign_in(resource_name, resource)
     #yield resource if block_given?
     #respond_with resource, location: after_sign_in_path_for(resource)
-    render :json=>{result: true, role: current_user.role_id }
+    render :json => {result: true, role: current_user.role_id}
   end
 
   def destroy

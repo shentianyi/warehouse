@@ -54,7 +54,7 @@
           <% end %></td>
         <td><%= '是' if pick_item.is_emergency %></td>
         <td><%= pick_item.remark %></td>
-        <td><%= pick_item.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_item.created_at%></td>
+        <td><%= pick_item.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_item.created_at %></td>
         <td><%= link_to '编辑', edit_pick_item_path(pick_item) %></td>
       </tr>
   <% end %>
@@ -64,3 +64,8 @@
   <%= will_paginate @pick_items, :container => false %>
 </div>
 <br>
+
+<script type="text/javascript" charset="utf-8">
+    $('.mui-tab-item-transfer').removeClass('nav-active');
+    $('.mui-tab-item-transfer:first-child+a').addClass('nav-active');
+</script>
