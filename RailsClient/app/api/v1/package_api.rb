@@ -30,6 +30,7 @@ module V1
       get :nstorage_package do
         return {result: 0, content: "请输入唯一码"} if params[:package_id].blank?
 
+        params[:package_id]=params[:package_id].sub(/S|M/, '') if params[:package_id].present?
         unless storage = NStorage.exists_package?(params[:package_id])
           return {result: 0, content: "唯一码不存在!"}
         end
