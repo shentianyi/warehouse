@@ -10,12 +10,12 @@ condition[:created_at]=Time.parse('2015-12-12 00:00:00').utc.to_s...Time.parse('
 
 count=0
 NStorage.transaction do
-  # storages=NStorage.where(ware_house_id: 'SR01')
-  #              .select("SUM(n_storages.qty) as total_qty, n_storages.qty as qty, n_storages.partNr as partNr, n_storages.ware_house_id as ware_house_id, n_storages.position as position")
-  #              .group(:partNr, :ware_house_id, :position)
-  storages=NStorage.where(ware_house_id: 'SR01', partNr: '76755104W000', position: 'SR01')
+  storages=NStorage.where(ware_house_id: 'SR01')
                .select("SUM(n_storages.qty) as total_qty, n_storages.qty as qty, n_storages.partNr as partNr, n_storages.ware_house_id as ware_house_id, n_storages.position as position")
                .group(:partNr, :ware_house_id, :position)
+  # storages=NStorage.where(ware_house_id: 'SR01', partNr: '76755104W000', position: 'SR01')
+  #              .select("SUM(n_storages.qty) as total_qty, n_storages.qty as qty, n_storages.partNr as partNr, n_storages.ware_house_id as ware_house_id, n_storages.position as position")
+  #              .group(:partNr, :ware_house_id, :position)
   storages.each do |storage|
     count+=1
     puts "-----#{count}-----"
@@ -62,7 +62,7 @@ NStorage.transaction do
             .select("SUM(movements.qty) as move_out_qty").first.move_out_qty.to_f
 
     end
-    puts "#{b}--------#{c}------------#{d}-------------#{storage.qty.to_f}-------"
+    # puts "#{b}--------#{c}------------#{d}-------------#{storage.qty.to_f}-------"
 
     calc_storage_qty=b + c - d
     unless storage.total_qty==calc_storage_qty
