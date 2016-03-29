@@ -355,7 +355,7 @@ module FileHandler
             end
           end
 
-          msg.contents << "数量: #{row[:qty]} 不可以小于等于 0!" if row[:qty].to_f < 0
+          msg.contents << "数量: #{row[:qty]} 不可以小于等于 0!" if row[:qty].to_f <= 0
 
         else
 
