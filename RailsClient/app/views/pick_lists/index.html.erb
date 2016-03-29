@@ -82,11 +82,15 @@
 
         .mui-segmented-control {
             border-radius: 0;
+            border: none;
+            border-right: 1px solid steelblue;
         }
 
         .mui-control-header {
             border-top-left-radius: 3px;
             border-top-right-radius: 3px;
+            border-top: 1px solid steelblue;
+            border-bottom: 1px solid steelblue;
         }
 
         .mui-control-body {
@@ -95,18 +99,19 @@
         }
 
         .mui-list-item {
-            line-height: 38px;
+            line-height: 58px;
             display: table-cell;
-            overflow: hidden;
             width: 1%;
             -webkit-transition: background-color .1s linear;
             transition: background-color .1s linear;
             text-align: center;
+            border-color: steelblue;
+            border-left: 1px solid steelblue;
+            border-top: none;
+            font-weight: bold;
+            overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
-            color: #007aff;
-            border-color: #007aff;
-            border-left: 1px solid #007aff;
         }
 
         .mui-table-view-cell {
@@ -118,9 +123,9 @@
             margin-top: -2px;
         }
 
-        .table-show {
-            margin-bottom: 60px;
-        }
+        /*.table-show {
+            margin-bottom: 120px;
+        }*/
 
         .mui-popover {
             height: 200px;
@@ -149,8 +154,9 @@
             margin-bottom: 5px;
         }
 
-        .digg_pagination a:active, .digg_pagination a:focus, .digg_pagination a:link {
+        .digg_pagination a:active, .digg_pagination a:focus, .digg_pagination a:link, a:hover, a:focus, a:link {
             background-color: transparent;
+            text-decoration: none;
         }
 
         .pick_list_search {
@@ -229,7 +235,7 @@
       </div>
     </div>
 
-    <div id="middlePopover" class="mui-popover">
+    <!--<div id="middlePopover" class="mui-popover">
       <div class="mui-popover-arrow"></div>
       <div class="mui-scroll-wrapper">
         <div class="mui-scroll">
@@ -238,6 +244,7 @@
         </div>
       </div>
     </div>
+-->
 
     <script type="text/javascript" charset="utf-8">
         var ClientWidth = document.documentElement.clientWidth;
@@ -250,11 +257,11 @@
 
         <% @pick_lists.each_with_index do |pick_list, index| %>
         $('<div class="mui-segmented-control"><li class="mui-table-view-cell">' +
-                '<div class="mui-slider-right mui-disabled"><span id="<%= pick_list.id %>" object_id="<%= pick_list.object_id %>" user_id="<%= pick_list.user_id %>" create_at="<%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %>"  class="mui-btn mui-btn-primary glyphicon glyphicon-eye-open show-details">&emsp;详情</span></div>' +
+                '<div class="mui-slider-right mui-disabled"><a href="<%= pick_list_path(id: pick_list,show:true) %>" id="<%= pick_list.id %>" object_id="<%= pick_list.object_id %>" user_id="<%= pick_list.user_id %>" create_at="<%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %>" style="background:steelblue;"  class="mui-btn glyphicon glyphicon-eye-open show-details">&emsp;详情</a></div>' +
                 '<div class="mui-slider-handle"><div class="mui-table-cell"><div class="mui-segmented-control mui-control-body"><span class="mui-list-item">' + '<%= pick_list.id %>' + '</span>' +
-                '<marquee class="mui-list-item" scrollamount="2" scrolldelay="0">' + '<%= pick_list.object_id %>' + '</marquee>' +
+                '<marquee class="mui-list-item" scrollamount="2" scrolldelay="50" hspace="3"  behavior="scroll">' + '<%= pick_list.object_id %>' + '</marquee>' +
                 '<span class="mui-list-item">' + '<%= pick_list.user_id %>' + '</span>' +
-                '<marquee class="mui-list-item" scrollamount="2" scrolldelay="0">' + '<%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %>' + '</marquee>' +
+                '<marquee class="mui-list-item" scrollamount="2" scrolldelay="50" hspace="3"  behavior="scroll">' + '<%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %>' + '</marquee>' +
                 '</div></div></div></li></div>').appendTo('.table-show').ready(function () {
         });
         <% end %>
@@ -286,18 +293,18 @@
                     left: (ClientWidth - 150) + 'px'
                 });
             }
-            $('.show-details-list').children().remove();
+//            $('.show-details-list').children().remove();
 
-            var ID = $(this).attr('id');
-            var ObjectID = $(this).attr('object_id');
-            var UserID = $(this).attr('user_id');
-            var CreateAt = $(this).attr('create_at');
+            /*var ID = $(this).attr('id');
+             var ObjectID = $(this).attr('object_id');
+             var UserID = $(this).attr('user_id');
+             var CreateAt = $(this).attr('create_at');
 
-            $('<li class="mui-table-view-cell">择货单号:&emsp;' + ID + '</li>' +
-                    '<li class="mui-table-view-cell">要货项目:&emsp;' + ObjectID + '</li>' +
-                    '<li class="mui-table-view-cell">要货员工:&emsp;' + UserID + '</li>' +
-                    '<li class="mui-table-view-cell">创建时间:&emsp;' + CreateAt + '</li>').appendTo('.show-details-list').ready(function () {
-            });
+             $('<li class="mui-table-view-cell">择货单号:&emsp;' + ID + '</li>' +
+             '<li class="mui-table-view-cell">要货项目:&emsp;' + ObjectID + '</li>' +
+             '<li class="mui-table-view-cell">要货员工:&emsp;' + UserID + '</li>' +
+             '<li class="mui-table-view-cell">创建时间:&emsp;' + CreateAt + '</li>').appendTo('.show-details-list').ready(function () {
+             });*/
         });
 
         $('.pick_list_search').click(function () {

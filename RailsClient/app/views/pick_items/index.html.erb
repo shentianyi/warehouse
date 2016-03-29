@@ -78,11 +78,14 @@
 
         .mui-segmented-control {
             border-radius: 0;
+            border: none;
+            border-right: 1px solid steelblue;
         }
 
         .mui-control-header {
             border-top-left-radius: 3px;
             border-top-right-radius: 3px;
+            border-top: 1px solid steelblue;
         }
 
         .mui-control-body {
@@ -91,18 +94,16 @@
         }
 
         .mui-list-item {
-            line-height: 38px;
+            line-height: 58px;
             display: table-cell;
-            overflow: hidden;
             width: 1%;
             -webkit-transition: background-color .1s linear;
             transition: background-color .1s linear;
             text-align: center;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            color: #007aff;
-            border-color: #007aff;
-            border-left: 1px solid #007aff;
+            border-color: steelblue;
+            border-left: 1px solid steelblue;
+            border-top: none;
+            font-weight: bold;
         }
 
         .mui-table-view-cell {
@@ -179,7 +180,7 @@
 
     <div class="table-show">
       <div class="mui-segmented-control mui-control-header">
-        <span class="mui-list-item">
+        <span class="mui-list-item" style="width: 1px;">
           <input name="checkbox" value="false" type="checkbox" class="mui-choose-all">
         </span>
         <span class="mui-list-item">
@@ -217,20 +218,20 @@
 
         if ('<%= pick_item.is_emergency %>') {
             $('<div class="mui-segmented-control"><li class="mui-table-view-cell">' +
-                    '<div class="mui-slider-right mui-disabled"><span id="<%= pick_item.part_id %>" quantity="<%= pick_item.quantity %>" whouse_name="<% if pp = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id) %><%= pp.position.detail %><% end %>" class="mui-btn mui-btn-primary glyphicon glyphicon-eye-open show-details">&emsp;详情</span></div>' +
-                    '<div class="mui-slider-handle"><div class="mui-table-cell" style="background:#ff0000;"><div class="mui-segmented-control mui-control-body"><div class="mui-list-item"><input id="<%= pick_item.id %>" class="check-box-content" name="checkbox" value="false" type="checkbox"></div>' +
-                    '<span class="mui-list-item" style="color: white;">' + '<%= pick_item.part_id %>' + '</span>' +
+                    '<div class="mui-slider-right mui-disabled"><span id="<%= pick_item.part_id %>" quantity="<%= pick_item.quantity %>" whouse_name="<% if pp = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id) %><%= pp.position.detail %><% end %>" style="background:steelblue" class="mui-btn glyphicon glyphicon-eye-open show-details">&emsp;详情</span></div>' +
+                    '<div class="mui-slider-handle"><div class="mui-table-cell" style="background:#F4A460;"><div class="mui-segmented-control mui-control-body"><div class="mui-list-item" style="width:1px;"><input id="<%= pick_item.id %>" class="check-box-content" name="checkbox" value="false" type="checkbox"></div>' +
+                    '<marquee class="mui-list-item" scrollamount="2" scrolldelay="50"  style="color: white;" hspace="3"  behavior="scroll">' + '<%= pick_item.part_id %>' + '</marquee>' +
                     '<span class="mui-list-item"  style="color: white;">' + '<%= pick_item.quantity %>' + '</span>' +
-                    '<marquee class="mui-list-item" scrollamount="2" scrolldelay="0"  style="color: white;">' + '<% if pp = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id) %><%= pp.position.detail %><% end %>' + '</marquee>' +
+                    '<marquee class="mui-list-item" scrollamount="2" scrolldelay="50"  style="color: white;" hspace="3"  behavior="scroll">' + '<% if pp = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id) %><%= pp.position.detail %><% end %>' + '</marquee>' +
                     '</div></div></li></div>').appendTo('.table-show').ready(function () {
             });
         } else {
             $('<div class="mui-segmented-control"><li class="mui-table-view-cell">' +
                     '<div class="mui-slider-right mui-disabled"><span id="<%= pick_item.part_id %>" quantity="<%= pick_item.quantity %>" whouse_name="<% if pp = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id) %><%= pp.position.detail %><% end %>" class="mui-btn mui-btn-primary glyphicon glyphicon-eye-open show-details">&emsp;详情</span></div>' +
                     '<div class="mui-slider-handle"><div class="mui-table-cell"><div class="mui-segmented-control mui-control-body"><div class="mui-list-item"><input id="<%= pick_item.id %>" class="check-box-content" name="checkbox" value="false" type="checkbox"></div>' +
-                    '<span class="mui-list-item">' + '<%= pick_item.part_id %>' + '</span>' +
+                    '<marquee class="mui-list-item"  scrollamount="2" scrolldelay="400" hspace="3"  behavior="scroll">' + '<%= pick_item.part_id %>' + '</marquee>' +
                     '<span class="mui-list-item">' + '<%= pick_item.quantity %>' + '</span>' +
-                    '<marquee class="mui-list-item" scrollamount="2" scrolldelay="0">' + '<% if pp = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id) %><%= pp.position.detail %><% end %>' + '</marquee>' +
+                    '<marquee class="mui-list-item" scrollamount="2" scrolldelay="50" hspace="3"  behavior="scroll">' + '<% if pp = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id) %><%= pp.position.detail %><% end %>' + '</marquee>' +
                     '</div></div></li></div>').appendTo('.table-show').ready(function () {
             });
         }
