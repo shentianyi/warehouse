@@ -13,5 +13,82 @@
       </div>
     </div>
 <% else %>
-    <h3>欢迎使用精密物料控制系统</h3>
+
+    <style>
+        .welcome-container {
+            height: 250px;
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            border-radius: 10px;
+            border: 1px solid steelblue;
+            box-shadow: 3px 1px 3px;
+            margin-top: 30px;
+            animation: tranform-container 5s;
+            -moz-animation: tranform-container 5s; /* Firefox */
+            -webkit-animation: tranform-container 5s; /* Safari 和 Chrome */
+            -o-animation: tranform-container 5s;
+            animation-delay: 5s;
+            animation-direction: alternate;
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
+        }
+
+        @keyframes tranform-container {
+            0% {
+                background: #fefefe;
+                transform: rotateY(90deg);
+            }
+            25% {
+                background: #f2f2f2;
+                transform: rotateY(-90deg);
+            }
+            50% {
+                background: #ffffff;
+                transform: rotateY(0deg);
+            }
+            75% {
+                background: #f2f2f2;
+                transform: rotateY(90deg);
+            }
+            100% {
+                background: #fefefe;
+                transform: rotateY(-90deg);
+            }
+        }
+
+        .welcome-container > h2 {
+            text-align: center;
+            font-size: 1.3em;
+            margin-top: 30px;
+            border-bottom: 2px solid steelblue;
+            padding-bottom: 30px;
+        }
+
+        .welcome-container > h3 {
+            text-align: center;
+            font-size: 1.3em;
+            padding: 20px;
+            border-bottom: 1px solid steelblue;
+            margin-bottom: 40px;
+        }
+
+        .welcome-container > span {
+            padding: 20px;
+            margin: 50px 0 0 35px;
+        }
+
+    </style>
+    <div class="welcome-container">
+      <h2>欢迎使用,精密物料控制系统</h2>
+
+      <h3>
+        你好,
+        <% if current_user %> <%= current_user.name %>
+        <% end %>
+      </h3>
+
+      <% if current_user %>
+          <span class="label label-info"><%= current_user.id+","+current_user.location.name+","+Role.display(current_user.role_id) %></span>
+      <% end %>
+    </div>
 <% end %>

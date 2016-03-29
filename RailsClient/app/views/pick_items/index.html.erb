@@ -1,71 +1,305 @@
-<h1>择货单项目列表</h1>
+<% if @request_from == 'Pc' %>
+    <h1>择货单项目列表</h1>
 
-<div>
-  <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
     <div>
-      <div>
+      <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+        <div>
+          <div>
         <span>零件号：
           <input type="text" name="pick_item[part_id]" value="<%= @part_id %>"/>
           <input type="hidden" name="pick_item[part_id_fuzzy]"/>
         </span>
+          </div>
+          <div>
+            <input type="submit" value="查 找" class="btn btn-primary"/>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <br/>
+    <div class="digg_pagination">
+      <div class="page_info">
+        <%= page_entries_info @pick_items %>
       </div>
-      <div>
-        <input type="submit" value="查 找" class="btn btn-primary"/>
+      <%= will_paginate @pick_items, :container => false %>
+    </div>
+    <table class="table table-bordered table-striped table-hover">
+      <thead>
+      <tr>
+        <th>NO.</th>
+        <th>零件号</th>
+        <th>数量</th>
+        <th>箱数</th>
+        <th>要货员工号</th>
+        <th>项目</th>
+        <th>要货库位</th>
+        <th>是否紧急</th>
+        <th>备注</th>
+        <th>创建时间</th>
+        <th></th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <% @pick_items.each_with_index do |pick_item, index| %>
+          <tr>
+            <td><%= index+@pick_items.offset+1 %></td>
+            <td><%= pick_item.part_id %></td>
+            <td><%= pick_item.quantity %></td>
+            <td><%= pick_item.box_quantity %></td>
+            <td><%= pick_item.user_id %></td>
+            <td><%= pick_item.destination_whouse.name %></td>
+            <td>
+              <% if pp = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id) %><%= pp.position.detail %>
+              <% end %></td>
+            <td><%= '是' if pick_item.is_emergency %></td>
+            <td><%= pick_item.remark %></td>
+            <td><%= pick_item.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_item.created_at %></td>
+            <td><%= link_to '编辑', edit_pick_item_path(pick_item) %></td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+    <div class="digg_pagination">
+      <%= will_paginate @pick_items, :container => false %>
+    </div>
+    <br>
+
+<% else %>
+
+    <style>
+        .table > thead > tr > th {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            text-align: center;
+        }
+
+        .mui-segmented-control {
+            border-radius: 0;
+        }
+
+        .mui-control-header {
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+        }
+
+        .mui-control-body {
+            border: none;
+            border-bottom: 1px solid steelblue;
+        }
+
+        .mui-list-item {
+            line-height: 38px;
+            display: table-cell;
+            overflow: hidden;
+            width: 1%;
+            -webkit-transition: background-color .1s linear;
+            transition: background-color .1s linear;
+            text-align: center;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            color: #007aff;
+            border-color: #007aff;
+            border-left: 1px solid #007aff;
+        }
+
+        .mui-table-view-cell {
+            padding: 0;
+            list-style: none;
+        }
+
+        .show-details {
+            margin-top: -2px;
+        }
+
+        .table-show {
+            margin-bottom: 60px;
+        }
+
+        .mui-popover {
+            height: 200px;
+        }
+
+        .show-details-list > li {
+            padding: 11px 15px;
+        }
+
+        .digg_pagination {
+            background: transparent;
+            margin: -40px -20px 0 -20px;
+        }
+
+        .digg_pagination .page_info {
+            width: auto;
+        }
+
+        .page_info b {
+            border-radius: 5px;
+            color: white;
+        }
+
+        .digg_pagination a, .digg_pagination span, .digg_pagination em {
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+
+        .digg_pagination a:active, .digg_pagination a:focus, .digg_pagination a:link {
+            background-color: transparent;
+        }
+
+        .mui-input-row {
+            display: flex;
+        }
+
+        .check-box-submit {
+            width: 100%;
+            margin-top: -10px;
+            margin-bottom: 5px;
+        }
+    </style>
+
+    <div class="digg_pagination">
+      <div class="page_info">
+        <%= page_entries_info @pick_items %>
+      </div>
+      <%= will_paginate @pick_items, :container => false %>
+    </div>
+
+    <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+      <div class="mui-input-row">
+        <input type="search" ame="pick_item[part_id]" value="<%= @part_id %>" class="mui-input-clear" placeholder="零件号" style="width: 78%;">
+        <input type="submit" value="查 找" class="mui-pull-right" style="height: 34px;line-height: 20px;"/>
+        <input type="hidden" name="pick_item[part_id_fuzzy]"/>
+      </div>
+    </form>
+
+    <button class="mui-btn mui-btn-primary check-box-submit">提交</button>
+
+    <div class="table-show">
+      <div class="mui-segmented-control mui-control-header">
+        <span class="mui-list-item">
+          <input name="checkbox" value="false" type="checkbox" class="mui-choose-all">
+        </span>
+        <span class="mui-list-item">
+          零件号
+        </span>
+        <span class="mui-list-item">
+          数量
+        </span>
+        <span class="mui-list-item">
+          择货位置
+        </span>
       </div>
     </div>
-  </form>
-</div>
 
-<br/>
-<div class="digg_pagination">
-  <div class="page_info">
-    <%= page_entries_info @pick_items %>
-  </div>
-  <%= will_paginate @pick_items, :container => false %>
-</div>
-<table class="table table-bordered table-striped table-hover">
-  <thead>
-  <tr>
-    <th>NO.</th>
-    <th>零件号</th>
-    <th>数量</th>
-    <th>箱数</th>
-    <th>要货员工号</th>
-    <th>项目</th>
-    <th>要货库位</th>
-    <th>是否紧急</th>
-    <th>备注</th>
-    <th>创建时间</th>
-    <th></th>
-  </tr>
-  </thead>
+    <div id="middlePopover" class="mui-popover">
+      <div class="mui-popover-arrow"></div>
+      <div class="mui-scroll-wrapper">
+        <div class="mui-scroll">
+          <ul class="mui-table-view show-details-list">
+          </ul>
+        </div>
+      </div>
+    </div>
 
-  <tbody>
-  <% @pick_items.each_with_index do |pick_item, index| %>
-      <tr>
-        <td><%= index+@pick_items.offset+1 %></td>
-        <td><%= pick_item.part_id %></td>
-        <td><%= pick_item.quantity %></td>
-        <td><%= pick_item.box_quantity %></td>
-        <td><%= pick_item.user_id %></td>
-        <td><%= pick_item.destination_whouse.name %></td>
-        <td>
-          <% if pp = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id) %><%= pp.position.detail %>
-          <% end %></td>
-        <td><%= '是' if pick_item.is_emergency %></td>
-        <td><%= pick_item.remark %></td>
-        <td><%= pick_item.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_item.created_at %></td>
-        <td><%= link_to '编辑', edit_pick_item_path(pick_item) %></td>
-      </tr>
-  <% end %>
-  </tbody>
-</table>
-<div class="digg_pagination">
-  <%= will_paginate @pick_items, :container => false %>
-</div>
-<br>
+    <script type="text/javascript" charset="utf-8">
+        var ClientWidth = document.documentElement.clientWidth;
+        var ClientHeight = document.documentElement.clientHeight;
+        AddMeta('apple-mobile-web-app-capable', 'yes');
+        AddMeta('apple-mobile-web-app-status-bar-style', 'black');
+
+        $('.mui-tab-item-transfer').removeClass('nav-active');
+        $('.mui-tab-item-transfer:first-child').addClass('nav-active');
+
+        <% @pick_items.each_with_index do |pick_item, index| %>
+
+        if ('<%= pick_item.is_emergency %>') {
+            $('<div class="mui-segmented-control"><li class="mui-table-view-cell">' +
+                    '<div class="mui-slider-right mui-disabled"><span id="<%= pick_item.part_id %>" quantity="<%= pick_item.quantity %>" whouse_name="<% if pp = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id) %><%= pp.position.detail %><% end %>" class="mui-btn mui-btn-primary glyphicon glyphicon-eye-open show-details">&emsp;详情</span></div>' +
+                    '<div class="mui-slider-handle"><div class="mui-table-cell" style="background:#ff0000;"><div class="mui-segmented-control mui-control-body"><div class="mui-list-item"><input id="<%= pick_item.id %>" class="check-box-content" name="checkbox" value="false" type="checkbox"></div>' +
+                    '<span class="mui-list-item" style="color: white;">' + '<%= pick_item.part_id %>' + '</span>' +
+                    '<span class="mui-list-item"  style="color: white;">' + '<%= pick_item.quantity %>' + '</span>' +
+                    '<marquee class="mui-list-item" scrollamount="2" scrolldelay="0"  style="color: white;">' + '<% if pp = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id) %><%= pp.position.detail %><% end %>' + '</marquee>' +
+                    '</div></div></li></div>').appendTo('.table-show').ready(function () {
+            });
+        } else {
+            $('<div class="mui-segmented-control"><li class="mui-table-view-cell">' +
+                    '<div class="mui-slider-right mui-disabled"><span id="<%= pick_item.part_id %>" quantity="<%= pick_item.quantity %>" whouse_name="<% if pp = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id) %><%= pp.position.detail %><% end %>" class="mui-btn mui-btn-primary glyphicon glyphicon-eye-open show-details">&emsp;详情</span></div>' +
+                    '<div class="mui-slider-handle"><div class="mui-table-cell"><div class="mui-segmented-control mui-control-body"><div class="mui-list-item"><input id="<%= pick_item.id %>" class="check-box-content" name="checkbox" value="false" type="checkbox"></div>' +
+                    '<span class="mui-list-item">' + '<%= pick_item.part_id %>' + '</span>' +
+                    '<span class="mui-list-item">' + '<%= pick_item.quantity %>' + '</span>' +
+                    '<marquee class="mui-list-item" scrollamount="2" scrolldelay="0">' + '<% if pp = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id) %><%= pp.position.detail %><% end %>' + '</marquee>' +
+                    '</div></div></li></div>').appendTo('.table-show').ready(function () {
+            });
+        }
+        <% end %>
+
+        $('.show-details').click(function () {
+            var MarginTop = $(this).offset().top;
+            var RealTop = MarginTop + 50;
+            mui('#middlePopover').popover('show');
+
+            if (RealTop > ($(window).height() - 200)) {
+                $('#middlePopover').css({
+                    top: RealTop - 260,
+                    left: '75px',
+                    transform: 'rotate(180deg)'
+                });
+                $('.mui-popover-arrow').css({
+                    left: '75px'
+                });
+
+                $('.mui-scroll-wrapper').css({
+                    transform: 'rotate(-180deg)'
+                })
+            } else {
+                $('#middlePopover').css({
+                    top: RealTop,
+                    left: '75px'
+                });
+                $('.mui-popover-arrow').css({
+                    left: (ClientWidth - 150) + 'px'
+                });
+            }
+            $('.show-details-list').children().remove();
+
+            var ID = $(this).attr('id');
+            var Quantity = $(this).attr('quantity');
+            var WhouseName = $(this).attr('whouse_name');
+
+            $('<li class="mui-table-view-cell">零件号:&emsp;' + ID + '</li>' +
+                    '<li class="mui-table-view-cell">数量:&emsp;' + Quantity + '</li>' +
+                    '<li class="mui-table-view-cell">择货位置:&emsp;' + WhouseName + '</li>').appendTo('.show-details-list').ready(function () {
+            });
+        });
+
+        $('.mui-choose-all').click(function () {
+            if (this.checked) {
+                $(":checkbox").attr("checked", true);
+            } else {
+                $(":checkbox").attr("checked", false);
+            }
+        });
+
+        $('.check-box-submit').click(function () {
+            var CheckBoxID = new Array();
+            $('.check-box-content').each(function () {
+                if (this.checked) {
+                    CheckBoxID.push($(this).attr('id'));
+                }
+            });
+            console.log(CheckBoxID);
+        });
+    </script>
+<% end %>
 
 <script type="text/javascript" charset="utf-8">
-    $('.mui-tab-item-transfer').removeClass('nav-active');
-    $('.mui-tab-item-transfer:first-child+a').addClass('nav-active');
+    $(function () {
+        $(".datepicker").datetimepicker({
+            lang: 'ch',
+            format: 'Y-m-d H:i'
+        });
+    });
 </script>
