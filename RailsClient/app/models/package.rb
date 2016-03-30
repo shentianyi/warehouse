@@ -32,15 +32,16 @@ class Package<Container
   end
 
   def parsed_fifo
-    puts "-----------------------------------------#{self.fifo_time_display}"
-    if self.fifo_time_display
-      begin
-        return Date.strptime(self.fifo_time_display.sub(/W\s*/, ''), '%d.%m.%y')
-        rescue => e
-        return Time.now
-      end
-    end
-    return Time.now
+    # puts "-----------------------------------------#{self.fifo_time_display}"
+    # if self.fifo_time_display
+    #   begin
+        # return Date.strptime(self.fifo_time_display.sub(/W\s*/, ''), '%d.%m.%y')
+        return self.created_at.localtime.strftime("%y-%m-%d")
+        # rescue => e
+        # return Time.now
+      # end
+    # end
+    # return Time.now
   end
 
   def self.generate_report_condition(type, start_t, end_t, location_id, part_id)

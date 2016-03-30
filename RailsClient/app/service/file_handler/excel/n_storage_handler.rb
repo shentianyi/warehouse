@@ -30,6 +30,8 @@ module FileHandler
                   end
                 end
 
+                PackageService.generate_package(row, current_user)
+
                 row[:movement_list_id] = move_list.id
                 MovementSource.create(row)
 
@@ -133,11 +135,11 @@ module FileHandler
         msg = Message.new(contents: [])
         StorageOperationRecord.save_record(row, 'ENTRY')
 
-        # if row[:packageId].present?
-        #   unless packageId = Container.exists?(row[:packageId])
-        #     msg.contents << "唯一码:#{row['packageId']} 不存在!"
-        #   end
-        # end
+        if row[:packageId].present?
+          if package = Container.exists?(row[:packageId])
+            msg.contents << "唯一码:#{row['packageId']} 已存在!"
+          end
+        end
 
         src_warehouse = Whouse.find_by_id(row[:toWh])
         unless src_warehouse

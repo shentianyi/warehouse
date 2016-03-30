@@ -114,4 +114,28 @@ class PackageService
     query=query.where(location_containers: {user_id: user_id}) if user_id
     query.select('containers.*,location_containers.*')
   end
+
+
+  #create package
+  def self.generate_package(row, user)
+    #create container
+    package = Package.create({
+                                 id: row[:packageId],
+                                 part_id: row[:partNr],
+                                 user_id: user.id,
+                                 quantity: row[:qty],
+                                 state: PackageState::RECEIVED
+                             })
+    #create lc
+    plc = package.logistics_containers.build({
+                                                 user_id: user.id,
+                                                 state: MovableState::CHECKED
+                                             })
+    # plc.destinationable = destination
+    plc.save
+
+    Record.create({recordable: plc, impl_id: user.id, impl_user_type: ImplUserType::RECEIVER, impl_action: 'receive', impl_time: Time.now})
+    # forklifts[row[:forklift_id]].add(plc)
+  end
+
 end
