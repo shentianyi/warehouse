@@ -73,6 +73,10 @@
         .mui-input-group input, .mui-input-group input textarea {
             background-color: steelblue;
         }
+
+        .login-in {
+            height: 50px;
+        }
     </style>
 
     <header class="mui-bar mui-bar-nav">
@@ -87,7 +91,7 @@
       <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: {class: 'mui-input-group', role: 'form'}) do |f| %>
           <div class="mui-input-row">
             <%= f.label :user_name, '员工号' %>
-            <%= f.text_field :user_name, autofocus: true, class: 'mui-input-clear mui-input', placeholder: "请输入员工号" %>
+            <%= f.text_field :user_name, class: 'mui-input-clear mui-input', placeholder: "请输入员工号" %>
           </div>
 
           <div class="mui-input-row">

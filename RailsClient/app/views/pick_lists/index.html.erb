@@ -73,13 +73,6 @@
 
 <% else %>
     <style>
-        .table > thead > tr > th {
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            text-align: center;
-        }
-
         .mui-segmented-control {
             border-radius: 0;
             border: none;
@@ -87,10 +80,11 @@
         }
 
         .mui-control-header {
-            border-top-left-radius: 3px;
-            border-top-right-radius: 3px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
             border-top: 1px solid steelblue;
             border-bottom: 1px solid steelblue;
+            font-weight: bold;
         }
 
         .mui-control-body {
@@ -99,7 +93,8 @@
         }
 
         .mui-list-item {
-            line-height: 58px;
+            height: 50px;
+            line-height: 50px;
             display: table-cell;
             width: 1%;
             -webkit-transition: background-color .1s linear;
@@ -108,7 +103,7 @@
             border-color: steelblue;
             border-left: 1px solid steelblue;
             border-top: none;
-            font-weight: bold;
+            /*font-weight: bold;*/
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
@@ -118,14 +113,6 @@
             padding: 0;
             list-style: none;
         }
-
-        .show-details {
-            margin-top: -2px;
-        }
-
-        /*.table-show {
-            margin-bottom: 120px;
-        }*/
 
         .mui-popover {
             height: 200px;
@@ -137,11 +124,12 @@
 
         .digg_pagination {
             background: transparent;
-            margin: -40px -20px 0 -20px;
+            margin: -40px -20px 0 20px;
         }
 
         .digg_pagination .page_info {
             width: auto;
+            margin-left: -40px;
         }
 
         .page_info b {
@@ -178,6 +166,10 @@
             padding: 10px;
             display: none;
             border: 1px solid steelblue;
+        }
+
+        .show-details {
+            margin-top: -2px;
         }
     </style>
 
@@ -247,84 +239,82 @@
 
     <script type="text/javascript" charset="utf-8">
         var ClientWidth = document.documentElement.clientWidth;
-        var ClientHeight = document.documentElement.clientHeight;
         AddMeta('apple-mobile-web-app-capable', 'yes');
         AddMeta('apple-mobile-web-app-status-bar-style', 'black');
-
-        $('.mui-tab-item-transfer').removeClass('nav-active');
-        $('.mui-tab-item-transfer:first-child').addClass('nav-active');
 
         <% @pick_lists.each_with_index do |pick_list, index| %>
         $('<div class="mui-segmented-control"><li class="mui-table-view-cell">' +
                 '<div class="mui-slider-right mui-disabled"><a href="<%= pick_list_path(id: pick_list,show:true) %>" id="<%= pick_list.id %>" object_id="<%= pick_list.object_id %>" user_id="<%= pick_list.user_id %>" create_at="<%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %>" style="background:steelblue;"  class="mui-btn glyphicon glyphicon-eye-open show-details">&emsp;详情</a></div>' +
-                '<div class="mui-slider-handle"><div class="mui-table-cell"><div class="mui-segmented-control mui-control-body"><span class="mui-list-item">' + '<%= pick_list.id %>' + '</span>' +
-                '<marquee class="mui-list-item" scrollamount="2" scrolldelay="50" hspace="3"  behavior="scroll">' + '<%= pick_list.object_id %>' + '</marquee>' +
-                '<span class="mui-list-item">' + '<%= pick_list.user_id %>' + '</span>' +
-                '<marquee class="mui-list-item" scrollamount="2" scrolldelay="50" hspace="3" behavior="scroll">' + '<%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %>' + '</marquee>' +
+                '<div class="mui-slider-handle">' +
+                '<div class="mui-table-cell" id="<%= pick_list.id %>">' +
+                '<div class="mui-segmented-control mui-control-body">' +
+                '<div class="mui-list-item"><span>' + '<%= pick_list.id %>' + '</span></div>' +
+                '<div class="mui-list-item"><span id="object_<%= pick_list.id %>">' + '<%= pick_list.object_id %>' + '</span></div>' +
+                '<div class="mui-list-item"><span id="user_id_<%= pick_list.id %>">' + '<%= pick_list.user_id %>' + '</span></div>' +
+                '<div class="mui-list-item"><span id="create_at_<%= pick_list.id %>">' + '<%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %>' + '</span></div>' +
                 '</div></div></div></li></div>').appendTo('.table-show').ready(function () {
         });
         <% end %>
 
-        $('.mui-segmented-control').on("doubletap", '.mui-table-cell', function () {
-            var ID = $(this).children('div').children('span').html();
-            var ObjectID = $(this).children('div').children('marquee').html();
-            var UserID = $(this).children('div').children('marquee').next().html();
-            var CreateAt = $(this).children('div').children('marquee').next().next().html();
+        $('.mui-segmented-control').on("longtap", '.mui-table-cell', function () {
+            var ID = $(this).attr('id');
+            var ObjectID = $('#object_' + ID).html();
+            var UserID = $('#user_id_' + ID).html();
+            var CreateAt = $('#create_at_' + ID).html();
 
-            mui.toast("择货单号:" + ID + '<br/>' + "要货项目:" + ObjectID + '<br/>' + "要货员工:" + UserID + '<br/>' + "创建时间:" + CreateAt);
 
-//            ShowPopOver(ID, ObjectID, UserID, CreateAt);
+            /*mui.toast('<div class="mui-popover"> <div class="mui-popover-arrow"></div> <div class="mui-scroll-wrapper"> <div class="mui-scroll"><ul class="mui-table-view" style="border-radius: 10px;text-align: left; background: steelblue;margin: -5px;"><li class="mui-table-view-cell" style="padding:5px 0 5px 20px;color: white;font-size: 1.2em;">' + "择货单号:" + ID + '</li>' +
+             '<li class="mui-table-view-cell" style="padding:5px 0 5px 20px;color: white;font-size: 1.2em;"">' + "要货项目:" + ObjectID + '</li>' +
+             '<li class="mui-table-view-cell" style="padding:5px 0 5px 20px;color: white;font-size: 1.2em;"">' + "要货员工:" + UserID + '</li>' +
+             '<li class="mui-table-view-cell" style="padding:5px 0 5px 20px;color: white;font-size: 1.2em;"">' + "创建时间:" + CreateAt + '</li><ul></div></div></div>');
+             */
+
+            var MarginTop = $(this).offset().top;
+            var RealTop = MarginTop + 50;
+
+            mui('#middlePopover').popover('show');
+
+            if (RealTop > ($(window).height() - 200)) {
+                $('#middlePopover').css({
+                    top: RealTop - 260,
+                    left: '75px',
+                    transform: 'rotate(180deg)'
+                });
+                $('.mui-popover-arrow').css({
+                    left: '75px'
+                });
+
+                $('.mui-scroll-wrapper').css({
+                    transform: 'rotate(-180deg)'
+                })
+            } else {
+                $('#middlePopover').css({
+                    top: RealTop,
+                    left: '75px'
+                });
+                $('.mui-popover-arrow').css({
+                    left: (ClientWidth - 150) + 'px'
+                });
+            }
+
+            $('.show-details-list').children().remove();
+
+
+            $('<li class="mui-table-view-cell">择货单号:&emsp;' + ID + '</li>' +
+                    '<li class="mui-table-view-cell">要货项目:&emsp;' + ObjectID + '</li>' +
+                    '<li class="mui-table-view-cell">要货员工:&emsp;' + UserID + '</li>' +
+                    '<li class="mui-table-view-cell">创建时间:&emsp;' + CreateAt + '</li>').appendTo('.show-details-list').ready(function () {
+            });
+
+            mui('#middlePopover').popover('show');
         });
-
-        //        function ShowPopOver(ID, ObjectID, UserID, CreateAt) {
-        //            var MarginTop = $(this).offset().top;
-        //            var RealTop = MarginTop + 50;
-        //
-        //            mui.toast("Hello");
-        //
-        //            mui.toast(ID + ' ' + ObjectID + ' ' + UserID + ' ' + CreateAt);
-        //
-        //            mui('#middlePopover').popover('show');
-        //
-        //            if (RealTop > ($(window).height() - 200)) {
-        //                $('#middlePopover').css({
-        //                    top: RealTop - 260,
-        //                    left: '75px',
-        //                    transform: 'rotate(180deg)'
-        //                });
-        //                $('.mui-popover-arrow').css({
-        //                    left: '75px'
-        //                });
-        //
-        //                $('.mui-scroll-wrapper').css({
-        //                    transform: 'rotate(-180deg)'
-        //                })
-        //            } else {
-        //                $('#middlePopover').css({
-        //                    top: RealTop,
-        //                    left: '75px'
-        //                });
-        //                $('.mui-popover-arrow').css({
-        //                    left: (ClientWidth - 150) + 'px'
-        //                });
-        //            }
-        //
-        //            $('.show-details-list').children().remove();
-        //
-        //            $('<li class="mui-table-view-cell">择货单号:&emsp;' + ID + '</li>' +
-        //                    '<li class="mui-table-view-cell">要货项目:&emsp;' + ObjectID + '</li>' +
-        //                    '<li class="mui-table-view-cell">要货员工:&emsp;' + UserID + '</li>' +
-        //                    '<li class="mui-table-view-cell">创建时间:&emsp;' + CreateAt + '</li>').appendTo('.show-details-list').ready(function () {
-        //            });
-        //        }
 
         $('.pick_list_search').click(function () {
             $('.search').slideToggle();
         });
 
-        $('.table-show').css({
-            height: (ClientHeight - 120) + 'px'
-        })
+        $('<div class="digg_pagination" style="margin-top: 10px;">' + '<%= will_paginate @pick_item_filters, :container => false %>' + '</div><div style="width: 100px;height: 60px;"></div>').appendTo('.table-show').ready(function () {
+        });
     </script>
 <% end %>
 

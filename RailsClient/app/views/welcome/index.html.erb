@@ -16,7 +16,7 @@
 
     <style>
         .welcome-container {
-            height: 250px;
+            height: 240px;
             -webkit-border-radius: 10px;
             -moz-border-radius: 10px;
             border-radius: 10px;
@@ -72,9 +72,12 @@
             margin-bottom: 40px;
         }
 
-        .welcome-container > span {
+        .welcome-container > div {
+            text-align: center;
+        }
+
+        .welcome-container > div > span {
             padding: 20px;
-            margin: 50px 0 0 35px;
         }
 
     </style>
@@ -87,8 +90,10 @@
         <% end %>
       </h3>
 
-      <% if current_user %>
-          <span class="label label-info"><%= current_user.id+","+current_user.location.name+","+Role.display(current_user.role_id) %></span>
-      <% end %>
+      <div>
+        <% if current_user %>
+            <span class="label label-info"><%= current_user.id+","+current_user.location.name+","+Role.display(current_user.role_id) %></span>
+        <% end %>
+      </div>
     </div>
 <% end %>

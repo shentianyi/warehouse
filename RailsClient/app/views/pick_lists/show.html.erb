@@ -136,29 +136,22 @@
     </script>
 <% else %>
     <style>
-
         .mui-card {
             margin: -30px 0 5px 0;
-        }
-
-        .table > thead > tr > th {
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            text-align: center;
         }
 
         .mui-segmented-control {
             border-radius: 0;
             border: none;
-            border-bottom: 1px solid steelblue;
             border-right: 1px solid steelblue;
         }
 
         .mui-control-header {
-            border-top-left-radius: 3px;
-            border-top-right-radius: 3px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
             border-top: 1px solid steelblue;
+            border-bottom: 1px solid steelblue;
+            font-weight: bold;
         }
 
         .mui-control-body {
@@ -167,8 +160,8 @@
         }
 
         .mui-list-item {
-            height: 60px;
-            line-height: 60px;
+            height: 50px;
+            line-height: 50px;
             display: table-cell;
             width: 1%;
             -webkit-transition: background-color .1s linear;
@@ -177,7 +170,6 @@
             border-color: steelblue;
             border-left: 1px solid steelblue;
             border-top: none;
-            font-weight: bold;
         }
 
         .show-details {
@@ -198,11 +190,12 @@
 
         .digg_pagination {
             background: transparent;
-            margin: -40px -20px 0 -20px;
+            margin: -40px -20px 0 20px;
         }
 
         .digg_pagination .page_info {
             width: auto;
+            margin-left: -40px;
         }
 
         .page_info b {
@@ -215,7 +208,12 @@
             margin-bottom: 5px;
         }
 
-        .digg_pagination a:active, .digg_pagination a:focus, .digg_pagination a:link, a:active, a:hover, a:link {
+        .digg_pagination a:active, .digg_pagination a:focus, .digg_pagination a:link, a:hover, a:focus, a:link {
+            background-color: transparent;
+            text-decoration: none;
+        }
+
+        a:active, a:hover, a:link {
             background-color: transparent;
             text-decoration: none;
         }
@@ -223,28 +221,29 @@
         .check-box-submit {
             width: 100%;
             margin-bottom: 5px;
+            display: none;
         }
     </style>
 
     <div class="mui-card">
       <ul class="mui-table-view">
         <li class="mui-table-view-cell mui-collapse">
-          <a class="mui-navigate-right" href="#">基础信息</a>
+          <a class="mui-navigate-right" href="#" style="background: steelblue;color: white;">择货信息</a>
 
           <div class="mui-collapse-content">
             <div class="mui-input-row mui-table-view-cell">
-              <p id="pick-list" pick_id="<%= @pick_list.id %>">择货单号：<%= @pick_list.id %></p>
+              <span id="pick-list" pick_id="<%= @pick_list.id %>">择货单号：<%= @pick_list.id %></span>
             </div>
             <div class="mui-input-row mui-table-view-cell">
-              <p>择货员工号：<%= @pick_list.user_id %></p>
-            </div>
-
-            <div class="mui-input-row mui-table-view-cell">
-              <p>生成时间：<%= @pick_list.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></p>
+              <span>择货员工号：<%= @pick_list.user_id %></span>
             </div>
 
             <div class="mui-input-row mui-table-view-cell">
-              <p>备注：<%= @pick_list.remark %></p>
+              <span>生成时间：<%= @pick_list.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></span>
+            </div>
+
+            <div class="mui-input-row mui-table-view-cell">
+              <span>备注：<%= @pick_list.remark %></span>
             </div>
           </div>
         </li>
@@ -275,26 +274,101 @@
         AddMeta('apple-mobile-web-app-status-bar-style', 'black');
 
         <% @pick_items.each_with_index do |pick_item, index| %>
-
-        if ('<%= pick_item.is_emergency %>') {
-            $('<div class="mui-segmented-control"><li class="mui-table-view-cell">' +
-                    '<div class="mui-slider-right mui-disabled"><span id="<%= pick_item.part_id %>" quantity="<%= pick_item.quantity %>" whouse_name="<% if pp = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id) %><%= pp.position.detail %><% end %>" style="background:steelblue" class="mui-btn glyphicon glyphicon-eye-open show-details">&emsp;详情</span></div>' +
-                    '<div class="mui-slider-handle"><div class="mui-table-cell" style="background:#F4A460;"><div class="mui-segmented-control mui-control-body"><div class="mui-list-item" style="width:1px;"><input id="<%= pick_item.id %>" class="check-box-content" name="checkbox" value="false" type="checkbox"></div>' +
-                    '<marquee class="mui-list-item" scrollamount="2" scrolldelay="50"  style="color: white;" hspace="3"  behavior="scroll">' + '<%= pick_item.part_id %>' + '</marquee>' +
-                    '<span class="mui-list-item"  style="color: white;">' + '<%= pick_item.quantity %>' + '</span>' +
-                    '<marquee class="mui-list-item" scrollamount="2" scrolldelay="50"  style="color: white;" hspace="3"  behavior="scroll">' + '<% if pp = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id) %><%= pp.position.detail %><% end %>' + '</marquee>' +
+        if ('<%= pick_item.is_emergency %>' == "true") {
+            $('<div class="mui-segmented-control"><li class="mui-table-view-cell" style="padding: 0;list-style: none;">' +
+                    '<div class="mui-slider-handle">' +
+                    '<div class="mui-table-cell" style="background:#F4A460;">' +
+                    '<div class="mui-segmented-control mui-control-body">' +
+                    '<div class="mui-list-item" style="width:1px;"><input id="<%= pick_item.id %>" class="check-box-content" name="checkbox" value="false" type="checkbox"></div>' +
+                    '<div class="mui-list-item"><marquee scrollamount="2" scrolldelay="0" style="color: white;margin-bottom:-20px;" behavior="scroll">' + '<%= pick_item.part_id %>' + '</marquee></div>' +
+                    '<div class="mui-list-item"><span style="color: white;">' + '<%= pick_item.quantity %>' + '</span></div>' +
+                    '<div class="mui-list-item"><marquee  scrollamount="2" scrolldelay="0" style="color: white;margin-bottom:-20px;" behavior="scroll">' + '<% if pp = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id) %><%= pp.position.detail %><% end %>' + '</marquee></div>' +
                     '</div></div></li></div>').appendTo('.table-show').ready(function () {
             });
         } else {
-            $('<div class="mui-segmented-control"><li class="mui-table-view-cell">' +
-                    '<div class="mui-slider-right mui-disabled"><span id="<%= pick_item.part_id %>" quantity="<%= pick_item.quantity %>" whouse_name="<% if pp = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id) %><%= pp.position.detail %><% end %>" class="mui-btn mui-btn-primary glyphicon glyphicon-eye-open show-details">&emsp;详情</span></div>' +
-                    '<div class="mui-slider-handle"><div class="mui-table-cell"><div class="mui-segmented-control mui-control-body"><div class="mui-list-item"><input id="<%= pick_item.id %>" class="check-box-content" name="checkbox" value="false" type="checkbox"></div>' +
-                    '<marquee class="mui-list-item"  scrollamount="2" scrolldelay="400" hspace="3"  behavior="scroll">' + '<%= pick_item.part_id %>' + '</marquee>' +
+            $('<div class="mui-segmented-control"><li class="mui-table-view-cell" style="padding: 0;list-style: none;">' +
+                    '<div class="mui-slider-handle">' +
+                    '<div class="mui-table-cell">' +
+                    '<div class="mui-segmented-control mui-control-body">' +
+                    '<div class="mui-list-item" style="width:1px;"><input id="<%= pick_item.id %>" class="check-box-content" name="checkbox" value="false" type="checkbox"></div>' +
+                    '<div class="mui-list-item" ><marquee scrollamount="2" scrolldelay="0" style="margin-bottom:-20px;" behavior="scroll">' + '<%= pick_item.part_id %>' + '</marquee></div>' +
                     '<span class="mui-list-item">' + '<%= pick_item.quantity %>' + '</span>' +
-                    '<marquee class="mui-list-item" scrollamount="2" scrolldelay="50" hspace="3"  behavior="scroll">' + '<% if pp = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id) %><%= pp.position.detail %><% end %>' + '</marquee>' +
+                    '<marquee class="mui-list-item" scrollamount="2" scrolldelay="0" style="margin-bottom:-20px;" behavior="scroll">' + '<% if pp = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id) %><%= pp.position.detail %><% end %>' + '</marquee>' +
                     '</div></div></li></div>').appendTo('.table-show').ready(function () {
             });
         }
         <% end %>
+
+        $('.mui-choose-all').click(function () {
+            if (this.checked) {
+                $(":checkbox").attr("checked", true);
+                $('.check-box-submit').css({
+                    display: 'block'
+                });
+            } else {
+                $(":checkbox").attr("checked", false);
+                $('.check-box-submit').css({
+                    display: 'none'
+                });
+            }
+        });
+
+        $('.check-box-content').click(function () {
+            if (this.checked) {
+                $('.check-box-submit').css({
+                    display: 'block'
+                });
+            } else {
+                $('.check-box-content').each(function (index) {
+                    if (document.getElementsByClassName('check-box-content')[index].checked) {
+                        $('.check-box-submit').css({
+                            display: 'block'
+                        });
+                        return false;
+                    } else {
+                        $('.check-box-submit').css({
+                            display: 'none'
+                        });
+                    }
+                });
+            }
+        });
+
+        $('.check-box-submit').click(function () {
+            var btnArray = ['否', '是'];
+            mui.confirm('确认提交?', '提交', btnArray, function (e) {
+                if (e.index == 1) {
+                    $('.mui-popup-text').html("<span class='icon-spinner icon-spin'></span>");
+                    var CheckBoxID = new Array();
+                    $('.check-box-content').each(function () {
+                        if (this.checked) {
+                            CheckBoxID.push($(this).attr('id'));
+                        }
+                    });
+
+                    console.log(CheckBoxID);
+
+                    $.ajax({
+                        url: '/',
+                        type: 'post',
+                        data: {
+                            id: CheckBoxID
+                        },
+                        success: function (data) {
+                            mui.toast("Here is Return:" + "<br/>" + data);
+                            $('.mui-popup-text').html("<span class='mui-icon mui-icon-checkmarkem'></span>");
+                        },
+                        error: function () {
+                            mui.toast("Cannot Get Data.");
+                            $('.mui-popup-text').html("<span class='icon-remove-sign'></span>");
+                        }
+                    })
+                } else {
+                }
+            });
+        });
+
+        $('<div style="width: 100px;height: 60px;"></div>').appendTo('.table-show').ready(function () {
+        });
     </script>
 <% end %>
