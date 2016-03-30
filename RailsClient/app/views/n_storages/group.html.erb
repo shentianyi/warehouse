@@ -11,7 +11,7 @@
             </span>
 
             <span>仓库号：
-              <%= select_tag('n_storage[ware_house_id]', options_from_collection_for_select(Whouse.all, :name, :id, @ware_house_id), include_blank: true) %>
+              <%= select_tag('n_storage[ware_house_id]', options_from_collection_for_select(Whouse.all, :id, :name, @ware_house_id), include_blank: true) %>
             </span>
 
             <span>库位号：
@@ -82,7 +82,7 @@
             <td><%= storage.total_qty %></td>
             <td><%= storage.fifo.localtime if storage.fifo %> </td>
             <td><%= storage.updated_at.localtime if storage.updated_at %> </td>
-            <td><%= storage.ware_house_id %></td>
+            <td><%= storage.ware_house.blank? ? '' : storage.ware_house.name %></td>
             <td><%= storage.position %></td>
             <!--<td><%= link_to '编辑', edit_n_storage_path(storage), :class => 'btn btn-default' %></td>-->
           </tr>
