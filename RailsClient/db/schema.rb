@@ -456,12 +456,12 @@ ActiveRecord::Schema.define(version: 20160307064434) do
   create_table "order_boxes", force: true do |t|
     t.string   "nr"
     t.string   "rfid_nr"
-    t.integer  "status"
+    t.integer  "status",              default: 100
     t.string   "part_id"
     t.float    "quantity"
     t.integer  "order_box_type_id"
-    t.string   "whouse_id"
-    t.string   "source_whouse_id"
+    t.string   "warehouse_id"
+    t.string   "source_warehouse_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "position_id"
@@ -470,13 +470,13 @@ ActiveRecord::Schema.define(version: 20160307064434) do
   add_index "order_boxes", ["order_box_type_id"], name: "index_order_boxes_on_order_box_type_id", using: :btree
   add_index "order_boxes", ["part_id"], name: "index_order_boxes_on_part_id", using: :btree
   add_index "order_boxes", ["position_id"], name: "index_order_boxes_on_position_id", using: :btree
-  add_index "order_boxes", ["source_whouse_id"], name: "index_order_boxes_on_source_warehouse_id", using: :btree
-  add_index "order_boxes", ["whouse_id"], name: "index_order_boxes_on_warehouse_id", using: :btree
+  add_index "order_boxes", ["source_warehouse_id"], name: "index_order_boxes_on_source_warehouse_id", using: :btree
+  add_index "order_boxes", ["warehouse_id"], name: "index_order_boxes_on_warehouse_id", using: :btree
 
   create_table "order_cars", force: true do |t|
     t.string   "nr"
     t.string   "rfid_nr"
-    t.integer  "status"
+    t.integer  "status",     default: 100
     t.string   "whouse_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -541,7 +541,7 @@ ActiveRecord::Schema.define(version: 20160307064434) do
   add_index "orders", ["source_id"], name: "index_orders_on_source_id", using: :btree
   add_index "orders", ["user_id"], name: "index_orders_on_user_id", using: :btree
   add_index "orders", ["uuid"], name: "index_orders_on_uuid", using: :btree
-  add_index "orders", ["whouse_id"], name: "index_orders_on_whouse_id", using: :btree
+  add_index "orders", ["whouse_id", "orderable_type", "orderable_id"], name: "index_orders_on_whouse_id_and_orderable_type_and_orderable_id", using: :btree
 
   create_table "package_positions", force: true do |t|
     t.string   "position_id"
@@ -629,41 +629,17 @@ ActiveRecord::Schema.define(version: 20160307064434) do
     t.float    "unit_pack"
     t.string   "part_type_id"
     t.decimal  "convert_unit",             precision: 20, scale: 10, default: 1.0
+    t.string   "unit"
     t.string   "name"
     t.float    "cross_section"
     t.float    "weight"
-    t.float    "weight_range"
-    t.string   "unit"
+    t.float    "weight_range",                                       default: 0.1
   end
 
   add_index "parts", ["id"], name: "index_parts_on_id", using: :btree
   add_index "parts", ["part_type_id"], name: "index_parts_on_part_type_id", using: :btree
   add_index "parts", ["user_id"], name: "index_parts_on_user_id", using: :btree
   add_index "parts", ["uuid"], name: "index_parts_on_uuid", using: :btree
-
-  create_table "permission_group_items", force: true do |t|
-    t.integer  "permission_id"
-    t.integer  "permission_group_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "permission_group_items", ["permission_group_id"], name: "index_permission_group_items_on_permission_group_id", using: :btree
-  add_index "permission_group_items", ["permission_id"], name: "index_permission_group_items_on_permission_id", using: :btree
-
-  create_table "permission_groups", force: true do |t|
-    t.string   "name"
-    t.string   "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "permissions", force: true do |t|
-    t.string   "name"
-    t.string   "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "pick_item_filters", force: true do |t|
     t.string   "user_id"
@@ -947,16 +923,6 @@ ActiveRecord::Schema.define(version: 20160307064434) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  create_table "user_permission_groups", force: true do |t|
-    t.string   "user_id"
-    t.integer  "permission_group_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "user_permission_groups", ["permission_group_id"], name: "index_user_permission_groups_on_permission_group_id", using: :btree
-  add_index "user_permission_groups", ["user_id"], name: "index_user_permission_groups_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "uuid",                   limit: 36,                 null: false

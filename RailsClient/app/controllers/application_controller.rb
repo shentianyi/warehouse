@@ -8,7 +8,8 @@ class ApplicationController < ActionController::Base
   before_filter :configure_permitted_parameters, if: :devise_controller?
   before_filter :authenticate_user_from_token!
   before_filter :authenticate_user!
-  before_filter :get_print_server 
+  before_filter :get_print_server
+  before_filter :get_request_info
   #============
   # fix cancan "ActiveModel::ForbiddenAttributesError" with Rails 4
   # see https://github.com/ryanb/cancan/issues/835
@@ -33,9 +34,9 @@ class ApplicationController < ActionController::Base
   protected
 
   def layout_by_resource
-    puts '-------------------------------------------'
-    puts request.env['HTTP_USER_AGENT']
-    puts '-------------------------------------------'
+    # puts '-------------------------------------------'
+    # puts request.env['HTTP_USER_AGENT']
+    # puts '-------------------------------------------'
     if devise_controller?
       "no_authorization"
     else
@@ -54,6 +55,17 @@ class ApplicationController < ActionController::Base
   end
 
   private
+  def get_request_info
+    info=request.env['HTTP_USER_AGENT']
+    if info.include?("Mobile")
+      @request_from='Mobile'
+    else
+      @request_from='Pc'
+    end
+
+    puts "--------#{info}-----------------------#{@request_from}-----------------------"
+  end
+
   def authenticate_user_from_token!
     # Need to pass email and token every request
     user_email = params[:user_email].presence
