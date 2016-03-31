@@ -13,7 +13,7 @@ module V3
         requires :user_id, type: String, desc: 'movement list builder'
       end
       get do
-        time_condition = 7.days.ago.utc...Time.now.utc
+        time_condition = 2.days.ago.utc...Time.now.utc
         args = []
         movement_lists = MovementList.where(created_at: time_condition, builder: params[:user_id]).order(created_at: :desc)
         if movement_lists
