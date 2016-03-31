@@ -143,7 +143,6 @@
         .check-box-submit {
             width: 100%;
             margin-bottom: 5px;
-            display: none;
         }
     </style>
 
@@ -219,7 +218,7 @@
                     '<div class="mui-slider-handle">' +
                     '<div class="mui-table-cell" style="background:' + bgcolor + '">' +
                     '<div class="mui-segmented-control mui-control-body">' +
-                    '<div class="mui-list-item" style="width:1px;"><input id=' + part_id + ' class="check-box-content" name="checkbox" value="false" type="checkbox"></div>' +
+                    '<div class="mui-list-item" style="width:1px;"><input id=' + id + ' class="check-box-content" name="checkbox" value="false" type="checkbox"></div>' +
                     '<div class="mui-list-item"><marquee scrollamount="2" scrolldelay="0" style="color:' + fontcolor + ';margin-bottom:-20px;" behavior="scroll">' + part_id + '</marquee></div>' +
                     '<div class="mui-list-item"><span style="color: ' + fontcolor + '">' + quantity + '</span></div>' +
                     '<div class="mui-list-item"><marquee  scrollamount="2" scrolldelay="0" style="color: ' + fontcolor + ';margin-bottom:-20px;" behavior="scroll">' + pick_position + '</marquee></div>' +
@@ -230,37 +229,38 @@
         $('.mui-choose-all').click(function () {
             if (this.checked) {
                 $(":checkbox").attr("checked", true);
-                $('.check-box-submit').css({
-                    display: 'block'
-                });
+                $(":checkbox").each(function () {
+                    var order_item_id = $(this).attr('id');
+                    order_item(order_item_id, true, 300);
+                })
             } else {
                 $(":checkbox").attr("checked", false);
-                $('.check-box-submit').css({
-                    display: 'none'
-                });
+                var order_item_id = $(this).attr('id');
+                order_item(order_item_id, false, 200);
             }
         });
 
         $('.check-box-content').click(function () {
+            var order_item_id = $(this).attr('id');
             if (this.checked) {
-                $('.check-box-submit').css({
-                    display: 'block'
-                });
+                order_item(order_item_id, true, 300);
             } else {
-                $('.check-box-content').each(function (index) {
-                    if (document.getElementsByClassName('check-box-content')[index].checked) {
-                        $('.check-box-submit').css({
-                            display: 'block'
-                        });
-                        return false;
-                    } else {
-                        $('.check-box-submit').css({
-                            display: 'none'
-                        });
-                    }
-                });
+                order_item(order_item_id, false, 200);
             }
         });
+
+        function order_item(order_item_id, is_finished, status) {
+            $.ajax({
+                url: "/order_items/" + order_item_id,
+                type: "PUT",
+                data: {order_item: {out_of_stock: is_finished, state: status}},
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                }
+            });
+        }
+
 
         $('.check-box-submit').click(function () {
             var btnArray = ['否', '是'];
@@ -276,14 +276,11 @@
 
                     var id = $('#pick-list').attr('pick_id');
 
-                    console.log(id);
-                    console.log(CheckBoxID);
                     $.ajax({
-                        url: '/',
+                        url: '/orders/finish_pick',
                         type: 'post',
                         data: {
-                            id: "<%= @pick_list.id %>",
-                            part_id: CheckBoxID
+                            pick_list_id: id
                         },
                         success: function (data) {
                             $('.mui-popup-text').html("<span class='fa fa-check-circle-o fa-3x' style='color:springgreen;'></span>");

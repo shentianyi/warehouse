@@ -26,3 +26,5 @@ class PickItemStatus<BaseStatus
     end
   end
 end
+
+PickItemStatus::PICKING
