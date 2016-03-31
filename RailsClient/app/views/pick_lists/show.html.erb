@@ -87,7 +87,7 @@
             </div>
           </td>
           <td><%= index+1 %></td>
-          <td><%= pick_item.part.nr %></td>
+          <td><%= pick_item.part.blank? ? pick_item.part_id : pick_item.part.nr %></td>
           <td><%= pick_item.quantity %></td>
           <td><%= pick_item.box_quantity %></td>
           <td><%= pick_item.order_user.nr %></td>

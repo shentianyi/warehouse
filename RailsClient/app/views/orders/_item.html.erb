@@ -11,11 +11,11 @@
     <th>NO.</th>
     <th>零件号</th>
     <th>数量</th>
-    <th>箱数</th>
-    <th>要货员工号</th>
-    <th>要货地点</th>
-    <th>是否加急</th>
-    <th>是否缺货</th>
+    <!--<th>箱数</th>-->
+    <!--<th>要货员工号</th>-->
+    <!--<th>要货地点</th>-->
+    <!--<th>是否加急</th>-->
+    <!--<th>是否缺货</th>-->
     <th>是否已完成备货</th>
     <th>备注</th>
   </tr>
@@ -25,17 +25,17 @@
   <% @order_items.each_with_index do |order_item, index| %>
       <tr>
         <td><%= index+1 %></td>
-        <td><%= order_item.part.nr_for_user(current_user) %></td>
-        <td><%= order_item.quantity %></td>
-        <td><%= order_item.box_quantity %></td>
-        <td><%= order_item.user.nr if order_item.user %></td>
-        <td><%= order_item.user.location.nr if order_item.user && order_item.user.location %></td>
-        <td>
-          <input type="checkbox" disabled <%= 'checked' if order_item.is_emergency %>/>
-        </td>
-        <td>
-          <input type="checkbox" disabled <%= 'checked' if order_item.out_of_stock %>"/>
-        </td>
+        <td><%= order_item.part.blank? ? order_item.part_id : order_item.part.nr_for_user(current_user) %></td>
+        <td><%= order_item.quantity.to_i %></td>
+        <!--<td><%= order_item.box_quantity %></td>-->
+        <!--<td><%= order_item.user.nr if order_item.user %></td>-->
+        <!--<td><%= order_item.user.location.nr if order_item.user && order_item.user.location %></td>-->
+        <!--<td>-->
+          <!--<input type="checkbox" disabled <%= 'checked' if order_item.is_emergency %>/>-->
+        <!--</td>-->
+        <!--<td>-->
+          <!--<input type="checkbox" disabled <%= 'checked' if order_item.out_of_stock %>"/>-->
+        <!--</td>-->
         <td>
           <input type="checkbox" disabled value="<%= order_item.id %>" <%= 'checked' if order_item.is_finished %> class="itemfinished-checkbox"/>
         </td>
