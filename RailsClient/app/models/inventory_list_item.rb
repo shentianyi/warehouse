@@ -21,6 +21,7 @@ class InventoryListItem < ActiveRecord::Base
                                    inventory_list_id: params[:inventory_list_id]).first
           raise '已盘点'
         end
+        p '-------------------------------------------'
         query = NStorage.where(packageId: params[:package_id]).first
       elsif !params[:unique_id].blank?
         query = NStorage.where(uniqueid: params[:unique_id]).first
@@ -31,6 +32,7 @@ class InventoryListItem < ActiveRecord::Base
         query = nil
       end
 
+      p query
       # 已入库，参数组合生成
       if query.nil?
         params[:current_whouse] = nil if params[:current_whouse].blank?
