@@ -217,13 +217,19 @@ class OrderService
   def self.move_stock_by_finish_pick id, user
     PickList.transaction do
       if pick = PickList.find_by_id(id)
-        pick.update_attribute(:is_delete, true)
+        picked=true
         pick.pick_items.each do |pick_item|
-          pick_item.update_attribute(:is_delete, true)
-          pick_item.order_item.update_attribute(:handled, true) if pick_item.order_item
 
+          unless [PickItemStatus::BEFORE_PRINTED, PickItemStatus::PICKED].include?(pick_item.state)
+            pick_item.update_attribute(:remark, "缺货")
+            picked=false
+            next
+          end
+
+          pick_item.order_item.update_attribute(:handled, true) if pick_item.order_item
           #move stock
           if from_wh=Whouse.find_by_id('PA')
+            pick_item.update_attribute(:remark, "已完成择货")
             WhouseService.new.move({
                                        employee_id: user.id,
                                        partNr: pick_item.part_id,
@@ -239,9 +245,15 @@ class OrderService
 
         end
 
-        pick.orders.each do |order|
-          order.update_attribute(:handled, true)
+        if picked
+          pick.update_attribute(:state, PickStatus::PICKED)
+        else
+          pick.update_attribute(:state, PickStatus::PICKING)
         end
+
+        # pick.orders.each do |order|
+        #   order.update_attribute(:handled, true)
+        # end
       else
         raise "Pick List #{id} Not Found"
       end
