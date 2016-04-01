@@ -80,7 +80,7 @@ module Printer
         i.update(state: PickItemState::PRINTED)
       end
 
-      p records
+      # p records
 
       records.each do |record|
         bodies=[]
