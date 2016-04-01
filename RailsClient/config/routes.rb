@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :package_types
+
   resources :permission_group_items do
     collection do
       get :search
@@ -34,7 +36,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :part_clients
+  resources :part_clients do
+    collection do
+      get :search
+    end
+  end
 
   resources :movement_sources do
     collection do
@@ -205,7 +211,7 @@ Rails.application.routes.draw do
       get :filters
       get :filt
       get :picklists
-
+      match :import, to: :import, via: [:get, :post]
       post :handle
     end
     member do

@@ -10,11 +10,11 @@ class PickItem < ActiveRecord::Base
     "PI#{Time.now.to_milli}"
   end
 
-  def remark
-    if self.order_item
-      self.order_item.remark
-    end
-  end
+  # def remark
+  #   if self.order_item
+  #     self.order_item.remark
+  #   end
+  # end
 
   def is_out_of_stock
     if self.order_item

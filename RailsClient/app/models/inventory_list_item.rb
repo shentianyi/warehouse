@@ -13,6 +13,10 @@ class InventoryListItem < ActiveRecord::Base
 
   def self.new_item(params, query=true)
     # 根据参数组合情况获取nstorage end
+    part=Part.find_by_nr(params[:part_id])
+    params[:part_id]=part.blank? ? params[:part_id] : part.id
+    position=Position.find_by_nr(params[:position])
+    params[:position]=position.blank? ? params[:position] : position.id
     if query
       query = NStorage.new
 
@@ -48,7 +52,7 @@ class InventoryListItem < ActiveRecord::Base
         end
       end
     end
-    part=Part.find_by_nr(params[:part_id])
+
     if params[:need_convert]
       params[:qty]=BigDecimal.new(params[:qty].to_s)/BigDecimal.new(part.convert_unit.to_s)
     else

@@ -10,17 +10,19 @@
     <th>No.</th>
     <th>零件号</th>
     <th>数量</th>
-    <th>箱数</th>
-    <th>要货员工号</th>
-    <th>要货部门</th>
-    <th>要货库位</th>
-    <th>是否加急</th>
-    <th>是否缺货</th>
-    <th>
-      <input id="finish-all-pickitems" type="checkbox">
-      是否已完成备货
-    </th>
+    <th>库存量</th>
+    <!--<th>箱数</th>-->
+    <!--<th>要货员工号</th>-->
+    <!--<th>要货部门</th>-->
+    <!--<th>要货库位</th>-->
+    <!--<th>是否加急</th>-->
+    <!--<th>是否缺货</th>-->
+    <!--<th>-->
+      <!--<input id="finish-all-pickitems" type="checkbox">-->
+      <!--是否已完成备货-->
+    <!--</th>-->
     <th>备注</th>
+    <th>择货位置</th>
   </tr>
   </thead>
   <tbody>
@@ -31,40 +33,42 @@
             <% if p=Part.find_by_id(pi.part_id) %>
                 <td><%= p.nr %></td>
             <% else %>
-                <td></td>
+                <td><%= pi.part_id %></td>
             <% end %>
-            <td><%= pi.quantity %></td>
-            <td><%= pi.box_quantity %></td>
-            <% if u=Part.find_by_id(pi.user_id) %>
-                <td><%= u.nr %></td>
-            <% else %>
-                <td></td>
-            <% end %>
-            <% if w=Whouse.find_by_id(pi.destination_whouse_id) %>
-                <td><%= w.name %></td>
-            <% else %>
-                <td></td>
-            <% end %>
-            <td>
-              <% if pp = OrderItemService.verify_department(pi.destination_whouse_id, pi.part_id) %><%= pp.position.detail %>
-              <% end %>
-            </td>
-            <td>
-              <% if pi.order_item %>
-                  <input type="checkbox" disabled class="pickitem-checkbox" <%= 'checked' if pi.is_emergency %> />
-              <% end %>
-            </td>
-            <td>
-              <% if pi.order_item %>
-                  <input type="checkbox" class="outofstock-checkbox" value="<%= pi.order_item_id %>" <%= 'checked' if pi.is_out_of_stock %> />
-              <% end %>
-            </td>
-            <td>
-              <% if pi.order_item %>
-                  <input type="checkbox" class="finishpick-checkbox" value="<%= pi.order_item_id %>" <%= 'checked' if pi.is_finished %> />
-              <% end %>
-            </td>
+            <td><%= pi.quantity.to_i %></td>
+            <td><%= NStorageService.get_total_stock_count(pi.part_id, current_user.location) %></td>
+            <!--<td><%= pi.box_quantity %></td>-->
+            <!--<% if u=Part.find_by_id(pi.user_id) %>-->
+                <!--<td><%= u.nr %></td>-->
+            <!--<% else %>-->
+                <!--<td></td>-->
+            <!--<% end %>-->
+            <!--<% if w=Whouse.find_by_id(pi.destination_whouse_id) %>-->
+                <!--<td><%= w.name %></td>-->
+            <!--<% else %>-->
+                <!--<td></td>-->
+            <!--<% end %>-->
+            <!--<td>-->
+              <!--<% if pp = OrderItemService.verify_department(pi.destination_whouse_id, pi.part_id) %><%= pp.position.detail %>-->
+              <!--<% end %>-->
+            <!--</td>-->
+            <!--<td>-->
+              <!--<% if pi.order_item %>-->
+                  <!--<input type="checkbox" disabled class="pickitem-checkbox" <%= 'checked' if pi.is_emergency %> />-->
+              <!--<% end %>-->
+            <!--</td>-->
+            <!--<td>-->
+              <!--<% if pi.order_item %>-->
+                  <!--<input type="checkbox" class="outofstock-checkbox" value="<%= pi.order_item_id %>" <%= 'checked' if pi.is_out_of_stock %> />-->
+              <!--<% end %>-->
+            <!--</td>-->
+            <!--<td>-->
+              <!--<% if pi.order_item %>-->
+                  <!--<input type="checkbox" class="finishpick-checkbox" value="<%= pi.order_item_id %>" <%= 'checked' if pi.is_finished %> />-->
+              <!--<% end %>-->
+            <!--</td>-->
             <td><%= pi.remark %></td>
+            <td><%= NStorageService.get_positions(pi.part_id, current_user.location)%></td>
           </tr>
       <% end %>
   <% end %>

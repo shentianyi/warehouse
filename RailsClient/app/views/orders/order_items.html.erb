@@ -1,15 +1,4 @@
 <style>
-    .digg_pagination .page_info {
-        text-align: left;
-        width: auto;
-        margin-left: -20px;
-        margin-right: -20px;
-    }
-
-    .digg_pagination {
-        background: transparent;
-    }
-
     .table > thead > tr > th, .table > tbody > tr > td {
         text-align: center;
     }
@@ -29,7 +18,7 @@
       <a href="/orders" title="返回需求单">需求单</a>
     </li>
     <li class="active">
-      需求单项目列表<span class="label label-primary"><%= @order.id %></span>
+      需求单项目列表<span class="label label-primary" style="margin-left: 10px;"><%= @order.id %></span>
     </li>
   </ol>
 </div>
@@ -45,22 +34,24 @@
 <br>
 <br>
 <table class="table table-bordered table-striped table-hover">
-  <tr>
-    <th>NO.</th>
-    <th>项目号</th>
-    <th>零件号</th>
-    <th>箱数</th>
-    <th>包装数量</th>
-    <th>状态</th>
-  </tr>
+  <thead>
+    <tr>
+      <th>NO.</th>
+      <th>项目号</th>
+      <th>零件号</th>
+      <!--<th>箱数</th>-->
+      <th>桶数</th>
+      <th>状态</th>
+    </tr>
+  </thead>
   <tbody>
   <% @order_items.each_with_index do |order, index| %>
       <tr>
         <td><%= index+1 %></td>
         <td><%= order.id %></td>
-        <td><%= order.part.nr_for_user(current_user) %></td>
-        <td><%= order.box_quantity %></td>
-        <td><%= order.quantity %></td>
+        <td><%= order.part.blank? ? order.part_id : order.part.nr_for_user(current_user) %></td>
+        <!--<td><%= order.box_quantity %></td>-->
+        <td><%= order.quantity.to_i %></td>
         <td><%= OrderItemState.display(order.state) %></td>
       </tr>
   <% end %>

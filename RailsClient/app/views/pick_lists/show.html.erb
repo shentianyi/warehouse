@@ -1,22 +1,61 @@
+<style>
+  .col-sm-3>p{
+    margin-top: 10px;
+  }
+    .table > thead > tr > th, .table > tbody > tr > td {
+        text-align: center;
+    }
+</style>
 
-<div class="header">
-  <p id="pick-list" pick_id = "<%= @pick_list.id %>">择货单号：<%= @pick_list.id %></p>
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">运输管理</li>
+    <li class="active">
+      择货单
+    </li>
+    <li class="active">
+      查看择货单
+    </li>
+  </ol>
+</div>
 
-  <p>择货员工号：<%= @pick_list.user.nr %></p>
-
-  <p>生成时间：<%= @pick_list.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></p>
-
-  <p>备注：<%= @pick_list.remark%></p>
+<div class="panel panel-primary"> 
+  <div class="panel-body">
+    <div class="col-sm-12" >
+      <div class="col-sm-3">
+          <p id="pick-list" pick_id = "<%= @pick_list.id %>">择货单号：<%= @pick_list.id %></p>
+      </div>
+      <div class="col-sm-3">
+         <p>择货员工号：<%= @pick_list.user.nr %></p>
+      </div>
+      <div class="col-sm-3">
+         <p>生成时间：<%= @pick_list.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></p>
+      </div>
+      <div class="col-sm-3">
+         <p>备注：<%= @pick_list.remark%></p>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="body">
-  <div>
-    <input type="button" value="打印择货单" class='btn btn-primary btn-lg' id="print-pick-list" onclick="print_pick_list_with_id('<%= @pick_list.id %>');"/>
-    <%= link_to '返回需求面板', panel_orders_path, :class=>'btn btn-default btn-lg' %>
-    <a href="<%=@back_url%>" class="btn btn-default btn-lg">返回择货单列表</a>
+  <div class="panel panel-primary">
+    <div class="panel-body">
+    <div class="col-sm-12">
+      <div class="col-sm-3">
+        <input type="button" value="打印择货单" class='btn btn-primary' id="print-pick-list" onclick="print_pick_list_with_id('<%= @pick_list.id %>');"/>
+      </div>
+      <div class="col-sm-3">
+        <%= link_to '返回需求面板', panel_orders_path, :class=>'btn btn-default' %>
+      </div>
+      <div class="col-sm-3">
+        <a href="<%=@back_url%>" class="btn btn-default">返回择货单列表</a>
+      </div>
+    </div>
+    </div>
   </div>
 
-  <table class="table table-bpicked table-striped globle-table">
+  <table class="table table-bpicked table-striped table-bordered">
     <thead>
     <tr>
       <th>
@@ -48,7 +87,7 @@
             </div>
           </td>
           <td><%= index+1 %></td>
-          <td><%= pick_item.part.nr %></td>
+          <td><%= pick_item.part.blank? ? pick_item.part_id : pick_item.part.nr %></td>
           <td><%= pick_item.quantity %></td>
           <td><%= pick_item.box_quantity %></td>
           <td><%= pick_item.order_user.nr %></td>
@@ -60,6 +99,8 @@
     </tbody>
   </table>
 </div>
+
+
 
 <% content_for :javascript_includes do %>
     <%= javascript_include_tag "pickitem-manage" %>

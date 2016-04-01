@@ -62,6 +62,7 @@
     <div class="panel-body" style="text-align: center;">
       <div class="col-md-2">
         <h4>未拥有权限</h4>
+        <h4>全选 <input id="pick-all-permission" type="checkbox"></h4>
       </div>
 
       <div class="col-md-10" id="NoPermission" style="border-left: 1px solid #CCCCCC;min-height: 60px;">
@@ -121,4 +122,12 @@
             }
         });
     }
+
+    $(document).ready(function () {
+        if ($(".col-md-2").length == $(".CheckBox:ischecked").length) {
+            $("#CheckBox").prop("ischecked", true);
+        } else {
+            $("#CheckBox").prop("ischecked", false);
+        }
+    });
 </script>

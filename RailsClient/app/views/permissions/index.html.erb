@@ -12,7 +12,8 @@
         text-decoration: none;
         background-color: white;
     }
-      a:hover, a:active {
+
+    a:hover, a:active {
         text-decoration: none;
         background-color: white;
         color: black;
@@ -35,10 +36,15 @@
     <div class="col-sm-4">
       <%= link_to "新建权限", send("new_#{@model}_path"), :class => 'btn btn-primary', :style => 'width:150px;color:white;' %>
     </div>
+
+    <!--此处可以写全选事件-->
+    <!-- <div class="col-sm-4">
+       <button class="btn btn-primary ChooseAllBtn">全选事件</button>
+     </div>-->
   </div>
 </div>
 
-<div class="digg_pagination">
+<div class="digg_pagination" style="margin-top: 20px;">
   <div class="page_info">
     <%= page_entries_info @parts %>
   </div>
@@ -47,6 +53,7 @@
 <table class="table table-bordered table-striped">
   <thead>
   <tr>
+    <th><input type="checkbox" class="ChooseAll"></th>
     <th>权限名称</th>
     <th>描述</th>
     <th colspan="3">操作</th>
@@ -56,6 +63,7 @@
   <tbody>
   <% @permissions.each do |permission| %>
       <tr>
+        <td><input type="checkbox" id="<%= permission.id %>" class="permission_checkbox"></td>
         <td><%= permission.name %></td>
         <td><%= permission.description %></td>
         <td>
@@ -71,3 +79,31 @@
 <div class="digg_pagination">
   <%= will_paginate @permissions, :container => false %>
 </div>
+
+<script type="text/javascript" charset="utf-8">
+    $('.ChooseAll').change(function () {
+        $('td>:input[type=checkbox]').each(function () {
+            if ($(this).attr('checked')) {
+                $('.ChooseAll').attr('checked', false);
+                $(this).attr('checked', false);
+            } else {
+                $('.ChooseAll').attr('checked', true);
+                $(this).attr('checked', true);
+            }
+        });
+    });
+
+    /*此处获取到复选框的ID*/
+
+    /* $('.ChooseAllBtn').click(function () {
+     var Choose_Id = new Array();
+     $('.permission_checkbox').each(function () {
+     if ($(this).attr('checked')) {
+     Choose_Id.push($(this).attr('id'));
+     }
+     });
+     console.log('-------');
+     console.log(Choose_Id);
+     console.log('-------');
+     });*/
+</script>

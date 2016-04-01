@@ -1,5 +1,22 @@
-<h2>编辑员工择货规则</h2>
+<style type="text/css">
+	a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+</style>
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">管理</li>
+    <li class="active">基础信息设置</li>
+    <li>
+      <%= link_to '员工择货规则', pick_item_filters_path, :title => '返回员工择货规则' %>
+    </li>
+    <li class="active">
+      编辑员工择货规则
+    </li>
+  </ol>
+</div>
 
 <%= render 'form' %>
-
-<%= link_to '返回', pick_item_filters_path %>

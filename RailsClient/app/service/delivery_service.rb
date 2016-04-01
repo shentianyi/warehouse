@@ -291,4 +291,43 @@ class DeliveryService
   def self.enter_stock user, lc, warehouse, position, fifo
     raise '禁止以运单入库'
   end
+
+
+  def self.to_xlsx deliveries
+    p = Axlsx::Package.new
+
+    wb = p.workbook
+    wb.add_worksheet(:name => "sheet1") do |sheet|
+      sheet.add_row ["序号", "运单号", "托盘号", "HU号", "800号", "数量", "零件号", "LESS P/N", "批次号"]
+      deliveries.each_with_index do |delivery, index|
+        p delivery
+        forklifts=LogisticsContainerService.get_forklifts(delivery)
+        forklifts.each do |forklift|
+
+          packages=LogisticsContainerService.get_packages(forklift)
+          packages.each do |package|
+            part=Part.find_by_id(package.package.part_id)
+
+            sheet.add_row [
+                              index+1,
+                              delivery.container_id,
+                              forklift.container_id.to_s,
+                              package.package.id.to_s,
+                              package.package.extra_800_no.to_s,
+                              package.package.quantity.to_s,
+                              part.blank? ? '' : part.nr.to_s,
+                              package.package.extra_sh_part_id.to_s,
+                              package.package.extra_batch.to_s
+                          ], types: [:string, :string, :string, :string, :string, :string, :string, :string]
+          end
+        end
+
+
+      end
+
+
+    end
+
+    p.to_stream.read
+  end
 end

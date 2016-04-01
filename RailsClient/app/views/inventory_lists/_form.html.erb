@@ -41,13 +41,13 @@
           </div>
           <div class="col-sm-4">
             <%= f.label :whouse_id,"仓库" %>
-            <%= f.select(:whouse_id, Whouse.all.collect { |w| [w.nr, w.nr] }, {include_blank: false}) %>
+            <%= f.select(:whouse_id, Whouse.all.collect { |w| [w.name, w.id] }, {include_blank: false}) %>
           </div>
         </div>
 
         <div class="col-sm-12">
           <div class="actions">
-            <input type="submit" class="btn btn-primary" value="更新盘点单清单" name="commit" style="margin-top: 10px;">
+            <input type="submit" class="btn btn-primary" value="完成" name="commit" style="margin-top: 10px;width: 150px;color: white;">
           </div>
         </div>
       </div>

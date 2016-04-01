@@ -25,7 +25,7 @@
     .table > thead > tr > th, .table > tbody > tr > td {
         text-align: center;
     }
-    
+
     a:hover, a:active {
         text-decoration: none;
         background-color: white;
@@ -65,18 +65,18 @@
     </div>
 
     <div class="col-sm-12">
-      <%if !current_user.is_client_user?%>
-      <div class="col-sm-3">
-        发送地：
-        <%= select_tag('delivery[source_location_id]', options_from_collection_for_select(Location.all, 'id', 'name', @delivery_source_location_id), include_blank: true) %>
-      </div>
+      <% if !current_user.is_client_user? %>
+          <div class="col-sm-3">
+            发送地：
+            <%= select_tag('delivery[source_location_id]', options_from_collection_for_select(Location.all, 'id', 'name', @delivery_source_location_id), include_blank: true) %>
+          </div>
 
-      <div class="col-sm-3">
-        目的地：
-        <%= select_tag('delivery[des_location_id]', options_from_collection_for_select(Location.all, 'id', 'name', @delivery_des_location_id), include_blank: true) %>
-      </div>
+          <div class="col-sm-3">
+            目的地：
+            <%= select_tag('delivery[des_location_id]', options_from_collection_for_select(Location.all, 'id', 'name', @delivery_des_location_id), include_blank: true) %>
+          </div>
 
-      <%end%>
+      <% end %>
       <div class="col-sm-6">
         创建日期：
         <input type="text" name="delivery[created_at][start]" class="datepicker" value="<%= @delivery_created_at_start %>"/>
@@ -86,17 +86,22 @@
     </div>
 
     <div class="col-sm-12">
-      <div class="col-sm-10">
+      <div class="col-sm-4">
         <h4 style="margin-top: 0;">
           根据操作记录
           <hr style="border-bottom: 1px dashed #000;margin: -10px 0 0 120px">
         </h4>
       </div>
 
-      <div class="col-sm-2" style="text-align: right;">
+      <div class="col-sm-8" style="text-align: right;">
         <input type="hidden" value="delivery" name="model"/>
         <input type="hidden" value="records" name="tables"/><!--使用分号隔开，这里的表应该与上面的参数一致-->
-        <input type="submit" value="查 找" class="btn btn-primary" style="width: 150px;height: 50px;margin-top: -20px;"/>
+          <div class="col-sm-4">
+            <input type="submit" value="查找" class="btn btn-primary" name="search" style="width: 200px;"/>
+          </div>
+          <div class="col-sm-4">
+            <input type="submit" value="导出" class="btn btn-primary" name="download" style="width: 200px;"/>
+          </div>
       </div>
     </div>
 
@@ -170,6 +175,9 @@
     <!--操作-->
     <th>最新记录</th>
     <!--操作-->
+    <th>木盘数</th>
+    <th>纸箱数</th>
+    <th>NPS数</th>
     <th colspan="3">操作</th>
   </tr>
   </thead>
@@ -191,6 +199,9 @@
         <td>
           <%= delivery.get_records.last.display %>
         </td>
+        <td><%= delivery.delivery.extra_wooden_count %></td>
+        <td><%= delivery.delivery.extra_box_count %></td>
+        <td><%= delivery.delivery.extra_nps_count %></td>
 
         <td>
           <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-eye-open', :style => 'color:green;'), {controller: 'deliveries', action: 'show', id: delivery.id}, :class => 'IconA', :title => '运单详情' %>

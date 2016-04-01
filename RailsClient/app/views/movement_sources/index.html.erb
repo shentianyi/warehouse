@@ -29,6 +29,10 @@
         color: black;
         outline: none;
     }
+
+    .datepicker{
+      width: 150px;
+    }
 </style>
 <div class="panel panel-default">
   <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
@@ -96,7 +100,7 @@
         <input type="text" name="movement_source[fifo][start]" class="datepicker" value="<%= @fifo_start %>"/>
         ~ <input type="text" name="movement_source[fifo][end]" class="datepicker" value="<%= @fifo_end %>"/>
       </div>
-      <div class="col-sm-4">
+      <div class="col-sm-2">
         备注：
         <input type="text" name="movement_source[remarks]" value="<%= @remarks %>"/>
         <input type="hidden" name="movement_source[remarks_fuzzy]"/>

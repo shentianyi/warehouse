@@ -36,7 +36,6 @@ module Import
           end
           # clean data
           operator=data.delete($UPMARKER)
-
           if query
             if item=self.unscoped.where(query).first
               if operator=='update'
@@ -75,6 +74,7 @@ module Import
           count = line.count
           header_count = self.csv_headers.count
 
+          p "---------#{count}------------------#{header_count}"
           if header_count > count
             (header_count-count).times.each { |i| line[count+1+i] = "" }
             line[header_count-1]='update'

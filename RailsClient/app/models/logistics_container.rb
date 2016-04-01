@@ -220,5 +220,4 @@ class LogisticsContainer<LocationContainer
     end
   end
 
-
 end

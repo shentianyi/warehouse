@@ -18,6 +18,10 @@
           <li><a href="<%= orders_path %>">需求单</a></li>
       <% end %>
 
+      <% if current_user.permission?(:view_order) %>
+          <li><a href="<%= import_orders_path %>">导入需求单</a></li>
+      <% end %>
+
       <% if current_user.permission?(:view_pick) %>
           <li><a href="<%= pick_panel_orders_path %>">择货需求</a></li>
       <% end %>
@@ -37,9 +41,6 @@
               <% if current_user.permission?(:view_extra) %>
                   <% if current_user.permission?(:jiaxuan_extra_export) %>
                       <li><a href="<%= generate_jiaxuan_deliveries_path %>">导入常州发运佳轩数据</a></li>
-                  <% end %>
-                  <% if current_user.permission?(:jiaxuan_extra_config) %>
-                      <li><a href="<%= jiaxuan_extra_sys_configs_path %>">扩展配置</a></li>
                   <% end %>
               <% end %>
             </ul>
@@ -180,6 +181,9 @@
               <% if current_user.permission?(:view_configuration) %>
                   <li id='regex_li'><a href="<%= regex_categories_path %>">正则规范配置</a></li>
                   <li id='sys_config_li'><a href="<%= sys_configs_path %>">系统配置</a></li>
+              <% end %>
+              <% if current_user.permission?(:jiaxuan_extra_config) %>
+                  <li><a href="<%= jiaxuan_extra_sys_configs_path %>">佳轩扩展配置</a></li>
               <% end %>
             </ul>
           </li>

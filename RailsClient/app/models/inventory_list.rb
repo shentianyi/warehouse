@@ -26,7 +26,7 @@ class InventoryList < ActiveRecord::Base
     if i=InventoryList.find_by(id: id)
       if w=Whouse.find_by(id: i.whouse_id)
         if !(ps = w.positions).blank?
-          return !ps.pluck(:detail).include?(position)
+          return !ps.pluck(:nr).include?(position)
         end
       end
     end
