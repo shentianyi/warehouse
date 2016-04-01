@@ -91,12 +91,12 @@ class Package<Container
       a = LogisticsContainer.joins(:package)
               .where(condition)
               .select("containers.id as containers_id,containers.part_id as part_id,SUM(containers.quantity) as count,COUNT(containers.id) as box,containers.fifo_time_display as FIFO,location_containers.destinationable_id as whouse,location_containers.state as state,location_containers.*")
-              .group("state,containers_id").order('containers.id asc').order(state: :desc)
+              .group("state,containers_id").order('containers.id asc').order(state: :desc).order("containers.quantity desc")
     else
       a = LogisticsContainer.joins(:package)
               .where(condition)
               .select("containers.part_id as part_id,SUM(containers.quantity) as count, COUNT(containers.id) as box,location_containers.destinationable_id as whouse,location_containers.state as state")
-              .group("state,whouse,part_id").order('containers.part_id asc').order(state: :desc)
+              .group("state,whouse,part_id").order('containers.part_id asc').order(state: :desc).order("containers.quantity desc")
     end
     # a = LogisticsContainer.joins(:package)
     #         .where(condition)
