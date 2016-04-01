@@ -14,7 +14,7 @@ module V1
 
       #get package info
       get do
-        if p = Package.exists?(params[:package_id])
+        unless p = Package.exists?(params[:package_id].sub(/S|M/, ''))
           return {result: 0, content: "唯一码不存在!"}
         end
 
