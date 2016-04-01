@@ -29,6 +29,11 @@ end
 #end
 
 
-every '29 11 1 * *' do
+every '0 15 1 * *' do
   runner "script/migrate/balance_storage.rb"
+end
+
+
+every '0 0 3 * *' do
+  runner "script/migrate/balance_storage2.rb"
 end
