@@ -1,7 +1,8 @@
 class Position < ActiveRecord::Base
   include Extensions::UUID
   include Import::PositionCsv
-
+  validates_presence_of :nr, :message => "nr不能为空!"
+  validates_uniqueness_of :nr, :message => "nr不能重复!"
   belongs_to :whouse
   has_many :part_positions, :dependent => :destroy
   has_many :parts, :through => :part_positions

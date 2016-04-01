@@ -2,6 +2,8 @@ class Whouse < ActiveRecord::Base
   include Extensions::UUID
   include Import::WhouseCsv
   validates_presence_of :name, :message => "名称不能为空!"
+  validates_presence_of :nr, :message => "nr不能为空!"
+  validates_uniqueness_of :nr, :message => "nr不能重复!"
   belongs_to :location
 
   has_many :positions, :dependent => :destroy
