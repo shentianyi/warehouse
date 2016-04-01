@@ -3,11 +3,11 @@
 #移入库存 C
 #移出库存 D
 #A=B+C-D
-p Time.now
+# p Time.now
 condition={}
 condition[:created_at]=Time.parse('2015-12-12 00:00:00').utc.to_s...Time.parse('2016-03-29 11:38:44').utc.to_s
 
-count=0
+# count=0
 NStorage.transaction do
   #ck ["3EX", "3PL", "BaofeiKu", "CUTTING_TMP", "KehuKu", "P82", "PA82", "Sample_tmp", "SR01", "SRPL", "误操作库", "转移老厂半成品"]
   storages=NStorage.where(ware_house_id: ["3EX", "3PL", "BaofeiKu", "CUTTING_TMP", "KehuKu", "P82", "PA82", "Sample_tmp", "SR01", "SRPL", "误操作库", "转移老厂半成品"])
@@ -17,8 +17,8 @@ NStorage.transaction do
   #              .select("SUM(n_storages.qty) as total_qty, n_storages.*")
   #              .group(:partNr, :ware_house_id, :position)
   storages.each do |storage|
-    count+=1
-    puts "-----#{count}-----"
+    # count+=1
+    # puts "-----#{count}-----"
     b=c=d=0
 
     if storage.position.blank?
@@ -75,7 +75,7 @@ NStorage.transaction do
 end
 
 
-p Time.now
+# p Time.now
 
 
 # NStorage.transaction do
