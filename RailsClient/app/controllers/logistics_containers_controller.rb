@@ -16,7 +16,12 @@ class LogisticsContainersController < ApplicationController
     #if params[:tables]
     tables = params[:tables].nil? ? [] : params[:tables].split(';')
     (tables  + ["#{model}"]).each { |t|
-      query = query.joins(t.to_sym)
+      if t=='records'
+       query=query.joins("LEFT JOIN `records` ON `records`.`recordable_id` = `location_containers`.`id`
+ AND `records`.`recordable_type` = 'LocationContainer'")
+      else
+        query = query.joins(t.to_sym)
+      end
     }
     joins = joins + tables
     args = args + tables
