@@ -18,8 +18,8 @@
 <p id="notice"><%= notice %></p>
 
 
-<% if @inventory_list.has_un_stored_item %>
-    <%= link_to "开始入库", store_list_inventory_list_item_path(@inventory_list.id), class: "btn btn-warning", data: {confirm: "确定?"} %>
+<% if @inventory_list.state==InventoryListState::PROCESSING && @inventory_list.has_un_stored_item %>
+    <%= link_to "开始入库", store_list_inventory_list_item_path(@inventory_list.id), class: "btn btn-warning", data: {confirm: "入库后将清空原有的库存记录以新的盘点结果作为库存记录"} %>
 <% end %>
 
 <div>
@@ -52,10 +52,12 @@
     <th>原材料线/非线标记</th>
     <th>需要转换</th>
     <th>创建人</th>
+    <th>创建时间</th>
     <th>是否在库存</th>
     <th>是否已锁定包装箱库存</th>
-    <th>是否已入库</th>
+    <th>是否盘点入库</th>
     <th>所属清单</th>
+    <th>备注</th>
     <th colspan="2">&nbsp;</th>
   </tr>
   </thead>
@@ -94,14 +96,16 @@
         <% end %>
         <td><%= inventory_list_item.need_convert_display %></td>
         <td><%= inventory_list_item.user_id %></td>
+        <td><%= inventory_list_item.created_at.localtime %></td>
         <td><%= inventory_list_item.in_store_display %></td>
         <td><%= inventory_list_item.locked_display %></td>
         <td><%= inventory_list_item.in_stored_display %></td>
         <td><%= inventory_list_item.inventory_list.name %></td>
+        <td><%= inventory_list_item.remark %></td>
         <td><%= link_to 'Show', inventory_list_item %></td>
         <td>
-          <% unless inventory_list_item.in_stored? %>
-              <%= link_to 'Destroy', inventory_list_item, method: :delete, data: {confirm: 'Are you sure?'} %>
+          <% if current_user.admin? %>
+              <%= link_to '删除', inventory_list_item, method: :delete, data: {confirm: '确定删除?'} %>
           <% end %>
         </td>
       </tr>

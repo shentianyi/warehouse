@@ -24,4 +24,13 @@ class Part < ActiveRecord::Base
   def self.nr_by_regex(nr)
     nr.sub(/^P/,'')
   end
+
+  def default_position wh
+    position = self.positions.where(whouse_id: wh).first
+    if position
+      default_position = position.detail
+    else
+      " "
+    end
+  end
 end

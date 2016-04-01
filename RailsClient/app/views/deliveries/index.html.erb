@@ -60,7 +60,9 @@
 <input type="button" value="打印接收确认单" class='btn btn-info' onclick="print_delivery_confirm_list();"/>
 <input type="button" value="打印未接收清单" class='btn btn-success' onclick="print_delivery_unrece_list();"/>
 <input type="button" value="打印接收清单" class='btn btn-primary' onclick="print_delivery_reve_list();"/>
-<h3><%= link_to '导入离线运单', import_logistics_containers_path, :class => "btn btn-warning" %></h3>
+<% if current_user.can_edit_inventory? %>
+    <h3><%= link_to '导入离线运单', import_logistics_containers_path, :class => "btn btn-warning" %></h3>
+<% end %>
 <div class="digg_pagination">
   <div class="page_info">
     <%= page_entries_info @deliveries %>
@@ -96,18 +98,20 @@
         <td><input type="checkbox" id="<%= delivery.id %>" class='print-check'></td>
         <td><%= index+@deliveries.offset+1 %></td>
         <td><%= delivery.container_id %></td>
-        <td><%= delivery.state_display%></td>
-        <td><%= delivery.destination.name%></td>
-        <td><%= delivery.remark%></td>
+        <td><%= delivery.state_display %></td>
+        <td><%= delivery.destination.name %></td>
+        <td><%= delivery.remark %></td>
         <td>
-          <%= link_to delivery_presenter.forklifts.count,forklifts_delivery_path(delivery), class:'btn btn-default' %>
+          <%= link_to delivery_presenter.forklifts.count, forklifts_delivery_path(delivery), class: 'btn btn-default' %>
         </td>
         <td>
-          <%= delivery.get_records.last.display%>
+          <%= delivery.get_records.last.display %>
         </td>
-        <td><%= link_to '详细',{ controller:'deliveries',action: 'show',id:delivery.id },class:'btn btn-default' %></td>
-        <td><%= link_to '编辑', { controller:'deliveries',action: 'edit',id:delivery.id },class:'btn btn-default' %></td>
-        <td><%= link_to '导出数据',{ controller:'logistics_containers',action: 'export',id:delivery.id },class:'btn btn-default'  %></td>
+        <td><%= link_to '详细', {controller: 'deliveries', action: 'show', id: delivery.id}, class: 'btn btn-default' %></td>
+        <% if current_user.can_edit_inventory? %>
+            <td><%= link_to '编辑', {controller: 'deliveries', action: 'edit', id: delivery.id}, class: 'btn btn-default' %></td>
+        <% end %>
+        <td><%= link_to '导出数据', {controller: 'logistics_containers', action: 'export', id: delivery.id}, class: 'btn btn-default' %></td>
       </tr>
   <% end %>
   </tbody>

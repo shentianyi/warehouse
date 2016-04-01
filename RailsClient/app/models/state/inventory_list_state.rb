@@ -15,6 +15,8 @@ class InventoryListState
         '未知状态'
     end
   end
+
+
   
   def self.menu
     data = []

@@ -1,0 +1,83 @@
+<h1>作记录列表</h1>
+
+<div>
+  <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+    <div>
+      <div>
+        <div>
+            <span>事件模型：
+              <input type="text" name="operation_log[item_type]" value="<%= @item_type %>"/>
+              <input type="hidden" name="operation_log[item_type_fuzzy]"/>
+            </span>
+            <span>事件ID：
+              <input type="text" name="operation_log[item_id]" value="<%= @item_id %>"/>
+            </span>
+            <span>事件类型：
+              <%= select_tag(name="operation_log[event]", options_for_select([["", ""], ["update", "update"], ["create", "create"], ["destroy", "destroy"]], @event), include_blank: false) %>
+            </span>
+            <span>操作者：
+              <input type="text" name="operation_log[whodunnit]" value="<%= @whodunnit %>"/>
+              <input type="hidden" name="operation_log[whodunnit_fuzzy]"/>
+            </span>
+        </div>
+        <div>
+            <span>
+              创建日期：
+              <input type="text" name="operation_log[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
+              ~  <input type="text" name="operation_log[created_at][end]" class="datepicker" value="<%= @created_at_end %>"/>
+            </span>
+        </div>
+        <div>
+          <input type="submit" value="查找" class="btn btn-primary" name="search"/>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @operation_logs %>
+  </div>
+  <%= will_paginate @operation_logs, :container => false %>
+</div>
+<table class="table table-bordered table-striped">
+  <thead>
+  <tr>
+    <th>事件模型</th>
+    <th>事件ID</th>
+    <th>事件类型</th>
+    <th>操作者</th>
+    <th>事件内容</th>
+    <th>事件时间</th>
+    <th colspan="3"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @operation_logs.each do |operation_log| %>
+      <tr>
+        <td><%= operation_log.item_type %></td>
+        <td><%= operation_log.item_id %></td>
+        <td><%= operation_log.event %></td>
+        <td><%= operation_log.whodunnit %></td>
+        <td><%= operation_log.object %></td>
+        <td><%= operation_log.created_at %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<div class="digg_pagination">
+  <%= will_paginate @operation_logs, :container => false %>
+</div>
+
+<script>
+    $(function () {
+        $(".datepicker").datetimepicker({
+            lang: 'ch',
+            format: 'Y-m-d H:i'
+        });
+    });
+    init_check();
+</script>

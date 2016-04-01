@@ -36,24 +36,24 @@
 
 <table class="table table-bordered table-striped table-hover">
   <thead>
-    <tr>
-      <th>NO.</th>
-      <th>订单项目号</th>
-      <th>要货员</th>
-      <th>所属订单</th>
-      <th>创建时间</th>
-      <th>要货位置</th>
-      <th>箱数</th>
-      <th>零件号</th>
-      <th>数量</th>
-      <th>是否加急</th>
-			<th>是否已完成</th>
-      <th colspan="2"></th>
-    </tr>
+  <tr>
+    <th>NO.</th>
+    <th>订单项目号</th>
+    <th>要货员</th>
+    <th>所属订单</th>
+    <th>创建时间</th>
+    <th>要货位置</th>
+    <th>箱数</th>
+    <th>零件号</th>
+    <th>数量</th>
+    <th>是否加急</th>
+    <th>是否已完成</th>
+    <th colspan="2"></th>
+  </tr>
   </thead>
 
   <tbody>
-    <% @order_items.each_with_index do |order_item,index| %>
+  <% @order_items.each_with_index do |order_item, index| %>
       <tr>
         <td><%= index+@order_items.offset+1 %></td>
         <td><%= order_item.id %></td>
@@ -63,29 +63,32 @@
         <td>
           <span class="label label-info"><%= order_item.location.name %></span>
           <span class="label label-info"><%= order_item.whouse.name %></span>
-          <span class="label label-info"><%if pp = OrderItemService.verify_department(order_item.whouse_id,order_item.part_id) %><%= pp.position.detail%><%end%></span>
+          <span class="label label-info"><% if pp = OrderItemService.verify_department(order_item.whouse_id, order_item.part_id) %><%= pp.position.detail %><% end %></span>
         </td>
         <td><%= order_item.box_quantity %></td>
-        <td><span class="label label-info"><%= OrderItemLabelRegex.part_prefix_string + order_item.part_id %></span></td>
+        <td><span class="label label-info"><%= OrderItemLabelRegex.part_prefix_string + order_item.part_id %></span>
+        </td>
         <td><%= OrderItemLabelRegex.quantity_prefix_string + order_item.quantity.to_s %></td>
         <td>
           <% if order_item.is_emergency %>
-          <span class="label label-success">是</span>
-          <%else%>
+              <span class="label label-success">是</span>
+          <% else %>
               <span class="label label-warning">否</span>
-          <%end%>
+          <% end %>
         </td>
-				<td>
+        <td>
           <% if order_item.is_finished %>
-          <span class="label label-success">是</span>
-          <%else%>
+              <span class="label label-success">是</span>
+          <% else %>
               <span class="label label-warning">否</span>
-          <%end%>
-				</td>
-        <td><%= link_to '详细', order_item ,:class=>'btn btn-default'%></td>
-        <td><%= link_to '编辑', edit_order_item_path(order_item),:class=>'btn btn-default' %></td>
+          <% end %>
+        </td>
+        <% if current_user.can_edit_inventory? %>
+            <td><%= link_to '详细', order_item, :class => 'btn btn-default' %></td>
+            <td><%= link_to '编辑', edit_order_item_path(order_item), :class => 'btn btn-default' %></td>
+        <% end %>
       </tr>
-    <% end %>
+  <% end %>
   </tbody>
 </table>
 <div class="digg_pagination">
@@ -95,7 +98,7 @@
 <script>
     $(function () {
         $(".datepicker").datetimepicker({
-            lang:'ch',
+            lang: 'ch',
             format: 'Y-m-d H:i'
         });
     });

@@ -71,7 +71,7 @@ module ApplicationHelper
     query=nil
     file_name= @model+'_'+Time.now.strftime('%Y%m%d%H%M%S')+'.csv'
     path=File.join($DOWNLOADPATH, file_name)
-    @msg= model.export_csv(path, query)
+    @msg= model.export_csv(path, query, request.user_agent)
     send_file path, :type => 'application/csv', :filename => file_name
   end
 

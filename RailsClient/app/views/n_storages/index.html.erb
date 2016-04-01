@@ -24,9 +24,9 @@
         </div>
         <div>
             <span>
-              创建日期：
-              <input type="text" name="n_storage[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
-              ~  <input type="text" name="n_storage[created_at][end]" class="datepicker" value="<%= @created_at_end %>"/>
+              更新日期：
+              <input type="text" name="n_storage[updated_at][start]" class="datepicker" value="<%= @updated_at_start %>"/>
+              ~  <input type="text" name="n_storage[updated_at][end]" class="datepicker" value="<%= @updated_at_end %>"/>
             </span>
             <span>
               FIFO：
@@ -62,9 +62,10 @@
     <th>唯一码</th>
     <th>库存量</th>
     <th>FIFO</th>
-    <th>创建日期</th>
+    <th>更新日期</th>
     <th>仓库号</th>
     <th>库位号</th>
+    <th>备注</th>
     <th></th>
   </tr>
   </thead>
@@ -76,10 +77,13 @@
         <td><%= storage.packageId %></td>
         <td><%= storage.qty %></td>
         <td><%= storage.fifo.localtime if storage.fifo %> </td>
-        <td><%= storage.created_at.localtime if storage.created_at %> </td>
+        <td><%= storage.updated_at.localtime if storage.updated_at %> </td>
         <td><%= storage.ware_house_id %></td>
         <td><%= storage.position %></td>
-        <td><%= link_to '编辑', edit_n_storage_path(storage), :class => 'btn btn-default' %></td>
+        <td><%= storage.remarks %></td>
+        <!--<% if current_user.can_edit_inventory? %>-->
+            <!--<td><%= link_to '编辑', edit_n_storage_path(storage), :class => 'btn btn-default' %></td>-->
+        <!--<% end %>-->
       </tr>
   <% end %>
   </tbody>

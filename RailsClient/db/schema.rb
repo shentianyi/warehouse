@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151126075233) do
+ActiveRecord::Schema.define(version: 20151212092157) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -151,6 +151,7 @@ ActiveRecord::Schema.define(version: 20151126075233) do
     t.boolean  "need_convert",                                default: false
     t.boolean  "locked",                                      default: false
     t.boolean  "in_stored",                                   default: false
+    t.string   "remark"
   end
 
   create_table "inventory_lists", force: true do |t|
@@ -371,8 +372,12 @@ ActiveRecord::Schema.define(version: 20151126075233) do
     t.datetime "updated_at"
     t.boolean  "locked",                                  default: false
     t.text     "remarks"
+    t.string   "lock_user_id"
+    t.string   "lock_remark"
+    t.datetime "lock_at"
   end
 
+  add_index "n_storages", ["locked"], name: "index_n_storages_on_locked", using: :btree
   add_index "n_storages", ["packageId"], name: "package_id_index", using: :btree
   add_index "n_storages", ["storageId"], name: "storage_id_unique", unique: true, using: :btree
   add_index "n_storages", ["uniqueId"], name: "unique_id_unique", unique: true, using: :btree
@@ -523,6 +528,7 @@ ActiveRecord::Schema.define(version: 20151126075233) do
     t.float    "unit_pack"
     t.string   "part_type_id"
     t.decimal  "convert_unit",            precision: 20, scale: 10, default: 1.0
+    t.string   "unit"
   end
 
   add_index "parts", ["id"], name: "index_parts_on_id", using: :btree
@@ -600,7 +606,7 @@ ActiveRecord::Schema.define(version: 20151126075233) do
   add_index "positions", ["id"], name: "index_positions_on_id", using: :btree
   add_index "positions", ["uuid"], name: "index_positions_on_uuid", using: :btree
   add_index "positions", ["whouse_id"], name: "index_positions_on_whouse_id", using: :btree
-
+  
   create_table "ptl_jobs", force: true do |t|
     t.text     "params"
     t.integer  "state",       default: 100

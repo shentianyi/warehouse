@@ -22,6 +22,7 @@ module Import
     def part_down_block
       Proc.new { |line, item|
         line<<item.id
+        line<<item.unit
         line<<item.unit_pack
         line<< item.part_type_id
         line<<item.convert_unit
@@ -31,9 +32,10 @@ module Import
     def init_csv_cols
       csv_cols=[]
       csv_cols<< Csv::CsvCol.new(field: 'id', header: 'PartNr')
-      csv_cols<< Csv::CsvCol.new(field: 'unit_pack', header: 'UnitPack')
-      csv_cols<< Csv::CsvCol.new(field: 'part_type_id', header: 'PartType', is_foreign: true, foreign: 'PartType')
-      csv_cols<< Csv::CsvCol.new(field: 'convert_unit', header: 'ConvertUnit')
+      csv_cols<< Csv::CsvCol.new(field: 'unit', header: 'Unit',null:true)
+      csv_cols<< Csv::CsvCol.new(field: 'unit_pack', header: 'UnitPack',null:true)
+      csv_cols<< Csv::CsvCol.new(field: 'part_type_id', header: 'PartType', is_foreign: true, foreign: 'PartType',null:true)
+      csv_cols<< Csv::CsvCol.new(field: 'convert_unit', header: 'ConvertUnit',null:true)
       csv_cols<< Csv::CsvCol.new(field: $UPMARKER, header: $UPMARKER)
       class_variable_set(:@@csv_cols, csv_cols)
     end

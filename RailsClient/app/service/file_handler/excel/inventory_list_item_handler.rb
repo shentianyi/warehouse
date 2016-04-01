@@ -5,7 +5,7 @@ module FileHandler
           '仓库号', '零件号', 'FIFO', '数量', '库位号', '唯一码', '原材料/半成品/成品标记', '需要转换'
       ]
       DETAIL_HEADERS=[
-          'No.', '仓库号', '零件号','FIFO原', 'FIFO', '数量', '原数量', '盘点库位号', '唯一码', '目前仓库', '目前库位', '原材料/半成品/成品标记', '原材料线/非线标记', '需要转换','是否已入库', '创建人', '是否在库存', '所属清单'
+          'No.', '仓库号', '零件号', 'FIFO原', 'FIFO', '数量', '原数量', '盘点库位号', '唯一码', '目前仓库', '目前库位', '原材料/半成品/成品标记', '原材料线/非线标记', '需要转换', '是否已入库', '创建人', '创建时间', '是否在库存', '所属清单', '备注'
       ]
 
       TOTAL_HEADERS=[
@@ -14,6 +14,10 @@ module FileHandler
 
       TOTAL_ALL_HEADERS=[
           '零件号', '数量', '原材料/半成品/成品标记', '原材料线/非线标记'
+      ]
+
+      TOTAL_ALL_WHOUSE_HEADERS=[
+          '仓库', '零件号', '数量'
       ]
 
       def self.import(file, inventory_list_id)
@@ -34,17 +38,18 @@ module FileHandler
                   row[k]=row[k].sub(/\.0/, '') if k=='零件号'
                 end
                 # if row['数量'].to_f > 0
-                  params={inventory_list_id: inventory_list_id,
-                          whouse_id: row['仓库号'],
-                          part_id: row['零件号'],
-                          fifo: row['FIFO'].present? ? row['FIFO'].to_time.utc : nil,
-                          origin_qty: row['数量'].to_f,
-                          position: row['库位号'],
-                          package_id: row['唯一码'],
-                          part_form_mark: row['原材料/半成品/成品标记'],
-                          need_convert: row['需要转换'].present? ? (row['需要转换']=='Y') : false
-                  }
-                  InventoryListItem.new_item(params)
+                params={inventory_list_id: inventory_list_id,
+                        whouse_id: row['仓库号'],
+                        part_id: row['零件号'],
+                        fifo: row['FIFO'].present? ? Date.strptime(row['FIFO'], '%d.%m.%y').to_time.utc : Time.now.utc,
+                        origin_qty: row['数量'].to_f,
+                        qty: row['数量'].to_f,
+                        position: row['库位号'],
+                        package_id: row['唯一码'],
+                        part_form_mark: row['原材料/半成品/成品标记'],
+                        need_convert: row['需要转换'].present? ? (row['需要转换']=='Y') : false
+                }
+                InventoryListItem.new_item(params, false)
                 # end
               end
             end
@@ -84,6 +89,34 @@ module FileHandler
         msg.content =tmp_file
         msg
       end
+
+      def self.export_total_by_whouse
+        whouses=InventoryListItem.joins(:inventory_list).where(inventory_lists: {state: InventoryListState::PROCESSING}).pluck(:whouse_id).uniq.sort
+        parts=InventoryListItem.joins(:inventory_list).where(inventory_lists: {state: InventoryListState::PROCESSING}).pluck(:part_id).uniq.sort
+
+        msg=Message.new
+        tmp_file=full_tmp_path('盘点仓库汇总清单.xlsx')
+        p = Axlsx::Package.new
+        p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
+          sheet.add_row ['零件号']+whouses
+          parts.each do |part_id|
+            data=[part_id]
+            types=[:string]
+            whouses.each do |whouse_id|
+              data<< ((item=InventoryListItem.joins(:inventory_list).where(part_id: part_id, whouse_id: whouse_id, inventory_lists: {state: InventoryListState::PROCESSING}).select('sum(qty) as qty').first).nil? ? '0.0' : item.qty)
+              types<<:string
+            end
+            sheet.add_row data, types: types
+          end
+        end
+        p.use_shared_strings = true
+        p.serialize(tmp_file)
+
+        msg.result =true
+        msg.content =tmp_file
+        msg
+      end
+
 
       def self.export_total(items)
         msg=Message.new
@@ -135,9 +168,11 @@ module FileHandler
                               inventory_list_item.need_convert_display,
                               inventory_list_item.in_stored_display,
                               inventory_list_item.user_id,
+                              inventory_list_item.created_at.localtime,
                               inventory_list_item.in_store_display,
-                              inventory_list_item.inventory_list.name
-                          ], types: [:string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string]
+                              inventory_list_item.inventory_list.name,
+                              inventory_list_item.remark
+                          ], types: [:string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string]
 
           end
         end
@@ -167,7 +202,7 @@ module FileHandler
               row[k]=row[k].sub(/\.0/, '') if k=='零件号'
             end
 
-            mssg = validate_row(row, line)
+            mssg = validate_row(row)
             if mssg.result
               sheet.add_row row.values
             else
@@ -184,8 +219,19 @@ module FileHandler
         msg
       end
 
-      def self.validate_row(row, line)
+      def self.validate_row(row)
         msg = Message.new(contents: [])
+
+        if row['唯一码'].present?
+          unless packageId = Container.exists?(row['唯一码'])
+            msg.contents << "唯一码:#{row['唯一码']} 不存在!"
+          end
+        end
+
+        position = Position.find_by(detail: row['库位号'])
+        unless position
+          msg.contents << "库位号:#{row['库位号']} 不存在!"
+        end
 
         src_warehouse = Whouse.find_by_name(row['仓库号'])
         unless src_warehouse
@@ -196,16 +242,58 @@ module FileHandler
         unless part_id
           msg.contents << "零件号:#{row['零件号']} 不存在!"
         end
-        #
-        # unless row['数量'].to_f > 0
-        #   msg.contents << "数量: #{row['数量']} 不可以 0!"
-        # end
+
+        unless row['数量'].to_f > 0
+          msg.contents << "数量: #{row['数量']} 不可以 0!"
+        end
 
         if row['FIFO'].present?
           begin
             row['FIFO'].to_time
           rescue => e
             msg.contents << "FIFO: #{row['FIFO']} 错误!"
+          end
+        end
+        unless msg.result=(msg.contents.size==0)
+          msg.content=msg.contents.join('/')
+        end
+        msg
+      end
+
+      def self.validate_api_params(row)
+        msg = Message.new(contents: [])
+
+        if row[:package_id].present?
+          unless packageId = Container.exists?(row[:package_id])
+            msg.contents << "唯一码:#{row[:package_id]} 不存在!"
+          end
+        end
+
+        position = Position.find_by(detail: row[:position])
+        unless position
+          msg.contents << "库位号:#{row[:position]} 不存在!"
+        end
+
+        if row[:whouse_id].present?
+          unless src_warehouse = Whouse.find_by_name(row[:whouse_id])
+            msg.contents << "仓库号:#{row[:whouse_id]} 不存在!"
+          end
+        end
+
+        part_id = Part.find_by_id(row[:part_id])
+        unless part_id
+          msg.contents << "零件号:#{row[:part_id]} 不存在!"
+        end
+
+        unless row[:qty].to_f > 0
+          msg.contents << "数量: #{row[:qty]} 不可以 0!"
+        end
+
+        if row[:FIFO].present?
+          begin
+            row[:FIFO].to_time
+          rescue => e
+            msg.contents << "FIFO: #{row[:FIFO]} 错误!"
           end
         end
         unless msg.result=(msg.contents.size==0)

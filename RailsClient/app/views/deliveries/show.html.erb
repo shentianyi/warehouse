@@ -2,16 +2,30 @@
 <!--基础-->
 <h2>基础</h2>
 <h1><%= @delivery.container_id %></h1>
-<span class="label label-primary"><%= @delivery.container_id%></span>
-<h4>状态: <small><%= dp.state_display %></small></h4>
-<h4>创建时间: <small><%= dp.created_at %></small></h4>
-<h4>创建员工号: <small><%= @delivery.user_id%></small></h4>
-<h4>创建员工: <small><%= @delivery.user.name%></small></h4>
-<h4>创建地: <small><%= @delivery.source.name %></small></h4>
-<h4>备注: <small><%= @delivery.remark %></small></h4>
-<h4>目的地:<small><%= @delivery.destination.name if @delivery.destination%></small></h4>
+<span class="label label-primary"><%= @delivery.container_id %></span>
+<h4>状态:
+  <small><%= dp.state_display %></small>
+</h4>
+<h4>创建时间:
+  <small><%= dp.created_at %></small>
+</h4>
+<h4>创建员工号:
+  <small><%= @delivery.user_id %></small>
+</h4>
+<h4>创建员工:
+  <small><%= @delivery.user.name %></small>
+</h4>
+<h4>创建地:
+  <small><%= @delivery.source.name %></small>
+</h4>
+<h4>备注:
+  <small><%= @delivery.remark %></small>
+</h4>
+<h4>目的地:
+  <small><%= @delivery.destination.name if @delivery.destination %></small>
+</h4>
 <h2>托清单列表</h2>
-<% @forklifts = dp.forklifts%>
+<% @forklifts = dp.forklifts %>
 <table class="table table-bordered table-striped globle-table table-hover">
   <thead>
   <tr>
@@ -27,10 +41,10 @@
   <% @forklifts.each_with_index do |f, index| %>
       <% fpresenter = ForkliftPresenter.new(f) %>
       <tr>
-        <td><%= index+1%></td>
-        <td><%= link_to f.container_id,forklift_path(f), :class => "btn btn-default"%></td>
+        <td><%= index+1 %></td>
+        <td><%= link_to f.container_id, forklift_path(f), :class => "btn btn-default" %></td>
         <td><%= f.state_display %></td>
-        <td><%= f.destinationable.name  if f.destinationable %></td>
+        <td><%= f.destinationable.name if f.destinationable %></td>
         <td><%= fpresenter.sum_packages %></td>
         <td><%= fpresenter.accepted_packages %></td>
       </tr>
@@ -39,9 +53,15 @@
 </table>
 <h2>操作记录</h2>
 <ul>
-<% @delivery.get_records.each do |r| %>
-  <li><h4><small><%= r.display %></small></h4></li>
-<%end%>
+  <% @delivery.get_records.each do |r| %>
+      <li>
+        <h4>
+          <small><%= r.display %></small>
+        </h4>
+      </li>
+  <% end %>
 </ul>
-<%= link_to '返回', deliveries_path ,:class=>'btn btn-default' %>
-<%= link_to '编辑', edit_delivery_path(@delivery), :class =>'btn btn-default' %>
+<%= link_to '返回', deliveries_path, :class => 'btn btn-default' %>
+<% if current_user.can_edit_inventory? %>
+    <%= link_to '编辑', edit_delivery_path(@delivery), :class => 'btn btn-default' %>
+<% end %>

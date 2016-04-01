@@ -1,0 +1,60 @@
+<h2>移库记录列表</h2>
+
+<%= link_to '返回', movement_lists_path, :class => "btn btn-default btn-lg" %>
+
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @movement_list_items %>
+  </div>
+  <%= will_paginate @movement_list_items, :container => false %>
+</div>
+
+<table class="table table-bordered table-striped">
+  <thead>
+  <tr>
+    <th>NO.</th>
+    <th>零件号</th>
+    <th>唯一码</th>
+    <th>移动量</th>
+    <th>类型</th>
+    <th>FIFO</th>
+    <th>创建时间</th>
+    <th>源仓库</th>
+    <th>源库位</th>
+    <th>目的仓库</th>
+    <th>目的库位</th>
+    <th>员工号</th>
+    <th>备注</th>
+    <th>所属移库单</th>
+    <th>状态</th>
+    <th></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @movement_list_items.each_with_index do |movement, i| %>
+      <tr>
+        <td><%= @page_start+i+1 %></td>
+        <td><%= movement.partNr if movement.partNr %></td>
+        <td><%= movement.packageId if movement.packageId %></td>
+        <td><%= movement.qty %></td>
+        <td><%= MoveType.find(movement.type_id).typeId if movement.type_id %> </td>
+        <td><%= movement.fifo.localtime if movement.fifo %> </td>
+        <td><%= movement.created_at.localtime if movement.created_at %></td>
+        <td><%= movement.from_id if movement.from_id %></td>
+        <td><%= movement.fromPosition if movement.fromPosition %></td>
+        <td><%= movement.to_id if movement.to_id %></td>
+        <td><%= movement.toPosition if movement.toPosition %></td>
+        <td><%= movement.employee_id if movement.employee_id %> </td>
+        <td><%= movement.remarks if movement.remarks %> </td>
+        <td><%= movement.movement_list.id %> </td>
+        <td><%= MovementListState.display movement.movement_list.state.to_i %> </td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<br>
+<div class="digg_pagination">
+  <%= will_paginate @movement_list_items, :container => false %>
+</div>

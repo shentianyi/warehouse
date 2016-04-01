@@ -3,14 +3,14 @@ module FileHandler
     class NStorageHandler<Base
 
       IMPORT_HEADERS=[
-          :toWh,:partNr,:fifo,:qty,:toPosition,:packageId, :employee_id, :remarks
+          :toWh, :partNr, :fifo, :qty, :toPosition, :packageId, :employee_id, :remarks
       ]
 
       MOVE_HEADERS = [
           :fromWh, :fromPosition, :packageId, :partNr, :qty, :fifo, :toWh, :toPosition, :employee_id, :remarks
       ]
 
-      def self.import(file)
+      def self.import(file, current_user)
         msg = Message.new
         book = Roo::Excelx.new file.full_path
         book.default_sheet = book.sheets.first
@@ -19,17 +19,23 @@ module FileHandler
         if validate_msg.result
           begin
             NStorage.transaction do
+              builder = current_user.blank? ? '' : current_user.id
+              move_list = MovementList.create(builder: builder, name: "#{builder}_#{DateTime.now.strftime("%H.%d.%m.%Y")}_F")
               2.upto(book.last_row) do |line|
                 row = {}
                 IMPORT_HEADERS.each_with_index do |k, i|
                   row[k] = book.cell(line, i+1).to_s.strip
-                  if k== :partNr || k== :packageId
+                  if k== :partNr || k== :packageId || k==:employee_id
                     row[k] = row[k].sub(/\.0/, '')
                   end
                 end
 
-                WhouseService.new.enter_stock(row)
+                row[:movement_list_id] = move_list.id
+                MovementSource.create(row)
 
+                row[:user] = current_user
+                WhouseService.new.enter_stock(row)
+                move_list.update(state: MovementListState::ENDING)
               end
             end
             msg.result = true
@@ -47,15 +53,16 @@ module FileHandler
         msg
       end
 
-      def self.move(file)
+      def self.move(file, current_user)
         msg = Message.new
         book = Roo::Excelx.new file.full_path
         book.default_sheet = book.sheets.first
-
         validate_msg = validate_move(file)
         if validate_msg.result
           begin
             NStorage.transaction do
+              builder = current_user.blank? ? '' : current_user.id
+              move_list = MovementList.create(builder: builder, name: "#{builder}_#{DateTime.now.strftime("%H.%d.%m.%Y")}_File")
               2.upto(book.last_row) do |line|
                 row = {}
                 MOVE_HEADERS.each_with_index do |k, i|
@@ -65,8 +72,12 @@ module FileHandler
                   end
                 end
 
-                WhouseService.new.move(row)
+                row[:movement_list_id] = move_list.id
+                MovementSource.create(row)
 
+                row[:user] = current_user
+                WhouseService.new.move(row)
+                move_list.update(state: MovementListState::ENDING)
               end
             end
             msg.result = true
@@ -120,19 +131,33 @@ module FileHandler
 
       def self.validate_import_row(row, line)
         msg = Message.new(contents: [])
+        StorageOperationRecord.save_record(row, 'ENTRY')
+
+        if row[:packageId].present?
+          unless packageId = Container.exists?(row[:packageId])
+            msg.contents << "唯一码:#{row['packageId']} 不存在!"
+          end
+        end
 
         src_warehouse = Whouse.find_by_id(row[:toWh])
         unless src_warehouse
-          msg.contents << "仓库号:#{row[:toWh]} 不存在!"
+          msg.contents << "目的仓库号:#{row[:toWh]} 不存在!"
         end
 
-        part_id = Part.find_by_id(row[:partNr])
-        unless part_id
-          msg.contents << "零件号:#{row[:partNr]} 不存在!"
+        if row[:packageId].present? && row[:partNr].blank?
+        else
+          part_id = Part.find_by_id(row[:partNr])
+          unless part_id
+            msg.contents << "零件号:#{row[:partNr]} 不存在!"
+          end
         end
 
-        unless row[:qty].to_f > 0
-          msg.contents << "数量: #{row[:qty]} 不可以小于等于 0!"
+        if row[:packageId].present?
+          msg.contents << "数量: #{row[:qty]} 不可以小于等于 0!" if row[:qty].to_f < 0
+        else
+          unless row[:qty].to_f > 0
+            msg.contents << "数量: #{row[:qty]} 不可以小于等于 0!"
+          end
         end
 
         if row[:fifo].present?
@@ -144,16 +169,16 @@ module FileHandler
         end
 
         if row[:toPosition].present?
-          position = Position.find_by_id(row[:toPosition])
+          position = Position.find_by(detail: row[:toPosition])
           unless position
-            msg.contents << "库位号:#{row[:toPosition]} 不存在!"
+            msg.contents << "目的库位号:#{row[:toPosition]} 不存在!"
           end
         end
 
         if row[:employee_id].present?
           employee_id = User.find(row[:employee_id])
           unless employee_id
-            msg.contents << "员工号:#{row[:employee_id]} 不存在!"
+            msg.contents << "员工号:#{row[:employee_id].sub(/\.0/, '')} 不存在!"
           end
         end
 
@@ -180,7 +205,7 @@ module FileHandler
               row[k]=row[k].sub(/\.0/, '') if k== :partNr || k== :packageId
             end
 
-            mssg = validate_move_row(row, line)
+            mssg = validate_move_row(row)
             if mssg.result
               sheet.add_row row.values
             else
@@ -197,8 +222,47 @@ module FileHandler
         msg
       end
 
-      def self.validate_move_row(row, line)
+      def self.validate_move_row(row)
         msg = Message.new(contents: [])
+        StorageOperationRecord.save_record(row, 'MOVE')
+
+        if row[:packageId].present?
+          unless package = NStorage.exists_package?(row[:packageId])
+            msg.contents << "唯一码:#{row['packageId']} 不存在!"
+          end
+
+          if package && package.qty < row[:qty].to_f
+            msg.contents << "移库量大于剩余库存量,唯一码#{row['packageId']}!"
+          end
+
+          if row[:fromWh].present?
+            storage = NStorage.find_by(packageId: row[:packageId], ware_house_id: row[:fromWh])
+            unless storage
+              msg.contents << "源仓库#{row[:fromWh]}不存在该唯一码#{row[:packageId]}！"
+            end
+          end
+
+          msg.contents << "数量: #{row[:qty]} 不可以小于等于 0!" if row[:qty].to_f < 0
+
+        else
+
+          if row[:partNr].blank?
+            msg.contents << "零件号不能为空!"
+          end
+
+          if row[:qty].blank? || row[:qty].to_f <= 0
+            msg.contents << "数量: #{row[:qty]} 不可以小于等于 0!"
+          end
+
+        end
+
+        if row[:toWh].blank?
+          msg.contents << "目的仓库号不能为空!"
+        end
+
+        if row[:toPosition].blank?
+          msg.contents << "目的库位号不能为空!"
+        end
 
         if row[:fromWh].present?
           src_warehouse = Whouse.find_by_id(row[:fromWh])
@@ -214,13 +278,17 @@ module FileHandler
           end
         end
 
-        part_id = Part.find_by_id(row[:partNr])
-        unless part_id
-          msg.contents << "零件号:#{row[:partNr]} 不存在!"
-        end
-
-        unless row[:qty].to_f > 0
-          msg.contents << "数量: #{row[:qty]} 不可以小于等于 0!"
+        positions = []
+        if row[:packageId].present? && row[:partNr].blank?
+        else
+          part_id = Part.find_by_id(row[:partNr])
+          if part_id
+            part_id.positions.each do |position|
+              positions += ["#{position.detail}"]
+            end
+          else
+            msg.contents << "零件号:#{row[:partNr]} 不存在!"
+          end
         end
 
         if row[:fifo].present?
@@ -232,23 +300,35 @@ module FileHandler
         end
 
         if row[:fromPosition].present?
-          from_position = Position.find_by_id(row[:fromPosition])
+          from_position = Position.find_by(detail: row[:fromPosition])
           unless from_position
-            msg.contents << "库位号:#{row[:fromPosition]} 不存在!"
+            msg.contents << "源位置:#{row[:fromPosition]} 不存在!"
+          end
+        end
+
+        if from_position && part_id
+          unless positions.include?(row[:fromPosition])
+            msg.contents << "零件号:#{row[:partNr]} 不在源库位号:#{row[:fromPosition]}上!"
           end
         end
 
         if row[:toPosition].present?
-          to_position = Position.find_by_id(row[:toPosition])
+          to_position = Position.find_by(detail: row[:toPosition])
           unless to_position
-            msg.contents << "库位号:#{row[:toPosition]} 不存在!"
+            msg.contents << "目的库位号:#{row[:toPosition]} 不存在!"
+          end
+        end
+
+        if to_position && part_id
+          unless positions.include?(row[:toPosition])
+            msg.contents << "零件号:#{row[:partNr]}不在目的库位号:#{row[:toPosition]}上!"
           end
         end
 
         if row[:employee_id].present?
           employee_id = User.find(row[:employee_id])
           unless employee_id
-            msg.contents << "员工号:#{row[:employee_id]} 不存在!"
+            msg.contents << "员工号:#{row[:employee_id].sub(/\.0/, '')} 不存在!"
           end
         end
 

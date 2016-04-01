@@ -8,6 +8,9 @@
   <br/>
 <!--Form-->
 <form method="get" path="<%= reports_reports_path%>">
+  <span>零件号：
+              <input type="text" name="part_id" value="<%= @part_id %>"/>
+            </span>
 <span class="label label-info">报表类型:</span>
 <%= select_tag(:type,options_for_select(ReportType.list,@type),include_blank: false)%>
 <span class="label label-info">地点:</span>

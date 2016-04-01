@@ -1,8 +1,24 @@
 class NStorage < ActiveRecord::Base
-  belongs_to :ware_house, class_name: 'WareHouse'
+  belongs_to :ware_house, class_name: 'Whouse'
   default_scope { where(locked: false) }
 
-  has_paper_trail
+  # before_validation :validate
+
+  # has_paper_trail
+
+  def self.exists_package?(id)
+    self.find_by_packageId(id)
+  end
+
+  def validate
+    # TODO
+    # 建议在API中实现
+
+    # errors.add(:ware_house_id, "仓库不存在") unless Whouse.find_by_id(self.ware_house_id)
+    # if self.ware_house && self.position.present?
+    #   errors.add(:position, "源库位不存在") unless self.ware_house.positions.find_by_detail(self.position)
+    # end
+  end
 
   def whId
     ware_house and ware_house.whId or nil
@@ -13,20 +29,20 @@ class NStorage < ActiveRecord::Base
     condition['inventory_list_items.inventory_list_id']= inventory_list_id
     inventory_list=InventoryList.find_by_id(inventory_list_id)
     # NStorage.joins("LEFT JOIN inventory_list_items ON inventory_list_items.part_id = n_storages.partNr")
-#             .where(condition)
-#             .select("n_storages.partNr, sum(n_storages.qty) as qty, sum(inventory_list_items.qty) as qty2, sum(n_storages.qty)-sum(inventory_list_items.qty) as diff")
-#             .group('n_storages.partNr')
+    #             .where(condition)
+    #             .select("n_storages.partNr, sum(n_storages.qty) as qty, sum(inventory_list_items.qty) as qty2, sum(n_storages.qty)-sum(inventory_list_items.qty) as diff")
+    #             .group('n_storages.partNr')
     results = []
     resultstemp = []
     @storages = NStorage.
         where(ware_house_id: inventory_list.whouse_id)
-            .select("partNr, sum(qty) as qty ")
-            .group('partNr')
+                    .select("partNr, sum(qty) as qty ")
+                    .group('partNr')
 
     @inventory_list_items = InventoryListItem
-            .where(condition)
-            .select("part_id, sum(qty) as qty2 ")
-            .group("part_id")
+                                .where(condition)
+                                .select("part_id, sum(qty) as qty2 ")
+                                .group("part_id")
 
     @storages.each do |storage|
       # puts "#{storage.partNr}"
@@ -34,21 +50,21 @@ class NStorage < ActiveRecord::Base
     end
 
     @inventory_list_items.each do |inventory_list_item|
-        @flag = false
-        results.each do |result|
+      @flag = false
+      results.each do |result|
         # @storages.each do |storage|
-          if inventory_list_item.part_id.to_s == result[0].to_s
-            result.insert(2,inventory_list_item.qty2)
-            result[3] = (result[1]||0) -  result[2]
-            @flag = true
-            # break
-          end
+        if inventory_list_item.part_id.to_s == result[0].to_s
+          result.insert(2, inventory_list_item.qty2)
+          result[3] = (result[1]||0) - result[2]
+          @flag = true
+          # break
+        end
 
-        end
-        if !@flag
-          results.push([inventory_list_item.part_id.to_s, 0, inventory_list_item.qty2, 0-inventory_list_item.qty2.to_f])
-          #puts "part id is -- #{inventory_list_item.part_id}"
-        end
+      end
+      if !@flag
+        results.push([inventory_list_item.part_id.to_s, 0, inventory_list_item.qty2, 0-inventory_list_item.qty2.to_f])
+        #puts "part id is -- #{inventory_list_item.part_id}"
+      end
 
 
     end
@@ -86,7 +102,7 @@ class NStorage < ActiveRecord::Base
     puts "9999999999999999999999999999999999"
     wb = p.workbook
     wb.add_worksheet(:name => "sheet1") do |sheet|
-      sheet.add_row ["序号","零件号", "唯一码",  "仓库号", "库位号", "数量", "FIFO", "创建时间"]
+      sheet.add_row ["序号", "零件号", "唯一码", "仓库号", "库位号", "数量", "FIFO", "创建时间"]
       n_storages.each_with_index { |n_storage, index|
         if n_storage.id && n_storage.id != ""
           sheet.add_row [

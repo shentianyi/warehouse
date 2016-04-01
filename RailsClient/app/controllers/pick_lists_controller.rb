@@ -49,6 +49,19 @@ class PickListsController < ApplicationController
     end
   end
 
+  def export
+    pick_list_id =  params["pick-list-check"].blank? ? '' : params["pick-list-check"].keys.first
+
+    if !pick_list_id.blank?
+      pick_items = PickItem.where(pick_list_id: pick_list_id)
+      send_data(PickItem.to_total_xlsx(pick_items),
+                :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+                :filename => "择货单#{pick_list_id}详细导出.xlsx")
+    else
+      redirect_to :back, notice: '请选择需要导出的择货单.'
+    end
+  end
+
   # DELETE /pick_lists/1
   # DELETE /pick_lists/1.json
   def destroy

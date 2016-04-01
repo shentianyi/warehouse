@@ -6,6 +6,10 @@ class InventoryListsController < ApplicationController
   def index
    
     @inventory_lists = InventoryList.paginate(:page => params[:page])
+
+    if SysConfigCache.hide_finished_inventory_value=='true'
+      @inventory_lists=@inventory_lists.where('state!=?',InventoryListState::ENDING)
+    end
     respond_with(@inventory_lists)
   end
 
@@ -82,6 +86,11 @@ class InventoryListsController < ApplicationController
     msg = FileHandler::Excel::InventoryListItemHandler.export_total_no_fifo(
         InventoryListItem.joins(:inventory_list).where(inventory_lists:{state:InventoryListState::PROCESSING}).group('part_id').select('*,sum(qty) as qty')
     )
+    send_file msg.content
+  end
+
+  def export_by_whouse
+    msg = FileHandler::Excel::InventoryListItemHandler.export_total_by_whouse
     send_file msg.content
   end
     

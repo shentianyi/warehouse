@@ -35,7 +35,7 @@ class Package<Container
     puts "-----------------------------------------#{self.fifo_time_display}"
     if self.fifo_time_display
       begin
-        return Date.strptime(self.fifo_time_display.sub(/W  /, ''), '%d.%m.%y')
+        return Date.strptime(self.fifo_time_display.sub(/W\s*/, ''), '%d.%m.%y')
         rescue => e
         return Time.now
       end
@@ -43,9 +43,14 @@ class Package<Container
     return Time.now
   end
 
-  def self.generate_report_condition(type, start_t, end_t, location_id)
+  def self.generate_report_condition(type, start_t, end_t, location_id, part_id)
     #joins({logistics_containers: :records})
     condition = {}
+
+    unless part_id.blank?
+      condition["containers.part_id"] = part_id
+    end
+
     # 2015-2-11 李其：修改查询条件
     condition["location_containers.created_at"] = Time.parse(start_t).utc.to_s...Time.parse(end_t).utc.to_s
     case type.to_i
@@ -63,7 +68,7 @@ class Package<Container
   end
 
   def self.generate_report_data(type, start_t, end_t, location_id, *args)
-    condition = generate_report_condition(type, start_t, end_t, location_id)
+    condition = generate_report_condition(type, start_t, end_t, location_id, args[1])
     #零件号，总数，箱数，部门(部门如何获得？)
     commit_value = args[0]
     if commit_value=="详细"

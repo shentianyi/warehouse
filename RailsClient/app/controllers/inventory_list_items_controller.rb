@@ -5,7 +5,7 @@ class InventoryListItemsController < ApplicationController
   respond_to :html
 
   def index
-    @inventory_list_items = InventoryListItem.paginate(:page => params[:page])
+    @inventory_list_items = InventoryListItem.paginate(:page => params[:page], :per_page => 50).order(:created_at)
     respond_with(@inventory_list_items)
   end
 
@@ -81,9 +81,11 @@ class InventoryListItemsController < ApplicationController
     InventoryListItem.transaction do
       @inventory_list.inventory_list_items.where("package_id<>''").each do |item|
         if s=NStorage.unscoped.where(packageId: item.package_id).first
+          puts item.package_id
+          puts '111111111111111111111111111111111111'
           s.update_attributes(locked: !item.locked)
           item.update_attributes(locked: !item.locked)
-        end if item.package_id.present
+        end if item.package_id.present?
       end
     end
     @inventory_list_items=@inventory_list.inventory_list_items.paginate(:page => params[:page])
@@ -97,14 +99,59 @@ class InventoryListItemsController < ApplicationController
     @inventory_list=InventoryList.find_by_id(params[:id])
     InventoryListItem.transaction do
       @inventory_list.inventory_list_items.where(in_stored: false).each do |item|
-        item.enter_stock
-        item.update_attributes(in_stored: true)
+        message= item.enter_stock
+        if message.result
+          item.update_attributes(in_stored: true)
+        else
+          item.update_attributes(remark: message.content)
+        end
       end
     end
     @inventory_list_items=@inventory_list.inventory_list_items.paginate(:page => params[:page])
     @page_start=(params[:page].nil? ? 0 : (params[:page].to_i-1))*20
 
     render 'inventory_lists/inventory_list_items'
+  end
+
+
+  def search
+    @condition=params[@model]
+    query=model.all #.unscoped
+    @condition.each do |k, v|
+      if (v.is_a?(Fixnum) || v.is_a?(String)) && !v.blank?
+        puts @condition.has_key?(k+'_fuzzy')
+        if @condition.has_key?(k+'_fuzzy')
+          query=query.where("#{k} like ?", "%#{v}%")
+        else
+          query=query.where(Hash[k, v])
+        end
+        instance_variable_set("@#{k}", v)
+      end
+      if v.is_a?(Hash) && v.values.count==2 && v.values.uniq!=['']
+        values=v.values.sort
+        values[0]=Time.parse(values[0]).utc.to_s if values[0].is_date? & values[0].include?('-')
+        values[1]=Time.parse(values[1]).utc.to_s if values[1].is_date? & values[1].include?('-')
+        query=query.where(Hash[k, (values[0]..values[1])])
+        v.each do |kk, vv|
+          instance_variable_set("@#{k}_#{kk}", vv)
+        end
+      end
+    end
+
+    unless params[:inventory_list][:state].blank?
+      query=query.joins(:inventory_list).where({inventory_lists: {state: params[:inventory_list][:state]}})
+      @inventory_list_state=params[:inventory_list][:state]
+    end if params[:inventory_list].present?
+
+    if params.has_key? "download"
+      send_data(query.to_xlsx(query),
+                :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+                :filename => @model.pluralize+".xlsx")
+      #render :json => query.to_xlsx(query)
+    else
+      instance_variable_set("@#{@model.pluralize}", query.paginate(:page => params[:page]).all)
+      render :index
+    end
   end
 
   private

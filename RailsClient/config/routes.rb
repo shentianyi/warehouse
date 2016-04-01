@@ -1,8 +1,36 @@
 Rails.application.routes.draw do
 
+  resources :movement_sources do
+    collection do
+      get :search
+    end
+  end
+
+  resources :operation_logs do
+    collection do
+      get :search
+    end
+  end
+
+  resources :storage_operation_records do
+    collection do
+      get :search
+    end
+  end
+
+  resources :movement_lists do
+    collection do
+      get :search
+      get :exports
+    end
+    member do
+      get 'movement_sources'
+    end
+  end
+
   resources :scrap_list_items do
     collection do
-      match :import, to: :import,via: [:get,:post]
+      match :import, to: :import, via: [:get, :post]
       get :search
     end
   end
@@ -17,7 +45,7 @@ Rails.application.routes.draw do
     end
 
     collection do
-      match :import, to: :import,via: [:get,:post]
+      match :import, to: :import, via: [:get, :post]
     end
   end
 
@@ -26,16 +54,17 @@ Rails.application.routes.draw do
       get 'inventory_list_items'
       get :discrepancy
     end
-    
+
     collection do
       get :export_total
+      get :export_by_whouse
     end
   end
-  
+
   resources :inventory_list_items do
     collection do
       get :search
-      match :import, to: :import,via: [:get,:post]
+      match :import, to: :import, via: [:get, :post]
     end
     member do
       get :export_list_detail
@@ -53,7 +82,6 @@ Rails.application.routes.draw do
       get :search_storage
     end
   end
-
 
 
   resources :regex_categories do
@@ -96,9 +124,10 @@ Rails.application.routes.draw do
     collection do
       post :print
       get :search
+      # post :export
     end
   end
-
+  post 'pick_lists/export', to: 'pick_lists#export'
 
   mount ApplicationAPI => '/api'
   root :to => "welcome#index"
@@ -167,9 +196,9 @@ Rails.application.routes.draw do
   resources :n_storages do
     collection do
       get :search
-      match :import, to: :import,via: [:get,:post]
-      match :move, to: :move,via: [:get,:post]
-      match :group, to: :group,via: [:get,:post]
+      match :import, to: :import, via: [:get, :post]
+      match :move, to: :move, via: [:get, :post]
+      match :group, to: :group, via: [:get, :post]
       # get :panel
       # get :search_storage
       get :summary
@@ -204,8 +233,7 @@ Rails.application.routes.draw do
   get 'reports/orders_report', to: 'reports#orders_report'
   get 'reports/reports', to: 'reports#reports'
   post 'reports/upload_file', to: 'reports#upload_file'
-  
-  
+
 
   get 'notifications', to: 'notifications#index'
   get 'notifications/orderbus', to: 'notifications#orderbus'
