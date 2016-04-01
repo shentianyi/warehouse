@@ -31,7 +31,7 @@ module V3
         query = NStorage
         # query relation params
 
-        package_id = params[:package_id].nil? ? nil : params[:package_id]
+        package_id = params[:package_id].nil? ? nil : params[:package_id].sub(/S|M/, '')
         unique_id = params[:unique_id].nil? ? nil : params[:unique_id]
         part_id = params[:part_id].nil? ? nil : params[:part_id].sub(/^P/,'')
         qty = params[:qty].nil? ? nil : params[:qty].sub(/^Q/,'')
