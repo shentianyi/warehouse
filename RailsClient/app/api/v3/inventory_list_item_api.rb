@@ -54,7 +54,7 @@ module V3
           return msg
         end
 
-        if part_id && Part.find_by(id: part_id).blank?
+        if part_id && Part.find_by(nr: part_id).blank?
           msg= {result: 0, content: "零件号#{part_id}不存在"}
           return msg
         end
