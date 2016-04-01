@@ -39,8 +39,8 @@
       <th>NO.</th>
       <th>项目号</th>
       <th>零件号</th>
-      <th>箱数</th>
-      <th>包装数量</th>
+      <!--<th>箱数</th>-->
+      <th>桶数</th>
       <th>状态</th>
     </tr>
   </thead>
@@ -49,9 +49,9 @@
       <tr>
         <td><%= index+1 %></td>
         <td><%= order.id %></td>
-        <td><%= order.part.nr_for_user(current_user) %></td>
-        <td><%= order.box_quantity %></td>
-        <td><%= order.quantity %></td>
+        <td><%= order.part.blank? ? order.part_id : order.part.nr_for_user(current_user) %></td>
+        <!--<td><%= order.box_quantity %></td>-->
+        <td><%= order.quantity.to_i %></td>
         <td><%= OrderItemState.display(order.state) %></td>
       </tr>
   <% end %>
