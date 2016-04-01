@@ -4,13 +4,13 @@
 #移出库存 D
 #A=B+C-D
 p Time.now
-
 condition={}
 condition[:created_at]=Time.parse('2015-12-12 00:00:00').utc.to_s...Time.parse('2016-03-29 11:38:44').utc.to_s
 
 count=0
 NStorage.transaction do
-  storages=NStorage.where(ware_house_id: 'SR01')
+  #ck ["3EX", "3PL", "BaofeiKu", "CUTTING_TMP", "KehuKu", "P82", "PA82", "Sample_tmp", "SR01", "SRPL", "误操作库", "转移老厂半成品"]
+  storages=NStorage.where(ware_house_id: ["3EX", "3PL", "BaofeiKu", "CUTTING_TMP", "KehuKu", "P82", "PA82", "Sample_tmp", "SR01", "SRPL", "误操作库", "转移老厂半成品"])
                .select("SUM(n_storages.qty) as total_qty, n_storages.*")
                .group(:partNr, :ware_house_id, :position)
   # storages=NStorage.where(ware_house_id: 'SR01', position: 'SR01', partNr: '76755104W000')
@@ -62,7 +62,7 @@ NStorage.transaction do
             .select("SUM(movements.qty) as move_out_qty").first.move_out_qty.to_f
 
     end
-    puts "- #{b}-------- #{c} ------------ #{d} -------------(#{storage.qty.to_f})-------"
+    # puts "- #{b}-------- #{c} ------------ #{d} -------------(#{storage.qty.to_f})-------"
 
     calc_storage_qty=b + c - d
     unless storage.total_qty==calc_storage_qty
