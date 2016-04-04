@@ -34,4 +34,11 @@ class InventoryList < ActiveRecord::Base
     true
   end
 
+  def self.position_ids(id,nr)
+    if i=InventoryList.find_by(id: id)
+      if w=Whouse.find_by(id: i.whouse_id)
+       w.positions.where("nr like '%#{nr}%'").pluck(:id)
+      end
+    end
+  end
 end
