@@ -60,7 +60,7 @@
     <div class="mui-content">
       <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: {class: 'mui-input-group', role: 'form'}) do |f| %>
           <div class="mui-input-row">
-            <%= f.label :user_name, '员工号' %>
+            <%= f.label :user_name, content_tag(:i, '', :class => 'glyphicon glyphicon-user', :style => 'color:green;') %>
             <%= f.text_field :user_name, autofocus: true, class: 'mui-input-clear mui-input', placeholder: "请输入员工号" %>
           </div>
 
@@ -70,16 +70,14 @@
           </div>
 
           <% if devise_mapping.rememberable? %>
-              <form class="mui-input-group">
-                <ul class="mui-table-view mui-table-view-chevron">
-                  <li class="mui-table-view-cell">
-                    自动登录
-                    <div id="autoLogin" class="mui-switch">
-                      <div class="mui-switch-handle"></div>
-                    </div>
-                  </li>
-                </ul>
-              </form>
+              <ul class="mui-table-view mui-table-view-chevron">
+                <li class="mui-table-view-cell">
+                  自动登录
+                  <div id="autoLogin" class="mui-switch" aria-readonly="true">
+                    <div class="mui-switch-handle"></div>
+                  </div>
+                </li>
+              </ul>
           <% end %>
 
           <div class="mui-content-padded">
@@ -87,4 +85,12 @@
           </div>
       <% end %>
     </div>
+
+    <script type="text/javascript" charset="utf-8">
+        var oMeta = document.createElement('meta');
+        oMeta.charset = 'utf-8';
+        oMeta.setAttribute('name', 'viewport');
+        oMeta.setAttribute('content', 'width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no');
+        document.getElementsByTagName('head')[0].appendChild(oMeta);
+    </script>
 <% end %>
