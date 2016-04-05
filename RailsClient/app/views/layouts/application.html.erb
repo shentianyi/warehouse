@@ -35,20 +35,23 @@
 <% else %>
 
     <script type="text/javascript" charset="utf-8">
-        var oMeta = document.createElement('meta');
-        oMeta.charset = 'utf-8';
-        oMeta.setAttribute('name', 'viewport');
-        oMeta.setAttribute('content', 'width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no');
-        document.getElementsByTagName('head')[0].appendChild(oMeta);
-
+        AddMeta('viewport', 'width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no');
         document.addEventListener('tap', function () {
             var alert_msg = "<%= alert %>";
             if (alert_msg == "") {
-                mui.toast("loading....");
+//                mui.toast("loading....");
             } else {
                 mui.toast(alert_msg);
             }
         });
+
+        function AddMeta(name, content) {
+            var oMeta = document.createElement('meta');
+            oMeta.charset = 'utf-8';
+            oMeta.setAttribute('name', name);
+            oMeta.setAttribute('content', content);
+            document.getElementsByTagName('head')[0].appendChild(oMeta);
+        }
     </script>
 
     <%= render 'shared/menu_1' %>
