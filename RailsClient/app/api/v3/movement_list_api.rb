@@ -86,9 +86,12 @@ module V3
 
         begin
           params[:qty]=params[:qty].sub(/Q/, '').to_f if params[:qty].present?
-          if params[:partNr].blank? && params[:packageId].blank?
-            raise '请填写零件号或者唯一码'
+          if params[:packageId].blank?
+            raise '请填写唯一码'
           end
+          # if params[:partNr].blank? && params[:packageId].blank?
+          #   raise '请填写零件号或者唯一码'
+          # end
           if params[:partNr].present? && params[:packageId].blank?
             raise '请填写数量' unless params[:qty].present?
           end

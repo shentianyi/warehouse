@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160327064202) do
+ActiveRecord::Schema.define(version: 20160406032157) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -82,6 +82,7 @@ ActiveRecord::Schema.define(version: 20160327064202) do
     t.string   "part_id_display"
     t.string   "quantity_display"
     t.string   "fifo_time_display"
+    t.string   "supplier"
   end
 
   add_index "containers", ["current_positionable_id"], name: "index_containers_on_current_positionable_id", using: :btree
@@ -191,17 +192,15 @@ ActiveRecord::Schema.define(version: 20160327064202) do
     t.boolean  "is_dirty",      default: true
     t.boolean  "is_new",        default: true
     t.string   "modem_id"
-    t.string   "position_id"
+    t.string   "position"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "mac"
-    t.string   "led_display"
-    t.boolean  "is_valid",      default: true
   end
 
   add_index "leds", ["id"], name: "index_leds_on_id", using: :btree
   add_index "leds", ["modem_id"], name: "index_leds_on_modem_id", using: :btree
-  add_index "leds", ["position_id"], name: "index_leds_on_position_id", using: :btree
+  add_index "leds", ["position"], name: "index_leds_on_position", using: :btree
   add_index "leds", ["signal_id"], name: "index_leds_on_signal_id", using: :btree
 
   create_table "location_container_hierarchies", id: false, force: true do |t|
@@ -274,7 +273,6 @@ ActiveRecord::Schema.define(version: 20160327064202) do
     t.integer  "parent_id"
     t.integer  "status",                    default: 0
     t.string   "remark",                    default: ""
-    t.string   "ip_detail"
   end
 
   add_index "locations", ["destination_id"], name: "index_locations_on_destination_id", using: :btree
@@ -349,6 +347,7 @@ ActiveRecord::Schema.define(version: 20160327064202) do
     t.string   "remarks"
     t.string   "employee_id"
     t.string   "movement_list_id"
+    t.string   "supplier"
   end
 
   add_index "movements", ["packageId"], name: "package_id_index", using: :btree
@@ -384,6 +383,7 @@ ActiveRecord::Schema.define(version: 20160327064202) do
     t.string   "lock_user_id"
     t.string   "lock_remark"
     t.datetime "lock_at"
+    t.string   "supplier"
   end
 
   add_index "n_storages", ["locked"], name: "index_n_storages_on_locked", using: :btree
@@ -485,9 +485,9 @@ ActiveRecord::Schema.define(version: 20160327064202) do
   add_index "order_cars", ["whouse_id"], name: "index_order_cars_on_whouse_id", using: :btree
 
   create_table "order_items", force: true do |t|
-    t.string   "uuid",                           null: false
+    t.string   "uuid",                         null: false
     t.float    "quantity"
-    t.integer  "box_quantity",   default: 0
+    t.integer  "box_quantity", default: 0
     t.string   "order_id"
     t.string   "location_id"
     t.string   "whouse_id"
@@ -495,24 +495,21 @@ ActiveRecord::Schema.define(version: 20160327064202) do
     t.string   "part_id"
     t.string   "part_type_id"
     t.string   "remark"
-    t.boolean  "is_emergency",   default: false, null: false
-    t.boolean  "is_delete",      default: false
-    t.boolean  "is_dirty",       default: true
-    t.boolean  "is_new",         default: true
+    t.boolean  "is_emergency", default: false, null: false
+    t.boolean  "is_delete",    default: false
+    t.boolean  "is_dirty",     default: true
+    t.boolean  "is_new",       default: true
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "is_finished",    default: false
-    t.boolean  "out_of_stock",   default: false
-    t.boolean  "handled",        default: false
-    t.integer  "state",          default: 0
-    t.integer  "orderable_id"
-    t.string   "orderable_type"
+    t.boolean  "is_finished",  default: false
+    t.boolean  "out_of_stock", default: false
+    t.boolean  "handled",      default: false
+    t.integer  "state",        default: 0
   end
 
   add_index "order_items", ["id"], name: "index_order_items_on_id", using: :btree
   add_index "order_items", ["location_id"], name: "index_order_items_on_location_id", using: :btree
   add_index "order_items", ["order_id"], name: "index_order_items_on_order_id", using: :btree
-  add_index "order_items", ["orderable_type", "orderable_id"], name: "index_order_items_on_orderable_type_and_orderable_id", using: :btree
   add_index "order_items", ["part_id"], name: "index_order_items_on_part_id", using: :btree
   add_index "order_items", ["part_type_id"], name: "index_order_items_on_part_type_id", using: :btree
   add_index "order_items", ["user_id"], name: "index_order_items_on_user_id", using: :btree
@@ -532,16 +529,12 @@ ActiveRecord::Schema.define(version: 20160327064202) do
     t.integer  "status",                        default: 0
     t.text     "remark"
     t.string   "source_location_id"
-    t.integer  "orderable_id"
-    t.string   "orderable_type"
-    t.string   "whouse_id"
   end
 
   add_index "orders", ["id"], name: "index_orders_on_id", using: :btree
   add_index "orders", ["source_id"], name: "index_orders_on_source_id", using: :btree
   add_index "orders", ["user_id"], name: "index_orders_on_user_id", using: :btree
   add_index "orders", ["uuid"], name: "index_orders_on_uuid", using: :btree
-  add_index "orders", ["whouse_id"], name: "index_orders_on_whouse_id", using: :btree
 
   create_table "package_positions", force: true do |t|
     t.string   "position_id"
@@ -588,16 +581,13 @@ ActiveRecord::Schema.define(version: 20160327064202) do
   create_table "part_positions", force: true do |t|
     t.string   "part_id"
     t.string   "position_id"
-    t.boolean  "is_delete",         default: false
-    t.boolean  "is_dirty",          default: true
-    t.boolean  "is_new",            default: true
+    t.boolean  "is_delete",       default: false
+    t.boolean  "is_dirty",        default: true
+    t.boolean  "is_new",          default: true
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "sourceable_id"
     t.string   "sourceable_type"
-    t.float    "safe_stock"
-    t.string   "from_warehouse_id"
-    t.string   "from_position_id"
   end
 
   add_index "part_positions", ["id"], name: "index_part_positions_on_id", using: :btree
@@ -618,21 +608,17 @@ ActiveRecord::Schema.define(version: 20160327064202) do
   add_index "part_types", ["id"], name: "index_part_types_on_id", using: :btree
 
   create_table "parts", force: true do |t|
-    t.string   "uuid",          limit: 36,                                           null: false
+    t.string   "uuid",         limit: 36,                                           null: false
     t.string   "customernum"
     t.string   "user_id"
-    t.boolean  "is_delete",                                          default: false
-    t.boolean  "is_dirty",                                           default: true
-    t.boolean  "is_new",                                             default: true
+    t.boolean  "is_delete",                                         default: false
+    t.boolean  "is_dirty",                                          default: true
+    t.boolean  "is_new",                                            default: true
     t.datetime "created_at"
     t.datetime "updated_at"
     t.float    "unit_pack"
     t.string   "part_type_id"
-    t.decimal  "convert_unit",             precision: 20, scale: 10, default: 1.0
-    t.string   "name"
-    t.float    "cross_section"
-    t.float    "weight"
-    t.float    "weight_range"
+    t.decimal  "convert_unit",            precision: 20, scale: 10, default: 1.0
     t.string   "unit"
     t.string   "description"
   end
@@ -700,17 +686,12 @@ ActiveRecord::Schema.define(version: 20160327064202) do
     t.datetime "updated_at"
     t.string   "order_item_id"
     t.integer  "state",                 default: 0
-    t.string   "position_id"
-    t.float    "weight"
-    t.float    "weight_qty"
-    t.boolean  "weight_valid"
   end
 
   add_index "pick_items", ["destination_whouse_id"], name: "index_pick_items_on_destination_whouse_id", using: :btree
   add_index "pick_items", ["id"], name: "index_pick_items_on_id", using: :btree
   add_index "pick_items", ["order_item_id"], name: "index_pick_items_on_order_item_id", using: :btree
   add_index "pick_items", ["pick_list_id"], name: "index_pick_items_on_pick_list_id", using: :btree
-  add_index "pick_items", ["position_id", "weight_valid"], name: "index_pick_items_on_position_id_and_weight_valid", using: :btree
 
   create_table "pick_lists", force: true do |t|
     t.string   "user_id"
@@ -722,12 +703,10 @@ ActiveRecord::Schema.define(version: 20160327064202) do
     t.datetime "updated_at"
     t.text     "order_ids"
     t.text     "remark"
-    t.string   "whouse_id"
   end
 
   add_index "pick_lists", ["id"], name: "index_pick_lists_on_id", using: :btree
   add_index "pick_lists", ["user_id"], name: "index_pick_lists_on_user_id", using: :btree
-  add_index "pick_lists", ["whouse_id"], name: "index_pick_lists_on_whouse_id", using: :btree
 
   create_table "pick_orders", force: true do |t|
     t.string   "order_id"

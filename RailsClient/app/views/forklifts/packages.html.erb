@@ -15,6 +15,7 @@
     <td>数量</td>
     <td>上架库位</td>
     <td>状态</td>
+    <td>供应商</td>
   </tr>
   </thead>
   <tbody>
@@ -27,6 +28,7 @@
         <td><%= PackageLabelRegex.quantity_prefix_string + package.package.quantity_str %></td>
         <td><%= ppresenter.position_nr %></td>
         <td><%= package.state_display%></td>
+        <td><%= package.package.supplier%></td>
       </tr>
   <% end%>
   </tbody>

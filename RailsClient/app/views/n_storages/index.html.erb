@@ -21,6 +21,10 @@
               <input type="text" name="n_storage[packageId]" value="<%= @packageId %>"/>
               <input type="hidden" name="n_storage[packageId_fuzzy]"/>
             </span>
+            <span>供应商：
+              <input type="text" name="n_storage[supplier]" value="<%= @supplier %>"/>
+              <input type="hidden" name="n_storage[supplier_fuzzy]"/>
+            </span>
         </div>
         <div>
             <span>
@@ -66,6 +70,7 @@
     <th>仓库号</th>
     <th>库位号</th>
     <th>备注</th>
+    <th>供应商</th>
     <th></th>
   </tr>
   </thead>
@@ -81,9 +86,12 @@
         <td><%= storage.ware_house.blank? ? '' : storage.ware_house.name %></td>
         <td><%= storage.position %></td>
         <td><%= storage.remarks %></td>
-        <!--<% if current_user.can_edit_inventory? %>-->
+        <td><%= storage.supplier %></td>
+        <!--
+        <% if current_user.can_edit_inventory? %>-->
             <!--<td><%= link_to '编辑', edit_n_storage_path(storage), :class => 'btn btn-default' %></td>-->
-        <!--<% end %>-->
+            <!--
+        <% end %>-->
       </tr>
   <% end %>
   </tbody>

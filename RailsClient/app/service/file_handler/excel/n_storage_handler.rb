@@ -3,7 +3,7 @@ module FileHandler
     class NStorageHandler<Base
 
       IMPORT_HEADERS=[
-          :toWh, :partNr, :fifo, :qty, :toPosition, :packageId, :employee_id, :remarks
+          :toWh, :partNr, :fifo, :qty, :toPosition, :packageId, :employee_id, :remarks, :supplier
       ]
 
       MOVE_HEADERS = [
@@ -33,7 +33,7 @@ module FileHandler
                 PackageService.generate_package(row, current_user)
 
                 row[:movement_list_id] = move_list.id
-                MovementSource.create(row)
+                MovementSource.create(row.except(:supplier))
 
                 row[:user] = current_user
                 WhouseService.new.enter_stock(row)
@@ -134,6 +134,14 @@ module FileHandler
       def self.validate_import_row(row, line)
         msg = Message.new(contents: [])
         StorageOperationRecord.save_record(row, 'ENTRY')
+
+        if row[:packageId].blank?
+          msg.contents << "唯一码不能为空!"
+        end
+
+        if row[:supplier].blank?
+          msg.contents << "供应商不能为空!"
+        end
 
         if row[:packageId].present?
           if package = Container.exists?(row[:packageId])
@@ -245,13 +253,15 @@ module FileHandler
 
         else
 
-          if row[:partNr].blank?
-            msg.contents << "零件号不能为空!"
-          end
+          msg.contents << "唯一码不能为空!"
 
-          if row[:qty].blank? || row[:qty].to_f <= 0
-            msg.contents << "数量: #{row[:qty]} 不可以小于等于 0!"
-          end
+          # if row[:partNr].blank?
+          #   msg.contents << "零件号不能为空!"
+          # end
+          #
+          # if row[:qty].blank? || row[:qty].to_f <= 0
+          #   msg.contents << "数量: #{row[:qty]} 不可以小于等于 0!"
+          # end
 
         end
 

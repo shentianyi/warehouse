@@ -23,6 +23,9 @@
 <h4>状态:
   <small><%= @package.state_display %></small>
 </h4>
+<h4>供应商:
+  <small><%= @package.package.supplier %></small>
+</h4>
 <h4>所属托盘:
   <small><%= link_to @package.parent.container_id, forklift_path(@package.parent), :class => 'btn btn-default' if @package.parent %></small>
 </h4>
