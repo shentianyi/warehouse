@@ -1,6 +1,8 @@
 class Part < ActiveRecord::Base
   include Extensions::UUID
   include Import::PartCsv
+  validates_presence_of :nr, :message => "nr不能为空!"
+  validates_uniqueness_of :nr, :message => "nr不能重复!"
 
   belongs_to :user
   belongs_to :part_type
