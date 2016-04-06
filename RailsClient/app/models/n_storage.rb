@@ -107,12 +107,13 @@ class NStorage < ActiveRecord::Base
     puts "9999999999999999999999999999999999"
     wb = p.workbook
     wb.add_worksheet(:name => "sheet1") do |sheet|
-      sheet.add_row ["序号", "零件号", "唯一码", "仓库号", "库位号", "数量", "FIFO", "创建时间"]
+      sheet.add_row ["序号", "零件号", "包装类型", "唯一码", "仓库号", "库位号", "数量", "FIFO", "创建时间"]
       n_storages.each_with_index { |n_storage, index|
         if n_storage.id && n_storage.id != ""
           sheet.add_row [
                             index+1,
                             n_storage.part.present? ? n_storage.part.nr : '',
+                            n_storage.part.present? ? n_storage.part.package_name : '',
                             n_storage.packageId,
                             n_storage.whouse.present? ? n_storage.whouse.nr : '',
                             n_storage.position.present? ? n_storage.position.nr : '',
