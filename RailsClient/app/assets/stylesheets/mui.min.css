@@ -3,7 +3,7 @@
  * Mui v2.8.0 (http://dev.dcloud.net.cn/mui)
  * =====================================================
  *//*! normalize.css v3.0.1 | MIT License | git.io/normalize */
-html {
+/*html {
     font-family: sans-serif;
     -webkit-text-size-adjust: 100%
 }
@@ -197,7 +197,7 @@ a {
 
 a:active {
     color: #0062cc
-}
+}*/
 
 .mui-content {
     background-color: #efeff4;
@@ -2040,7 +2040,7 @@ p {
 .mui-slider-cell > .mui-slider-right {
     right: 0
 }
-
+/*
 input, select, textarea {
     font-family: 'Helvetica Neue', Helvetica, sans-serif;
     font-size: 17px;
@@ -2104,7 +2104,7 @@ select {
 select:focus {
     -webkit-user-modify: read-only
 }
-
+*/
 .mui-input-group {
     position: relative;
     padding: 0;

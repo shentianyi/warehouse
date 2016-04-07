@@ -171,8 +171,9 @@
         .show-details {
             margin-top: -2px;
         }
-    </style>
 
+    </style>
+    <%= render 'style' %>
     <div class="search">
       <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
         <div>

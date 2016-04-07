@@ -224,7 +224,7 @@
             display: none;
         }
     </style>
-
+    <%= render 'style' %>
     <div class="mui-card">
       <ul class="mui-table-view">
         <li class="mui-table-view-cell mui-collapse">
@@ -251,6 +251,7 @@
     </div>
 
     <button class="mui-btn mui-btn-primary check-box-submit">提交</button>
+
 
     <div class="table-show">
       <div class="mui-segmented-control mui-control-header">
@@ -338,15 +339,13 @@
             var btnArray = ['否', '是'];
             mui.confirm('确认提交?', '提交', btnArray, function (e) {
                 if (e.index == 1) {
-                    $('.mui-popup-text').html("<span class='icon-spinner icon-spin'></span>");
+                    $('.mui-popup-text').html("<i class='fa fa-spinner fa-spin'></i>submitting...");
                     var CheckBoxID = new Array();
                     $('.check-box-content').each(function () {
                         if (this.checked) {
                             CheckBoxID.push($(this).attr('id'));
                         }
                     });
-
-                    console.log(CheckBoxID);
 
                     $.ajax({
                         url: '/',
@@ -355,15 +354,14 @@
                             id: CheckBoxID
                         },
                         success: function (data) {
+                            $('.mui-popup-text').html("<span class='fa fa-check-circle-o fa-3x' style='color:springgreen;'></span>");
                             mui.toast("Here is Return:" + "<br/>" + data);
-                            $('.mui-popup-text').html("<span class='mui-icon mui-icon-checkmarkem'></span>");
                         },
                         error: function () {
                             mui.toast("Cannot Get Data.");
-                            $('.mui-popup-text').html("<span class='icon-remove-sign'></span>");
+                            $('.mui-popup-text').html("<i class='fa fa-times fa-3x' style='color: red;'></i>");
                         }
                     })
-                } else {
                 }
             });
         });
