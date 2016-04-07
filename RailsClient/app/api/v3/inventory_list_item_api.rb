@@ -28,13 +28,11 @@ module V3
         puts params.to_json
         puts '-----------'
         msg=nil
-        query = NStorage
-        # query relation params
 
         package_id = params[:package_id].nil? ? nil : params[:package_id].sub(/S|M/, '')
         unique_id = params[:unique_id].nil? ? nil : params[:unique_id]
-        part_id = params[:part_id].nil? ? nil : params[:part_id].sub(/^P/,'')
-        qty = params[:qty].nil? ? nil : params[:qty].sub(/^Q/,'')
+        part_id = params[:part_id].nil? ? nil : params[:part_id]
+        qty = params[:qty].nil? ? nil : params[:qty]
 
         position = params[:position].nil? ? nil : params[:position]
         inventory_list_id = params[:inventory_list_id].nil? ? nil : params[:inventory_list_id]
@@ -44,6 +42,7 @@ module V3
           msg= {result: 0, content: "请填写数量！"}
           return msg
         end
+
         if InventoryList.validate_position(params[:inventory_list_id], params[:position])
           msg= {result: 0, content: "库位#{params[:position]}不存在或者不在所盘仓库"}
           return msg
@@ -62,14 +61,14 @@ module V3
         begin
           # 保存
           item={
-              package_id:package_id,
-              unique_id:unique_id,
-              part_id:part_id,
-              qty:qty,
-              position:position,
-              inventory_list_id:inventory_list_id,
-              user_id:user_id,
-              need_convert:false
+              package_id: package_id,
+              unique_id: unique_id,
+              part_id: part_id,
+              qty: qty,
+              position: position,
+              inventory_list_id: inventory_list_id,
+              user_id: user_id,
+              need_convert: false
           }
 
           msg = FileHandler::Excel::InventoryListItemHandler.validate_api_params item
@@ -104,9 +103,13 @@ module V3
         params[:page] = 0 if params[:page].blank? || params[:page].to_i < 0
         params[:size] = 30 if params[:size].blank? || params[:size].to_i < 0
 
-        if InventoryList.validate_position(params[:inventory_list_id], params[:position])
-          msg= {result: 0, content: "库位#{params[:position]}不存在或者不在所盘仓库"}
-          return msg
+        if params[:position].present?
+          if InventoryList.validate_position(params[:inventory_list_id], params[:position])
+            msg= {result: 0, content: "库位#{params[:position]}不存在或者不在所盘仓库"}
+            return msg
+          else
+            params[:position]=InventoryList.position_ids(params[:inventory_list_id], params[:position])
+          end
         end
 
         msg = InventoryListItem.condition_items params
@@ -154,18 +157,30 @@ module V3
         unless item = InventoryListItem.find_by(id: params[:inventory_list_item_id])
           return {result: 0, content: InventoryListItemMessage::NotFound}
         end
-
         args = {}
         args[:package_id] = params[:package_id] unless params[:package_id].blank?
-        args[:part_id] = params[:part_id] unless params[:part_id].blank?
+       if params[:part_id].present? && (part=Part.find_by_nr(params[:part_id]))
+         args[:part_id] =part.id
+       else
+         return {result: 0, content: '零件号不存在'}
+       end
         args[:qty] = params[:qty] unless params[:qty].blank?
-        args[:whouse_id] = params[:whouse_id] unless params[:whouse_id].blank?
-        args[:position] = params[:position] unless params[:position].blank?
+        if params[:whouse_id].present? && (whouse=Whouse.find_by_nr(params[:whouse_id]))
+          args[:whouse_id] = whouse.id
+        else
+          return {result: 0, content: '仓库不存在'}
+        end
+
+        if params[:position].present? && whouse.present? && (position=whouse.positions.find_by_nr(params[:position]))
+          args[:position] =position.id #params[:position] unless params[:position].blank?
+        else
+          return {result: 0, content: '库位不存在'}
+        end
 
         begin
           item.update(args)
         rescue => e
-            return {result: 0, content: e.message}
+          return {result: 0, content: e.message}
         end
         return {result: 1, content: InventoryListItemMessage::UpdateSuccess}
 

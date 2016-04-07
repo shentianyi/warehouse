@@ -27,9 +27,14 @@ module V3
         params[:page] = 0 if params[:page].blank? || params[:page].to_i < 0
         params[:size] = 30 if params[:size].blank? || params[:size].to_i < 0
 
-        if params[:position] && InventoryList.validate_position(params[:inventory_list_id], params[:position])
-          msg= {result: 0, content: "库位#{params[:position]}不存在或者不在所盘仓库"}
-          return msg
+
+        if params[:position].present?
+          if InventoryList.validate_position(params[:inventory_list_id], params[:position])
+            msg= {result: 0, content: "库位#{params[:position]}不存在或者不在所盘仓库"}
+            return msg
+          else
+            params[:position]=InventoryList.position_ids(params[:inventory_list_id], params[:position])
+          end
         end
 
         msg = InventoryListItem.condition_positions params
@@ -54,10 +59,22 @@ module V3
       end
       get :search_position do
 
-        if params[:position] && InventoryList.validate_position(params[:inventory_list_id], params[:position])
-          msg= {result: 0, content: "库位#{params[:position]}不存在或者不在所盘仓库"}
-          return msg
+        # if params[:position] && InventoryList.validate_position(params[:inventory_list_id], params[:position])
+        #   msg= {result: 0, content: "库位#{params[:position]}不存在或者不在所盘仓库"}
+        #   return msg
+        # else
+        #   params[:position]=InventoryList.position_ids(params[:inventory_list_id], params[:position])
+        # end
+
+        if params[:position].present?
+          if InventoryList.validate_position(params[:inventory_list_id], params[:position])
+            msg= {result: 0, content: "库位#{params[:position]}不存在或者不在所盘仓库"}
+            return msg
+          else
+            params[:position]=InventoryList.position_ids(params[:inventory_list_id], params[:position])
+          end
         end
+
 
         msg = InventoryListItem.search_condition_positions params
         if msg.result

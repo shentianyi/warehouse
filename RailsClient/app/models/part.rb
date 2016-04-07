@@ -18,6 +18,10 @@ class Part < ActiveRecord::Base
   has_many :containers
   #has_many :inventory_list_items
 
+  def package_name
+    self.package_type.blank? ? '' : self.package_type.name
+  end
+
   def self.exists?(nr)
     Part.find_by_nr(nr)
   end

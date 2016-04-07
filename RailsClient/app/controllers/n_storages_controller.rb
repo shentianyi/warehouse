@@ -93,6 +93,11 @@ class NStoragesController < ApplicationController
         query=query.unscope(where: :position_id).where(position_id: position.id)
       end
 
+      unless params[:part][:package_type].blank?
+        query=query.joins(:part).where(parts: {package_type_id: params[:part][:package_type]})
+        instance_variable_set("@package_type", params[:part][:package_type])
+      end
+
       query
     }
   end
@@ -111,6 +116,11 @@ class NStoragesController < ApplicationController
     end
     query=model.unscoped
     where_comdition = ""
+
+    unless params[:part][:package_type].blank?
+      query=query.joins(:part).where(parts: {package_type_id: params[:part][:package_type]})
+      instance_variable_set("@package_type", params[:part][:package_type])
+    end
 
     @condition.each do |k, v|
       if (v.is_a?(Fixnum) || v.is_a?(String)) && !v.blank?
@@ -165,7 +175,12 @@ class NStoragesController < ApplicationController
         else
           where_comdition += "AND locked = 0 "
         end
-        query = NStorage.find_by_sql("select SUM(n_storages.qty) as total_qty, n_storages.* from n_storages #{where_comdition} group by n_storages.partNr, n_storages.ware_house_id, n_storages.position_id")
+        unless params[:part][:package_type].blank?
+          query = NStorage.find_by_sql("select SUM(n_storages.qty) as total_qty, n_storages.* from n_storages INNER JOIN parts ON parts.id = n_storages.partNr #{where_comdition} And parts.package_type_id=#{params[:part][:package_type]} group by n_storages.partNr, n_storages.ware_house_id, n_storages.position_id")
+          instance_variable_set("@package_type", params[:part][:package_type])
+        else
+          query = NStorage.find_by_sql("select SUM(n_storages.qty) as total_qty, n_storages.* from n_storages #{where_comdition} group by n_storages.partNr, n_storages.ware_house_id, n_storages.position_id")
+        end
       end
     end
 
@@ -173,7 +188,7 @@ class NStoragesController < ApplicationController
 
     respond_to do |format|
       format.xlsx do
-        send_data(query.to_total_xlsx(query),
+        send_data(query.to_total_xlsx(query, params[:part][:package_type]),
                   :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
                   :filename => "库存查询导出.xlsx")
       end
