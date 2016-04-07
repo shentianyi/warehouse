@@ -36,6 +36,14 @@
 
     <script type="text/javascript" charset="utf-8">
         AddMeta('viewport', 'width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no');
+
+        mui.init({
+            gestureConfig: {
+                longtap: true,
+                doubletap: true
+            }
+        });
+
         document.addEventListener('tap', function () {
             var alert_msg = "<%= alert %>";
             if (alert_msg == "") {

@@ -235,7 +235,7 @@
       </div>
     </div>
 
-    <!--<div id="middlePopover" class="mui-popover">
+    <div id="middlePopover" class="mui-popover">
       <div class="mui-popover-arrow"></div>
       <div class="mui-scroll-wrapper">
         <div class="mui-scroll">
@@ -244,7 +244,6 @@
         </div>
       </div>
     </div>
--->
 
     <script type="text/javascript" charset="utf-8">
         var ClientWidth = document.documentElement.clientWidth;
@@ -261,51 +260,63 @@
                 '<div class="mui-slider-handle"><div class="mui-table-cell"><div class="mui-segmented-control mui-control-body"><span class="mui-list-item">' + '<%= pick_list.id %>' + '</span>' +
                 '<marquee class="mui-list-item" scrollamount="2" scrolldelay="50" hspace="3"  behavior="scroll">' + '<%= pick_list.object_id %>' + '</marquee>' +
                 '<span class="mui-list-item">' + '<%= pick_list.user_id %>' + '</span>' +
-                '<marquee class="mui-list-item" scrollamount="2" scrolldelay="50" hspace="3"  behavior="scroll">' + '<%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %>' + '</marquee>' +
+                '<marquee class="mui-list-item" scrollamount="2" scrolldelay="50" hspace="3" behavior="scroll">' + '<%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %>' + '</marquee>' +
                 '</div></div></div></li></div>').appendTo('.table-show').ready(function () {
         });
         <% end %>
 
-        $('.show-details').click(function () {
-            var MarginTop = $(this).offset().top;
-            var RealTop = MarginTop + 50;
-            mui('#middlePopover').popover('show');
+        $('.mui-segmented-control').on("doubletap", '.mui-table-cell', function () {
+            var ID = $(this).children('div').children('span').html();
+            var ObjectID = $(this).children('div').children('marquee').html();
+            var UserID = $(this).children('div').children('marquee').next().html();
+            var CreateAt = $(this).children('div').children('marquee').next().next().html();
 
-            if (RealTop > ($(window).height() - 200)) {
-                $('#middlePopover').css({
-                    top: RealTop - 260,
-                    left: '75px',
-                    transform: 'rotate(180deg)'
-                });
-                $('.mui-popover-arrow').css({
-                    left: '75px'
-                });
+            mui.toast("择货单号:" + ID + '<br/>' + "要货项目:" + ObjectID + '<br/>' + "要货员工:" + UserID + '<br/>' + "创建时间:" + CreateAt);
 
-                $('.mui-scroll-wrapper').css({
-                    transform: 'rotate(-180deg)'
-                })
-            } else {
-                $('#middlePopover').css({
-                    top: RealTop,
-                    left: '75px'
-                });
-                $('.mui-popover-arrow').css({
-                    left: (ClientWidth - 150) + 'px'
-                });
-            }
-//            $('.show-details-list').children().remove();
-
-            /*var ID = $(this).attr('id');
-             var ObjectID = $(this).attr('object_id');
-             var UserID = $(this).attr('user_id');
-             var CreateAt = $(this).attr('create_at');
-
-             $('<li class="mui-table-view-cell">择货单号:&emsp;' + ID + '</li>' +
-             '<li class="mui-table-view-cell">要货项目:&emsp;' + ObjectID + '</li>' +
-             '<li class="mui-table-view-cell">要货员工:&emsp;' + UserID + '</li>' +
-             '<li class="mui-table-view-cell">创建时间:&emsp;' + CreateAt + '</li>').appendTo('.show-details-list').ready(function () {
-             });*/
+//            ShowPopOver(ID, ObjectID, UserID, CreateAt);
         });
+
+        //        function ShowPopOver(ID, ObjectID, UserID, CreateAt) {
+        //            var MarginTop = $(this).offset().top;
+        //            var RealTop = MarginTop + 50;
+        //
+        //            mui.toast("Hello");
+        //
+        //            mui.toast(ID + ' ' + ObjectID + ' ' + UserID + ' ' + CreateAt);
+        //
+        //            mui('#middlePopover').popover('show');
+        //
+        //            if (RealTop > ($(window).height() - 200)) {
+        //                $('#middlePopover').css({
+        //                    top: RealTop - 260,
+        //                    left: '75px',
+        //                    transform: 'rotate(180deg)'
+        //                });
+        //                $('.mui-popover-arrow').css({
+        //                    left: '75px'
+        //                });
+        //
+        //                $('.mui-scroll-wrapper').css({
+        //                    transform: 'rotate(-180deg)'
+        //                })
+        //            } else {
+        //                $('#middlePopover').css({
+        //                    top: RealTop,
+        //                    left: '75px'
+        //                });
+        //                $('.mui-popover-arrow').css({
+        //                    left: (ClientWidth - 150) + 'px'
+        //                });
+        //            }
+        //
+        //            $('.show-details-list').children().remove();
+        //
+        //            $('<li class="mui-table-view-cell">择货单号:&emsp;' + ID + '</li>' +
+        //                    '<li class="mui-table-view-cell">要货项目:&emsp;' + ObjectID + '</li>' +
+        //                    '<li class="mui-table-view-cell">要货员工:&emsp;' + UserID + '</li>' +
+        //                    '<li class="mui-table-view-cell">创建时间:&emsp;' + CreateAt + '</li>').appendTo('.show-details-list').ready(function () {
+        //            });
+        //        }
 
         $('.pick_list_search').click(function () {
             $('.search').slideToggle();
