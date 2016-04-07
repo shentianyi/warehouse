@@ -8,6 +8,7 @@ ActiveRecord::Base.transaction do
     t2=Tenant.create(name: '萧山佳轩物流有限公司', code: 'XSJX', short_name: '萧山佳轩简称', type: TenantType::SELF)
   end
 
+  
   # init location and admin
   unless (jxlo=Location.find_by_nr('SHJXLO'))
     jxlo = Location.create(nr: 'SHJXLO', name: '上海佳轩物流', is_base: true,
