@@ -175,15 +175,6 @@
       </ul>
     </div>
 
-    <!--Please Change send url-->
-    <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
-      <div class="mui-input-row mui-search">
-        <input type="search" ame="pick_item[part_id]" value="<%= @part_id %>" class="mui-input-clear" placeholder="备注" style="width: 78%;">
-        <input type="submit" value="查 找" class="mui-pull-right" style="height: 34px;line-height: 20px;"/>
-        <input type="hidden" name="pick_item[part_id_fuzzy]"/>
-      </div>
-    </form>
-
     <button class="mui-btn mui-btn-primary check-box-submit">提交</button>
 
     <div class="table-show">
@@ -294,7 +285,7 @@
                     mui.alert('正在提交', '提交状态', function () {
                     });
 
-                    $('.mui-popup-text').html("<i class='fa fa-spinner fa-spin'></i>submitting...");
+                    $('.mui-popup-text').html("<i class='fa fa-spinner fa-spin fa-3x'></i>&emsp;0<b style='font-size: 17px;'>submitting...</b>");
 
                     var CheckBoxID = new Array();
                     $('.check-box-content').each(function () {

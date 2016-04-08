@@ -237,7 +237,7 @@ class OrderService
                                        qty: pick_item.quantity,
                                        fromWh: from_wh.id,
                                        toWh: pick_item.destination_whouse_id,
-                                       toPosition: pick_item.position_id.blank? ? (pick_position.blank? ? "" : pick_position.detail) : pick_item.position_id,
+                                       toPosition: pick_item.position_id.blank? ? (pick_position.blank? ? "" : pick_position.position.detail) : pick_item.position_id,
                                        remarks: "MOVE FROM PICK: #{pick_item.remark}"
                                    })
           else
