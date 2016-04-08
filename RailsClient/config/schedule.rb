@@ -27,3 +27,13 @@ end
 #every 1.minute do
 #  runner 'script/test/test_delivery.rb'
 #end
+
+
+#every '0 7 3 * *' do
+#  runner "script/migrate/balance_storage.rb"
+#end
+
+
+#every '0 8 3 * *' do
+#  runner "script/migrate/balance_storage2.rb"
+#end

@@ -2,7 +2,7 @@ class NStorage < ActiveRecord::Base
   belongs_to :ware_house, class_name: 'Whouse'
   default_scope { where(locked: false) }
 
-  before_validation :validate
+  # before_validation :validate
 
   has_paper_trail
 
