@@ -230,13 +230,14 @@ class OrderService
           #move stock
           if from_wh=Whouse.find_by_id('3EX')
             pick_item.update_attribute(:remark, "已完成择货")
+            pick_position = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id)
             WhouseService.new.move({
                                        employee_id: user.id,
                                        partNr: pick_item.part_id,
                                        qty: pick_item.quantity,
                                        fromWh: from_wh.id,
                                        toWh: pick_item.destination_whouse_id,
-                                       toPosition: pick_item.position_id,
+                                       toPosition: pick_item.position_id.blank? ? (pick_position.blank? ? "" : pick_position.detail) : pick_item.position_id,
                                        remarks: "MOVE FROM PICK: #{pick_item.remark}"
                                    })
           else

@@ -56,7 +56,8 @@
               <td><%= pick_item.user_id %></td>
               <td><%= pick_item.destination_whouse.name %></td>
               <td>
-                <% if pp = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id) %><%= pp.position.detail %>
+                <% if pp = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id) %>
+                    <%= pp.position.detail %>
                 <% end %></td>
               <td><%= '是' if pick_item.is_emergency %></td>
               <td><%= pick_item.remark %></td>
