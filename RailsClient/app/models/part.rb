@@ -1,6 +1,8 @@
 class Part < ActiveRecord::Base
   include Extensions::UUID
   include Import::PartCsv
+  validates_presence_of :nr, :message => "nr不能为空!"
+  validates_uniqueness_of :nr, :message => "nr不能重复!"
 
   belongs_to :user
   belongs_to :part_type
@@ -15,6 +17,10 @@ class Part < ActiveRecord::Base
 
   has_many :containers
   #has_many :inventory_list_items
+
+  def package_name
+    self.package_type.blank? ? '' : self.package_type.name
+  end
 
   def self.exists?(nr)
     Part.find_by_nr(nr)

@@ -22,40 +22,62 @@ module FileHandler
                 pick.user=user
                 pick.remark="AUTO CREATE BY ORDER"
 
+                part_ids=[]
+                records={}
                 2.upto(book.last_row) do |line|
                   row = {}
                   HEADERS.each_with_index do |k, i|
                     row[k] = book.cell(line, i+1).to_s.strip
                     row[k]=row[k].sub(/\.0/, '') if k=='莱尼号码'
                   end
-
                   batch_nr=row['报缺日期'].gsub(/,/, '') + row['报缺时间'].slice(0...2)
-                  part=PartClient.where(client_tenant_id: Tenant.find_by_code('SHL').id, client_part_nr: row['莱尼号码']).first.part
+
+                  part_ids<<row['莱尼号码']
+                  if records[row['莱尼号码']]
+                    records[row['莱尼号码']][:qty]=records[row['莱尼号码']][:qty].to_i + row['桶数'].to_i
+                  else
+                    records[row['莱尼号码']]={
+                        part_id: row['莱尼号码'],
+                        qty: row['桶数'],
+                        batch_nr: batch_nr
+                    }
+                  end
+                end
+
+
+                part_ids.uniq.each do |id|
+                  part=nil
+                  if part_client=PartClient.where(client_tenant_id: Tenant.find_by_code('SHL').id, client_part_nr: id).first
+                    part = part_client.part
+                  end
+
                   order_item=OrderItem.new({
-                                               part_id: part.id,
-                                               part_type_id: part.part_type_id,
-                                               quantity: row['桶数']
+                                               part_id: part.blank? ? id : part.id,
+                                               part_type_id: part.blank? ? '' : part.part_type_id,
+                                               quantity: records[id][:qty],
+                                               remark: NStorageService.get_remark(part, user.location, records[id][:qty].to_i)
                                            })
                   order_item.user=user
                   order_item.order = order
+                  order_item.location_id=user.location.id
                   order_item.handled=true
 
                   if order_item.save
                     pick_item=PickItem.new(
-                        batch_nr: batch_nr,
+                        batch_nr: records[id][:batch_nr],
                         user_id: user.id,
-                        part_id: part.id,
-                        quantity: row['桶数'],
+                        part_id: part.blank? ? id : part.id,
+                        quantity: records[id][:qty],
                         state: PickStatus::INIT,
-                        remark: "AUTO CREATE BY ORDER"
+                        remark: NStorageService.get_remark(part, user.location, records[id][:qty].to_i)
                     )
                     pick_item.order_item=order_item
                     pick.pick_items<<pick_item
                   end
                 end
+
                 pick.order_ids=order.order_items.pluck(:id).join(";")
                 pick.save
-
               end
 
             end

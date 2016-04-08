@@ -25,5 +25,20 @@ class NStorageService
                    ware_house_id: (location.whouses.pluck(:id)-[location.send_whouse.id])).count
   end
 
+  def self.get_remark part, location, qty
+    if part
+      count=NStorage.where(partNr: part.id,  ware_house_id: (location.whouses.pluck(:id)-[location.send_whouse.id])).count
+      if count==0
+        "零库存"
+      elsif count<qty
+        "库存不足"
+      else
+        ""
+      end
+    else
+      "仓库无此型号"
+    end
+  end
+
 
 end

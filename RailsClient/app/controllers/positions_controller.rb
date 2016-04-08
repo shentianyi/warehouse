@@ -5,7 +5,7 @@ class PositionsController < ApplicationController
   # GET /positions
   # GET /positions.json
   def index
-    @positions = Position.paginate(:page=>params[:page])#all
+    @positions = Position.order(nr: :asc).paginate(:page=>params[:page])#all
     #@positions = @positions.paginate(:page=>params[:page])
   end
 

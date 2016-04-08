@@ -69,6 +69,6 @@ class PickItemsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def pick_item_params
-      params.require(:pick_item).permit(:id, :part_id, :quantity,:box_quantity,:destination_whouse_id,:state)
+      params.require(:pick_item).permit(:id, :part_id, :quantity,:box_quantity,:destination_whouse_id,:state, :remark)
     end
 end

@@ -16,7 +16,7 @@ module FileHandler
 
         validate_msg = validate_import(file)
         if validate_msg.result
-          begin
+          # begin
             ActiveRecord::Base.transaction do
               book=Roo::Excelx.new file.full_path
 
@@ -153,10 +153,10 @@ module FileHandler
 
             msg.content ='处理成功'
             msg.result =true
-          rescue => e
-            msg.result=false
-            msg.content = e.message
-          end
+          # rescue => e
+          #   msg.result=false
+          #   msg.content = e.message
+          # end
         else
           msg.result = false
           msg.content = validate_msg.content

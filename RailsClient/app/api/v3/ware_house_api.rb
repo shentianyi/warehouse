@@ -65,7 +65,7 @@ module V3
         params[:fromPosition]=params[:fromPosition].sub(/LO/, '') if params[:fromPosition].present?
 
         params[:partNr]=params[:partNr].sub(/P/, '') if params[:partNr].present?
-        params[:employee_id] = 'PMS API CALL'
+        # params[:employee_id] = 'PMS API CALL'
         puts "#{params.to_json}-----------"
         begin
           params[:qty]=params[:qty].sub(/Q/, '').to_f if params[:qty].present?
@@ -78,6 +78,20 @@ module V3
           unless msg.result
             return {result: 0, content: msg.content}
           end
+
+          part=Part.find_by_nr(params[:partNr])
+          fromWh=Whouse.find_by_nr(params[:fromWh])
+          fromPosition=Position.find_by_nr(params[:fromPosition])
+          toWh=Whouse.find_by_nr(params[:toWh])
+          toPosition=Position.find_by_nr(params[:toPosition])
+
+          params[:toWh] = toWh.id
+          params[:toPosition] = toPosition.id
+          params[:fromWh] = fromWh.blank? ? nil : fromWh.id
+          params[:fromPosition] = fromPosition.blank? ? nil : fromPosition.id
+          params[:partNr] = part.blank? ? nil : part.id
+          params[:qty] = params[:qty].present? ? params[:qty].to_f : nil
+          params[:packageId] = params[:packageId].present? ? params[:packageId].sub(/S/, '') : nil
 
           NStorage.transaction do
             WhouseService.new.move(params)

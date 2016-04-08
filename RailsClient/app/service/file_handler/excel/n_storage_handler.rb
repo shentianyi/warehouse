@@ -6,8 +6,9 @@ module FileHandler
           :toWh, :partNr, :fifo, :qty, :toPosition, :packageId, :employee_id, :remarks
       ]
 
+      #:fromWh, :fromPosition, :packageId, :partNr, :qty, :fifo, :toWh, :toPosition, :employee_id, :remarks
       MOVE_HEADERS = [
-          :fromWh, :fromPosition, :packageId, :partNr, :qty, :fifo, :toWh, :toPosition, :employee_id, :remarks
+          :fromWh, :fromPosition, :packageId, :partNr, :fifo, :toWh, :toPosition, :employee_id, :remarks
       ]
 
       def self.import(file, current_user)
@@ -102,6 +103,10 @@ module FileHandler
                   row[:fromPosition]=fromPosition.id
                 end
 
+                if package = NStorage.exists_package?(row[:packageId])
+                  row[:qty]=package.qty
+                end
+
                 row[:movement_list_id] = move_list.id
                 MovementSource.create(row)
 
@@ -164,7 +169,7 @@ module FileHandler
         # StorageOperationRecord.save_record(row, 'ENTRY')
 
         if row[:packageId].present?
-          unless packageId = Container.exists?(row[:packageId])
+          unless package = Container.exists?(row[:packageId])
             msg.contents << "唯一码:#{row['packageId']} 不存在!"
           end
         end
@@ -355,9 +360,11 @@ module FileHandler
             end
           end
 
-          msg.contents << "数量: #{row[:qty]} 不可以小于等于 0!" if row[:qty].to_f < 0
+          # msg.contents << "数量: #{row[:qty]} 不可以小于等于 0!" if row[:qty].to_f <= 0
 
         else
+
+          msg.contents << "唯一码不能为空!"
 
           if row[:partNr].blank?
             msg.contents << "零件号不能为空!"

@@ -42,19 +42,26 @@
 <div class="all-search">
   <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
     <div class="col-sm-12">
-      <div class="col-sm-3">
+      <div class="col-sm-4">
         零件号：
         <input type="text" name="n_storage[partNr]" value="<%= @partNr %>"/>
       </div>
-      <div class="col-sm-3">
+      <div class="col-sm-4">
+        包装类型：
+        <%= select_tag('part[package_type]', options_from_collection_for_select(PackageType.all, :id, :name, @package_type), include_blank: true) %>
+      </div>
+    </div>
+
+    <div class="col-sm-12">
+      <div class="col-sm-4">
         仓库号：
         <%= select_tag('n_storage[ware_house_id]', options_from_collection_for_select(Whouse.all, :nr, :name, @ware_house_id), include_blank: true) %>
       </div>
-      <div class="col-sm-3">
+      <div class="col-sm-4">
         库位号：
         <input type="text" name="n_storage[position_id]" value="<%= @position_id %>"/>
       </div>
-      <div class="col-sm-3">
+      <div class="col-sm-4">
         唯一码：
         <input type="text" name="n_storage[packageId]" value="<%= @packageId %>"/>
         <input type="hidden" name="n_storage[packageId_fuzzy]"/>
@@ -111,6 +118,7 @@
   <tr>
     <th>NO.</th>
     <th>零件号</th>
+    <th>包装类型</th>
     <th>唯一码</th>
     <th>库存量</th>
     <th>FIFO</th>
@@ -126,6 +134,7 @@
       <tr>
         <td><%= i+@n_storages.offset+1 %></td>
         <td><%= storage.part.nr if storage.part.present? %></td>
+        <td><%= storage.part.package_name if storage.part.present? %></td>
         <td><%= storage.packageId %></td>
         <td><%= storage.qty %></td>
         <td><%= storage.fifo.localtime if storage.fifo %> </td>

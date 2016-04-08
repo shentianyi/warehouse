@@ -1,18 +1,33 @@
 class InventoryListItem < ActiveRecord::Base
   #belongs_to :package
   #belongs_to :part
-  # belongs_to :position
+  belongs_to :position_object,class_name: 'Position',foreign_key: :position
+  belongs_to :part
   belongs_to :user
   belongs_to :whouse
   belongs_to :inventory_list
+
+
+  belongs_to :current_whouse_object,class_name: 'Whouse',foreign_key: :current_whouse
+  belongs_to :current_position_object,class_name: 'Position',foreign_key: :current_position
 
   validates :qty, :inventory_list_id, presence: true
   validates_inclusion_of :in_store, in: [true, false]
 
   has_paper_trail
 
+  def position_nr
+    if p=Position.find_by_id(self.position)
+      p.nr
+    end
+  end
+
   def self.new_item(params, query=true)
     # 根据参数组合情况获取nstorage end
+    part=Part.find_by_nr(params[:part_id])
+    params[:part_id]=part.blank? ? params[:part_id] : part.id
+    position=Position.find_by_nr(params[:position])
+    params[:position]=position.blank? ? params[:position] : position.id
     if query
       query = NStorage.new
 
@@ -48,7 +63,7 @@ class InventoryListItem < ActiveRecord::Base
         end
       end
     end
-    part=Part.find_by_nr(params[:part_id])
+
     if params[:need_convert]
       params[:qty]=BigDecimal.new(params[:qty].to_s)/BigDecimal.new(part.convert_unit.to_s)
     else
@@ -164,11 +179,14 @@ class InventoryListItem < ActiveRecord::Base
       record = {}
       record[:id] = item.id
       record[:part_id] = item.part_id
+      record[:part_nr]= item.part.blank? ? '' : item.part.nr
       record[:package_id] = item.package_id
       record[:qty] = item.qty
       record[:fifo] = item.fifo.blank? ? '' : item.fifo.localtime.strftime('%Y-%m-%d')
-      record[:position] = item.position
+      record[:position_id] = item.position
+      record[:position_nr] = item.position_nr
       record[:whouse_id] = item.whouse_id
+      record[:whouse_nr] = item.whouse.blank? ? '' : item.whouse.nr
       records[index] = record
     end
 
@@ -190,7 +208,7 @@ class InventoryListItem < ActiveRecord::Base
 
     record = []
     items.each_with_index do |item, index|
-      record[index] = {position: item.position, count: item.count}
+      record[index] = {position_nr: item.position_nr,position_id:item.position, count: item.count}
     end
 
     msg.content = record
@@ -206,7 +224,7 @@ class InventoryListItem < ActiveRecord::Base
 
     record = []
     items.each_with_index do |item, index|
-      record[index] = {position: item.position, count: item.count}
+      record[index] = {position_nr: item.position_nr,position_id:item.position, count: item.count}
     end
 
     # records = []

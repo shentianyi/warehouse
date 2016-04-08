@@ -90,7 +90,7 @@
         <td><%= i+1 %></td>
         <td><%= inventory_list.name %></td>
         <td><%= InventoryListState.display inventory_list.state %></td>
-        <td><%= inventory_list.whouse.blank? ? '' : inventory_list.whouse.nr %></td>
+        <td><%= inventory_list.whouse.blank? ? '' : inventory_list.whouse.name %></td>
 
         <td>
           <%= link_to content_tag(:span, '清单列表', :class => 'label label-primary'), inventory_list_items_inventory_list_path(inventory_list) %>
