@@ -13,7 +13,7 @@ class PickItem < ActiveRecord::Base
 
   def remark
     if self.order_item
-      self.order_item.remark
+      self.order_item.remark||=self.remark
     end
   end
 
