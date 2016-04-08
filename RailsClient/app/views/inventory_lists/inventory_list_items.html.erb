@@ -129,8 +129,10 @@
         <td><%= inventory_list_item.origin_qty %></td>
         <td><%= inventory_list_item.position_nr %></td>
         <td><%= inventory_list_item.package_id %></td>
-        <td><%= inventory_list_item.current_whouse %></td>
-        <td><%= inventory_list_item.current_position %></td>
+
+        <td><%= inventory_list_item.current_whouse_object.nr if inventory_list_item.current_whouse_object %></td>
+        <td><%= inventory_list_item.current_position_object.nr if inventory_list_item.current_position_object %></td>
+
 
         <td><%= inventory_list_item.part_form_mark %></td>
         <td><%= inventory_list_item.part_wire_mark %></td>

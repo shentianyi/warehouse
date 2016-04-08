@@ -1,11 +1,15 @@
 class InventoryListItem < ActiveRecord::Base
   #belongs_to :package
   #belongs_to :part
-  # belongs_to :position
+  belongs_to :position_object,class_name: 'Position',foreign_key: :position
   belongs_to :part
   belongs_to :user
   belongs_to :whouse
   belongs_to :inventory_list
+
+
+  belongs_to :current_whouse_object,class_name: 'Whouse',foreign_key: :current_whouse
+  belongs_to :current_position_object,class_name: 'Position',foreign_key: :current_position
 
   validates :qty, :inventory_list_id, presence: true
   validates_inclusion_of :in_store, in: [true, false]
