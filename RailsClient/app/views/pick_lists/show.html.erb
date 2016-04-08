@@ -140,91 +140,15 @@
             margin: -30px 0 5px 0;
         }
 
-        .mui-segmented-control {
-            border-radius: 0;
-            border: none;
-            border-right: 1px solid steelblue;
-        }
-
-        .mui-control-header {
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-            border-top: 1px solid steelblue;
-            border-bottom: 1px solid steelblue;
-            font-weight: bold;
-        }
-
-        .mui-control-body {
-            border: none;
-            border-bottom: 1px solid steelblue;
-        }
-
-        .mui-list-item {
-            height: 50px;
-            line-height: 50px;
-            display: table-cell;
-            width: 1%;
-            -webkit-transition: background-color .1s linear;
-            transition: background-color .1s linear;
-            text-align: center;
-            border-color: steelblue;
-            border-left: 1px solid steelblue;
-            border-top: none;
-        }
-
-        .show-details {
-            margin-top: -2px;
-        }
-
-        .table-show {
-            margin-bottom: 60px;
-        }
-
-        .mui-popover {
-            height: 200px;
-        }
-
-        .show-details-list > li {
-            padding: 11px 15px;
-        }
-
-        .digg_pagination {
-            background: transparent;
-            margin: -40px -20px 0 20px;
-        }
-
-        .digg_pagination .page_info {
-            width: auto;
-            margin-left: -40px;
-        }
-
-        .page_info b {
-            border-radius: 5px;
-            color: white;
-        }
-
-        .digg_pagination a, .digg_pagination span, .digg_pagination em {
-            border-radius: 5px;
-            margin-bottom: 5px;
-        }
-
-        .digg_pagination a:active, .digg_pagination a:focus, .digg_pagination a:link, a:hover, a:focus, a:link {
-            background-color: transparent;
-            text-decoration: none;
-        }
-
-        a:active, a:hover, a:link {
-            background-color: transparent;
-            text-decoration: none;
-        }
-
         .check-box-submit {
             width: 100%;
             margin-bottom: 5px;
             display: none;
         }
     </style>
+
     <%= render 'style' %>
+
     <div class="mui-card">
       <ul class="mui-table-view">
         <li class="mui-table-view-cell mui-collapse">
@@ -250,8 +174,16 @@
       </ul>
     </div>
 
-    <button class="mui-btn mui-btn-primary check-box-submit">提交</button>
+    <!--Please Change send url-->
+    <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+      <div class="mui-input-row mui-search">
+        <input type="search" ame="pick_item[part_id]" value="<%= @part_id %>" class="mui-input-clear" placeholder="备注" style="width: 78%;">
+        <input type="submit" value="查 找" class="mui-pull-right" style="height: 34px;line-height: 20px;"/>
+        <input type="hidden" name="pick_item[part_id_fuzzy]"/>
+      </div>
+    </form>
 
+    <button class="mui-btn mui-btn-primary check-box-submit">提交</button>
 
     <div class="table-show">
       <div class="mui-segmented-control mui-control-header">
@@ -275,30 +207,25 @@
         AddMeta('apple-mobile-web-app-status-bar-style', 'black');
 
         <% @pick_items.each_with_index do |pick_item, index| %>
-        if ('<%= pick_item.is_emergency %>' == "true") {
-            $('<div class="mui-segmented-control"><li class="mui-table-view-cell" style="padding: 0;list-style: none;">' +
-                    '<div class="mui-slider-handle">' +
-                    '<div class="mui-table-cell" style="background:#F4A460;">' +
-                    '<div class="mui-segmented-control mui-control-body">' +
-                    '<div class="mui-list-item" style="width:1px;"><input id="<%= pick_item.id %>" class="check-box-content" name="checkbox" value="false" type="checkbox"></div>' +
-                    '<div class="mui-list-item"><marquee scrollamount="2" scrolldelay="0" style="color: white;margin-bottom:-20px;" behavior="scroll">' + '<%= pick_item.part_id %>' + '</marquee></div>' +
-                    '<div class="mui-list-item"><span style="color: white;">' + '<%= pick_item.quantity %>' + '</span></div>' +
-                    '<div class="mui-list-item"><marquee  scrollamount="2" scrolldelay="0" style="color: white;margin-bottom:-20px;" behavior="scroll">' + '<% if pp = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id) %><%= pp.position.detail %><% end %>' + '</marquee></div>' +
-                    '</div></div></li></div>').appendTo('.table-show').ready(function () {
-            });
+        if ('<%= pick_item.is_emergency %>' == "true" || '<%= pick_item.remark %>' == "缺货") {
+            show_table_fun('#F4A460', 'white', '<%= pick_item.id %>', '<%= pick_item.part_id %>', '<%= pick_item.quantity %>', '<%= pick_item.pick_position %>');
         } else {
+            show_table_fun('white', 'black', '<%= pick_item.id %>', '<%= pick_item.part_id %>', '<%= pick_item.quantity %>', '<%= pick_item.pick_position %>');
+        }
+        <% end %>
+
+        function show_table_fun(bgcolor, fontcolor, id, part_id, quantity, pick_position) {
             $('<div class="mui-segmented-control"><li class="mui-table-view-cell" style="padding: 0;list-style: none;">' +
                     '<div class="mui-slider-handle">' +
-                    '<div class="mui-table-cell">' +
+                    '<div class="mui-table-cell" style="background:' + bgcolor + '">' +
                     '<div class="mui-segmented-control mui-control-body">' +
-                    '<div class="mui-list-item" style="width:1px;"><input id="<%= pick_item.id %>" class="check-box-content" name="checkbox" value="false" type="checkbox"></div>' +
-                    '<div class="mui-list-item" ><marquee scrollamount="2" scrolldelay="0" style="margin-bottom:-20px;" behavior="scroll">' + '<%= pick_item.part_id %>' + '</marquee></div>' +
-                    '<span class="mui-list-item">' + '<%= pick_item.quantity %>' + '</span>' +
-                    '<marquee class="mui-list-item" scrollamount="2" scrolldelay="0" style="margin-bottom:-20px;" behavior="scroll">' + '<% if pp = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id) %><%= pp.position.detail %><% end %>' + '</marquee>' +
+                    '<div class="mui-list-item" style="width:1px;"><input id=' + part_id + ' class="check-box-content" name="checkbox" value="false" type="checkbox"></div>' +
+                    '<div class="mui-list-item"><marquee scrollamount="2" scrolldelay="0" style="color:' + fontcolor + ';margin-bottom:-20px;" behavior="scroll">' + part_id + '</marquee></div>' +
+                    '<div class="mui-list-item"><span style="color: ' + fontcolor + '">' + quantity + '</span></div>' +
+                    '<div class="mui-list-item"><marquee  scrollamount="2" scrolldelay="0" style="color: ' + fontcolor + ';margin-bottom:-20px;" behavior="scroll">' + pick_position + '</marquee></div>' +
                     '</div></div></li></div>').appendTo('.table-show').ready(function () {
             });
         }
-        <% end %>
 
         $('.mui-choose-all').click(function () {
             if (this.checked) {
@@ -347,11 +274,16 @@
                         }
                     });
 
+                    var id = $('#pick-list').attr('pick_id');
+
+                    console.log(id);
+                    console.log(CheckBoxID);
                     $.ajax({
                         url: '/',
                         type: 'post',
                         data: {
-                            id: CheckBoxID
+                            id: "<%= @pick_list.id %>",
+                            part_id: CheckBoxID
                         },
                         success: function (data) {
                             $('.mui-popup-text').html("<span class='fa fa-check-circle-o fa-3x' style='color:springgreen;'></span>");
