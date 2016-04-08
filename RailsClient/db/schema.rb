@@ -160,7 +160,6 @@ ActiveRecord::Schema.define(version: 20160307064434) do
     t.boolean  "need_convert",                                default: false
     t.boolean  "locked",                                      default: false
     t.boolean  "in_stored",                                   default: false
-    t.string   "remark"
   end
 
   create_table "inventory_lists", force: true do |t|
@@ -302,40 +301,10 @@ ActiveRecord::Schema.define(version: 20160307064434) do
     t.datetime "updated_at"
   end
 
-  create_table "movement_lists", force: true do |t|
-    t.string   "uuid",       limit: 36,                 null: false
-    t.string   "name",                  default: ""
-    t.string   "state",                 default: "100"
-    t.string   "builder"
-    t.string   "remarks",               default: ""
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "movement_lists", ["id"], name: "index_movement_lists_on_id", using: :btree
-  add_index "movement_lists", ["uuid"], name: "index_movement_lists_on_uuid", using: :btree
-
-  create_table "movement_sources", force: true do |t|
-    t.string   "movement_list_id"
-    t.string   "fromWh"
-    t.string   "fromPosition"
-    t.string   "packageId"
-    t.string   "partNr"
-    t.float    "qty"
-    t.datetime "fifo"
-    t.string   "toWh"
-    t.string   "toPosition"
-    t.string   "employee_id"
-    t.string   "remarks"
-    t.string   "type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "movements", force: true do |t|
     t.string   "partNr"
     t.datetime "fifo"
-    t.decimal  "qty",              precision: 20, scale: 10
+    t.decimal  "qty",          precision: 20, scale: 10
     t.string   "from_id"
     t.string   "fromPosition"
     t.string   "to_id"
@@ -348,7 +317,6 @@ ActiveRecord::Schema.define(version: 20160307064434) do
     t.string   "remark"
     t.string   "remarks"
     t.string   "employee_id"
-    t.string   "movement_list_id"
   end
 
   add_index "movements", ["packageId"], name: "package_id_index", using: :btree
@@ -380,13 +348,8 @@ ActiveRecord::Schema.define(version: 20160307064434) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "locked",                                  default: false
-    t.text     "remarks"
-    t.string   "lock_user_id"
-    t.string   "lock_remark"
-    t.datetime "lock_at"
   end
 
-  add_index "n_storages", ["locked"], name: "index_n_storages_on_locked", using: :btree
   add_index "n_storages", ["packageId"], name: "package_id_index", using: :btree
   add_index "n_storages", ["storageId"], name: "storage_id_unique", unique: true, using: :btree
   add_index "n_storages", ["uniqueId"], name: "unique_id_unique", unique: true, using: :btree
@@ -434,16 +397,6 @@ ActiveRecord::Schema.define(version: 20160307064434) do
 
   add_index "oauth_applications", ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type", using: :btree
   add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
-
-  create_table "operation_logs", force: true do |t|
-    t.string   "item_type"
-    t.string   "item_id"
-    t.string   "event"
-    t.string   "whodunnit"
-    t.text     "object"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "order_box_types", force: true do |t|
     t.string   "name"
@@ -618,22 +571,21 @@ ActiveRecord::Schema.define(version: 20160307064434) do
   add_index "part_types", ["id"], name: "index_part_types_on_id", using: :btree
 
   create_table "parts", force: true do |t|
-    t.string   "uuid",          limit: 36,                                          null: false
+    t.string   "uuid",          limit: 36,                                           null: false
     t.string   "customernum"
     t.string   "user_id"
-    t.boolean  "is_delete",                                         default: false
-    t.boolean  "is_dirty",                                          default: true
-    t.boolean  "is_new",                                            default: true
+    t.boolean  "is_delete",                                          default: false
+    t.boolean  "is_dirty",                                           default: true
+    t.boolean  "is_new",                                             default: true
     t.datetime "created_at"
     t.datetime "updated_at"
     t.float    "unit_pack"
     t.string   "part_type_id"
-    t.decimal  "convert_unit",             precision: 10, scale: 0, default: 1
-    t.string   "unit"
+    t.decimal  "convert_unit",             precision: 20, scale: 10, default: 1.0
     t.string   "name"
     t.float    "cross_section"
     t.float    "weight"
-    t.float    "weight_range",                                      default: 0.1
+    t.float    "weight_range",                                       default: 0.1
   end
 
   add_index "parts", ["id"], name: "index_parts_on_id", using: :btree
@@ -848,22 +800,6 @@ ActiveRecord::Schema.define(version: 20160307064434) do
   end
 
   add_index "state_logs", ["id"], name: "index_state_logs_on_id", using: :btree
-
-  create_table "storage_operation_records", force: true do |t|
-    t.string   "partNr"
-    t.string   "qty"
-    t.string   "fromWh"
-    t.string   "fromPosition"
-    t.string   "toWh"
-    t.string   "toPosition"
-    t.string   "packageId"
-    t.string   "type_id"
-    t.string   "remarks"
-    t.string   "employee_id"
-    t.datetime "fifo"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "storages", force: true do |t|
     t.string   "location_id"
