@@ -144,7 +144,6 @@
         .check-box-submit {
             width: 100%;
             margin-bottom: 5px;
-            display: none;
         }
     </style>
 
@@ -175,7 +174,7 @@
       </ul>
     </div>
 
-    <button class="mui-btn mui-btn-primary check-box-submit">提交</button>
+    <button class="mui-btn mui-btn-primary check-box-submit">完成择货并移库</button>
 
     <div class="table-show">
       <div class="mui-segmented-control mui-control-header">
@@ -197,16 +196,47 @@
     <script type="text/javascript" charset="utf-8">
         AddMeta('apple-mobile-web-app-capable', 'yes');
         AddMeta('apple-mobile-web-app-status-bar-style', 'black');
-
-        <% @pick_items.each_with_index do |pick_item, index| %>
-        if ('<%= pick_item.is_emergency %>' == "true" || '<%= pick_item.remark %>' == "缺货") {
-            show_table_fun('#F4A460', 'white', '<%= pick_item.id %>', '<%= pick_item.part_id %>', '<%= pick_item.quantity %>', '<%= pick_item.pick_position %>');
+        if ('<%= @pick_items.length %>' > 0) {
+            <% @pick_items.each_with_index do |pick_item, index| %>
+            if ('<%= pick_item.state %>' == "300" || '<%= pick_item.state %>' == "2") {
+                if ('<%= pick_item.is_emergency %>' == "true") {
+                    show_list_checked_fun('#F4A460', 'white', '<%= pick_item.id %>', '<%= pick_item.part_id %>', '<%= pick_item.quantity %>', '<%= pick_item.pick_position %>');
+                } else if ('<%= pick_item.remark %>' == "缺货") {
+                    show_list_checked_fun('#C1CDC1', 'black', '<%= pick_item.id %>', '<%= pick_item.part_id %>', '<%= pick_item.quantity %>', '<%= pick_item.pick_position %>');
+                } else {
+                    show_list_checked_fun('white', 'black', '<%= pick_item.id %>', '<%= pick_item.part_id %>', '<%= pick_item.quantity %>', '<%= pick_item.pick_position %>');
+                }
+            }
+            else {
+                if ('<%= pick_item.is_emergency %>' == "true") {
+                    show_list_unchecked_fun('#F4A460', 'white', '<%= pick_item.id %>', '<%= pick_item.part_id %>', '<%= pick_item.quantity %>', '<%= pick_item.pick_position %>');
+                } else if ('<%= pick_item.remark %>' == "缺货") {
+                    show_list_unchecked_fun('#C1CDC1', 'black', '<%= pick_item.id %>', '<%= pick_item.part_id %>', '<%= pick_item.quantity %>', '<%= pick_item.pick_position %>');
+                } else {
+                    show_list_unchecked_fun('white', 'black', '<%= pick_item.id %>', '<%= pick_item.part_id %>', '<%= pick_item.quantity %>', '<%= pick_item.pick_position %>');
+                }
+            }
+            <% end %>
         } else {
-            show_table_fun('white', 'black', '<%= pick_item.id %>', '<%= pick_item.part_id %>', '<%= pick_item.quantity %>', '<%= pick_item.pick_position %>');
+            $('.mui-choose-all').css({
+                display: 'none'
+            });
         }
-        <% end %>
 
-        function show_table_fun(bgcolor, fontcolor, id, part_id, quantity, pick_position) {
+        function show_list_checked_fun(bgcolor, fontcolor, id, part_id, quantity, pick_position) {
+            $('<div class="mui-segmented-control"><li class="mui-table-view-cell" style="padding: 0;list-style: none;">' +
+                    '<div class="mui-slider-handle">' +
+                    '<div class="mui-table-cell" style="background:' + bgcolor + '">' +
+                    '<div class="mui-segmented-control mui-control-body">' +
+                    '<div class="mui-list-item" style="width:1px;"><input id=' + id + ' class="check-box-content" name="checkbox" value="false" type="checkbox" checked ></div>' +
+                    '<div class="mui-list-item"><marquee scrollamount="2" scrolldelay="0" style="color:' + fontcolor + ';margin-bottom:-20px;" behavior="scroll">' + part_id + '</marquee></div>' +
+                    '<div class="mui-list-item"><span style="color: ' + fontcolor + '">' + quantity + '</span></div>' +
+                    '<div class="mui-list-item"><marquee  scrollamount="2" scrolldelay="0" style="color: ' + fontcolor + ';margin-bottom:-20px;" behavior="scroll">' + pick_position + '</marquee></div>' +
+                    '</div></div></li></div>').appendTo('.table-show').ready(function () {
+            });
+        }
+
+        function show_list_unchecked_fun(bgcolor, fontcolor, id, part_id, quantity, pick_position) {
             $('<div class="mui-segmented-control"><li class="mui-table-view-cell" style="padding: 0;list-style: none;">' +
                     '<div class="mui-slider-handle">' +
                     '<div class="mui-table-cell" style="background:' + bgcolor + '">' +
@@ -222,21 +252,21 @@
         $('.mui-choose-all').click(function () {
             if (this.checked) {
                 $(":checkbox").attr("checked", true);
-                $('.check-box-submit').css({
-                    display: 'block'
-                });
                 $(".check-box-content").each(function () {
                     var pick_item_id = $(this).attr('id');
                     pick_item(pick_item_id, 300);
+                    $('#' + pick_item_id).parent().parent().parent().css({
+                        background: "#96CDCD"
+                    })
                 })
             } else {
                 $(":checkbox").attr("checked", false);
-                $('.check-box-submit').css({
-                    display: 'none'
-                });
                 $(".check-box-content").each(function () {
                     var pick_item_id = $(this).attr('id');
                     pick_item(pick_item_id, 200);
+                    $('#' + pick_item_id).parent().parent().parent().css({
+                        background: "white"
+                    })
                 });
             }
         });
@@ -244,24 +274,9 @@
         $('.check-box-content').click(function () {
             var pick_item_id = $(this).attr('id');
             if (this.checked) {
-                $('.check-box-submit').css({
-                    display: 'block'
-                });
                 pick_item(pick_item_id, 300);
             } else {
                 pick_item(pick_item_id, 200);
-                $('.check-box-content').each(function (index) {
-                    if (document.getElementsByClassName('check-box-content')[index].checked) {
-                        $('.check-box-submit').css({
-                            display: 'block'
-                        });
-                        return false;
-                    } else {
-                        $('.check-box-submit').css({
-                            display: 'none'
-                        });
-                    }
-                });
             }
         });
 
@@ -272,27 +287,25 @@
                 data: {pick_item: {state: status}},
                 dataType: 'json',
                 success: function (data) {
-                    console.log(data);
                 }
             });
         }
 
         $('.check-box-submit').click(function () {
             var btnArray = ['否', '是'];
-            mui.confirm('确认提交?', '提交', btnArray, function (e) {
+            mui.confirm('确认完成择货并移库?', '提交', btnArray, function (e) {
                 if (e.index == 1) {
-
-                    mui.alert('正在提交', '提交状态', function () {
-                    });
-
-                    $('.mui-popup-text').html("<i class='fa fa-spinner fa-spin fa-3x'></i>&emsp;0<b style='font-size: 17px;'>submitting...</b>");
-
                     var CheckBoxID = new Array();
                     $('.check-box-content').each(function () {
                         if (this.checked) {
                             CheckBoxID.push($(this).attr('id'));
                         }
                     });
+
+                    mui.alert("<i class='fa fa-spinner fa-spin fa-3x'></i>&emsp;<b style='font-size: 17px;'>submitting...</b>", '&nbsp;', function () {
+                        window.location.reload();
+                    });
+                    $('.mui-popup-button').html("&nbsp;");
 
                     var id = $('#pick-list').attr('pick_id');
 
@@ -303,15 +316,15 @@
                             pick_list_id: id
                         },
                         success: function (data) {
-                            $('.mui-popup-text').html("<span class='fa fa-check-circle-o fa-3x' style='color:springgreen;'></span>");
-//                            mui.toast("Here is Return:" + "<br/>" + data);
+                            $('.mui-popup-title').html("<p style='color: green;'>提交成功</p>");
+                            $('.mui-popup-text').html("<span class='fa fa-check-circle-o fa-3x' style='color:green;'></span>");
+                            $('.mui-popup-button').html("<span style='color:green;'>Good!</span>");
                         },
                         error: function (error) {
-//                            mui.toast("Cannot Get Data.");
-
-                            $('.mui-popup-title').html("<span>Status:" + error.status + "</span>");
-                            var show_error_msg = "<i class='fa fa-times fa-3x' style='color: red;'></i><span style='font-size: 17px;'>" + error.statusText + "</span>";
+                            $('.mui-popup-title').html("<p style='color: #ff0000;'>提交失败</p>");
+                            var show_error_msg = "<i class='fa fa-times fa-3x' style='color:  #ff0000;'></i>";
                             $('.mui-popup-text').html(show_error_msg);
+                            $('.mui-popup-button').html("<span style='color: #ff0000;'>Error!</span>");
                         }
                     });
                 }
