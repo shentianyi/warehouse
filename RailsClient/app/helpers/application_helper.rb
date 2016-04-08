@@ -11,8 +11,9 @@ module ApplicationHelper
         file=params[:files][0]
         data=FileData.new(data: file, oriName: file.original_filename, path: $UPDATAPATH, pathName: "#{Time.now.strftime('%Y%m%d%H%M%S')}-#{file.original_filename}")
         data.saveFile
-        csv=Csv::CsvConfig.new(encoding: Csv::CsvConfig.csv_write_encode(request.user_agent), col_sep: $CSVSP, file_path: data.full_path)
-        msg=model.import_csv(csv)
+        #csv=Csv::CsvConfig.new(encoding: Csv::CsvConfig.csv_write_encode(request.user_agent), col_sep: $CSVSP, file_path: data.full_path)
+        #msg=model.import_csv(csv)
+        msg = FileHandler::Excel::OrderHandler.import(data, current_user)
       else
         msg.content='未选择文件或只能上传一个文件'
       end
@@ -79,34 +80,36 @@ module ApplicationHelper
     send_file path, :type => 'application/csv', :filename => file_name
   end
 
+
   def template
     if params[:extend].blank? || params[:extend]=='csv'
       # file_name="#{@model}_csv_upload_template.csv"
       case @model
         when "part"
-          file_name="上传零件模版.csv"
+          file_name="上传零件模版.xlsx"
         when "led"
-          file_name="上传LED灯模版.csv"
+          file_name="上传LED灯模版.xlsx"
         when "location"
-          file_name="上传地点信息模版.csv"
+          file_name="上传地点信息模版.xlsx"
         when "modem"
-          file_name="上传modem模版.csv"
+          file_name="上传modem模版.xlsx"
         when "part_position"
-          file_name="上传零件位置模版.csv"
+          file_name="上传零件位置模版.xlsx"
         when "part_type"
-          file_name="上传零件类型模版.csv"
+          file_name="上传零件类型模版.xlsx"
         when "pick_item_filter"
-          file_name="上传择货项模版.csv"
+          file_name="上传择货项模版.xlsx"
         when "position"
-          file_name="上传库位模版.csv"
+          file_name="上传库位模版.xlsx"
         when "user"
-          file_name="上传用户模版.csv"
-        when "whouse"
-          file_name="上传仓库模版.csv"
-      end
+          file_name="上传用户模版.xlsx"
 
+        when "whouse"
+          file_name="上传仓库模版.xlsx"
+
+      end
       path=File.join($TEMPLATEPATH, file_name)
-      send_file path, :type => 'application/csv', :filename => file_name
+      send_file path, :type => 'application/xlsx', :filename => file_name
     else
       file_name="#{@model}_excel_upload_template.excel"
       path=File.join($TEMPLATEPATH, file_name)

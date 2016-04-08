@@ -78,6 +78,7 @@
           <th>创建时间</th>
           <th>状态</th>
           <th>操作</th>
+          <th>择货单批次号</th>
         </tr>
         </thead>
 
@@ -93,6 +94,7 @@
               <td><%= pick_list.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %></td>
               <td><%= pick_list.state %></td>
               <td><%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-eye-open', :style => 'color:green;'), pick_list_path(id: pick_list, show: true), :title => '详情' %></td>
+              <td><%= pick_list.created_at.localtime.strftime('%Y%m%d') if pick_list.created_at %></td>
             </tr>
         <% end %>
         </tbody>

@@ -84,7 +84,12 @@ module FileHandler
         p = Axlsx::Package.new
         p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
           sheet.add_row HEADERS+['Error Msg']
+
           #validate file
+          if book.row(2)[2].blank?
+            raise "文件没有数据"
+          end
+
           2.upto(book.last_row) do |line|
             row = {}
             HEADERS.each_with_index do |k, i|
@@ -111,6 +116,10 @@ module FileHandler
 
       def self.validate_row(row)
         msg = Message.new(contents: [])
+
+        if row['莱尼号码'].blank?
+          msg.contents << "零件号不能为空"
+        end
 
         unless PartClient.where(client_tenant_id: Tenant.find_by_code('SHL').id, client_part_nr: row['莱尼号码']).first
           msg.contents << "零件号不存在"
