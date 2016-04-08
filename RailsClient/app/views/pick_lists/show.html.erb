@@ -143,6 +143,7 @@
         .check-box-submit {
             width: 100%;
             margin-bottom: 5px;
+            display: none;
         }
     </style>
 
@@ -229,31 +230,54 @@
         $('.mui-choose-all').click(function () {
             if (this.checked) {
                 $(":checkbox").attr("checked", true);
-                $(":checkbox").each(function () {
-                    var order_item_id = $(this).attr('id');
-                    order_item(order_item_id, true, 300);
+                $('.check-box-submit').css({
+                    display: 'block'
+                });
+                $(".check-box-content").each(function () {
+                    var pick_item_id = $(this).attr('id');
+                    pick_item(pick_item_id, 300);
                 })
             } else {
                 $(":checkbox").attr("checked", false);
-                var order_item_id = $(this).attr('id');
-                order_item(order_item_id, false, 200);
+                $('.check-box-submit').css({
+                    display: 'none'
+                });
+                $(".check-box-content").each(function () {
+                    var pick_item_id = $(this).attr('id');
+                    pick_item(pick_item_id, 200);
+                });
             }
         });
 
         $('.check-box-content').click(function () {
-            var order_item_id = $(this).attr('id');
+            var pick_item_id = $(this).attr('id');
             if (this.checked) {
-                order_item(order_item_id, true, 300);
+                $('.check-box-submit').css({
+                    display: 'block'
+                });
+                pick_item(pick_item_id, 300);
             } else {
-                order_item(order_item_id, false, 200);
+                pick_item(pick_item_id, 200);
+                $('.check-box-content').each(function (index) {
+                    if (document.getElementsByClassName('check-box-content')[index].checked) {
+                        $('.check-box-submit').css({
+                            display: 'block'
+                        });
+                        return false;
+                    } else {
+                        $('.check-box-submit').css({
+                            display: 'none'
+                        });
+                    }
+                });
             }
         });
 
-        function order_item(order_item_id, is_finished, status) {
+        function pick_item(pick_item_id, status) {
             $.ajax({
-                url: "/order_items/" + order_item_id,
+                url: "/pick_items/" + pick_item_id,
                 type: "PUT",
-                data: {order_item: {out_of_stock: is_finished, state: status}},
+                data: {pick_item: {state: status}},
                 dataType: 'json',
                 success: function (data) {
                     console.log(data);
@@ -261,12 +285,16 @@
             });
         }
 
-
         $('.check-box-submit').click(function () {
             var btnArray = ['否', '是'];
             mui.confirm('确认提交?', '提交', btnArray, function (e) {
                 if (e.index == 1) {
+
+                    mui.alert('正在提交', '提交状态', function () {
+                    });
+
                     $('.mui-popup-text').html("<i class='fa fa-spinner fa-spin'></i>submitting...");
+
                     var CheckBoxID = new Array();
                     $('.check-box-content').each(function () {
                         if (this.checked) {
@@ -284,13 +312,16 @@
                         },
                         success: function (data) {
                             $('.mui-popup-text').html("<span class='fa fa-check-circle-o fa-3x' style='color:springgreen;'></span>");
-                            mui.toast("Here is Return:" + "<br/>" + data);
+//                            mui.toast("Here is Return:" + "<br/>" + data);
                         },
-                        error: function () {
-                            mui.toast("Cannot Get Data.");
-                            $('.mui-popup-text').html("<i class='fa fa-times fa-3x' style='color: red;'></i>");
+                        error: function (error) {
+//                            mui.toast("Cannot Get Data.");
+
+                            $('.mui-popup-title').html("<span>Status:" + error.status + "</span>");
+                            var show_error_msg = "<i class='fa fa-times fa-3x' style='color: red;'></i><span style='font-size: 17px;'>" + error.statusText + "</span>";
+                            $('.mui-popup-text').html(show_error_msg);
                         }
-                    })
+                    });
                 }
             });
         });

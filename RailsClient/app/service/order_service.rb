@@ -228,7 +228,7 @@ class OrderService
 
           pick_item.order_item.update_attribute(:handled, true) if pick_item.order_item
           #move stock
-          if from_wh=Whouse.find_by_id('PA')
+          if from_wh=Whouse.find_by_id('3EX')
             pick_item.update_attribute(:remark, "已完成择货")
             WhouseService.new.move({
                                        employee_id: user.id,
