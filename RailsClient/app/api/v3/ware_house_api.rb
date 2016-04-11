@@ -91,7 +91,7 @@ module V3
           params[:fromPosition] = fromPosition.blank? ? nil : fromPosition.id
           params[:partNr] = part.blank? ? nil : part.id
           params[:qty] = params[:qty].present? ? params[:qty].to_f : nil
-          params[:packageId] = params[:packageId].present? ? params[:packageId].sub(/S/, '') : nil
+          params[:packageId] = params[:packageId].present? ? params[:packageId] : nil
 
           NStorage.transaction do
             WhouseService.new.move(params)

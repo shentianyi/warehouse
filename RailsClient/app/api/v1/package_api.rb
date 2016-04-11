@@ -14,7 +14,7 @@ module V1
 
       #get package info
       get do
-        unless p = Package.exists?(params[:package_id].sub(/S|M/, ''))
+        unless p = Package.exists?(params[:package_id])
           return {result: 0, content: "唯一码不存在!"}
         end
 
@@ -30,7 +30,6 @@ module V1
       get :nstorage_package do
         return {result: 0, content: "请输入唯一码"} if params[:package_id].blank?
 
-        params[:package_id]=params[:package_id].sub(/S|M/, '') if params[:package_id].present?
         unless storage = NStorage.exists_package?(params[:package_id])
           return {result: 0, content: "唯一码不存在!"}
         end
@@ -39,8 +38,8 @@ module V1
         args[:package_id] = storage.packageId
         args[:part_id] = storage.part.nr
         args[:qty] = storage.qty
-        args[:whouse_id] = storage.ware_house_id
-        args[:position_id] = storage.position_id
+        args[:whouse_id] = storage.whouse.blank? ? ''  :  storage.whouse.nr
+        args[:position_id] = storage.position.blank? ? ''  :  storage.position.nr
         args[:fifo] = storage.fifo.blank? ? '' : storage.fifo.localtime
         {result: '1', content: args}
       end
