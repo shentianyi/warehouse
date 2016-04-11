@@ -47,13 +47,20 @@
             <%= f.text_field :tel %>
           </div>
           <div class="col-sm-4">
-          <%= f.label :order_source_location_id %>
-          <%= f.select(:order_source_location_id, Location.all.collect { |l| [l.name, l.id] }, {include_blank: false}) %>
-        </div>
+            <%= f.label :order_source_location_id %>
+            <%= f.select(:order_source_location_id, Location.all.collect { |l| [l.name, l.id] }, {include_blank: false}) %>
+          </div>
         </div>
 
         <div class="col-sm-12" style="border-bottom: 1px dashed #000;">
-        <div class="col-sm-4">
+
+
+          <div class="col-sm-4">
+            <%= f.label :default_whouse_id,'默认仓库' %>
+            <%= f.select(:default_whouse_id, @location.whouses.all.collect { |l| [l.name, l.id] }, {include_blank: false}) %>
+          </div>
+
+          <div class="col-sm-4">
             <%= f.label :receive_whouse_id %>
             <%= f.select(:receive_whouse_id, @location.whouses.all.collect { |l| [l.name, l.id] }, {include_blank: false}) %>
           </div>
@@ -66,7 +73,13 @@
             <%= f.select(:receive_mode, DeliveryReceiveMode.to_select_list, {include_blank: false}) %>
           </div>
         </div>
+        <div class="col-sm-12">
 
+          <div class="col-sm-4">
+            <%= f.label :can_send_when_no_stock, '唯一码未入库可以发运' %>
+            <%= f.check_box :can_send_when_no_stock %>
+          </div>
+        </div>
         <div class="col-sm-12">
           <div class="col-sm-4">
             <%= f.label :is_open_safe_qty, '开启库存预警' %>

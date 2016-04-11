@@ -150,7 +150,7 @@ class PackageService
         if lc.state==MovableState::CHECKED
           if storage=NStorage.where(packageId: package.id).first
             if user.location.whouse_ids.include?(storage.ware_house_id) #storage #position==storage.position
-              raise '唯一码已入库，不可重复操作'
+              raise "唯一码#{lc.container_id}已入库，不可重复操作" if raise_error
             else
               # 移库
               WhouseService.new.move({
@@ -187,74 +187,9 @@ class PackageService
           raise '唯一码不可入库, 请联系管理员' if raise_error
         end
       end
-
-
-      # if storage=NStorage.where(packageId: package.id).first
-      #   if user.location.whouse_ids.include?(storage.ware_house_id) #storage #position==storage.position
-      #     raise '唯一码已入库，不可重复操作'
-      #   end
-      # else
-      #   # WhouseService.new.enter_stock({
-      #   #                                   partNr: package.part_id,
-      #   #                                   qty: package.quantity,
-      #   #                                   fifo: fifo,
-      #   #                                   packageId: package.id,
-      #   #                                   toWh: warehouse.id,
-      #   #                                   toPosition: position.id,
-      #   #                                   user: user
-      #   #                               })
-      # end
-
-
-      # if storage
-      #   current_location= storage.whouse.location
-      # else
-      #   current_location=lc.source_location
-      # end
-      # user_location=user.location
-      #
-      # if current_location==user.location
-      #   if lc.state==MovableState::CHECKED
-      #     if storage
-      #       WhouseService.new.move({
-      #                                  partNr: package.part_id,
-      #                                  qty: package.quantity,
-      #                                  packageId: package.id,
-      #                                  fromWh: storage.ware_house_id,
-      #                                  toWh: warehouse.id,
-      #                                  toPosition: position.id,
-      #                                  fifo: fifo,
-      #                                  user: user
-      #                              })
-      #     else
-      #       WhouseService.new.enter_stock({
-      #                                         partNr: package.part_id,
-      #                                         qty: package.quantity,
-      #                                         fifo: fifo,
-      #                                         packageId: package.id,
-      #                                         toWh: warehouse.id,
-      #                                         toPosition: position.id,
-      #                                         user: user
-      #                                     })
-      #     end
-      #   elsif lc.state==MovableState::WAY
-      #     raise '唯一码已在发运途中，不可入库' if raise_error
-      #   else
-      #     raise '唯一码已发运，不可入库' if raise_error
-      #   end
-      # else
-      #   destination_location=lc.destinationable
-      #   if destination_location==user_location
-      #     raise '唯一码未被接收，不可入库' if raise_error
-      #   else
-      #     raise '唯一码不可入库, 请联系管理员' if raise_error
-      #   end
-      # end
-
-
       return true
     else
-      raise "唯一码:#{params[:container_id]}不存在"
+      raise "唯一码:#{lc.container_id}不存在"
     end
     false
   end

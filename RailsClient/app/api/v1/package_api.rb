@@ -22,7 +22,7 @@ module V1
         args[:package_id] = p.id
         args[:part_id] = p.part.nr
         args[:qty] = p.quantity
-        args[:fifo] =p.storage_fifo_display# p.fifo_time_display.blank? ? '' : Date.strptime(p.fifo_time_display.sub(/W\s*/, ''), '%d.%m.%y')
+        args[:fifo] =p.storage_fifo_display # p.fifo_time_display.blank? ? '' : Date.strptime(p.fifo_time_display.sub(/W\s*/, ''), '%d.%m.%y')
         {result: '1', content: args}
       end
 
@@ -69,27 +69,50 @@ module V1
           args[:des_location_id] = current_user.location_id
         end
 
-       # args[:ancestry]= nil
+        # args[:ancestry]= nil
 
-        {result: 1, content: PackagePresenter.init_json_presenters(PackageService.search(args).order(created_at: :desc).all,current_user)}
+        {result: 1, content: PackagePresenter.init_json_presenters(PackageService.search(args).order(created_at: :desc).all, current_user)}
       end
 
       # validate package id
       # @deprecated
       # use validate_id instead
       post :validate do
-        p params
         if Package.id_valid?(params[:id])
-          {result: 1, content: ''}
+          {result: 1, content: ''} # 不存在
         else
-          {result: 0, content: PackageMessage::IdNotValid}
+          # 存在
+          if current_user.location.can_send_when_no_stock
+            {result: 0, content: PackageMessage::IdNotValid}
+          else
+            if storage=NStorage.package_by_user(current_user, params[:id]).first
+              {result: 0, content: ''}
+            else
+              {result: 2, content: PackageMessage::NotInStock}
+            end
+          end
         end
+
+        # p params
+        # if Package.id_valid?(params[:id])
+        #   {result: 1, content: ''}
+        # else
+        #   {result: 0, content: PackageMessage::IdNotValid}
+        # end
       end
 
       #validate package id
       get :validate_id do
         if Package.id_valid?(params[:id])
-          {result: 1, content: ''}
+          if current_user.location.can_send_when_no_stock
+            {result: 1, content: ''}
+          else
+            if storage=NStorage.package_by_user(current_user, params[:id]).first
+              {result: 1, content: ''}
+            else
+              {result: 0, content: PackageMessage::NotInStock}
+            end
+          end
         else
           {result: 0, content: PackageMessage::IdNotValid}
         end

@@ -21,8 +21,9 @@ class Location < ActiveRecord::Base
 
   belongs_to :receive_whouse, class_name: 'Whouse'
   belongs_to :send_whouse, class_name: 'Whouse'
-
   belongs_to :order_source_location, class_name: 'Location', foreign_key: :order_source_location_id
+
+  belongs_to :default_whouse,class_name: 'Whouse',foreign_key: :default_whouse_id
 
   def whouse_ids
     ids= self.whouses.pluck(:id)
