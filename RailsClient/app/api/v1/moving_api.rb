@@ -58,7 +58,7 @@ module V1
         begin
           if warehouse=current_user.location.whouses.where(nr: params[:warehouse]).first
             if position=warehouse.positions.where(nr: params[:position]).first
-              if (lc=LogisticsContainer.find_by_container_id(params[:container]))
+              if (lc=LogisticsContainer.last_lc_container(params[:container]))
                 if msg.result=lc.get_service.enter_stock(current_user,lc,warehouse, position,Time.now.utc)
                   msg.content='入库成功'
                 else
