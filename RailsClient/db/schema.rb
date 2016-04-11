@@ -11,11 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema.define(version: 20160323065108) do
-=======
 ActiveRecord::Schema.define(version: 20160408084717) do
->>>>>>> d227108... c
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -56,15 +52,6 @@ ActiveRecord::Schema.define(version: 20160408084717) do
   add_index "attachments", ["attachable_id"], name: "index_attachments_on_attachable_id", using: :btree
   add_index "attachments", ["attachable_type"], name: "index_attachments_on_attachable_type", using: :btree
   add_index "attachments", ["id"], name: "index_attachments_on_id", using: :btree
-
-  create_table "colors", force: true do |t|
-    t.string   "nr"
-    t.string   "name"
-    t.string   "short_name"
-    t.string   "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "containers", force: true do |t|
     t.string   "custom_id",                 limit: 36
@@ -412,49 +399,6 @@ ActiveRecord::Schema.define(version: 20160408084717) do
   add_index "n_storages", ["uniqueId"], name: "unique_id_unique", unique: true, using: :btree
   add_index "n_storages", ["ware_house_id"], name: "index_n_storages_on_ware_house_id", using: :btree
 
-  create_table "oauth_access_grants", force: true do |t|
-    t.integer  "resource_owner_id", null: false
-    t.integer  "application_id",    null: false
-    t.string   "token",             null: false
-    t.integer  "expires_in",        null: false
-    t.text     "redirect_uri",      null: false
-    t.datetime "created_at",        null: false
-    t.datetime "revoked_at"
-    t.string   "scopes"
-  end
-
-  add_index "oauth_access_grants", ["token"], name: "index_oauth_access_grants_on_token", unique: true, using: :btree
-
-  create_table "oauth_access_tokens", force: true do |t|
-    t.integer  "resource_owner_id"
-    t.integer  "application_id"
-    t.string   "token",             null: false
-    t.string   "refresh_token"
-    t.integer  "expires_in"
-    t.datetime "revoked_at"
-    t.datetime "created_at",        null: false
-    t.string   "scopes"
-  end
-
-  add_index "oauth_access_tokens", ["refresh_token"], name: "index_oauth_access_tokens_on_refresh_token", unique: true, using: :btree
-  add_index "oauth_access_tokens", ["resource_owner_id"], name: "index_oauth_access_tokens_on_resource_owner_id", using: :btree
-  add_index "oauth_access_tokens", ["token"], name: "index_oauth_access_tokens_on_token", unique: true, using: :btree
-
-  create_table "oauth_applications", force: true do |t|
-    t.string   "name",                      null: false
-    t.string   "uid",                       null: false
-    t.string   "secret",                    null: false
-    t.text     "redirect_uri",              null: false
-    t.string   "scopes",       default: "", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "owner_id"
-    t.string   "owner_type"
-  end
-
-  add_index "oauth_applications", ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type", using: :btree
-  add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
-
   create_table "operation_logs", force: true do |t|
     t.string   "item_type"
     t.string   "item_id"
@@ -464,45 +408,6 @@ ActiveRecord::Schema.define(version: 20160408084717) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  create_table "order_box_types", force: true do |t|
-    t.string   "name"
-    t.string   "description"
-    t.float    "weight"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "order_boxes", force: true do |t|
-    t.string   "nr"
-    t.string   "rfid_nr"
-    t.integer  "status",              default: 100
-    t.string   "part_id"
-    t.float    "quantity"
-    t.integer  "order_box_type_id"
-    t.string   "warehouse_id"
-    t.string   "source_warehouse_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "position_id"
-  end
-
-  add_index "order_boxes", ["order_box_type_id"], name: "index_order_boxes_on_order_box_type_id", using: :btree
-  add_index "order_boxes", ["part_id"], name: "index_order_boxes_on_part_id", using: :btree
-  add_index "order_boxes", ["position_id"], name: "index_order_boxes_on_position_id", using: :btree
-  add_index "order_boxes", ["source_warehouse_id"], name: "index_order_boxes_on_source_warehouse_id", using: :btree
-  add_index "order_boxes", ["warehouse_id"], name: "index_order_boxes_on_warehouse_id", using: :btree
-
-  create_table "order_cars", force: true do |t|
-    t.string   "nr"
-    t.string   "rfid_nr"
-    t.integer  "status",     default: 100
-    t.string   "whouse_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "order_cars", ["whouse_id"], name: "index_order_cars_on_whouse_id", using: :btree
 
   create_table "order_items", force: true do |t|
     t.string   "uuid",                         null: false
@@ -753,16 +658,6 @@ ActiveRecord::Schema.define(version: 20160408084717) do
   add_index "pick_lists", ["id"], name: "index_pick_lists_on_id", using: :btree
   add_index "pick_lists", ["user_id"], name: "index_pick_lists_on_user_id", using: :btree
 
-  create_table "pick_orders", force: true do |t|
-    t.string   "order_id"
-    t.string   "pick_list_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "pick_orders", ["order_id"], name: "index_pick_orders_on_order_id", using: :btree
-  add_index "pick_orders", ["pick_list_id"], name: "index_pick_orders_on_pick_list_id", using: :btree
-
   create_table "positions", force: true do |t|
     t.string   "uuid",       limit: 36,                 null: false
     t.string   "whouse_id"
@@ -780,21 +675,6 @@ ActiveRecord::Schema.define(version: 20160408084717) do
   add_index "positions", ["nr"], name: "index_positions_on_nr", using: :btree
   add_index "positions", ["uuid"], name: "index_positions_on_uuid", using: :btree
   add_index "positions", ["whouse_id"], name: "index_positions_on_whouse_id", using: :btree
-
-  create_table "ptl_jobs", force: true do |t|
-    t.text     "params"
-    t.integer  "state",       default: 100
-    t.boolean  "is_delete",   default: false
-    t.boolean  "is_dirty",    default: true
-    t.boolean  "is_new",      default: true
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.text     "msg"
-    t.integer  "order_state", default: 100
-    t.integer  "to_state"
-    t.string   "to_display"
-    t.string   "node_id"
-  end
 
   create_table "records", force: true do |t|
     t.string   "recordable_id"
@@ -877,15 +757,6 @@ ActiveRecord::Schema.define(version: 20160408084717) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name"
-  end
-
-  create_table "settings", force: true do |t|
-    t.string   "name"
-    t.string   "value"
-    t.string   "code"
-    t.integer  "type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "state_logs", force: true do |t|
@@ -971,7 +842,6 @@ ActiveRecord::Schema.define(version: 20160408084717) do
   add_index "sys_configs", ["code"], name: "index_sys_configs_on_code", using: :btree
   add_index "sys_configs", ["id"], name: "index_sys_configs_on_id", using: :btree
 
-<<<<<<< HEAD
   create_table "tenants", force: true do |t|
     t.string   "name"
     t.string   "code"
@@ -988,23 +858,13 @@ ActiveRecord::Schema.define(version: 20160408084717) do
   create_table "user_permission_groups", force: true do |t|
     t.string   "user_id"
     t.integer  "permission_group_id"
-=======
-  create_table "units", force: true do |t|
-    t.string   "nr"
-    t.string   "name"
-    t.string   "short_name"
-    t.string   "description"
->>>>>>> d227108... c
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-<<<<<<< HEAD
   add_index "user_permission_groups", ["permission_group_id"], name: "index_user_permission_groups_on_permission_group_id", using: :btree
   add_index "user_permission_groups", ["user_id"], name: "index_user_permission_groups_on_user_id", using: :btree
 
-=======
->>>>>>> d227108... c
   create_table "users", force: true do |t|
     t.string   "uuid",                   limit: 36,                 null: false
     t.boolean  "is_delete",                         default: false
