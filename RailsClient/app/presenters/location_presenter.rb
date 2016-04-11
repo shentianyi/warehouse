@@ -15,6 +15,13 @@ class LocationPresenter<Presenter
     if @location.order_source_location
     json[:order_source_location]=LocationPresenter.new(@location.order_source_location).to_json
     end
+    if @location.default_whouse
+      json[:default_whouse]={
+          id: @location.default_whouse.id,
+          nr: @location.default_whouse.nr,
+          name: @location.default_whouse.name
+      }
+    end
     json
   end
 end

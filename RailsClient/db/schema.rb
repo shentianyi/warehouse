@@ -279,6 +279,8 @@ ActiveRecord::Schema.define(version: 20160408084717) do
     t.string   "order_source_location_id"
     t.boolean  "is_open_safe_qty",                    default: false
     t.text     "safe_qty_emails"
+    t.boolean  "can_send_when_no_stock",              default: false
+    t.string   "default_whouse_id"
   end
 
   add_index "locations", ["destination_id"], name: "index_locations_on_destination_id", using: :btree

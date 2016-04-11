@@ -5,7 +5,7 @@ class NStorageService
     positions=[]
 
     ids= NStorage.where(partNr: part_id,
-                        ware_house_id: (location.whouses.pluck(:id)-[location.send_whouse.id])).order(fifo: :asc).pluck(:position_id).uniq
+                        ware_house_id: location.whouse_ids).order(fifo: :asc).pluck(:position_id).uniq
     ids.each do |id|
       if p=Position.find_by_id(id)
         positions<<p.nr
@@ -22,12 +22,12 @@ class NStorageService
     # end
 
     NStorage.where(partNr: part_id,
-                   ware_house_id: (location.whouses.pluck(:id)-[location.send_whouse.id])).count
+                   ware_house_id: location.whouse_ids).count
   end
 
   def self.get_remark part, location, qty
     if part
-      count=NStorage.where(partNr: part.id,  ware_house_id: (location.whouses.pluck(:id)-[location.send_whouse.id])).count
+      count=NStorage.where(partNr: part.id,  ware_house_id: location.whouse_ids).count
       if count==0
         "零库存"
       elsif count<qty
