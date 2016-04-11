@@ -1,7 +1,7 @@
 class PartClientsController < ApplicationController
   before_action :set_part_client, only: [:edit, :update, :destroy]
 
-  before_action :set_tenant, only: [:index, :new, :edit,:destroy]
+  before_action :set_tenant, only: [:search, :index, :new, :edit, :destroy]
   before_action :set_part_clients, only: [:index]
   before_action :prepare_tenant_client_part_params, only: [:create, :update]
 
@@ -43,11 +43,19 @@ class PartClientsController < ApplicationController
 
   def destroy
     @part_client.destroy
-    redirect_to  tenant_part_clients_path(@tenant),notice: '删除成功'
+    redirect_to tenant_part_clients_path(@tenant), notice: '删除成功'
     #respond_with(@part_client)
   end
 
+  def search
+    super{|query|
+      if part=Part.find_by_nr(params[:part_client][:part_id])
+        query=query.unscope(where: :part_id).where(part_id: part.id)
+      end
 
+      query
+    }
+  end
 
   def import
     if request.post?
@@ -58,13 +66,15 @@ class PartClientsController < ApplicationController
                           path: $tmp_file_path,
                           pathName: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
         fd.save
-        msg = FileHandler::Excel::PartClientHandler.import(fd,params[:tenant_id])
+        msg = FileHandler::Excel::PartClientHandler.import(fd, params[:tenant_id])
       rescue => e
         msg.content = e.message
       end
       render json: msg
     end
   end
+
+
   private
   def set_tenant
     unless @tenant=Tenant.find_by_id(params[:tenant_id])
@@ -73,7 +83,7 @@ class PartClientsController < ApplicationController
   end
 
   def set_part_clients
-    @part_clients=@tenant.parts.paginate(:page=>params[:page])
+    @part_clients=@tenant.parts.paginate(:page => params[:page])
   end
 
   def set_part_client

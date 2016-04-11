@@ -34,7 +34,7 @@
   </ol>
 </div>
 
-<form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+<form method="get" action="<%= send("search_tenant_part_clients_path") %>">
   <div class="panel panel-primary">
     <div class="panel-body">
       <div class="col-sm-12" style="border-bottom: 1px dashed #000;">
@@ -47,6 +47,7 @@
           <input type="text" name="part_client[client_part_nr]" value="<%= @client_part_nr %>"/>
           <input type="hidden" name="part_client[client_part_nr_fuzzy]"/>
         </div>
+
         <div class="col-sm-4">
           <input type="submit" value="查 找" class="btn btn-primary" style="width: 150px;"/>
         </div>
