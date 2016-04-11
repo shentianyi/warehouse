@@ -142,8 +142,8 @@ class PackageService
 
   def self.enter_stock user, lc, warehouse, position, fifo,raise_error=true
     if package=lc.package
-      if storage=NStorage.find_by_packageId(package.id)
-        if position==storage.position
+      if storage=NStorage.where(packageId: package.id,ware_house_id: user.location.whouse_ids).first
+        if storage #position==storage.position
           raise '唯一码已入库，不可重复'
         else
           if storage.whouse.location==user.location

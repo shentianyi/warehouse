@@ -19,10 +19,21 @@ class Location < ActiveRecord::Base
   has_many :source_containers, class_name: 'LocationContainer'
   belongs_to :parent, class_name: 'Location'
 
-  belongs_to :receive_whouse,class_name: 'Whouse'
-  belongs_to :send_whouse,class_name: 'Whouse'
+  belongs_to :receive_whouse, class_name: 'Whouse'
+  belongs_to :send_whouse, class_name: 'Whouse'
 
-  belongs_to :order_source_location,class_name:'Location',foreign_key: :order_source_location_id
+  belongs_to :order_source_location, class_name: 'Location', foreign_key: :order_source_location_id
+
+  def whouse_ids
+    ids= self.whouses.pluck(:id)
+    if self.send_whouse
+      ids= ids-[self.send_whouse.id]
+    end
+    if self.receive_whouse
+      ids= ids-[self.receive_whouse.id]
+    end
+    ids
+  end
 
   def default_destination
     @default_destination||=(self.default_location_destination.present? ? self.default_location_destination.destination : nil)
