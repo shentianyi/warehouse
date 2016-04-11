@@ -178,17 +178,34 @@
         AddMeta('apple-mobile-web-app-status-bar-style', 'black');
 
         <% @pick_lists.each_with_index do |pick_list, index| %>
-        $('<div class="mui-segmented-control"><li class="mui-table-view-cell">' +
-                '<div class="mui-slider-right mui-disabled"><a href="<%= pick_list_path(id: pick_list,show:true) %>" id="<%= pick_list.id %>" object_id="<%= pick_list.object_id %>" user_id="<%= pick_list.user_id %>" create_at="<%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %>" style="background:steelblue;"  class="mui-btn glyphicon glyphicon-eye-open show-details">&emsp;详情</a></div>' +
-                '<div class="mui-slider-handle">' +
-                '<div class="mui-table-cell" id="<%= pick_list.id %>">' +
-                '<div class="mui-segmented-control mui-control-body">' +
-                '<div class="mui-list-item"><span>' + '<%= pick_list.id %>' + '</span></div>' +
-                '<div class="mui-list-item"><span id="object_<%= pick_list.id %>">' + '<%= pick_list.object_id %>' + '</span></div>' +
-                '<div class="mui-list-item"><span id="user_id_<%= pick_list.id %>">' + '<%= pick_list.user_id %>' + '</span></div>' +
-                '<div class="mui-list-item"><span id="create_at_<%= pick_list.id %>">' + '<%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %>' + '</span></div>' +
-                '</div></div></div></li></div>').appendTo('.table-show').ready(function () {
-        });
+        if ("<%= pick_list.state %>" == "300" || "<%= pick_list.state %>" == "2") {
+            console.log("Hello" + "<%= pick_list.state %>");
+            $('<div class="mui-segmented-control"><li class="mui-table-view-cell">' +
+                    '<div class="mui-slider-right mui-disabled"><a href="<%= pick_list_path(id: pick_list,show:true) %>" id="<%= pick_list.id %>" object_id="<%= pick_list.object_id %>" user_id="<%= pick_list.user_id %>" create_at="<%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %>" style="background:steelblue;"  class="mui-btn glyphicon glyphicon-eye-open show-details">&emsp;详情</a></div>' +
+                    '<div class="mui-slider-handle">' +
+                    '<div class="mui-table-cell" id="<%= pick_list.id %>" style="background: #96CDCD;">' +
+                    '<div class="mui-segmented-control mui-control-body">' +
+                    '<div class="mui-list-item"><span>' + '<%= pick_list.id %>' + '</span></div>' +
+                    '<div class="mui-list-item"><span id="object_<%= pick_list.id %>">' + '<%= pick_list.object_id %>' + '</span></div>' +
+                    '<div class="mui-list-item"><span id="user_id_<%= pick_list.id %>">' + '<%= pick_list.user_id %>' + '</span></div>' +
+                    '<div class="mui-list-item"><span id="create_at_<%= pick_list.id %>">' + '<%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %>' + '</span></div>' +
+                    '</div></div></div></li></div>').appendTo('.table-show').ready(function () {
+            });
+        } else {
+            console.log(<%= pick_list.state %>);
+            $('<div class="mui-segmented-control"><li class="mui-table-view-cell">' +
+                    '<div class="mui-slider-right mui-disabled"><a href="<%= pick_list_path(id: pick_list,show:true) %>" id="<%= pick_list.id %>" object_id="<%= pick_list.object_id %>" user_id="<%= pick_list.user_id %>" create_at="<%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %>" style="background:steelblue;"  class="mui-btn glyphicon glyphicon-eye-open show-details">&emsp;详情</a></div>' +
+                    '<div class="mui-slider-handle">' +
+                    '<div class="mui-table-cell" id="<%= pick_list.id %>">' +
+                    '<div class="mui-segmented-control mui-control-body">' +
+                    '<div class="mui-list-item"><span>' + '<%= pick_list.id %>' + '</span></div>' +
+                    '<div class="mui-list-item"><span id="object_<%= pick_list.id %>">' + '<%= pick_list.object_id %>' + '</span></div>' +
+                    '<div class="mui-list-item"><span id="user_id_<%= pick_list.id %>">' + '<%= pick_list.user_id %>' + '</span></div>' +
+                    '<div class="mui-list-item"><span id="create_at_<%= pick_list.id %>">' + '<%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %>' + '</span></div>' +
+                    '</div></div></div></li></div>').appendTo('.table-show').ready(function () {
+            });
+        }
+
         <% end %>
 
         $('.mui-segmented-control').on("longtap", '.mui-table-cell', function () {

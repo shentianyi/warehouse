@@ -224,11 +224,12 @@
         }
 
         function show_list_checked_fun(bgcolor, fontcolor, id, part_id, quantity, pick_position) {
+//            $('.mui-choose-all').attr('disabled', "true");
             $('<div class="mui-segmented-control"><li class="mui-table-view-cell" style="padding: 0;list-style: none;">' +
                     '<div class="mui-slider-handle">' +
                     '<div class="mui-table-cell" style="background:' + bgcolor + '">' +
                     '<div class="mui-segmented-control mui-control-body">' +
-                    '<div class="mui-list-item" style="width:1px;"><input id=' + id + ' class="check-box-content" name="checkbox" value="false" type="checkbox" checked ></div>' +
+                    '<div class="mui-list-item" style="width:1px;"><input id=' + id + ' class="check-box-content" name="checkbox" value="false" type="checkbox" checked></div>' +
                     '<div class="mui-list-item"><marquee scrollamount="2" scrolldelay="0" style="color:' + fontcolor + ';margin-bottom:-20px;" behavior="scroll">' + part_id + '</marquee></div>' +
                     '<div class="mui-list-item"><span style="color: ' + fontcolor + '">' + quantity + '</span></div>' +
                     '<div class="mui-list-item"><marquee  scrollamount="2" scrolldelay="0" style="color: ' + fontcolor + ';margin-bottom:-20px;" behavior="scroll">' + pick_position + '</marquee></div>' +
@@ -255,18 +256,18 @@
                 $(".check-box-content").each(function () {
                     var pick_item_id = $(this).attr('id');
                     pick_item(pick_item_id, 300);
-                    $('#' + pick_item_id).parent().parent().parent().css({
-                        background: "#96CDCD"
-                    })
+//                    $('#' + pick_item_id).parent().parent().parent().css({
+//                        background: "#96CDCD"
+//                    })
                 })
             } else {
                 $(":checkbox").attr("checked", false);
                 $(".check-box-content").each(function () {
                     var pick_item_id = $(this).attr('id');
                     pick_item(pick_item_id, 200);
-                    $('#' + pick_item_id).parent().parent().parent().css({
-                        background: "white"
-                    })
+//                    $('#' + pick_item_id).parent().parent().parent().css({
+//                        background: "white"
+//                    })
                 });
             }
         });
