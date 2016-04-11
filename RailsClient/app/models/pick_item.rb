@@ -1,7 +1,7 @@
 class PickItem < ActiveRecord::Base
   include Extensions::UUID
   belongs_to :pick_list
-  belongs_to :destination_whouse,class_name:'Whouse',foreign_key:'destination_whouse_id'
+  belongs_to :destination_whouse, class_name: 'Whouse', foreign_key: 'destination_whouse_id'
   belongs_to :order_item
 
   belongs_to :part
@@ -51,13 +51,17 @@ class PickItem < ActiveRecord::Base
 
   def pick_position
     pick_storages=[]
-    part = Part.find_by_id(self.part_id)
 
-    part.positions.each do |pp|
-      storages=NStorage.select("SUM(n_storages.qty) as total_qty, n_storages.position").where(position: pp.detail, partNr: self.part_id).group(:position)
-      storages.each do |storage|
-        pick_storages<<"#{storage.position}/#{storage.total_qty}"
+    wh_ids=[]
+    if user=User.find_by_id(self.user_id)
+      LocationDestination.where(destination_id: user.location.id).each do |ld|
+        wh_ids<<ld.location.whouses.pluck(:id)
       end
+    end
+
+    storages=NStorage.select("SUM(n_storages.qty) as total_qty, n_storages.position").where(position: pp.detail, partNr: self.part_id, ware_house_id: wh_ids.uniq).group(:position)
+    storages.each do |storage|
+      pick_storages<<"#{storage.position}/#{storage.total_qty}"
     end
 
     pick_storages.join("-----")
