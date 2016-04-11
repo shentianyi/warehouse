@@ -33,7 +33,8 @@ module FileHandler
                     pc.destroy
                   end
                 elsif PartClient.where(
-                    part_id: part.id, client_part_nr: row['客户零件号'], client_tenant_id: tenant_id).first.blank?
+                    # part_id: part.id, client_part_nr: row['客户零件号'], client_tenant_id: tenant_id).first.blank?
+                    part_id: part.id, client_tenant_id: tenant_id).first.blank?
 
                   PartClient.create(
                       part_id: part.id,

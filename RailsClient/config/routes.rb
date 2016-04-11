@@ -31,16 +31,13 @@ Rails.application.routes.draw do
   resources :tenants do
     resources :part_clients do
       collection do
+        get :search
         match :import, to: :import, via: [:get, :post]
       end
     end
   end
 
-  resources :part_clients do
-    collection do
-      get :search
-    end
-  end
+  resources :part_clients
 
   resources :movement_sources do
     collection do
