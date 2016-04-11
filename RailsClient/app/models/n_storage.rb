@@ -53,23 +53,28 @@ class NStorage < ActiveRecord::Base
 
     @storages.each do |storage|
       # puts "#{storage.partNr}"
-      results.push([storage.partNr, storage.qty, 0, storage.qty])
+      storage_count=NStorage.where(ware_house_id: inventory_list.whouse_id, partNr: storage.partNr).count
+      results.push([storage.partNr, storage.qty,0, storage.qty, storage_count, 0, storage_count])
     end
 
     @inventory_list_items.each do |inventory_list_item|
       @flag = false
+      item_count=InventoryListItem.where(condition).where(part_id: inventory_list_item.part_id).count
       results.each do |result|
         # @storages.each do |storage|
         if inventory_list_item.part_id.to_s == result[0].to_s
           result.insert(2, inventory_list_item.qty2)
           result[3] = (result[1]||0) - result[2]
+
+          result.insert(6, item_count)
+          result[7] = (result[5]||0) - result[6]
           @flag = true
           # break
         end
 
       end
       if !@flag
-        results.push([inventory_list_item.part_id.to_s, 0, inventory_list_item.qty2, 0-inventory_list_item.qty2.to_f])
+        results.push([inventory_list_item.part_id.to_s, 0, inventory_list_item.qty2, 0-inventory_list_item.qty2.to_f], 0, item_count, 0-item_count.to_i)
         #puts "part id is -- #{inventory_list_item.part_id}"
       end
 
