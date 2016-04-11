@@ -4,11 +4,11 @@ class InventoryListsController < ApplicationController
   respond_to :html
 
   def index
-   
+
     @inventory_lists = InventoryList.paginate(:page => params[:page])
 
     if SysConfigCache.hide_finished_inventory_value=='true'
-      @inventory_lists=@inventory_lists.where('state!=?',InventoryListState::ENDING)
+      @inventory_lists=@inventory_lists.where('state!=?', InventoryListState::ENDING)
     end
     respond_with(@inventory_lists)
   end
@@ -49,17 +49,17 @@ class InventoryListsController < ApplicationController
     @inventory_list.destroy
     respond_with(@inventory_list)
   end
-  
+
   def inventory_list_items
     @inventory_list_items = @inventory_list.inventory_list_items.paginate(:page => params[:page])
     @page_start=(params[:page].nil? ? 0 : (params[:page].to_i-1))*20
   end
-  
+
   def discrepancy
     @inventory_list_id = params[:sid]||params[:id]
     @inventory_list=InventoryList.find_by_id(@inventory_list_id)
     @results = NStorage.generate_diff_report(@inventory_list_id)
-    
+
     @title="#{InventoryList.find_by(:id => @inventory_list_id).name}差异报表"
     # @inventory_list_items = InventoryListItem.all
     # puts @inventory_list_items.first.part_id
@@ -84,7 +84,7 @@ class InventoryListsController < ApplicationController
 
   def export_total
     msg = FileHandler::Excel::InventoryListItemHandler.export_total_no_fifo(
-        InventoryListItem.joins(:inventory_list).where(inventory_lists:{state:InventoryListState::PROCESSING}).group('part_id').select('*,sum(qty) as qty')
+        InventoryListItem.joins(:inventory_list).where(inventory_lists: {state: InventoryListState::PROCESSING}).group('part_id').select('*,sum(qty) as qty')
     )
     send_file msg.content
   end
@@ -93,48 +93,81 @@ class InventoryListsController < ApplicationController
     msg = FileHandler::Excel::InventoryListItemHandler.export_total_by_whouse
     send_file msg.content
   end
-    
-  private
-    def set_inventory_list
-      @inventory_list = InventoryList.find(params[:id])
-    end
 
-    def inventory_list_params
-      params.require(:inventory_list).permit(:name, :state, :whouse_id, :user_id)
+  def disable_enable_storage
+    # if request.post?=
+    last_batch=0
+    if storage=NStorage.unscoped.order(lock_batch: :desc).first
+      last_batch=storage.lock_batch
     end
-    
-    def order_report_xlsx results
-      p = Axlsx::Package.new
-      wb = p.workbook
-      wb.add_worksheet(:name => "Basic Sheet") do |sheet|
-        sheet.add_row ["No.", "零件号", "库存数量", "盘点数量", "差异数（库存数-盘点数）"]
-        results.each_with_index { |o, index|
-          sheet.add_row [
-                    index+1,
-                    o[0],
-                    o[1],
-                    o[2],
-                    o[3]
-                   ], :types => [:string]
-          # removal_packages["#{o.part_id}#{o.whouse_id}"] = nil
-        }
+    if params[:do]=='disable'
+      NStorage.transaction do
+        lock_remark='盘点覆盖锁定'+"-"+Time.now.strftime("%Y%m%d")
+        NStorage.where(locked: false)
+            .update_all(locked: true,
+                        lock_user_id: 'admin',
+                        lock_remark: lock_remark,
+                        lock_batch: last_batch+1,
+                        lock_at: Time.now.utc)
       end
-      p.to_stream.read
-    end
-    
-    def order_report_csv results
-      CSV.generate do |csv|
-        csv << ["No.", "零件号", "库存数量", "盘点数量", "差异数（库存数-盘点数）"]
-        results.each.each_with_index { |o, index|
-          csv <<[
-              index+1,
-              o[0],
-              o[1],
-              o[2],
-              o[3]
-          ]   
-          # removal_packages["#{o.part_id}#{o.whouse_id}"] = nil
-        }
+
+    else
+
+      NStorage.transaction do
+        NStorage.unscoped.where(locked: true, lock_batch: last_batch)
+            .update_all(locked: false,
+                        lock_user_id: nil,
+                        lock_remark: nil,
+                        lock_at: nil)
       end
     end
+    # end
+
+    redirect_to action: :index
+  end
+
+  private
+  def set_inventory_list
+    @inventory_list = InventoryList.find(params[:id])
+  end
+
+  def inventory_list_params
+    params.require(:inventory_list).permit(:name, :state, :whouse_id, :user_id)
+  end
+
+  def order_report_xlsx results
+    p = Axlsx::Package.new
+    wb = p.workbook
+    wb.add_worksheet(:name => "Basic Sheet") do |sheet|
+      sheet.add_row ["No.", "零件号", "库存数量", "盘点数量", "差异数（库存数-盘点数）"]
+      results.each_with_index { |o, index|
+        sheet.add_row [
+                          index+1,
+                          o[0],
+                          o[1],
+                          o[2],
+                          o[3]
+                      ], :types => [:string]
+        # removal_packages["#{o.part_id}#{o.whouse_id}"] = nil
+      }
+    end
+    p.to_stream.read
+  end
+
+  def order_report_csv results
+    CSV.generate do |csv|
+      csv << ["No.", "零件号", "库存数量", "盘点数量", "差异数（库存数-盘点数）"]
+      results.each.each_with_index { |o, index|
+        csv <<[
+            index+1,
+            o[0],
+            o[1],
+            o[2],
+            o[3]
+        ]
+        # removal_packages["#{o.part_id}#{o.whouse_id}"] = nil
+      }
+    end
+  end
+
 end
