@@ -1,26 +1,26 @@
 ActiveRecord::Base.transaction do
 
-  unless t=Tenant.find_by_code('SHJX')
-    t=Tenant.create(name: '上海佳轩物流有限公司', code: 'SHJX', short_name: '上海佳轩简称', type: TenantType::SELF)
-  end
+  # unless t=Tenant.find_by_code('SHJX')
+  #   t=Tenant.create(name: '上海佳轩物流有限公司', code: 'SHJX', short_name: '上海佳轩简称', type: TenantType::SELF)
+  # end
 
-  unless t2=Tenant.find_by_code('XSJX')
-    t2=Tenant.create(name: '萧山佳轩物流有限公司', code: 'XSJX', short_name: '萧山佳轩简称', type: TenantType::SELF)
+  unless t=Tenant.find_by_code('JXJX')
+    t=Tenant.create(name: '江西佳轩物流有限公司', code: 'JXJX', short_name: '江西佳轩简称', type: TenantType::SELF)
   end
 
   
   # init location and admin
-  unless (jxlo=Location.find_by_nr('SHJXLO'))
-    jxlo = Location.create(nr: 'SHJXLO', name: '上海佳轩物流', is_base: true,
-                           tenant_id: t.id,
-                           address: '上海佳轩物流有限公司的地址',
-                           receive_mode: DeliveryReceiveMode::PACKAGE)
-  end
+  # unless (jxlo=Location.find_by_nr('SHJXLO'))
+  #   jxlo = Location.create(nr: 'SHJXLO', name: '上海佳轩物流', is_base: true,
+  #                          tenant_id: t.id,
+  #                          address: '上海佳轩物流有限公司的地址',
+  #                          receive_mode: DeliveryReceiveMode::PACKAGE)
+  # end
 
-  unless (jxlo2=Location.find_by_nr('XSJXLO'))
-    jxlo2 = Location.create(nr: 'XSJXLO', name: '萧山佳轩简称', is_base: true,
+  unless (jxlo=Location.find_by_nr('JXJXLO'))
+    jxlo = Location.create(nr: 'JXJXLO', name: '江西佳轩简称', is_base: true,
                            tenant_id: t2.id,
-                           address: '萧山佳轩物流有限公司的地址',
+                           address: '江西佳轩物流有限公司的地址',
                            receive_mode: DeliveryReceiveMode::PACKAGE)
   end
 
