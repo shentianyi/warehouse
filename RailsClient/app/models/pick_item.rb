@@ -59,7 +59,7 @@ class PickItem < ActiveRecord::Base
       end
     end
 
-    storages=NStorage.select("SUM(n_storages.qty) as total_qty, n_storages.position").where(position: pp.detail, partNr: self.part_id, ware_house_id: wh_ids.uniq).group(:position)
+    storages=NStorage.select("SUM(n_storages.qty) as total_qty, n_storages.position").where(partNr: self.part_id, ware_house_id: wh_ids.uniq).group(:position)
     storages.each do |storage|
       pick_storages<<"#{storage.position}/#{storage.total_qty}"
     end

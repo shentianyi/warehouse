@@ -199,6 +199,10 @@
         if ('<%= @pick_items.length %>' > 0) {
             <% @pick_items.each_with_index do |pick_item, index| %>
             if ('<%= pick_item.state %>' == "300" || '<%= pick_item.state %>' == "2") {
+                document.getElementsByClassName('mui-choose-all')[0].disabled = true;
+                $('.check-box-submit').css({
+                    display: 'none'
+                })
                 if ('<%= pick_item.is_emergency %>' == "true") {
                     show_list_checked_fun('#F4A460', 'white', '<%= pick_item.id %>', '<%= pick_item.part_id %>', '<%= pick_item.quantity %>', '<%= pick_item.pick_position %>');
                 } else if ('<%= pick_item.remark %>' == "缺货") {
@@ -224,12 +228,11 @@
         }
 
         function show_list_checked_fun(bgcolor, fontcolor, id, part_id, quantity, pick_position) {
-//            $('.mui-choose-all').attr('disabled', "true");
             $('<div class="mui-segmented-control"><li class="mui-table-view-cell" style="padding: 0;list-style: none;">' +
                     '<div class="mui-slider-handle">' +
                     '<div class="mui-table-cell" style="background:' + bgcolor + '">' +
                     '<div class="mui-segmented-control mui-control-body">' +
-                    '<div class="mui-list-item" style="width:1px;"><input id=' + id + ' class="check-box-content" name="checkbox" value="false" type="checkbox" checked></div>' +
+                    '<div class="mui-list-item" style="width:1px;"><input id=' + id + ' class="check-box-content" name="checkbox" value="false" disabled="true" type="checkbox" checked></div>' +
                     '<div class="mui-list-item"><marquee scrollamount="2" scrolldelay="0" style="color:' + fontcolor + ';margin-bottom:-20px;" behavior="scroll">' + part_id + '</marquee></div>' +
                     '<div class="mui-list-item"><span style="color: ' + fontcolor + '">' + quantity + '</span></div>' +
                     '<div class="mui-list-item"><marquee  scrollamount="2" scrolldelay="0" style="color: ' + fontcolor + ';margin-bottom:-20px;" behavior="scroll">' + pick_position + '</marquee></div>' +
