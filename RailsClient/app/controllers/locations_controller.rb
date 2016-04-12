@@ -141,6 +141,6 @@ class LocationsController < ApplicationController
     params.require(:location).permit(:name, :address, :tel, :id,:nr,
                                      :prefix, :suffix,:receive_whouse_id,:send_whouse_id,
                                      :order_source_location_id,:receive_mode, :destination_id,:tenant_id,
-    :is_open_safe_qty,:safe_qty_emails)
+    :is_open_safe_qty,:safe_qty_emails,:can_send_when_no_stock,:check_delivery_by_pick,:default_whouse_id)
   end
 end

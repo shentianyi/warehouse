@@ -93,7 +93,7 @@
   <% @pick_item_filters.each_with_index do |pick_item_filter, i| %>
       <tr>
         <td><%= i+@pick_item_filters.offset+1 %>
-        <td><%= pick_item_filter.user.nr %></td>
+        <td><%= pick_item_filter.user.nr if pick_item_filter.user%></td>
         <td><%= pick_item_filter.filter_type_display %></td>
         <td><%= pick_item_filter.filterable_type %></td>
         <td><%= pick_item_filter.filterable.name %></td>

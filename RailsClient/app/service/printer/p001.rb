@@ -1,40 +1,47 @@
 # print package list
 module Printer
   class P001<Base
-    HEAD=[:id, :whouse, :delivery_date, :user, :total_packages]
-    BODY=[:package_id, :part_id, :quantity, :w_date, :receive_position]
+    # HEAD=[:id, :whouse, :delivery_date, :user, :total_packages]
+    # BODY=[:package_id, :part_id, :quantity, :w_date, :receive_position]
 
+    HEAD=[:forklist_nr, :create_date]
+    BODY=[:jx_batchnr, :shleoninr, :czleoninr, :qty,:unit, :num_buckle, :remark]
     #拖清单和包装箱的打印模板
     def generate_data
       f=LogisticsContainer.find_by_id(self.id)
-      #fp=ForkliftPresenter.new(f)
       p = f.presenter
-
-      head={id: p.container_id,
-            total_packages: p.sum_packages,
-            whouse: '',#p.destinationable_name,
-            delivery_date: f.get_dispatch_time,
-            user: f.user.nr}
+      #
+      head={
+          forklist_nr: p.container_id,
+          create_date: p.created_at
+      }
       heads=[]
 
       HEAD.each do |k|
         heads<<{Key: k, Value: head[k]}
       end
 
-      #这里肯定是包装箱
-      packages=PackagePresenter.init_presenters(LogisticsContainerService.get_all_packages_with_detail(f, 'part_id,container_id'))
-      packages.each do |p|
-        body={package_id: p.container_id,
-              part_id: p.part_id_display,
-              quantity: p.quantity_display,
-              w_date: p.fifo_time_display,
-              receive_position: p.position_nr}
+      packages=LogisticsContainerService.get_packages(f)
+      packages.each_with_index do |p, i|
+        puts p
+        body={
+            # nr: i+1,
+            jx_batchnr: '',
+            shleoninr: p.package.extra_sh_part_id.to_s,
+            czleoninr: p.package.extra_cz_part_id.to_s,
+            qty: p.package.quantity.to_s,
+            unit: p.package.extra_unit.to_s,
+            num_buckle: 1,
+            remark: p.package.remark.to_s
+        }
         bodies=[]
         BODY.each do |k|
           bodies<<{Key: k, Value: body[k]}
         end
         self.data_set <<(heads+bodies)
       end
+
+
     end
   end
 end

@@ -12,6 +12,10 @@ class NStorage < ActiveRecord::Base
     self.find_by_packageId(id)
   end
 
+  def self.package_by_user user,id
+    where(packageId: id,ware_house_id: user.location.whouse_ids)
+  end
+
   def validate
     # TODO
     # 建议在API中实现

@@ -24,6 +24,10 @@ class LogisticsContainer<LocationContainer
   #    self.package.destroy
   # end
 
+  def self.last_lc_container container_id
+    where(container_id:container_id).order('created_at desc').first
+  end
+
   def exists?(location_id)
     self.source_location_id==location_id
   end

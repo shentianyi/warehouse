@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   belongs_to :location
   has_many :deliveries
   has_many :pick_lists
-  has_many :pick_item_filters
+  has_many :pick_item_filters,dependent: :destroy
   has_many :inventory_lists
   #has_many :inventory_list_items
   has_many :user_permission_groups, dependent: :destroy

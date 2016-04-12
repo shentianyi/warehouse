@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160408084717) do
+ActiveRecord::Schema.define(version: 20160412043338) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -115,6 +115,13 @@ ActiveRecord::Schema.define(version: 20160408084717) do
   add_index "deliveries", ["source_id"], name: "index_deliveries_on_source_id", using: :btree
   add_index "deliveries", ["user_id"], name: "index_deliveries_on_user_id", using: :btree
   add_index "deliveries", ["uuid"], name: "index_deliveries_on_uuid", using: :btree
+
+  create_table "delivery_pick_lists", force: true do |t|
+    t.string   "delivery_id"
+    t.string   "pick_list_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "forklifts", force: true do |t|
     t.string   "uuid",        limit: 36,                 null: false
@@ -279,6 +286,9 @@ ActiveRecord::Schema.define(version: 20160408084717) do
     t.string   "order_source_location_id"
     t.boolean  "is_open_safe_qty",                    default: false
     t.text     "safe_qty_emails"
+    t.boolean  "can_send_when_no_stock",              default: false
+    t.string   "default_whouse_id"
+    t.boolean  "check_delivery_by_pick",              default: false
   end
 
   add_index "locations", ["destination_id"], name: "index_locations_on_destination_id", using: :btree
@@ -518,7 +528,7 @@ ActiveRecord::Schema.define(version: 20160408084717) do
     t.datetime "updated_at"
   end
 
-  add_index "part_clients", ["part_id"], name: "index_part_clients_on_parts_id", using: :btree
+  add_index "part_clients", ["part_id"], name: "index_part_clients_on_part_id", using: :btree
 
   create_table "part_positions", force: true do |t|
     t.string   "part_id"

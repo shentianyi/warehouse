@@ -20,4 +20,6 @@ module PackageMessage
   Sent = '唯一码已发送'
   InForkliftCannotReceive = '唯一码在拖清单中，不能单独接收'
 
+  NotInStock = '唯一码未入库或已发运,不可发运'
+
 end
