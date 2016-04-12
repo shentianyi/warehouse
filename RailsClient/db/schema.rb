@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160408084717) do
+ActiveRecord::Schema.define(version: 20160412083848) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -571,6 +571,7 @@ ActiveRecord::Schema.define(version: 20160408084717) do
     t.float    "safe_qty",                                             default: 0.0
     t.integer  "safe_qty_type",                                        default: 100
     t.integer  "package_type_id"
+    t.string   "supplier"
   end
 
   add_index "parts", ["id"], name: "index_parts_on_id", using: :btree
