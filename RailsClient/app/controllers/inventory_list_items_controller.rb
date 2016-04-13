@@ -65,14 +65,20 @@ class InventoryListItemsController < ApplicationController
 
   def export_list_detail
     @inventory_list=InventoryList.find_by_id(params[:id])
-    msg = FileHandler::Excel::InventoryListItemHandler.export_detail(@inventory_list.inventory_list_items)
+    msg = FileHandler::Excel::InventoryListItemHandler.export_detail(
+        @inventory_list.inventory_list_items
+            .joins(:part)
+            .select("inventory_list_items.*,parts.nr as part_nr")
+    )
     send_file msg.content
   end
 
   def export_list_total
     @inventory_list=InventoryList.find_by_id(params[:id])
     msg = FileHandler::Excel::InventoryListItemHandler.export_total(
-        @inventory_list.inventory_list_items.group('whouse_id,part_id,fifo').select('*,sum(qty) as qty'))
+        @inventory_list.inventory_list_items
+            .group('whouse_id,part_id').joins(:part)
+            .select('inventory_list_items.*,sum(qty) as qty,count(*) as num,parts.nr as part_nr'))
     send_file msg.content
   end
 

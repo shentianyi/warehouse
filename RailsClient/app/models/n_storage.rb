@@ -41,39 +41,41 @@ class NStorage < ActiveRecord::Base
     #             .group('n_storages.partNr')
     results = []
     resultstemp = []
-    @storages = NStorage.
+    @storages = NStorage.joins('inner join parts on parts.id=n_storages.partNr').
         where(ware_house_id: inventory_list.whouse_id)
-                    .select("partNr, sum(qty) as qty ")
+                    .select("partNr,parts.nr as nr, sum(qty) as qty,count(*) as num")
                     .group('partNr')
 
-    @inventory_list_items = InventoryListItem
+    @inventory_list_items = InventoryListItem.joins(:part)
                                 .where(condition)
-                                .select("part_id, sum(qty) as qty2 ")
+                                .select("part_id,parts.nr as nr, sum(qty) as qty2,count(*) as num")
                                 .group("part_id")
 
     @storages.each do |storage|
       # puts "#{storage.partNr}"
-      results.push([storage.partNr, storage.qty, 0, storage.qty])
+      # 零件号:0,库存数量:1,盘点数量:2,数量差异值:3,库存桶数:4,盘点桶数:5,桶数差异:6
+      results.push([storage.nr, storage.qty, 0, storage.qty,storage.num,0,storage.num])
     end
 
     @inventory_list_items.each do |inventory_list_item|
       @flag = false
       results.each do |result|
         # @storages.each do |storage|
-        if inventory_list_item.part_id.to_s == result[0].to_s
-          result.insert(2, inventory_list_item.qty2)
+        if inventory_list_item.nr == result[0]
+          #result.insert(2, inventory_list_item.qty2)
+          result[2]=inventory_list_item.qty2
           result[3] = (result[1]||0) - result[2]
+          #result[4]=
+          result[5]=inventory_list_item.num
+          result[6]= (result[4]||0) - result[5]
           @flag = true
           # break
         end
-
       end
       if !@flag
-        results.push([inventory_list_item.part_id.to_s, 0, inventory_list_item.qty2, 0-inventory_list_item.qty2.to_f])
+        results.push([Part.find_by_id(inventory_list_item.part_id).nr, 0, inventory_list_item.qty2, 0-inventory_list_item.qty2.to_f,0,inventory_list_item.num,0-inventory_list_item.num])
         #puts "part id is -- #{inventory_list_item.part_id}"
       end
-
-
     end
     return results
   end

@@ -1,19 +1,38 @@
 module FileHandler
   module Excel
     class InventoryListItemHandler<Base
+      # HEADERS=[
+      #     '仓库号', '零件号', 'FIFO', '数量', '库位号', '唯一码', '原材料/半成品/成品标记', '需要转换'
+      # ]
+      # DETAIL_HEADERS=[
+      #     'No.', '仓库号', '零件号', 'FIFO原', 'FIFO', '数量', '原数量', '盘点库位号', '唯一码', '目前仓库', '目前库位', '原材料/半成品/成品标记', '原材料线/非线标记', '需要转换', '是否已入库', '创建人', '创建时间', '是否在库存', '所属清单', '备注'
+      # ]
+      #
+      # TOTAL_HEADERS=[
+      #     '仓库号', '零件号', 'FIFO', '数量', '原材料/半成品/成品标记', '原材料线/非线标记'
+      # ]
+      #
+      # TOTAL_ALL_HEADERS=[
+      #     '零件号', '数量', '原材料/半成品/成品标记', '原材料线/非线标记'
+      # ]
+      #
+      # TOTAL_ALL_WHOUSE_HEADERS=[
+      #     '仓库', '零件号', '数量'
+      # ]
+
       HEADERS=[
-          '仓库号', '零件号', 'FIFO', '数量', '库位号', '唯一码', '原材料/半成品/成品标记', '需要转换'
+          '仓库号', '零件号', 'FIFO', '数量', '库位号', '唯一码'
       ]
       DETAIL_HEADERS=[
-          'No.', '仓库号', '零件号', 'FIFO原', 'FIFO', '数量', '原数量', '盘点库位号', '唯一码', '目前仓库', '目前库位', '原材料/半成品/成品标记', '原材料线/非线标记', '需要转换', '是否已入库', '创建人', '创建时间', '是否在库存', '所属清单', '备注'
+          'No.', '仓库号', '零件号', 'FIFO', '数量', '原数量', '盘点库位号', '唯一码', '目前仓库', '目前库位', '是否已入库', '创建人', '创建时间', '是否在库存', '所属清单', '备注'
       ]
 
       TOTAL_HEADERS=[
-          '仓库号', '零件号', 'FIFO', '数量', '原材料/半成品/成品标记', '原材料线/非线标记'
+          '仓库号', '零件号', 'FIFO', '数量','桶数'
       ]
 
       TOTAL_ALL_HEADERS=[
-          '零件号', '数量', '原材料/半成品/成品标记', '原材料线/非线标记'
+          '零件号', '数量','桶数'
       ]
 
       TOTAL_ALL_WHOUSE_HEADERS=[
@@ -46,8 +65,8 @@ module FileHandler
                         qty: row['数量'].to_f,
                         position: row['库位号'],
                         package_id: row['唯一码'],
-                        part_form_mark: row['原材料/半成品/成品标记'],
-                        need_convert: row['需要转换'].present? ? (row['需要转换']=='Y') : false
+                        # part_form_mark: row['原材料/半成品/成品标记'],
+                        need_convert: false#row['需要转换'].present? ? (row['需要转换']=='Y') : false
                 }
                 InventoryListItem.new_item(params, false)
                 # end
@@ -75,11 +94,10 @@ module FileHandler
           sheet.add_row TOTAL_ALL_HEADERS
           items.all.each do |inventory_list_item|
             sheet.add_row [
-                              inventory_list_item.part_id,
+                              inventory_list_item.part_nr,
                               inventory_list_item.qty,
-                              inventory_list_item.part_form_mark,
-                              inventory_list_item.part_wire_mark
-                          ], types: [:string, :string, :string, :string]
+                              inventory_list_item.num
+                          ], types: [:string, :string, :string]
           end
         end
         p.use_shared_strings = true
@@ -103,7 +121,10 @@ module FileHandler
             data=[part_id]
             types=[:string]
             whouses.each do |whouse_id|
-              data<< ((item=InventoryListItem.joins(:inventory_list).where(part_id: part_id, whouse_id: whouse_id, inventory_lists: {state: InventoryListState::PROCESSING}).select('sum(qty) as qty').first).nil? ? '0.0' : item.qty)
+              data<< ((item=InventoryListItem.joins(:inventory_list)
+                                .where(part_id: part_id, whouse_id: whouse_id,
+                                       inventory_lists: {state: InventoryListState::PROCESSING})
+                                .select('sum(qty) as qty').first).nil? ? '0.0' : item.qty)
               types<<:string
             end
             sheet.add_row data, types: types
@@ -126,13 +147,12 @@ module FileHandler
           sheet.add_row TOTAL_HEADERS
           items.all.each do |inventory_list_item|
             sheet.add_row [
-                              inventory_list_item.whouse_id,
-                              inventory_list_item.part_id,
-                              inventory_list_item.fifo_export_display,
+                              inventory_list_item.whouse_nr,
+                              inventory_list_item.part_nr,
+                              inventory_list_item.fifo_display,
                               inventory_list_item.qty,
-                              inventory_list_item.part_form_mark,
-                              inventory_list_item.part_wire_mark
-                          ], types: [:string, :string, :string, :string, :string, :string]
+                              inventory_list_item.num
+                          ], types: [:string, :string, :string, :string, :string]
 
           end
         end
@@ -153,26 +173,22 @@ module FileHandler
           items.all.each_with_index do |inventory_list_item, i|
             sheet.add_row [
                               i+1,
-                              inventory_list_item.whouse_id,
-                              inventory_list_item.part_id,
+                              inventory_list_item.whouse_nr,
+                              inventory_list_item.part_nr,
                               inventory_list_item.fifo_display,
-                              inventory_list_item.fifo_export_display,
                               inventory_list_item.qty,
                               inventory_list_item.origin_qty,
-                              inventory_list_item.position,
+                              inventory_list_item.position_nr,
                               inventory_list_item.package_id,
-                              inventory_list_item.current_whouse,
-                              inventory_list_item.current_position,
-                              inventory_list_item.part_form_mark,
-                              inventory_list_item.part_wire_mark,
-                              inventory_list_item.need_convert_display,
+                              inventory_list_item.current_whouse_nr,
+                              inventory_list_item.current_position_nr,
                               inventory_list_item.in_stored_display,
-                              inventory_list_item.user_id,
+                              inventory_list_item.user_nr,
                               inventory_list_item.created_at.localtime,
                               inventory_list_item.in_store_display,
                               inventory_list_item.inventory_list.name,
                               inventory_list_item.remark
-                          ], types: [:string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string]
+                          ], types: [:string,:string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string]
 
           end
         end
@@ -285,9 +301,9 @@ module FileHandler
           msg.contents << "零件号:#{row[:part_id]} 不存在!"
         end
 
-        unless row[:qty].to_f > 0
-          msg.contents << "数量: #{row[:qty]} 不可以 0!"
-        end
+        # unless row[:qty].to_f > 0
+        #   msg.contents << "数量: #{row[:qty]} 不可以 0!"
+        # end
 
         if row[:FIFO].present?
           begin
