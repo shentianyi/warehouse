@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160413054029) do
+ActiveRecord::Schema.define(version: 20160413153103) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -214,6 +214,13 @@ ActiveRecord::Schema.define(version: 20160413054029) do
 
   add_index "location_container_hierarchies", ["ancestor_id", "descendant_id", "generations"], name: "anc_desc_idx", unique: true, using: :btree
   add_index "location_container_hierarchies", ["descendant_id"], name: "desc_idx", using: :btree
+
+  create_table "location_container_orders", force: true do |t|
+    t.string   "location_container_id"
+    t.string   "order_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "location_container_pick_lists", force: true do |t|
     t.string   "location_container_id"

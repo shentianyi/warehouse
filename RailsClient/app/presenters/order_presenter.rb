@@ -1,5 +1,5 @@
 class OrderPresenter<Presenter
-  Delegators=[:id,:user_id,:created_at,:order_items,:handled,:remark]
+  Delegators=[:id,:user_id,:order_items,:handled,:remark]
   def_delegators :@order,*Delegators
 
   def initialize(order)
@@ -23,11 +23,22 @@ class OrderPresenter<Presenter
     end
   end
 
+
+  def user_nr
+    @order.user.nil? ? '' : @order.user.nr
+  end
+
+  def created_at
+    @order.created_at.blank? ? '' : @order.created_at.localtime.strftime('%Y-%m-%d %H:%M')
+  end
+
+
   def to_json
     {
         id: self.id,
-        user_id: self.user_id,
-        created_at: self.created_at.localtime,
+        user_id: self.user_id.blank? ? '' : self.user_id,
+        user_nr: self.user_nr,
+        created_at: self.created_at,
         remark: self.remark,
         handled: self.handled ? 1 : 0,
         has_out_of_stock: self.has_out_of_stock ? 1:0

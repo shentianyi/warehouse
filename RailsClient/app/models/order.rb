@@ -9,12 +9,15 @@ class Order < ActiveRecord::Base
   #要货地
   belongs_to :source_location, class_name: "Location"
 
+  has_many :location_container_orders, dependent: :destroy
+  has_many :location_containers, through: :location_container_orders
+
   def generate_id
     "OD#{Time.now.to_milli}"
   end
 
   def is_emergency
-    self.order_items.each{|item|
+    self.order_items.each { |item|
       if item.is_emergency
         return true
       end
@@ -46,7 +49,7 @@ class Order < ActiveRecord::Base
                               OrderItemLabelRegex.part_prefix_string + item.part_id,
                               item.box_quantity,
                               OrderItemLabelRegex.quantity_prefix_string + item.quantity.to_s,
-                              OrderItemState.display(item.state )
+                              OrderItemState.display(item.state)
                           ]
           end
         end

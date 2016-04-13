@@ -1,6 +1,7 @@
 #encoding: utf-8
 module V3
-  class PickListApi < Grape::API
+  class PickListApi < Base
+    guard_all!
     namespace :pick_lists do
       format :json
       rescue_from :all do |e|

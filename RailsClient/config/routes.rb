@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :location_container_orders
+
   resources :location_container_pick_lists
 
   resources :package_types

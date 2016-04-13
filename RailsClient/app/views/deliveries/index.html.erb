@@ -96,12 +96,12 @@
       <div class="col-sm-8" style="text-align: right;">
         <input type="hidden" value="delivery" name="model"/>
         <input type="hidden" value="records" name="tables"/><!--使用分号隔开，这里的表应该与上面的参数一致-->
-          <div class="col-sm-4">
-            <input type="submit" value="查找" class="btn btn-primary" name="search" style="width: 200px;"/>
-          </div>
-          <div class="col-sm-4">
-            <input type="submit" value="导出" class="btn btn-primary" name="download" style="width: 200px;"/>
-          </div>
+        <div class="col-sm-4">
+          <input type="submit" value="查找" class="btn btn-primary" name="search" style="width: 200px;"/>
+        </div>
+        <div class="col-sm-4">
+          <input type="submit" value="导出" class="btn btn-primary" name="download" style="width: 200px;"/>
+        </div>
       </div>
     </div>
 
@@ -171,6 +171,11 @@
     <!--基础-->
     <!--包含-->
     <th>托清单数</th>
+    <% if current_user.location.check_delivery_by_pick %>
+        <th>
+          需求单号
+        </th>
+    <% end %>
     <!--包含-->
     <!--操作-->
     <th>最新记录</th>
@@ -196,6 +201,13 @@
         <td>
           <%= link_to delivery_presenter.forklifts.count, forklifts_delivery_path(delivery), style: 'border-radius:10px;padding:5px 20px 5px 20px;background:steelblue;color:white;', :title => '托清单数' %>
         </td>
+        <% if current_user.location.check_delivery_by_pick %>
+            <td title="<%= delivery.order_id %>">
+              <% if delivery.order %>
+                  <%= link_to content_tag(:span, delivery.order_id, :class => 'label label-primary'), order_items_order_path(delivery.order) %>
+              <% end %>
+            </td>
+        <% end %>
         <td>
           <%= delivery.get_records.last.display %>
         </td>

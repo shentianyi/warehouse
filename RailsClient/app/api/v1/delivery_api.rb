@@ -8,7 +8,7 @@ module V1
       #strong parameters
       helpers do
         def delivery_params
-          ActionController::Parameters.new(params).require(:delivery).permit(:id, :destination_id, :user_id, :delivery_date, :forklifts, :remark)
+          ActionController::Parameters.new(params).require(:delivery).permit(:id,:order_id, :destination_id, :user_id, :delivery_date, :forklifts, :remark)
         end
       end
 
