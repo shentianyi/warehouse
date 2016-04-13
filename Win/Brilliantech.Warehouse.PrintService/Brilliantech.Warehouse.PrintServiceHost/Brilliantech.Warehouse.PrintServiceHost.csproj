@@ -182,6 +182,8 @@
     <None Include="Template\ForkliftList.tfs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Template\forklist.tff" />
+    <None Include="Template\forklist.tfs" />
     <None Include="Template\PackageList.tff">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

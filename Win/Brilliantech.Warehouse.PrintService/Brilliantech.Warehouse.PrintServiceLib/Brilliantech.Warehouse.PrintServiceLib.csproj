@@ -82,16 +82,17 @@
     </None>
     <None Include="Ini\api.ini" />
     <None Include="Ini\printers.ini" />
+    <None Include="Template\deliveryList-cztojx.tff" />
+    <None Include="Template\deliveryList-jxtosh.tff" />
     <None Include="Template\DeliveryList.tff" />
     <None Include="Template\DeliveryListCZToJX.tff" />
     <None Include="Template\DeliveryReceivedList.tff" />
     <None Include="Template\DeliveryUnReceivedList.tff" />
     <None Include="Template\ForkliftList.tff" />
+    <None Include="Template\picklist.tff" />
     <None Include="Template\read.ini" />
     <None Include="Template\test.tff" />
-    <Content Include="Template\TransferForkliftList.tff">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Template\TransferForkliftList.tff" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Brilliantech.Framwork\Brilliantech.Framwork.csproj">
