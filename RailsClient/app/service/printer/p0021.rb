@@ -45,7 +45,7 @@ module Printer
           p part.id
           p parts
           p parts[part.id]
-          p  parts[part.id].blank?
+          p parts[part.id].blank?
           p '---------------'
 
           if parts[part.id].blank?
@@ -57,7 +57,7 @@ module Printer
           bodies=[]
           body={
               forklift_nr: f.container_id.to_s,
-              batch_nr: ps.package.extra_batch.to_s,
+              batch_nr: d.batch_no.nil? ? '' : d.batch_no,#ps.package.extra_batch.to_s,
               part_nr: part.sh_part_nr, #ps.package.part.present? ?  ps.package.part.nr : '',
               czleoni_partnr: part.cz_part_nr, #ps.package.extra_cz_part_id.to_s,
               total_qty: ps.package.quantity.to_s,
@@ -75,11 +75,11 @@ module Printer
         end
       end
       p '---------------'
-p parts
+      p parts
       p '---------------'
 
       if d.order
-        d.order.order_items.each do |item|
+        d.order.order_items.select('*,sum(quantity) as quantity').group(:part_id).each do |item|
           part_id=item.part_id
           if part=Part.find_by_id(part_id)
             qty=item.quantity.to_i

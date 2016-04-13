@@ -24,13 +24,16 @@ module Printer
       packages=LogisticsContainerService.get_packages(f)
       packages.each_with_index do |p, i|
         puts p
+        part=Part.find_by_id(p.package.part_id)
+p part.to_json
+        p p.package
         body={
             # nr: i+1,
-            jx_batchnr: '',
-            shleoninr: p.package.extra_sh_part_id.to_s,
-            czleoninr: p.package.extra_cz_part_id.to_s,
+            jx_batchnr: f.batch_no.nil? ? '' : f.batch_no,
+            shleoninr: part.sh_part_nr, #ps.package.part.present? ?  ps.package.part.nr : '',
+            czleoninr: part.cz_part_nr, #ps.package.extra_cz_part_id.to_s,
             qty: p.package.quantity.to_s,
-            unit: p.package.extra_unit.to_s,
+            unit: part.unit, #ps.package.extra_unit.to_s,
             num_buckle: 1,
             remark: p.package.remark.to_s
         }

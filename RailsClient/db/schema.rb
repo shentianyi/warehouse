@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160413153103) do
+ActiveRecord::Schema.define(version: 20160413204218) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -245,6 +245,7 @@ ActiveRecord::Schema.define(version: 20160413153103) do
     t.string   "destinationable_id"
     t.string   "destinationable_type"
     t.string   "ancestry"
+    t.string   "batch_no"
   end
 
   add_index "location_containers", ["ancestry"], name: "index_location_containers_on_ancestry", using: :btree
