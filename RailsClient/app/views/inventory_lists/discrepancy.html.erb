@@ -4,33 +4,35 @@
   </div>
   <div class="panel-body">
     <br/>
+
     <div>
       <script type="text/javascript">
-        function submitForm() {
-            document.forms[0].submit();
-        }
-          
+          function submitForm() {
+              document.forms[0].submit();
+          }
+
       </script>
-     
+
     </div>
     <div>
       <form method="get" action="<%= discrepancy_inventory_list_path(@inventory_list) %>">
-          <div>
-            <span class="label label-info">盘点清单:</span>
-			<% inventory_lists_array = InventoryList.all.map { |inventory_list| [inventory_list.name, inventory_list.id]}%>
-            <%= select_tag(:sid,options_for_select(inventory_lists_array,@inventory_list_id),include_blank: false)%>
-            
-            <span class="label label-info">显示方式:</span>
-            <%= select_tag :format, options_for_select([["Web", "html"],["Excel File(MS 07 or later)", "xlsx"]], "html") %>
-           
-            <input type="button" value="确定" class="btn btn-warning" name="commit" onclick="submitForm()"/>
-          </div>
+        <div>
+          <span class="label label-info">盘点清单:</span>
+          <% inventory_lists_array = InventoryList.all.map { |inventory_list| [inventory_list.name, inventory_list.id] } %>
+          <%= select_tag(:sid, options_for_select(inventory_lists_array, @inventory_list_id), include_blank: false) %>
+
+          <span class="label label-info">显示方式:</span>
+          <%= select_tag :format, options_for_select([["Web", "html"], ["Excel File(MS 07 or later)", "xlsx"]], "html") %>
+
+          <input type="button" value="确定" class="btn btn-warning" name="commit" onclick="submitForm()"/>
+        </div>
       </form>
     </div>
   </div>
   <br/>
+
   <div class="alert alert-success" role="alert">
-    <p><%= @title%></p>
+    <p><%= @title %></p>
   </div>
   <table class="table table-striped table-condensed table-hover">
     <thead>
@@ -46,11 +48,13 @@
     </tr>
     </thead>
     <tbody>
-    <% i = 0%>
+    <% i = 0 %>
     <% @results.each_with_index do |o, i| %>
         <tr>
           <td><%= i+1 %></td>
-          <td><%= o[0] %></td>
+          <td>
+            <%= o[0] %>
+          </td>
           <td><%= o[1] %></td>
           <td><%= o[2] %></td>
           <td><%= o[3] %></td>

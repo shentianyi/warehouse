@@ -103,6 +103,7 @@ class InventoryListsController < ApplicationController
       last_batch=storage.lock_batch
     end
     if params[:do]=='disable'
+      flash[:notice]='盘点重置成功'
       NStorage.transaction do
         lock_remark='盘点覆盖锁定'+"-"+Time.now.strftime("%Y%m%d")
         NStorage.where(locked: false)
@@ -114,7 +115,7 @@ class InventoryListsController < ApplicationController
       end
 
     else
-
+      flash[:notice]='取消盘点重置成功'
       NStorage.transaction do
         NStorage.unscoped.where(locked: true, lock_batch: last_batch)
             .update_all(locked: false,

@@ -1,6 +1,6 @@
 class NStorage < ActiveRecord::Base
   belongs_to :whouse, foreign_key: :ware_house_id
-  belongs_to :position#, foreign_key: :position
+  belongs_to :position #, foreign_key: :position
   belongs_to :part, foreign_key: :partNr
   default_scope { where(locked: false) }
 
@@ -12,8 +12,8 @@ class NStorage < ActiveRecord::Base
     self.find_by_packageId(id)
   end
 
-  def self.package_by_user user,id
-    where(packageId: id,ware_house_id: user.location.whouse_ids)
+  def self.package_by_user user, id
+    where(packageId: id, ware_house_id: user.location.whouse_ids)
   end
 
   def validate
@@ -54,11 +54,14 @@ class NStorage < ActiveRecord::Base
     @storages.each do |storage|
       # puts "#{storage.partNr}"
       # 零件号:0,库存数量:1,盘点数量:2,数量差异值:3,库存桶数:4,盘点桶数:5,桶数差异:6
-      results.push([storage.nr, storage.qty, 0, storage.qty,storage.num,0,storage.num])
+      results.push([storage.nr, storage.qty, 0, storage.qty, storage.num, 0, storage.num])
+      # storage_count=NStorage.where(ware_house_id: inventory_list.whouse_id, partNr: storage.partNr).count
+      # results.push([storage.partNr, storage.qty,0, storage.qty, storage_count, 0, storage_count])
     end
 
     @inventory_list_items.each do |inventory_list_item|
       @flag = false
+      item_count=InventoryListItem.where(condition).where(part_id: inventory_list_item.part_id).count
       results.each do |result|
         # @storages.each do |storage|
         if inventory_list_item.nr == result[0]
@@ -68,12 +71,14 @@ class NStorage < ActiveRecord::Base
           #result[4]=
           result[5]=inventory_list_item.num
           result[6]= (result[4]||0) - result[5]
+          # result.insert(6, item_count)
+          # result[7] = (result[5]||0) - result[6]
           @flag = true
           # break
         end
       end
       if !@flag
-        results.push([Part.find_by_id(inventory_list_item.part_id).nr, 0, inventory_list_item.qty2, 0-inventory_list_item.qty2.to_f,0,inventory_list_item.num,0-inventory_list_item.num])
+        results.push([Part.find_by_id(inventory_list_item.part_id).nr, 0, inventory_list_item.qty2, 0-inventory_list_item.qty2.to_f, 0, inventory_list_item.num, 0-inventory_list_item.num])
         #puts "part id is -- #{inventory_list_item.part_id}"
       end
     end
@@ -99,7 +104,7 @@ class NStorage < ActiveRecord::Base
                             n_storage.fifo.present? ? n_storage.fifo.localtime.strftime("%Y-%m-%d %H:%M") : '',
                             n_storage.created_at.present? ? n_storage.created_at.localtime.strftime("%Y-%m-%d %H:%M") : '',
                             n_storage.packageId
-                        ], types: [:string, :string, :string, :string, :string, :string, :string,:string]
+                        ], types: [:string, :string, :string, :string, :string, :string, :string, :string]
         end
       }
     end
@@ -126,7 +131,7 @@ class NStorage < ActiveRecord::Base
                             n_storage.qty,
                             n_storage.fifo.present? ? n_storage.fifo.localtime.strftime("%Y-%m-%d %H:%M") : '',
                             n_storage.created_at.present? ? n_storage.created_at.localtime.strftime("%Y-%m-%d %H:%M") : ''
-                        ], types: [:string, :string, :string, :string, :string, :string, :string,:string]
+                        ], types: [:string, :string, :string, :string, :string, :string, :string, :string]
         end
       }
     end
