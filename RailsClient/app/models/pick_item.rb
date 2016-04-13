@@ -55,13 +55,14 @@ class PickItem < ActiveRecord::Base
     wh_ids=[]
     if user=User.find_by_id(self.user_id)
       LocationDestination.where(destination_id: user.location.id).each do |ld|
-        wh_ids<<ld.location.whouses.pluck(:id)
+        wh_ids+=ld.location.whouses.pluck(:id)
       end
     end
 
     storages=NStorage.select("SUM(n_storages.qty) as total_qty, n_storages.position").where(partNr: self.part_id, ware_house_id: wh_ids.uniq).group(:position)
+    # storages=NStorage.select("SUM(n_storages.qty) as total_qty, n_storages.position").where(partNr: self.part_id, ware_house_id: wh_ids.uniq-[self.destination_whouse_id]).group(:position)
     storages.each do |storage|
-      pick_storages<<"#{storage.position}/#{storage.total_qty}"
+      pick_storages<<"#{storage.position.blank? ? "库位没有记录" : storage.position}/#{storage.total_qty}"
     end
 
     pick_storages.join("-----")
