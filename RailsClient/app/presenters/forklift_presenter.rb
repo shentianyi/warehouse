@@ -12,7 +12,7 @@ class ForkliftPresenter<Presenter
   end
 
   def created_at
-    @forklift.created_at.blank? ? '' : @forklift.created_at.strftime('%Y-%m-%d %H:%M')
+    @forklift.created_at.blank? ? '' : @forklift.created_at.localtime.strftime('%Y-%m-%d %H:%M')
   end
 
   def user_id

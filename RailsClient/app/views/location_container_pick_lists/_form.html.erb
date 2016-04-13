@@ -1,0 +1,25 @@
+<%= form_for(@location_container_pick_list) do |f| %>
+  <% if @location_container_pick_list.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@location_container_pick_list.errors.count, "error") %> prohibited this location_container_pick_list from being saved:</h2>
+
+      <ul>
+      <% @location_container_pick_list.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :location_container_id %><br>
+    <%= f.text_field :location_container_id %>
+  </div>
+  <div class="field">
+    <%= f.label :pick_list_id %><br>
+    <%= f.text_field :pick_list_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

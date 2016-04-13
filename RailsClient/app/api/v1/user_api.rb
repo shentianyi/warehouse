@@ -17,7 +17,7 @@ module V1
               {result: 0, content: '盘点中...登陆锁定'}
             else
               {result: 1, content: {user_id: current_user.id,
-                                    user_nr:current_user.nr,
+                                    user_nr: current_user.nr,
                                     role_id: current_user.role_id,
                                     location_id: current_user.location_id,
                                     location_name: current_user.location.name,

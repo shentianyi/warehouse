@@ -1,5 +1,5 @@
 class LocationPresenter<Presenter
-  Delegators=[:id, :nr, :tenant_id, :name, :created_at, :updated_at,:receive_mode]
+  Delegators=[:id, :nr, :tenant_id, :name, :created_at, :updated_at, :receive_mode,:check_delivery_by_pick]
   def_delegators :@location, *Delegators
 
   def initialize(location)
@@ -13,7 +13,7 @@ class LocationPresenter<Presenter
       json[:destination]=LocationPresenter.new(@location.default_destination).to_json
     end
     if @location.order_source_location
-    json[:order_source_location]=LocationPresenter.new(@location.order_source_location).to_json
+      json[:order_source_location]=LocationPresenter.new(@location.order_source_location).to_json
     end
     if @location.default_whouse
       json[:default_whouse]={

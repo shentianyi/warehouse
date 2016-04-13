@@ -12,6 +12,9 @@ class LocationContainer < ActiveRecord::Base
   belongs_to :source_location, class_name: 'Location'
   belongs_to :des_location, class_name: 'Location'
 
+  has_many :location_container_pick_lists, dependent: :destroy
+  has_many :pick_lists,through: :location_container_pick_lists
+
   # has_ancestry
   # acts_as_tree
   before_create :init_container_attr

@@ -10,5 +10,6 @@ module V3
     mount V3::MovementListApi
     mount V3::MovementApi
     mount V3::MovementSourceApi
+    mount V3::PickListApi
   end
 end
