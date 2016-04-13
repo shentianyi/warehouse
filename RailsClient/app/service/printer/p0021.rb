@@ -65,18 +65,11 @@ module Printer
       parts=parts.uniq
 
       if d.order
-        d.order.order_items.pluck(:part_id).uniq.each do |part_id|
+        d.order.order_items.each do |item|
+          part_id=item.part_id
           unless parts.include?(part_id)
             if part=Part.find_by_id(part_id)
               bodies=[]
-              remark=''
-              if d.source_location.default_whouse
-                if storage=NStorage.where(ware_house_id: d.source_location.default_whouse.id, partNr: part_id).first
-                  remark='未择货'
-                else
-                  remark='无库存'
-                end
-              end
               body={
                   forklift_nr: '',
                   batch_nr: '',
@@ -84,8 +77,8 @@ module Printer
                   czleoni_partnr: part.cz_part_nr,
                   total_qty: '',
                   unit: '',
-                  num_bucket: 1,
-                  remark: remark
+                  num_bucket: item.quantity.to_i,
+                  remark: item.remark
               }
               BODY.each do |k|
                 bodies<<{Key: k, Value: body[k]}
