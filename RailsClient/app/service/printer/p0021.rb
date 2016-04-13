@@ -33,13 +33,27 @@ module Printer
 
       forklifts=LogisticsContainerService.get_forklifts(d)
 
-      parts=[]
+      parts={}
       forklifts.each do |f|
 
         packages=LogisticsContainerService.get_packages(f)
         packages.each do |ps|
           part=Part.find_by_id(ps.package.part_id)
-          parts<<part.id
+
+
+          p '---------------'
+          p part.id
+          p parts
+          p parts[part.id]
+          p  parts[part.id].blank?
+          p '---------------'
+
+          if parts[part.id].blank?
+            parts[part.id]=1
+          else
+            parts[part.id]+=1
+          end
+
           bodies=[]
           body={
               forklift_nr: f.container_id.to_s,
@@ -60,15 +74,25 @@ module Printer
 
         end
       end
-
-
-      parts=parts.uniq
+      p '---------------'
+p parts
+      p '---------------'
 
       if d.order
         d.order.order_items.each do |item|
           part_id=item.part_id
-          unless parts.include?(part_id)
-            if part=Part.find_by_id(part_id)
+          if part=Part.find_by_id(part_id)
+            qty=item.quantity.to_i
+
+            if parts[part_id].present?
+              # if item.qty>parts[part_id]
+              qty=item.quantity.to_i-parts[part_id]
+              # else
+              #   qty=0
+              # end
+            end
+
+            if qty>0
               bodies=[]
               body={
                   forklift_nr: '',
@@ -77,13 +101,14 @@ module Printer
                   czleoni_partnr: part.cz_part_nr,
                   total_qty: '',
                   unit: '',
-                  num_bucket: item.quantity.to_i,
+                  num_bucket: qty,
                   remark: item.remark
               }
               BODY.each do |k|
                 bodies<<{Key: k, Value: body[k]}
               end
               self.data_set <<(heads+bodies)
+
             end
           end
         end
@@ -93,3 +118,24 @@ module Printer
     end
   end
 end
+
+
+# unless parts.include?(part_id)
+#   if part=Part.find_by_id(part_id)
+#     bodies=[]
+#     body={
+#         forklift_nr: '',
+#         batch_nr: '',
+#         part_nr: part.sh_part_nr,
+#         czleoni_partnr: part.cz_part_nr,
+#         total_qty: '',
+#         unit: '',
+#         num_bucket: item.quantity.to_i,
+#         remark: item.remark
+#     }
+#     BODY.each do |k|
+#       bodies<<{Key: k, Value: body[k]}
+#     end
+#     self.data_set <<(heads+bodies)
+#   end
+# end
