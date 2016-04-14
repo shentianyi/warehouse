@@ -28,6 +28,6 @@ set :output, {:error => 'log/cron_error_log.log', :standard => 'log/cron_log.log
 #  runner 'script/test/test_delivery.rb'
 #end
 
-every 1.day,:at=>['9:47'] do
-  command "backup perform -t jiaxuan_backup"
-end
+# every 1.day,:at=>['9:47'] do
+#   command "backup perform -t jiaxuan_backup"
+# end

@@ -19,7 +19,7 @@ ActiveRecord::Base.transaction do
 
   unless (jxlo=Location.find_by_nr('JXJXLO'))
     jxlo = Location.create(nr: 'JXJXLO', name: '江西佳轩简称', is_base: true,
-                           tenant_id: t2.id,
+                           tenant_id: t.id,
                            address: '江西佳轩物流有限公司的地址',
                            receive_mode: DeliveryReceiveMode::PACKAGE)
   end

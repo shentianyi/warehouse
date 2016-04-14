@@ -50,6 +50,11 @@
           <input type="hidden" name="part[nr_fuzzy]"/>
         </div>
         <div class="col-sm-4">
+          供应商：
+          <input type="text" name="part[supplier]" value="<%= @supplier %>"/>
+          <input type="hidden" name="part[supplier_fuzzy]"/>
+        </div>
+        <div class="col-sm-4">
           <input type="submit" value="查 找" class="btn btn-primary" style="width: 150px;"/>
         </div>
       </div>
