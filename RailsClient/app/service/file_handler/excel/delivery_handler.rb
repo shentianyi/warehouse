@@ -55,13 +55,14 @@ module FileHandler
                                            fifo_time: fifo,
                                            remark: book.cell(2, 4),
                                            user_id: user.id,
-                                           location_id: source.id
+                                           location_id: source.id,
+                                           state: DeliveryState::RECEIVED
                                        })
 
             # generate delivery location_container
             # destination =source.default_location_destination #Location.find_by_nr(SysConfigCache.jiaxuan_extra_destination_value)
 
-            dlc = delivery.logistics_containers.build(source_location_id: source.id, des_location_id: destination.id, user_id: user.id, remark: '常州莱尼发运数据', state: MovableState::WAY)
+            dlc = delivery.logistics_containers.build(source_location_id: source.id, des_location_id: destination.id, user_id: user.id, remark: '常州莱尼发运数据', state: MovableState::CHECKED)
             dlc.destinationable = destination
             dlc.save
             # send dlc,create record for dlc
@@ -72,10 +73,11 @@ module FileHandler
             # generate forklifts containers
             forklift = Forklift.create({
                                            user_id: user.id,
-                                           location_id: source.id
+                                           location_id: source.id,
+                                           state: ForkliftState::RECEIVED
                                        })
             #create forklift lc
-            flc = forklift.logistics_containers.build({source_location_id: source.id, des_location_id: destination.id, user_id: user.id, state: MovableState::WAY})
+            flc = forklift.logistics_containers.build({source_location_id: source.id, des_location_id: destination.id, user_id: user.id, state: MovableState::CHECKED})
             flc.destinationable = destination
             flc.save
             Record.create({recordable: flc, impl_id: user.id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
@@ -127,7 +129,7 @@ module FileHandler
 
               to_wh=Whouse.find_by_nr(row[:to_wh])
               to_position=Position.find_by_nr(row[:to_position])
-                plc.enter_stock(to_wh, to_position, Time.now, false)
+                plc.enter_stock(to_wh, to_position, row[:fifo], false)
 
                 Record.create({recordable: plc, impl_id: user.id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
                 flc.add(plc)
