@@ -175,14 +175,14 @@ class LogisticsContainer<LocationContainer
     end
   end
 
-  def enter_stock(warehouse, position, fifo)
+  def enter_stock(warehouse, position, fifo, pid=true)
     # if self.state==MovableState::CHECKED
     if (package=self.package)
       params={
           partNr: package.part.id,
           qty: package.quantity,
           fifo: fifo,
-          packageId: package.id,
+          packageId: (package.id if pid),
           toWh: warehouse.id,
           toPosition: position.id
       }

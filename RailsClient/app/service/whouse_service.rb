@@ -54,18 +54,18 @@ class WhouseService
       data[:uniqueId] = params[:uniqueId] if params[:uniqueId].present?
       data[:packageId] = params[:packageId] if params[:packageId].present?
       data[:locked]=true if params[:locked].present?
-      # if params[:packageId].present?
+      if params[:packageId].present?
         NStorage.create!(data)
-      # else
-        # storage = NStorage.where(partNr: params[:partNr], ware_house_id: wh.id, position_id: params[:toPosition], packageId: nil, fifo: fifo)
-        #               .order("n_storages.qty asc").first
-        #
-        # if storage
-        #   storage.update!(qty: storage.qty + params[:qty].to_f)
-        # else
-        #   NStorage.create!(data)
-        # end
-      # end
+      else
+        storage = NStorage.where(partNr: params[:partNr], ware_house_id: wh.id, position_id: params[:toPosition], packageId: nil, fifo: fifo)
+                      .order("n_storages.qty asc").first
+
+        if storage
+          storage.update!(qty: storage.qty + params[:qty].to_f)
+        else
+          NStorage.create!(data)
+        end
+      end
     end
     type = MoveType.find_by!(typeId: 'ENTRY')
     data = {fifo: fifo, partNr: params[:partNr], qty: params[:qty], to_id: wh.id, toPosition: params[:toPosition],
