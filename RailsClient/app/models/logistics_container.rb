@@ -32,7 +32,7 @@ class LogisticsContainer<LocationContainer
                .where(created_at: [start_time..end_time],
                       source_location_id: Location.find_by_nr('SHJXLO').id).count
 
-    self.batch_no= "#{Time.now.strftime('%y%m%d')}#{ '%02d' % ((count+1)*2)}"
+    self.batch_no= "#{Time.now.strftime('%y%m%d')}#{ '%02d' % ((count)*2)}"
   end
 
   def self.last_lc_container container_id
