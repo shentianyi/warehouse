@@ -13,11 +13,12 @@ default: &default
   adapter: mysql2
   pool: 30
   timeout: 5000
-  socket: /var/run/mysqld/mysqld.sock
+  #socket: /var/run/mysqld/mysqld.sock
   username: vmi_jiaxuan
   password: vmi_jiaxuan@
   reconnect: false
   encoding: utf8
+  socket: /tmp/mysql.sock
 
 
 development:
