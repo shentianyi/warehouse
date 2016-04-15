@@ -14,41 +14,41 @@ default: &default
   pool: 30
   timeout: 5000
   socket: /var/run/mysqld/mysqld.sock
-  username: vmi_jiaxuan
-  password: vmi_jiaxuan@
+  username: jxjx
+  password: jxjx@
   reconnect: false
   encoding: utf8
 
 
 development:
   <<: *default
-  database: vmi_jiaxuandb #db/development.sqlite3
+  database: jxjxdb #db/development.sqlite3
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: vmi_jiaxuandb_test
+  database: jxjxdb_test
 
 production:
   <<: *default
-  database: vmi_jiaxuandb
+  database: jxjxdb
 
 server:
   <<: *default
 
 sync1:
   <<: *default
-  database: vmi_jiaxuan_sync_1_db
+  database: jxjxdb_sync_1_db
 
 sync2:
   <<: *default
-  database: vmi_jiaxuan_sync_2_db
+  database: jxjxdb_sync_2_db
 
 
 development_test:
   <<: *default
-  database: vmi_jiaxuandb_test #db/development.sqlite3
+  database: jxjxdb_test #db/development.sqlite3
 
 

@@ -35,12 +35,12 @@ module FileHandler
 
             source = Location.find_by_nr(book.cell(2, 1))
             if source.blank?
-              raise '没有正确配置常州发运地址'
+              raise '没有正确配置发货地址'
             end
 
             destination = Location.find_by_nr(book.cell(2, 2))
             if destination.blank?
-              raise '没有正确配置常州发运地址'
+              raise '没有正确配置收货地址'
             end
 
             #calc wooden box nps count
@@ -62,7 +62,7 @@ module FileHandler
             # generate delivery location_container
             # destination =source.default_location_destination #Location.find_by_nr(SysConfigCache.jiaxuan_extra_destination_value)
 
-            dlc = delivery.logistics_containers.build(source_location_id: source.id, des_location_id: destination.id, user_id: user.id, remark: '常州莱尼发运数据', state: MovableState::CHECKED)
+            dlc = delivery.logistics_containers.build(source_location_id: source.id, des_location_id: destination.id, user_id: user.id, remark: book.cell(2, 4), state: MovableState::CHECKED)
             dlc.destinationable = destination
             dlc.save
             # send dlc,create record for dlc
@@ -115,6 +115,7 @@ module FileHandler
                                              part_id: part.id,
                                              user_id: user.id,
                                              quantity: row[:quantity],
+                                             remark: row[:remark],
                                              state: PackageState::RECEIVED
                                          })
                 #create lc
@@ -158,6 +159,20 @@ module FileHandler
         tmp_file=full_tmp_path(file.oriName)
         msg = Message.new(result: true)
         book = Roo::Excelx.new file.full_path
+
+        book.default_sheet=book.sheets.first
+        return nil if book.cell(2, 1).nil?
+
+        source = Location.find_by_nr(book.cell(2, 1))
+        if source.blank?
+          raise '没有正确配置发货地址'
+        end
+
+        destination = Location.find_by_nr(book.cell(2, 2))
+        if destination.blank?
+          raise '没有正确配置收货地址'
+        end
+
         book.default_sheet=book.sheets[1]
 
         p = Axlsx::Package.new
@@ -176,7 +191,7 @@ module FileHandler
               end
             end
 
-            mssg = validate_receive_row(row)
+            mssg = validate_receive_row(row, destination)
             if mssg.result
               sheet.add_row row.values
             else
@@ -193,7 +208,7 @@ module FileHandler
         msg
       end
 
-      def self.validate_receive_row(row)
+      def self.validate_receive_row(row, location)
         msg = Message.new(contents: [])
 
         if row[:quantity].blank?
@@ -210,7 +225,11 @@ module FileHandler
         end
 
         wh = Whouse.find_by_nr(row[:to_wh])
-        unless wh
+        if wh
+          unless wh.location.id==location.id
+            msg.contents <<  "入库仓库:#{row[:to_wh]}不属于收货地址:#{location.nr}"
+          end
+        else
           msg.contents << "仓库号:#{row[:to_wh]} 不存在!"
         end
 

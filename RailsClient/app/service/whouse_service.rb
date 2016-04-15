@@ -207,7 +207,7 @@ class WhouseService
         if params[:fromPosition].present?
           storages = NStorage.where(partNr: params[:partNr], ware_house_id: fromWh.id, position_id: params[:fromPosition]).where("n_storages.qty > ?", 0).order(fifo: :asc)
         else
-          storages = NStorage.where(partNr: params[:partNr], ware_house_id: fromWh.id).where("n_storages.qty > ?", 0).order(fifo: :asc)
+          storages = NStorage.where(partNr: params[:partNr], ware_house_id: fromWh.id).where("n_storages.qty > ?", 0).order(fifo: :asc).order(position_id: :asc)
         end
         #   if params[:fromPosition].present?
         #   negatives_storages = NStorage.where(partNr: params[:partNr], ware_house_id: fromWh.id, position: params[:fromPosition]).where("n_storages.qty < ?", 0)
@@ -311,7 +311,7 @@ class WhouseService
           if params[:fromPosition].present?
             negatives_storage = NStorage.where(partNr: params[:partNr], ware_house_id: fromWh.id, position_id: params[:fromPosition]).where("n_storages.qty < ?", 0).first
           else
-            negatives_storage = NStorage.where(partNr: params[:partNr], ware_house_id: fromWh.id).where("n_storages.qty < ?", 0).first
+            negatives_storage = NStorage.where(partNr: params[:partNr], ware_house_id: fromWh.id).where("n_storages.qty < ?", 0).order(position_id: :asc).first
           end
 
           if !negatives_storage.blank?
