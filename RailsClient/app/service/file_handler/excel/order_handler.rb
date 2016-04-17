@@ -49,8 +49,8 @@ module FileHandler
                   part=nil
                   if part_client=PartClient.where(client_tenant_id: Tenant.find_by_code('SHL').id, client_part_nr: id).first
                     part = part_client.part
-                  else
-                    # part=Part.create()
+                  # else
+                  #   part=Part.new()
                   end
 
                   order_item=OrderItem.new({
