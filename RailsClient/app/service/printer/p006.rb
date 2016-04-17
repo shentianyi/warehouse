@@ -48,7 +48,7 @@ module Printer
 
         pick_count=i.quantity
         location=Location.find_by_nr('SHJXLO')
-        storages=NStorage.where(partNr: i.part_id, ware_house_id: (location.whouses.pluck(:id)-[location.send_whouse.id])).order(fifo: :asc)
+        storages=NStorage.where(partNr: i.part_id, ware_house_id: (location.whouses.pluck(:id)-[location.send_whouse.id])).order(ware_house_id: :desc).order(fifo: :asc)
         storages.each do |storage|
           if pick_count==0
             break
