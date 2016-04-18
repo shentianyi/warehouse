@@ -244,6 +244,7 @@ Rails.application.routes.draw do
       match :import, to: :import, via: [:get, :post]
       match :move, to: :move, via: [:get, :post]
       match :group, to: :group, via: [:get, :post]
+      get :total
       # get :panel
       # get :search_storage
       get :summary

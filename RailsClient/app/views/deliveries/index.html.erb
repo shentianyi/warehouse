@@ -62,6 +62,11 @@
         运单状态：
         <%= select 'delivery', 'state', MovableState.state, selected: @delivery_state, include_blank: true %>
       </div>
+
+      <div class="col-sm-3">
+        装箱单号： 
+        <input type="text" name="containers[extra_batch]" value="<%= @container_extra_batch %>"/>
+      </div>
     </div>
 
     <div class="col-sm-12">
@@ -166,7 +171,9 @@
     <th>NO.</th>
     <th>运单号</th>
     <th>状态</th>
+    <th>发送地</th>
     <th>目的地</th>
+    <th>装箱单号</th>
     <th>备注</th>
     <!--基础-->
     <!--包含-->
@@ -191,7 +198,9 @@
         <td><%= index+@deliveries.offset+1 %></td>
         <td><%= delivery.container_id %></td>
         <td><%= delivery.state_display %></td>
+        <td><%= delivery.source_location.name %></td>
         <td><%= delivery.destination.name %></td>
+        <td><%= delivery.delivery.extra_batch %></td>
         <td><%= delivery.remark %></td>
         <td>
           <%= link_to delivery_presenter.forklifts.count, forklifts_delivery_path(delivery), style: 'border-radius:10px;padding:5px 20px 5px 20px;background:steelblue;color:white;', :title => '托清单数' %>

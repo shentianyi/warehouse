@@ -191,6 +191,24 @@ class LogisticsContainer<LocationContainer
     # end
   end
 
+  def move_stock(destination, warehouse, position, fifo, pid=true)
+    if (package=self.package)
+      toWh=destination.whouses.first
+      params={
+          partNr: package.part.id,
+          qty: package.quantity,
+          fifo: fifo,
+          packageId: (package.id if pid),
+          employee_id: package.user_id,
+          fromWh: warehouse.id,
+          fromPosition: (position.id if position),
+          toWh: toWh.id,
+          toPosition: toWh.default_position.id
+      }
+      WhouseService.new.move(params)
+    end
+  end
+
 
   def check_safe_stock
 

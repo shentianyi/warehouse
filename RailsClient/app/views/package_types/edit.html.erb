@@ -1,6 +1,23 @@
-<h1>Editing package_type</h1>
+<style>
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+</style>
+
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">管理</li>
+    <li>
+      <%= link_to '包装类型', package_types_path, :title => '返回包装类型' %>
+    </li>
+    <li class="active">
+      编辑包装类型
+      <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-eye-open', :style => 'color:green;'), @package_type, :title => '详细' %>
+    </li>
+  </ol>
+</div>
 
 <%= render 'form' %>
-
-<%= link_to 'Show', @package_type %> |
-<%= link_to 'Back', package_types_path %>

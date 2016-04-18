@@ -4,7 +4,7 @@ class PackageTypesController < ApplicationController
   respond_to :html
 
   def index
-    @package_types = PackageType.all
+    @package_types = PackageType.all.paginate(:page=> params[:page])
     respond_with(@package_types)
   end
 
