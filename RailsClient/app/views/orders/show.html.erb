@@ -1,13 +1,14 @@
 <style type="text/css">
-  a:hover, a:active {
-          text-decoration: none;
-          background-color: white;
-          color: black;
-          outline: none;
-      }
-      .col-sm-12{
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+
+    .col-sm-12 {
         height: 40px;
-      }
+    }
 </style>
 
 <div class="panel panel-default">
@@ -19,17 +20,17 @@
     <li class="active">
       查看需求单详情<span class="label label-primary"><%= @order.id %></span>
       <% if current_user.can_edit_inventory? %>
-        <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-pencil', :style => 'color:#4F94CD;'), edit_order_path(@order), :title => '编辑需求单' %>
+          <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-pencil', :style => 'color:#4F94CD;'), edit_order_path(@order), :title => '编辑需求单' %>
       <% end %>
     </li>
   </ol>
 </div>
 
-  <div class="panel panel-primary">
-    <div class="panel-body">
+<div class="panel panel-primary">
+  <div class="panel-body">
     <div class="col-sm-12" style="border-bottom: 1px dashed #000;">
       <div class="col-sm-3">
-        要货员:<%= @order.user.name %>
+        要货员:<%= @order.user.blank? ? '' : @order.user.name %>
       </div>
       <div class="col-sm-3">
         要货员工号:<%= @order.user.blank? ? '' : @order.user.nr %>
@@ -67,4 +68,4 @@
       </div>
     </div>
   </div>
-
+</div>

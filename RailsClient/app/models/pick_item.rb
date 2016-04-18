@@ -1,7 +1,7 @@
 class PickItem < ActiveRecord::Base
   include Extensions::UUID
   belongs_to :pick_list
-  # belongs_to :destination_whouse, class_name: 'Whouse', foreign_key: 'destination_whouse_id'
+  belongs_to :destination_whouse, class_name: 'Whouse', foreign_key: 'destination_whouse_id'
   belongs_to :order_item
   belongs_to :order_user, class_name: 'User', foreign_key: :user_id
   belongs_to :part
@@ -45,14 +45,16 @@ class PickItem < ActiveRecord::Base
       sheet.add_row ["序号", "择货单号", "零件号", "数量", "箱数", "要货员工号", "要货项目", "要货库位", "是否加急", "备注"]
       pick_items.each_with_index { |pick_item, index|
         pp = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id)
+        part=Part.find_by_id(pick_item.part_id)
+        user=User.find_by_id(pick_item.user_id)
         sheet.add_row [
                           index+1,
                           pick_item.pick_list_id,
-                          pick_item.part_id,
+                          part.blank? ? '' : part.nr,
                           pick_item.quantity,
                           pick_item.box_quantity,
-                          pick_item.user_id,
-                          pick_item.destination_whouse.name,
+                          user.blank? ? '' : user.nr,
+                          pick_item.destination_whouse.blank? ? '' : pick_item.destination_whouse.name,
                           pp.blank? ? '' : pp.position.detail,
                           pick_item.is_emergency ? '是' : '否',
                           pick_item.remark
