@@ -129,7 +129,8 @@ module V3
         args[:movement_list_id] = params[:movement_list_id]
         args[:employee_id] = params[:employee_id].sub(/\.0/, '') if params[:employee_id].present?
         args[:remarks] = params[:remarks] if params[:remarks].present?
-        args[:user] = current_user
+        args[:user]=current_user
+        args[:employee_id]=current_user.nr
 
         return {result: 0, content: "#{params[:movement_list_id]}移库单不存在！"} unless m=MovementList.find_by(id: params[:movement_list_id])
 
