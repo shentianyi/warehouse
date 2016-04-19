@@ -9,13 +9,15 @@ module Printer
 
       d=LogisticsContainer.find(self.id)
 
-      if d.source_location.nr=='CZLLO'
+      # if d.des_location.nr=='JXJXLO'
+        #接收
         self.code='P0020'
         self.data_set= Printer::P0020.new(self.id, 'P0020').data_set
-      elsif d.source_location.nr=='SHJXLO'
-        self.code='P0021'
-        self.data_set= Printer::P0021.new(self.id, 'P0021').data_set
-      end
+      # elsif d.source_location.nr=='JXJXLO'
+      #   #发货
+      #   self.code='P0021'
+      #   self.data_set= Printer::P0021.new(self.id, 'P0021').data_set
+      # end
 
       # dp=DeliveryPresenter.new(d)
       #
