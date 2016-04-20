@@ -43,10 +43,10 @@
 <div class="panel panel-default">
   <div class="panel-body">
     <div class="col-sm-12" style="border-bottom: 1px dashed #999;">
-      <div class="col-sm-3">
-        状态:
-        <%= dp.state_display %>
-      </div>
+      <!--<div class="col-sm-3">-->
+        <!--状态:-->
+        <!--<%= dp.state_display %>-->
+      <!--</div>-->
       <div class="col-sm-3">
         创建时间:
         <%= dp.created_at %>
@@ -85,7 +85,7 @@
     <tr>
       <th>NO.</th>
       <th>托清单号</th>
-      <th>状态</th>
+      <!--<th>状态</th>-->
       <!--<th>备货仓库</th>-->
       <th>包装箱总数</th>
       <th>已接收箱数</th>
@@ -99,7 +99,7 @@
           <td>
             <%= link_to content_tag(:span, f.container_id, :class => "label label-primary"), forklift_path(f) %>
           </td>
-          <td><%= f.state_display %></td>
+          <!--<td><%= f.state_display %></td>-->
           <!--<td><%= f.destinationable.name if f.destinationable %></td>-->
           <td><%= fpresenter.sum_packages %></td>
           <td><%= fpresenter.accepted_packages %></td>

@@ -62,10 +62,10 @@
       </div>
     </div>
     <div class="col-sm-12">
-      <div class="col-sm-6">
-        状  态：
-        <%= select 'forklift', 'state', MovableState.state, selected: @forklift_state, include_blank: true %>
-      </div>
+      <!--<div class="col-sm-6">-->
+        <!--状  态：-->
+        <!--<%= select 'forklift', 'state', MovableState.state, selected: @forklift_state, include_blank: true %>-->
+      <!--</div>-->
       <div class="col-sm-6">
         创建日期： 
         <input type="text" name="forklift[created_at][start]" class="datepicker" value="<%= @forklift_created_at_start %>"/>
@@ -145,7 +145,7 @@
     <th></th>
     <th>序号</th>
     <th>托清单号</th>
-    <th>状态</th>
+    <!--<th>状态</th>-->
     <th>所属运单</th>
     <th>目标仓库</th>
     <th>备注</th>
@@ -164,7 +164,7 @@
         <td><input type="checkbox" id="<%= forklift.id %>" class='print-check'></td>
         <td><%= index+@forklifts.offset+1 %>
         <td><%= forklift.container_id %></td>
-        <td><%= forklift.state_display %></td>
+        <!--<td><%= forklift.state_display %></td>-->
         <td>
           <%= link_to content_tag(:span, forklift.parent.container_id, :class => 'label label-primary', :style => 'font-size:1em;'), delivery_path(forklift.parent) if forklift.parent %>
         </td>

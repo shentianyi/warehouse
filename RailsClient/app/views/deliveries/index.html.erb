@@ -170,7 +170,8 @@
     <!--基础-->
     <th>NO.</th>
     <th>运单号</th>
-    <th>状态</th>
+    <!--<th>状态</th>-->
+    <th>收发货日期</th>
     <th>发送地</th>
     <th>目的地</th>
     <th>装箱单号</th>
@@ -197,7 +198,8 @@
         <td><input type="checkbox" id="<%= delivery.id %>" class='print-check'></td>
         <td><%= index+@deliveries.offset+1 %></td>
         <td><%= delivery.container_id %></td>
-        <td><%= delivery.state_display %></td>
+        <!--<td><%= delivery.state_display %></td>-->
+        <td><%= delivery.delivery.fifo_time %></td>
         <td><%= delivery.source_location.name %></td>
         <td><%= delivery.destination.name %></td>
         <td><%= delivery.delivery.extra_batch %></td>
