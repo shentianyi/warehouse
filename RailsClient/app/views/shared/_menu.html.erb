@@ -38,11 +38,11 @@
               <li id='delivery_li'><a href="<%= deliveries_path %>">运 单</a></li>
               <li id='forklift_li'><a href="<%= forklifts_path %>">托 盘</a></li>
               <li id='package_li'><a href="<%= packages_path %>">包装箱</a></li>
-              <% if current_user.permission?(:view_extra) %>
-                  <% if current_user.permission?(:jiaxuan_extra_export) %>
-                      <li><a href="<%= generate_jiaxuan_deliveries_path %>">导入常州发运佳轩数据</a></li>
-                  <% end %>
-              <% end %>
+              <!--<% if current_user.permission?(:view_extra) %>-->
+                  <!--<% if current_user.permission?(:jiaxuan_extra_export) %>-->
+                      <!--<li><a href="<%= generate_jiaxuan_deliveries_path %>">导入常州发运佳轩数据</a></li>-->
+                  <!--<% end %>-->
+              <!--<% end %>-->
             </ul>
           </li>
       <% end %>
@@ -106,9 +106,10 @@
       </a>
         <ul>
           <% if current_user.permission?(:view_storage) %>
-              <li><a href="<%= n_storages_path %>">详细库存查询</a></li>
-              <li><a href="<%= group_n_storages_path %>">库存汇总查询</a></li>
-              <li><a href="<%= storage_operation_records_path %>">库存操作记录</a></li>
+              <li><a href="<%= n_storages_path %>">库存详细查询</a></li>
+              <li><a href="<%= group_n_storages_path %>">库存位置角度汇总</a></li>
+              <li><a href="<%= total_n_storages_path %>">库存零件角度汇总</a></li>
+              <!--<li><a href="<%= storage_operation_records_path %>">库存操作记录</a></li>-->
           <% end %>
         </ul>
       </li>
@@ -161,6 +162,7 @@
               <li id='whouse_li'><a href="<%= whouses_path %>">仓 库</a></li>
               <li id='position_li'><a href="<%= positions_path %>">库 位</a></li>
               <li class="divider"></li>
+              <li id='part_type_li'><a href="<%= package_types_path %>">包装类型</a></li>
               <li id='part_type_li'><a href="<%= part_types_path %>">零件类型</a></li>
               <li id='part_li'><a href="<%= parts_path %>">零件</a></li>
               <li class="divider"></li>
@@ -182,9 +184,9 @@
                   <li id='regex_li'><a href="<%= regex_categories_path %>">正则规范配置</a></li>
                   <li id='sys_config_li'><a href="<%= sys_configs_path %>">系统配置</a></li>
               <% end %>
-              <% if current_user.permission?(:jiaxuan_extra_config) %>
-                  <li><a href="<%= jiaxuan_extra_sys_configs_path %>">佳轩扩展配置</a></li>
-              <% end %>
+              <!--<% if current_user.permission?(:jiaxuan_extra_config) %>-->
+                  <!--<li><a href="<%= jiaxuan_extra_sys_configs_path %>">佳轩扩展配置</a></li>-->
+              <!--<% end %>-->
             </ul>
           </li>
       <% end %>

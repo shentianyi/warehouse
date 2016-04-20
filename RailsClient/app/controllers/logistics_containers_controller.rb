@@ -68,6 +68,11 @@ class LogisticsContainersController < ApplicationController
       hash_conditions[:containers]={part_id: Part.where("nr like ?",  "%#{params[:containers][:part_id]}%").pluck(:id)}
       instance_variable_set("@container_part_id", params[:containers][:part_id])
     end
+
+    if params[:containers].present? && params[:containers][:extra_batch].present?
+      hash_conditions[:containers]={extra_batch: params[:containers][:extra_batch]}
+      instance_variable_set("@container_extra_batch", params[:containers][:extra_batch])
+    end
     # query.first
     query=query.where(hash_conditions)
 

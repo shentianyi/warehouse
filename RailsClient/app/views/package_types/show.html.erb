@@ -1,14 +1,30 @@
-<p id="notice"><%= notice %></p>
+<style>
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+</style>
 
-<p>
-  <strong>Nr:</strong>
-  <%= @package_type.nr %>
-</p>
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">管理</li>
+    <li class="active">基础信息设置</li>
+    <li>
+      <%= link_to '包装类型', package_types_path, :title => '返回包装类型' %>
+    </li>
+    <li class="active">
+      包装类型详情
+    </li>
+  </ol>
+</div>
 
-<p>
-  <strong>Name:</strong>
-  <%= @package_type.name %>
-</p>
-
-<%= link_to 'Edit', edit_package_type_path(@package_type) %> |
-<%= link_to 'Back', package_types_path %>
+<div class="panel panel-primary">
+  <div class="panel panel-heading">
+    <div class="panel-title" style="display: flex;">
+      <h3><%= @package_type.nr %></h3>
+      <span class="label label-info" style="height: 30px;line-height: 25px;margin-top: 20px;margin-left: 10px;"><%= @package_type.name %></span>
+    </div>
+  </div>
+</div>

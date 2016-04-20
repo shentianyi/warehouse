@@ -1,6 +1,6 @@
 class NStorage < ActiveRecord::Base
   belongs_to :whouse, foreign_key: :ware_house_id
-  belongs_to :position#, foreign_key: :position
+  belongs_to :position #, foreign_key: :position
   belongs_to :part, foreign_key: :partNr
   default_scope { where(locked: false) }
 
@@ -12,8 +12,8 @@ class NStorage < ActiveRecord::Base
     self.find_by_packageId(id)
   end
 
-  def self.package_by_user user,id
-    where(packageId: id,ware_house_id: user.location.whouse_ids)
+  def self.package_by_user user, id
+    where(packageId: id, ware_house_id: user.location.whouse_ids)
   end
 
   def validate
@@ -54,7 +54,7 @@ class NStorage < ActiveRecord::Base
     @storages.each do |storage|
       # puts "#{storage.partNr}"
       storage_count=NStorage.where(ware_house_id: inventory_list.whouse_id, partNr: storage.partNr).count
-      results.push([storage.partNr, storage.qty,0, storage.qty, storage_count, 0, storage_count])
+      results.push([storage.partNr, storage.qty, 0, storage.qty, storage_count, 0, storage_count])
     end
 
     @inventory_list_items.each do |inventory_list_item|
@@ -102,7 +102,7 @@ class NStorage < ActiveRecord::Base
                             n_storage.fifo.present? ? n_storage.fifo.localtime.strftime("%Y-%m-%d %H:%M") : '',
                             n_storage.created_at.present? ? n_storage.created_at.localtime.strftime("%Y-%m-%d %H:%M") : '',
                             n_storage.packageId
-                        ], types: [:string, :string, :string, :string, :string, :string, :string,:string]
+                        ], types: [:string, :string, :string, :string, :string, :string, :string, :string]
         end
       }
     end
@@ -129,8 +129,26 @@ class NStorage < ActiveRecord::Base
                             n_storage.qty,
                             n_storage.fifo.present? ? n_storage.fifo.localtime.strftime("%Y-%m-%d %H:%M") : '',
                             n_storage.created_at.present? ? n_storage.created_at.localtime.strftime("%Y-%m-%d %H:%M") : ''
-                        ], types: [:string, :string, :string, :string, :string, :string, :string,:string]
+                        ], types: [:string, :string, :string, :string, :string, :string, :string, :string]
         end
+      }
+    end
+    p.to_stream.read
+  end
+
+  def self.to_part_view_xlsx n_storages
+    p = Axlsx::Package.new
+
+    wb = p.workbook
+    wb.add_worksheet(:name => "sheet1") do |sheet|
+      sheet.add_row ["序号", "零件号", "库存总量"]
+      n_storages.each_with_index { |n_storage, index|
+        part=Part.find_by_id(n_storage.partNr)
+        sheet.add_row [
+                          index+1,
+                          part.present? ? part.nr : '',
+                          n_storage.total_qty
+                      ], types: [:string, :string, :string]
       }
     end
     p.to_stream.read

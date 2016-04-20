@@ -5,7 +5,7 @@ class WhousesController < ApplicationController
   # GET /whouses
   # GET /whouses.json
   def index
-    @whouses = Whouse.paginate(:page => params[:page])#all
+    @whouses = Whouse.order(location_id: :desc).paginate(:page => params[:page])#all
     #@whouses = @whouses.paginate(:page=>params[:page])
   end
 
