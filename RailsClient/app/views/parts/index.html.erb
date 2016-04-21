@@ -11,6 +11,10 @@
         <input type="text" name="part[id]" value="<%= @id %>"/>
         <input type="hidden" name="part[id_fuzzy]"/>
       </span>
+      <span>供应商：
+        <input type="text" name="part[supplier]" value="<%= @supplier %>"/>
+        <input type="hidden" name="part[supplier_fuzzy]"/>
+      </span>
       <span>  零件类型：
            <%=  select_tag('part[part_type_id]',options_from_collection_for_select(@part_types,'id','name',@part_type_id), include_blank: true)%>
       </span>
@@ -42,6 +46,7 @@
     <th>单位包装量</th>
     <th>盘点单位转换标准</th>
     <th>描述</th>
+    <th>供应商</th>
     <th>所属库位</th>
     <td>超市要货来源</td>
     <th>是否已删除</th>
@@ -59,6 +64,7 @@
         <td><%= part.unit_pack %></td>
         <td><%=part.convert_unit%></td>
         <td><%=part.description%></td>
+        <td><%=part.supplier%></td>
         <td>
           <p>
             <%part.positions.each do |p|%>

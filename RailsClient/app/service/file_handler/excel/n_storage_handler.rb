@@ -154,8 +154,12 @@ module FileHandler
           msg.contents << "目的仓库号:#{row[:toWh]} 不存在!"
         end
 
-        part_id = Part.find_by_id(row[:partNr])
-        unless part_id
+        part = Part.find_by_id(row[:partNr])
+        if part
+          unless part.supplier.include?(row[:supplier])
+            msg.contents << "零件号:#{row[:partNr]} 没有供应商是 #{row[:supplier]}!"
+          end
+        else
           msg.contents << "零件号:#{row[:partNr]} 不存在!"
         end
 

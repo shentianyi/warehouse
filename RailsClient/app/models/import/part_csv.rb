@@ -27,6 +27,7 @@ module Import
         line<< item.part_type_id
         line<<item.convert_unit
         line<<item.description
+        line<<item.supplier
       }
     end
 
@@ -38,6 +39,7 @@ module Import
       csv_cols<< Csv::CsvCol.new(field: 'part_type_id', header: 'PartType', is_foreign: true, foreign: 'PartType',null:true)
       csv_cols<< Csv::CsvCol.new(field: 'convert_unit', header: 'ConvertUnit',null:true)
       csv_cols<< Csv::CsvCol.new(field: 'description', header: 'Description',null:true)
+      csv_cols<< Csv::CsvCol.new(field: 'supplier', header: 'Supplier',null:true)
       csv_cols<< Csv::CsvCol.new(field: $UPMARKER, header: $UPMARKER)
       class_variable_set(:@@csv_cols, csv_cols)
     end
