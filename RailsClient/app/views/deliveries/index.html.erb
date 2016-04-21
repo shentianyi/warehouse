@@ -205,7 +205,7 @@
         <td><%= delivery.destination.name %></td>
         <td><%= delivery.delivery.extra_batch %></td>
         <td><%= delivery.remark %></td>
-        <td><%= delivery.created_at.localtime.strftime('%y.%m.%d') %></td>
+        <td><%= delivery.created_at.localtime.strftime('%y.%m.%d %H%M') %></td>
         <td>
           <%= link_to delivery_presenter.forklifts.count, forklifts_delivery_path(delivery), style: 'border-radius:10px;padding:5px 20px 5px 20px;background:steelblue;color:white;', :title => '托清单数' %>
         </td>
