@@ -199,7 +199,7 @@
         <td><%= index+@deliveries.offset+1 %></td>
         <td><%= delivery.container_id %></td>
         <!--<td><%= delivery.state_display %></td>-->
-        <td><%= delivery.delivery.fifo_time %></td>
+        <td><%= delivery.delivery.fifo_time.blank? ? ' ' : delivery.delivery.fifo_time.localtime.strftime('%y.%m.%d') %></td>
         <td><%= delivery.source_location.name %></td>
         <td><%= delivery.destination.name %></td>
         <td><%= delivery.delivery.extra_batch %></td>

@@ -57,6 +57,7 @@ module FileHandler
             # nps_count=0
 
             fifo=book.cell(2, 3).to_time
+            fifo=Time.now if fifo.blank?
             raise "fifo:#{fifo} 无效" if fifo > Time.now
 
             delivery = Delivery.create({
@@ -75,7 +76,7 @@ module FileHandler
             dlc.save
             # send dlc,create record for dlc
             impl_time = Time.now
-            Record.create({recordable: dlc, impl_id: user.id, impl_user_type: ImplUserType::RECEIVER, impl_action: 'dispatch', impl_time: impl_time})
+            Record.create({recordable: dlc, impl_id: user.id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
 
 
             # generate forklifts containers
@@ -88,7 +89,7 @@ module FileHandler
             flc = forklift.logistics_containers.build({source_location_id: source.id, des_location_id: destination.id, user_id: user.id, state: MovableState::CHECKED})
             flc.destinationable = destination
             flc.save
-            Record.create({recordable: flc, impl_id: user.id, impl_user_type: ImplUserType::RECEIVER, impl_action: 'dispatch', impl_time: impl_time})
+            Record.create({recordable: flc, impl_id: user.id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
             dlc.add(flc)
 
 
@@ -133,7 +134,7 @@ module FileHandler
               from_position=Position.find_by_nr(row[:from_position])
               plc.move_stock(destination, from_wh, from_position, row[:fifo], false)
 
-              Record.create({recordable: plc, impl_id: user.id, impl_user_type: ImplUserType::RECEIVER, impl_action: 'dispatch', impl_time: impl_time})
+              Record.create({recordable: plc, impl_id: user.id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
               flc.add(plc)
             end
           end
@@ -303,7 +304,7 @@ module FileHandler
             dlc.save
             # send dlc,create record for dlc
             impl_time = Time.now
-            Record.create({recordable: dlc, impl_id: user.id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
+            Record.create({recordable: dlc, impl_id: user.id, impl_user_type: ImplUserType::RECEIVER, impl_action: 'receive', impl_time: impl_time})
 
 
             # generate forklifts containers
@@ -316,7 +317,7 @@ module FileHandler
             flc = forklift.logistics_containers.build({source_location_id: source.id, des_location_id: destination.id, user_id: user.id, state: MovableState::CHECKED})
             flc.destinationable = destination
             flc.save
-            Record.create({recordable: flc, impl_id: user.id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
+            Record.create({recordable: flc, impl_id: user.id, impl_user_type: ImplUserType::RECEIVER, impl_action: 'receive', impl_time: impl_time})
             dlc.add(flc)
 
 
@@ -368,7 +369,7 @@ module FileHandler
               to_position=Position.find_by_nr(row[:to_position])
               plc.enter_stock(to_wh, to_position, row[:fifo], false)
 
-              Record.create({recordable: plc, impl_id: user.id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
+              Record.create({recordable: plc, impl_id: user.id, impl_user_type: ImplUserType::RECEIVER, impl_action: 'receive', impl_time: impl_time})
               flc.add(plc)
             end
 
