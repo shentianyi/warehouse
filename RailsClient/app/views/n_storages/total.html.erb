@@ -48,11 +48,11 @@
         包装类型：
         <%= select_tag('part[package_type]', options_from_collection_for_select(PackageType.all, :id, :name, @package_type), include_blank: true) %>
       </div>
-      <div class="col-sm-3">
-        FIFO：
-        <input type="text" name="n_storage[fifo][start]" class="datepicker" value="<%= @fifo_start %>"/>
-        ~ <input type="text" name="n_storage[fifo][end]" class="datepicker" value="<%= @fifo_end %>"/>
-      </div>
+      <!--<div class="col-sm-3">-->
+        <!--FIFO：-->
+        <!--<input type="text" name="n_storage[fifo][start]" class="datepicker" value="<%= @fifo_start %>"/>-->
+        <!--~ <input type="text" name="n_storage[fifo][end]" class="datepicker" value="<%= @fifo_end %>"/>-->
+      <!--</div>-->
     </div>
     <div class="col-sm-12" style="margin-bottom: 10px;">
       <div class="col-sm-4">

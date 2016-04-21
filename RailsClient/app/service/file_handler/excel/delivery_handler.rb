@@ -51,6 +51,10 @@ module FileHandler
               raise '没有正确配置收货地址'
             end
 
+            if book.cell(2, 5).blank?
+              raise '装箱单号不能为空'
+            end
+
             #calc wooden box nps count
             # wooden_count=0
             # box_count=0
@@ -63,6 +67,7 @@ module FileHandler
             delivery = Delivery.create({
                                            fifo_time: fifo,
                                            remark: book.cell(2, 4),
+                                           extra_batch: book.cell(2, 5),
                                            user_id: user.id,
                                            location_id: source.id,
                                            state: DeliveryState::RECEIVED
@@ -97,6 +102,7 @@ module FileHandler
             book.default_sheet=book.sheets[1]
             return nil if book.cell(2, 1).nil?
 
+            move_list = MovementList.create(builder: user.id, name: "#{user.nr}_#{DateTime.now.strftime("%H.%d.%m.%Y")}_Send")
             2.upto(book.last_row) do |line|
               if book.cell(line, 2).blank?
                 next
@@ -113,6 +119,7 @@ module FileHandler
               part=Part.find_by_nr(row[:part_id])
               package = Package.create({
                                            location_id: source.id,
+                                           fifo_time: fifo,
                                            part_id: part.id,
                                            user_id: user.id,
                                            quantity: row[:quantity],
@@ -132,11 +139,12 @@ module FileHandler
               row[:fifo]=fifo if row[:fifo].blank?
               from_wh=Whouse.find_by_nr(row[:from_wh])
               from_position=Position.find_by_nr(row[:from_position])
-              plc.move_stock(destination, from_wh, from_position, row[:fifo], false)
+              plc.move_stock(destination, from_wh, from_position, row[:fifo], move_list.id, false)
 
               Record.create({recordable: plc, impl_id: user.id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
               flc.add(plc)
             end
+            move_list.update(state: MovementListState::ENDING)
           end
 
           msg.content ='处理成功'
@@ -155,7 +163,7 @@ module FileHandler
 
       def self.validate_send file
         tmp_file=full_tmp_path(file.oriName)
-        msg = Message.new(result: true)
+        msg = Message.new(result: false)
         book = Roo::Excelx.new file.full_path
 
         book.default_sheet=book.sheets.first
@@ -163,16 +171,22 @@ module FileHandler
 
         source = Location.find_by_nr(book.cell(2, 1))
         if source.blank?
-          raise '没有正确配置发货地址'
+          msg.result=false
+          msg.content= '没有正确配置发货地址'
+          return msg
         end
 
         destination = Location.find_by_nr(book.cell(2, 2))
         if destination.blank?
-          raise '没有正确配置收货地址'
+          msg.result=false
+          msg.content= '没有正确配置收货地址'
+          return msg
         end
 
         if destination.whouses.first.blank?
-          raise '收货地址没有创建接收仓库'
+          msg.result=false
+          msg.content= '收货地址没有创建接收仓库'
+          return msg
         end
 
         book.default_sheet=book.sheets[1]
@@ -207,6 +221,7 @@ module FileHandler
         end
         p.use_shared_strings = true
         p.serialize(tmp_file)
+        msg.result=true
         msg
       end
 
@@ -279,6 +294,10 @@ module FileHandler
               raise '没有正确配置收货地址'
             end
 
+            if book.cell(2, 5).blank?
+              raise '装箱单号不能为空'
+            end
+
             #calc wooden box nps count
             # wooden_count=0
             # box_count=0
@@ -325,6 +344,7 @@ module FileHandler
             book.default_sheet=book.sheets[1]
             return nil if book.cell(2, 1).nil?
 
+            move_list = MovementList.create(builder: user.id, name: "#{user.nr}_#{DateTime.now.strftime("%H.%d.%m.%Y")}_Receive")
             2.upto(book.last_row) do |line|
               if book.cell(line, 2).blank?
                 next
@@ -349,6 +369,7 @@ module FileHandler
               part=Part.find_by_nr(row[:part_id])
               package = Package.create({
                                            location_id: source.id,
+                                           fifo_time: fifo,
                                            part_id: part.id,
                                            user_id: user.id,
                                            quantity: row[:quantity],
@@ -367,12 +388,12 @@ module FileHandler
 
               to_wh=Whouse.find_by_nr(row[:to_wh])
               to_position=Position.find_by_nr(row[:to_position])
-              plc.enter_stock(to_wh, to_position, row[:fifo], false)
+              plc.enter_stock(to_wh, to_position, row[:fifo], move_list.id, false)
 
               Record.create({recordable: plc, impl_id: user.id, impl_user_type: ImplUserType::RECEIVER, impl_action: 'receive', impl_time: impl_time})
               flc.add(plc)
             end
-
+            move_list.update(state: MovementListState::ENDING)
             # delivery.update_attributes(extra_wooden_count: wooden_count,
             #                            extra_box_count: box_count,
             #                            extra_nps_count: nps_count)
@@ -402,12 +423,16 @@ module FileHandler
 
         source = Location.find_by_nr(book.cell(2, 1))
         if source.blank?
-          raise '没有正确配置发货地址'
+          msg.result=false
+          msg.content= '没有正确配置发货地址'
+          return msg
         end
 
         destination = Location.find_by_nr(book.cell(2, 2))
         if destination.blank?
-          raise '没有正确配置收货地址'
+          msg.result=false
+          msg.content= '没有正确配置收货地址'
+          return msg
         end
 
         book.default_sheet=book.sheets[1]

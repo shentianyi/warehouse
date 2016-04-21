@@ -93,9 +93,19 @@ class NStoragesController < ApplicationController
         query=query.unscope(where: :position_id).where(position_id: position.id)
       end
 
-      unless params[:part][:package_type].blank?
-        query=query.joins(:part).where(parts: {package_type_id: params[:part][:package_type]})
-        instance_variable_set("@package_type", params[:part][:package_type])
+      if params[:part][:package_type].present? || params[:part][:part_type].present?
+        where_conditions={}
+        if params[:part][:package_type].present?
+          where_conditions[:package_type_id]=params[:part][:package_type]
+          instance_variable_set("@package_type", params[:part][:package_type])
+        end
+        if params[:part][:part_type].present?
+          where_conditions[:part_type_id]=params[:part][:part_type]
+          instance_variable_set("@part_type", params[:part][:part_type])
+        end
+
+        query=query.joins(:part).where(parts: where_conditions)
+
       end
 
       query

@@ -22,6 +22,10 @@ class Part < ActiveRecord::Base
     self.package_type.blank? ? '' : self.package_type.name
   end
 
+  def type_name
+    self.part_type.blank? ? '' : self.part_type.name
+  end
+
   def self.exists?(nr)
     Part.find_by_nr(nr)
   end

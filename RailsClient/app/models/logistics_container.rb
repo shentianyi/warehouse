@@ -175,7 +175,7 @@ class LogisticsContainer<LocationContainer
     end
   end
 
-  def enter_stock(warehouse, position, fifo, pid=true)
+  def enter_stock(warehouse, position, fifo, move_list_id=nil, pid=true)
     # if self.state==MovableState::CHECKED
     if (package=self.package)
       params={
@@ -187,11 +187,16 @@ class LogisticsContainer<LocationContainer
           toPosition: position.id
       }
       WhouseService.new.enter_stock(params)
+
+      if move_list_id
+        params[:movement_list_id]=move_list_id
+        MovementSource.create(params)
+      end
     end
     # end
   end
 
-  def move_stock(destination, warehouse, position, fifo, pid=true)
+  def move_stock(destination, warehouse, position, fifo, move_list_id, pid=true)
     if (package=self.package)
       toWh=destination.whouses.first
       params={
@@ -206,6 +211,9 @@ class LogisticsContainer<LocationContainer
           toPosition: toWh.default_position.id
       }
       WhouseService.new.move(params)
+
+      params[:movement_list_id]=move_list_id
+      MovementSource.create(params)
     end
   end
 

@@ -197,6 +197,8 @@ class ReportsController < ApplicationController
       if commit_value == "详细"
         sheet.add_row entry_header_detials
         packages.each_with_index { |p, index|
+          part=Part.find_by_id(p['part_id'])
+          whouse=Whouse.find_by_id(p['whouse'])
           f= p.parent.nil? ? nil:p.parent
           d=(f.nil? || f.parent.nil?) ? nil:f.parent
           s=p.records.where(impl_action:'dispatch').last
@@ -207,10 +209,10 @@ class ReportsController < ApplicationController
                             d.nil? ? nil : d.container_id,
                             f.nil? ? nil : f.container_id,
                             p['containers_id'],
-                            p['part_id'],
+                            part.blank? ? '' : part.nr,
                             p['count'],
                             p['box'],
-                            p['whouse'],
+                            whouse.blank? ? '' : whouse.nr,
                             MovableState.display(p['state']),
                             p['FIFO'],
                             s.nil? ? nil : s.impl_time.localtime,
@@ -221,12 +223,14 @@ class ReportsController < ApplicationController
       else
         sheet.add_row entry_header_total
         packages.each_with_index { |p, index|
+          part=Part.find_by_id(p['part_id'])
+          whouse=Whouse.find_by_id(p['whouse'])
           sheet.add_row [
                             index+1,
-                            p['part_id'],
+                            part.blank? ? '' : part.nr,
                             p['count'],
                             p['box'],
-                            p['whouse'],
+                            whouse.blank? ? '' : whouse.nr,
                             MovableState.display(p['state'])
                         #DatetimeHelper.ddate(p['ddate'])
                         ], :types => [:string]

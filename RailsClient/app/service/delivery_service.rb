@@ -292,33 +292,48 @@ class DeliveryService
     raise '禁止以运单入库'
   end
 
-
   def self.to_xlsx deliveries
     p = Axlsx::Package.new
 
     wb = p.workbook
     wb.add_worksheet(:name => "sheet1") do |sheet|
-      sheet.add_row ["序号", "运单号", "托盘号", "HU号", "800号", "数量", "零件号", "LESS P/N", "批次号"]
+      sheet.add_row [
+                        "序号", "收发货日期",	"收发货",	"发送地",	"接收地", "票数", "运单号", "托盘号", "包装箱号",
+                        "零件号", "数量", "零件类型", "装箱单号", "备注"
+                    ]
+
+      count=0
+      action=''
       deliveries.each_with_index do |delivery, index|
         p delivery
         forklifts=LogisticsContainerService.get_forklifts(delivery)
         forklifts.each do |forklift|
+          if delivery.source_location.id==Location.find_by_nr('JXJX').id
+            action='收货'
+          else
+            action='发货'
+          end
 
           packages=LogisticsContainerService.get_packages(forklift)
           packages.each do |package|
             part=Part.find_by_id(package.package.part_id)
-
+            count+=1
             sheet.add_row [
+                              count,
+                              package.package.fifo_time.blank? ? '' : package.package.fifo_time.localtime.strftime('%y.%m.%d %H:%M'),
+                              action,
+                              delivery.source_location.name,
+                              delivery.destination.name,
                               index+1,
                               delivery.container_id,
                               forklift.container_id.to_s,
                               package.package.id.to_s,
-                              package.package.extra_800_no.to_s,
-                              package.package.quantity.to_s,
                               part.blank? ? '' : part.nr.to_s,
-                              package.package.extra_sh_part_id.to_s,
-                              package.package.extra_batch.to_s
-                          ], types: [:string, :string, :string, :string, :string, :string, :string, :string]
+                              package.package.quantity.to_s,
+                              part.blank? ? '' : part.type_name,
+                              part.blank? ? '' : part.package_name,
+                              package.remark
+                          ], types: [:string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string]
           end
         end
 

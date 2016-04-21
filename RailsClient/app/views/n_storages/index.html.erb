@@ -47,6 +47,10 @@
         <input type="text" name="n_storage[partNr]" value="<%= @partNr %>"/>
       </div>
       <div class="col-sm-4">
+        零件类型：
+        <%= select_tag('part[part_type]', options_from_collection_for_select(PartType.all, :id, :name, @part_type), include_blank: true) %>
+      </div>
+      <div class="col-sm-4">
         包装类型：
         <%= select_tag('part[package_type]', options_from_collection_for_select(PackageType.all, :id, :name, @package_type), include_blank: true) %>
       </div>
@@ -118,6 +122,7 @@
   <tr>
     <th>NO.</th>
     <th>零件号</th>
+    <th>零件类型</th>
     <th>包装类型</th>
     <th>供应商</th>
     <th>唯一码</th>
@@ -135,6 +140,7 @@
       <tr>
         <td><%= i+@n_storages.offset+1 %></td>
         <td><%= storage.part.nr if storage.part.present? %></td>
+        <td><%= (storage.part.part_type.blank? ? '' : storage.part.part_type.name) if storage.part.present? %></td>
         <td><%= storage.part.package_name if storage.part.present? %></td>
         <td><%= storage.part.supplier if storage.part.present? %></td>
         <td><%= storage.packageId %></td>
