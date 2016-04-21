@@ -90,6 +90,16 @@
       </div>
     </div>
 
+
+    <div class="col-sm-12">
+      <div class="col-sm-6">
+        收发货日期：
+        <input type="text" name="containers[fifo_time][start]" class="datepicker" value="<%= @delivery_fifo_time_start %>"/>
+        ~
+        <input type="text" name="containers[fifo_time][end]" class="datepicker" value="<%= @delivery_fifo_time_end %>"/>
+      </div>
+    </div>
+
     <div class="col-sm-12">
       <div class="col-sm-4">
         <h4 style="margin-top: 0;">
@@ -200,7 +210,7 @@
         <td><%= index+@deliveries.offset+1 %></td>
         <td><%= delivery.container_id %></td>
         <!--<td><%= delivery.state_display %></td>-->
-        <td><%= delivery.delivery.fifo_time.blank? ? ' ' : delivery.delivery.fifo_time.localtime.strftime('%y.%m.%d') %></td>
+        <td><%= delivery.delivery.fifo_time.blank? ? ' ' : delivery.delivery.fifo_time.localtime.strftime('%y.%m.%d %H:%M') %></td>
         <td><%= delivery.source_location.name %></td>
         <td><%= delivery.destination.name %></td>
         <td><%= delivery.delivery.extra_batch %></td>

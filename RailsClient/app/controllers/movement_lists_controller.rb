@@ -4,7 +4,7 @@ class MovementListsController < ApplicationController
   respond_to :html
 
   def index
-    @movement_lists = MovementList.all.paginate(:page => params[:page])
+    @movement_lists = MovementList.all.order(created_at: :desc).paginate(:page => params[:page])
     respond_with(@movement_lists)
   end
 

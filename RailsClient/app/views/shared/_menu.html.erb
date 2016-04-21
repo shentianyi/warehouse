@@ -89,9 +89,7 @@
               <li><a href="<%= movement_sources_path %>">移库项列表</a></li>
           <% end %>
 
-          <% if current_user.permission?(:view_storage) %>
-              <li><a href="<%= movements_path %>">库存移动记录查询</a></li>
-          <% end %>
+
         </ul>
       </li>
 
@@ -113,6 +111,10 @@
           <% end %>
         </ul>
       </li>
+
+      <% if current_user.permission?(:view_storage) %>
+          <li><a href="<%= movements_path %>">库存移动记录查询</a></li>
+      <% end %>
     </ul>
   </li>
 

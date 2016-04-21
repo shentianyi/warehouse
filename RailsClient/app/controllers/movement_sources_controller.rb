@@ -108,7 +108,7 @@ class MovementSourcesController < ApplicationController
 
   def index
     @movement_sources = MovementSource.joins(:movement_list)
-                            .select("movement_sources.*, movement_lists.state as state").paginate(:page => params[:page])
+                            .select("movement_sources.*, movement_lists.state as state").order(created_at: :desc).paginate(:page => params[:page])
     # .where("movement_lists.state != #{MovementListState::ENDING}")
     # @movement_sources = MovementSource.all.paginate(:page => params[:page])
     respond_with(@movement_sources)

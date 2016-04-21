@@ -60,19 +60,49 @@ class LogisticsContainersController < ApplicationController
     end
     # raise
     #puts "=================="
-
+    puts '------------------------------------------------------------'
     puts hash_conditions
 
-
+    containers={}
     if params[:containers].present? && params[:containers][:part_id].present?
-      hash_conditions[:containers]={part_id: Part.where("nr like ?",  "%#{params[:containers][:part_id]}%").pluck(:id)}
+      containers[:part_id]=Part.where("nr like ?",  "%#{params[:containers][:part_id]}%").pluck(:id)
       instance_variable_set("@container_part_id", params[:containers][:part_id])
     end
 
     if params[:containers].present? && params[:containers][:extra_batch].present?
-      hash_conditions[:containers]={extra_batch: params[:containers][:extra_batch]}
+      containers[:extra_batch]=params[:containers][:extra_batch]
       instance_variable_set("@container_extra_batch", params[:containers][:extra_batch])
     end
+
+    if params[:containers].present? && params[:containers][:fifo_time][:start].present? && params[:containers][:fifo_time][:end].present?
+      containers[:fifo_time]=(Time.parse(params[:containers][:fifo_time][:start]).utc.to_s..Time.parse(params[:containers][:fifo_time][:end]).utc.to_s)
+      instance_variable_set("@delivery_fifo_time_start", params[:containers][:fifo_time][:start])
+      instance_variable_set("@delivery_fifo_time_end", params[:containers][:fifo_time][:end])
+    end
+
+    unless containers.blank?
+      hash_conditions[:containers]=containers
+    end
+
+    # hash_conditions[:containers]={}
+    # if params[:containers].present? && params[:containers][:part_id].present?
+    #   hash_conditions[:containers][:part_id]=Part.where("nr like ?",  "%#{params[:containers][:part_id]}%").pluck(:id)
+    #   instance_variable_set("@container_part_id", params[:containers][:part_id])
+    # end
+    #
+    # if params[:containers].present? && params[:containers][:extra_batch].present?
+    #   hash_conditions[:containers][:extra_batch]=params[:containers][:extra_batch]
+    #   instance_variable_set("@container_extra_batch", params[:containers][:extra_batch])
+    # end
+    #
+    # if params[:containers].present? && params[:containers][:fifo_time][:start].present? && params[:containers][:fifo_time][:end].present?
+    #   hash_conditions[:containers][:fifo_time]=(params[:containers][:fifo_time][:start]..params[:containers][:fifo_time][:end])
+    #   instance_variable_set("@delivery_fifo_time_start", params[:containers][:fifo_time][:start])
+    #   instance_variable_set("@delivery_fifo_time_end", params[:containers][:fifo_time][:end])
+    # end
+
+    puts hash_conditions
+    puts '------------------------------------------------------------'
     # query.first
     query=query.where(hash_conditions)
 
