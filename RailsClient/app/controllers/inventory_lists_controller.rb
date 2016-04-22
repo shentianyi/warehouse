@@ -100,11 +100,13 @@ class InventoryListsController < ApplicationController
     if storage=NStorage.unscoped.order(lock_batch: :desc).first
       last_batch=storage.lock_batch
     end
+    whouse_condition={}
+    whouse_condition[:ware_house_id]=current_user.location.whouses.pluck(:id).uniq
     if params[:do]=='disable'
       flash[:notice]='盘点重置成功'
       NStorage.transaction do
         lock_remark='盘点覆盖锁定'+"-"+Time.now.strftime("%Y%m%d")
-        NStorage.where(locked: false)
+        NStorage.where(locked: false).where(whouse_condition)
             .update_all(locked: true,
                         lock_user_id: 'admin',
                         lock_remark: lock_remark,
@@ -115,7 +117,7 @@ class InventoryListsController < ApplicationController
     else
       flash[:notice]='取消盘点重置成功'
       NStorage.transaction do
-        NStorage.unscoped.where(locked: true, lock_batch: last_batch)
+        NStorage.unscoped.where(locked: true, lock_batch: last_batch).where(whouse_condition)
             .update_all(locked: false,
                         lock_user_id: nil,
                         lock_remark: nil,
