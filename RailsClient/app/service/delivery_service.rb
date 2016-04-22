@@ -325,7 +325,7 @@ class DeliveryService
                               delivery.source_location.name,
                               delivery.destination.name,
                               index+1,
-                              delivery.extra_batch,
+                              delivery.delivery.extra_batch,
                               delivery.container_id,
                               forklift.container_id.to_s,
                               package.package.id.to_s,
@@ -334,7 +334,7 @@ class DeliveryService
                               part.blank? ? '' : part.type_name,
                               part.blank? ? '' : part.package_name,
                               package.remark
-                          ], types: [:string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string]
+                          ], types: [:string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string]
           end
         end
 
