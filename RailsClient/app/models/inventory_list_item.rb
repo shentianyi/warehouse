@@ -28,6 +28,8 @@ class InventoryListItem < ActiveRecord::Base
     params[:part_id]=part.blank? ? params[:part_id] : part.id
     position=Position.find_by_nr(params[:position])
     params[:position]=position.blank? ? params[:position] : position.id
+    whouse=Whouse.find_by_nr(params[:whouse_id])
+    params[:whouse_id]=whouse.blank? ? nil : whouse.id
     if query
       query = NStorage.new
 
