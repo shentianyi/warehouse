@@ -298,8 +298,8 @@ class DeliveryService
     wb = p.workbook
     wb.add_worksheet(:name => "sheet1") do |sheet|
       sheet.add_row [
-                        "序号", "收发货日期",	"收发货",	"发送地",	"接收地", "票数", "运单号", "托盘号", "包装箱号",
-                        "零件号", "数量", "零件类型", "装箱单号", "备注"
+                        "序号", "收发货日期", "收发货", "发送地", "接收地", "票数", "装箱单号", "运单号",
+                        "托盘号", "包装箱号", "零件号", "数量", "零件类型", "包装类型", "备注"
                     ]
 
       count=0
@@ -325,6 +325,7 @@ class DeliveryService
                               delivery.source_location.name,
                               delivery.destination.name,
                               index+1,
+                              delivery.extra_batch,
                               delivery.container_id,
                               forklift.container_id.to_s,
                               package.package.id.to_s,
