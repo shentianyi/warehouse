@@ -122,7 +122,7 @@
         <td><%= inventory_list_item.part_form_mark %></td>
         <td><%= inventory_list_item.part_wire_mark %></td>
         <td><%= inventory_list_item.need_convert_display %></td>
-        <td><%= inventory_list_item.user.nr %></td>
+        <td><%= inventory_list_item.user.blank? ? '' : inventory_list_item.user.nr %></td>
         <td><%= inventory_list_item.in_store_display %></td>
         <td><%= inventory_list_item.locked_display %></td>
         <td><%= inventory_list_item.in_stored_display %></td>
