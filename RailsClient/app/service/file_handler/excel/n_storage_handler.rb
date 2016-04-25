@@ -107,6 +107,10 @@ module FileHandler
                   row[:qty]=package.qty
                 end
 
+                unless row[:employee_id].present?
+                  row[:employee_id]=current_user.nr
+                end
+
                 row[:movement_list_id] = move_list.id
                 MovementSource.create(row)
 

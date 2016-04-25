@@ -48,11 +48,12 @@ class PartClientsController < ApplicationController
   end
 
   def search
-    super{|query|
+    p params
+    super { |query|
       if part=Part.find_by_nr(params[:part_client][:part_id])
         query=query.unscope(where: :part_id).where(part_id: part.id)
       end
-
+      query=query.where(client_tenant_id: params[:tenant_id])
       query
     }
   end

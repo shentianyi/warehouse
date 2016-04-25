@@ -58,13 +58,13 @@
   <table class="table table-bpicked table-striped table-bordered">
     <thead>
     <tr>
-      <th>
-        <input type="checkbox" id="check-all-unprinted"/><label class="label label-info">全选未打印</label>
-      </th>
+      <!--<th>-->
+        <!--<input type="checkbox" id="check-all-unprinted"/><label class="label label-info">全选未打印</label>-->
+      <!--</th>-->
       <th>NO.</th>
       <th>零件号</th>
       <th>数量</th>
-      <th>包装量</th>
+      <!--<th>包装量</th>-->
       <th>要货员工号</th>
       <th>要货地点</th>
       <th>是否加急</th>
@@ -74,22 +74,22 @@
     <tbody>
     <% @pick_items.each_with_index do |pick_item, index| %>
         <tr>
-          <td>
-            <div id="<%= pick_item.id %>">
-              <input type="checkbox" <%= "printed" if pick_item.state == PickItemState::PRINTED%> class="pick-item" id="<%= pick_item.id %>" state="<%= pick_item.state%>"/>
-              <% if pick_item.state == PickItemState::PRINTED%>
-                  <label>已打印</label>
-              <% elsif pick_item.state == PickItemState::PRINTING%>
-                  <label>正在打印</label>
-              <% else %>
-                  <label>未打印</label>
-               <% end %>
-            </div>
-          </td>
+          <!--<td>-->
+            <!--<div id="<%= pick_item.id %>">-->
+              <!--&lt;!&ndash;<input type="checkbox" <%= "printed" if pick_item.state == PickItemState::PRINTED%> class="pick-item" id="<%= pick_item.id %>" state="<%= pick_item.state%>"/>&ndash;&gt;-->
+              <!--&lt;!&ndash;<% if pick_item.state == PickItemState::PRINTED%>&ndash;&gt;-->
+                  <!--&lt;!&ndash;<label>已打印</label>&ndash;&gt;-->
+              <!--&lt;!&ndash;<% elsif pick_item.state == PickItemState::PRINTING%>&ndash;&gt;-->
+                  <!--&lt;!&ndash;<label>正在打印</label>&ndash;&gt;-->
+              <!--&lt;!&ndash;<% else %>&ndash;&gt;-->
+                  <!--&lt;!&ndash;<label>未打印</label>&ndash;&gt;-->
+               <!--&lt;!&ndash;<% end %>&ndash;&gt;-->
+            <!--</div>-->
+          <!--</td>-->
           <td><%= index+1 %></td>
           <td><%= pick_item.part.blank? ? pick_item.part_id : pick_item.part.nr %></td>
           <td><%= pick_item.quantity %></td>
-          <td><%= pick_item.box_quantity %></td>
+          <!--<td><%= pick_item.box_quantity %></td>-->
           <td><%= pick_item.order_user.nr %></td>
           <td><%= pick_item.source_location.name if pick_item.source_location %></td>
           <td><%= '是' if pick_item.is_emergency %></td>

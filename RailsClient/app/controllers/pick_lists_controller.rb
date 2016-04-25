@@ -10,7 +10,8 @@ class PickListsController < ApplicationController
   # GET /pick_lists/1
   # GET /pick_lists/1.json
   def show
-    @back_url = params.has_key?(:show) ? '/pick_lists' : '/orders/panel'
+    # @back_url = params.has_key?(:show) ? '/pick_lists' : '/orders/panel'
+    @back_url = '/pick_lists'
     @pick_items=@pick_list.pick_items.order(state: :asc, is_emergency: :desc)
   end
 
@@ -53,6 +54,7 @@ class PickListsController < ApplicationController
   end
 
   def export
+    p params
     pick_list_id =  params["pick-list-check"].blank? ? '' : params["pick-list-check"].keys.first
 
     if !pick_list_id.blank?
