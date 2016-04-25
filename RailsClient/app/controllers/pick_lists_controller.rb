@@ -4,7 +4,12 @@ class PickListsController < ApplicationController
   # GET /pick_lists
   # GET /pick_lists.json
   def index
-    @pick_lists = PickList.paginate(:page => params[:page]).order(created_at: :desc) #all
+    if @request_from == 'Pc'
+      @pick_lists = PickList.paginate(:page => params[:page]).order(created_at: :desc) #all
+    else
+      @pick_lists = PickList.where(created_at: (Time.parse(Time.now.strftime("%Y-%m-%d 7:00")).utc.to_s...Time.parse((Time.now+1.day).strftime("%Y-%m-%d 7:00")).utc.to_s))
+                        .paginate(:page => params[:page]).order(created_at: :desc)
+    end
   end
 
   # GET /pick_lists/1

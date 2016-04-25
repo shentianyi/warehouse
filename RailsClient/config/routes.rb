@@ -2,6 +2,22 @@
 
 Rails.application.routes.draw do
 
+  resources :movement_sources do
+    collection do
+      get :search
+    end
+  end
+
+  resources :movement_lists do
+    collection do
+      get :search
+      get :exports
+    end
+    member do
+      get 'movement_sources'
+    end
+  end
+
   use_doorkeeper
   resources :pick_orders
 

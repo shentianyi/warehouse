@@ -19,6 +19,8 @@ module FileHandler
         if validate_msg.result
           begin
             NStorage.transaction do
+              builder = current_user.blank? ? '' : current_user.id
+              move_list = MovementList.create(builder: builder, name: "#{builder}_#{DateTime.now.strftime("%H.%d.%m.%Y")}_F_ENTRY")
               2.upto(book.last_row) do |line|
                 row = {}
                 IMPORT_HEADERS.each_with_index do |k, i|
@@ -28,9 +30,13 @@ module FileHandler
                   end
                 end
 
+                row[:movement_list_id] = move_list.id
+                MovementSource.create(row)
+
                 row[:employee_id] ||= current_user.id
                 WhouseService.new.enter_stock(row)
               end
+              move_list.update(state: MovementListState::ENDING)
             end
             msg.result = true
             msg.content = "导入库存数据成功"
@@ -55,6 +61,8 @@ module FileHandler
         if validate_msg.result
           begin
             NStorage.transaction do
+              builder = current_user.blank? ? '' : current_user.id
+              move_list = MovementList.create(builder: builder, name: "#{builder}_#{DateTime.now.strftime("%H.%d.%m.%Y")}_F_MOVE")
               2.upto(book.last_row) do |line|
                 row = {}
                 MOVE_HEADERS.each_with_index do |k, i|
@@ -64,9 +72,13 @@ module FileHandler
                   end
                 end
 
+                row[:movement_list_id] = move_list.id
+                MovementSource.create(row)
+
                 row[:employee_id] ||= current_user.id
                 WhouseService.new.move(row)
               end
+              move_list.update(state: MovementListState::ENDING)
             end
             msg.result = true
             msg.content = "导入移库数据成功"
@@ -119,7 +131,7 @@ module FileHandler
 
       def self.validate_import_row(row, line)
         msg = Message.new(contents: [])
-        StorageOperationRecord.save_record(row, 'ENTRY')
+        # StorageOperationRecord.save_record(row, 'ENTRY')
 
         if row[:packageId].present?
           unless packageId = Container.exists?(row[:packageId])
@@ -212,7 +224,7 @@ module FileHandler
 
       def self.validate_move_row(row)
         msg = Message.new(contents: [])
-        StorageOperationRecord.save_record(row, 'MOVE')
+        # StorageOperationRecord.save_record(row, 'MOVE')
 
         if row[:packageId].present?
           unless package = NStorage.exists_package?(row[:packageId])

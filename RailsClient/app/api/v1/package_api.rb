@@ -12,6 +12,36 @@ module V1
         end
       end
 
+      #get package info
+      get do
+        unless p = Package.exists?(params[:package_id])
+          return {result: 0, content: "唯一码不存在!"}
+        end
+
+        args = {}
+        args[:package_id] = p.id
+        args[:part_id] = "P#{p.part_id}"
+        args[:qty] = p.quantity
+        args[:fifo] =p.parsed_fifo# p.fifo_time_display.blank? ? '' : Date.strptime(p.fifo_time_display.sub(/W\s*/, ''), '%d.%m.%y')
+        {result: '1', content: args}
+      end
+
+      #get package info from NStorage
+      get :nstorage_package do
+        return {result: 0, content: "请输入唯一码"} if params[:package_id].blank?
+
+        unless storage = NStorage.exists_package?(params[:package_id])
+          return {result: 0, content: "唯一码不存在!"}
+        end
+
+        args = {}
+        args[:package_id] = storage.packageId
+        args[:part_id] = "P#{storage.partNr}"
+        args[:qty] = storage.qty
+        args[:fifo] = storage.fifo.blank? ? '' : storage.fifo.localtime
+        {result: '1', content: args}
+      end
+
       #get packages by created_at time and state
       #@start_time
       #@end_time
@@ -67,6 +97,18 @@ module V1
       #=============
       post do
         m = PackageService.create package_params, current_user
+        m.result ? {result: 1, content: PackagePresenter.new(m.object).to_json} : {result: 0, content: m.content}
+      end
+
+      #=============
+      # url: POST packages/
+      # params
+      #=============
+      post :enter_stock do
+        m = PackageService.create package_params, current_user
+        if m.result
+          m.object.update_attributes(state: MovableState::CHECKED)
+        end
         m.result ? {result: 1, content: PackagePresenter.new(m.object).to_json} : {result: 0, content: m.content}
       end
 

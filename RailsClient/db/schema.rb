@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160307064434) do
+ActiveRecord::Schema.define(version: 20160425074111) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -301,10 +301,42 @@ ActiveRecord::Schema.define(version: 20160307064434) do
     t.datetime "updated_at"
   end
 
+  create_table "movement_lists", force: true do |t|
+    t.string   "uuid",       limit: 36,                 null: false
+    t.string   "name",                  default: ""
+    t.string   "state",                 default: "100"
+    t.string   "builder"
+    t.string   "remarks",               default: ""
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "movement_lists", ["id"], name: "index_movement_lists_on_id", using: :btree
+  add_index "movement_lists", ["uuid"], name: "index_movement_lists_on_uuid", using: :btree
+
+  create_table "movement_sources", force: true do |t|
+    t.string   "movement_list_id"
+    t.string   "fromWh"
+    t.string   "fromPosition"
+    t.string   "packageId"
+    t.string   "partNr"
+    t.float    "qty"
+    t.datetime "fifo"
+    t.string   "toWh"
+    t.string   "toPosition"
+    t.string   "employee_id"
+    t.string   "remarks"
+    t.string   "type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "movement_sources", ["movement_list_id"], name: "index_movement_sources_on_movement_list_id", using: :btree
+
   create_table "movements", force: true do |t|
     t.string   "partNr"
     t.datetime "fifo"
-    t.decimal  "qty",          precision: 20, scale: 10
+    t.decimal  "qty",              precision: 20, scale: 10
     t.string   "from_id"
     t.string   "fromPosition"
     t.string   "to_id"
@@ -317,6 +349,7 @@ ActiveRecord::Schema.define(version: 20160307064434) do
     t.string   "remark"
     t.string   "remarks"
     t.string   "employee_id"
+    t.string   "movement_list_id"
   end
 
   add_index "movements", ["packageId"], name: "package_id_index", using: :btree
@@ -348,6 +381,7 @@ ActiveRecord::Schema.define(version: 20160307064434) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "locked",                                  default: false
+    t.string   "remarks"
   end
 
   add_index "n_storages", ["packageId"], name: "package_id_index", using: :btree

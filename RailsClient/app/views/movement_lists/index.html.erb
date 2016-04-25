@@ -1,0 +1,92 @@
+<h2>移库单列表</h2>
+<div>
+  <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+    <div>
+      <div>
+        <div>
+            <span>移库单号：
+              <input type="text" name="movement_list[id]" value="<%= @id %>"/>
+              <input type="hidden" name="movement_list[id_fuzzy]"/>
+            </span>
+
+            <span>状态：
+              <%= select 'movement_list', 'state', MovementListState.menu, selected: @state, include_blank: true %>
+            </span>
+
+            <span>创建人：
+              <input type="text" name="movement_list[builder]" value="<%= @builder %>"/>
+            </span>
+        </div>
+        <div>
+            <span>
+              创建日期：
+              <input type="text" name="movement_list[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
+              ~  <input type="text" name="movement_list[created_at][end]" class="datepicker" value="<%= @created_at_end %>"/>
+            </span>
+        </div>
+        <div>
+          <input type="submit" value="查找" class="btn btn-primary" name="search"/>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @movement_lists %>
+  </div>
+  <%= will_paginate @movement_lists, :container => false %>
+</div>
+
+<table class="table table-bordered table-striped globle-table">
+  <thead>
+  <tr>
+    <th>No.</th>
+    <th>移库单名称</th>
+    <th>移库单号</th>
+    <th>状态</th>
+    <th>清单</td>
+    <th>导出</td>
+    <th>创建人</th>
+    <th>创建时间</th>
+    <th>备注</th>
+    <th colspan="4"></th>
+    <th colspan="3"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @movement_lists.each_with_index do |movement_list,i| %>
+      <tr>
+        <td><%= i+1%></td>
+        <td><%= movement_list.name %></td>
+        <td><%= movement_list.id %></td>
+        <td><%= MovementListState.display movement_list.state.to_i %></td>
+        <td><%= link_to '清单列表',movement_sources_movement_list_path(movement_list) %><span class="badge pull-right"><%= movement_list.movement_sources.count%></td>
+        <td><%= link_to '导出移库单详细',exports_movement_lists_path(movement_list) %></td>
+        <td><%= movement_list.builder %></td>
+        <td><%= movement_list.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
+        <td><%= movement_list.remarks %></td>
+        <!--<td><%= link_to '详细', movement_list %></td>-->
+        <!--<td><%= link_to '编辑', edit_movement_list_path(movement_list) %></td>-->
+        <!--<td><%= link_to '删除', movement_list, method: :delete, data: { confirm: 'Are you sure?' } %></td>-->
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<br>
+<div class="digg_pagination">
+  <%= will_paginate @movement_lists, :container => false %>
+</div>
+
+<script>
+    $(function () {
+        $(".datepicker").datetimepicker({
+            lang: 'ch',
+            format: 'Y-m-d H:i'
+        });
+    });
+</script>

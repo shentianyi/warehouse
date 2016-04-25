@@ -8,6 +8,10 @@ class NStorage < ActiveRecord::Base
     ware_house and ware_house.whId or nil
   end
 
+  def self.exists_package?(id)
+    self.find_by_packageId(id)
+  end
+
   def self.generate_diff_report(inventory_list_id)
     condition = {}
     condition['inventory_list_items.inventory_list_id']= inventory_list_id

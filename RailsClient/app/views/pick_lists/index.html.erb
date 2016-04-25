@@ -12,6 +12,9 @@
           <input type="text" name="pick_list[user_id]" value="<%= @user_id %>"/>
           <input type="hidden" name="pick_list[user_id_fuzzy]"/>
         </span>
+        <span>状态：
+          <%= select 'pick_list', 'state', PickStatus.menu, selected: @state, include_blank: true %>
+        </span>
           </div>
           <div>
         <span>
@@ -56,7 +59,7 @@
             <td><%= pick_list.id %></td>
             <td><%= pick_list.user_id %></td>
             <td><%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %></td>
-            <td><%= PickItemStatus.display(pick_list.state) %></td>
+            <td><%= PickStatus.display(pick_list.state) %></td>
             <td><%= link_to '详细', pick_list_path(id: pick_list, show: true) %></td>
           </tr>
       <% end %>
@@ -120,6 +123,9 @@
           <input type="text" name="pick_list[user_id]" value="<%= @user_id %>" class="mui-input-clear"/>
           <input type="hidden" name="pick_list[user_id_fuzzy]"/>
         </span>
+        <span>状态：
+          <%= select 'pick_list', 'state', PickStatus.menu, selected: @state, include_blank: true %>
+        </span>
           </div>
           <div>
             <span>
@@ -180,27 +186,27 @@
         <% @pick_lists.each_with_index do |pick_list, index| %>
         if ("<%= pick_list.state %>" == "300" || "<%= pick_list.state %>" == "2") {
             $('<div class="mui-segmented-control"><li class="mui-table-view-cell">' +
-                    '<div class="mui-slider-right mui-disabled"><a href="<%= pick_list_path(id: pick_list,show:true) %>" id="<%= pick_list.id %>" object_id="<%= pick_list.object_id %>" user_id="<%= pick_list.user_id %>" create_at="<%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %>" style="background:steelblue;"  class="mui-btn glyphicon glyphicon-eye-open show-details">&emsp;详情</a></div>' +
-                    '<div class="mui-slider-handle">' +
-                    '<div class="mui-table-cell" id="<%= pick_list.id %>" style="background: #96CDCD;">' +
-                    '<div class="mui-segmented-control mui-control-body">' +
-                    '<div class="mui-list-item"><span>' + '<%= pick_list.id %>' + '</span></div>' +
-                    '<div class="mui-list-item"><span id="object_<%= pick_list.id %>">' + '<%= pick_list.object_id %>' + '</span></div>' +
-                    '<div class="mui-list-item"><span id="user_id_<%= pick_list.id %>">' + '<%= pick_list.user_id %>' + '</span></div>' +
-                    '<div class="mui-list-item"><span id="create_at_<%= pick_list.id %>">' + '<%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %>' + '</span></div>' +
-                    '</div></div></div></li></div>').appendTo('.table-show').ready(function () {
+            '<div class="mui-slider-right mui-disabled"><a href="<%= pick_list_path(id: pick_list,show:true) %>" id="<%= pick_list.id %>" object_id="<%= pick_list.object_id %>" user_id="<%= pick_list.user_id %>" create_at="<%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %>" style="background:steelblue;"  class="mui-btn glyphicon glyphicon-eye-open show-details">&emsp;详情</a></div>' +
+            '<div class="mui-slider-handle">' +
+            '<div class="mui-table-cell" id="<%= pick_list.id %>" style="background: #96CDCD;">' +
+            '<div class="mui-segmented-control mui-control-body">' +
+            '<div class="mui-list-item"><span>' + '<%= pick_list.id %>' + '</span></div>' +
+            '<div class="mui-list-item"><span id="object_<%= pick_list.id %>">' + '<%= pick_list.object_id %>' + '</span></div>' +
+            '<div class="mui-list-item"><span id="user_id_<%= pick_list.id %>">' + '<%= pick_list.user_id %>' + '</span></div>' +
+            '<div class="mui-list-item"><span id="create_at_<%= pick_list.id %>">' + '<%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %>' + '</span></div>' +
+            '</div></div></div></li></div>').appendTo('.table-show').ready(function () {
             });
         } else {
             $('<div class="mui-segmented-control"><li class="mui-table-view-cell">' +
-                    '<div class="mui-slider-right mui-disabled"><a href="<%= pick_list_path(id: pick_list,show:true) %>" id="<%= pick_list.id %>" object_id="<%= pick_list.object_id %>" user_id="<%= pick_list.user_id %>" create_at="<%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %>" style="background:steelblue;"  class="mui-btn glyphicon glyphicon-eye-open show-details">&emsp;详情</a></div>' +
-                    '<div class="mui-slider-handle">' +
-                    '<div class="mui-table-cell" id="<%= pick_list.id %>">' +
-                    '<div class="mui-segmented-control mui-control-body">' +
-                    '<div class="mui-list-item"><span>' + '<%= pick_list.id %>' + '</span></div>' +
-                    '<div class="mui-list-item"><span id="object_<%= pick_list.id %>">' + '<%= pick_list.object_id %>' + '</span></div>' +
-                    '<div class="mui-list-item"><span id="user_id_<%= pick_list.id %>">' + '<%= pick_list.user_id %>' + '</span></div>' +
-                    '<div class="mui-list-item"><span id="create_at_<%= pick_list.id %>">' + '<%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %>' + '</span></div>' +
-                    '</div></div></div></li></div>').appendTo('.table-show').ready(function () {
+            '<div class="mui-slider-right mui-disabled"><a href="<%= pick_list_path(id: pick_list,show:true) %>" id="<%= pick_list.id %>" object_id="<%= pick_list.object_id %>" user_id="<%= pick_list.user_id %>" create_at="<%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %>" style="background:steelblue;"  class="mui-btn glyphicon glyphicon-eye-open show-details">&emsp;详情</a></div>' +
+            '<div class="mui-slider-handle">' +
+            '<div class="mui-table-cell" id="<%= pick_list.id %>">' +
+            '<div class="mui-segmented-control mui-control-body">' +
+            '<div class="mui-list-item"><span>' + '<%= pick_list.id %>' + '</span></div>' +
+            '<div class="mui-list-item"><span id="object_<%= pick_list.id %>">' + '<%= pick_list.object_id %>' + '</span></div>' +
+            '<div class="mui-list-item"><span id="user_id_<%= pick_list.id %>">' + '<%= pick_list.user_id %>' + '</span></div>' +
+            '<div class="mui-list-item"><span id="create_at_<%= pick_list.id %>">' + '<%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %>' + '</span></div>' +
+            '</div></div></div></li></div>').appendTo('.table-show').ready(function () {
             });
         }
 
@@ -249,9 +255,9 @@
             $('.show-details-list').children().remove();
 
             $('<li class="mui-table-view-cell">择货单号:&emsp;' + ID + '</li>' +
-                    '<li class="mui-table-view-cell">要货项目:&emsp;' + ObjectID + '</li>' +
-                    '<li class="mui-table-view-cell">要货员工:&emsp;' + UserID + '</li>' +
-                    '<li class="mui-table-view-cell">创建时间:&emsp;' + CreateAt + '</li>').appendTo('.show-details-list').ready(function () {
+            '<li class="mui-table-view-cell">要货项目:&emsp;' + ObjectID + '</li>' +
+            '<li class="mui-table-view-cell">要货员工:&emsp;' + UserID + '</li>' +
+            '<li class="mui-table-view-cell">创建时间:&emsp;' + CreateAt + '</li>').appendTo('.show-details-list').ready(function () {
             });
 
             mui('#middlePopover').popover('show');

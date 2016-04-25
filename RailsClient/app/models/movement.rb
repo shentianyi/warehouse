@@ -2,7 +2,7 @@ class Movement < ActiveRecord::Base
   belongs_to :type, class_name: 'MoveType'
   belongs_to :to, class_name: 'Whouse'
   belongs_to :from, class_name: 'Whouse'
-
+  belongs_to :movement_list
 
   def self.generate_report_data(date_start, date_end)
     Movement.find_by_sql("select src_qty,dse_qty,partNr from (select SUM(qty) as src_qty,partNr from movements where created_at between '#{Time.parse(date_start).utc.to_s}' and '#{Time.parse(date_end).utc.to_s}' GROUP BY partNr)a join (select sum(quantity) as dse_qty,part_id from scrap_list_items where time between '#{Time.parse(date_start).utc.to_s}' and '#{Time.parse(date_end).utc.to_s}' group by part_id)b on a.partNr=b.part_id ")
@@ -39,4 +39,19 @@ class Movement < ActiveRecord::Base
     p.to_stream.read
   end
 
+  def self.save_invalid_record params
+    move_data = {
+        to_id: params[:toWh],
+        toPosition: params[:toPosition],
+        type_id: MoveType.find_by!(typeId: 'MOVE').id,
+        employee_id: (params[:employee_id] if params[:employee_id].present?),
+        remarks: "参数验证错误",
+        movement_list_id: (params[:movement_list_id] if params[:movement_list_id].present?),
+        from_id: params[:fromWh],
+        fromPosition: params[:fromPosition],
+        fifo: (params[:fifo] if params[:fifo].present?),
+        partNr: (params[:partNr] if params[:partNr].present?)
+    }
+    Movement.create!(move_data)
+  end
 end

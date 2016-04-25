@@ -178,7 +178,8 @@ class LogisticsContainer<LocationContainer
             packageId: package.id,
             toWh: toWh,
             toPosition: to_position,
-            uniq: true
+            uniq: true,
+            employee_id: package.user_id
         }
         WhouseService.new.enter_stock(params)
       end

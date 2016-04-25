@@ -1,0 +1,137 @@
+<h1>移库项列表</h1>
+
+<div>
+  <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+    <div>
+      <div>
+        <div>
+          <span>移库单号：
+              <input type="text" name="movement_source[movement_list_id]" value="<%= @movement_list_id %>"/>
+            </span>
+            <span>零件号：
+              <input type="text" name="movement_source[partNr]" value="<%= @partNr %>"/>
+              <input type="hidden" name="movement_source[partNr_fuzzy]"/>
+            </span>
+            <span>唯一码：
+              <input type="text" name="movement_source[packageId]" value="<%= @packageId %>"/>
+              <input type="hidden" name="movement_source[packageId_fuzzy]"/>
+            </span>
+
+            <span>员工号：
+              <input type="text" name="movement_source[employee_id]" value="<%= @employee_id %>"/>
+            </span>
+        </div>
+
+        <div>
+            <span>源仓库号：
+              <%= select_tag('movement_source[fromWh]', options_from_collection_for_select(Whouse.all, :name, :id, @fromWh), include_blank: true) %>
+            </span>
+            <span>源库位号：
+              <input type="text" name="movement_source[fromPosition]" value="<%= @fromPosition %>"/>
+              <input type="hidden" name="movement_source[fromPosition_fuzzy]"/>
+            </span>
+
+            <span>目的仓库号：
+              <%= select_tag('movement_source[toWh]', options_from_collection_for_select(Whouse.all, :name, :id, @toWh), include_blank: true) %>
+            </span>
+            <span>目的库位号：
+              <input type="text" name="movement_source[toPosition]" value="<%= @toPosition %>"/>
+              <input type="hidden" name="movement_source[toPosition_fuzzy]"/>
+            </span>
+        </div>
+
+        <div>
+            <span>
+              创建日期：
+              <input type="text" name="movement_source[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
+              ~  <input type="text" name="movement_source[created_at][end]" class="datepicker" value="<%= @created_at_end %>"/>
+            </span>
+            <span>
+              FIFO：
+              <input type="text" name="movement_source[fifo][start]" class="datepicker" value="<%= @fifo_start %>"/>
+              ~  <input type="text" name="movement_source[fifo][end]" class="datepicker" value="<%= @fifo_end %>"/>
+            </span>
+        </div>
+        <div>备注：
+          <input type="text" name="movement_source[remarks]" value="<%= @remarks %>"/>
+          <input type="hidden" name="movement_source[remarks_fuzzy]"/>
+        </div>
+        <div>状态：
+          <%= select 'state', 'state', MovementListState.menu, selected: @state, include_blank: true %>
+        </div>
+        <div>
+          <input type="submit" value="查找" class="btn btn-primary" name="search"/>
+          <input type="submit" value="导出" class="btn btn-primary" name="download"/>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @movement_sources %>
+  </div>
+  <%= will_paginate @movement_sources, :container => false %>
+</div>
+
+<table class="table table-striped table-condensed table-hover">
+  <thead>
+  <tr>
+    <th>移库单ID</th>
+    <th>源仓库</th>
+    <th>源库位</th>
+    <th>唯一码</th>
+    <th>零件号</th>
+    <th>数量</th>
+    <th>FIFO</th>
+    <th>目的仓库</th>
+    <th>目的库位</th>
+    <th>员工号</th>
+    <th>创建时间</th>
+    <th>备注</th>
+    <th>移库单状态</th>
+    <th colspan="3"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @movement_sources.each do |movement_source| %>
+      <tr>
+        <td><%= movement_source.movement_list_id %></td>
+        <td><%= movement_source.fromWh %></td>
+        <td><%= movement_source.fromPosition %></td>
+        <td><%= movement_source.packageId %></td>
+        <td><%= movement_source.partNr %></td>
+        <td><%= movement_source.qty %></td>
+        <td><%= movement_source.fifo %></td>
+        <td><%= movement_source.toWh %></td>
+        <td><%= movement_source.toPosition %></td>
+        <td><%= movement_source.employee_id %></td>
+        <td><%= movement_source.created_at.localtime %></td>
+        <td><%= movement_source.remarks %></td>
+        <td><%= MovementListState.display movement_source.state.to_i %></td>
+        <!--<td><%= link_to 'Show', movement_source %></td>-->
+        <!--<td><%= link_to 'Edit', edit_movement_source_path(movement_source) %></td>-->
+        <% if movement_source.state.to_i != 300 %>
+            <td><%= link_to '删除', movement_source, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        <% end %>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<br>
+<div class="digg_pagination">
+  <%= will_paginate @movement_sources, :container => false %>
+</div>
+
+<script>
+    $(function () {
+        $(".datepicker").datetimepicker({
+            lang: 'ch',
+            format: 'Y-m-d H:i'
+        });
+    });
+    init_check();
+</script>
