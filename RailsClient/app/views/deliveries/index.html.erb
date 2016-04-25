@@ -37,7 +37,6 @@
 <div class="panel panel-default">
   <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
     <li class="active">运输管理</li>
-    <li class="active">运输管理</li>
     <li class="active">发运流程</li>
     <li class="active">运单</li>
   </ol>
@@ -85,27 +84,7 @@
       </div>
     </div>
 
-    <div class="col-sm-12">
-      <div class="col-sm-4">
-        <h4 style="margin-top: 0;">
-          根据操作记录
-          <hr style="border-bottom: 1px dashed #000;margin: -10px 0 0 120px">
-        </h4>
-      </div>
-
-      <div class="col-sm-8" style="text-align: right;">
-        <input type="hidden" value="delivery" name="model"/>
-        <input type="hidden" value="records" name="tables"/><!--使用分号隔开，这里的表应该与上面的参数一致-->
-        <div class="col-sm-4">
-          <input type="submit" value="查找" class="btn btn-primary" name="search" style="width: 200px;"/>
-        </div>
-        <div class="col-sm-4">
-          <input type="submit" value="导出" class="btn btn-primary" name="download" style="width: 200px;"/>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-sm-12" style="border-bottom: 1px solid #CCCCCC;">
+    <div class="col-sm-12" style="border-bottom: 1px solid #ccc;margin-bottom: 10px;">
       <div class="col-sm-3">
         员工号：
         <input type="text" name="records[impl_id]" value="<%= @records_impl_id %>"/>
@@ -121,14 +100,29 @@
         ~ <input type="text" name="records[impl_time][end]" class="datepicker" value="<%= @records_impl_time_end %>"/>
       </div>
     </div>
+
+     <div class="col-sm-12">
+        <input type="hidden" value="delivery" name="model"/>
+        <input type="hidden" value="records" name="tables"/><!--使用分号隔开，这里的表应该与上面的参数一致-->
+        <div class="col-sm-4">
+          <input type="submit" value="查找" class="btn btn-primary" name="search" style="width: 200px;"/>
+        </div>
+        <div class="col-sm-4">
+          <input type="submit" value="导出" class="btn btn-primary" name="download" style="width: 200px;"/>
+        </div>
+
+        <div class="col-sm-4">
+          <input type="button" value="打印发运单" class='btn btn-warning' onclick="print_delivery_list();"/>
+        </div>
+    </div>
   </form>
 </div>
 
 <div class="col-sm-12 up_search">
-  <i class=" glyphicon glyphicon-chevron-up" title="收起搜索条件"></i>
+  <i class=" glyphicon glyphicon-chevron-up pull-right" title="收起搜索条件"></i>
 </div>
 
-
+<!-- 
 <div class="col-sm-12" style="margin-bottom: 20px;margin-top: -20px; ">
   <div class="col-sm-2">
     <input type="button" value="打印发运单" class='btn btn-warning' onclick="print_delivery_list();"/>
@@ -148,7 +142,7 @@
     <% end %>
   </div>
 </div>
-
+ -->
 <div class="col-sm-12">
   <div class="digg_pagination">
     <div class="page_info">
@@ -245,10 +239,10 @@
         var this_arrow = $(this);
         $('.all-search').slideToggle(300, function () {
             if (this_arrow.children('i').hasClass('glyphicon-chevron-up')) {
-                this_arrow.children('i').attr('class', 'glyphicon glyphicon-chevron-down');
+                this_arrow.children('i').attr('class', 'glyphicon glyphicon-chevron-down pull-right');
                 this_arrow.children('i').attr('title', '展开搜索条件');
             } else {
-                this_arrow.children('i').attr('class', 'glyphicon glyphicon-chevron-up');
+                this_arrow.children('i').attr('class', 'glyphicon glyphicon-chevron-up pull-right');
                 this_arrow.children('i').attr('title', '收起搜索条件');
             }
         });
