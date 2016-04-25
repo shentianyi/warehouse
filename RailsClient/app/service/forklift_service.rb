@@ -69,6 +69,9 @@ class ForkliftService
         lc.destinationable=location
         lc.save
 
+        if args[:delivery_id].present? && (d=LogisticsContainer.find_by_id(args[:delivery_id]))
+          d.add(lc)
+        end
         msg.result=true
         msg.object = lc
       else

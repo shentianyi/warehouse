@@ -6,7 +6,7 @@ module V1
       #strong parameters
       helpers do
         def forklift_params
-          ActionController::Parameters.new(params).require(:forklift).permit(:whouse_id, :user_id, :remark, :stocker_id, :id)
+          ActionController::Parameters.new(params).require(:forklift).permit(:whouse_id, :user_id, :remark, :stocker_id, :id,:delivery_id)
         end
       end
 

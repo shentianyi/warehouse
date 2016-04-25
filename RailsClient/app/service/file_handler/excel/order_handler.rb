@@ -16,6 +16,15 @@ module FileHandler
               order = Order.new()
               order.source_id=user.location.id
               order.remark = "文件导入需求单"
+              p '***************************************'
+              last_row={}
+              HEADERS.each_with_index do |k, i|
+                last_row[k] = book.cell(book.last_row, i+1).to_s.strip
+                last_row[k]=last_row[k].sub(/\.0/, '') if k=='莱尼号码'
+              end
+              p last_row
+              order.required_at=Time.parse("#{last_row['报缺日期']} #{last_row['报缺时间']}").utc
+              p '***************************************'
 
               if order.save
                 pick=PickList.new(state: PickStatus::INIT)
@@ -30,7 +39,7 @@ module FileHandler
                     row[k] = book.cell(line, i+1).to_s.strip
                     row[k]=row[k].sub(/\.0/, '') if k=='莱尼号码'
                   end
-                  batch_nr=row['报缺日期'].gsub(/,/, '') + row['报缺时间'].slice(0...2)
+                  #batch_nr=row['报缺日期'].gsub(/,/, '') + row['报缺时间'].slice(0...2)
 
                   part_ids<<row['莱尼号码']
                   if records[row['莱尼号码']]
@@ -39,7 +48,7 @@ module FileHandler
                     records[row['莱尼号码']]={
                         part_id: row['莱尼号码'],
                         qty: row['桶数'],
-                        batch_nr: batch_nr
+                        batch_nr: order.batch_nr
                     }
                   end
                 end
@@ -49,8 +58,8 @@ module FileHandler
                   part=nil
                   if part_client=PartClient.where(client_tenant_id: Tenant.find_by_code('SHL').id, client_part_nr: id).first
                     part = part_client.part
-                  # else
-                  #   part=Part.new()
+                    # else
+                    #   part=Part.new()
                   end
 
                   order_item=OrderItem.new({
@@ -139,6 +148,20 @@ module FileHandler
         # unless PartClient.where(client_tenant_id: Tenant.find_by_code('SHL').id, client_part_nr: row['莱尼号码']).first
         #   msg.contents << "零件号不存在"
         # end
+
+        if row['报缺日期'].blank?
+          msg.contents << "报缺日期不可空"
+        end
+        if row['报缺时间'].blank?
+          msg.contents << "报缺时间不可空"
+        end
+        if row['莱尼号码'].blank?
+          msg.contents << "莱尼号码不可空"
+        end
+        if row['桶数'].blank?
+          msg.contents << "桶数不可空"
+        end
+
 
         unless msg.result=(msg.contents.size==0)
           msg.content=msg.contents.join('/')

@@ -25,6 +25,15 @@ class Order < ActiveRecord::Base
     return false
   end
 
+  def batch_nr
+    #"#{Time.parse(date_string).strftime('%y%m%d')}#{Time.parse(time_string).strftime('%H')}"
+    self.required_at.localtime.strftime('%y%m%d%H')
+  end
+
+  def required_at_display
+   self.required_at.blank? ? '' : self.required_at.localtime.strftime('%Y-%m-%d %H:%M')
+  end
+
   def self.to_xlsx orders
     p = Axlsx::Package.new
     wb = p.workbook
