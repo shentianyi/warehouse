@@ -24,6 +24,13 @@
       <div class="panel-body">
         <div class="col-sm-12" style="border-bottom: 1px dashed #000;">
           <div class="col-sm-6">
+            <%= f.label :required_at, '报缺时间' %>
+            <%= f.text_field :required_at,value:@order.required_at_display %>
+          </div>
+        </div>
+
+        <div class="col-sm-12" style="border-bottom: 1px dashed #000;">
+          <div class="col-sm-6">
             <%= f.label :handled, '是否已处理' %>
             <%= f.check_box :handled %>
           </div>

@@ -30,7 +30,7 @@
   <div class="panel-body">
     <div class="col-sm-12" style="border-bottom: 1px dashed #000;">
       <div class="col-sm-3">
-        要货员:<%= @order.user.blank? ? '' : @order.user.name %>
+        报缺时间:<%= @order.required_at_display %>
       </div>
       <div class="col-sm-3">
         要货员工号:<%= @order.user.blank? ? '' : @order.user.nr %>

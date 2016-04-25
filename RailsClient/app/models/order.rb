@@ -12,6 +12,8 @@ class Order < ActiveRecord::Base
   has_many :location_container_orders, dependent: :destroy
   has_many :location_containers, through: :location_container_orders
 
+  before_save :set_required_at
+
   def generate_id
     "OD#{Time.now.to_milli}"
   end
@@ -25,13 +27,19 @@ class Order < ActiveRecord::Base
     return false
   end
 
+  def set_required_at
+    if self.required_at.present?
+      self.required_at=(self.required_at-8.hours).localtime.utc
+    end
+  end
+
   def batch_nr
     #"#{Time.parse(date_string).strftime('%y%m%d')}#{Time.parse(time_string).strftime('%H')}"
     self.required_at.localtime.strftime('%y%m%d%H')
   end
 
   def required_at_display
-   self.required_at.blank? ? '' : self.required_at.localtime.strftime('%Y-%m-%d %H:%M')
+    self.required_at.blank? ? '' : self.required_at.localtime.strftime('%Y-%m-%d %H:%M')
   end
 
   def self.to_xlsx orders
