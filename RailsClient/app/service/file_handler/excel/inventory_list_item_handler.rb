@@ -39,7 +39,7 @@ module FileHandler
           '仓库', '零件号', '数量'
       ]
 
-      def self.import(file, inventory_list_id)
+      def self.import(file, inventory_list_id,user)
         msg = Message.new
         book = Roo::Excelx.new file.full_path
         book.default_sheet = book.sheets.first
@@ -48,7 +48,7 @@ module FileHandler
 
         if validate_msg.result
           #validate file
-          begin
+         # begin
             InventoryListItem.transaction do
               2.upto(book.last_row) do |line|
                 row = {}
@@ -57,14 +57,17 @@ module FileHandler
                   row[k]=row[k].sub(/\.0/, '') if k=='零件号'
                 end
                 # if row['数量'].to_f > 0
+                # p row['FIFO']
+                whouse=Whouse.find_by_nr(row['仓库号'])
                 params={inventory_list_id: inventory_list_id,
-                        whouse_id: row['仓库号'],
-                        part_id: row['零件号'],
-                        fifo: row['FIFO'].present? ? Date.strptime(row['FIFO'], '%d.%m.%y').to_time.utc : Time.now.utc,
+                        whouse_id: whouse.id,
+                        part_id: row['零件号'],#Part.find_by_nr(row['零件号']).id,
+                        fifo: row['FIFO'].present? ? Time.parse(row['FIFO']).utc : Time.now.utc,
                         origin_qty: row['数量'].to_f,
                         qty: row['数量'].to_f,
-                        position: row['库位号'],
+                        position:row['库位号'] ,#whouse.positions.find_by_nr(row['库位号']),
                         package_id: row['唯一码'],
+                        user_id:user.id,
                         # part_form_mark: row['原材料/半成品/成品标记'],
                         need_convert: false#row['需要转换'].present? ? (row['需要转换']=='Y') : false
                 }
@@ -74,11 +77,11 @@ module FileHandler
             end
             msg.result = true
             msg.content = "导入盘点单数据成功"
-          rescue => e
-            puts e.backtrace
-            msg.result = false
-            msg.content = e.message
-          end
+          # rescue => e
+          #   puts e.backtrace
+          #   msg.result = false
+          #   msg.content = e.message
+          # end
         else
           msg.result = false
           msg.content = validate_msg.content
@@ -265,7 +268,7 @@ module FileHandler
 
         if row['FIFO'].present?
           begin
-            row['FIFO'].to_time
+            row['FIFO']#.to_time
           rescue => e
             msg.contents << "FIFO: #{row['FIFO']} 错误!"
           end
@@ -307,7 +310,7 @@ module FileHandler
 
         if row[:FIFO].present?
           begin
-            row[:FIFO].to_time
+            row[:FIFO]#.to_time
           rescue => e
             msg.contents << "FIFO: #{row[:FIFO]} 错误!"
           end

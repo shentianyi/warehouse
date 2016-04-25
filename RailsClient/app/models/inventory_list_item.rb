@@ -88,9 +88,9 @@ class InventoryListItem < ActiveRecord::Base
       params[:qty]=BigDecimal.new(params[:qty].to_s)
     end
 
-    if params[:part_wire_mark].blank?
-      params[:part_wire_mark]=part.is_wire? ? 'L' : 'M'
-    end
+    # if params[:part_wire_mark].blank?
+    #   params[:part_wire_mark]=part.is_wire? ? 'L' : 'M'
+    # end
 
     if params[:whouse_id].blank?
       params[:whouse_id]=InventoryList.find(params[:inventory_list_id]).whouse_id
