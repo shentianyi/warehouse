@@ -80,6 +80,7 @@
         <ul>
           <% if current_user.permission?(:view_storage) %>
               <% if current_user.permission?(:operate_storage) %>
+                  <li><a href="<%= misoperation_movements_path %>">库存误操作处理</a></li>
                   <li><a href="<%= move_n_storages_path %>">文件移库</a></li>
               <% end %>
           <% end %>

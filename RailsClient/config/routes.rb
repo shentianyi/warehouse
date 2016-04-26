@@ -255,6 +255,7 @@ Rails.application.routes.draw do
 
   resources :movements do
     collection do
+      match :misoperation, to: :misoperation, via: [:get, :post]
       get :search
     end
   end

@@ -1,0 +1,55 @@
+<h1>test</h1>
+
+<form method="post" action="<%= send("misoperation_movements_path") %>">
+  <div class="col-sm-12" style="border-bottom: 1px dashed #999;">
+    <div class="col-sm-3">
+      零件号：
+      <input type="text" name="movement[partNr]" value="<%= @partNr %>"/>
+    </div>
+    <div class="col-sm-3">
+      唯一码：
+      <input type="text" name="movement[packageId]" value="<%= @packageId %>"/>
+    </div>
+    <div class="col-sm-3">
+      数量：
+      <input type="text" name="movement[qty]" value="<%= @qty %>"/>
+    </div>
+  </div>
+
+  <div></div>
+
+  <div class="col-sm-12" style="border-bottom: 1px dashed #999;">
+    <div class="col-sm-3">
+      源仓库号：
+      <%= select_tag('movement[from_id]', options_from_collection_for_select(Whouse.all, :nr, :name, @from_id), include_blank: true) %>
+    </div>
+    <div class="col-sm-3">
+      源库位号：
+      <input type="text" name="movement[fromPosition]" value="<%= @fromPosition %>"/>
+    </div>
+    <div class="col-sm-3">
+      目的仓库号：
+      <%= select_tag('movement[to_id]', options_from_collection_for_select(Whouse.all, :nr, :name, @to_id), include_blank: true) %>
+    </div>
+    <div class="col-sm-3">
+      目的库位号：
+      <input type="text" name="movement[toPosition]" value="<%= @toPosition %>"/>
+    </div>
+  </div>
+
+  <div></div>
+
+  <div class="col-sm-12" style="border-bottom: 1px dashed #999;">
+    <div class="col-sm-4">
+      备注：
+      <input type="text" name="movement[remarks]" value="<%= @remarks %>"/>
+    </div>
+    <div class="col-sm-3">
+      员工号：
+      <input type="text" name="movement[employee_id]" value="<%= @employee_id %>"/>
+    </div>
+    <div class="col-sm-4">
+      <input type="submit" value="提交" class="btn btn-primary" name="move" style="width: 200px;"/>
+    </div>
+  </div>
+</form>

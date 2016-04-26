@@ -30,6 +30,13 @@ class MovementsController < ApplicationController
     }
   end
 
+  def misoperation
+    puts params
+    if request.post?
+
+    end
+  end
+
   private
 # Use callbacks to share common setup or constraints between actions.
   def set_movement
