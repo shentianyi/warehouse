@@ -252,7 +252,7 @@ class OrderService
 
         # if picked
           pick.update_attribute(:state, PickStatus::PICKED)
-        pick.order.update_attributes(status: OrderState::HANDLED, handled: true)
+        pick.orders.first.update_attributes(status: OrderState::HANDLED, handled: true)
         # else
         #   pick.update_attribute(:state, PickStatus::PICKING)
         # end
