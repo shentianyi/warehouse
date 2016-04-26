@@ -228,7 +228,8 @@ class OrderService
 
           pick_item.order_item.update_attribute(:handled, true) if pick_item.order_item
           #move stock
-          if from_wh=Whouse.find_by_id('PA')
+          user
+          if from_wh=user.location.whouses.first
             pick_item.update_attribute(:remark, "已完成择货")
             pick_position = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id)
             WhouseService.new.move({
@@ -241,7 +242,7 @@ class OrderService
                                        remarks: "MOVE FROM PICK: #{pick_item.remark}"
                                    })
           else
-            raise "WAREHOUSE PA Not Found"
+            raise "SRC WAREHOUSE Not Found"
           end
 
         end
