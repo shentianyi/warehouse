@@ -60,17 +60,17 @@
       </div>
       <div class="col-sm-12" style="margin-top: 20px;">
         <% if current_user.permission?(:operate_basic_info_create) %>
-            <div class="col-sm-4">
+            <div class="col-sm-3">
               <%= link_to "新建零件", send("new_#{@model}_path"), :class => 'btn btn-primary', :style => 'width: 150px;color:white' %>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-3">
               <%= link_to "上传/更新零件", send("import_#{@model.pluralize}_path"), :class => 'btn btn-primary', :style => 'width: 150px;color:white' %>
             </div>
-            <!--<div class="col-sm-4">-->
-              <!--<%= link_to "上传/更新零件位置", parts_import_positions_path, :class => 'btn btn-primary', :style => 'width: 150px;color:white' %>-->
-            <!--</div>-->
+            <div class="col-sm-3">
+              <%= link_to "上传/更新零件位置", parts_import_positions_path, :class => 'btn btn-primary', :style => 'width: 150px;color:white' %>
+            </div>
         <% end %>
-        <div class="col-sm-4">
+        <div class="col-sm-3">
           <%= link_to "下载零件", send("download_#{@model.pluralize}_path"), data: {confirm: 'Are you sure?'}, :class => 'btn btn-primary', :style => 'width: 150px;color:white' %>
         </div>
       </div>
