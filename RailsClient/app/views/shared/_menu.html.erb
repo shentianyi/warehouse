@@ -11,7 +11,7 @@
     <a href="#">运输管理 &nbsp;<i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:black;"></i></a>
     <ul>
       <% if current_user.permission?(:view_pick) %>
-          <li><a href="<%= panel_orders_path %>">要货需求</a></li>
+          <li><a href="<%= panel_orders_path %>">要货需求面板</a></li>
       <% end %>
 
       <% if current_user.permission?(:view_order) %>
@@ -23,7 +23,7 @@
       <% end %>
 
       <% if current_user.permission?(:view_pick) %>
-          <li><a href="<%= pick_panel_orders_path %>">择货需求</a></li>
+          <li><a href="<%= pick_panel_orders_path %>">择货需求面板</a></li>
       <% end %>
 
       <% if current_user.permission?(:view_pick) %>

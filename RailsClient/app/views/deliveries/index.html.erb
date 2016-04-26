@@ -159,6 +159,7 @@
     <!--基础-->
     <th>NO.</th>
     <th>运单号</th>
+    <th>批次号</th>
     <th>状态</th>
     <th>目的地</th>
     <th>备注</th>
@@ -189,6 +190,7 @@
         <td><input type="checkbox" id="<%= delivery.id %>" class='print-check'></td>
         <td><%= index+@deliveries.offset+1 %></td>
         <td><%= delivery.container_id %></td>
+        <td><%=delivery.batch_nr%></td>
         <td><%= delivery.state_display %></td>
         <td><%= delivery.destination.name %></td>
         <td><%= delivery.remark %></td>
@@ -205,9 +207,9 @@
         <td>
           <%= delivery.get_records.last.display %>
         </td>
-        <td><%= delivery.delivery.extra_wooden_count %></td>
-        <td><%= delivery.delivery.extra_box_count %></td>
-        <td><%= delivery.delivery.extra_nps_count %></td>
+        <td><%= delivery.part_type_count[:wooden] %></td>
+        <td><%= delivery.part_type_count[:box]  %></td>
+        <td><%= delivery.part_type_count[:nps]  %></td>
 
         <td>
           <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-eye-open', :style => 'color:green;'), {controller: 'deliveries', action: 'show', id: delivery.id}, :class => 'IconA', :title => '运单详情' %>

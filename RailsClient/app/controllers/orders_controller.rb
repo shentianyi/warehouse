@@ -1,4 +1,5 @@
 class OrdersController < ApplicationController
+  before_action :parse_time_to_utc, only: [:update]
   before_action :set_order, only: [:show, :edit, :update, :destroy, :order_items]
 
   # GET /orders
@@ -97,7 +98,7 @@ class OrdersController < ApplicationController
   end
 
   def items
-    unless  user=User.find_by_nr(params[:user_id])
+    unless user=User.find_by_nr(params[:user_id])
       @order_items=OrderItem.where(order_id: params[:order_ids]).order(is_emergency: :desc)
       #.group(:part_id,:whouse_id)
       #.select('order_items.*,sum(order_items.quantity) as quantity')
@@ -182,8 +183,14 @@ class OrdersController < ApplicationController
     @order = Order.unscoped.find(params[:id])
   end
 
+  def parse_time_to_utc
+    if params[:order][:required_at].present?
+      params[:order][:required_at]=Time.parse(params[:order][:required_at]).utc
+    end
+  end
+
   # Never trust parameters from the scary internet, only allow the white list through.
   def order_params
-    params.require(:order).permit(:id, :user_id, :handled, :is_delete,:required_at)
+    params.require(:order).permit(:id, :user_id, :handled, :is_delete, :required_at)
   end
 end

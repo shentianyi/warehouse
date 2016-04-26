@@ -2,7 +2,7 @@
 module Printer
   class P0021<Base
     HEAD=[:delivery_nr, :delivery_date, :from_addr, :to_addr, :totalnr_forklift, :totalnr_mupan, :num_paperbox, :totalnr_nps]
-    BODY=[:forklift_nr, :batch_nr, :part_nr, :czleoni_partnr, :total_qty, :unit, :num_bucket, :remark]
+    BODY=[:forklift_nr, :batch_nr, :part_nr, :czleoni_partnr, :total_qty, :unit, :num_bucket, :remark,:nr]
 
 
     def generate_data
@@ -34,10 +34,10 @@ module Printer
       forklifts=LogisticsContainerService.get_forklifts(d)
 
       parts={}
-      forklifts.each do |f|
+      forklifts.each_with_index do |f,i|
 
         packages=LogisticsContainerService.get_packages(f)
-        packages.each do |ps|
+        packages.each_with_index do |ps,ii|
           part=Part.find_by_id(ps.package.part_id)
 
 
@@ -56,8 +56,9 @@ module Printer
 
           bodies=[]
           body={
-              forklift_nr: f.container_id.to_s,
-              batch_nr: d.batch_no.nil? ? '' : d.batch_no,#ps.package.extra_batch.to_s,
+              nr:ii+1,
+              forklift_nr: "#{f.container_id}",
+              batch_nr: d.batch_nr,#d.batch_no.nil? ? '' : d.batch_no,#ps.package.extra_batch.to_s,
               part_nr: part.sh_part_nr, #ps.package.part.present? ?  ps.package.part.nr : '',
               czleoni_partnr: part.cz_part_nr, #ps.package.extra_cz_part_id.to_s,
               total_qty: ps.package.quantity.to_s,

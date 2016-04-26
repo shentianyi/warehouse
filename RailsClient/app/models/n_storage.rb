@@ -31,59 +31,6 @@ class NStorage < ActiveRecord::Base
   #   whouse and whouse.id or nil
   # end
 
-  def self.generate_diff_report(inventory_list_id)
-    condition = {}
-    condition['inventory_list_items.inventory_list_id']= inventory_list_id
-    inventory_list=InventoryList.find_by_id(inventory_list_id)
-    # NStorage.joins("LEFT JOIN inventory_list_items ON inventory_list_items.part_id = n_storages.partNr")
-    #             .where(condition)
-    #             .select("n_storages.partNr, sum(n_storages.qty) as qty, sum(inventory_list_items.qty) as qty2, sum(n_storages.qty)-sum(inventory_list_items.qty) as diff")
-    #             .group('n_storages.partNr')
-    results = []
-    resultstemp = []
-    @storages = NStorage.joins('inner join parts on parts.id=n_storages.partNr').
-        where(ware_house_id: inventory_list.whouse_id)
-                    .select("partNr,parts.nr as nr, sum(qty) as qty,count(*) as num")
-                    .group('partNr')
-
-    @inventory_list_items = InventoryListItem.joins(:part)
-                                .where(condition)
-                                .select("part_id,parts.nr as nr, sum(qty) as qty2,count(*) as num")
-                                .group("part_id")
-
-    @storages.each do |storage|
-      # puts "#{storage.partNr}"
-      # 零件号:0,库存数量:1,盘点数量:2,数量差异值:3,库存桶数:4,盘点桶数:5,桶数差异:6
-      results.push([storage.nr, storage.qty, 0, storage.qty, storage.num, 0, storage.num])
-      # storage_count=NStorage.where(ware_house_id: inventory_list.whouse_id, partNr: storage.partNr).count
-      # results.push([storage.partNr, storage.qty,0, storage.qty, storage_count, 0, storage_count])
-    end
-
-    @inventory_list_items.each do |inventory_list_item|
-      @flag = false
-      item_count=InventoryListItem.where(condition).where(part_id: inventory_list_item.part_id).count
-      results.each do |result|
-        # @storages.each do |storage|
-        if inventory_list_item.nr == result[0]
-          #result.insert(2, inventory_list_item.qty2)
-          result[2]=inventory_list_item.qty2
-          result[3] = (result[1]||0) - result[2]
-          #result[4]=
-          result[5]=inventory_list_item.num
-          result[6]= (result[4]||0) - result[5]
-          # result.insert(6, item_count)
-          # result[7] = (result[5]||0) - result[6]
-          @flag = true
-          # break
-        end
-      end
-      if !@flag
-        results.push([Part.find_by_id(inventory_list_item.part_id).nr, 0, inventory_list_item.qty2, 0-inventory_list_item.qty2.to_f, 0, inventory_list_item.num, 0-inventory_list_item.num])
-        #puts "part id is -- #{inventory_list_item.part_id}"
-      end
-    end
-    return results
-  end
 
 
   def self.to_total_xlsx n_storages, package_type_id
@@ -114,8 +61,6 @@ class NStorage < ActiveRecord::Base
 
   def self.to_xlsx n_storages
     p = Axlsx::Package.new
-
-    puts "9999999999999999999999999999999999"
     wb = p.workbook
     wb.add_worksheet(:name => "sheet1") do |sheet|
       sheet.add_row ["序号", "零件号", "包装类型", "唯一码", "仓库号", "库位号", "数量", "FIFO", "创建时间"]

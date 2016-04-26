@@ -8,7 +8,7 @@ class LogisticsContainer<LocationContainer
   after_update :check_move_stock
   # after_update :check_safe_stock
 
-  before_create :generate_batch_nr
+  #before_create :generate_batch_nr
 
   default_scope { where(type: LocationContainerType::LOGISTICS) }
   has_ancestry
@@ -24,16 +24,16 @@ class LogisticsContainer<LocationContainer
   # def destroy
   #    self.package.destroy
   # end
-  def generate_batch_nr
-    start_time=Time.now.beginning_of_day.utc
-    end_time=Time.now.end_of_day.utc
-
-    count= self.class.joins(:delivery)
-               .where(created_at: [start_time..end_time],
-                      source_location_id: Location.find_by_nr('SHJXLO').id).count
-
-    self.batch_no= "#{Time.now.strftime('%y%m%d')}#{ '%02d' % ((count)*2)}"
-  end
+  # def generate_batch_nr
+  #   start_time=Time.now.beginning_of_day.utc
+  #   end_time=Time.now.end_of_day.utc
+  #
+  #   count= self.class.joins(:delivery)
+  #              .where(created_at: [start_time..end_time],
+  #                     source_location_id: Location.find_by_nr('SHJXLO').id).count
+  #
+  #   self.batch_no= "#{Time.now.strftime('%y%m%d')}#{ '%02d' % ((count)*2)}"
+  # end
 
   def self.last_lc_container container_id
     where(container_id: container_id).order('created_at desc').first
@@ -51,6 +51,19 @@ class LogisticsContainer<LocationContainer
         self.get_forklift_service
       when ContainerType::DELIVERY
         self.get_delivery_service
+    end
+  end
+
+  def batch_nr
+    case self.container.type
+      when ContainerType::FORKLIFT
+        if self.parent
+          self.parent.batch_nr
+        end
+      when ContainerType::DELIVERY
+        self.order.blank? ? '' : self.order.batch_nr
+      else
+        ''
     end
   end
 
@@ -235,4 +248,16 @@ class LogisticsContainer<LocationContainer
     # end
   end
 
+  def part_type_count
+    return @part_type_count if @part_type_count
+    @part_type_count={
+        wooden: 0,
+        box: 0,
+        nps: 0
+    }
+    PackageType.all.each do |t|
+      @part_type_count[t.nr.to_sym] =LogisticsContainerService.get_packages(self).joins(package: :part).where(parts: {package_type_id: t.id}).count
+    end
+    @part_type_count
+  end
 end

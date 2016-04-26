@@ -96,6 +96,7 @@ Rails.application.routes.draw do
     member do
       get 'inventory_list_items'
       get :discrepancy
+      get :pack_discrepancy
     end
 
     collection do

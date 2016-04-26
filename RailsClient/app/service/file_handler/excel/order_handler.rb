@@ -23,7 +23,10 @@ module FileHandler
                 last_row[k]=last_row[k].sub(/\.0/, '') if k=='莱尼号码'
               end
               p last_row
-              order.required_at=Time.parse("#{last_row['报缺日期']} #{last_row['报缺时间']}").utc
+              p "#{last_row['报缺日期'].gsub(/,/, '.')} #{last_row['报缺时间']}"
+              p Time.parse("#{last_row['报缺日期'].gsub(/,/, '.')} #{last_row['报缺时间']}")
+              p Time.parse("#{last_row['报缺日期'].gsub(/,/, '.')} #{last_row['报缺时间']}").utc
+              order.required_at=Time.parse("#{last_row['报缺日期'].gsub(/,/, '.')} #{last_row['报缺时间']}").utc
               p '***************************************'
 
               if order.save
@@ -66,6 +69,7 @@ module FileHandler
                                                part_id: part.blank? ? id : part.id,
                                                part_type_id: part.blank? ? '' : part.part_type_id,
                                                quantity: records[id][:qty],
+                                               box_quantity:1,
                                                remark: NStorageService.get_remark(part, user.location, records[id][:qty].to_i)
                                            })
                   order_item.user=user

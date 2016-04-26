@@ -47,7 +47,6 @@ class InventoryListItem < ActiveRecord::Base
     position=Position.find_by_nr(params[:position])
     params[:position]=position.blank? ? params[:position] : position.id
     if query
-      query = NStorage.new
 
       # 根据参数组合情况获取nstorage start
       if !params[:package_id].blank?
@@ -72,7 +71,7 @@ class InventoryListItem < ActiveRecord::Base
         params[:in_store] = false if params[:current_position].blank?
       else
         params[:current_whouse] = query.ware_house_id if params[:current_whouse].blank?
-        params[:current_position] = query.position if params[:current_position].blank?
+        params[:current_position] = query.position_id if params[:current_position].blank?
         params[:in_store] = true
         params[:fifo]=query.fifo if params[:fifo].blank?
         params[:origin_qty] =params[:qty]=query.qty if params[:qty].blank?

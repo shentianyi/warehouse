@@ -15,9 +15,9 @@ class LogisticsContainersController < ApplicationController
 
     #if params[:tables]
     tables = params[:tables].nil? ? [] : params[:tables].split(';')
-    (tables  + ["#{model}"]).each { |t|
+    (tables + ["#{model}"]).each { |t|
       if t=='records'
-       query=query.joins("LEFT JOIN `records` ON `records`.`recordable_id` = `location_containers`.`id`
+        query=query.joins("LEFT JOIN `records` ON `records`.`recordable_id` = `location_containers`.`id`
  AND `records`.`recordable_type` = 'LocationContainer'")
       else
         query = query.joins(t.to_sym)
@@ -42,7 +42,11 @@ class LogisticsContainersController < ApplicationController
           if condition.has_key?(k+'_fuzzy')
             query = query.where("#{table.pluralize}.#{k} like ?", "%#{v}%")
           else
-            hash_conditions[table.to_sym] = Hash[k, v]
+            if hash_conditions[table.to_sym].blank?
+              hash_conditions[table.to_sym] = Hash[k, v]
+            else
+              hash_conditions[table.to_sym][k.to_sym]=v
+            end
           end
           instance_variable_set("@#{arg}_#{k}", v)
         end
@@ -51,7 +55,11 @@ class LogisticsContainersController < ApplicationController
           values=v.values.sort
           values[0]=Time.parse(values[0]).utc.to_s if values[0].is_date?
           values[1]=Time.parse(values[1]).utc.to_s if values[1].is_date?
-          hash_conditions[table.to_sym] = Hash[k, (values[0]..values[1])]
+          if hash_conditions[table.to_sym].blank?
+            hash_conditions[table.to_sym] = Hash[k, (values[0]..values[1])]
+          else
+            hash_conditions[table.to_sym][k.to_sym]=  (values[0]..values[1])
+          end
           v.each do |kk, vv|
             instance_variable_set("@#{arg}_#{k}_#{kk}", vv)
           end
@@ -65,7 +73,7 @@ class LogisticsContainersController < ApplicationController
 
 
     if params[:containers].present? && params[:containers][:part_id].present?
-      hash_conditions[:containers]={part_id: Part.where("nr like ?",  "%#{params[:containers][:part_id]}%").pluck(:id)}
+      hash_conditions[:containers]={part_id: Part.where("nr like ?", "%#{params[:containers][:part_id]}%").pluck(:id)}
       instance_variable_set("@container_part_id", params[:containers][:part_id])
     end
     # query.first
