@@ -51,8 +51,7 @@
         </div>
         <div class="col-sm-4">
           供应商：
-          <input type="text" name="part[supplier]" value="<%= @supplier %>"/>
-          <input type="hidden" name="part[supplier_fuzzy]"/>
+          <%= select 'part', 'supplier', Location.supplier_select(current_user), selected: @supplier, include_blank: true %>
         </div>
         <div class="col-sm-4">
           <input type="submit" value="查 找" class="btn btn-primary" style="width: 150px;"/>

@@ -102,12 +102,12 @@
     <th>唯一码</th>
     <th>目前仓库</th>
     <th>目前库位</th>
-    <th>原材料/半成品/成品标记</th>
-    <th>原材料线/非线标记</th>
-    <th>需要转换</th>
-    <th>创建人</th>
+    <!--<th>原材料/半成品/成品标记</th>-->
+    <!--<th>原材料线/非线标记</th>-->
+    <!--<th>需要转换</th>-->
+    <!--<th>创建人</th>-->
     <th>是否在库存</th>
-    <th>是否已锁定包装箱库存</th>
+    <!--<th>是否已锁定包装箱库存</th>-->
     <th>是否已入库</th>
     <th>所属清单</th>
     <th>盘点状态</th>
@@ -120,7 +120,6 @@
   <% @inventory_list_items.each_with_index do |inventory_list_item, i| %>
       <tr>
         <td><%= i+1 %></td>
-
         <td><%= inventory_list_item.part.nr %></td>
         <td><%= inventory_list_item.fifo_display %></td>
         <td><%= inventory_list_item.fifo_export_display %></td>
@@ -134,12 +133,12 @@
         <td><%= inventory_list_item.current_position_object.nr if inventory_list_item.current_position_object %></td>
 
 
-        <td><%= inventory_list_item.part_form_mark %></td>
-        <td><%= inventory_list_item.part_wire_mark %></td>
-        <td><%= inventory_list_item.need_convert_display %></td>
-        <td><%= inventory_list_item.user.blank? ? '' : inventory_list_item.user.nr %></td>
+        <!--<td><%= inventory_list_item.part_form_mark %></td>-->
+        <!--<td><%= inventory_list_item.part_wire_mark %></td>-->
+        <!--<td><%= inventory_list_item.need_convert_display %></td>-->
+        <!--<td><%= inventory_list_item.user.blank? ? '' : inventory_list_item.user.nr %></td>-->
         <td><%= inventory_list_item.in_store_display %></td>
-        <td><%= inventory_list_item.locked_display %></td>
+        <!--<td><%= inventory_list_item.locked_display %></td>-->
         <td><%= inventory_list_item.in_stored_display %></td>
         <td><%= inventory_list_item.inventory_list.name %></td>
         <td><%= InventoryListState.display inventory_list_item.inventory_list.state %></td>

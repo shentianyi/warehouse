@@ -174,15 +174,20 @@ module FileHandler
           end
         end
 
-        src_warehouse = Whouse.find_by_nr(row[:toWh])
-        unless src_warehouse
+        des_warehouse = Whouse.find_by_nr(row[:toWh])
+        unless des_warehouse
           msg.contents << "目的仓库号:#{row[:toWh]} 不存在!"
         end
 
+        positions = []
         if row[:packageId].present? && row[:partNr].blank?
         else
           part_id = Part.find_by_nr(row[:partNr])
-          unless part_id
+          if part_id
+            part_id.positions.each do |position|
+              positions += ["#{position.nr}"]
+            end
+          else
             msg.contents << "零件号:#{row[:partNr]} 不存在!"
           end
         end
@@ -207,6 +212,12 @@ module FileHandler
           position = Position.find_by(nr: row[:toPosition])
           unless position
             msg.contents << "目的库位号:#{row[:toPosition]} 不存在!"
+          end
+        end
+
+        if to_position && part_id
+          unless positions.include?(row[:toPosition])
+            msg.contents << "零件号:#{row[:partNr]}不在目的库位号:#{row[:toPosition]}上!"
           end
         end
 
@@ -311,11 +322,11 @@ module FileHandler
           end
         end
 
-        # if from_position && part_id
-        #   unless positions.include?(row[:fromPosition])
-        #     msg.contents << "零件号:#{row[:partNr]} 不在源库位号:#{row[:fromPosition]}上!"
-        #   end
-        # end
+        if from_position && part_id
+          unless positions.include?(row[:fromPosition])
+            msg.contents << "零件号:#{row[:partNr]} 不在源库位号:#{row[:fromPosition]}上!"
+          end
+        end
 
         if row[:toPosition].present?
           to_position = Position.find_by_nr(row[:toPosition])
@@ -323,12 +334,12 @@ module FileHandler
             msg.contents << "目的库位号:#{row[:toPosition]} 不存在!"
           end
         end
-        #
-        # if to_position && part_id
-        #   unless positions.include?(row[:toPosition])
-        #     msg.contents << "零件号:#{row[:partNr]}不在目的库位号:#{row[:toPosition]}上!"
-        #   end
-        # end
+
+        if to_position && part_id
+          unless positions.include?(row[:toPosition])
+            msg.contents << "零件号:#{row[:partNr]}不在目的库位号:#{row[:toPosition]}上!"
+          end
+        end
 
         if row[:employee_id].present?
           employee = User.find_by_nr(row[:employee_id])

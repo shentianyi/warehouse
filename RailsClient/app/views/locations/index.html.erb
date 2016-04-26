@@ -72,10 +72,10 @@
     <th>编号</th>
     <th>名称</th>
     <th>目的地点</th>
-    <th>要货地点(发货地点)</th>
-    <th>接收仓库</th>
-    <th>在途仓库</th>
-    <th>运单接收模式</th>
+    <!--<th>要货地点(发货地点)</th>-->
+    <!--<th>接收仓库</th>-->
+    <!--<th>在途仓库</th>-->
+    <!--<th>运单接收模式</th>-->
     <th>所有员工</th>
     <th>所有仓库</th>
     <th>所属公司</th>
@@ -100,18 +100,18 @@
             <% end %>
           </ul>
         </td>
-        <td>
-          <%= location.order_source_location.name if location.order_source_location %>
-        </td>
-        <td>
-          <%= location.receive_whouse.name if location.receive_whouse %>
-        </td>
-        <td>
-          <%= location.send_whouse.name if location.send_whouse %>
-        </td>
-        <td>
-          <%= DeliveryReceiveMode.display(location.receive_mode) %>
-        </td>
+        <!--<td>-->
+          <!--<%= location.order_source_location.name if location.order_source_location %>-->
+        <!--</td>-->
+        <!--<td>-->
+          <!--<%= location.receive_whouse.name if location.receive_whouse %>-->
+        <!--</td>-->
+        <!--<td>-->
+          <!--<%= location.send_whouse.name if location.send_whouse %>-->
+        <!--</td>-->
+        <!--<td>-->
+          <!--<%= DeliveryReceiveMode.display(location.receive_mode) %>-->
+        <!--</td>-->
         <td style="white-space: nowrap;">
           <%= link_to content_tag(:span, '员工列表', :class => 'label label-primary'), users_location_path(location) %>
           <span class="badge"><%= location.users.count %></span>

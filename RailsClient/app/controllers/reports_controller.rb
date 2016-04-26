@@ -198,12 +198,11 @@ class ReportsController < ApplicationController
         sheet.add_row entry_header_detials
         packages.each_with_index { |p, index|
           part=Part.find_by_id(p['part_id'])
-          whouse=Whouse.find_by_id(p['whouse'])
+          whouse=Location.find_by_id(p['whouse'])
           f= p.parent.nil? ? nil:p.parent
           d=(f.nil? || f.parent.nil?) ? nil:f.parent
           s=p.records.where(impl_action:'dispatch').last
           r=p.records.where(impl_action:'receive').last
-          #["编号", "运单号","托盘号","唯一码", "零件号", "总数", "箱数","部门","状态","FIFO","发运时间","入库时间"]
           sheet.add_row [
                             index+1,
                             d.nil? ? nil : d.container_id,
@@ -211,9 +210,9 @@ class ReportsController < ApplicationController
                             p['containers_id'],
                             part.blank? ? '' : part.nr,
                             p['count'],
-                            p['box'],
+                            # p['box'],
                             whouse.blank? ? '' : whouse.nr,
-                            MovableState.display(p['state']),
+                            # MovableState.display(p['state']),
                             p['FIFO'],
                             s.nil? ? nil : s.impl_time.localtime,
                             r.nil? ? nil : r.impl_time.localtime
@@ -224,14 +223,14 @@ class ReportsController < ApplicationController
         sheet.add_row entry_header_total
         packages.each_with_index { |p, index|
           part=Part.find_by_id(p['part_id'])
-          whouse=Whouse.find_by_id(p['whouse'])
+          whouse=Location.find_by_id(p['whouse'])
           sheet.add_row [
                             index+1,
                             part.blank? ? '' : part.nr,
                             p['count'],
-                            p['box'],
-                            whouse.blank? ? '' : whouse.nr,
-                            MovableState.display(p['state'])
+                            # p['box'],
+                            whouse.blank? ? '' : whouse.nr
+                            # MovableState.display(p['state'])
                         #DatetimeHelper.ddate(p['ddate'])
                         ], :types => [:string]
         }
@@ -303,15 +302,15 @@ class ReportsController < ApplicationController
   end
 
   def entry_header
-    ["编号", "零件号", "总数", "箱数","部门","时间"]
+    ["编号", "零件号", "总数", "地点","时间"]
   end
 
   def entry_header_detials
-    ["编号", "运单号","托盘号","唯一码", "零件号", "总数", "箱数","部门","状态","FIFO","发运时间","入库时间"]
+    ["编号", "运单号","托盘号","唯一码", "零件号", "总数", "地点", "收发运日期", "发货时间", "收货时间"]
   end
 
   def entry_header_total
-    ["编号", "零件号", "总数", "箱数","部门","状态"]
+    ["编号", "零件号", "总数", "地点"]
   end
 
   # def entry_header

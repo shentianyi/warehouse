@@ -13,7 +13,7 @@ module FileHandler
       ]
 
       TOTAL_ALL_HEADERS=[
-          '零件号', '数量', '原材料/半成品/成品标记', '原材料线/非线标记'
+          '零件号', '数量'#, '原材料/半成品/成品标记', '原材料线/非线标记'
       ]
 
       TOTAL_ALL_WHOUSE_HEADERS=[
@@ -74,12 +74,13 @@ module FileHandler
         p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
           sheet.add_row TOTAL_ALL_HEADERS
           items.all.each do |inventory_list_item|
+            part=Part.find_by_id(inventory_list_item.part_id)
             sheet.add_row [
-                              inventory_list_item.part_id,
-                              inventory_list_item.qty,
-                              inventory_list_item.part_form_mark,
-                              inventory_list_item.part_wire_mark
-                          ], types: [:string, :string, :string, :string]
+                              part.blank? ? '' : part.nr,
+                              inventory_list_item.qty
+                              # inventory_list_item.part_form_mark,
+                              # inventory_list_item.part_wire_mark
+                          ], types: [:string, :string]
           end
         end
         p.use_shared_strings = true
@@ -91,8 +92,22 @@ module FileHandler
       end
 
       def self.export_total_by_whouse
-        whouses=InventoryListItem.joins(:inventory_list).where(inventory_lists: {state: InventoryListState::PROCESSING}).pluck(:whouse_id).uniq.sort
-        parts=InventoryListItem.joins(:inventory_list).where(inventory_lists: {state: InventoryListState::PROCESSING}).pluck(:part_id).uniq.sort
+        whouses=[]
+        parts=[]
+        # whouses=InventoryListItem.joins(:inventory_list).where(inventory_lists: {state: InventoryListState::PROCESSING}).pluck(:whouse_id).uniq.sort
+        # parts=InventoryListItem.joins(:inventory_list).where(inventory_lists: {state: InventoryListState::PROCESSING}).pluck(:part_id).uniq.sort
+        InventoryListItem.joins(:inventory_list).where(inventory_lists: {state: InventoryListState::PROCESSING}).each do |item|
+          if item.whouse
+            whouses<<item.whouse.nr
+          end
+
+          if item.part
+            parts<<item.part.nr
+          end
+        end
+
+        whouses=whouses.uniq
+        parts=parts.uniq
 
         msg=Message.new
         tmp_file=full_tmp_path('盘点仓库汇总清单.xlsx')
@@ -100,10 +115,12 @@ module FileHandler
         p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
           sheet.add_row ['零件号']+whouses
           parts.each do |part_id|
+            part=Part.find_by_nr(part_id)
             data=[part_id]
             types=[:string]
             whouses.each do |whouse_id|
-              data<< ((item=InventoryListItem.joins(:inventory_list).where(part_id: part_id, whouse_id: whouse_id, inventory_lists: {state: InventoryListState::PROCESSING}).select('sum(qty) as qty').first).nil? ? '0.0' : item.qty)
+              whouse=Whouse.find_by_nr(whouse_id)
+              data<< ((item=InventoryListItem.joins(:inventory_list).where(part_id: part.id, whouse_id: whouse.id, inventory_lists: {state: InventoryListState::PROCESSING}).select('sum(qty) as qty').first).nil? ? '0.0' : item.qty)
               types<<:string
             end
             sheet.add_row data, types: types

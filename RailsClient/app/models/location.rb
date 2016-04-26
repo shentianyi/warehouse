@@ -52,4 +52,19 @@ class Location < ActiveRecord::Base
     self.location_destinations.update_all(is_default: false)
     self.location_destinations.where(destination_id: location.id).update_attributes(is_default: true)
   end
+
+  def self.supplier_select user
+    data = []
+
+    condition=[]
+    condition += [user.location.id]
+    user.location.destinations.each do |d|
+      condition +=[d.id]
+    end
+
+    self.where.not(id: condition).each do |l|
+      data << [l.name, l.name]
+    end
+    data
+  end
 end

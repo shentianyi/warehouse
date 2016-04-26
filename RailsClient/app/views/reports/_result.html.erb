@@ -9,9 +9,9 @@
     <th>No.</th>
     <th>零件号</th>
     <th>数量</th>
-    <th>箱数</th>
-    <th>部门</th>
-    <th>状态</th>
+    <!--<th>箱数</th>-->
+    <th>地点</th>
+    <!--<th>状态</th>-->
   </tr>
   </thead>
   <tbody>
@@ -24,13 +24,13 @@
             <td></td>
         <% end %>
         <td><%= p['count'] %></td>
-        <td><%= p['box'] %></td>
+        <!--<td><%= p['box'] %></td>-->
         <% if location=Location.find_by_id(p['whouse']) %>
             <td><%=  location.name %></td>
         <% else %>
             <td></td>
         <% end %>
-        <td><%= MovableState.display(p['state']) %></td>
+        <!--<td><%= MovableState.display(p['state']) %></td>-->
       </tr>
   <% end %>
   </tbody>
