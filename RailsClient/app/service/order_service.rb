@@ -222,13 +222,12 @@ class OrderService
 
           unless [PickItemStatus::BEFORE_PRINTED, PickItemStatus::PICKED].include?(pick_item.state)
             pick_item.update_attribute(:remark, "缺货")
+            pick_item.order_item.update_attributes(handled: true, is_finished: false) if pick_item.order_item
             picked=false
             next
           end
 
-          pick_item.order_item.update_attribute(:handled, true) if pick_item.order_item
           #move stock
-          user
           if from_wh=user.location.whouses.first
             pick_item.update_attribute(:remark, "已完成择货")
             pick_position = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id)
@@ -241,6 +240,10 @@ class OrderService
                                        toPosition: pick_item.position_id.blank? ? (pick_position.blank? ? "" : pick_position.position.detail) : pick_item.position_id,
                                        remarks: "MOVE FROM PICK: #{pick_item.remark}"
                                    })
+
+            if pick_item.order_item
+              pick_item.order_item.update_attributes(handled: true, is_finished: true)
+            end
           else
             raise "SRC WAREHOUSE Not Found"
           end
@@ -249,6 +252,7 @@ class OrderService
 
         # if picked
           pick.update_attribute(:state, PickStatus::PICKED)
+        pick.order.update_attributes(status: OrderState::HANDLED, handled: true)
         # else
         #   pick.update_attribute(:state, PickStatus::PICKING)
         # end
