@@ -1,17 +1,17 @@
 <div class="notification-center">
   <h3>通知中心</h3>
   <div id="order-warehouse">
-    <%= render 'orderbus'%>
+    <%= render 'orderbus' %>
   </div>
 </div>
 
 <script type="text/javascript">
-  $(document).ready(function(){
-      window.setInterval(function(){
-          console.log("get");
-          $.get('/notifications/orderbus',function(data){
-              $("#order-warehouse").html(data);
-          },'html');
-      },10000);
+  $(document).ready(function () {
+    window.setInterval(function () {
+      console.log("get");
+      $.get('/notifications/orderbus', function (data) {
+        $("#order-warehouse").html(data);
+      }, 'html');
+    }, 10000);
   });
 </script>
