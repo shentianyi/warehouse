@@ -116,8 +116,8 @@
             prestate = pre_state;
           }
 
-          console.log(state);
-          console.log(id);
+//          console.log(state);
+//          console.log(id);
           Manage.pick_item.update(id, {pick_item: {state: state}}, function (data) {
             target.prop("checked", checked);
             target.attr("state", state);
@@ -152,7 +152,7 @@
     <div class="mui-card">
       <ul class="mui-table-view">
         <li class="mui-table-view-cell mui-collapse">
-          <a class="mui-navigate-right" href="#" style="background: steelblue;color: white;">择货信息</a>
+          <a class="mui-navigate-right" href="#" style="background: steelblue;color: white;">请择货</a>
 
           <div class="mui-collapse-content">
             <div class="mui-input-row mui-table-view-cell">
@@ -200,7 +200,8 @@
       if ('<%= @pick_items.length %>' > 0) {
 
         <% @pick_items.each_with_index do |pick_item, index| %>
-        if ('<%= pick_item.state %>' == "300" || '<%= pick_item.state %>' == "2") {
+
+        if ('<%= pick_item.state %>' == "300") {
           document.getElementsByClassName('mui-choose-all')[0].disabled = true;
 
           $('.check-box-submit').css({
@@ -225,6 +226,20 @@
           }
         }
         <% end %>
+
+        if ('<%= @pick_list.state %>' == '300') {
+          $('.check-box-submit').css({
+            display: 'none'
+          });
+          var CheckBox = document.getElementsByClassName('check-box-content');
+          for (var i = 0; i < CheckBox.length; i++) {
+            CheckBox[i].disabled = true;
+          }
+          document.getElementsByClassName('mui-choose-all')[0].disabled = true;
+
+          $('.mui-navigate-right').html("已完成择货");
+
+        }
       } else {
         $('.mui-choose-all').css({
           display: 'none'
