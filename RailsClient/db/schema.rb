@@ -160,6 +160,7 @@ ActiveRecord::Schema.define(version: 20160425074111) do
     t.boolean  "need_convert",                                default: false
     t.boolean  "locked",                                      default: false
     t.boolean  "in_stored",                                   default: false
+    t.string   "remark"
   end
 
   create_table "inventory_lists", force: true do |t|
@@ -381,9 +382,13 @@ ActiveRecord::Schema.define(version: 20160425074111) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "locked",                                  default: false
-    t.string   "remarks"
+    t.text     "remarks"
+    t.string   "lock_user_id"
+    t.string   "lock_remark"
+    t.datetime "lock_at"
   end
 
+  add_index "n_storages", ["locked"], name: "index_n_storages_on_locked", using: :btree
   add_index "n_storages", ["packageId"], name: "package_id_index", using: :btree
   add_index "n_storages", ["storageId"], name: "storage_id_unique", unique: true, using: :btree
   add_index "n_storages", ["uniqueId"], name: "unique_id_unique", unique: true, using: :btree
@@ -615,21 +620,22 @@ ActiveRecord::Schema.define(version: 20160425074111) do
   add_index "part_types", ["id"], name: "index_part_types_on_id", using: :btree
 
   create_table "parts", force: true do |t|
-    t.string   "uuid",          limit: 36,                                           null: false
+    t.string   "uuid",          limit: 36,                                          null: false
     t.string   "customernum"
     t.string   "user_id"
-    t.boolean  "is_delete",                                          default: false
-    t.boolean  "is_dirty",                                           default: true
-    t.boolean  "is_new",                                             default: true
+    t.boolean  "is_delete",                                         default: false
+    t.boolean  "is_dirty",                                          default: true
+    t.boolean  "is_new",                                            default: true
     t.datetime "created_at"
     t.datetime "updated_at"
     t.float    "unit_pack"
     t.string   "part_type_id"
-    t.decimal  "convert_unit",             precision: 20, scale: 10, default: 1.0
+    t.decimal  "convert_unit",             precision: 10, scale: 0, default: 1
+    t.string   "unit"
     t.string   "name"
     t.float    "cross_section"
     t.float    "weight"
-    t.float    "weight_range",                                       default: 0.1
+    t.float    "weight_range",                                      default: 0.1
   end
 
   add_index "parts", ["id"], name: "index_parts_on_id", using: :btree

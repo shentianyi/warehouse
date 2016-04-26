@@ -228,7 +228,7 @@ class OrderService
 
           pick_item.order_item.update_attribute(:handled, true) if pick_item.order_item
           #move stock
-          if from_wh=Whouse.find_by_id('3EX')
+          if from_wh=Whouse.find_by_id('PA')
             pick_item.update_attribute(:remark, "已完成择货")
             pick_position = OrderItemService.verify_department(pick_item.destination_whouse_id, pick_item.part_id)
             WhouseService.new.move({
@@ -246,11 +246,11 @@ class OrderService
 
         end
 
-        if picked
+        # if picked
           pick.update_attribute(:state, PickStatus::PICKED)
-        else
-          pick.update_attribute(:state, PickStatus::PICKING)
-        end
+        # else
+        #   pick.update_attribute(:state, PickStatus::PICKING)
+        # end
 
         # pick.orders.each do |order|
         #   order.update_attribute(:handled, true)

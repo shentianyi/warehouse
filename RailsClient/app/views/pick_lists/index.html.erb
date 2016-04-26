@@ -3,29 +3,27 @@
     <div>
       <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
         <div>
-          <div>
-        <span>择货单号：
-          <input type="text" name="pick_list[id]" value="<%= @id %>"/>
-          <input type="hidden" name="pick_list[id_fuzzy]"/>
-        </span>
-        <span>择货员工：
-          <input type="text" name="pick_list[user_id]" value="<%= @user_id %>"/>
-          <input type="hidden" name="pick_list[user_id_fuzzy]"/>
-        </span>
-        <span>状态：
-          <%= select 'pick_list', 'state', PickStatus.menu, selected: @state, include_blank: true %>
-        </span>
-          </div>
-          <div>
+          <span>择货单号：
+            <input type="text" name="pick_list[id]" value="<%= @id %>"/>
+            <input type="hidden" name="pick_list[id_fuzzy]"/>
+          </span>
+          <span>择货员工：
+            <input type="text" name="pick_list[user_id]" value="<%= @user_id %>"/>
+            <input type="hidden" name="pick_list[user_id_fuzzy]"/>
+          </span>
+          <span>状态：
+            <%= select 'pick_list', 'state', PickStatus.menu, selected: @state, include_blank: true %>
+          </span>
+        </div>
+        <div>
         <span>
         创建日期：
           <input type="text" name="pick_list[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
           ~  <input type="text" name="pick_list[created_at][end]" class="datepicker" value="<%= @created_at_end %>"/>
         </span>
-          </div>
-          <div>
-            <input type="submit" value="查 找" class="btn btn-primary"/>
-          </div>
+        </div>
+        <div>
+          <input type="submit" value="查 找" class="btn btn-primary"/>
         </div>
       </form>
     </div>
@@ -71,42 +69,42 @@
     </div>
 
     <script>
-        init_check();
+      init_check();
     </script>
 
 <% else %>
     <style>
-        .mui-list-item {
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
+      .mui-list-item {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
 
-        .mui-table-view-cell {
-            padding: 0;
-            list-style: none;
-        }
+      .mui-table-view-cell {
+        padding: 0;
+        list-style: none;
+      }
 
-        .pick_list_search {
-            margin-top: -35px;
-            color: white;
-            font-size: 1.2em;
-        }
+      .pick_list_search {
+        margin-top: -35px;
+        color: white;
+        font-size: 1.2em;
+      }
 
-        .search {
-            width: 200px;
-            position: fixed;
-            right: 0;
-            top: 30px;
-            z-index: 1000;
-            background: white;
-            -webkit-border-radius: 5px;
-            -moz-border-radius: 5px;
-            border-radius: 5px;
-            padding: 10px;
-            display: none;
-            border: 1px solid steelblue;
-        }
+      .search {
+        width: 200px;
+        position: fixed;
+        right: 0;
+        top: 30px;
+        z-index: 1000;
+        background: white;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        padding: 10px;
+        display: none;
+        border: 1px solid steelblue;
+      }
     </style>
 
     <%= render 'style' %>
@@ -114,30 +112,30 @@
     <div class="search">
       <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
         <div>
-          <div>
-        <span>择货单号：
-          <input type="text" name="pick_list[id]" value="<%= @id %>" class="mui-input-clear"/>
-          <input type="hidden" name="pick_list[id_fuzzy]"/>
-        </span>
-        <span>择货员工：
-          <input type="text" name="pick_list[user_id]" value="<%= @user_id %>" class="mui-input-clear"/>
-          <input type="hidden" name="pick_list[user_id_fuzzy]"/>
-        </span>
-        <span>状态：
-          <%= select 'pick_list', 'state', PickStatus.menu, selected: @state, include_blank: true %>
-        </span>
-          </div>
-          <div>
+          <span>择货单号：
+            <input type="text" name="pick_list[id]" value="<%= @id %>" class="mui-input-clear"/>
+            <input type="hidden" name="pick_list[id_fuzzy]"/>
+          </span>
+          <span>择货员工：
+            <input type="text" name="pick_list[user_id]" value="<%= @user_id %>" class="mui-input-clear"/>
+            <input type="hidden" name="pick_list[user_id_fuzzy]"/>
+          </span>
+          <span>状态：
+            <%= select 'pick_list', 'state', PickStatus.menu, selected: @state, include_blank: true, :style => "border:1px solid #000;" %>
+          </span>
+        </div>
+
+        <div>
             <span>
             创建日期：
               <input type="text" name="pick_list[created_at][start]" autocomplete="off" class="datepicker mui-input-clear" value="<%= @created_at_start %>"/>
               ~
               <input type="text" name="pick_list[created_at][end]" autocomplete="off" class="datepicker mui-input-clear" value="<%= @created_at_end %>"/>
             </span>
-          </div>
-          <div>
-            <input type="submit" value="查 找" class="mui-btn mui-btn-block mui-btn-primary"/>
-          </div>
+        </div>
+
+        <div>
+          <input type="submit" value="查 找" class="mui-btn mui-btn-block mui-btn-primary"/>
         </div>
       </form>
     </div>
@@ -179,13 +177,14 @@
     </div>
 
     <script type="text/javascript" charset="utf-8">
-        var ClientWidth = document.documentElement.clientWidth;
-        AddMeta('apple-mobile-web-app-capable', 'yes');
-        AddMeta('apple-mobile-web-app-status-bar-style', 'black');
+      var ClientWidth = document.documentElement.clientWidth;
+      AddMeta('apple-mobile-web-app-capable', 'yes');
+      AddMeta('apple-mobile-web-app-status-bar-style', 'black');
 
-        <% @pick_lists.each_with_index do |pick_list, index| %>
-        if ("<%= pick_list.state %>" == "300" || "<%= pick_list.state %>" == "2") {
-            $('<div class="mui-segmented-control"><li class="mui-table-view-cell">' +
+      <% @pick_lists.each_with_index do |pick_list, index| %>
+
+      if ("<%= pick_list.state %>" == "300" || "<%= pick_list.state %>" == "2") {
+        $('<div class="mui-segmented-control"><li class="mui-table-view-cell">' +
             '<div class="mui-slider-right mui-disabled"><a href="<%= pick_list_path(id: pick_list,show:true) %>" id="<%= pick_list.id %>" object_id="<%= pick_list.object_id %>" user_id="<%= pick_list.user_id %>" create_at="<%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %>" style="background:steelblue;"  class="mui-btn glyphicon glyphicon-eye-open show-details">&emsp;详情</a></div>' +
             '<div class="mui-slider-handle">' +
             '<div class="mui-table-cell" id="<%= pick_list.id %>" style="background: #96CDCD;">' +
@@ -195,9 +194,9 @@
             '<div class="mui-list-item"><span id="user_id_<%= pick_list.id %>">' + '<%= pick_list.user_id %>' + '</span></div>' +
             '<div class="mui-list-item"><span id="create_at_<%= pick_list.id %>">' + '<%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %>' + '</span></div>' +
             '</div></div></div></li></div>').appendTo('.table-show').ready(function () {
-            });
-        } else {
-            $('<div class="mui-segmented-control"><li class="mui-table-view-cell">' +
+        });
+      } else {
+        $('<div class="mui-segmented-control"><li class="mui-table-view-cell">' +
             '<div class="mui-slider-right mui-disabled"><a href="<%= pick_list_path(id: pick_list,show:true) %>" id="<%= pick_list.id %>" object_id="<%= pick_list.object_id %>" user_id="<%= pick_list.user_id %>" create_at="<%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %>" style="background:steelblue;"  class="mui-btn glyphicon glyphicon-eye-open show-details">&emsp;详情</a></div>' +
             '<div class="mui-slider-handle">' +
             '<div class="mui-table-cell" id="<%= pick_list.id %>">' +
@@ -207,76 +206,76 @@
             '<div class="mui-list-item"><span id="user_id_<%= pick_list.id %>">' + '<%= pick_list.user_id %>' + '</span></div>' +
             '<div class="mui-list-item"><span id="create_at_<%= pick_list.id %>">' + '<%= pick_list.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %>' + '</span></div>' +
             '</div></div></div></li></div>').appendTo('.table-show').ready(function () {
-            });
+        });
+      }
+
+      <% end %>
+
+      $('.mui-segmented-control').on("longtap", '.mui-table-cell', function () {
+        var ID = $(this).attr('id');
+        var ObjectID = $('#object_' + ID).html();
+        var UserID = $('#user_id_' + ID).html();
+        var CreateAt = $('#create_at_' + ID).html();
+
+        /*mui.toast('<div class="mui-popover"> <div class="mui-popover-arrow"></div> <div class="mui-scroll-wrapper"> <div class="mui-scroll"><ul class="mui-table-view" style="border-radius: 10px;text-align: left; background: steelblue;margin: -5px;"><li class="mui-table-view-cell" style="padding:5px 0 5px 20px;color: white;font-size: 1.2em;">' + "择货单号:" + ID + '</li>' +
+         '<li class="mui-table-view-cell" style="padding:5px 0 5px 20px;color: white;font-size: 1.2em;"">' + "要货项目:" + ObjectID + '</li>' +
+         '<li class="mui-table-view-cell" style="padding:5px 0 5px 20px;color: white;font-size: 1.2em;"">' + "要货员工:" + UserID + '</li>' +
+         '<li class="mui-table-view-cell" style="padding:5px 0 5px 20px;color: white;font-size: 1.2em;"">' + "创建时间:" + CreateAt + '</li><ul></div></div></div>');
+         */
+
+        var MarginTop = $(this).offset().top;
+        var RealTop = MarginTop + 50;
+
+        mui('#middlePopover').popover('show');
+
+        if (RealTop > ($(window).height() - 200)) {
+          $('#middlePopover').css({
+            top: RealTop - 260,
+            left: '75px',
+            transform: 'rotate(180deg)'
+          });
+          $('.mui-popover-arrow').css({
+            left: '75px'
+          });
+
+          $('.mui-scroll-wrapper').css({
+            transform: 'rotate(-180deg)'
+          })
+        } else {
+          $('#middlePopover').css({
+            top: RealTop,
+            left: '75px'
+          });
+          $('.mui-popover-arrow').css({
+            left: (ClientWidth - 150) + 'px'
+          });
         }
 
-        <% end %>
+        $('.show-details-list').children().remove();
 
-        $('.mui-segmented-control').on("longtap", '.mui-table-cell', function () {
-            var ID = $(this).attr('id');
-            var ObjectID = $('#object_' + ID).html();
-            var UserID = $('#user_id_' + ID).html();
-            var CreateAt = $('#create_at_' + ID).html();
-
-            /*mui.toast('<div class="mui-popover"> <div class="mui-popover-arrow"></div> <div class="mui-scroll-wrapper"> <div class="mui-scroll"><ul class="mui-table-view" style="border-radius: 10px;text-align: left; background: steelblue;margin: -5px;"><li class="mui-table-view-cell" style="padding:5px 0 5px 20px;color: white;font-size: 1.2em;">' + "择货单号:" + ID + '</li>' +
-             '<li class="mui-table-view-cell" style="padding:5px 0 5px 20px;color: white;font-size: 1.2em;"">' + "要货项目:" + ObjectID + '</li>' +
-             '<li class="mui-table-view-cell" style="padding:5px 0 5px 20px;color: white;font-size: 1.2em;"">' + "要货员工:" + UserID + '</li>' +
-             '<li class="mui-table-view-cell" style="padding:5px 0 5px 20px;color: white;font-size: 1.2em;"">' + "创建时间:" + CreateAt + '</li><ul></div></div></div>');
-             */
-
-            var MarginTop = $(this).offset().top;
-            var RealTop = MarginTop + 50;
-
-            mui('#middlePopover').popover('show');
-
-            if (RealTop > ($(window).height() - 200)) {
-                $('#middlePopover').css({
-                    top: RealTop - 260,
-                    left: '75px',
-                    transform: 'rotate(180deg)'
-                });
-                $('.mui-popover-arrow').css({
-                    left: '75px'
-                });
-
-                $('.mui-scroll-wrapper').css({
-                    transform: 'rotate(-180deg)'
-                })
-            } else {
-                $('#middlePopover').css({
-                    top: RealTop,
-                    left: '75px'
-                });
-                $('.mui-popover-arrow').css({
-                    left: (ClientWidth - 150) + 'px'
-                });
-            }
-
-            $('.show-details-list').children().remove();
-
-            $('<li class="mui-table-view-cell">择货单号:&emsp;' + ID + '</li>' +
+        $('<li class="mui-table-view-cell">择货单号:&emsp;' + ID + '</li>' +
             '<li class="mui-table-view-cell">要货项目:&emsp;' + ObjectID + '</li>' +
             '<li class="mui-table-view-cell">要货员工:&emsp;' + UserID + '</li>' +
             '<li class="mui-table-view-cell">创建时间:&emsp;' + CreateAt + '</li>').appendTo('.show-details-list').ready(function () {
-            });
-
-            mui('#middlePopover').popover('show');
         });
 
-        $('.pick_list_search').click(function () {
-            $('.search').slideToggle();
-        });
+        mui('#middlePopover').popover('show');
+      });
 
-        $('<div class="digg_pagination" style="margin-top: 10px;">' + '<%= will_paginate @pick_item_filters, :container => false %>' + '</div><div style="width: 100px;height: 60px;"></div>').appendTo('.table-show').ready(function () {
-        });
+      $('.pick_list_search').click(function () {
+        $('.search').slideToggle();
+      });
+
+      $('<div class="digg_pagination" style="margin-top: 10px;">' + '<%= will_paginate @pick_item_filters, :container => false %>' + '</div><div style="width: 100px;height: 60px;"></div>').appendTo('.table-show').ready(function () {
+      });
     </script>
 <% end %>
 
 <script type="text/javascript" charset="utf-8">
-    $(function () {
-        $(".datepicker").datetimepicker({
-            lang: 'ch',
-            format: 'Y-m-d H:i'
-        });
+  $(function () {
+    $(".datepicker").datetimepicker({
+      lang: 'ch',
+      format: 'Y-m-d H:i'
     });
+  });
 </script>
