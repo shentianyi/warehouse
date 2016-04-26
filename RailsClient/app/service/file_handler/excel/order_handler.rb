@@ -32,7 +32,7 @@ module FileHandler
                   end
                   batch_nr=row['报缺日期'].gsub(/,/, '') + row['报缺时间'].slice(0...2)
 
-                  part_ids<<row['莱尼号码']
+                  part_ids<<row['莱尼号码'].downcase
                   if records[row['莱尼号码'].downcase]
                     records[row['莱尼号码'].downcase][:qty]=records[row['莱尼号码'].downcase][:qty].to_i + row['桶数'].to_i
                   else
