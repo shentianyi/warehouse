@@ -432,6 +432,16 @@ ActiveRecord::Schema.define(version: 20160425074111) do
   add_index "oauth_applications", ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type", using: :btree
   add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
 
+  create_table "operation_logs", force: true do |t|
+    t.string   "item_type"
+    t.string   "item_id"
+    t.string   "event"
+    t.string   "whodunnit"
+    t.text     "object"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "order_box_types", force: true do |t|
     t.string   "name"
     t.string   "description"
@@ -834,6 +844,22 @@ ActiveRecord::Schema.define(version: 20160425074111) do
   end
 
   add_index "state_logs", ["id"], name: "index_state_logs_on_id", using: :btree
+
+  create_table "storage_operation_records", force: true do |t|
+    t.string   "partNr"
+    t.string   "qty"
+    t.string   "fromWh"
+    t.string   "fromPosition"
+    t.string   "toWh"
+    t.string   "toPosition"
+    t.string   "packageId"
+    t.string   "type_id"
+    t.string   "remarks"
+    t.string   "employee_id"
+    t.datetime "fifo"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "storages", force: true do |t|
     t.string   "location_id"
