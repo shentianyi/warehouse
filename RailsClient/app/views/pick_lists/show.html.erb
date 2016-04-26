@@ -73,78 +73,78 @@
     <% end %>
 
     <script type="text/javascript">
-        $(document).ready(function () {
-            init_check();
-            $("body").on("change", "#check-all-unprinted", function () {
-                var checked = $(this).attr('checked') == undefined ? false : true;
-                $(".pick-item").not("[printed]").each(function () {
-                    $(this).prop("checked", checked).trigger("change");
-                })
-            }).on("change", ".pick-item", function () {
-                var target = $(this);
-                var checked = $(this).attr('checked') == undefined ? false : true;
-                var id = $(this).attr("id");
-                var state = $(this).attr("state");
-                var prestate = $(this).attr("prestate");
+      $(document).ready(function () {
+        init_check();
+        $("body").on("change", "#check-all-unprinted", function () {
+          var checked = $(this).attr('checked') == undefined ? false : true;
+          $(".pick-item").not("[printed]").each(function () {
+            $(this).prop("checked", checked).trigger("change");
+          })
+        }).on("change", ".pick-item", function () {
+          var target = $(this);
+          var checked = $(this).attr('checked') == undefined ? false : true;
+          var id = $(this).attr("id");
+          var state = $(this).attr("state");
+          var prestate = $(this).attr("prestate");
 
-                if (prestate == undefined) {
-                    prestate = state;
-                    if (state == 0 && checked == true) {
-                        state = 1
-                    }
-                    else if (state == 1 && checked == false) {
-                        state = 0
-                    }
-                    else if (state == 2 && checked == true) {
-                        state = 1
-                    }
-                }
-                else {
-                    var pre_state = state;
-                    if (state == 0 && checked == true) {
-                        state = 1
-                    }
-                    else if (state == 1 && checked == false && (prestate == 0 || prestate == 1)) {
-                        state = 0
-                    }
-                    else if (state == 1 && checked == false && prestate == 2) {
-                        state = 2
-                    }
-                    else if (state == 2 && checked == true) {
-                        state = 1
-                    }
-                    prestate = pre_state;
-                }
+          if (prestate == undefined) {
+            prestate = state;
+            if (state == 0 && checked == true) {
+              state = 1
+            }
+            else if (state == 1 && checked == false) {
+              state = 0
+            }
+            else if (state == 2 && checked == true) {
+              state = 1
+            }
+          }
+          else {
+            var pre_state = state;
+            if (state == 0 && checked == true) {
+              state = 1
+            }
+            else if (state == 1 && checked == false && (prestate == 0 || prestate == 1)) {
+              state = 0
+            }
+            else if (state == 1 && checked == false && prestate == 2) {
+              state = 2
+            }
+            else if (state == 2 && checked == true) {
+              state = 1
+            }
+            prestate = pre_state;
+          }
 
-                console.log(state);
-                console.log(id);
-                Manage.pick_item.update(id, {pick_item: {state: state}}, function (data) {
-                    target.prop("checked", checked);
-                    target.attr("state", state);
-                    target.attr("prestate", prestate);
-                    target.removeAttr("printed");
-                    $("div#" + id + " label").remove();
-                    if (state == 1) {
-                        $("div#" + id).append($("<label>").text("正在打印"));
-                    } else if (state == 0) {
-                        $("div#" + id).append($("<label>").text("未打印"));
-                    } else if (state == 2) {
-                        $("div#" + id).append($("<label>").text("已打印"));
-                    }
-                });
-            })
+          console.log(state);
+          console.log(id);
+          Manage.pick_item.update(id, {pick_item: {state: state}}, function (data) {
+            target.prop("checked", checked);
+            target.attr("state", state);
+            target.attr("prestate", prestate);
+            target.removeAttr("printed");
+            $("div#" + id + " label").remove();
+            if (state == 1) {
+              $("div#" + id).append($("<label>").text("正在打印"));
+            } else if (state == 0) {
+              $("div#" + id).append($("<label>").text("未打印"));
+            } else if (state == 2) {
+              $("div#" + id).append($("<label>").text("已打印"));
+            }
+          });
         })
+      })
     </script>
 <% else %>
     <style>
-        .mui-card {
-            margin: -30px 0 5px 0;
-        }
+      .mui-card {
+        margin: -30px 0 5px 0;
+      }
 
-        .check-box-submit {
-            width: 100%;
-            margin-bottom: 5px;
-        }
+      .check-box-submit {
+        width: 100%;
+        margin-bottom: 5px;
+      }
     </style>
 
     <%= render 'style' %>
@@ -194,148 +194,153 @@
     </div>
 
     <script type="text/javascript" charset="utf-8">
-        AddMeta('apple-mobile-web-app-capable', 'yes');
-        AddMeta('apple-mobile-web-app-status-bar-style', 'black');
-        if ('<%= @pick_items.length %>' > 0) {
-            <% @pick_items.each_with_index do |pick_item, index| %>
-            if ('<%= pick_item.state %>' == "300" || '<%= pick_item.state %>' == "2") {
-                document.getElementsByClassName('mui-choose-all')[0].disabled = true;
-                $('.check-box-submit').css({
-                    display: 'none'
-                })
-                if ('<%= pick_item.is_emergency %>' == "true") {
-                    show_list_checked_fun('#F4A460', 'white', '<%= pick_item.id %>', '<%= pick_item.part_id %>', '<%= pick_item.quantity %>', '<%= pick_item.pick_position %>');
-                } else if ('<%= pick_item.remark %>' == "缺货") {
-                    show_list_checked_fun('#C1CDC1', 'black', '<%= pick_item.id %>', '<%= pick_item.part_id %>', '<%= pick_item.quantity %>', '<%= pick_item.pick_position %>');
-                } else {
-                    show_list_checked_fun('white', 'black', '<%= pick_item.id %>', '<%= pick_item.part_id %>', '<%= pick_item.quantity %>', '<%= pick_item.pick_position %>');
-                }
-            }
-            else {
-                if ('<%= pick_item.is_emergency %>' == "true") {
-                    show_list_unchecked_fun('#F4A460', 'white', '<%= pick_item.id %>', '<%= pick_item.part_id %>', '<%= pick_item.quantity %>', '<%= pick_item.pick_position %>');
-                } else if ('<%= pick_item.remark %>' == "缺货") {
-                    show_list_unchecked_fun('#C1CDC1', 'black', '<%= pick_item.id %>', '<%= pick_item.part_id %>', '<%= pick_item.quantity %>', '<%= pick_item.pick_position %>');
-                } else {
-                    show_list_unchecked_fun('white', 'black', '<%= pick_item.id %>', '<%= pick_item.part_id %>', '<%= pick_item.quantity %>', '<%= pick_item.pick_position %>');
-                }
-            }
-            <% end %>
-        } else {
-            $('.mui-choose-all').css({
-                display: 'none'
-            });
-        }
+      AddMeta('apple-mobile-web-app-capable', 'yes');
+      AddMeta('apple-mobile-web-app-status-bar-style', 'black');
 
-        function show_list_checked_fun(bgcolor, fontcolor, id, part_id, quantity, pick_position) {
-            $('<div class="mui-segmented-control"><li class="mui-table-view-cell" style="padding: 0;list-style: none;">' +
-                    '<div class="mui-slider-handle">' +
-                    '<div class="mui-table-cell" style="background:' + bgcolor + '">' +
-                    '<div class="mui-segmented-control mui-control-body">' +
-                    '<div class="mui-list-item" style="width:1px;"><input id=' + id + ' class="check-box-content" name="checkbox" value="false" disabled="true" type="checkbox" checked></div>' +
-                    '<div class="mui-list-item"><marquee scrollamount="2" scrolldelay="0" style="color:' + fontcolor + ';margin-bottom:-20px;" behavior="scroll">' + part_id + '</marquee></div>' +
-                    '<div class="mui-list-item"><span style="color: ' + fontcolor + '">' + quantity + '</span></div>' +
-                    '<div class="mui-list-item"><marquee  scrollamount="2" scrolldelay="0" style="color: ' + fontcolor + ';margin-bottom:-20px;" behavior="scroll">' + pick_position + '</marquee></div>' +
-                    '</div></div></li></div>').appendTo('.table-show').ready(function () {
-            });
-        }
+      if ('<%= @pick_items.length %>' > 0) {
 
-        function show_list_unchecked_fun(bgcolor, fontcolor, id, part_id, quantity, pick_position) {
-            $('<div class="mui-segmented-control"><li class="mui-table-view-cell" style="padding: 0;list-style: none;">' +
-                    '<div class="mui-slider-handle">' +
-                    '<div class="mui-table-cell" style="background:' + bgcolor + '">' +
-                    '<div class="mui-segmented-control mui-control-body">' +
-                    '<div class="mui-list-item" style="width:1px;"><input id=' + id + ' class="check-box-content" name="checkbox" value="false" type="checkbox"></div>' +
-                    '<div class="mui-list-item"><marquee scrollamount="2" scrolldelay="0" style="color:' + fontcolor + ';margin-bottom:-20px;" behavior="scroll">' + part_id + '</marquee></div>' +
-                    '<div class="mui-list-item"><span style="color: ' + fontcolor + '">' + quantity + '</span></div>' +
-                    '<div class="mui-list-item"><marquee  scrollamount="2" scrolldelay="0" style="color: ' + fontcolor + ';margin-bottom:-20px;" behavior="scroll">' + pick_position + '</marquee></div>' +
-                    '</div></div></li></div>').appendTo('.table-show').ready(function () {
-            });
-        }
+        <% @pick_items.each_with_index do |pick_item, index| %>
+        if ('<%= pick_item.state %>' == "300" || '<%= pick_item.state %>' == "2") {
+          document.getElementsByClassName('mui-choose-all')[0].disabled = true;
 
-        $('.mui-choose-all').click(function () {
-            if (this.checked) {
-                $(":checkbox").attr("checked", true);
-                $(".check-box-content").each(function () {
-                    var pick_item_id = $(this).attr('id');
-                    pick_item(pick_item_id, 300);
+          $('.check-box-submit').css({
+            display: 'none'
+          });
+
+          if ('<%= pick_item.is_emergency %>' == "true") {
+            show_list_checked_fun('#F4A460', 'white', '<%= pick_item.id %>', '<%= pick_item.part_id %>', '<%= pick_item.quantity %>', '<%= pick_item.pick_position %>');
+          } else if ('<%= pick_item.remark %>' == "缺货") {
+            show_list_checked_fun('#C1CDC1', 'black', '<%= pick_item.id %>', '<%= pick_item.part_id %>', '<%= pick_item.quantity %>', '<%= pick_item.pick_position %>');
+          } else {
+            show_list_checked_fun('white', 'black', '<%= pick_item.id %>', '<%= pick_item.part_id %>', '<%= pick_item.quantity %>', '<%= pick_item.pick_position %>');
+          }
+        }
+        else {
+          if ('<%= pick_item.is_emergency %>' == "true") {
+            show_list_unchecked_fun('#F4A460', 'white', '<%= pick_item.id %>', '<%= pick_item.part_id %>', '<%= pick_item.quantity %>', '<%= pick_item.pick_position %>');
+          } else if ('<%= pick_item.remark %>' == "缺货") {
+            show_list_unchecked_fun('#C1CDC1', 'black', '<%= pick_item.id %>', '<%= pick_item.part_id %>', '<%= pick_item.quantity %>', '<%= pick_item.pick_position %>');
+          } else {
+            show_list_unchecked_fun('white', 'black', '<%= pick_item.id %>', '<%= pick_item.part_id %>', '<%= pick_item.quantity %>', '<%= pick_item.pick_position %>');
+          }
+        }
+        <% end %>
+      } else {
+        $('.mui-choose-all').css({
+          display: 'none'
+        });
+      }
+
+      function show_list_checked_fun(bgcolor, fontcolor, id, part_id, quantity, pick_position) {
+        $('<div class="mui-segmented-control"><li class="mui-table-view-cell" style="padding: 0;list-style: none;">' +
+            '<div class="mui-slider-handle">' +
+            '<div class="mui-table-cell" style="background:' + bgcolor + '">' +
+            '<div class="mui-segmented-control mui-control-body">' +
+            '<div class="mui-list-item" style="width:1px;"><input id=' + id + ' class="check-box-content" name="checkbox" value="false" disabled="true" type="checkbox" checked></div>' +
+            '<div class="mui-list-item"><marquee scrollamount="2" scrolldelay="0" style="color:' + fontcolor + ';margin-bottom:-20px;" behavior="scroll">' + part_id + '</marquee></div>' +
+            '<div class="mui-list-item"><span style="color: ' + fontcolor + '">' + quantity + '</span></div>' +
+            '<div class="mui-list-item"><marquee  scrollamount="2" scrolldelay="0" style="color: ' + fontcolor + ';margin-bottom:-20px;" behavior="scroll">' + pick_position + '</marquee></div>' +
+            '</div></div></li></div>').appendTo('.table-show').ready(function () {
+        });
+      }
+
+      function show_list_unchecked_fun(bgcolor, fontcolor, id, part_id, quantity, pick_position) {
+        $('<div class="mui-segmented-control"><li class="mui-table-view-cell" style="padding: 0;list-style: none;">' +
+            '<div class="mui-slider-handle">' +
+            '<div class="mui-table-cell" style="background:' + bgcolor + '">' +
+            '<div class="mui-segmented-control mui-control-body">' +
+            '<div class="mui-list-item" style="width:1px;"><input id=' + id + ' class="check-box-content" name="checkbox" value="false" type="checkbox"></div>' +
+            '<div class="mui-list-item"><marquee scrollamount="2" scrolldelay="0" style="color:' + fontcolor + ';margin-bottom:-20px;" behavior="scroll">' + part_id + '</marquee></div>' +
+            '<div class="mui-list-item"><span style="color: ' + fontcolor + '">' + quantity + '</span></div>' +
+            '<div class="mui-list-item"><marquee  scrollamount="2" scrolldelay="0" style="color: ' + fontcolor + ';margin-bottom:-20px;" behavior="scroll">' + pick_position + '</marquee></div>' +
+            '</div></div></li></div>').appendTo('.table-show').ready(function () {
+        });
+      }
+
+      $('.mui-choose-all').click(function () {
+        if (this.checked) {
+          $(":checkbox").attr("checked", true);
+          $(".check-box-content").each(function () {
+            var pick_item_id = $(this).attr('id');
+            pick_item(pick_item_id, 300);
 //                    $('#' + pick_item_id).parent().parent().parent().css({
 //                        background: "#96CDCD"
 //                    })
-                })
-            } else {
-                $(":checkbox").attr("checked", false);
-                $(".check-box-content").each(function () {
-                    var pick_item_id = $(this).attr('id');
-                    pick_item(pick_item_id, 200);
+          })
+        } else {
+          $(":checkbox").attr("checked", false);
+          $(".check-box-content").each(function () {
+            var pick_item_id = $(this).attr('id');
+            pick_item(pick_item_id, 200);
 //                    $('#' + pick_item_id).parent().parent().parent().css({
 //                        background: "white"
 //                    })
-                });
-            }
-        });
-
-        $('.check-box-content').click(function () {
-            var pick_item_id = $(this).attr('id');
-            if (this.checked) {
-                pick_item(pick_item_id, 300);
-            } else {
-                pick_item(pick_item_id, 200);
-            }
-        });
-
-        function pick_item(pick_item_id, status) {
-            $.ajax({
-                url: "/pick_items/" + pick_item_id,
-                type: "PUT",
-                data: {pick_item: {state: status}},
-                dataType: 'json',
-                success: function (data) {
-                }
-            });
+          });
         }
+      });
 
-        $('.check-box-submit').click(function () {
-            var btnArray = ['否', '是'];
-            mui.confirm('确认完成择货并移库?', '提交', btnArray, function (e) {
-                if (e.index == 1) {
-                    var CheckBoxID = new Array();
-                    $('.check-box-content').each(function () {
-                        if (this.checked) {
-                            CheckBoxID.push($(this).attr('id'));
-                        }
-                    });
+      $('.check-box-content').click(function () {
+        var pick_item_id = $(this).attr('id');
+        if (this.checked) {
+          pick_item(pick_item_id, 300);
+        } else {
+          pick_item(pick_item_id, 200);
+        }
+      });
 
-                    mui.alert("<i class='fa fa-spinner fa-spin fa-3x'></i>&emsp;<b style='font-size: 17px;'>submitting...</b>", '&nbsp;', function () {
-                        window.location.reload();
-                    });
-                    $('.mui-popup-button').html("&nbsp;");
+      function pick_item(pick_item_id, status) {
+        $.ajax({
+          url: "/pick_items/" + pick_item_id,
+          type: "PUT",
+          data: {pick_item: {state: status}},
+          dataType: 'json',
+          success: function (data) {
+          }
+        });
+      }
 
-                    var id = $('#pick-list').attr('pick_id');
+      $('.check-box-submit').click(function () {
+        var btnArray = ['否', '是'];
+        mui.confirm('确认完成择货并移库?', '提交', btnArray, function (e) {
+          if (e.index == 1) {
+            var CheckBoxID = new Array();
 
-                    $.ajax({
-                        url: '/orders/finish_pick',
-                        type: 'post',
-                        data: {
-                            pick_list_id: id
-                        },
-                        success: function (data) {
-                            $('.mui-popup-title').html("<p style='color: green;'>提交成功</p>");
-                            $('.mui-popup-text').html("<span class='fa fa-check-circle-o fa-3x' style='color:green;'></span>");
-                            $('.mui-popup-button').html("<span style='color:green;'>Good!</span>");
-                        },
-                        error: function (error) {
-                            $('.mui-popup-title').html("<p style='color: #ff0000;'>提交失败</p>");
-                            var show_error_msg = "<i class='fa fa-times fa-3x' style='color:  #ff0000;'></i>";
-                            $('.mui-popup-text').html(show_error_msg);
-                            $('.mui-popup-button').html("<span style='color: #ff0000;'>Error!</span>");
-                        }
-                    });
-                }
+            $('.check-box-content').each(function () {
+              if (this.checked) {
+                CheckBoxID.push($(this).attr('id'));
+              }
             });
-        });
 
-        $('<div style="width: 100px;height: 60px;"></div>').appendTo('.table-show').ready(function () {
+            mui.alert("<i class='fa fa-spinner fa-spin fa-3x'></i>&emsp;<b style='font-size: 17px;'>submitting...</b>", '&nbsp;', function () {
+              window.location.reload();
+            });
+            $('.mui-popup-button').html("&nbsp;");
+
+            var id = $('#pick-list').attr('pick_id');
+
+            $.ajax({
+              url: '/orders/finish_pick',
+              type: 'post',
+              data: {
+                pick_list_id: id
+              },
+              success: function (data) {
+                $('.mui-popup-title').html("<p style='color: green;'>提交成功</p>");
+                $('.mui-popup-text').html("<span class='fa fa-check-circle-o fa-3x' style='color:green;'></span>");
+                $('.mui-popup-button').html("<span style='color:green;'>Good!</span>");
+              },
+              error: function (error) {
+                $('.mui-popup-title').html("<p style='color: #ff0000;'>" + error.statusText + "</p>");
+                var show_error_msg = "<i class='fa fa-times fa-3x' style='color:  #ff0000;'></i>";
+                $('.mui-popup-text').html(show_error_msg);
+                $('.mui-popup-button').html("<span style='color: #ff0000;'>Error!</span>");
+              }
+            });
+          }
         });
+      });
+
+      $('<div style="width: 100px;height: 60px;"></div>').appendTo('.table-show').ready(function () {
+      });
     </script>
 <% end %>
