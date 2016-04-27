@@ -169,7 +169,7 @@ class NStoragesController < ApplicationController
       instance_variable_set("@#{@model.pluralize}", query.paginate(:page => params[:page]))
       if params[:n_storage][:ware_house_id]=='WE87'
         render :by_whouse_we87
-      elsif params[:n_storage][:ware_house_id]=='PA'
+      elsif params[:n_storage][:ware_house_id]=='PA87'
         render :by_whouse_pa
       end
     end
@@ -180,7 +180,7 @@ class NStoragesController < ApplicationController
   end
 
   def by_whouse_pa
-    @n_storages= NStorage.where(ware_house_id: 'PA').paginate(:page => params[:page])
+    @n_storages= NStorage.where(ware_house_id: 'PA87').paginate(:page => params[:page])
   end
 
   private
