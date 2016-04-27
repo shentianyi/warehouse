@@ -237,6 +237,9 @@
 
           <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-log-out'), {controller: 'logistics_containers', action: 'export', id: delivery.id}, class: 'IconA', :title => '导出运单' %>
           <%= link_to '删除', delivery.delivery, method: :delete, data: {confirm: '确认删除?'} %>
+
+
+          <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-log-out'), {controller: 'logistics_containers', action: 'move_stock', id: delivery.id}, class: 'IconA', :title => '导出运单' %>
         </td>
       </tr>
   <% end %>

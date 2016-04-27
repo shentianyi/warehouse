@@ -350,7 +350,7 @@ class DeliveryService
   def self.delete id
     puts "--------------------#{id}---------------------------"
     d=Container.find_by_id(id)
-    if d
+    if d && (d.state != PackageState::RECEIVED)
       d.update_attributes(is_delete: true)
       dlc=d.logistics_containers.first
 
@@ -366,7 +366,12 @@ class DeliveryService
       end
 
     else
-      raise "未找到该运单号"
+      raise "未找到该运单号或者该运单已接收入库，不可删除"
     end
   end
+
+  def self.stock_move
+
+  end
+
 end

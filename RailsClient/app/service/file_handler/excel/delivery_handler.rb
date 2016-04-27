@@ -71,7 +71,7 @@ module FileHandler
                                            extra_batch: book.cell(2, 5),
                                            user_id: user.id,
                                            location_id: source.id,
-                                           state: DeliveryState::RECEIVED
+                                           state: DeliveryState::DESTINATION
                                        })
 
             # generate delivery location_container
@@ -89,7 +89,7 @@ module FileHandler
             forklift = Forklift.create({
                                            user_id: user.id,
                                            location_id: source.id,
-                                           state: ForkliftState::RECEIVED
+                                           state: ForkliftState::DESTINATION
                                        })
             #create forklift lc
             flc = forklift.logistics_containers.build({source_location_id: source.id, des_location_id: destination.id, user_id: user.id, state: MovableState::CHECKED})
@@ -125,7 +125,7 @@ module FileHandler
                                            user_id: user.id,
                                            quantity: row[:quantity],
                                            remark: row[:remark],
-                                           state: PackageState::RECEIVED
+                                           state: PackageState::DESTINATION
                                        })
               #create lc
               plc = package.logistics_containers.build({
@@ -137,10 +137,11 @@ module FileHandler
               plc.destinationable = destination
               plc.save
 
-              row[:fifo]=fifo if row[:fifo].blank?
-              from_wh=Whouse.find_by_nr(row[:from_wh])
-              from_position=Position.find_by_nr(row[:from_position])
-              plc.move_stock(destination, from_wh, from_position, row[:fifo], move_list.id, false)
+              #移库
+              # row[:fifo]=fifo if row[:fifo].blank?
+              # from_wh=Whouse.find_by_nr(row[:from_wh])
+              # from_position=Position.find_by_nr(row[:from_position])
+              # plc.move_stock(destination, from_wh, from_position, row[:fifo], move_list.id, false)
 
               Record.create({recordable: plc, impl_id: user.id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
               flc.add(plc)
@@ -314,13 +315,13 @@ module FileHandler
                                            extra_batch: book.cell(2, 5),
                                            user_id: user.id,
                                            location_id: source.id,
-                                           state: DeliveryState::RECEIVED
+                                           state: DeliveryState::DESTINATION
                                        })
 
             # generate delivery location_container
             # destination =source.default_location_destination #Location.find_by_nr(SysConfigCache.jiaxuan_extra_destination_value)
 
-            dlc = delivery.logistics_containers.build(source_location_id: source.id, des_location_id: destination.id, user_id: user.id, remark: book.cell(2, 4), state: MovableState::CHECKED)
+            dlc = delivery.logistics_containers.build(source_location_id: source.id, des_location_id: destination.id, user_id: user.id, remark: book.cell(2, 4), state: MovableState::ARRIVED)
             dlc.destinationable = destination
             dlc.save
             # send dlc,create record for dlc
@@ -332,10 +333,10 @@ module FileHandler
             forklift = Forklift.create({
                                            user_id: user.id,
                                            location_id: source.id,
-                                           state: ForkliftState::RECEIVED
+                                           state: ForkliftState::DESTINATION
                                        })
             #create forklift lc
-            flc = forklift.logistics_containers.build({source_location_id: source.id, des_location_id: destination.id, user_id: user.id, state: MovableState::CHECKED})
+            flc = forklift.logistics_containers.build({source_location_id: source.id, des_location_id: destination.id, user_id: user.id, state: MovableState::ARRIVED})
             flc.destinationable = destination
             flc.save
             Record.create({recordable: flc, impl_id: user.id, impl_user_type: ImplUserType::RECEIVER, impl_action: 'receive', impl_time: impl_time})
@@ -376,21 +377,22 @@ module FileHandler
                                            user_id: user.id,
                                            quantity: row[:quantity],
                                            remark: row[:remark],
-                                           state: PackageState::RECEIVED
+                                           state: PackageState::DESTINATION
                                        })
               #create lc
               plc = package.logistics_containers.build({
                                                            source_location_id: source.id,
                                                            des_location_id: destination.id,
                                                            user_id: user.id,
-                                                           state: MovableState::CHECKED
+                                                           state: MovableState::ARRIVED
                                                        })
               plc.destinationable = destination
               plc.save
 
-              to_wh=Whouse.find_by_nr(row[:to_wh])
-              to_position=Position.find_by_nr(row[:to_position])
-              plc.enter_stock(to_wh, to_position, row[:fifo], move_list.id, false)
+              #入库
+              # to_wh=Whouse.find_by_nr(row[:to_wh])
+              # to_position=Position.find_by_nr(row[:to_position])
+              # plc.enter_stock(to_wh, to_position, row[:fifo], move_list.id, false)
 
               Record.create({recordable: plc, impl_id: user.id, impl_user_type: ImplUserType::RECEIVER, impl_action: 'receive', impl_time: impl_time})
               flc.add(plc)
