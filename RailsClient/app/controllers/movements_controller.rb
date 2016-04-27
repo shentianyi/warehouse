@@ -31,9 +31,18 @@ class MovementsController < ApplicationController
   end
 
   def misoperation
-    puts params
     if request.post?
+      params[:movement][:employee_id]=current_user.nr if params[:movement][:employee_id].blank?
+      msg= FileHandler::Excel::NStorageHandler.validate_move_row(params[:movement])
 
+      if msg.result
+        WhouseService.new.move(msg.object)
+        flash[:notice]='操作成功'
+      else
+        flash[:notice]=msg.content
+      end
+
+      redirect_to action: :misoperation
     end
   end
 
@@ -44,6 +53,6 @@ class MovementsController < ApplicationController
   end
 
   def movement_params
-    params.require(:movement).permit(:partNr, :fifo, :from_id, :fromPosition, :to_id, :toPosition, :packageId, :uniqueId, :type_id, :qty, :remarks, :employee)
+    params.require(:movement)#.permit(:partNr, :fifo, :from_id, :fromPosition, :to_id, :toPosition, :packageId, :uniqueId, :type_id, :qty, :remarks, :employee)
   end
 end

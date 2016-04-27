@@ -1,6 +1,7 @@
 <h1>test</h1>
 
-<form method="post" action="<%= send("misoperation_movements_path") %>">
+<%= form_tag controller: 'movements', action: 'misoperation', method: 'post' do %>
+
   <div class="col-sm-12" style="border-bottom: 1px dashed #999;">
     <div class="col-sm-3">
       零件号：
@@ -21,7 +22,7 @@
   <div class="col-sm-12" style="border-bottom: 1px dashed #999;">
     <div class="col-sm-3">
       源仓库号：
-      <%= select_tag('movement[from_id]', options_from_collection_for_select(Whouse.all, :nr, :name, @from_id), include_blank: true) %>
+      <%= select_tag('movement[fromWh]', options_from_collection_for_select(Whouse.all, :nr, :name, @fromWh), include_blank: true) %>
     </div>
     <div class="col-sm-3">
       源库位号：
@@ -29,7 +30,7 @@
     </div>
     <div class="col-sm-3">
       目的仓库号：
-      <%= select_tag('movement[to_id]', options_from_collection_for_select(Whouse.all, :nr, :name, @to_id), include_blank: true) %>
+      <%= select_tag('movement[toWh]', options_from_collection_for_select(Whouse.all, :nr, :name, @toWh), include_blank: true) %>
     </div>
     <div class="col-sm-3">
       目的库位号：
@@ -52,4 +53,4 @@
       <input type="submit" value="提交" class="btn btn-primary" name="move" style="width: 200px;"/>
     </div>
   </div>
-</form>
+<% end %>

@@ -182,9 +182,9 @@ module FileHandler
         positions = []
         if row[:packageId].present? && row[:partNr].blank?
         else
-          part_id = Part.find_by_nr(row[:partNr])
-          if part_id
-            part_id.positions.each do |position|
+          part = Part.find_by_nr(row[:partNr])
+          if part
+            part.positions.each do |position|
               positions += ["#{position.nr}"]
             end
           else
@@ -215,7 +215,7 @@ module FileHandler
           end
         end
 
-        if to_position && part_id
+        if to_position && part
           unless positions.include?(row[:toPosition])
             msg.contents << "零件号:#{row[:partNr]}不在目的库位号:#{row[:toPosition]}上!"
           end
@@ -269,7 +269,7 @@ module FileHandler
       end
 
       def self.validate_move_row(row)
-        msg = Message.new(contents: [])
+        msg = Message.new(contents: [], object: {})
         # StorageOperationRecord.save_record(row, 'MOVE')
 
         if row[:toWh].blank?
@@ -284,6 +284,8 @@ module FileHandler
           src_warehouse = Whouse.find_by_nr(row[:fromWh])
           unless src_warehouse
             msg.contents << "源仓库号:#{row[:fromWh]} 不存在!"
+          else
+            msg.object[:fromWh]=src_warehouse.id
           end
         end
 
@@ -291,15 +293,18 @@ module FileHandler
           dse_warehouse = Whouse.find_by_nr(row[:toWh])
           unless dse_warehouse
             msg.contents << "目的仓库号:#{row[:toWh]} 不存在!"
+          else
+            msg.object[:toWh]=dse_warehouse.id
           end
         end
 
         positions = []
         if row[:packageId].present? && row[:partNr].blank?
         else
-          part_id = Part.find_by_nr(row[:partNr])
-          if part_id
-            part_id.positions.each do |position|
+          part = Part.find_by_nr(row[:partNr])
+          if part
+            msg.object[:partNr]=part.id
+            part.positions.each do |position|
               positions += ["#{position.nr}"]
             end
           else
@@ -319,10 +324,12 @@ module FileHandler
           from_position = Position.find_by_nr(row[:fromPosition])
           unless from_position
             msg.contents << "源位置:#{row[:fromPosition]} 不存在!"
+          else
+            msg.object[:fromPosition]=from_position.id
           end
         end
 
-        if from_position && part_id
+        if from_position && part
           unless positions.include?(row[:fromPosition])
             msg.contents << "零件号:#{row[:partNr]} 不在源库位号:#{row[:fromPosition]}上!"
           end
@@ -332,10 +339,12 @@ module FileHandler
           to_position = Position.find_by_nr(row[:toPosition])
           unless to_position
             msg.contents << "目的库位号:#{row[:toPosition]} 不存在!"
+          else
+            msg.object[:toPosition]=to_position.id
           end
         end
 
-        if to_position && part_id
+        if to_position && part
           unless positions.include?(row[:toPosition])
             msg.contents << "零件号:#{row[:partNr]}不在目的库位号:#{row[:toPosition]}上!"
           end
@@ -345,12 +354,16 @@ module FileHandler
           employee = User.find_by_nr(row[:employee_id])
           unless employee
             msg.contents << "员工号:#{row[:employee_id].sub(/\.0/, '')} 不存在!"
+          else
+            msg.object[:employee_id]=row[:employee_id]
           end
         end
 
         if row[:packageId].present?
           unless package = NStorage.exists_package?(row[:packageId])
             msg.contents << "唯一码:#{row['packageId']} 不存在!"
+          else
+            msg.object[:packageId]=row[:packageId]
           end
 
           if package && package.qty < row[:qty].to_f
@@ -371,7 +384,11 @@ module FileHandler
             end
           end
 
-          msg.contents << "数量: #{row[:qty]} 不可以小于等于 0!" if row[:qty].to_f <= 0
+          if row[:qty].to_f <= 0
+            msg.contents << "数量: #{row[:qty]} 不可以小于等于 0!"
+          else
+            msg.object[:qty]=row[:qty]
+          end
 
         else
 
@@ -383,9 +400,13 @@ module FileHandler
 
           if row[:qty].blank? || row[:qty].to_f <= 0
             msg.contents << "数量: #{row[:qty]} 不可以小于等于 0!"
+          else
+            msg.object[:qty]=row[:qty]
           end
 
         end
+
+        msg.object[:remarks]=row[:remarks] unless row[:remarks].blank?
 
 
         unless msg.result=(msg.contents.size==0)
