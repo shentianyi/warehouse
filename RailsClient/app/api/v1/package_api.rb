@@ -41,7 +41,7 @@ module V1
         args[:fifo] = storage.fifo.blank? ? '' : storage.fifo.localtime
 
         args[:fromWh] = storage.ware_house_id
-        args[:fromPosition] = storage.position_id
+        args[:fromPosition] = storage.position
         {result: '1', content: args}
       end
 
