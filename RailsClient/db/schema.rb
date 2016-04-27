@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(version: 20160427081217) do
   add_index "back_parts", ["des_location_id"], name: "index_back_parts_on_des_location_id", using: :btree
   add_index "back_parts", ["id"], name: "index_back_parts_on_id", using: :btree
   add_index "back_parts", ["src_location_id"], name: "index_back_parts_on_src_location_id", using: :btree
+  add_index "back_parts", ["user_id"], name: "index_back_parts_on_user_id", using: :btree
 
   create_table "containers", force: true do |t|
     t.string   "custom_id",                 limit: 36
@@ -147,6 +148,13 @@ ActiveRecord::Schema.define(version: 20160427081217) do
   add_index "deliveries", ["source_id"], name: "index_deliveries_on_source_id", using: :btree
   add_index "deliveries", ["user_id"], name: "index_deliveries_on_user_id", using: :btree
   add_index "deliveries", ["uuid"], name: "index_deliveries_on_uuid", using: :btree
+
+  create_table "delivery_pick_lists", force: true do |t|
+    t.string   "delivery_id"
+    t.string   "pick_list_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "forklifts", force: true do |t|
     t.string   "uuid",        limit: 36,                 null: false
@@ -247,6 +255,20 @@ ActiveRecord::Schema.define(version: 20160427081217) do
   add_index "location_container_hierarchies", ["ancestor_id", "descendant_id", "generations"], name: "anc_desc_idx", unique: true, using: :btree
   add_index "location_container_hierarchies", ["descendant_id"], name: "desc_idx", using: :btree
 
+  create_table "location_container_orders", force: true do |t|
+    t.string   "location_container_id"
+    t.string   "order_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "location_container_pick_lists", force: true do |t|
+    t.string   "location_container_id"
+    t.string   "pick_list_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "location_containers", force: true do |t|
     t.string   "source_location_id"
     t.string   "des_location_id"
@@ -263,6 +285,7 @@ ActiveRecord::Schema.define(version: 20160427081217) do
     t.string   "destinationable_id"
     t.string   "destinationable_type"
     t.string   "ancestry"
+    t.string   "batch_no"
   end
 
   add_index "location_containers", ["ancestry"], name: "index_location_containers_on_ancestry", using: :btree
@@ -313,6 +336,7 @@ ActiveRecord::Schema.define(version: 20160427081217) do
     t.text     "safe_qty_emails"
     t.boolean  "can_send_when_no_stock",              default: false
     t.string   "default_whouse_id"
+    t.boolean  "check_delivery_by_pick",              default: false
   end
 
   add_index "locations", ["destination_id"], name: "index_locations_on_destination_id", using: :btree
