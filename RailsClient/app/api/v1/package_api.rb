@@ -39,6 +39,9 @@ module V1
         args[:part_id] = "P#{storage.partNr}"
         args[:qty] = storage.qty
         args[:fifo] = storage.fifo.blank? ? '' : storage.fifo.localtime
+
+        args[:fromWh] = storage.ware_house_id
+        args[:fromPosition] = storage.position
         {result: '1', content: args}
       end
 
