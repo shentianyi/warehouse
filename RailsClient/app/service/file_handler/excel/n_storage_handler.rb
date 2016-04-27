@@ -307,8 +307,10 @@ module FileHandler
         end
 
         if from_position && part_id
-          unless positions.include?(row[:fromPosition])
-            msg.contents << "零件号:#{row[:partNr]} 不在源库位号:#{row[:fromPosition]}上!"
+          if src_warehouse && src_warehouse.nr!='PA'
+            unless positions.include?(row[:fromPosition])
+              msg.contents << "零件号:#{row[:partNr]} 不在源库位号:#{row[:fromPosition]}上!"
+            end
           end
         end
 
@@ -320,8 +322,10 @@ module FileHandler
         end
 
         if to_position && part_id
-          unless positions.include?(row[:toPosition])
-            msg.contents << "零件号:#{row[:partNr]}不在目的库位号:#{row[:toPosition]}上!"
+          if dse_warehouse && dse_warehouse.nr!='PA'
+            unless positions.include?(row[:toPosition])
+              msg.contents << "零件号:#{row[:partNr]}不在目的库位号:#{row[:toPosition]}上!"
+            end
           end
         end
 
