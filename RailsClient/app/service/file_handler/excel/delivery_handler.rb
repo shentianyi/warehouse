@@ -77,7 +77,7 @@ module FileHandler
             # generate delivery location_container
             # destination =source.default_location_destination #Location.find_by_nr(SysConfigCache.jiaxuan_extra_destination_value)
 
-            dlc = delivery.logistics_containers.build(source_location_id: source.id, des_location_id: destination.id, user_id: user.id, remark: book.cell(2, 4), state: MovableState::CHECKED)
+            dlc = delivery.logistics_containers.build(source_location_id: source.id, des_location_id: destination.id, user_id: user.id, remark: book.cell(2, 4), state: MovableState::ARRIVED)
             dlc.destinationable = destination
             dlc.save
             # send dlc,create record for dlc
@@ -92,7 +92,7 @@ module FileHandler
                                            state: ForkliftState::DESTINATION
                                        })
             #create forklift lc
-            flc = forklift.logistics_containers.build({source_location_id: source.id, des_location_id: destination.id, user_id: user.id, state: MovableState::CHECKED})
+            flc = forklift.logistics_containers.build({source_location_id: source.id, des_location_id: destination.id, user_id: user.id, state: MovableState::ARRIVED})
             flc.destinationable = destination
             flc.save
             Record.create({recordable: flc, impl_id: user.id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
@@ -118,6 +118,10 @@ module FileHandler
 
               #create container
               part=Part.find_by_nr(row[:part_id])
+              row[:fifo]=fifo if row[:fifo].blank?
+              from_wh=Whouse.find_by_nr(row[:from_wh])
+              from_position=Position.find_by_nr(row[:from_position])
+
               package = Package.create({
                                            location_id: source.id,
                                            fifo_time: fifo,
@@ -125,28 +129,29 @@ module FileHandler
                                            user_id: user.id,
                                            quantity: row[:quantity],
                                            remark: row[:remark],
-                                           state: PackageState::DESTINATION
+                                           state: PackageState::DESTINATION,
+                                           extra_fifo: row[:fifo],
+                                           extra_whouse_id: from_wh.id,
+                                           extra_position_id: from_position.id
                                        })
               #create lc
               plc = package.logistics_containers.build({
                                                            source_location_id: source.id,
                                                            des_location_id: destination.id,
                                                            user_id: user.id,
-                                                           state: MovableState::CHECKED
+                                                           state: MovableState::ARRIVED
                                                        })
               plc.destinationable = destination
               plc.save
 
               #移库
-              # row[:fifo]=fifo if row[:fifo].blank?
-              # from_wh=Whouse.find_by_nr(row[:from_wh])
-              # from_position=Position.find_by_nr(row[:from_position])
               # plc.move_stock(destination, from_wh, from_position, row[:fifo], move_list.id, false)
 
               Record.create({recordable: plc, impl_id: user.id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
               flc.add(plc)
             end
             move_list.update(state: MovementListState::ENDING)
+            delivery.update_attributes(movement_list_id: move_list.id)
           end
 
           msg.content ='处理成功'
@@ -370,6 +375,9 @@ module FileHandler
 
               #create container
               part=Part.find_by_nr(row[:part_id])
+              row[:fifo]=fifo if row[:fifo].blank?
+              to_wh=Whouse.find_by_nr(row[:to_wh])
+              to_position=Position.find_by_nr(row[:to_position])
               package = Package.create({
                                            location_id: source.id,
                                            fifo_time: fifo,
@@ -377,7 +385,10 @@ module FileHandler
                                            user_id: user.id,
                                            quantity: row[:quantity],
                                            remark: row[:remark],
-                                           state: PackageState::DESTINATION
+                                           state: PackageState::DESTINATION,
+                                           extra_fifo: row[:fifo],
+                                           extra_whouse_id: to_wh.id,
+                                           extra_position_id: to_position.id
                                        })
               #create lc
               plc = package.logistics_containers.build({
@@ -390,14 +401,13 @@ module FileHandler
               plc.save
 
               #入库
-              # to_wh=Whouse.find_by_nr(row[:to_wh])
-              # to_position=Position.find_by_nr(row[:to_position])
               # plc.enter_stock(to_wh, to_position, row[:fifo], move_list.id, false)
 
               Record.create({recordable: plc, impl_id: user.id, impl_user_type: ImplUserType::RECEIVER, impl_action: 'receive', impl_time: impl_time})
               flc.add(plc)
             end
             move_list.update(state: MovementListState::ENDING)
+            delivery.update_attributes(movement_list_id: move_list.id)
             # delivery.update_attributes(extra_wooden_count: wooden_count,
             #                            extra_box_count: box_count,
             #                            extra_nps_count: nps_count)

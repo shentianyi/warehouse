@@ -162,7 +162,7 @@ Rails.application.routes.draw do
 
     member do
       get :export
-      post :stock_move
+      get :stock_move
     end
   end
 =begin

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160427081217) do
+ActiveRecord::Schema.define(version: 20160427104934) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -105,10 +105,10 @@ ActiveRecord::Schema.define(version: 20160427081217) do
     t.string   "part_id_display"
     t.string   "quantity_display"
     t.string   "fifo_time_display"
-    t.string   "extra_800_no"
-    t.string   "extra_cz_part_id"
-    t.string   "extra_sh_part_id"
-    t.string   "extra_unit"
+    t.string   "extra_fifo"
+    t.string   "extra_whouse_id"
+    t.string   "extra_position_id"
+    t.string   "movement_list_id"
     t.string   "extra_batch"
     t.integer  "extra_wooden_count",                   default: 0
     t.integer  "extra_box_count",                      default: 0

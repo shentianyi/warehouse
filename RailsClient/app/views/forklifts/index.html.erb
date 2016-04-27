@@ -185,7 +185,7 @@
               <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-pencil', :style => 'color:#4F94CD;'), edit_forklift_path(forklift), :class => 'IconA', :title => '编辑托清单' if current_user.admin? %>
           <% end %>
 
-          <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-log-out'), {controller: 'logistics_containers', action: 'export', id: forklift.id}, class: 'IconA', :title => '导出托清单' %>
+          <!--<%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-log-out'), {controller: 'logistics_containers', action: 'export', id: forklift.id}, class: 'IconA', :title => '导出托清单' %>-->
         </td>
       </tr>
   <% end %>

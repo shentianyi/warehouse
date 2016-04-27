@@ -350,9 +350,12 @@ class DeliveryService
   def self.delete id
     puts "--------------------#{id}---------------------------"
     d=Container.find_by_id(id)
-    if d && (d.state != PackageState::RECEIVED)
+    if d && (d.state != DeliveryState::RECEIVED)
       d.update_attributes(is_delete: true)
       dlc=d.logistics_containers.first
+      if move_list=MovementList.find_by_id(d.movement_list_id)
+        move_list.destroy
+      end
 
       fs=LogisticsContainerService.get_forklifts(dlc)
       fs.each do |f|
@@ -366,12 +369,50 @@ class DeliveryService
       end
 
     else
-      raise "未找到该运单号或者该运单已接收入库，不可删除"
+      raise "未找到该运单号或者该运单已出入库，不可删除"
     end
   end
 
-  def self.stock_move
+  def self.stock_move id
+    msg=Message.new
 
+    dlc=LogisticsContainer.find_by_id(id)
+    if dlc && (dlc.state == MovableState::ARRIVED)
+      d=dlc.delivery
+      d.update_attributes(state: DeliveryState::RECEIVED)
+      dlc.update_attributes(state: MovableState::CHECKED)
+
+      fs=LogisticsContainerService.get_forklifts(dlc)
+      fs.each do |f|
+        f.update_attributes(state: MovableState::CHECKED)
+        f.forklift.update_attributes(state: ForkliftState::RECEIVED)
+
+        ps=LogisticsContainerService.get_packages(f)
+        ps.each do |p|
+          p.update_attributes(state: MovableState::CHECKED)
+          p.package.update_attributes(state: PackageState::RECEIVED)
+
+          whouse=Whouse.find_by_id(p.package.extra_whouse_id)
+          position=Position.find_by_id(p.package.extra_position_id)
+
+          if dlc.source_location.id==(Location.find_by_nr('JXJX').id)
+            #stock move
+            p.move_stock(dlc.des_location, whouse, position, p.package.extra_fifo, d.movement_list_id, false)
+            msg.content = "运单出库成功"
+          else
+            #stock enter
+            p.enter_stock(whouse, position, p.package.extra_fifo, d.movement_list_id, false)
+            msg.content = "运单入库成功"
+          end
+
+        end
+      end
+      msg.result=true
+    else
+      msg.content = "未找到该运单号或者该运单已出入库"
+    end
+
+    msg
   end
 
 end
