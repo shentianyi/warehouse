@@ -1,0 +1,29 @@
+<%= form_for(@back_part) do |f| %>
+  <% if @back_part.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@back_part.errors.count, "error") %> prohibited this back_part from being saved:</h2>
+
+      <ul>
+      <% @back_part.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :user_id, '创建者' %><br>
+    <%= f.select(:user_id, User.all.collect { |l| [l.name, l.id] }, {include_blank: false}) %>
+  </div>
+  <div class="field">
+    <%= f.label :des_location_id, '退货接收地' %><br>
+    <%= f.select(:des_location_id, Location.all.collect { |l| [l.name, l.id] }, {include_blank: false}) %>
+  </div>
+  <div class="field">
+    <%= f.label :src_location_id, '退货创建地' %><br>
+    <%= f.select(:src_location_id, Location.all.collect { |l| [l.name, l.id] }, {include_blank: false}) %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

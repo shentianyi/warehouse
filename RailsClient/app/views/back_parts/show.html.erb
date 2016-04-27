@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Builder:</strong>
+  <%= @back_part.user.nr %>
+</p>
+
+<p>
+  <strong>Des location:</strong>
+  <%= @back_part.des_location.nr %>
+</p>
+
+<p>
+  <strong>Src location:</strong>
+  <%= @back_part.src_location.nr %>
+</p>
+
+<%= link_to 'Edit', edit_back_part_path(@back_part) %> |
+<%= link_to 'Back', back_parts_path %>

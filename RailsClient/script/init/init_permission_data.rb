@@ -28,6 +28,10 @@ unless Permission.find_by_name("view_scrap")
   Permission.create(name: "view_scrap", description: "查看报废菜单")
 end
 
+unless Permission.find_by_name("view_back_part")
+  Permission.create(name: "view_back_part", description: "查看退货菜单")
+end
+
 unless Permission.find_by_name("view_report")
   Permission.create(name: "view_report", description: "查看报表菜单")
 end
@@ -98,6 +102,18 @@ end
 
 unless Permission.find_by_name("operate_scrap_delete")
   Permission.create(name: "operate_scrap_delete", description: "报废删除权限")
+end
+
+unless Permission.find_by_name("operate_back_part_create")
+  Permission.create(name: "operate_back_part_create", description: "退货新建权限")
+end
+
+unless Permission.find_by_name("operate_back_part_edit")
+  Permission.create(name: "operate_back_part_edit", description: "退货编辑权限")
+end
+
+unless Permission.find_by_name("operate_back_part_delete")
+  Permission.create(name: "operate_back_part_delete", description: "退货删除权限")
 end
 
 unless Permission.find_by_name("operate_basic_info_create")

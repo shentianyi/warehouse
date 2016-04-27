@@ -1,0 +1,38 @@
+<h1>Listing back_parts</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Builder</th>
+      <th>Des location</th>
+      <th>Src location</th>
+      <th>清单列表</th>
+      <th>导入退货信息</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @back_parts.each do |back_part| %>
+      <tr>
+        <td><%= back_part.user.nr %></td>
+        <td><%= back_part.des_location.nr %></td>
+        <td><%= back_part.src_location.nr %></td>
+        <td>
+          <%= link_to content_tag(:span, '清单列表', :class => 'label label-primary'), back_part_items_back_part_path(back_part) %>
+          <span class="badge"><%= back_part.back_part_items.count %></span>
+        </td>
+        <td>
+          <%= link_to content_tag(:span, '导入退货信息', :class => 'label label-primary'), import_back_part_items_path(id: back_part.id) %>
+        </td>
+        <td><%= link_to 'Show', back_part %></td>
+        <td><%= link_to 'Edit', edit_back_part_path(back_part) %></td>
+        <td><%= link_to 'Destroy', back_part, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Back part', new_back_part_path %>

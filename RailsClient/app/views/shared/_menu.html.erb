@@ -63,6 +63,17 @@
           </li>
       <% end %>
 
+      <% if current_user.permission?(:view_back_part) %>
+          <li><a href="#">退货生成&nbsp;
+            <i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:white;transform: rotate(-90deg);"></i>
+          </a>
+            <ul>
+              <li><a href="<%= back_parts_path %>">退货单</a></li>
+              <li><a href="<%= back_part_items_path %>">退货项</a></li>
+            </ul>
+          </li>
+      <% end %>
+
       <% if current_user.permission?(:view_scrap) %>
           <li><a href="#">报废生成&nbsp;
             <i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:white;transform: rotate(-90deg);"></i>

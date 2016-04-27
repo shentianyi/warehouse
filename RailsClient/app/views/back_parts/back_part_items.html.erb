@@ -1,0 +1,46 @@
+<div class="col-sm-12">
+  <div class="digg_pagination">
+    <div class="page_info">
+      <%= page_entries_info @back_part_items %>
+    </div>
+    <%= will_paginate @back_part_items, :container => false %>
+  </div>
+</div>
+
+<table>
+  <thead>
+  <tr>
+    <th>退货单号</th>
+    <th>零件号</th>
+    <th>数量</th>
+    <th>退货原因</th>
+    <th>样品</th>
+    <th>备注</th>
+    <th>仓库号</th>
+    <th>库位号</th>
+    <th colspan="3"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @back_part_items.each do |back_part_item| %>
+      <tr>
+        <td><%= back_part_item.back_part.id %></td>
+        <td><%= back_part_item.part.nr %></td>
+        <td><%= back_part_item.qty %></td>
+        <td><%= back_part_item.back_reason %></td>
+        <td><%= back_part_item.has_sample %></td>
+        <td><%= back_part_item.remark %></td>
+        <td><%= back_part_item.whouse.blank? ? '' : back_part_item.whouse.nr %></td>
+        <td><%= back_part_item.position.blank? ? '' : back_part_item.position.nr %></td>
+        <!--<td><%= link_to 'Show', back_part_item %></td>-->
+        <!--<td><%= link_to 'Edit', edit_back_part_item_path(back_part_item) %></td>-->
+        <!--<td><%= link_to 'Destroy', back_part_item, method: :delete, data: { confirm: 'Are you sure?' } %></td>-->
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<div class="digg_pagination">
+  <%= will_paginate @back_part_items, :container => false %>
+</div>

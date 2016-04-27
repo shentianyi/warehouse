@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160412083848) do
+ActiveRecord::Schema.define(version: 20160427043231) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -52,6 +52,38 @@ ActiveRecord::Schema.define(version: 20160412083848) do
   add_index "attachments", ["attachable_id"], name: "index_attachments_on_attachable_id", using: :btree
   add_index "attachments", ["attachable_type"], name: "index_attachments_on_attachable_type", using: :btree
   add_index "attachments", ["id"], name: "index_attachments_on_id", using: :btree
+
+  create_table "back_part_items", force: true do |t|
+    t.integer  "back_part_id"
+    t.integer  "part_id"
+    t.float    "qty",          default: 0.0
+    t.integer  "whouse_id"
+    t.integer  "position_id"
+    t.string   "back_reason"
+    t.string   "remark"
+    t.boolean  "has_sample",   default: false, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "back_part_items", ["back_part_id"], name: "index_back_part_items_on_back_part_id", using: :btree
+  add_index "back_part_items", ["id"], name: "index_back_part_items_on_id", using: :btree
+  add_index "back_part_items", ["part_id"], name: "index_back_part_items_on_part_id", using: :btree
+  add_index "back_part_items", ["position_id"], name: "index_back_part_items_on_position_id", using: :btree
+  add_index "back_part_items", ["whouse_id"], name: "index_back_part_items_on_whouse_id", using: :btree
+
+  create_table "back_parts", force: true do |t|
+    t.string   "user_id"
+    t.string   "des_location_id"
+    t.string   "src_location_id"
+    t.integer  "state",           default: 100
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "back_parts", ["des_location_id"], name: "index_back_parts_on_des_location_id", using: :btree
+  add_index "back_parts", ["id"], name: "index_back_parts_on_id", using: :btree
+  add_index "back_parts", ["src_location_id"], name: "index_back_parts_on_src_location_id", using: :btree
 
   create_table "containers", force: true do |t|
     t.string   "custom_id",                 limit: 36

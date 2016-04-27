@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Back part:</strong>
+  <%= @back_part_item.back_part %>
+</p>
+
+<p>
+  <strong>Part:</strong>
+  <%= @back_part_item.part %>
+</p>
+
+<p>
+  <strong>Qty:</strong>
+  <%= @back_part_item.qty %>
+</p>
+
+<p>
+  <strong>Back reason:</strong>
+  <%= @back_part_item.back_reason %>
+</p>
+
+<p>
+  <strong>Has sample:</strong>
+  <%= @back_part_item.has_sample %>
+</p>
+
+<p>
+  <strong>Remark:</strong>
+  <%= @back_part_item.remark %>
+</p>
+
+<p>
+  <strong>Whouse:</strong>
+  <%= @back_part_item.whouse %>
+</p>
+
+<p>
+  <strong>Position:</strong>
+  <%= @back_part_item.position %>
+</p>
+
+<%= link_to 'Edit', edit_back_part_item_path(@back_part_item) %> |
+<%= link_to 'Back', back_part_items_path %>

@@ -1,5 +1,23 @@
 Rails.application.routes.draw do
 
+  resources :back_part_items do
+    collection do
+      get :search
+      match :import, to: :import, via: [:get, :post]
+    end
+  end
+
+  resources :back_parts do
+    member do
+      get 'back_part_items'
+    end
+
+    collection do
+      get :search
+      match :import, to: :import, via: [:get, :post]
+    end
+  end
+
   resources :package_types
 
   resources :permission_group_items do
