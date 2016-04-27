@@ -1,56 +1,81 @@
-<h1>test</h1>
+
+<style type="text/css">
+  .col-sm-12 {
+        height: 60px;
+    }
+
+    select {
+        width: 150px;
+    }
+</style>
+
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">库存管理</li>
+    <li class="active">
+      移库管理
+    </li>
+    <li class="active">
+      库存误操作处理
+    </li>
+  </ol>
+</div>
 
 <%= form_tag controller: 'movements', action: 'misoperation', method: 'post' do %>
+ <div class="panel panel-primary">
+      <div class="panel-body">
+        <div class="col-sm-12">
+          <div class="col-sm-4">
+            <span>零件号：</span>
+            <input type="text" name="movement[partNr]" value="<%= @partNr %>"/>
+          </div>
+          <div class="col-sm-4">
+            <span>唯一码：</span>
+            <input type="text" name="movement[packageId]" value="<%= @packageId %>"/>
+          </div>
+          <div class="col-sm-4">
+           <span> 数量：</span>
+            <input type="text" name="movement[qty]" value="<%= @qty %>"/>
+          </div>
+        </div>
 
-  <div class="col-sm-12" style="border-bottom: 1px dashed #999;">
-    <div class="col-sm-3">
-      零件号：
-      <input type="text" name="movement[partNr]" value="<%= @partNr %>"/>
-    </div>
-    <div class="col-sm-3">
-      唯一码：
-      <input type="text" name="movement[packageId]" value="<%= @packageId %>"/>
-    </div>
-    <div class="col-sm-3">
-      数量：
-      <input type="text" name="movement[qty]" value="<%= @qty %>"/>
-    </div>
-  </div>
+        <div class="col-sm-12">
+          <div class="col-sm-4">
+           <span>源仓库号：</span>
+           <%= select_tag('movement[fromWh]', options_from_collection_for_select(Whouse.all, :nr, :name, @fromWh), include_blank: true) %>
+          </div>
+          <div class="col-sm-4">
+            <span>源库位号：</span>
+             <input type="text" name="movement[fromPosition]" value="<%= @fromPosition %>"/>
+          </div>
+          <div class="col-sm-4">
+         <span>目的仓库号：</span>
+            <%= select_tag('movement[toWh]', options_from_collection_for_select(Whouse.all, :nr, :name, @toWh), include_blank: true) %>
+          </div>
+        </div>
 
-  <div></div>
+        <div class="col-sm-12">
+          <div class="col-sm-4">
+           <span>目的库位号：</span>
+            <input type="text" name="movement[toPosition]" value="<%= @toPosition %>"/>
+          </div>
+          <div class="col-sm-4">
+           <span>员工号：</span>
+            <input type="text" name="movement[employee_id]" value="<%= @employee_id %>"/>
+          </div>
+          <div class="col-sm-4">
+           <span> 备注：</span>
+            <input type="text" name="movement[remarks]" value="<%= @remarks %>"/>
+          </div>
+        </div>
 
-  <div class="col-sm-12" style="border-bottom: 1px dashed #999;">
-    <div class="col-sm-3">
-      源仓库号：
-      <%= select_tag('movement[fromWh]', options_from_collection_for_select(Whouse.all, :nr, :name, @fromWh), include_blank: true) %>
-    </div>
-    <div class="col-sm-3">
-      源库位号：
-      <input type="text" name="movement[fromPosition]" value="<%= @fromPosition %>"/>
-    </div>
-    <div class="col-sm-3">
-      目的仓库号：
-      <%= select_tag('movement[toWh]', options_from_collection_for_select(Whouse.all, :nr, :name, @toWh), include_blank: true) %>
-    </div>
-    <div class="col-sm-3">
-      目的库位号：
-      <input type="text" name="movement[toPosition]" value="<%= @toPosition %>"/>
-    </div>
-  </div>
 
-  <div></div>
-
-  <div class="col-sm-12" style="border-bottom: 1px dashed #999;">
-    <div class="col-sm-4">
-      备注：
-      <input type="text" name="movement[remarks]" value="<%= @remarks %>"/>
-    </div>
-    <div class="col-sm-3">
-      员工号：
-      <input type="text" name="movement[employee_id]" value="<%= @employee_id %>"/>
-    </div>
-    <div class="col-sm-4">
-      <input type="submit" value="提交" class="btn btn-primary" name="move" style="width: 200px;"/>
+        <div class="col-sm-12" style="border-top: 1px dashed #000;padding-top: 10px;">
+          <div class="actions">
+            <input type="submit" class="btn btn-primary" value="提交" name="move" style="margin-top: 10px;width: 200px;color: white;">
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 <% end %>
