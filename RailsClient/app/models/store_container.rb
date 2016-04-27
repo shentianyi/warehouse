@@ -1,6 +1,6 @@
 class StoreContainer<LocationContainer
   include CZ::Containable
-  default_scope { where(type: LocationContainerType::STORE) }
+  default_scope { where(type: LocationContainerType::STORE, is_delete: 0) }
   has_ancestry
   belongs_to :package, foreign_key: :container_id
 

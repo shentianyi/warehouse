@@ -346,4 +346,27 @@ class DeliveryService
 
     p.to_stream.read
   end
+
+  def self.delete id
+    puts "--------------------#{id}---------------------------"
+    d=Container.find_by_id(id)
+    if d
+      d.update_attributes(is_delete: true)
+      dlc=d.logistics_containers.first
+
+      fs=LogisticsContainerService.get_forklifts(dlc)
+      fs.each do |f|
+        f.forklift.update_attributes(is_delete: true)
+
+        ps=LogisticsContainerService.get_packages(f)
+        ps.each do |p|
+          p.package.update_attributes(is_delete: true)
+          p.update_attributes(is_delete: true)
+        end
+      end
+
+    else
+      raise "未找到该运单号"
+    end
+  end
 end

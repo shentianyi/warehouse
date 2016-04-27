@@ -111,12 +111,12 @@
       <div class="col-sm-8" style="text-align: right;">
         <input type="hidden" value="delivery" name="model"/>
         <input type="hidden" value="records" name="tables"/><!--使用分号隔开，这里的表应该与上面的参数一致-->
-          <div class="col-sm-4">
-            <input type="submit" value="查找" class="btn btn-primary" name="search" style="width: 200px;"/>
-          </div>
-          <div class="col-sm-4">
-            <input type="submit" value="导出" class="btn btn-primary" name="download" style="width: 200px;"/>
-          </div>
+        <div class="col-sm-4">
+          <input type="submit" value="查找" class="btn btn-primary" name="search" style="width: 200px;"/>
+        </div>
+        <div class="col-sm-4">
+          <input type="submit" value="导出" class="btn btn-primary" name="download" style="width: 200px;"/>
+        </div>
       </div>
     </div>
 
@@ -148,20 +148,22 @@
   <div class="col-sm-2">
     <input type="button" value="打印发运单" class='btn btn-warning' onclick="print_delivery_list();"/>
   </div>
-  <div class="col-sm-2">
-    <input type="button" value="打印接收确认单" class='btn btn-info' onclick="print_delivery_confirm_list();"/>
-  </div>
-  <div class="col-sm-2">
-    <input type="button" value="打印未接收清单" class='btn btn-success' onclick="print_delivery_unrece_list();"/>
-  </div>
-  <div class="col-sm-2">
-    <input type="button" value="打印接收清单" class='btn btn-primary' onclick="print_delivery_reve_list();"/>
-  </div>
-  <div class="col-sm-2">
-    <% if current_user.can_edit_inventory? %>
-        <%= link_to '导入离线运单', import_logistics_containers_path, :class => "btn btn-warning", :style => 'color:white;' %>
-    <% end %>
-  </div>
+  <!--<div class="col-sm-2">-->
+  <!--<input type="button" value="打印接收确认单" class='btn btn-info' onclick="print_delivery_confirm_list();"/>-->
+  <!--</div>-->
+  <!--<div class="col-sm-2">-->
+  <!--<input type="button" value="打印未接收清单" class='btn btn-success' onclick="print_delivery_unrece_list();"/>-->
+  <!--</div>-->
+  <!--<div class="col-sm-2">-->
+  <!--<input type="button" value="打印接收清单" class='btn btn-primary' onclick="print_delivery_reve_list();"/>-->
+  <!--</div>-->
+  <!--<div class="col-sm-2">-->
+  <!--
+  <% if current_user.can_edit_inventory? %>-->
+      <!--<%= link_to '导入离线运单', import_logistics_containers_path, :class => "btn btn-warning", :style => 'color:white;' %>-->
+      <!--
+  <% end %>-->
+  <!--</div>-->
 </div>
 
 <div class="col-sm-12">
@@ -197,7 +199,7 @@
     <!--<th>木盘数</th>-->
     <!--<th>纸箱数</th>-->
     <!--<th>NPS数</th>-->
-    <th colspan="3">操作</th>
+    <th colspan="4">操作</th>
   </tr>
   </thead>
 
@@ -234,6 +236,7 @@
           <% end %>
 
           <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-log-out'), {controller: 'logistics_containers', action: 'export', id: delivery.id}, class: 'IconA', :title => '导出运单' %>
+          <%= link_to '删除', delivery.delivery, method: :delete, data: {confirm: '确认删除?'} %>
         </td>
       </tr>
   <% end %>

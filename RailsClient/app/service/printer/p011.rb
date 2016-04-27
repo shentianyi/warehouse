@@ -24,7 +24,7 @@ module Printer
       bp_is = bp.back_part_items
 
       bp_is.each_with_index do |i, index|
-        p 
+        p i
         body= {
             nr: index+1,
             part_nr: i.part.blank? ? '' : i.part.nr,

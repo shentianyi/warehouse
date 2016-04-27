@@ -4,7 +4,7 @@ class Package<Container
   has_many :positions, through: :part
   #has_many :inventory_list_items
 
-  default_scope { where(type: ContainerType::PACKAGE) }
+  default_scope { where(type: ContainerType::PACKAGE, is_delete: 0) }
 
   def self.id_valid?(id)
     Package.unscoped.where(id: id, type: ContainerType::PACKAGE).first.nil?

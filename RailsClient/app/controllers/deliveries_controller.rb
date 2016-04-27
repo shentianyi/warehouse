@@ -69,15 +69,15 @@ class DeliveriesController < ApplicationController
 
   # DELETE /deliveries/1
   # DELETE /deliveries/1.json
-=begin
+# =begin
   def destroy
-    @delivery.destroy
+    DeliveryService.delete(params[:id])
     respond_to do |format|
       format.html { redirect_to deliveries_url, notice: '运单成功删除.' }
       format.json { head :no_content }
     end
   end
-=end
+# =end
 
   # GET /deliveries/1/forklifts
   def forklifts
