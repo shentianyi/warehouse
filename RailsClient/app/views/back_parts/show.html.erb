@@ -1,19 +1,49 @@
+<style>
+  .col-sm-4 {
+    font-size: 1.2em;
+  }
+
+  a:hover, a:active {
+    text-decoration: none;
+    background-color: white;
+    color: black;
+    outline: none;
+  }
+</style>
+
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Builder:</strong>
-  <%= @back_part.user.nr %>
-</p>
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">库存管理</li>
+    <li class="active">
+      退货生成
+    </li>
+    <li>
+      <%= link_to '退货单', back_parts_path %>
+    </li>
+    <li class="active">
+      退货单详情
+      <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-pencil', :style => 'color:#4F94CD;'), edit_back_part_path(@back_part) %>
+    </li>
+  </ol>
+</div>
 
-<p>
-  <strong>Des location:</strong>
-  <%= @back_part.des_location.nr %>
-</p>
-
-<p>
-  <strong>Src location:</strong>
-  <%= @back_part.src_location.nr %>
-</p>
-
-<%= link_to 'Edit', edit_back_part_path(@back_part) %> |
-<%= link_to 'Back', back_parts_path %>
+<div class="panel panel-primary">
+  <div class="panel-body">
+    <div class="col-sm-12">
+      <div class="col-sm-4">
+        <strong>Builder:</strong>
+        <%= @back_part.user.nr %>
+      </div>
+      <div class="col-sm-4">
+        <strong>Des location:</strong>
+        <%= @back_part.des_location.nr %>
+      </div>
+      <div class="col-sm-4">
+        <strong>Src location:</strong>
+        <%= @back_part.src_location.nr %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,33 +1,33 @@
 <style>
-    .btn {
-        width: 200px;
-        margin: 10px 0 10px 0;
-    }
+  .btn {
+    width: 200px;
+    margin: 10px 0 10px 0;
+  }
 
-    .label {
-        font-size: 1em;
-    }
+  .label {
+    font-size: 1em;
+  }
 
-    .IconA {
-        margin: 0 10px;
-        font-size: 1.2em;
-    }
+  .IconA {
+    margin: 0 10px;
+    font-size: 1.2em;
+  }
 
-    .IconA:hover {
-        text-decoration: none;
-        background-color: white;
-    }
+  .IconA:hover {
+    text-decoration: none;
+    background-color: white;
+  }
 
-    .table > thead > tr > th, .table > tbody > tr > td {
-        text-align: center;
-    }
-    
-    a:hover, a:active {
-        text-decoration: none;
-        background-color: white;
-        color: black;
-        outline: none;
-    }
+  .table > thead > tr > th, .table > tbody > tr > td {
+    text-align: center;
+  }
+
+  a:hover, a:active {
+    text-decoration: none;
+    background-color: white;
+    color: black;
+    outline: none;
+  }
 </style>
 
 <div class="panel panel-default">
@@ -45,7 +45,7 @@
 <div class="col-sm-12" style="margin-bottom: 20px;">
   <% if current_user.permission?(:operate_inventory_create) %>
       <div class="col-sm-4">
-        <%= link_to "新建盘点", send("new_#{@model}_path"), :class => 'btn btn-primary',:style=>'color:white' %>
+        <%= link_to "新建盘点", send("new_#{@model}_path"), :class => 'btn btn-primary', :style => 'color:white' %>
       </div>
   <% end %>
   <div class="col-sm-4">
@@ -66,7 +66,7 @@
 </div>
 
 
-<table class="table table-bordered table-striped globle-table">
+<table class="table table-bordered table-striped">
   <thead>
   <tr>
     <th>No.</th>

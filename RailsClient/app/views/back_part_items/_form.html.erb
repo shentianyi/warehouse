@@ -1,49 +1,50 @@
 <%= form_for(@back_part_item) do |f| %>
-  <% if @back_part_item.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@back_part_item.errors.count, "error") %> prohibited this back_part_item from being saved:</h2>
+    <% if @back_part_item.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@back_part_item.errors.count, "error") %> prohibited this back_part_item from being
+            saved:</h2>
 
-      <ul>
-      <% @back_part_item.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+          <ul>
+            <% @back_part_item.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="field">
+      <%= f.label :back_part_id %><br>
+      <%= f.text_field :back_part_id %>
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :back_part_id %><br>
-    <%= f.text_field :back_part_id %>
-  </div>
-  <div class="field">
-    <%= f.label :part_id %><br>
-    <%= f.text_field :part_id %>
-  </div>
-  <div class="field">
-    <%= f.label :qty %><br>
-    <%= f.text_field :qty %>
-  </div>
-  <div class="field">
-    <%= f.label :back_reason %><br>
-    <%= f.text_field :back_reason %>
-  </div>
-  <div class="field">
-    <%= f.label :has_sample %><br>
-    <%= f.text_field :has_sample %>
-  </div>
-  <div class="field">
-    <%= f.label :remark %><br>
-    <%= f.text_field :remark %>
-  </div>
-  <div class="field">
-    <%= f.label :whouse_id %><br>
-    <%= f.text_field :whouse_id %>
-  </div>
-  <div class="field">
-    <%= f.label :position_id %><br>
-    <%= f.text_field :position_id %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+    <div class="field">
+      <%= f.label :part_id %><br>
+      <%= f.text_field :part_id %>
+    </div>
+    <div class="field">
+      <%= f.label :qty %><br>
+      <%= f.text_field :qty %>
+    </div>
+    <div class="field">
+      <%= f.label :back_reason %><br>
+      <%= f.text_field :back_reason %>
+    </div>
+    <div class="field">
+      <%= f.label :has_sample %><br>
+      <%= f.text_field :has_sample %>
+    </div>
+    <div class="field">
+      <%= f.label :remark %><br>
+      <%= f.text_field :remark %>
+    </div>
+    <div class="field">
+      <%= f.label :whouse_id %><br>
+      <%= f.text_field :whouse_id %>
+    </div>
+    <div class="field">
+      <%= f.label :position_id %><br>
+      <%= f.text_field :position_id %>
+    </div>
+    <div class="actions">
+      <%= f.submit %>
+    </div>
 <% end %>

@@ -28,8 +28,8 @@ var printer = {
                     }
                 }
             }).always(function () {
-                    hide_handle_dialog();
-                });
+                hide_handle_dialog();
+            });
         }
     },
     id: null
@@ -52,16 +52,23 @@ function print_delivery_reve_list() {
 function print_pick_list() {
     printer.print('P006');
 }
-function print_pick_list_with_id(id){
-    printer.id=function(){return id};
+function print_pick_list_with_id(id) {
+    printer.id = function () {
+        return id
+    };
     printer.print('P006');
 }
+
+function print_back_parts_with_id(id) {
+    printer.print('P011');
+}
+
 function init_check() {
     $('body').on('change', '.print-check', function () {
         $(this).prop('checked', $(this).is(':checked'));
         $('.print-check').not(this).prop('checked', false);
     });
     printer.id = function () {
-        return  $('.print-check:checked').attr('id');
+        return $('.print-check:checked').attr('id');
     }
 }

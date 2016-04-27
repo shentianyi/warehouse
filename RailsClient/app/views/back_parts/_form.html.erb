@@ -1,29 +1,37 @@
 <%= form_for(@back_part) do |f| %>
-  <% if @back_part.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@back_part.errors.count, "error") %> prohibited this back_part from being saved:</h2>
+    <% if @back_part.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@back_part.errors.count, "error") %> prohibited this back_part from being saved:</h2>
 
-      <ul>
-      <% @back_part.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+          <ul>
+            <% @back_part.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="panel panel-primary">
+      <div class="panel-body">
+        <div class="col-sm-12" style="margin-bottom: 20px;">
+          <div class="col-sm-4">
+            <%= f.label :user_id, '创建者' %>
+            <%= f.select(:user_id, User.all.collect { |l| [l.name, l.id] }, {include_blank: false}) %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.label :des_location_id, '退货接收地' %>
+            <%= f.select(:des_location_id, Location.all.collect { |l| [l.name, l.id] }, {include_blank: false}) %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.label :src_location_id, '退货创建地' %>
+            <%= f.select(:src_location_id, Location.all.collect { |l| [l.name, l.id] }, {include_blank: false}) %>
+          </div>
+        </div>
+        <div class="col-sm-12" style="padding-top: 20px;border-top: 1px dashed #000;">
+          <div class="actions">
+            <input type="submit" class="btn btn-primary" value="完成" name="commit" style="width: 150px;color:white;">
+          </div>
+        </div>
+      </div>
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :user_id, '创建者' %><br>
-    <%= f.select(:user_id, User.all.collect { |l| [l.name, l.id] }, {include_blank: false}) %>
-  </div>
-  <div class="field">
-    <%= f.label :des_location_id, '退货接收地' %><br>
-    <%= f.select(:des_location_id, Location.all.collect { |l| [l.name, l.id] }, {include_blank: false}) %>
-  </div>
-  <div class="field">
-    <%= f.label :src_location_id, '退货创建地' %><br>
-    <%= f.select(:src_location_id, Location.all.collect { |l| [l.name, l.id] }, {include_blank: false}) %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
 <% end %>
