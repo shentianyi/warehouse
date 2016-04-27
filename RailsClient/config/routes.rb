@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     end
 
     collection do
+      post :print
       get :search
       match :import, to: :import, via: [:get, :post]
     end

@@ -41,6 +41,22 @@ class BackPartsController < ApplicationController
     @page_start=(params[:page].nil? ? 0 : (params[:page].to_i-1))*20
   end
 
+  def print
+    msg=Message.new
+    begin
+      puts SysConfigCache.print_server_value
+      msg= RestClient::Resource.new("#{SysConfigCache.print_server_value}/printer/print/P011/#{params[:id]}",
+                                    :timeout => 20,
+                                    :open_timeout => 20,
+                                    'content_type' => 'application/json').get
+    rescue
+      msg.result
+      msg.content='无法连接打印服务器，请重新配置'
+    end
+    msg.result =true
+    render json: msg
+  end
+
   private
     def set_back_part
       @back_part = BackPart.find(params[:id])
