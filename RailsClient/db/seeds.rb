@@ -13,7 +13,7 @@ ActiveRecord::Base.transaction do
 
   # init package label regex
   unless Regex.where(code: 'UNIQ', type: RegexType::PACKAGE_LABEL).first
-    Regex.create(name: '123唯一码', code: 'UNIQ', prefix_string: 'WI', regex_string: '^(M|S)[A-Za-z0-9]+$', type: RegexType::PACKAGE_LABEL)
+    Regex.create(name: '唯一码', code: 'UNIQ', prefix_string: 'WI', regex_string: '^(M|S)[A-Za-z0-9]+$', type: RegexType::PACKAGE_LABEL)
   end
   unless Regex.where(code: 'PART', type: RegexType::PACKAGE_LABEL).first
     Regex.create(name: '零件号', code: 'PART', prefix_string: 'P', regex_string: '^[A-Za-z0-9]+$', type: RegexType::PACKAGE_LABEL)
@@ -65,6 +65,10 @@ ActiveRecord::Base.transaction do
     SysConfig.create(code: 'HIDE_FINISHED_INVENTORY', category: '盘点配置', index: 900, value: 'true', name: '是否隐藏结束的盘点单')
   end
 
+  #库位容量配置
+  unless SysConfig.find_by_code('CAPACITY_NR')
+    SysConfig.create(code: 'CAPACITY_NR', category: '库位容量配置', index: 900, value: '6', name: '填写库位最大容量')
+  end
 
   # 打印服务配置
   unless SysConfig.find_by_code('PRINT_SERVER')
