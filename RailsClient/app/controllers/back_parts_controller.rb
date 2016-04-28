@@ -57,6 +57,16 @@ class BackPartsController < ApplicationController
     render json: msg
   end
 
+  def search
+    super { |query|
+      if user=User.find_by_nr(params[:back_part][:user_id])
+        query=query.unscope(where: :user_id).where(user_id: user.id)
+      end
+
+      query
+    }
+  end
+
   private
     def set_back_part
       @back_part = BackPart.find(params[:id])

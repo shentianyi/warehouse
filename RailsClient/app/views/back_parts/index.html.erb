@@ -37,14 +37,49 @@
   </ol>
 </div>
 
-<div class="col-sm-12" style="margin-bottom: 20px;">
-  <div class="col-sm-4">
-    <%= link_to "新建退货单", new_back_part_path, :class => 'btn btn-primary', :style => 'width:150px;color:white;' %>
+<form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+  <div class="panel panel-primary">
+    <div class="panel-body">
+      <div class="col-sm-15" style="border-bottom: 1px dashed #000;">
+        <div class="col-sm-3">
+          退货单号：
+          <input type="text" name="back_part[id]" value="<%= @id %>"/>
+        </div>
+        <div class="col-sm-3">
+          创建者：
+          <input type="text" name="back_part[user_id]" value="<%= @user_id %>"/>
+        </div>
+        <div class="col-sm-3">
+          退货单创建地：
+          <%= select_tag('back_part[src_location_id]', options_from_collection_for_select(Location.all, 'id', 'name', @src_location_id), include_blank: true) %>
+        </div>
+        <div class="col-sm-3">
+          退货单接收地：
+          <%= select_tag('back_part[des_location_id]', options_from_collection_for_select(Location.all, 'id', 'name', @des_location_id), include_blank: true) %>
+        </div>
+        <div class="col-sm-3">
+          <input type="submit" value="查 找" class="btn btn-primary" style="width:150px;"/>
+        </div>
+      </div>
+
+      <div class="col-sm-12" style="margin-top: 20px;">
+        <% if current_user.permission?(:operate_back_part_create) %>
+            <!--<div class="col-sm-12" style="margin-bottom: 20px;">-->
+              <div class="col-sm-4">
+                <%= link_to "新建退货单", new_back_part_path, :class => 'btn btn-primary', :style => 'width:150px;color:white;' %>
+              </div>
+
+            <!--</div>-->
+        <% end %>
+        <div class="col-sm-4">
+          <button class="btn btn-warning" style="width: 150px;color: white;" onclick="print_back_parts_with_id();">打印退货单</button>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="col-sm-4">
-    <button class="btn btn-warning" style="width: 150px;color: white;" onclick="print_back_parts_with_id();">打印退货单</button>
-  </div>
-</div>
+</form>
+
+
 
 <table class="table table-bordered table-hover">
   <thead>

@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(version: 20160427104934) do
   add_index "back_parts", ["des_location_id"], name: "index_back_parts_on_des_location_id", using: :btree
   add_index "back_parts", ["id"], name: "index_back_parts_on_id", using: :btree
   add_index "back_parts", ["src_location_id"], name: "index_back_parts_on_src_location_id", using: :btree
+  add_index "back_parts", ["user_id"], name: "index_back_parts_on_user_id", using: :btree
 
   create_table "containers", force: true do |t|
     t.string   "custom_id",                 limit: 36
