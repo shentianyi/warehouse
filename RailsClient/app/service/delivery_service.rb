@@ -4,6 +4,16 @@ class DeliveryService
       return Message.new.set_false("无法发运空运单")
     end
 
+    if user.location.check_delivery_by_pick && movable.order
+
+      delivery_parts=LogisticsContainerService.get_packages(movable).select('*').pluck(:part_id).uniq
+      order_parts=movable.order.order_items.pluck(:part_id).uniq
+
+      if (delivery_parts-order_parts).length>0
+        return Message.new.set_false("运单包含没有需求的零件,不可发运")
+      end
+    end
+# raise
     ActiveRecord::Base.transaction do
       unless (m = movable.get_movable_service.dispatch(movable, destination, user)).result
         return m
@@ -56,11 +66,14 @@ class DeliveryService
     msg=Message.new
     ActiveRecord::Base.transaction do
       delivery=Delivery.new(remark: args[:remark], user_id: user.id, location_id: user.location_id)
+
       if delivery.save
         lc=delivery.logistics_containers.build(source_location_id: user.location_id, user_id: user.id, remark: args[:remark])
         # lc.destinationable=user.location.destination
         # lc.des_location_id=user.location.destination.id
-
+        if args[:order_id].present? && (order=Order.find_by_id(args[:order_id]))
+          lc.order=order
+        end
         lc.save
         msg.result=true
         msg.object = lc

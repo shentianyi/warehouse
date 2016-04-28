@@ -2,7 +2,7 @@ class PickListService
   def self.covert_order_to_pick_list user_id, order_ids
     order_items=PickItemService.get_order_items(user_id, order_ids)
     if order_items && order_items.count>0
-      pick_list=PickList.new(user_id: user_id,order_ids:order_ids.join(';'))
+      pick_list=PickList.new(user_id: user_id,order_ids:order_ids.join(';'), state: PickStatus::INIT)
       order_items.each do |i|
         pick_list.pick_items<<PickItem.new(
             quantity: i.quantity,

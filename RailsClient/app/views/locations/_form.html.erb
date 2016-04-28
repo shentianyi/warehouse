@@ -56,7 +56,7 @@
 
 
           <div class="col-sm-4">
-            <%= f.label :default_whouse_id,'默认仓库' %>
+            <%= f.label :default_whouse_id, '默认仓库' %>
             <%= f.select(:default_whouse_id, @location.whouses.all.collect { |l| [l.name, l.id] }, {include_blank: false}) %>
           </div>
 
@@ -68,16 +68,21 @@
             <%= f.label :send_whouse_id %>
             <%= f.select(:send_whouse_id, @location.whouses.all.collect { |l| [l.name, l.id] }, {include_blank: false}) %>
           </div>
-          <div class="col-sm-4">
-            <%= f.label :receive_mode, '运单接收模式' %>
-            <%= f.select(:receive_mode, DeliveryReceiveMode.to_select_list, {include_blank: false}) %>
-          </div>
         </div>
-        <div class="col-sm-12">
-
+        <div class="col-sm-12" style="margin-top: 10px;">
           <div class="col-sm-4">
             <%= f.label :can_send_when_no_stock, '唯一码未入库可以发运' %>
             <%= f.check_box :can_send_when_no_stock %>
+          </div>
+
+          <div class="col-sm-4">
+            <%= f.label :check_delivery_by_pick, '运单发运需通过需求单验证' %>
+            <%= f.check_box :check_delivery_by_pick %>
+          </div>
+
+          <div class="col-sm-4">
+            <%= f.label :receive_mode, '运单接收模式' %>
+            <%= f.select(:receive_mode, DeliveryReceiveMode.to_select_list, {include_blank: false}) %>
           </div>
         </div>
         <div class="col-sm-12">

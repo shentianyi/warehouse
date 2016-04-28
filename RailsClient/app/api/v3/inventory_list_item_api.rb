@@ -29,7 +29,7 @@ module V3
         puts '-----------'
         msg=nil
 
-        package_id = params[:package_id].nil? ? nil : params[:package_id].sub(/S|M/, '')
+        package_id = params[:package_id].nil? ? nil : params[:package_id]#.sub(/S|M/, '')
         unique_id = params[:unique_id].nil? ? nil : params[:unique_id]
         part_id = params[:part_id].nil? ? nil : params[:part_id]
         qty = params[:qty].nil? ? nil : params[:qty]

@@ -25,30 +25,30 @@
   </ol>
 </div>
 
-  <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
-    <div class="col-sm-12" style="border-bottom: 1px dashed #000;margin-top:10px;">
-      <div class="col-sm-3">
-        择货单号：
-        <input type="text" name="pick_list[id]" value="<%= @id %>"/>
-        <input type="hidden" name="pick_list[id_fuzzy]"/>
-      </div>
-      <!--<div class="col-sm-3">-->
-        <!--择货员工：-->
-        <!--<input type="text" name="pick_list[user_id]" value="<%= @user_id %>"/>-->
-        <!--<input type="hidden" name="pick_list[user_id_fuzzy]"/>-->
-      <!--</div>-->
-      <div class="col-sm-5">
-        创建日期：
-        <input type="text" name="pick_list[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
-        ~
-        <input type="text" name="pick_list[created_at][end]" class="datepicker" value="<%= @created_at_end %>"/>
-      </div>
-
-      <div class="col-sm-1">
-        <input type="submit" value="查 找" class="btn btn-primary" style="width: 100px;"/>
-      </div>
+<form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+  <div class="col-sm-12" style="border-bottom: 1px dashed #000;margin-top:10px;">
+    <div class="col-sm-3">
+      择货单号：
+      <input type="text" name="pick_list[id]" value="<%= @id %>"/>
+      <input type="hidden" name="pick_list[id_fuzzy]"/>
     </div>
-  </form>
+    <!--<div class="col-sm-3">-->
+    <!--择货员工：-->
+    <!--<input type="text" name="pick_list[user_id]" value="<%= @user_id %>"/>-->
+    <!--<input type="hidden" name="pick_list[user_id_fuzzy]"/>-->
+    <!--</div>-->
+    <div class="col-sm-5">
+      创建日期：
+      <input type="text" name="pick_list[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
+      ~
+      <input type="text" name="pick_list[created_at][end]" class="datepicker" value="<%= @created_at_end %>"/>
+    </div>
+
+    <div class="col-sm-1">
+      <input type="submit" value="查 找" class="btn btn-primary" style="width: 100px;"/>
+    </div>
+  </div>
+</form>
 
 <%= form_tag controller: 'pick_lists', action: 'export', method: 'post' do %>
     <div class="col-sm-12" style="margin-top: 10px;">
@@ -59,7 +59,7 @@
         <input type="submit" class="btn btn-warning" value="导出EXCEL" style="width: 200px;"/>
       </div>
     </div>
-<% end %>
+
     <div class="col-sm-12" style="margin-top: 20px;">
       <div class="digg_pagination">
         <div class="page_info">
@@ -68,37 +68,37 @@
         <%= will_paginate @pick_lists, :container => false %>
       </div>
     </div>
-      <table class="table table-bordered table-striped table-hover">
-        <thead>
-        <tr>
-          <th></th>
-          <th>NO.</th>
-          <th>择货单号</th>
-          <th>择货员工号</th>
-          <th>创建时间</th>
-          <th>状态</th>
-          <th>操作</th>
-          <th>择货单批次号</th>
-        </tr>
-        </thead>
+    <table class="table table-bordered table-striped table-hover">
+      <thead>
+      <tr>
+        <th></th>
+        <th>NO.</th>
+        <th>择货单号</th>
+        <th>择货员工号</th>
+        <th>创建时间</th>
+        <!--<th>状态</th>-->
+        <th>操作</th>
+      </tr>
+      </thead>
 
-        <tbody>
-        <% @pick_lists.each_with_index do |pick_list, index| %>
-            <tr>
-              <td>
-                <input name="pick-list-check[<%= pick_list.id %>]" type="checkbox" id="<%= pick_list.id %>" class='print-check'>
-              </td>
-              <td><%= index+@pick_lists.offset+1 %></td>
-              <td><%= pick_list.id %></td>
-              <td><%= pick_list.user.nr if pick_list.user %></td>
-              <td><%= pick_list.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %></td>
-              <td><%= pick_list.state %></td>
-              <td><%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-eye-open', :style => 'color:green;'), pick_list_path(id: pick_list, show: true), :title => '详情' %></td>
-              <td><%= pick_list.created_at.localtime.strftime('%Y%m%d') if pick_list.created_at %></td>
-            </tr>
-        <% end %>
-        </tbody>
-      </table>
+      <tbody>
+      <% @pick_lists.each_with_index do |pick_list, index| %>
+          <tr>
+            <td>
+              <input name="pick-list-check[<%= pick_list.id %>]" type="checkbox" id="<%= pick_list.id %>" class='print-check'>
+            </td>
+            <td><%= index+@pick_lists.offset+1 %></td>
+            <td><%= pick_list.id %></td>
+            <td><%= pick_list.user.nr if pick_list.user %></td>
+            <td><%= pick_list.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_list.created_at %></td>
+            <!--<td><%= PickStatus.display(pick_list.state) %></td>-->
+            <td><%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-eye-open', :style => 'color:green;'), pick_list_path(id: pick_list, show: true), :title => '详情' %></td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+
+<% end %>
 
 <div class="digg_pagination">
   <%= will_paginate @pick_lists, :container => false %>

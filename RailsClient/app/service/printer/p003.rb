@@ -33,6 +33,8 @@ module Printer
         end
         self.data_set <<(heads+bodies)
       end
+
+
     end
   end
 end

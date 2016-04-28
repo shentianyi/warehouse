@@ -56,7 +56,7 @@
             <%= f.select(:package_type_id, PackageType.all.collect { |p| [p.name, p.id] }, {include_blank: true}) %>
           </div>
           <div class="col-sm-3">
-            <%= f.label :unit_pack, '盘点单位转换标准' %>
+            <%= f.label :convert_unit, '盘点单位转换标准' %>
             <%= f.text_field :convert_unit %>
           </div>
           <div class="col-sm-3">
@@ -71,7 +71,11 @@
 
         <div class="col-sm-12">
           <div class="col-sm-3">
-            <%= f.label :unit_pack, '是否已删除' %>
+            <%= f.label :supplier, '供应商' %>
+            <%= f.text_field :supplier %>
+          </div>
+          <div class="col-sm-3">
+            <%= f.label :is_delete, '是否已删除' %>
             <%= f.check_box :is_delete %>
           </div>
         </div>

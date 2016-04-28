@@ -1,15 +1,4 @@
 <style>
-    .digg_pagination .page_info {
-        text-align: left;
-        width: auto;
-        margin-left: -20px;
-        margin-right: -20px;
-    }
-
-    .digg_pagination {
-        background: transparent;
-    }
-
     .btn {
         margin: 0 0 10px 0;
         width: 200px;
@@ -63,16 +52,16 @@
 </div>
 
 <div class="col-sm-12">
-  <div class="col-sm-4">
-    <% if @inventory_list.has_unlocked_pack_item %>
-        <%= link_to "锁定包装箱库存", lock_unlock_list_inventory_list_item_path(@inventory_list.id), class: "btn btn-warning", data: {confirm: "确定?"} %>
-    <% end %>
-  </div>
-  <div class="col-sm-4">
-    <% if @inventory_list.has_locked_pack_item %>
-        <%= link_to "解锁包装箱库存", lock_unlock_list_inventory_list_item_path(@inventory_list.id), class: "btn btn-warning", data: {confirm: "确定?"} %>
-    <% end %>
-  </div>
+  <!--<div class="col-sm-4">-->
+    <!--<% if @inventory_list.has_unlocked_pack_item %>-->
+        <!--<%= link_to "锁定包装箱库存", lock_unlock_list_inventory_list_item_path(@inventory_list.id), class: "btn btn-warning", data: {confirm: "确定?"} %>-->
+    <!--<% end %>-->
+  <!--</div>-->
+  <!--<div class="col-sm-4">-->
+    <!--<% if @inventory_list.has_locked_pack_item %>-->
+        <!--<%= link_to "解锁包装箱库存", lock_unlock_list_inventory_list_item_path(@inventory_list.id), class: "btn btn-warning", data: {confirm: "确定?"} %>-->
+    <!--<% end %>-->
+  <!--</div>-->
   <div class="col-sm-4">
     <% if @inventory_list.state==InventoryListState::PROCESSING && @inventory_list.has_un_stored_item %>
         <%= link_to "开始入库", store_list_inventory_list_item_path(@inventory_list.id), class: "btn btn-warning", data: {confirm: "入库后将清空原有的库存记录以新的盘点结果作为库存记录"} %>
@@ -80,7 +69,7 @@
   </div>
 </div>
 
-<div class="col-sm-12">
+<div class="col-sm-12" style="margin-top: 20px;margin-bottom: :20px;">
   <div class="digg_pagination">
     <div class="page_info">
       <%= page_entries_info @inventory_list_items %>
@@ -95,19 +84,19 @@
     <th>NO.</th>
     <th>零件号</th>
     <th>FIFO</th>
-    <th>FIFO报表</th>
+    <!--<th>FIFO报表</th>-->
     <th>数量</th>
     <th>原数量</th>
     <th>盘点库位号</th>
     <th>唯一码</th>
     <th>目前仓库</th>
     <th>目前库位</th>
-    <th>原材料/半成品/成品标记</th>
-    <th>原材料线/非线标记</th>
-    <th>需要转换</th>
+    <!--<th>原材料/半成品/成品标记</th>-->
+    <!--<th>原材料线/非线标记</th>-->
+    <!--<th>需要转换</th>-->
     <th>创建人</th>
     <th>是否在库存</th>
-    <th>是否已锁定包装箱库存</th>
+    <!--<th>是否已锁定包装箱库存</th>-->
     <th>是否已入库</th>
     <th>所属清单</th>
     <th>盘点状态</th>
@@ -123,7 +112,7 @@
 
         <td><%= inventory_list_item.part.nr %></td>
         <td><%= inventory_list_item.fifo_display %></td>
-        <td><%= inventory_list_item.fifo_export_display %></td>
+        <!--<td><%= inventory_list_item.fifo_export_display %></td>-->
 
         <td><%= inventory_list_item.qty %></td>
         <td><%= inventory_list_item.origin_qty %></td>
@@ -134,19 +123,19 @@
         <td><%= inventory_list_item.current_position_object.nr if inventory_list_item.current_position_object %></td>
 
 
-        <td><%= inventory_list_item.part_form_mark %></td>
-        <td><%= inventory_list_item.part_wire_mark %></td>
-        <td><%= inventory_list_item.need_convert_display %></td>
+        <!--<td><%= inventory_list_item.part_form_mark %></td>-->
+        <!--<td><%= inventory_list_item.part_wire_mark %></td>-->
+        <!--<td><%= inventory_list_item.need_convert_display %></td>-->
         <td><%= inventory_list_item.user.nr %></td>
         <td><%= inventory_list_item.in_store_display %></td>
-        <td><%= inventory_list_item.locked_display %></td>
+        <!--<td><%= inventory_list_item.locked_display %></td>-->
         <td><%= inventory_list_item.in_stored_display %></td>
         <td><%= inventory_list_item.inventory_list.name %></td>
         <td><%= InventoryListState.display inventory_list_item.inventory_list.state %></td>
         <td><%= inventory_list_item.remark %></td>
 
         <td>
-          <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-eye-open', :style => 'color:green;'), inventory_list_item, :title => '查看移库项详情' %>
+          <!--<%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-eye-open', :style => 'color:green;'), inventory_list_item, :title => '查看移库项详情' %>-->
 
           <% unless inventory_list_item.in_stored? %>
               <%= link_to content_tag(:i, '', :class => ' glyphicon glyphicon-trash', :style => 'color:darkred;'), inventory_list_item, method: :delete, data: {confirm: 'Are you sure?'}, :title => '删除移库项' %>

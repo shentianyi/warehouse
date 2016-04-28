@@ -18,6 +18,7 @@ default: &default
   password: vmi_jiaxuan@
   reconnect: false
   encoding: utf8
+#  socket: /tmp/mysql.sock
 
 
 development:

@@ -8,6 +8,7 @@ class LogisticsContainer<LocationContainer
   after_update :check_move_stock
   # after_update :check_safe_stock
 
+  before_create :generate_batch_nr
 
   default_scope { where(type: LocationContainerType::LOGISTICS) }
   has_ancestry
@@ -23,9 +24,19 @@ class LogisticsContainer<LocationContainer
   # def destroy
   #    self.package.destroy
   # end
+  def generate_batch_nr
+    start_time=Time.now.beginning_of_day.utc
+    end_time=Time.now.end_of_day.utc
+
+    count= self.class.joins(:delivery)
+               .where(created_at: [start_time..end_time],
+                      source_location_id: Location.find_by_nr('SHJXLO').id).count
+
+    self.batch_no= "#{Time.now.strftime('%y%m%d')}#{ '%02d' % ((count)*2)}"
+  end
 
   def self.last_lc_container container_id
-    where(container_id:container_id).order('created_at desc').first
+    where(container_id: container_id).order('created_at desc').first
   end
 
   def exists?(location_id)

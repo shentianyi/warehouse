@@ -84,7 +84,9 @@ class InventoryListsController < ApplicationController
 
   def export_total
     msg = FileHandler::Excel::InventoryListItemHandler.export_total_no_fifo(
-        InventoryListItem.joins(:inventory_list).where(inventory_lists: {state: InventoryListState::PROCESSING}).group('part_id').select('*,sum(qty) as qty')
+        InventoryListItem.joins(:inventory_list).joins(:part)
+            .where(inventory_lists: {state: InventoryListState::PROCESSING})
+            .group('part_id').select('inventory_list_items.*,sum(qty) as qty,count(*) as num,parts.nr as part_nr')
     )
     send_file msg.content
   end
@@ -101,6 +103,7 @@ class InventoryListsController < ApplicationController
       last_batch=storage.lock_batch
     end
     if params[:do]=='disable'
+      flash[:notice]='盘点重置成功'
       NStorage.transaction do
         lock_remark='盘点覆盖锁定'+"-"+Time.now.strftime("%Y%m%d")
         NStorage.where(locked: false)
@@ -112,7 +115,7 @@ class InventoryListsController < ApplicationController
       end
 
     else
-
+      flash[:notice]='取消盘点重置成功'
       NStorage.transaction do
         NStorage.unscoped.where(locked: true, lock_batch: last_batch)
             .update_all(locked: false,
@@ -139,14 +142,17 @@ class InventoryListsController < ApplicationController
     p = Axlsx::Package.new
     wb = p.workbook
     wb.add_worksheet(:name => "Basic Sheet") do |sheet|
-      sheet.add_row ["No.", "零件号", "库存数量", "盘点数量", "差异数（库存数-盘点数）"]
+      sheet.add_row ["No.", "零件号", "库存数量", "盘点数量", "数量差异值（库存数量-盘点数量）", "库存桶数", "盘点桶数", "桶数差异值(库存桶数-盘点桶数)"]
       results.each_with_index { |o, index|
         sheet.add_row [
                           index+1,
                           o[0],
                           o[1],
                           o[2],
-                          o[3]
+                          o[3],
+                          o[4],
+                          o[5],
+                          o[6]
                       ], :types => [:string]
         # removal_packages["#{o.part_id}#{o.whouse_id}"] = nil
       }

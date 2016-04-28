@@ -29,6 +29,7 @@ module Import
         # line<<item.safe_qty
         line<<item.description
         line<<item.package_type_id
+        line<<item.supplier
       }
     end
 
@@ -42,6 +43,7 @@ module Import
       # csv_cols<< Csv::CsvCol.new(field: 'safe_qty', header: 'SafeQty', null: false)
       csv_cols<< Csv::CsvCol.new(field: 'description', header: 'Description', null: true)
       csv_cols<< Csv::CsvCol.new(field: 'package_type_id', header: '包装类型', is_foreign: true, foreign: 'PackageType', null: true)
+      csv_cols<< Csv::CsvCol.new(field: 'supplier', header: 'Supplier', null: true)
       csv_cols<< Csv::CsvCol.new(field: $UPMARKER, header: $UPMARKER)
       class_variable_set(:@@csv_cols, csv_cols)
     end

@@ -1,15 +1,15 @@
 class InventoryListItem < ActiveRecord::Base
   #belongs_to :package
   #belongs_to :part
-  belongs_to :position_object,class_name: 'Position',foreign_key: :position
+  belongs_to :position_object, class_name: 'Position', foreign_key: :position
   belongs_to :part
   belongs_to :user
   belongs_to :whouse
   belongs_to :inventory_list
 
 
-  belongs_to :current_whouse_object,class_name: 'Whouse',foreign_key: :current_whouse
-  belongs_to :current_position_object,class_name: 'Position',foreign_key: :current_position
+  belongs_to :current_whouse_object, class_name: 'Whouse', foreign_key: :current_whouse
+  belongs_to :current_position_object, class_name: 'Position', foreign_key: :current_position
 
   validates :qty, :inventory_list_id, presence: true
   validates_inclusion_of :in_store, in: [true, false]
@@ -20,6 +20,24 @@ class InventoryListItem < ActiveRecord::Base
     if p=Position.find_by_id(self.position)
       p.nr
     end
+  end
+
+
+  def whouse_nr
+    self.whouse.blank? ? '' : self.whouse.nr
+  end
+
+  def current_whouse_nr
+    self.current_whouse_object.blank? ? '' : self.current_whouse_object.nr
+  end
+
+
+  def current_position_nr
+    self.current_position_object.blank? ? '' : self.current_position_object.nr
+  end
+
+  def user_nr
+    self.user.blank? ? '' : self.user.nr
   end
 
   def self.new_item(params, query=true)
@@ -154,6 +172,7 @@ class InventoryListItem < ActiveRecord::Base
     self.locked? ? 'Y' : 'N'
   end
 
+
   # 盘点项手动入库后修改这个字段
   def in_stored_display
     self.in_stored? ? 'Y' : 'N'
@@ -208,7 +227,7 @@ class InventoryListItem < ActiveRecord::Base
 
     record = []
     items.each_with_index do |item, index|
-      record[index] = {position_nr: item.position_nr,position_id:item.position, count: item.count}
+      record[index] = {position_nr: item.position_nr, position_id: item.position, count: item.count}
     end
 
     msg.content = record
@@ -224,7 +243,7 @@ class InventoryListItem < ActiveRecord::Base
 
     record = []
     items.each_with_index do |item, index|
-      record[index] = {position_nr: item.position_nr,position_id:item.position, count: item.count}
+      record[index] = {position_nr: item.position_nr, position_id: item.position, count: item.count}
     end
 
     # records = []

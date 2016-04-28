@@ -76,7 +76,6 @@ module V3
       end
       post :validate_movement do
         params[:toWh]=params[:toWh] #.sub(/LO/, '')
-        params[:packageId]=params[:packageId].sub(/S/, '') if params[:packageId].present?
         params[:toPosition]=params[:toPosition] #.sub(/LO/, '')
         params[:fromWh]=params[:fromWh] if params[:fromWh].present?
         params[:fromPosition]=params[:fromPosition] if params[:fromPosition].present?
@@ -130,7 +129,8 @@ module V3
         args[:movement_list_id] = params[:movement_list_id]
         args[:employee_id] = params[:employee_id].sub(/\.0/, '') if params[:employee_id].present?
         args[:remarks] = params[:remarks] if params[:remarks].present?
-        args[:user] = current_user
+        args[:user]=current_user
+        args[:employee_id]=current_user.nr
 
         return {result: 0, content: "#{params[:movement_list_id]}移库单不存在！"} unless m=MovementList.find_by(id: params[:movement_list_id])
 
@@ -155,7 +155,7 @@ module V3
                 args[:fromPosition] = fromPosition.blank? ? nil : fromPosition.id
                 args[:partNr] = part.blank? ? nil : part.id
                 args[:qty] = movement[:qty].present? ? movement[:qty].to_f : nil
-                args[:packageId] = movement[:packageId].present? ? movement[:packageId].sub(/S/, '') : nil
+                args[:packageId] = movement[:packageId].present? ? movement[:packageId] : nil
 
                 if movement[:partNr].present? && movement[:packageId].blank?
                   raise '请填写数量' unless movement[:qty].present?

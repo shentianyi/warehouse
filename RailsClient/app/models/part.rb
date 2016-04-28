@@ -18,6 +18,28 @@ class Part < ActiveRecord::Base
   has_many :containers
   #has_many :inventory_list_items
 
+  def jx_part_nr
+    nr
+  end
+
+  def cz_part_nr
+    pc= self.part_clients.where(client_tenant_id: Tenant.find_by_code('CZL')).first
+    if pc
+      pc.client_part_nr
+    else
+      ''
+    end
+  end
+
+  def sh_part_nr
+    pc= self.part_clients.where(client_tenant_id: Tenant.find_by_code('SHL')).first
+    if pc
+      pc.client_part_nr
+    else
+      ''
+    end
+  end
+
   def package_name
     self.package_type.blank? ? '' : self.package_type.name
   end
