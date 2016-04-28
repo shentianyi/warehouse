@@ -52,6 +52,54 @@ module V1
         {result: 1, content: '移库成功'}
       end
 
+      def to_json
+        {
+            position_id: self.position_id
+        }
+      end
+
+      post :rt_position do
+        msg=Message.new
+        begin
+          position_id= Position.where(nr: params[:position]).select("id")
+
+          puts("sfaskfjsalfk")
+          puts(position_id.to_a)
+          puts(position_id.to_a[0])
+          puts(position_id.to_a[0].id)
+
+          if position_id.to_a == " "
+            return {result: 0, unfill: '库位不存在'}
+          else
+            get_position_id=(position_id.to_a[0].id)
+
+            #max_position_count = SysConfig.where(code: 'CAPACITY_SERVER').select("value")
+            max_position_count = SysConfig.where(code: 'CAPACITY_SERVER').to_a[0].value.to_i
+
+            puts("Get Position ID ========")
+            puts(get_position_id)
+
+            if warehouse=NStorage.where(:ware_house_id => 'e1915e6e-141c-4480-abe2-e355c44a9bec', :position_id => get_position_id).count("ware_house_id")
+              if warehouse < max_position_count
+                return {result: 0, unfill: warehouse}
+                puts ('success  0==================')
+                puts (warehouse)
+              else
+                return {result: 1, unfill: '库位已满'}
+              end
+            else
+              return {result: 0, unfill: '数据库查询失败'}
+            end
+          end
+        rescue => e
+          msg.content=e.message
+          puts ('e.message==================')
+          puts (msg.content)
+        end
+
+        puts(msg.content)
+      end
+
 
       post :enter do
         msg=Message.new
@@ -59,7 +107,7 @@ module V1
           if warehouse=current_user.location.whouses.where(nr: params[:warehouse]).first
             if position=warehouse.positions.where(nr: params[:position]).first
               if (lc=LogisticsContainer.last_lc_container(params[:container]))
-                if msg.result=lc.get_service.enter_stock(current_user,lc,warehouse, position,Time.now.utc)
+                if msg.result=lc.get_service.enter_stock(current_user, lc, warehouse, position, Time.now.utc)
                   msg.content='入库成功'
                 else
                   msg.content='入库失败'

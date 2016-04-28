@@ -44,11 +44,11 @@ module FileHandler
                   end
                   #batch_nr=row['报缺日期'].gsub(/,/, '') + row['报缺时间'].slice(0...2)
 
-                  part_ids<<row['莱尼号码']
-                  if records[row['莱尼号码']]
-                    records[row['莱尼号码']][:qty]=records[row['莱尼号码']][:qty].to_i + row['桶数'].to_i
+                  part_ids<<row['莱尼号码'].downcase
+                  if records[row['莱尼号码'].downcase]
+                    records[row['莱尼号码'].downcase][:qty]=records[row['莱尼号码'].downcase][:qty].to_i + row['桶数'].to_i
                   else
-                    records[row['莱尼号码']]={
+                    records[row['莱尼号码'].downcase]={
                         part_id: row['莱尼号码'],
                         qty: row['桶数'],
                         batch_nr: order.batch_nr
@@ -68,9 +68,9 @@ module FileHandler
                   order_item=OrderItem.new({
                                                part_id: part.blank? ? id : part.id,
                                                part_type_id: part.blank? ? '' : part.part_type_id,
-                                               quantity: records[id][:qty],
                                                box_quantity:1,
-                                               remark: NStorageService.get_remark(part, user.location, records[id][:qty].to_i)
+                                               quantity: records[id.downcase][:qty],
+                                               remark: NStorageService.get_remark(part, user.location, records[id.downcase][:qty].to_i)
                                            })
                   order_item.user=user
                   order_item.order = order
@@ -79,12 +79,12 @@ module FileHandler
 
                   if order_item.save
                     pick_item=PickItem.new(
-                        batch_nr: records[id][:batch_nr],
+                        batch_nr: records[id.downcase][:batch_nr],
                         user_id: user.id,
                         part_id: part.blank? ? id : part.id,
-                        quantity: records[id][:qty],
+                        quantity: records[id.downcase][:qty],
                         state: PickStatus::INIT,
-                        remark: NStorageService.get_remark(part, user.location, records[id][:qty].to_i)
+                        remark: NStorageService.get_remark(part, user.location, records[id.downcase][:qty].to_i)
                     )
                     pick_item.order_item=order_item
                     pick.pick_items<<pick_item
@@ -121,7 +121,12 @@ module FileHandler
         p = Axlsx::Package.new
         p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
           sheet.add_row HEADERS+['Error Msg']
+
           #validate file
+          if book.row(2)[2].blank?
+            raise "文件没有数据"
+          end
+
           2.upto(book.last_row) do |line|
             row = {}
             HEADERS.each_with_index do |k, i|
@@ -149,9 +154,13 @@ module FileHandler
       def self.validate_row(row)
         msg = Message.new(contents: [])
 
-        # unless PartClient.where(client_tenant_id: Tenant.find_by_code('SHL').id, client_part_nr: row['莱尼号码']).first
-        #   msg.contents << "零件号不存在"
-        # end
+        if row['莱尼号码'].blank?
+          msg.contents << "零件号不能为空"
+        end
+
+        unless PartClient.where(client_tenant_id: Tenant.find_by_code('SHL').id, client_part_nr: row['莱尼号码']).first
+          msg.contents << "零件号不存在"
+        end
 
         if row['报缺日期'].blank?
           msg.contents << "报缺日期不可空"

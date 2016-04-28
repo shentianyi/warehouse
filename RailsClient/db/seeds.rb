@@ -65,6 +65,10 @@ ActiveRecord::Base.transaction do
     SysConfig.create(code: 'HIDE_FINISHED_INVENTORY', category: '盘点配置', index: 900, value: 'true', name: '是否隐藏结束的盘点单')
   end
 
+  #库位容量配置
+  unless SysConfig.find_by_code('CAPACITY_NR')
+    SysConfig.create(code: 'CAPACITY_NR', category: '库位容量配置', index: 900, value: '6', name: '填写库位最大容量')
+  end
 
   # 打印服务配置
   unless SysConfig.find_by_code('PRINT_SERVER')
