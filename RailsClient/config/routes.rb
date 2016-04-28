@@ -9,6 +9,7 @@ Rails.application.routes.draw do
 
   resources :back_parts do
     member do
+      get :stock_move
       get 'back_part_items'
     end
 

@@ -33,7 +33,7 @@ module FileHandler
                     position_id: position.id,
                     qty: row['数量'].to_f,
                     back_reason: row['退货原因'],
-                    has_sample: row['样品'].present? ? (row['需要转换']=='Y') : false,
+                    has_sample: row['样品'].present? ? (row['样品']=='Y') : false,
                     remark: row['备注']
                 }
                 BackPartItem.create(params)

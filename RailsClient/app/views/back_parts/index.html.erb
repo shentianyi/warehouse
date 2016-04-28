@@ -40,7 +40,7 @@
 <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
   <div class="panel panel-primary">
     <div class="panel-body">
-      <div class="col-sm-15" style="border-bottom: 1px dashed #000;">
+      <div class="col-sm-12" >
         <div class="col-sm-3">
           退货单号：
           <input type="text" name="back_part[id]" value="<%= @id %>"/>
@@ -57,8 +57,29 @@
           退货单接收地：
           <%= select_tag('back_part[des_location_id]', options_from_collection_for_select(Location.all, 'id', 'name', @des_location_id), include_blank: true) %>
         </div>
-        <div class="col-sm-3">
-          <input type="submit" value="查 找" class="btn btn-primary" style="width:150px;"/>
+      </div>
+
+      <div class="col-sm-12">
+        <div class="col-sm-6">
+          退货日期：
+          <input type="text" name="back_part[back_time][start]" class="datepicker" value="<%= @back_time_start %>"/>
+          ~
+          <input type="text" name="back_part[back_time][end]" class="datepicker" value="<%= @back_time_end %>"/>
+        </div>
+        <div class="col-sm-6">
+          创建日期：
+          <input type="text" name="back_part[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
+          ~
+          <input type="text" name="back_part[created_at][end]" class="datepicker" value="<%= @created_at_end %>"/>
+        </div>
+      </div>
+
+      <div class="col-sm-8" style="text-align: right;">
+        <div class="col-sm-4">
+          <input type="submit" value="查找" class="btn btn-primary" name="search" style="width: 200px;"/>
+        </div>
+        <div class="col-sm-4">
+          <input type="submit" value="导出" class="btn btn-primary" name="download" style="width: 200px;"/>
         </div>
       </div>
 
@@ -89,6 +110,8 @@
     <th>创建者</th>
     <th>退货单接收地</th>
     <th>退货单创建地</th>
+    <th>退货日期</th>
+    <th>创建日期</th>
     <th>清单列表</th>
     <th>导入退货信息</th>
     <th>操作</th>
@@ -103,6 +126,8 @@
         <td><%= back_part.user.nr %></td>
         <td><%= back_part.des_location.nr %></td>
         <td><%= back_part.src_location.nr %></td>
+        <td><%= back_part.back_time.blank? ? '' : back_part.back_time.utc %></td>
+        <td><%= back_part.created_at.localtime.strftime('%y.%m.%d %H:%M') %></td>
         <td>
           <%= link_to content_tag(:span, '清单列表', :class => 'label label-primary'), back_part_items_back_part_path(back_part) %>
           <span class="badge"><%= back_part.back_part_items.count %></span>
@@ -127,7 +152,26 @@
   </tbody>
 </table>
 
-<script type="text/javascript" charset="utf-8">
-  init_check();
-</script>
 
+<script>
+    $(function () {
+        $(".datepicker").datetimepicker({
+            lang: 'ch',
+            format: 'Y-m-d H:i'
+        });
+    });
+    init_check();
+
+    $('.up_search').click(function () {
+        var this_arrow = $(this);
+        $('.all-search').slideToggle(300, function () {
+            if (this_arrow.children('i').hasClass('glyphicon-chevron-up')) {
+                this_arrow.children('i').attr('class', 'glyphicon glyphicon-chevron-down');
+                this_arrow.children('i').attr('title', '展开搜索条件');
+            } else {
+                this_arrow.children('i').attr('class', 'glyphicon glyphicon-chevron-up');
+                this_arrow.children('i').attr('title', '收起搜索条件');
+            }
+        });
+    })
+</script>

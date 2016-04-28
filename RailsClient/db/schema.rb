@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160427104934) do
+ActiveRecord::Schema.define(version: 20160428070646) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -79,6 +79,7 @@ ActiveRecord::Schema.define(version: 20160427104934) do
     t.integer  "state",           default: 100
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "back_time"
   end
 
   add_index "back_parts", ["des_location_id"], name: "index_back_parts_on_des_location_id", using: :btree

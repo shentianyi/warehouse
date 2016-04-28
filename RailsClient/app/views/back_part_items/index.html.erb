@@ -52,7 +52,12 @@
         <td><%= back_part_item.part.nr %></td>
         <td><%= back_part_item.qty %></td>
         <td><%= back_part_item.back_reason %></td>
-        <td><%= back_part_item.has_sample %></td>
+        <td><%if back_part_item.has_sample %>
+              <%= 'Y' %>
+          <%else %>
+              <%= 'N' %>
+          <%end %>
+        </td>
         <td><%= back_part_item.remark %></td>
         <td><%= back_part_item.whouse.blank? ? '' : back_part_item.whouse.nr %></td>
         <td><%= back_part_item.position.blank? ? '' : back_part_item.position.nr %></td>
