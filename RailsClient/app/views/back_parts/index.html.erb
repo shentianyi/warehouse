@@ -74,7 +74,11 @@
         </div>
       </div>
 
-      <div class="col-sm-8" style="text-align: right;">
+      <div class="col-sm-12">
+        <div class="col-sm-4">
+          退货单状态：
+          <%= select 'back_part', 'state', BackPartState.state, selected: @state, include_blank: true %>
+        </div>
         <div class="col-sm-4">
           <input type="submit" value="查找" class="btn btn-primary" name="search" style="width: 200px;"/>
         </div>
@@ -101,7 +105,13 @@
 </form>
 
 
-
+<br>
+<div class="digg_pagination" style="margin-bottom: 0;">
+  <div class="page_info">
+    <%= page_entries_info @back_parts %>
+  </div>
+  <%= will_paginate @back_parts, :container => false %>
+</div>
 <table class="table table-bordered table-hover">
   <thead>
   <tr>
@@ -123,10 +133,10 @@
       <tr>
         <td><input type="checkbox" id="<%= back_part.id %>" class='print-check'></td>
         <td><%= back_part.id %></td>
-        <td><%= back_part.user.nr %></td>
+        <td><%= back_part.user.name %></td>
         <td><%= back_part.des_location.nr %></td>
         <td><%= back_part.src_location.nr %></td>
-        <td><%= back_part.back_time.blank? ? '' : back_part.back_time.utc %></td>
+        <td><%= back_part.back_time.blank? ? '' : back_part.back_time.localtime.strftime('%y.%m.%d %H:%M') %></td>
         <td><%= back_part.created_at.localtime.strftime('%y.%m.%d %H:%M') %></td>
         <td>
           <%= link_to content_tag(:span, '清单列表', :class => 'label label-primary'), back_part_items_back_part_path(back_part) %>
@@ -138,8 +148,11 @@
 
         <td>
           <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-eye-open', :style => 'color:green;'), back_part, :class => 'IconA' %>
-          <% unless SysConfigCache.inventory_enable_value=='true' && current_user.inventoryer? %>
+          <% if current_user.permission?(:operate_back_part_edit)  %>
               <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-pencil', :style => 'color:#4F94CD;'), edit_back_part_path(back_part), :class => 'IconA' %>
+          <% end %>
+          <% if current_user.permission?(:operate_back_part_delete) && back_part.state!=BackPartState::ENDING %>
+              <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-log-in'), {controller: 'back_parts', action: 'stock_move', id: back_part.id}, class: 'IconA', :title => '退货进出库' %>
               <%= link_to content_tag(:i, '', :class => ' glyphicon glyphicon-trash', :style => 'color:darkred;'), back_part, method: :delete, data: {confirm: 'Are you sure?'}, :class => 'IconA' %>
           <% end %>
         </td>
@@ -151,7 +164,9 @@
   <% end %>
   </tbody>
 </table>
-
+<div class="digg_pagination">
+  <%= will_paginate @back_parts, :container => false %>
+</div>
 
 <script>
     $(function () {

@@ -4,7 +4,7 @@ class BackPartsController < ApplicationController
   respond_to :html
 
   def index
-    @back_parts = BackPart.all
+    @back_parts = BackPart.order(created_at: :desc).paginate(:page=> params[:page])
     respond_with(@back_parts)
   end
 
@@ -57,66 +57,64 @@ class BackPartsController < ApplicationController
     render json: msg
   end
 
-  # def search
-  #   super { |query|
-  #     if user=User.find_by_nr(params[:back_part][:user_id])
-  #       query=query.unscope(where: :user_id).where(user_id: user.id)
-  #     end
-  #
-  #     query
-  #   }
-  # end
-
   def search
-    @condition=params[@model]
-    query=model.all #.unscoped
-    @condition.each do |k, v|
-      if (v.is_a?(Fixnum) || v.is_a?(String)) && !v.blank?
-        puts @condition.has_key?(k+'_fuzzy')
-        if @condition.has_key?(k+'_fuzzy')
-          query=query.where("#{k} like ?", "%#{v}%")
-        else
-          query=query.where(Hash[k, v])
-        end
-        instance_variable_set("@#{k}", v)
+    super { |query|
+      if user=User.find_by_nr(params[:back_part][:user_id])
+        query=query.unscope(where: :user_id).where(user_id: user.id)
       end
-      #if v.is_a?(Array) && !v.empty?
-      #  query= v.size==1 ? query.where(Hash[k, v[0]]) : query.in(Hash[k, v]
-      #end
-      #query=query.where(Hash[k, v]) if v.is_a?(Range)
-      if v.is_a?(Hash) && v.values.count==2 && v.values.uniq!=['']
-        values=v.values.sort
-        values[0]=Time.parse(values[0]).to_s if values[0].is_date? & values[0].include?('-')
-        values[1]=Time.parse(values[1]).to_s if values[1].is_date? & values[1].include?('-')
-        query=query.where(Hash[k, (values[0]..values[1])])
-        v.each do |kk, vv|
-          instance_variable_set("@#{k}_#{kk}", vv)
-        end
-      end
-    end
 
-    if block_given?
-      query=(yield query)
-    end
-
-    if params.has_key? "download"
-      send_data(query.to_xlsx(query),
-                :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
-                :filename => @model.pluralize+".xlsx")
-      #render :json => query.to_xlsx(query)
-    else
-      instance_variable_set("@#{@model.pluralize}", query.paginate(:page => params[:page]).all)
-      render :index
-    end
+      query
+    }
   end
 
-  def stock_move
+  # def search
+  #   @condition=params[@model]
+  #   query=model.all #.unscoped
+  #   @condition.each do |k, v|
+  #     if (v.is_a?(Fixnum) || v.is_a?(String)) && !v.blank?
+  #       puts @condition.has_key?(k+'_fuzzy')
+  #       if @condition.has_key?(k+'_fuzzy')
+  #         query=query.where("#{k} like ?", "%#{v}%")
+  #       else
+  #         query=query.where(Hash[k, v])
+  #       end
+  #       instance_variable_set("@#{k}", v)
+  #     end
+  #     #if v.is_a?(Array) && !v.empty?
+  #     #  query= v.size==1 ? query.where(Hash[k, v[0]]) : query.in(Hash[k, v]
+  #     #end
+  #     #query=query.where(Hash[k, v]) if v.is_a?(Range)
+  #     if v.is_a?(Hash) && v.values.count==2 && v.values.uniq!=['']
+  #       values=v.values.sort
+  #       values[0]=Time.parse(values[0]).to_s if values[0].is_date? & values[0].include?('-')
+  #       values[1]=Time.parse(values[1]).to_s if values[1].is_date? & values[1].include?('-')
+  #       query=query.where(Hash[k, (values[0]..values[1])])
+  #       v.each do |kk, vv|
+  #         instance_variable_set("@#{k}_#{kk}", vv)
+  #       end
+  #     end
+  #   end
+  #
+  #   if block_given?
+  #     query=(yield query)
+  #   end
+  #
+  #   if params.has_key? "download"
+  #     send_data(query.to_xlsx(query),
+  #               :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+  #               :filename => @model.pluralize+".xlsx")
+  #     #render :json => query.to_xlsx(query)
+  #   else
+  #     instance_variable_set("@#{@model.pluralize}", query.paginate(:page => params[:page]).all)
+  #     render :index
+  #   end
+  # end
 
-    puts params
-    puts '------------------------------'
+  def stock_move
+    msg=BackPartService.stock_move(params[:id], current_user)
 
     respond_to do |format|
-      format.html { redirect_to back_parts_url, notice: '退货单出入库操作成功.' }
+      format.html { redirect_to back_parts_url, notice: msg.content }
       format.json { head :no_content }
     end
   end

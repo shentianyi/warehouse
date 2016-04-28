@@ -100,13 +100,24 @@ module FileHandler
           msg.contents << "仓库号:#{row['仓库号']} 不存在!"
         end
 
-        part_id = Part.find_by_nr(row['零件号'])
-        unless part_id
+        positions = []
+        part = Part.find_by_nr(row['零件号'])
+        if part
+          part.positions.each do |position|
+            positions += ["#{position.nr}"]
+          end
+        else
           msg.contents << "零件号:#{row['零件号']} 不存在!"
         end
 
+        if position && part
+          unless positions.include?(row['库位号'])
+            msg.contents << "零件号:#{row['零件号']} 不在库位号:#{row['库位号']}上!"
+          end
+        end
+
         unless row['数量'].to_f > 0
-          msg.contents << "数量: #{row['数量']} 不可以 0!"
+          msg.contents << "数量: #{row['数量']} 不可以 <= 0!"
         end
 
         unless msg.result=(msg.contents.size==0)

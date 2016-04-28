@@ -74,16 +74,16 @@
           </li>
       <% end %>
 
-      <% if current_user.permission?(:view_scrap) %>
-          <li><a href="#">报废生成&nbsp;
-            <i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:white;transform: rotate(-90deg);"></i>
-          </a>
-            <ul>
-              <li><a href="<%= scrap_lists_path %>">报废单</a></li>
-              <li><a href="<%= scrap_list_items_path %>">报废项</a></li>
-            </ul>
-          </li>
-      <% end %>
+      <!--<% if current_user.permission?(:view_scrap) %>-->
+          <!--<li><a href="#">报废生成&nbsp;-->
+            <!--<i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:white;transform: rotate(-90deg);"></i>-->
+          <!--</a>-->
+            <!--<ul>-->
+              <!--<li><a href="<%= scrap_lists_path %>">报废单</a></li>-->
+              <!--<li><a href="<%= scrap_list_items_path %>">报废项</a></li>-->
+            <!--</ul>-->
+          <!--</li>-->
+      <!--<% end %>-->
 
       <li><a href="#">移库管理&nbsp;
         <i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:white;transform: rotate(-90deg);"></i>

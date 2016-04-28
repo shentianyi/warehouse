@@ -199,6 +199,7 @@ class ReportsController < ApplicationController
         packages.each_with_index { |p, index|
           part=Part.find_by_id(p['part_id'])
           whouse=Location.find_by_id(p['whouse'])
+          src_location=Location.find_by_id(p['src_location'])
           f= p.parent.nil? ? nil:p.parent
           d=(f.nil? || f.parent.nil?) ? nil:f.parent
           s=p.records.where(impl_action:'dispatch').last
@@ -211,7 +212,8 @@ class ReportsController < ApplicationController
                             part.blank? ? '' : part.nr,
                             p['count'],
                             # p['box'],
-                            whouse.blank? ? '' : whouse.nr,
+                            whouse.blank? ? '' : whouse.name,
+                            src_location.blank? ? '' : src_location.name,
                             # MovableState.display(p['state']),
                             p['FIFO'],
                             s.nil? ? nil : s.impl_time.localtime,
@@ -224,12 +226,14 @@ class ReportsController < ApplicationController
         packages.each_with_index { |p, index|
           part=Part.find_by_id(p['part_id'])
           whouse=Location.find_by_id(p['whouse'])
+          src_location=Location.find_by_id(p['src_location'])
           sheet.add_row [
                             index+1,
                             part.blank? ? '' : part.nr,
                             p['count'],
                             # p['box'],
-                            whouse.blank? ? '' : whouse.nr
+                            whouse.blank? ? '' : whouse.name,
+                            src_location.blank? ? '' : src_location.name
                             # MovableState.display(p['state'])
                         #DatetimeHelper.ddate(p['ddate'])
                         ], :types => [:string]
@@ -302,15 +306,15 @@ class ReportsController < ApplicationController
   end
 
   def entry_header
-    ["编号", "零件号", "总数", "地点","时间"]
+    ["编号", "零件号", "数量", "收货地点", "发货地点","时间"]
   end
 
   def entry_header_detials
-    ["编号", "运单号","托盘号","唯一码", "零件号", "总数", "地点", "收发运日期", "发货时间", "收货时间"]
+    ["编号", "运单号","托盘号","唯一码", "零件号", "数量", "收货地点", "发货地点", "收发运日期", "创建时间(发货)", "创建时间(收货)"]
   end
 
   def entry_header_total
-    ["编号", "零件号", "总数", "地点"]
+    ["编号", "零件号", "数量", "收货地点", "发货地点"]
   end
 
   # def entry_header

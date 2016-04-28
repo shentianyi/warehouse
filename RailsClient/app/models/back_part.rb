@@ -6,12 +6,11 @@ class BackPart < ActiveRecord::Base
   belongs_to :src_location, class_name: 'Location'
   belongs_to :user
 
-  # before_save :convert_time
-  #
-  # def convert_time
-  #   p self
-  #   self.back_time=self.back_time.utc
-  # end
+  before_save :convert_time
+
+  def convert_time
+    self.back_time=self.back_time - 8.hour
+  end
 
   def generate_id
     "BP#{Time.now.to_milli}"

@@ -52,6 +52,9 @@ class MovableState
   def self.state
     data = []
     self.constants.each do |c|
+      if [:INIT,:WAY,:REJECTED].include?(c)
+        next
+      end
       v = self.const_get(c.to_s)
       data << [self.display(v),v]
     end

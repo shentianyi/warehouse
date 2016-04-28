@@ -11,6 +11,11 @@ class Container< ActiveRecord::Base
   has_many :store_containers, :dependent => :destroy
 
   before_create :init_container_attr
+  # before_save :convert_time
+  #
+  # def convert_time
+  #   self.fifo_time=self.fifo_time - 8.hour
+  # end
 
   def init_container_attr
     self.type=ContainerType.get_type(self.class.name)
