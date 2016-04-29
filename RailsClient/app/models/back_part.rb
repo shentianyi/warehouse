@@ -20,12 +20,15 @@ class BackPart < ActiveRecord::Base
     p = Axlsx::Package.new
     wb = p.workbook
     wb.add_worksheet(:name => "sheet1") do |sheet|
-      sheet.add_row ["序号", "退货单号", "创建者", "退货单接收地", "退货单创建地", "退货日期",
+      sheet.add_row ["序号", "单数", "退货单号", "创建者", "退货单接收地", "退货单创建地", "退货日期",
                      "零件号", "数量", "仓库号", "库位号", "退货原因", "样品", "备注"]
-      back_parts.each { |back_part|
-        back_part.back_part_items.each_with_index do |item, index|
+      count=0
+      back_parts.each_with_index { |back_part, index|
+        back_part.back_part_items.each do |item|
+          count+=1
           sheet.add_row [
                             index+1,
+                            count,
                             back_part.id,
                             back_part.user.blank? ? "" : back_part.user.nr,
                             back_part.des_location.blank? ? '' : back_part.des_location.nr,
