@@ -7,13 +7,12 @@ module Printer
     def generate_data
       bp = BackPart.find_by_id(self.id)
 
-      p bp
-
       head={
-          list_date: Time.now.strftime('%Y.%m.%d %H:%M:%S'),
-          lister: bp.user.blank? ? '' : bp.user.nr,
+          #list_date: Time.now.strftime('%Y.%m.%d %H:%M:%S'),
+          list_date: bp.back_time.localtime.strftime('%Y.%m.%d %H:%M:%S'),
+          lister: bp.user.blank? ? '' : bp.user.name,
           rcpt_nr: bp.id,
-          client: bp.des_location.blank? ? '' : bp.des_location.nr,
+          client: bp.des_location.blank? ? '' : bp.des_location.name,
           rtn_date: bp.created_at.localtime.strftime('%Y.%m.%d %H:%M:%S')
       }
       heads=[]
