@@ -8,12 +8,11 @@ module Printer
       bp = BackPart.find_by_id(self.id)
 
       head={
-          #list_date: Time.now.strftime('%Y.%m.%d %H:%M:%S'),
-          list_date: bp.back_time.blank? ? Time.now.strftime('%Y.%m.%d %H:%M:%S') : bp.back_time.localtime.strftime('%Y.%m.%d %H:%M:%S'),
+          list_date: Time.now.strftime('%Y.%m.%d %H:%M:%S'),
           lister: bp.user.blank? ? '' : bp.user.name,
           rcpt_nr: bp.id,
           client: bp.des_location.blank? ? '' : bp.des_location.name,
-          rtn_date: bp.created_at.localtime.strftime('%Y.%m.%d %H:%M:%S')
+          rtn_date: bp.back_time.blank? ? Time.now.strftime('%Y.%m.%d %H:%M:%S') : bp.back_time.localtime.strftime('%Y.%m.%d %H:%M:%S')
       }
       heads=[]
       HEAD.each do |k|
