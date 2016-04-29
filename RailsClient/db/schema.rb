@@ -309,7 +309,6 @@ ActiveRecord::Schema.define(version: 20160425043235) do
     t.string   "default_whouse_id"
     t.boolean  "check_delivery_by_pick",              default: false
     t.string   "ip_detail"
-
   end
 
   add_index "locations", ["destination_id"], name: "index_locations_on_destination_id", using: :btree
@@ -570,10 +569,10 @@ ActiveRecord::Schema.define(version: 20160425043235) do
     t.integer  "status",                        default: 0
     t.text     "remark"
     t.string   "source_location_id"
-    t.datetime "required_at"
     t.integer  "orderable_id"
     t.string   "orderable_type"
     t.string   "whouse_id"
+    t.datetime "required_at"
   end
 
   add_index "orders", ["id"], name: "index_orders_on_id", using: :btree
@@ -694,7 +693,6 @@ ActiveRecord::Schema.define(version: 20160425043235) do
     t.integer  "safe_qty_type",                                        default: 100
     t.integer  "package_type_id"
     t.string   "supplier"
-
     t.string   "name"
     t.float    "cross_section"
     t.float    "weight"
