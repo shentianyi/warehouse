@@ -76,7 +76,7 @@ module V1
             get_position_id=(position_id.to_a[0].id)
 
             #max_position_count = SysConfig.where(code: 'CAPACITY_SERVER').select("value")
-            max_position_count = SysConfig.where(code: 'CAPACITY_SERVER').to_a[0].value.to_i
+            max_position_count = SysConfig.where(code: 'CAPACITY_NR').to_a[0].value.to_i
 
             puts("Get Position ID ========")
             puts(get_position_id)
