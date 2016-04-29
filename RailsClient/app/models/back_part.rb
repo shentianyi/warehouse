@@ -27,13 +27,13 @@ class BackPart < ActiveRecord::Base
         back_part.back_part_items.each do |item|
           count+=1
           sheet.add_row [
-                            index+1,
                             count,
+                            index+1,
                             back_part.id,
                             back_part.user.blank? ? "" : back_part.user.nr,
                             back_part.des_location.blank? ? '' : back_part.des_location.nr,
                             back_part.src_location.blank? ? '' : back_part.src_location.nr,
-                            back_part.back_time.blank? ? '' : back_part.back_time.localtime.strftime('%y.%m.%d %H:%M'),
+                            back_part.back_time.blank? ? '' : back_part.back_time.localtime.utc.strftime('%y.%m.%d %H:%M'),
                             item.part.blank? ? '' : item.part.nr,
                             item.qty,
                             item.whouse.blank? ? '' : item.whouse.nr,
