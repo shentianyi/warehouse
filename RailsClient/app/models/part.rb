@@ -76,4 +76,49 @@ class Part < ActiveRecord::Base
       self.find_by_nr(nr)
     end
   end
+
+
+  def self.to_xlsx parts
+    p = Axlsx::Package.new
+
+    wb = p.workbook
+    wb.add_worksheet(:name => "sheet1") do |sheet|
+      count=0
+      sheet.add_row ["序号", "零件数", "零件号", "零件单位", "零件类型", "包装类型", "安全库存量", "供应商", "仓库号", "库位号"]
+      parts.order(supplier: :desc).each_with_index { |part, index|
+        if part.part_positions.count > 0
+          part.part_positions.each do |pp|
+            count+=1
+            sheet.add_row [
+                              count,
+                              index+1,
+                              part.nr,
+                              part.unit,
+                              part.part_type.blank? ? '' : part.part_type.name,
+                              part.package_type.blank? ? '' : part.package_type.name,
+                              part.safe_qty,
+                              part.supplier,
+                              pp.position.whouse.nr,
+                              pp.position.nr
+                          ], types: [:string, :string, :string, :string, :string, :string, :string, :string, :string, :string]
+          end
+        else
+          count+=1
+          sheet.add_row [
+                            count,
+                            index+1,
+                            part.nr,
+                            part.unit,
+                            part.part_type.blank? ? '' : part.part_type.name,
+                            part.package_type.blank? ? '' : part.package_type.name,
+                            part.safe_qty,
+                            part.supplier,
+                            ' ',
+                            ' '
+                        ], types: [:string, :string, :string, :string, :string, :string, :string, :string, :string, :string]
+        end
+      }
+    end
+    p.to_stream.read
+  end
 end

@@ -44,17 +44,20 @@
   <div class="panel panel-primary">
     <div class="panel-body">
       <div class="col-sm-12" style="border-bottom: 1px dashed #000;">
-        <div class="col-sm-4">
+        <div class="col-sm-3">
           零件号：
           <input type="text" name="part[nr]" value="<%= @nr %>"/>
           <input type="hidden" name="part[nr_fuzzy]"/>
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-3">
           供应商：
           <%= select 'part', 'supplier', Location.supplier_select(current_user), selected: @supplier, include_blank: true %>
         </div>
-        <div class="col-sm-4">
-          <input type="submit" value="查 找" class="btn btn-primary" style="width: 150px;"/>
+        <div class="col-sm-3">
+          <input type="submit" value="查找" class="btn btn-primary" name="search" style="width: 200px;"/>
+        </div>
+        <div class="col-sm-3">
+          <input type="submit" value="导出" class="btn btn-primary" name="download" style="width: 200px;"/>
         </div>
       </div>
       <div class="col-sm-12" style="margin-top: 20px;">
