@@ -4,7 +4,7 @@ class MovementListsController < ApplicationController
   respond_to :html
 
   def index
-    @movement_lists = MovementList.all.paginate(:page => params[:page])
+    @movement_lists = MovementList.all.order(created_at: :desc).paginate(:page => params[:page])
     respond_with(@movement_lists)
   end
 
@@ -84,6 +84,16 @@ class MovementListsController < ApplicationController
 
   def entry_header
     ["编号", "移库单号", "源仓库", "源库位", "目的仓库", "目的库位", "唯一码", "零件号", "数量", "FIFO", "员工号", "备注"]
+  end
+
+  def search
+    super { |query|
+      if user=User.find_by_nr(params[:movement_list][:builder])
+        query=query.unscope(where: :builder).where(builder: user.id).order(created_at: :desc)
+      end
+
+      query
+    }
   end
 
   private

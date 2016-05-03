@@ -147,6 +147,7 @@ class LogisticsContainer<LocationContainer
   end
 
   def check_move_stock
+    puts '----------------------------------------------------------------------------------------------------------------------------------'
     if (package=self.package)
       source_location=self.source_location
       destinationable=self.destinationable
@@ -159,7 +160,8 @@ class LogisticsContainer<LocationContainer
                                        packageId: package.id,
                                        fromWh: source_location.send_whouse.id,
                                        toWh: destinationable.receive_whouse.id,
-                                       toPosition: destinationable.receive_whouse.default_position.id
+                                       toPosition: destinationable.receive_whouse.default_position.id,
+                                       employee_id: package.user.blank? ? '' : package.user.nr
                                    })
           end
         rescue
@@ -173,7 +175,8 @@ class LogisticsContainer<LocationContainer
                                        packageId: package.id,
                                        fromWh: destinationable.receive_whouse.id,
                                        toWh: source_location.send_whouse.id,
-                                       toPosition: source_location.send_whouse.default_position.id
+                                       toPosition: source_location.send_whouse.default_position.id,
+                                       employee_id: package.user.blank? ? '' : package.user.nr
                                    })
           end
         rescue
@@ -187,7 +190,8 @@ class LogisticsContainer<LocationContainer
                                      packageId: package.id,
                                      fromWh: ns.ware_house_id,
                                      toWh: source_location.send_whouse.id,
-                                     toPosition: source_location.send_whouse.default_position.id
+                                     toPosition: source_location.send_whouse.default_position.id,
+                                     employee_id: package.user.blank? ? '' : package.user.nr
                                  })
         else
           self.enter_stock(source_location.send_whouse, source_location.send_whouse.default_position, Time.now)
@@ -208,7 +212,8 @@ class LogisticsContainer<LocationContainer
           fifo: fifo,
           packageId: package.id,
           toWh: warehouse.id,
-          toPosition: position.id
+          toPosition: position.id,
+          employee_id: package.user_id
       }
       WhouseService.new.enter_stock(params)
     end
