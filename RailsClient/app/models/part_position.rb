@@ -9,20 +9,22 @@ class PartPosition < ActiveRecord::Base
 
   belongs_to :sourceable, polymorphic: true
 
-  validates_uniqueness_of :part_id, :scope => :position_id
+  default_scope { where(is_delete: false) }
+
+  # validates_uniqueness_of :part_id, :scope => :position_id
 
   FK=%w(position_id part_id)
 
   before_update :set_update_flag
 
-  # before_create :check_uniq
-  #
-  # def check_uniq
-  #   unless PartPosition.where(part_id: self.part_id, position_id: self.position_id).blank?
-  #     errors.add(:part_id, "该零件#{self.part_id}\位置#{self.position_id}对应信息已存在")
-  #     return false
-  #   end
-  # end
+  before_create :check_uniq
+
+  def check_uniq
+    unless PartPosition.where(part_id: self.part_id, position_id: self.position_id, is_delete: false).blank?
+      errors.add(:part_id, "该零件#{self.part_id}\位置#{self.position_id}对应信息已存在")
+      return false
+    end
+  end
 
   private
   def set_update_flag
