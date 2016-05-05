@@ -36,21 +36,23 @@
     <th>NO.</th>
     <th>零件号</th>
     <th>需求量</th>
+    <th>发货量</th>
   </tr>
   </thead>
   <% if @items.present? %>
       <tbody>
-      <% @items.each_with_index do |item, i| %>
+      <% @items.keys.each_with_index do |key, i| %>
           <tr>
             <td><%= i+1 %></td>
             <td>
-              <% if item.part.present? %>
-                  <%= item.part.nr %>
+              <% if part=Part.find_by_id(key) %>
+                  <%= part.nr %>
               <% else %>
-                  <%= item.part_id %>
+                  <%= key %>
               <% end %>
             </td>
-            <td><%= item.qty %></td>
+            <td><%= @items[key][:order_count].to_i %></td>
+            <td><%= @items[key][:send_count].to_i %></td>
           </tr>
       <% end %>
       </tbody>
