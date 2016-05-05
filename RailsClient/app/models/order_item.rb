@@ -51,7 +51,7 @@ class OrderItem < ActiveRecord::Base
     condition = {}
 
     condition["order_items.created_at"] = Time.parse(start_t).utc.to_s...Time.parse(end_t).utc.to_s
-    condition["order_items.is_supplment"] = false
+    condition["order_items.is_supplement"] = false
     unless part_id.blank?
       condition["order_items.part_id"] = part_id
     end
@@ -75,7 +75,7 @@ class OrderItem < ActiveRecord::Base
 
     if part_id
       send_deliveries=LogisticsContainer.joins(:delivery).where(source_location_id: user.location.id, created_at: Time.parse(start_t).utc.to_s...Time.parse(end_t).utc.to_s)
-                          .where("containers.part_id=?", )
+                          .where("containers.part_id=?", part_id)
     else
       send_deliveries=LogisticsContainer.joins(:delivery).where(source_location_id: user.location.id, created_at: Time.parse(start_t).utc.to_s...Time.parse(end_t).utc.to_s)
     end

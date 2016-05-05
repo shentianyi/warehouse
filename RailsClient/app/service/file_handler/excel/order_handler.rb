@@ -51,7 +51,8 @@ module FileHandler
                     records[row['莱尼号码'].downcase]={
                         part_id: row['莱尼号码'],
                         qty: row['桶数'],
-                        batch_nr: order.batch_nr
+                        batch_nr: order.batch_nr,
+                        is_supplement: row['是否补发']=='Y' ? true : false
                     }
                   end
                 end
@@ -70,8 +71,8 @@ module FileHandler
                                                part_type_id: part.blank? ? '' : part.part_type_id,
                                                box_quantity:1,
                                                quantity: records[id.downcase][:qty],
-                                               remark: NStorageService.get_remark(part, user.location, records[id.downcase][:qty].to_i)#,
-                                               # is_supplement: row['是否补发']=='Y' ? true : false
+                                               remark: NStorageService.get_remark(part, user.location, records[id.downcase][:qty].to_i),
+                                               is_supplement: records[id.downcase][:is_supplement]
                                            })
                   order_item.user=user
                   order_item.order = order

@@ -53,7 +53,7 @@
         <td><%= order.part.blank? ? order.part_id : order.part.nr_for_user(current_user) %></td>
         <!--<td><%= order.box_quantity %></td>-->
         <td><%= order.quantity.to_i %></td>
-        <td><%= order.is_suppliment ? 'Y' : 'N' %></td>
+        <td><%= order.is_supplement ? 'Y' : 'N' %></td>
         <td><%= OrderItemState.display(order.state) %></td>
       </tr>
   <% end %>

@@ -448,7 +448,7 @@ ActiveRecord::Schema.define(version: 20160505031313) do
     t.boolean  "out_of_stock",  default: false
     t.boolean  "handled",       default: false
     t.integer  "state",         default: 0
-    t.boolean  "is_suppliment"
+    t.boolean  "is_supplement"
   end
 
   add_index "order_items", ["id"], name: "index_order_items_on_id", using: :btree

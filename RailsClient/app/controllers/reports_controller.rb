@@ -329,12 +329,14 @@ class ReportsController < ApplicationController
     p = Axlsx::Package.new
     wb = p.workbook
     wb.add_worksheet(:name => "Basic Sheet") do |sheet|
-      sheet.add_row ["ID", "零件号", "数量"]
-      items.each_with_index do |item, index|
+      sheet.add_row ["ID", "零件号", "需求数量", "发货数量"]
+      items.keys.each_with_index do |key, i|
+        part=Part.find_by_id(key)
         sheet.add_row [
-                          index+1,
-                          item.part.blank? ? item.part_id : item.part.nr,
-                          item.qty
+                          i+1,
+                          part.blank? ? key : part.nr,
+                          items[key][:order_count].to_i,
+                          items[key][:send_count].to_i
                       ], :types => [:string, :string, :string]
       end
     end
