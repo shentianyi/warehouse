@@ -141,11 +141,11 @@
   </li>
 
   <li>
-    <a href="#">应急 &nbsp;<i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:black;"></i></a>
+    <a href="#">导入运单 &nbsp;<i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:black;"></i></a>
     <ul>
       <% if current_user.permission?(:view_emergency) %>
+      <li><a href="<%= receive_deliveries_path %>">导入接收数据</a></li>
           <li><a href="<%= generate_deliveries_path %>">导入发运数据</a></li>
-          <li><a href="<%= receive_deliveries_path %>">导入接收数据</a></li>
       <% end %>
     </ul>
   </li>
