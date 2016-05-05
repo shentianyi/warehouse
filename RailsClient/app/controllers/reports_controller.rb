@@ -216,20 +216,25 @@ class ReportsController < ApplicationController
       if commit_value == "详细"
         sheet.add_row entry_header_detials
         packages.each_with_index { |p, index|
-          f= p.parent.nil? ? nil : p.parent
-          d=(f.nil? || f.parent.nil?) ? nil : f.parent
-          s=p.records.where(impl_action: 'dispatch').last
-          r=p.records.where(impl_action: 'receive').last
+
+          f= p.parent.nil? ? nil:p.parent
+          d=(f.nil? || f.parent.nil?) ? nil:f.parent
+          s=p.records.where(impl_action:'dispatch').last
+          r=p.records.where(impl_action:'receive').last
+
+          part=Part.find_by_id(p['part_id'])
+          location=Location.find_by_id(p['whouse'])
+
           #["编号", "运单号","托盘号","唯一码", "零件号", "总数", "箱数","部门","状态","FIFO","发运时间","入库时间"]
           sheet.add_row [
                             index+1,
                             d.nil? ? nil : d.container_id,
                             f.nil? ? nil : f.container_id,
                             p['containers_id'],
-                            p['part_id'],
+                            part.nil? ? nil : part.nr  ,
                             p['count'],
                             p['box'],
-                            p['whouse'],
+                            location.nil? ? nil : location.nr,
                             MovableState.display(p['state']),
                             p['FIFO'],
                             s.nil? ? nil : s.impl_time.localtime,
@@ -240,12 +245,15 @@ class ReportsController < ApplicationController
       else
         sheet.add_row entry_header_total
         packages.each_with_index { |p, index|
+          part=Part.find_by_id(p['part_id'])
+          location=Location.find_by_id(p['whouse'])
+
           sheet.add_row [
                             index+1,
-                            p['part_id'],
+                            part.nil? ? nil : part.nr,
                             p['count'],
                             p['box'],
-                            p['whouse'],
+                            location.nil? ? nil : location.nr,
                             MovableState.display(p['state'])
                         #DatetimeHelper.ddate(p['ddate'])
                         ], :types => [:string]
