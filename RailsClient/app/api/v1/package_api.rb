@@ -23,6 +23,7 @@ module V1
         args[:part_id] = p.part.nr
         args[:qty] = p.quantity
         args[:fifo] =p.storage_fifo_display # p.fifo_time_display.blank? ? '' : Date.strptime(p.fifo_time_display.sub(/W\s*/, ''), '%d.%m.%y')
+        args[:position]=p.storage_position_display
         {result: '1', content: args}
       end
 

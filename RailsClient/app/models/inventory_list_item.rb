@@ -226,7 +226,7 @@ class InventoryListItem < ActiveRecord::Base
 
     record = []
     items.each_with_index do |item, index|
-      record[index] = {position_nr: item.position_nr, position_id: item.position, count: item.count}
+      record[index] = {position_nr: item.position_nr, position_id: item.position, count: item.count,current_position_nr:item.current_position_nr}
     end
 
     msg.content = record
