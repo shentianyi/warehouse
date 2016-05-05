@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160425043235) do
+ActiveRecord::Schema.define(version: 20160505031313) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -428,9 +428,9 @@ ActiveRecord::Schema.define(version: 20160425043235) do
   end
 
   create_table "order_items", force: true do |t|
-    t.string   "uuid",                         null: false
+    t.string   "uuid",                          null: false
     t.float    "quantity"
-    t.integer  "box_quantity", default: 0
+    t.integer  "box_quantity",  default: 0
     t.string   "order_id"
     t.string   "location_id"
     t.string   "whouse_id"
@@ -438,16 +438,17 @@ ActiveRecord::Schema.define(version: 20160425043235) do
     t.string   "part_id"
     t.string   "part_type_id"
     t.string   "remark"
-    t.boolean  "is_emergency", default: false, null: false
-    t.boolean  "is_delete",    default: false
-    t.boolean  "is_dirty",     default: true
-    t.boolean  "is_new",       default: true
+    t.boolean  "is_emergency",  default: false, null: false
+    t.boolean  "is_delete",     default: false
+    t.boolean  "is_dirty",      default: true
+    t.boolean  "is_new",        default: true
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "is_finished",  default: false
-    t.boolean  "out_of_stock", default: false
-    t.boolean  "handled",      default: false
-    t.integer  "state",        default: 0
+    t.boolean  "is_finished",   default: false
+    t.boolean  "out_of_stock",  default: false
+    t.boolean  "handled",       default: false
+    t.integer  "state",         default: 0
+    t.boolean  "is_suppliment"
   end
 
   add_index "order_items", ["id"], name: "index_order_items_on_id", using: :btree

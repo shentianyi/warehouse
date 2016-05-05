@@ -1,5 +1,24 @@
 # encoding: utf-8
 class ReportsController < ApplicationController
+  def stockout
+    @part_id = params[:part_id]
+    @date_start = params[:date_start].nil? ? 1.day.ago.strftime("%Y-%m-%d 7:00") : params[:date_start]
+    @date_end = params[:date_end].nil? ? Time.now.strftime("%Y-%m-%d 7:00") : params[:date_end]
+
+    part=Part.find_by_nr(params[:part_id])
+    part_id = part.blank? ? nil : part.id
+
+    @items=OrderItem.generate_stockout_data(@date_start, @date_end, part_id, current_user)
+    respond_to do |format|
+      format.xlsx do
+        send_data(stockout_with_xlsx(@items),
+                  :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+                  :filename => "缺货信息导出.xlsx")
+      end
+      format.html
+    end
+  end
+
   def reports
     @part_id = params[:part_id]
     @type = params[:type].nil? ? ReportType::Entry : params[:type]
@@ -16,14 +35,14 @@ class ReportsController < ApplicationController
     location_id=location.blank? ? nil : location.id
 
 
-    @packages = Package.generate_report_data(@type,@date_start,@date_end,@location_id,@commit_value,part_id)
+    @packages = Package.generate_report_data(@type, @date_start, @date_end, @location_id, @commit_value, part_id)
     #render :json=> @packages
-    @title = ReportsHelper.gen_title(@type,@date_start,@date_end,@location_id)
+    @title = ReportsHelper.gen_title(@type, @date_start, @date_end, @location_id)
     respond_to do |format|
       format.xlsx do
         send_data(entry_with_xlsx(@packages, @commit_value),
-            :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
-            :filename => "#{@title}.xlsx")
+                  :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+                  :filename => "#{@title}.xlsx")
       end
       format.html
     end
@@ -53,7 +72,7 @@ class ReportsController < ApplicationController
 
     @packages = {}
 
-    Package.generate_report_data(@type,@date_start,@date_end,@location_id).each { |p|
+    Package.generate_report_data(@type, @date_start, @date_end, @location_id).each { |p|
       if @packages[p['part_id']+p['whouse']].nil?
         @packages[p['part_id']+p['whouse']] = {"PartNr." => p['part_id'], "Warehouse" => p['whouse'], "Amount" => 0}
       end
@@ -84,7 +103,7 @@ class ReportsController < ApplicationController
       end
     end
 
-    @title = ReportsHelper.gen_title(@type,@date_start,@date_end,@location_id,"差异")
+    @title = ReportsHelper.gen_title(@type, @date_start, @date_end, @location_id, "差异")
 
     respond_to do |format|
       format.html
@@ -103,10 +122,10 @@ class ReportsController < ApplicationController
     @source_location_id = params[:source_location_id].nil? ? current_user.location_id : params[:source_location_id]
     @title = '要货报表'
 
-    @order_items = OrderItem.generate_report_data(@date_start,@date_end,@source_location_id)
+    @order_items = OrderItem.generate_report_data(@date_start, @date_end, @source_location_id)
 
     #获得发货数据，注：包括外库和工厂库
-    packages = Package.generate_report_data(ReportType::Entry,@date_start,@date_end,@source_location_id)
+    packages = Package.generate_report_data(ReportType::Entry, @date_start, @date_end, @source_location_id)
     @removal_packages = {}
     @all_orders = {}
 
@@ -120,7 +139,7 @@ class ReportsController < ApplicationController
 
     packages.inject(@removal_packages) { |h, p|
       if h["#{p['part_id']}#{p['whouse']}"].nil?
-        h["#{p['part_id']}#{p['whouse']}"] = {'count'=>0,'box'=>0}
+        h["#{p['part_id']}#{p['whouse']}"] = {'count' => 0, 'box' => 0}
       end
       h["#{p['part_id']}#{p['whouse']}"]['count'] += p['count']
       h["#{p['part_id']}#{p['whouse']}"]['box'] += p['box']
@@ -131,13 +150,13 @@ class ReportsController < ApplicationController
 
     respond_to do |format|
       format.csv do
-        send_data(order_report_csv(@order_items,@removal_packages,@all_orders),
+        send_data(order_report_csv(@order_items, @removal_packages, @all_orders),
                   :type => "text/csv;charset=utf-8; header=present",
                   :filename => filename+".csv")
       end
 
       format.xlsx do
-        send_data(order_report_xlsx(@order_items,@removal_packages,@all_orders),
+        send_data(order_report_xlsx(@order_items, @removal_packages, @all_orders),
                   :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
                   :filename => filename+".xlsx"
         )
@@ -148,11 +167,11 @@ class ReportsController < ApplicationController
 
   private
 
-  def order_report_xlsx order_items,removal_packages,all_orders
+  def order_report_xlsx order_items, removal_packages, all_orders
     p = Axlsx::Package.new
     wb = p.workbook
     wb.add_worksheet(:name => "Basic Sheet") do |sheet|
-      sheet.add_row ["No.", "零件号", "总数", "箱数", "部门", "要货人", "状态","已发货总数","已发货箱数","差异数（要货总数-已发运总数）"]
+      sheet.add_row ["No.", "零件号", "总数", "箱数", "部门", "要货人", "状态", "已发货总数", "已发货箱数", "差异数（要货总数-已发运总数）"]
       order_items.each_with_index { |o, index|
         sheet.add_row [
                           index+1,
@@ -165,7 +184,7 @@ class ReportsController < ApplicationController
                           removal_packages["#{o.part_id}#{o.whouse_id}"].nil? ? "" : removal_packages["#{o.part_id}#{o.whouse_id}"]['count'],
                           removal_packages["#{o.part_id}#{o.whouse_id}"].nil? ? "" : removal_packages["#{o.part_id}#{o.whouse_id}"]['box'],
                           removal_packages["#{o.part_id}#{o.whouse_id}"].nil? ? "" : all_orders["#{o.part_id}#{o.whouse_id}"] - removal_packages["#{o.part_id}#{o.whouse_id}"]['count']
-                         ], :types => [:string]
+                      ], :types => [:string]
         removal_packages["#{o.part_id}#{o.whouse_id}"] = nil
       }
     end
@@ -197,10 +216,10 @@ class ReportsController < ApplicationController
       if commit_value == "详细"
         sheet.add_row entry_header_detials
         packages.each_with_index { |p, index|
-          f= p.parent.nil? ? nil:p.parent
-          d=(f.nil? || f.parent.nil?) ? nil:f.parent
-          s=p.records.where(impl_action:'dispatch').last
-          r=p.records.where(impl_action:'receive').last
+          f= p.parent.nil? ? nil : p.parent
+          d=(f.nil? || f.parent.nil?) ? nil : f.parent
+          s=p.records.where(impl_action: 'dispatch').last
+          r=p.records.where(impl_action: 'receive').last
           #["编号", "运单号","托盘号","唯一码", "零件号", "总数", "箱数","部门","状态","FIFO","发运时间","入库时间"]
           sheet.add_row [
                             index+1,
@@ -215,7 +234,7 @@ class ReportsController < ApplicationController
                             p['FIFO'],
                             s.nil? ? nil : s.impl_time.localtime,
                             r.nil? ? nil : r.impl_time.localtime
-                            #DatetimeHelper.ddate(p['ddate'])
+                        #DatetimeHelper.ddate(p['ddate'])
                         ], :types => [:string]
         }
       else
@@ -236,9 +255,9 @@ class ReportsController < ApplicationController
     p.to_stream.read
   end
 
-  def order_report_csv order_items,removal_packages,all_orders
+  def order_report_csv order_items, removal_packages, all_orders
     CSV.generate do |csv|
-      csv << ["No.", "零件号", "总数", "箱数", "部门", "要货人", "状态","已发货总数","已发货箱数","差异数（要货总数-已发运总数）"]
+      csv << ["No.", "零件号", "总数", "箱数", "部门", "要货人", "状态", "已发货总数", "已发货箱数", "差异数（要货总数-已发运总数）"]
 
       order_items.each_with_index { |o, index|
         csv <<[
@@ -298,23 +317,38 @@ class ReportsController < ApplicationController
     end
   end
 
+  def stockout_with_xlsx(items)
+    p = Axlsx::Package.new
+    wb = p.workbook
+    wb.add_worksheet(:name => "Basic Sheet") do |sheet|
+      sheet.add_row ["ID", "零件号", "数量"]
+      items.each_with_index do |item, index|
+        sheet.add_row [
+                          index+1,
+                          item.part.blank? ? item.part_id : item.part.nr,
+                          item.qty
+                      ], :types => [:string, :string, :string]
+      end
+    end
+    p.to_stream.read
+  end
+
   def entry_header
-    ["编号", "零件号", "总数", "箱数","部门","时间"]
+    ["编号", "零件号", "总数", "箱数", "部门", "时间"]
   end
 
   def entry_header_detials
-    ["编号", "运单号","托盘号","唯一码", "零件号", "总数", "箱数","部门","状态","FIFO","发运时间","入库时间"]
+    ["编号", "运单号", "托盘号", "唯一码", "零件号", "总数", "箱数", "部门", "状态", "FIFO", "发运时间", "入库时间"]
   end
 
   def entry_header_total
-    ["编号", "零件号", "总数", "箱数","部门","状态"]
+    ["编号", "零件号", "总数", "箱数", "部门", "状态"]
   end
 
   # def entry_header
   #   ["编号", "零件号", "总数", "箱数","部门","状态","时间"]
   # end
 
- 
 
   def removal_header
     ["编号", "零件号", "总数", "箱数", "部门", "创建时间", "发货人", "是否被拒绝"]

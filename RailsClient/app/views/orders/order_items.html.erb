@@ -41,6 +41,7 @@
       <th>零件号</th>
       <!--<th>箱数</th>-->
       <th>桶数</th>
+      <th>是否补发</th>
       <th>状态</th>
     </tr>
   </thead>
@@ -52,6 +53,7 @@
         <td><%= order.part.blank? ? order.part_id : order.part.nr_for_user(current_user) %></td>
         <!--<td><%= order.box_quantity %></td>-->
         <td><%= order.quantity.to_i %></td>
+        <td><%= order.is_suppliment ? 'Y' : 'N' %></td>
         <td><%= OrderItemState.display(order.state) %></td>
       </tr>
   <% end %>

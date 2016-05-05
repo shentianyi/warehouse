@@ -1,0 +1,2965 @@
+commit 548af47840eba49005002fc803b198cd163486e8
+Author: lzding <472339105@qq.com>
+Date:   Wed Mar 9 10:27:20 2016 +0800
+
+    err post
+
+commit 446ce3c7fb1c401906bb86e4da436d224dbd1b64
+Author: lzding <472339105@qq.com>
+Date:   Tue Jan 5 13:27:58 2016 +0800
+
+    fix move storage remarks
+
+commit 4dba68f9ffeb22398c05e9a5111cc098586f8e4f
+Author: lzding <472339105@qq.com>
+Date:   Thu Dec 24 13:57:47 2015 +0800
+
+    fix default position
+
+commit f552d7c7d392f481c3b4532ba10a8afc8216ab24
+Author: lzding <472339105@qq.com>
+Date:   Thu Dec 24 12:13:21 2015 +0800
+
+    fix file nstorage source list
+
+commit 5b0d0a675c330485587acd3439f4b527ab8fcf61
+Author: lzding <472339105@qq.com>
+Date:   Thu Dec 24 11:33:29 2015 +0800
+
+    close nstorage edit
+
+commit 78a53756ca5f727e80b7e8435cc40e636bc35766
+Author: lzding <472339105@qq.com>
+Date:   Wed Dec 23 13:17:58 2015 +0800
+
+    fix move storage position
+
+commit cd98c23ad1119ae4084ca6c1d2d3c93ff43ab292
+Author: lzding <472339105@qq.com>
+Date:   Tue Dec 22 17:04:46 2015 +0800
+
+    fix move storage position
+
+commit b4d51f7c05287a63c946121c09966b6080509981
+Author: lzding <472339105@qq.com>
+Date:   Wed Dec 16 14:57:20 2015 +0800
+
+     fix movement list check
+
+commit 4a68e82f0d8dcb9a4c92362f7dbd54e0290860f7
+Author: lzding <472339105@qq.com>
+Date:   Wed Dec 16 14:18:02 2015 +0800
+
+    fix file move list state
+
+commit 3f8b6ef2f3a3ec2594bf0fb974dfa14b18b77d81
+Author: lzding <472339105@qq.com>
+Date:   Tue Dec 15 15:00:45 2015 +0800
+
+    fix move packageId
+
+commit 4f9d8853d79d3724bf06c0ca0c2f102c51d468af
+Author: lzding <472339105@qq.com>
+Date:   Mon Dec 14 16:40:11 2015 +0800
+
+    fix move remark
+
+commit 92bfec41cffbb5413c89e4fc3d8bab9257b298ad
+Author: lzding <472339105@qq.com>
+Date:   Mon Dec 14 16:32:54 2015 +0800
+
+    fix move
+
+commit baddca65730bd38b563e9c06f5d7093a203b0b85
+Author: lzding <472339105@qq.com>
+Date:   Mon Dec 14 14:18:11 2015 +0800
+
+    fix movement source state
+
+commit 6ad5b94f8239b0b93d8903a988df26f50ad44b2e
+Author: lzding <472339105@qq.com>
+Date:   Mon Dec 14 12:09:42 2015 +0800
+
+    fix search movement source
+
+commit 76542116feb448bafe9e48eb638a49c0a9db509b
+Author: lzding <472339105@qq.com>
+Date:   Mon Dec 14 11:36:09 2015 +0800
+
+    fix movement source search
+
+commit 127bb65ca15c63014fbfd4fcefeee17d9b6cf7b4
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sat Dec 12 17:41:31 2015 +0800
+
+    export remark
+
+commit 18907d439da69aff62559e091eccd65f98841163
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sat Dec 12 17:32:04 2015 +0800
+
+    add search
+
+commit df839c5a7b99825535a60167ad402866888de038
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sat Dec 12 17:25:24 2015 +0800
+
+    add remark
+
+commit be30a0974547ad4e34b1c79b9139372e8a05b8b3
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sat Dec 12 14:33:12 2015 +0800
+
+    add config hide ended inventory list
+
+commit 8f3f851128f383d7d7b885bbfdca56a1253d4b86
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sat Dec 12 14:20:13 2015 +0800
+
+    before check in store
+
+commit de8ede7fd2e6bcd885c870719c39bc13578a62f6
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sat Dec 12 11:23:01 2015 +0800
+
+    change
+
+commit 0f626fdac8470d1d72de55e243d33b21e97b8056
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sat Dec 12 02:01:18 2015 +0800
+
+    state search
+
+commit 3bef6793b8d96610b2e21b9084d754b446a1fb93
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sat Dec 12 01:45:13 2015 +0800
+
+    page
+
+commit 0a1a985718ded7a92c959931b8993d45c820ac33
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Dec 11 23:18:27 2015 +0800
+
+    update
+
+commit e4721fb96baafbbf3921e69d8432df626174b3a0
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Dec 11 23:14:44 2015 +0800
+
+    float
+
+commit eca905a5b0dc4f9ffe79cdb607ebe70d31c617dd
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Dec 11 23:10:55 2015 +0800
+
+    0
+
+commit 5b2f1c23e53dd4657034fe0eb978098e1999c771
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Dec 11 23:08:47 2015 +0800
+
+    fix nil
+
+commit f56084aeca0f1be0e40e4b7f2a8c415dd3b6ec50
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Dec 11 23:05:03 2015 +0800
+
+    fix qty
+
+commit 3e174b1f7c3d91af822cd18f3e3240ea839afbdc
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Dec 11 23:04:02 2015 +0800
+
+    change
+
+commit 6ff84400da7c25195f1240e4b129ffb44d9cc3a7
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Dec 11 22:52:14 2015 +0800
+
+    order
+
+commit 9f7968f7f9943d13749a6bea5ec5eebdae97ada1
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Dec 11 22:49:36 2015 +0800
+
+    update exprot
+
+commit a44ee3935ce635d26cae6152778e2f6fc5e25329
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Dec 11 22:46:17 2015 +0800
+
+    change
+
+commit 2a9e9e34a73ddfc9975d8da5f21f01dcda577e99
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Dec 11 21:25:11 2015 +0800
+
+    change
+
+commit fbe4e875a0324ac23a8faca3d7285a4264058672
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Dec 11 21:18:46 2015 +0800
+
+    fix
+
+commit a5095de1ce93aac40df3414b3d6ff1d9f533d963
+Merge: c17e4fb 5260cb8
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Dec 11 16:48:39 2015 +0800
+
+    Merge branch 'penglai' of github.com:shentianyi/warehouse into penglai
+
+commit c17e4fbb97168b1f1c88b044dcb558ab1a75633f
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Dec 11 16:47:44 2015 +0800
+
+    update inventory item list
+
+commit 5260cb8d196b606b9787c762f2780abcfeb92fe9
+Merge: 24d5cdc 09cf6a0
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Dec 11 15:23:58 2015 +0800
+
+    fix conflict
+
+commit 24d5cdc7a66b5977feb2049d3b6772cb12782a00
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Dec 11 15:22:49 2015 +0800
+
+    from server
+
+commit 09cf6a0b75222e8ae4a2c6bc91e760a1ba825bd6
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Dec 11 15:20:10 2015 +0800
+
+    fix bug
+
+commit fd6f266526674b2827ba3eb55b0d77b45438ab0d
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Dec 11 02:11:16 2015 +0800
+
+    fix validate
+
+commit 6592ffa7f35dec63684e5f2d2534ebe057c25e59
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Dec 11 01:43:31 2015 +0800
+
+    fix some bugs
+
+commit 7c817ee25463a4b889874ad200b8932a20419cb4
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Dec 10 10:52:40 2015 +0800
+
+    add part unit
+
+commit 19fe266cab2aed375e1a826a34e06634a5edb750
+Merge: 304708a c1c8e7c
+Author: lzding <472339105@qq.com>
+Date:   Tue Dec 8 14:22:57 2015 +0800
+
+    merge penglai-test
+
+commit c1c8e7c70ad9f1ac5ac533b339fa724b65b3b731
+Author: lzding <472339105@qq.com>
+Date:   Fri Dec 4 19:11:35 2015 +0800
+
+    movement list search position api
+
+commit 054be21316143d42eeb8dd624e2af31e310a8e57
+Author: lzding <472339105@qq.com>
+Date:   Fri Dec 4 14:14:41 2015 +0800
+
+    movement list search position api
+
+commit 6748685d275c373b704605cae1c23f5748789fce
+Author: lzding <472339105@qq.com>
+Date:   Fri Dec 4 13:28:16 2015 +0800
+
+    movement list search position api
+
+commit 659525588711f7fc0b1b3dfe27d8e30493c2e656
+Author: lzding <472339105@qq.com>
+Date:   Thu Dec 3 16:45:11 2015 +0800
+
+    local
+
+commit 92b39781fed5cc0535cffb0de6ead8c1803177df
+Author: lzding <472339105@qq.com>
+Date:   Thu Dec 3 09:45:52 2015 +0800
+
+    fix inventory api return
+
+commit cc72df5ce95061f5f11ab6fc36e580591ca35984
+Author: lzding <472339105@qq.com>
+Date:   Tue Dec 1 12:14:00 2015 +0800
+
+    fix move api
+
+commit 06f66977d887d9f5e8560b8ac24c5b80794ed373
+Author: lzding <472339105@qq.com>
+Date:   Mon Nov 30 17:12:12 2015 +0800
+
+     fix api notice
+
+commit 50d833776cf51e855771cfe9e5653b760636ceb8
+Author: lzding <472339105@qq.com>
+Date:   Mon Nov 30 14:52:52 2015 +0800
+
+     fix movement source api
+
+commit 1e97fd75af46fc92bfe8d763f513cbc584f3c6b8
+Author: lzding <472339105@qq.com>
+Date:   Mon Nov 30 12:20:13 2015 +0800
+
+     fix INVENTORY api
+
+commit 95ce7062cd1f4911738ae67fb7ea88756d3f0ee3
+Author: lzding <472339105@qq.com>
+Date:   Mon Nov 30 11:15:46 2015 +0800
+
+     fix movement api
+
+commit 5e1b014732fa720ca12cac5fbfd006a54dcca58e
+Author: lzding <472339105@qq.com>
+Date:   Mon Nov 30 10:11:05 2015 +0800
+
+     fix movement api
+
+commit 364091de2a908290e9687d00b5953127edab27bb
+Author: lzding <472339105@qq.com>
+Date:   Mon Nov 30 09:43:40 2015 +0800
+
+    fix movement api
+
+commit d738f4c1c11498e4c8f62008b31dd121a924dccd
+Merge: 3cf50c6 a4aab56
+Author: lzding <472339105@qq.com>
+Date:   Mon Nov 30 09:31:40 2015 +0800
+
+    Merge branch 'penglai-test' of github.com:shentianyi/warehouse into penglai-test
+
+commit a4aab5644ee6103f0fb7dea2a0edafe2c77b3531
+Author: lzding <lzding@lzding.(none)>
+Date:   Sun Nov 29 11:57:55 2015 +0800
+
+    fix inventory api
+
+commit 743e77ea08c5c9f85d66eefa46e662953093bbab
+Author: lzding <lzding@lzding.(none)>
+Date:   Sun Nov 29 11:49:32 2015 +0800
+
+    fix inventory api
+
+commit 489d66e1b04a334f09f39f9fe12cfef03d1cd974
+Merge: 34ec72d dea9035
+Author: lzding <lzding@lzding.(none)>
+Date:   Sun Nov 29 11:05:49 2015 +0800
+
+    Merge branch 'penglai-test' of https://github.com/shentianyi/warehouse into penglai-test
+
+commit 34ec72d5114e9f040fe83af57ae51c8803b59252
+Author: lzding <lzding@lzding.(none)>
+Date:   Sun Nov 29 11:04:52 2015 +0800
+
+    fix inventory api
+
+commit ce967d3338c9294636e351adb2e0194d82e3f617
+Author: lzding <lzding@lzding.(none)>
+Date:   Sun Nov 29 10:53:06 2015 +0800
+
+    fix inventory api
+
+commit 3cf50c6efb982bb694b4444b0c84820cad4d8ac1
+Author: lzding <472339105@qq.com>
+Date:   Fri Nov 27 19:46:58 2015 +0800
+
+    coding export movement source
+
+commit dea9035b6633a53ebc8fa80f90e2203bd845ff45
+Author: lzding <472339105@qq.com>
+Date:   Fri Nov 27 18:06:29 2015 +0800
+
+    fix permit
+
+commit 4e1c31712d866f95e5b59790e95b02a88fc9c25f
+Author: lzding <472339105@qq.com>
+Date:   Fri Nov 27 13:56:48 2015 +0800
+
+    coding movement source api
+
+commit 920be1166dda635e5a0a44832e1f55cfd4a2fd28
+Author: lzding <472339105@qq.com>
+Date:   Fri Nov 27 13:44:07 2015 +0800
+
+    coding movement source api
+
+commit 97a3408438952a762dad5917454c4a1f704b1c54
+Author: lzding <472339105@qq.com>
+Date:   Fri Nov 27 11:45:29 2015 +0800
+
+     fix api return
+
+commit 407e93692b332ac6dd6d4c98f64e94ecc3a1eae3
+Author: lzding <472339105@qq.com>
+Date:   Fri Nov 27 09:58:04 2015 +0800
+
+    fix delete api
+
+commit 382f3f1e148dc4a8507e1cc75acacd2e8dd0122f
+Author: lzding <472339105@qq.com>
+Date:   Fri Nov 27 09:52:53 2015 +0800
+
+    fix delete api
+
+commit 8812163f2c54421faef73fe4172bcc3669c7e19b
+Author: lzding <472339105@qq.com>
+Date:   Thu Nov 26 14:38:57 2015 +0800
+
+    fix
+
+commit b6155ea25416071df86a1fe71994d5362f798a52
+Author: lzding <472339105@qq.com>
+Date:   Thu Nov 26 11:20:22 2015 +0800
+
+    fix api state
+
+commit 40f7ef1a32ec7b70eef9f6f9b189fdf4b6bee85f
+Author: lzding <472339105@qq.com>
+Date:   Thu Nov 26 10:27:06 2015 +0800
+
+    fix api state
+
+commit 304708aa9df8d84828c550ca76acf7c0ea89713d
+Author: lzding <472339105@qq.com>
+Date:   Wed Nov 25 09:31:31 2015 +0800
+
+    fix move storage
+
+commit 5404e0203592a7c35f13f301c629104b06bd2a34
+Author: lzding <472339105@qq.com>
+Date:   Tue Nov 24 11:13:28 2015 +0800
+
+    fix version script
+
+commit 2c98dc9c511ef5f551e8d7cafebc4c895c4557e0
+Author: lzding <472339105@qq.com>
+Date:   Mon Nov 23 14:49:23 2015 +0800
+
+    fix db change
+
+commit 8707bb1a0db94e036ae6376ae3de62850caa959e
+Author: lzding <472339105@qq.com>
+Date:   Mon Nov 23 10:41:49 2015 +0800
+
+    fix storage updated time
+
+commit 76fa01b6ac69ad7e068bbc02fd8327fad1ba1633
+Author: lzding <472339105@qq.com>
+Date:   Fri Nov 20 11:40:32 2015 +0800
+
+    fix api
+
+commit 7b77ecd01133c4ab971dea410610e80a77bc8386
+Author: lzding <472339105@qq.com>
+Date:   Thu Nov 19 18:09:08 2015 +0800
+
+    fix validate
+
+commit 3a034dc7c8beda20a1603677e4946747b9f9074f
+Author: lzding <472339105@qq.com>
+Date:   Thu Nov 19 13:27:55 2015 +0800
+
+    coding versions display and search
+
+commit 1ca9a78b503770b5d0eebfaa482ee1c6370587a0
+Author: lzding <472339105@qq.com>
+Date:   Thu Nov 19 10:06:28 2015 +0800
+
+    coding storage operation record save
+
+commit c36755b062b827183db4e16017f672974feb4213
+Author: lzding <472339105@qq.com>
+Date:   Tue Nov 17 18:06:02 2015 +0800
+
+    fix save invalid move record
+
+commit 57c9c77afed8bbae56b0b3d278e4a06e56387e1c
+Author: lzding <472339105@qq.com>
+Date:   Tue Nov 17 16:27:20 2015 +0800
+
+    move api change
+
+commit 0b7f415d439e1a107d47c92cd083342094f3a4bc
+Author: lzding <472339105@qq.com>
+Date:   Mon Nov 16 16:33:54 2015 +0800
+
+    fix validate
+
+commit c686583b58b0371c3237a59d1a0fbcf2acb02dc8
+Author: lzding <472339105@qq.com>
+Date:   Fri Nov 13 11:12:43 2015 +0800
+
+    fix movement list view
+
+commit f2f4d1baaddf99c80dba6fefefbc3cb9e6131477
+Author: lzding <472339105@qq.com>
+Date:   Fri Nov 13 10:21:57 2015 +0800
+
+    fix inventory search API
+
+commit dd3254c257e3f20b31b0840a2bf02d4a4dc8211e
+Author: lzding <472339105@qq.com>
+Date:   Thu Nov 12 18:01:02 2015 +0800
+
+    fix movement list id
+
+commit c70dba307d761f232f0a8a1b7a26ffa4c4c371fd
+Author: lzding <472339105@qq.com>
+Date:   Wed Nov 11 13:48:07 2015 +0800
+
+    inventory item search
+
+commit c9bc5ec79da5f099cd9c2c9f1e2b544728126127
+Author: lzding <472339105@qq.com>
+Date:   Wed Nov 11 12:06:00 2015 +0800
+
+    Move API
+
+commit 71f26d6791a8ebbf9385c13047f1d3d9cf5df8a4
+Author: lzding <472339105@qq.com>
+Date:   Fri Nov 6 18:26:26 2015 +0800
+
+    fix
+
+commit 61adea823945acf2b4ac19d01d7aa46e7fcf3172
+Author: lzding <472339105@qq.com>
+Date:   Fri Nov 6 11:39:15 2015 +0800
+
+    fix
+
+commit ab3b9bf56d2b6908c2697a1fc4f57cda231ef28d
+Author: lzding <472339105@qq.com>
+Date:   Wed Nov 4 10:04:51 2015 +0800
+
+    co
+
+commit 6076d4253972d5c6bb12c1162e16d85ead542f4d
+Author: lzding <472339105@qq.com>
+Date:   Tue Nov 3 10:25:30 2015 +0800
+
+    co
+
+commit 3450dde7c8958b02a793e29279dffe67cbc68743
+Author: lzding <472339105@qq.com>
+Date:   Mon Nov 2 17:44:19 2015 +0800
+
+    co
+
+commit 00714bfada73064ec89e52908cd76a8c19b0f7c0
+Author: lzding <472339105@qq.com>
+Date:   Mon Nov 2 16:49:17 2015 +0800
+
+    fix negative remarks
+
+commit 68854396df017448557ed3cef9ea55ebe4cb9d1d
+Author: lzding <472339105@qq.com>
+Date:   Mon Nov 2 15:04:10 2015 +0800
+
+    fix move zero qty
+
+commit 200be198271ec25fbca5c2c2c8f4f489e838aeae
+Author: lzding <472339105@qq.com>
+Date:   Thu Oct 22 16:05:50 2015 +0800
+
+    onn
+
+commit 07733882cbce217072995ae8455dc02751c9d9ad
+Author: lzding <472339105@qq.com>
+Date:   Wed Sep 9 16:01:31 2015 +0800
+
+    fix move file
+
+commit 8b68aaafcbb8c762916d8721ab25616f393cb604
+Author: lzding <472339105@qq.com>
+Date:   Wed Sep 9 15:45:49 2015 +0800
+
+    fix move file
+
+commit 00c0bba867493da4de2b6cd9223eb32c87d2bb36
+Author: lzding <472339105@qq.com>
+Date:   Wed Sep 9 15:38:13 2015 +0800
+
+    fix move
+
+commit a6ed6ece1bdb949a0856318372db1988fc4c5954
+Author: lzding <472339105@qq.com>
+Date:   Tue Sep 8 17:26:36 2015 +0800
+
+    add movement record for packageId
+
+commit a1cd926865766625b36430eeab268a0721839347
+Merge: b04b52a ee8efc2
+Author: lzding <472339105@qq.com>
+Date:   Wed Jul 22 14:07:42 2015 +0800
+
+    Merge branch 'penglai' of github.com:shentianyi/warehouse into penglai
+
+commit b04b52af3bf7b59cc8a6721ff1e88dfebe71d153
+Author: lzding <472339105@qq.com>
+Date:   Wed Jul 22 14:06:38 2015 +0800
+
+    API CHANGE
+
+commit ee8efc2d0fa1842a7da3eed052e0d6414db9ebe7
+Merge: ab39f73 1c48ab4
+Author: Charlot <7wangsong@gmail.com>
+Date:   Tue Jul 21 09:27:23 2015 +0800
+
+    remark
+
+commit ab39f73a40007bd6d778f79ef81c65d7ec8755bc
+Author: Charlot <7wangsong@gmail.com>
+Date:   Tue Jul 21 09:26:05 2015 +0800
+
+    order service
+
+commit 1c48ab4e190214099bb1d093dad22606540302c7
+Author: lzding <472339105@qq.com>
+Date:   Mon Jul 20 17:33:35 2015 +0800
+
+    API使用文档
+
+commit 2870072c30f9a51e620a1f4f70bd35b63ea75510
+Author: lzding <472339105@qq.com>
+Date:   Mon Jul 20 17:16:00 2015 +0800
+
+    优化
+
+commit f9d127c5435e9395139a69dd10ab8d87066244ff
+Author: lzding <472339105@qq.com>
+Date:   Mon Jul 20 16:35:06 2015 +0800
+
+    零件默认库位查询，需要执行 rake db:seed; bug fix
+
+commit 3b28dcadea23386c9ad008d263c80680d3a86fc8
+Author: lzding <472339105@qq.com>
+Date:   Tue Jul 14 12:01:45 2015 +0800
+
+    .
+
+commit 176a41752a482ecc907395cf4e630c1be417403b
+Author: lzding <472339105@qq.com>
+Date:   Mon Jul 6 14:01:47 2015 +0800
+
+    fix bug
+
+commit 7a7bcc97e1a43ed23288c6bda06f3fe308a87e73
+Author: lzding <472339105@qq.com>
+Date:   Mon Jul 6 12:26:22 2015 +0800
+
+    库存汇总 paginate group by
+
+commit 9ab69c7c03c4a2bfff8cb77d47f7d347816c865d
+Author: lzding <472339105@qq.com>
+Date:   Mon Jul 6 10:00:18 2015 +0800
+
+    优化
+
+commit df682a8e436af5a8c86a51d161f9739d596d7d42
+Merge: 36f9844 1c401ea
+Author: lzding <472339105@qq.com>
+Date:   Thu Jul 2 18:26:25 2015 +0800
+
+    Merge branch 'penglai' of github.com:shentianyi/warehouse into penglai
+
+commit 36f9844770a9e1a557d97d2ddd16ca957371e5eb
+Author: lzding <472339105@qq.com>
+Date:   Thu Jul 2 18:26:08 2015 +0800
+
+    报废导出及优化
+
+commit 1c401eaaff0565ce89353237a2a4dcc526bf6404
+Author: Charlot <7wangsong@gmail.com>
+Date:   Wed Jul 1 14:00:22 2015 +0800
+
+    raise
+
+commit 9460ab9ecd31e7fc85bcba12bd703d72174fc8f2
+Merge: a338c1d 067ec12
+Author: Charlot <7wangsong@gmail.com>
+Date:   Wed Jul 1 13:36:06 2015 +0800
+
+    Merge branch 'penglai' of github.com:shentianyi/warehouse into penglai
+
+commit a338c1d8ff8fe36fe8dfc2ac6b6f97133bffb509
+Author: Charlot <7wangsong@gmail.com>
+Date:   Wed Jul 1 13:32:55 2015 +0800
+
+    d
+
+commit 067ec12d36a76cec57e8c91c1f2ccd6a60d5e6db
+Author: lzding <472339105@qq.com>
+Date:   Wed Jul 1 12:16:08 2015 +0800
+
+    cut uniqueId
+
+commit 38c99c8c1ac2471980be1d7c4ae2f0fff940c272
+Merge: 6a661d7 0c9a50e
+Author: Charlot <7wangsong@gmail.com>
+Date:   Tue Jun 30 16:12:35 2015 +0800
+
+    Merge branch 'penglai' of github.com:shentianyi/warehouse into penglai
+
+commit 6a661d71960533f10238580ffaccf85744e07f10
+Author: Charlot <7wangsong@gmail.com>
+Date:   Tue Jun 30 16:12:00 2015 +0800
+
+    search
+
+commit 0c9a50e3901905843fab94403c2e6dc15a08e9ea
+Merge: 6af112d e426310
+Author: Charlot <7wangsong@gmail.com>
+Date:   Tue Jun 30 12:06:15 2015 +0800
+
+    remark
+
+commit 6af112d11d8189f1aba89127e45164aad0c57a43
+Author: Charlot <7wangsong@gmail.com>
+Date:   Tue Jun 30 12:04:20 2015 +0800
+
+    sc
+
+commit e4263108ae7c87693e84ee44cac60601044f3f43
+Merge: 1245bd5 2ee4a65
+Author: Charlot <7wangsong@gmail.com>
+Date:   Tue Jun 30 12:00:42 2015 +0800
+
+    db
+
+commit 1245bd515f6686bdf0a1b29260d9560108ca8839
+Author: Charlot <7wangsong@gmail.com>
+Date:   Tue Jun 30 11:58:23 2015 +0800
+
+    move
+
+commit 2ee4a65ccefd1d6202205594769dc037aa0f5faf
+Author: lzding <472339105@qq.com>
+Date:   Tue Jun 30 11:49:36 2015 +0800
+
+    merge
+
+commit fd2c7ccd697985e3d65b490eda1fdbfd8e67a69e
+Merge: d7cd19e ea903d3
+Author: Charlot <7wangsong@gmail.com>
+Date:   Tue Jun 30 11:43:50 2015 +0800
+
+    Merge branch 'penglai' of github.com:shentianyi/warehouse into penglai
+
+commit d7cd19e5e03ce57c5a50fe622ae14e97a31d34a9
+Author: Charlot <7wangsong@gmail.com>
+Date:   Tue Jun 30 11:42:51 2015 +0800
+
+    scrap
+
+commit ea903d3b322291f1a06fabe07c7cdb67cf4e8f07
+Merge: 5a6366c fe4dc2f
+Author: lzding <472339105@qq.com>
+Date:   Tue Jun 30 11:38:01 2015 +0800
+
+    merge
+
+commit fe4dc2f34a53391e5ad2d5ebf74cb3853854b1b1
+Author: lzding <472339105@qq.com>
+Date:   Tue Jun 30 11:22:01 2015 +0800
+
+    movement 查询导出，其他功能优化
+
+commit 5a6366c36f29e1d8e5bb7941b9270b2b9846761c
+Author: Charlot <7wangsong@gmail.com>
+Date:   Tue Jun 30 11:17:47 2015 +0800
+
+    list
+
+commit 9093ba3731c497f7521b2c449424fb9b8b9e4440
+Author: Charlot <7wangsong@gmail.com>
+Date:   Tue Jun 30 10:59:06 2015 +0800
+
+    update
+
+commit 9e5b55292e377d2ebf598798e6e3f5b9371629f7
+Author: Charlot <7wangsong@gmail.com>
+Date:   Mon Jun 29 23:49:04 2015 +0800
+
+    open move
+
+commit 11a121f7d3b3fc13e5b5a490b50b311a7052b6ce
+Merge: fb410df 33b73c2
+Author: Charlot <7wangsong@gmail.com>
+Date:   Mon Jun 29 18:22:15 2015 +0800
+
+    l
+
+commit fb410df066f3941e6cc1d491f2ad124678ef5237
+Author: Charlot <7wangsong@gmail.com>
+Date:   Mon Jun 29 18:19:57 2015 +0800
+
+    pl
+
+commit 33b73c26f57ba6e3e483b372509135eec875d7c7
+Merge: dae0718 43ad9b6
+Author: Charlot <7wangsong@gmail.com>
+Date:   Mon Jun 29 17:50:42 2015 +0800
+
+    Merge branch 'penglai' of github.com:shentianyi/warehouse into penglai
+
+commit dae07182fc546acc947848130ce46afffc557397
+Author: Charlot <7wangsong@gmail.com>
+Date:   Mon Jun 29 17:50:17 2015 +0800
+
+    update
+
+commit 43ad9b6c03fbceef41ad38321b2f69d854ad5b8e
+Merge: 8f2c725 4d501f3
+Author: lzding <472339105@qq.com>
+Date:   Mon Jun 29 10:37:24 2015 +0800
+
+    Merge branch 'penglai' of github.com:shentianyi/warehouse into penglai
+
+commit 8f2c7254d2b5e5a9a2cd67d64fdc7fa417c87f36
+Author: lzding <472339105@qq.com>
+Date:   Mon Jun 29 10:36:59 2015 +0800
+
+    merge
+
+commit 4d501f3973af9c8aeb7711678054f8bb2704c093
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sun Jun 28 23:21:05 2015 +0800
+
+    diff repoart
+
+commit a3228ddca8cfeeb19f3e6b808489ecfadcc334a1
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sun Jun 28 23:10:31 2015 +0800
+
+    desc
+
+commit 893c509934ee7e737621d1950a802d598ec20ff2
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sun Jun 28 22:30:50 2015 +0800
+
+    page
+
+commit d3dcf78936d31c3bac43a58ff3038e25fdd6baf7
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sun Jun 28 22:26:59 2015 +0800
+
+    show
+
+commit 7b3905be580f3dc06acb460bb00baf0ac0add812
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sun Jun 28 22:03:04 2015 +0800
+
+    fifo
+
+commit 92c254a5c8567d44275d4e0366467c70c9e5b0ec
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sun Jun 28 22:00:34 2015 +0800
+
+    fifo expoty
+
+commit 43b3a61a7016b59b5d5dd3bb214dd9a273fa3f3c
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sun Jun 28 21:35:46 2015 +0800
+
+    fifo invalid
+
+commit d10ed359c2abef8b2ed1ef2a8ad9c187dcc94de9
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sun Jun 28 21:28:56 2015 +0800
+
+    search lock
+
+commit 2c6cd40b3d6a4df11d32951bacd793ef6c8d67db
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sun Jun 28 21:23:15 2015 +0800
+
+    enter store
+
+commit 666b837805989bb394ad9cbdce18c2fa5eb55ad8
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sun Jun 28 12:43:35 2015 +0800
+
+    export total
+
+commit aff40ff9dd56bcaba98b9990250d6b6ad4c0dc01
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sat Jun 27 15:34:14 2015 +0800
+
+    update
+
+commit acfbc46d1b92e45d4857c94323596f5e04f1c4d6
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sat Jun 27 14:49:49 2015 +0800
+
+    qty zero
+
+commit d0f60b19c04400b725f8c0ec7ac6c7625686c512
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sat Jun 27 14:27:00 2015 +0800
+
+    export qty
+
+commit 46fde27131ef7659f413e763c22a12c8a601c4d1
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sat Jun 27 12:06:28 2015 +0800
+
+    fifo
+
+commit e4e2c69f79b6aba40b31d65d52f4125ee5929541
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sat Jun 27 10:36:02 2015 +0800
+
+    pl
+
+commit 1c80968af0daba132eebf0f5da75b4ff7cee50e0
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Jun 26 20:57:04 2015 +0800
+
+    in store
+
+commit 7e419933edb652359fad6da812d77a10e42c58ea
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Jun 26 17:44:17 2015 +0800
+
+    change default
+
+commit 9f9f9326ada7404ff8b1ca415d0133e9a06ee899
+Author: lzding <472339105@qq.com>
+Date:   Fri Jun 26 15:11:30 2015 +0800
+
+    merge
+
+commit 1cf7852b9a3e210a332fe49c578e5a59d2a9f74f
+Merge: 5003d97 d84834b
+Author: lzding <472339105@qq.com>
+Date:   Fri Jun 26 15:08:07 2015 +0800
+
+    merge
+
+commit 5003d976f585aa6491b6ce1ccb1683de0f948f25
+Author: lzding <472339105@qq.com>
+Date:   Fri Jun 26 15:06:37 2015 +0800
+
+    0库存记录DESTORY
+
+commit d84834b89b945e0bb666d7ec5447428ed3fc6d79
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Jun 26 13:44:26 2015 +0800
+
+    rename
+
+commit 67a026d3bfddc0652458d2c85d51b2392dbb77fd
+Merge: 9d70c76 eec537e
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Jun 26 13:03:56 2015 +0800
+
+    Merge branch 'penglai' of github.com:shentianyi/warehouse into penglai
+
+commit 9d70c7657476bc0a90d3d3ec125cc27c5d6588be
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Jun 26 13:03:34 2015 +0800
+
+    update
+
+commit eec537e67c02f187d079e3c82998146e9472cad6
+Merge: c452360 215b574
+Author: lzding <472339105@qq.com>
+Date:   Fri Jun 26 12:07:08 2015 +0800
+
+    Merge branch 'penglai' of github.com:shentianyi/warehouse into penglai
+
+commit c4523601957f6eedea9f98ed73dce39e177fdc1f
+Author: lzding <472339105@qq.com>
+Date:   Fri Jun 26 12:06:24 2015 +0800
+
+    优化
+
+commit 215b57400c196b70434751dbf80d7ea789e70101
+Merge: 653635d 9b1192d
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Jun 26 11:35:10 2015 +0800
+
+    Merge branch 'penglai' of github.com:shentianyi/warehouse into penglai
+
+commit 653635dfa7c1aea1247c748ee5a398e5cf1afafe
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Jun 26 11:34:40 2015 +0800
+
+    view name
+
+commit 9b1192d808f5110b77da8c55b55a849272718bc3
+Merge: da1e6e8 423f9db
+Author: lzding <472339105@qq.com>
+Date:   Fri Jun 26 10:48:59 2015 +0800
+
+    Merge branch 'penglai' of github.com:shentianyi/warehouse into penglai
+
+commit da1e6e8e1349c3bd24b94ee1a1cfd11c1845f905
+Author: lzding <472339105@qq.com>
+Date:   Fri Jun 26 10:46:42 2015 +0800
+
+    fix move bug
+
+commit 423f9db75790e850ce91655f69bf63e92065c519
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Jun 26 09:45:41 2015 +0800
+
+    lock
+
+commit 4f83cb1515ac87311e7f851177fd0ec024984da7
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Jun 26 09:42:03 2015 +0800
+
+    fi
+
+commit ddc84371e4c1d18809789c90f07a0ef3689ec5aa
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Jun 26 09:40:55 2015 +0800
+
+    fix fifo
+
+commit 2360950de400a250655783a81106abb7417205aa
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Jun 26 09:33:22 2015 +0800
+
+    fifo
+
+commit 2a35480803cbe47ad7cdb322239aea06022a1b15
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Jun 26 07:52:50 2015 +0800
+
+    params
+
+commit 4f7a580b662bcffdeab0ad49a537e2431b41d579
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Jun 26 07:48:38 2015 +0800
+
+    fix
+
+commit fd0649a830677dd618b9519d5a329537ef83fdd1
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Jun 26 07:25:30 2015 +0800
+
+    add default whouse
+
+commit 21f02971a39fdfff2ae6bd20a8aae1bde032908f
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Jun 26 07:16:18 2015 +0800
+
+    disable enterstock
+
+commit 88da33226e03b5cf7ffc6cc6fe0102626b6b6b4f
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Jun 26 07:13:12 2015 +0800
+
+    re
+
+commit d47b11f876a2ce4cf6595ee830fea337e107c92d
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Jun 26 07:06:23 2015 +0800
+
+    add lock
+
+commit cac9acab3c2bb0604be8925d75fdd8a71cf17a32
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Jun 26 05:43:54 2015 +0800
+
+    export
+
+commit c1bd61f6a7c5a58b913e338ddc19d07cc38458a3
+Merge: afd1add 28b1c60
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Jun 25 21:04:00 2015 +0800
+
+    Merge branch 'penglai' of github.com:shentianyi/warehouse into penglai
+
+commit afd1add11d0ec71b41fd1e9b19e0f4c9972f562f
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Jun 25 21:03:34 2015 +0800
+
+    created at
+
+commit 28b1c60997e0f2a3c7c9ffa0a9e185bb4bbcd6c5
+Merge: 1f8f62a 8872d0b
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Jun 25 20:58:21 2015 +0800
+
+    Merge branch 'penglai' of github.com:shentianyi/warehouse into penglai
+
+commit 1f8f62a33ccfb3572318077077c2c6f8203f0cb0
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Jun 25 20:57:57 2015 +0800
+
+    schema
+
+commit 8872d0b9b85adb2dc383c832b630015446024f09
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Jun 25 20:57:04 2015 +0800
+
+    name to scrape
+
+commit 417aa906a3a65b84b34b7ba5badc22493176e5c8
+Merge: cae29ae 9df96fa
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Jun 25 20:29:43 2015 +0800
+
+    Merge branch 'penglai' of github.com:shentianyi/warehouse into penglai
+
+commit 9df96fa1f780449e293ee184a0ce74e83ad8b8d7
+Merge: 5c1a56f bbce5d0
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Jun 25 20:28:05 2015 +0800
+
+    Merge branch 'penglai' of github.com:shentianyi/warehouse into penglai
+
+commit 5c1a56f105cd8e6d2c12c1b8e96a075358e40ad0
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Jun 25 20:27:24 2015 +0800
+
+    fix
+
+commit bbce5d065e9c69b4ad1c83d13e03d1c883e264fa
+Author: lzding <472339105@qq.com>
+Date:   Thu Jun 25 18:47:11 2015 +0800
+
+    fix bug
+
+commit cae29aee49bb7b7763e19ac29f93cdadb687905b
+Merge: 380a9ee 02cf58d
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Jun 25 16:33:55 2015 +0800
+
+    Merge branch 'penglai' of github.com:shentianyi/warehouse into penglai
+
+commit 380a9ee83cc8ddf6227a030b4384186571ee97e3
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Jun 25 16:33:26 2015 +0800
+
+    schema
+
+commit 02cf58dfdf47ea7475d848e618a4531cba9b70c3
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Jun 25 16:32:05 2015 +0800
+
+    add open logistics destroy
+
+commit 143243eca48ce4f739451e79831e6f27e0ac7848
+Author: lzding <472339105@qq.com>
+Date:   Thu Jun 25 16:29:45 2015 +0800
+
+    fix bug
+
+commit 4b783e01bcd69e0bf283f293defa97b4695e2972
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Jun 25 16:04:53 2015 +0800
+
+    update
+
+commit f22f1b202cb6522bcacee59ef16a3a0d14048fe5
+Merge: 1c05d03 f0a36b8
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Jun 25 15:37:16 2015 +0800
+
+    Merge branch 'penglai' of github.com:shentianyi/warehouse into penglai
+
+commit 1c05d036b13a1eae218bd4ff78354ffbd5230fc3
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Jun 25 15:36:35 2015 +0800
+
+    fix params
+
+commit f0a36b87776db73b510e8e6487ada1504b0c0516
+Merge: b2fe174 f103575
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Jun 25 15:32:07 2015 +0800
+
+    schema conflict
+
+commit b2fe17410e08a784fd242b259f44112081659ef7
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Jun 25 15:30:44 2015 +0800
+
+    schema
+
+commit f1035757bf980fac1122ec001959f4eff214397a
+Merge: a6c3f63 1665ce9
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Jun 25 15:25:06 2015 +0800
+
+    schema conflict
+
+commit a6c3f63153e81ebf338d45c305a93c2d048e1bf7
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Jun 25 15:22:50 2015 +0800
+
+    schema
+
+commit 1665ce9e489f966c25f2b5d37c913a1753a0fd88
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Jun 25 15:21:01 2015 +0800
+
+    rescue
+
+commit 576757fbd8194b78accd19f6cacad482b6d6de7e
+Merge: 97fa957 60f04c7
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Jun 25 14:42:49 2015 +0800
+
+    Merge branch 'penglai' of github.com:shentianyi/warehouse into penglai
+
+commit 97fa957bacb23b588cc52f4e2588890829b39b99
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Jun 25 14:42:11 2015 +0800
+
+    update
+
+commit 60f04c720d12325881def15d48e91d194108059b
+Merge: 195d5a7 5601259
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Jun 25 14:32:32 2015 +0800
+
+    schema
+
+commit 195d5a780cfec45dfff80f21ed3035faadab9184
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Jun 25 14:30:58 2015 +0800
+
+    schema
+
+commit 56012599b847a196f7fecb58b63a9689b8b5a2f7
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Jun 25 14:29:34 2015 +0800
+
+    update column type
+
+commit 4993ac9fc5dad8b64941595a44d0fa9a0a117873
+Merge: 22fc918 47e2d29
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Jun 25 13:31:52 2015 +0800
+
+    Merge branch 'penglai' of github.com:shentianyi/warehouse into penglai
+
+commit 47e2d292e4b21275a949ff05dea54e3f2ffade13
+Merge: b3e5463 4179302
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Jun 25 13:13:28 2015 +0800
+
+    fix nstorage update
+
+commit 4179302fd4df679fc715cd6d18e75b784e1f7456
+Author: lzding <472339105@qq.com>
+Date:   Thu Jun 25 12:10:44 2015 +0800
+
+    库存导出优化
+
+commit 22fc918d0155bc23a870f55f0751b84fd33fe721
+Merge: 3c906cc b3e5463
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Jun 25 11:43:51 2015 +0800
+
+    Merge branch 'penglai' of github.com:shentianyi/warehouse into penglai
+
+commit 3c906cc9f051fb1f7f2a4b4714797c1f69ce516d
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Jun 25 11:43:22 2015 +0800
+
+    schema
+
+commit b3e546319b980cfb96cab9b177f988cafd182745
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Jun 25 11:41:57 2015 +0800
+
+    update export nstorage detail
+
+commit 40246b724cfdf516922bf46282897c2eb8e8ba7c
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Jun 25 10:08:52 2015 +0800
+
+    update
+
+commit 3e2774a2822613d136b16e2e09fe524b396e5fb2
+Merge: 2c568d7 e7fdf95
+Author: Charlot <7wangsong@gmail.com>
+Date:   Wed Jun 24 20:16:39 2015 +0800
+
+    Merge branch 'penglai-develop' of github.com:shentianyi/warehouse into penglai-develop
+
+commit 2c568d79c163c7ca9922c28a331ee299c23b1130
+Author: Charlot <7wangsong@gmail.com>
+Date:   Wed Jun 24 20:16:02 2015 +0800
+
+    update
+
+commit e7fdf95ca1a1765c5087fc3e52d9b1d2a57745e8
+Author: lzding <472339105@qq.com>
+Date:   Wed Jun 24 18:44:11 2015 +0800
+
+    库存查询导出
+
+commit b49d0be991eb03b0c00fcf72a6457f30e337ffd9
+Merge: 2f8922f 040b2cb
+Author: Charlot <7wangsong@gmail.com>
+Date:   Wed Jun 24 15:59:07 2015 +0800
+
+    conflict
+
+commit 2f8922f0b51ab5ae381d5168d39cdf864ab9baf1
+Author: Charlot <7wangsong@gmail.com>
+Date:   Wed Jun 24 15:56:49 2015 +0800
+
+    push
+
+commit 040b2cb09c8ecd62a7f33732477e4020ced1ab35
+Author: lzding <472339105@qq.com>
+Date:   Wed Jun 24 11:28:47 2015 +0800
+
+    数据库修改
+
+commit 899430c821f6702865eafa641eec312963e6e7f5
+Merge: c6fb23a 5418ef4
+Author: Charlot <7wangsong@gmail.com>
+Date:   Wed Jun 24 10:50:26 2015 +0800
+
+    Merge branch 'penglai' into penglai-develop
+
+commit c6fb23a58f4e8afb2b8c1c60ff8c767a49fca6cb
+Author: lzding <472339105@qq.com>
+Date:   Wed Jun 24 10:34:40 2015 +0800
+
+    数据库n_Storages,movements 字段属性修改
+
+commit 5418ef4e74510cdae63688224636456318bd092f
+Author: Charlot <7wangsong@gmail.com>
+Date:   Wed Jun 24 10:27:57 2015 +0800
+
+    user name nil
+
+commit f01127b89e1a7fa5f3629b746e8dfc0dc0e98d60
+Author: Charlot <7wangsong@gmail.com>
+Date:   Wed Jun 24 10:23:51 2015 +0800
+
+    fix record
+
+commit b9f744a58a980637f1fa69195820a6eaa5b77b8d
+Merge: 2224aa5 771b2b9
+Author: lzding <472339105@qq.com>
+Date:   Wed Jun 24 09:47:30 2015 +0800
+
+    Merge branch 'penglai-develop' of github.com:shentianyi/warehouse into penglai-develop
+
+commit 2224aa5a8ff4fcd19d0c3dad77960a282b7d5a5e
+Author: lzding <472339105@qq.com>
+Date:   Wed Jun 24 09:44:30 2015 +0800
+
+    merge
+
+commit 771b2b98d5cd6442c17eafef8b12829ea31c0732
+Author: Charlot <7wangsong@gmail.com>
+Date:   Wed Jun 24 07:56:51 2015 +0800
+
+    scrap
+
+commit 2ffe3d8ade087daaa1e2feeac282aff6be985b06
+Author: Charlot <7wangsong@gmail.com>
+Date:   Wed Jun 24 04:06:18 2015 +0800
+
+    update
+
+commit b7aa47cb9f1d9800d0d407ef8d59c31f0fe04dba
+Author: Charlot <7wangsong@gmail.com>
+Date:   Tue Jun 23 15:54:26 2015 +0800
+
+    update qty
+
+commit 5e27813588690f1b1972956a66204fd9be52fbf3
+Author: Charlot <7wangsong@gmail.com>
+Date:   Tue Jun 23 15:43:23 2015 +0800
+
+    update
+
+commit 96380eaf6c0025b187d277b58b7faa420026a677
+Merge: aea83ff 946d7c3
+Author: Charlot <7wangsong@gmail.com>
+Date:   Tue Jun 23 07:37:18 2015 +0800
+
+    update
+
+commit aea83ffb8fab71a2b10afc3a9097cfad636bc40b
+Author: Charlot <7wangsong@gmail.com>
+Date:   Tue Jun 23 07:33:31 2015 +0800
+
+    w
+
+commit 946d7c331f5a9a158b887fa42566b75addc959d2
+Merge: 4fc275c d5fea00
+Author: lzding <472339105@qq.com>
+Date:   Mon Jun 22 18:42:56 2015 +0800
+
+    merge
+
+commit 4fc275caa187329f0274c96bf3b8c72b30474ae9
+Author: lzding <472339105@qq.com>
+Date:   Mon Jun 22 18:36:07 2015 +0800
+
+    负库存功能及文件移库功能
+
+commit d5fea00552c3c98f8ac3f6e75280463cf3abf445
+Author: Charlot <7wangsong@gmail.com>
+Date:   Mon Jun 22 13:12:08 2015 +0800
+
+    update prefix
+
+commit c876c8b3bb3825f71185d73aecc6255742ac80cf
+Author: Charlot <7wangsong@gmail.com>
+Date:   Mon Jun 22 13:07:46 2015 +0800
+
+    update
+
+commit 9b3e18cbd92e8f62f23725509c53d020e126adba
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri Jun 19 21:37:41 2015 +0800
+
+    update api
+
+commit 901eccf8fdca61258f3a93d76bc76d8d93a6aa37
+Merge: 9319e40 b144dea
+Author: lzding <472339105@qq.com>
+Date:   Tue Jun 16 15:23:34 2015 +0800
+
+    Merge branch 'penglai-develop' of github.com:shentianyi/warehouse into penglai-develop
+
+commit 9319e40e89220c0539eea97dc18d95a0e324a50b
+Author: lzding <472339105@qq.com>
+Date:   Tue Jun 16 15:23:16 2015 +0800
+
+    报废报表
+
+commit b144deacca706dd79708228121331e2c316ea1f1
+Author: Charlot <7wangsong@gmail.com>
+Date:   Mon Jun 15 11:27:37 2015 +0800
+
+    update
+
+commit 6b4215029368b727812b13adf5c3e266bda5b86b
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sat Jun 13 12:38:09 2015 +0800
+
+    set current user id
+
+commit df8414a7dd558849670e4d0476b13d3fc06a92a3
+Author: lzding <472339105@qq.com>
+Date:   Fri Jun 12 10:27:43 2015 +0800
+
+    scrap list
+
+commit 5799be01d67cfb5dd88dd00afa25f33226cded9b
+Author: lzding <472339105@qq.com>
+Date:   Wed Jun 10 13:42:04 2015 +0800
+
+    change fifo_time column
+
+commit 4e2d47fb182a77504deafd69d00356bd664dce9c
+Author: lzding <472339105@qq.com>
+Date:   Tue Jun 9 18:08:31 2015 +0800
+
+    报表数据WEB 修改
+
+commit bf15cfc1eaab303eeae90954d705c87cfbc32d13
+Author: lzding <472339105@qq.com>
+Date:   Tue Jun 9 17:51:51 2015 +0800
+
+    报表数据补充
+
+commit 9d0be5d5359bad69a4fa136618147e0391d5455f
+Author: Charlot <7wangsong@gmail.com>
+Date:   Tue Jun 9 15:28:55 2015 +0800
+
+    update prefix
+
+commit 6c0ce44d3b870db258637193445b521272cb81ab
+Author: ryan715 <yxr.306789@gmail.com>
+Date:   Mon Jun 8 21:42:30 2015 +0800
+
+    fix inventory report
+
+commit 3157505a98a66e0914ff4592dd77b9a42e39a26d
+Merge: 42230a7 a2cd851
+Author: ryan715 <yxr.306789@gmail.com>
+Date:   Mon Jun 8 21:23:33 2015 +0800
+
+    fix
+
+commit 42230a71f7c0b5d1e29d2d067873513cacaab728
+Author: ryan715 <yxr.306789@gmail.com>
+Date:   Mon Jun 8 19:55:53 2015 +0800
+
+    fix all
+
+commit a2cd8516dc09b64cce6d50877e82f6e986c85da2
+Merge: e86a05f e83adce
+Author: lzding <472339105@qq.com>
+Date:   Mon Jun 8 11:27:57 2015 +0800
+
+    Merge branch 'penglai-develop' of https://github.com/shentianyi/warehouse into penglai-develop
+
+commit e86a05fd75dbe1863ca9bfa38b6f86a0df1bb54f
+Author: lzding <472339105@qq.com>
+Date:   Mon Jun 8 11:22:16 2015 +0800
+
+    数据查询时间区间问题
+
+commit e83adced4edda40b1bce4b05ebdb8140882d9b9d
+Author: Charlot <7wangsong@gmail.com>
+Date:   Mon Jun 8 11:13:17 2015 +0800
+
+    add api
+
+commit 1796657a974f0d1d172e9ac1f084326cfd109150
+Author: ryan715 <yxr.306789@gmail.com>
+Date:   Sat Jun 6 21:19:57 2015 +0800
+
+    fix report
+
+commit d0dc3691394e1f612590300768350c413082c799
+Author: ryan715 <yxr.306789@gmail.com>
+Date:   Sat Jun 6 21:14:18 2015 +0800
+
+    finish generate diff report
+
+commit 85feef13b1bb624cba48f2465ff4019bc9527eb2
+Author: ryan715 <yxr.306789@gmail.com>
+Date:   Sat Jun 6 18:27:41 2015 +0800
+
+    fix api of InventoryList Processing
+
+commit e9129910830b637b22050da0174e9cba94115109
+Author: ryan715 <yxr.306789@gmail.com>
+Date:   Sat Jun 6 18:25:05 2015 +0800
+
+    finish v3 api of InventoryListItem
+
+commit ea0332b1fda1c175e2538ad042812e585adcb2c6
+Author: ryan715 <yxr.306789@gmail.com>
+Date:   Sat Jun 6 13:07:34 2015 +0800
+
+    generate_diff_report index
+
+commit 8a6c856045ee2a01184d3dc6dcf2bcf299c49d3d
+Author: ryan715 <yxr.306789@gmail.com>
+Date:   Sat Jun 6 12:24:56 2015 +0800
+
+    fix inventory_list_item relationship
+
+commit cb0c8dc0af337033c1b3d5e466e01a0cfc6336ab
+Author: ryan715 <yxr.306789@gmail.com>
+Date:   Sat Jun 6 00:01:46 2015 +0800
+
+    editing api of inventorylistitem post
+
+commit 3e26c94c645d35b6ca0997ba281cf6cad6a19b02
+Author: ryan715 <yxr.306789@gmail.com>
+Date:   Fri Jun 5 19:59:40 2015 +0800
+
+    finish api of InventoryList processing
+
+commit 03f269d555619611360715e6806c933cfff93203
+Author: ryan715 <yxr.306789@gmail.com>
+Date:   Fri Jun 5 18:25:55 2015 +0800
+
+    finish ability of InventoryListItem new edit
+
+commit 77bc0d779e76f7dc5219c7a2e04590e7b91b76f4
+Author: ryan715 <yxr.306789@gmail.com>
+Date:   Fri Jun 5 16:56:40 2015 +0800
+
+    InventoryListItem index
+
+commit 7208cff77de0c5d481c55eed4f55d4615d18cac0
+Author: ryan715 <yxr.306789@gmail.com>
+Date:   Fri Jun 5 16:36:21 2015 +0800
+
+    InventoryListItem model
+
+commit cc570229f501997778c40d266b9409a2d8e6b09b
+Author: ryan715 <yxr.306789@gmail.com>
+Date:   Fri Jun 5 16:24:44 2015 +0800
+
+    InventoryList new ability,  edit ability
+
+commit 1c6f4f1f2c64a1a9d8fce81efba26a214c06c599
+Author: ryan715 <yxr.306789@gmail.com>
+Date:   Fri Jun 5 00:53:04 2015 +0800
+
+    InventoryList scaffold
+
+commit 8431d38cdbb28a7724f5cac97bfb2fe351fb6af7
+Author: Charlot <7wangsong@gmail.com>
+Date:   Mon Jun 1 05:16:05 2015 +0800
+
+    rm raise
+
+commit 059819aed7cc58664c1935abde7921223193216d
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sat May 30 12:28:29 2015 +0800
+
+    update report
+
+commit 54e82471964cce3dbbc1df1d3065724371772fe3
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu May 21 14:42:26 2015 +0800
+
+    rm raise
+
+commit 796b5e3f156034c7155e4cb0afa6bee45c1c472b
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu May 21 09:06:24 2015 +0800
+
+    fix search
+
+commit 7eef4aa20c30e290d7ca92106ec82cc6e45664f7
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu May 21 08:41:37 2015 +0800
+
+    move query
+
+commit 09f736e768e5bce311a0c9e24795a46760711200
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu May 21 07:22:15 2015 +0800
+
+    api
+
+commit eaabd5315b401c4079b223456189f1659f4e8051
+Author: Charlot <7wangsong@gmail.com>
+Date:   Wed May 20 16:05:43 2015 +0800
+
+    fifo
+
+commit c976b76e50d7f732e7ef9285fbef6273afa73584
+Author: Charlot <7wangsong@gmail.com>
+Date:   Tue May 19 14:45:06 2015 +0800
+
+    update
+
+commit d0203644d43c0d4af923c118ac3c5404558ddb72
+Merge: c7416ae 4b2b0b1
+Author: Charlot <7wangsong@gmail.com>
+Date:   Tue May 19 13:08:11 2015 +0800
+
+    Merge branch 'penglai' of github.com:liqites/warehouse into penglai
+
+commit c7416ae5e967510e81f0de01b44b7a5fc647f36a
+Author: Charlot <7wangsong@gmail.com>
+Date:   Tue May 19 13:07:39 2015 +0800
+
+    role display
+
+commit 4b2b0b1ef0d453a1c028fbf1acd14b530dd86db4
+Merge: ae1c0f0 50f0ae7
+Author: Charlot <7wangsong@gmail.com>
+Date:   Tue May 19 11:02:59 2015 +0800
+
+    Merge branch 'penglai' of github.com:shentianyi/warehouse into penglai
+
+commit 50f0ae703c7452db691d22d478b50cbeae0e7e6c
+Author: Charlot <7wangsong@gmail.com>
+Date:   Tue May 19 11:02:09 2015 +0800
+
+    update position
+
+commit ae1c0f0f8a9bd6c7fd14732116c649ed58fee9f8
+Merge: c255571 7d34403
+Author: Charlot <7wangsong@gmail.com>
+Date:   Tue May 19 10:56:40 2015 +0800
+
+    Merge branch 'penglai' of github.com:shentianyi/warehouse into penglai
+
+commit c255571d0acacd8a93e4bdca205c65b9e170d8f8
+Author: Charlot <7wangsong@gmail.com>
+Date:   Tue May 19 10:56:10 2015 +0800
+
+    server
+
+commit 7d34403625592ebca2c5a607c7809d8b5c6a1d3d
+Author: Charlot <7wangsong@gmail.com>
+Date:   Tue May 19 10:55:05 2015 +0800
+
+    fix
+
+commit eddb8f56026c2bc7045b597236de2332a78c4846
+Author: Charlot <7wangsong@gmail.com>
+Date:   Tue May 19 10:35:51 2015 +0800
+
+    rm validate
+
+commit 14519ef1aa6db9afa88dc3c54505329ced149396
+Author: Charlot <7wangsong@gmail.com>
+Date:   Tue May 19 09:32:55 2015 +0800
+
+    secret key
+
+commit c207ed9cc9633c974c2eac214748fb5b9ec39ee7
+Merge: 2817bff f16f77c
+Author: Charlot <7wangsong@gmail.com>
+Date:   Tue May 19 09:30:21 2015 +0800
+
+    Merge branch 'penglai' of github.com:liqites/warehouse into penglai
+
+commit 2817bfffb0cc46df8ba41eda699de0579fd7ad64
+Author: Charlot <7wangsong@gmail.com>
+Date:   Tue May 19 09:22:15 2015 +0800
+
+    add test
+
+commit f16f77c27c41177471ef0cbc06b8fbec3060ce9e
+Author: Charlot <7wangsong@gmail.com>
+Date:   Mon May 18 11:15:09 2015 +0800
+
+    update
+
+commit 2efe06f3f667bd8b2c695c4a09a492182b208e0f
+Merge: 17375d6 62f8757
+Author: Charlot <7wangsong@gmail.com>
+Date:   Mon May 18 08:45:24 2015 +0800
+
+    Merge branch 'penglai' of github.com:shentianyi/warehouse into penglai
+
+commit 62f8757f054f5baa71b3533688e84914167515de
+Author: Charlot <7wangsong@gmail.com>
+Date:   Mon May 18 08:44:32 2015 +0800
+
+    change type
+
+commit 17375d61b322aa441681bb5468e6ce64f43d8f04
+Merge: 33a7bcb 09a655b
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sun May 17 13:08:06 2015 +0800
+
+    Merge branch 'penglai' of github.com:shentianyi/warehouse into penglai
+
+commit 09a655bbf5c53d54070a14c3cc1af516ff19da89
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sun May 17 13:04:05 2015 +0800
+
+    commit -m
+
+commit 6c92e8294b707c058cdb8c03c1f432063864598d
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri May 15 04:33:40 2015 +0800
+
+    package enter store
+
+commit 17616088a9068e95acff625a687125fc1a9313aa
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri May 15 02:39:56 2015 +0800
+
+    fix api namespace and method error
+
+commit 2ab9ac1fd62b3347c3a90c31619077f8dc722d8a
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri May 15 01:53:02 2015 +0800
+
+    move new warehouse and location to old
+
+commit a8ce79222a35808a42114029f02c15728ca262d2
+Merge: 625ed89 e1a53fa
+Author: Charlot <7wangsong@gmail.com>
+Date:   Fri May 15 00:55:44 2015 +0800
+
+    Merge branch 'NewWms' into penglai-develop
+
+commit e1a53fa989b2660b85982b4246dd23629863f7cb
+Author: Jet <ijetlee@gmail.com>
+Date:   Thu May 14 07:31:18 2015 +0800
+
+    update validators
+
+commit b1dc2d2d01729809d7d4625997cb6c750618f041
+Author: Jet <ijetlee@gmail.com>
+Date:   Thu May 14 07:29:25 2015 +0800
+
+    fix bug: db column part_nr -> partNr.
+
+commit b76351ccf3063f91fcae3adba8081da9799a28d2
+Author: Jet <ijetlee@gmail.com>
+Date:   Wed May 13 17:43:50 2015 +0800
+
+    add query movement method. And update way of handling relation params.
+
+commit dcc247b9e73de7783f2fceb26d89deb0fbeb4d76
+Author: Jet <ijetlee@gmail.com>
+Date:   Wed May 13 13:55:10 2015 +0800
+
+    fix bug: exception in rescue_from. And params format of createWh
+
+commit 0dc12e0b52147c8418394ef85d92e339a5e13495
+Author: Jet <ijetlee@gmail.com>
+Date:   Wed May 13 12:34:10 2015 +0800
+
+    return success in move method.
+
+commit 5535a913ff4984258ba535cb76f84246766bf43f
+Author: Jet <ijetlee@gmail.com>
+Date:   Wed May 13 12:29:14 2015 +0800
+
+    add query stock method
+
+commit e634040493898fbe033b43541de439c493436452
+Author: Jet <ijetlee@gmail.com>
+Date:   Wed May 13 09:37:01 2015 +0800
+
+    fix bug: db column part_nr -> partNr.
+
+commit 340be148be32e552cf783db780c0a203b1434b67
+Author: Jet <ijetlee@gmail.com>
+Date:   Tue May 12 23:08:01 2015 +0800
+
+    revert grape back to 0.9.0 to compat with original code.
+
+commit 0d4eb30949b3b0b3cd096abbd88f34efa836a0a3
+Author: Jet <ijetlee@gmail.com>
+Date:   Tue May 12 23:06:39 2015 +0800
+
+    packageId not unique
+
+commit 604f093ba22d59a5ec8ed77a28d403fb3e512263
+Author: Jet <ijetlee@gmail.com>
+Date:   Tue May 12 17:13:04 2015 +0800
+
+    a, create move record in entry_stock.
+    b, add MoveType records to seeds.
+    c, rename fields.
+
+commit 0d8fc9cc3c9a5b1f6f33b513276ac2d5517e8c93
+Author: Jet <ijetlee@gmail.com>
+Date:   Tue May 12 16:37:49 2015 +0800
+
+    fix bug: db column part_nr -> partNr. update enter_stock
+
+commit e4cc0f399c9775c66b34b20cf44928719e330bb1
+Author: Jet <ijetlee@gmail.com>
+Date:   Tue May 12 16:25:48 2015 +0800
+
+    fix bug: exception in rescue_from if don't use error!
+
+commit 5f3ed3e1fe00bf923be0e54325eec5836b6e5eed
+Author: Jet <ijetlee@gmail.com>
+Date:   Tue May 12 15:44:33 2015 +0800
+
+    add warehouse api(list, create, enter stock).
+
+commit 1c881238f3ff4a6197864a83e0df3e1df87bce77
+Author: Jet <ijetlee@gmail.com>
+Date:   Tue May 12 15:24:01 2015 +0800
+
+    update response json format.
+
+commit 66eb64fd1aa5032efac46b56193135abfa0679af
+Author: Jet <ijetlee@gmail.com>
+Date:   Tue May 12 14:19:53 2015 +0800
+
+    use new version of grape to avoid raise exception in resuce_from method
+
+commit a1168fb7c867626947b7bf5732ab7af39705a658
+Author: Jet <ijetlee@gmail.com>
+Date:   Tue May 12 12:14:13 2015 +0800
+
+    add location api: createLocation
+
+commit f6de5c3e19e6de7798a7b0ca8a35cccb306e9cda
+Author: Jet <ijetlee@gmail.com>
+Date:   Tue May 12 12:12:33 2015 +0800
+
+    add index to xxxId string columns
+
+commit 552af11de05b4ec805bdf52e79e8bd53605c4c9f
+Author: Jet <ijetlee@gmail.com>
+Date:   Tue May 12 12:11:46 2015 +0800
+
+    add index to xxxId string columns
+
+commit fd92e4e068fa5812ee78df573ae13aba6bcd7be5
+Author: Jet <ijetlee@gmail.com>
+Date:   Tue May 12 07:45:36 2015 +0800
+
+    models
+
+commit 33a7bcba0d7e32ca5507bce1efc784c545324cc8
+Merge: 41fc9ee 625ed89
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu May 7 16:16:29 2015 +0800
+
+    Merge branch 'penglai' of github.com:shentianyi/warehouse into penglai
+
+commit 41fc9ee1af7eef78dc15a26c14ba925498599290
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu May 7 16:16:08 2015 +0800
+
+    zh.yml
+
+commit 625ed89c6fef8b8a6ec5c286cfcf4b816e255329
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu May 7 16:14:00 2015 +0800
+
+    fix position
+
+commit 71fc14b595d1b5bb13a91e76c794fe756c750db1
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu May 7 14:44:26 2015 +0800
+
+    fix keyboard error
+
+commit 3bfda12564fbd19e93ebc445398ea1fdbf02d1d3
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu May 7 14:38:30 2015 +0800
+
+    sync
+
+commit 894bffaf5ad12df2a970009affa2568e96a6c819
+Author: Charlot <7wangsong@gmail.com>
+Date:   Wed May 6 21:01:24 2015 +0800
+
+    time
+
+commit 5663c5793baf3deec3c8a4a808cfee1bfe2a836e
+Author: Tesla <leechee89@gmail.com>
+Date:   Wed Apr 1 22:58:02 2015 +0800
+
+    fix
+
+commit cfbe70aca10c2a8079919446d228ad22564226ca
+Author: Tesla <leechee89@gmail.com>
+Date:   Wed Apr 1 22:04:18 2015 +0800
+
+    fix
+
+commit 999e052909c4d997b2fdbeb826fc46faca41c7c1
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Mar 31 15:42:08 2015 +0800
+
+    add download
+
+commit a700a616f4ecfda5aea3d1faccea09fa3869fff7
+Author: Tesla <leechee89@gmail.com>
+Date:   Sun Mar 29 13:10:16 2015 +0800
+
+    fix
+
+commit 75031da13e5045e142ec0e1a9148687014e6f07a
+Author: Tesla <leechee89@gmail.com>
+Date:   Sun Mar 29 11:13:47 2015 +0800
+
+    fix
+
+commit e4bfe7272de6b781a785cd3785d5adac7854ab59
+Author: Tesla <leechee89@gmail.com>
+Date:   Sun Mar 29 09:32:10 2015 +0800
+
+    seed
+
+commit 3095364079d79035d68df1768f299b8171484365
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sat Mar 28 17:37:35 2015 +0800
+
+    grape
+
+commit 94eb32429b64ebaf2cf537b30dd8766caae85166
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sat Mar 28 17:28:54 2015 +0800
+
+    con
+
+commit 5d88d5d96dff5a7bff91a2057ef61370490f6b0b
+Merge: 659d193 cc01c8d
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sat Mar 28 17:05:35 2015 +0800
+
+    Merge branch 'master' of github.com:liqites/warehouse into penglai
+
+commit 659d193b6f74226cb8877f55a11d1cca4eb84a6d
+Merge: e6dd4fd 42c012d
+Author: Charlot <7wangsong@gmail.com>
+Date:   Sat Mar 28 17:03:36 2015 +0800
+
+    conflict
+
+commit e6dd4fdc4361d9fb63367bfaa3e3635f74a03b99
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Mar 17 15:01:19 2015 +0800
+
+    fix grape bug
+
+commit 25fd1dc4c3f3e3796f5c2216505c00ba2c5ab840
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Mar 17 14:55:09 2015 +0800
+
+    fix grape bug
+
+commit 42c012d204cd21b4b553354be7de050ada3c9667
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Mar 12 17:51:47 2015 +0800
+
+    storage api
+
+commit 51fd76fed9cde717d2983fa4ad071e51d02f569b
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Mar 12 16:28:50 2015 +0800
+
+    storage
+
+commit 36f3b96e34a10f75d26f78069ac60e11c464e045
+Author: Tesla <leechee89@gmail.com>
+Date:   Wed Mar 4 16:57:01 2015 +0800
+
+    add something
+
+commit a3b70b27530d2a382476eff72e71f4e0902b0831
+Author: Tesla <leechee89@gmail.com>
+Date:   Sun Feb 15 18:00:08 2015 +0800
+
+    fix report
+
+commit 7b83f8a14c00370ec946dc0c771db1d7e208ff49
+Author: liqites <leechee89@gmail.com>
+Date:   Wed Feb 11 15:50:03 2015 +0800
+
+    fix report
+
+commit ec5b44fb0cc46e31e59db6f17d9ed3698fc5106a
+Author: liqites <leechee89@gmail.com>
+Date:   Wed Feb 11 15:47:34 2015 +0800
+
+    fix report
+
+commit 41e48f0b6e8fcba7c3674c7e8086b014fb3760c3
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Feb 5 16:27:48 2015 +0800
+
+    fix
+
+commit a9d74bacd41c6e41b2bc0d5ebb66837113101b8f
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Feb 5 16:18:42 2015 +0800
+
+    del
+
+commit 455e745943c2647c344c10d0f2b230e10b1b08e4
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Feb 5 16:01:42 2015 +0800
+
+    fix
+
+commit 996eae49978811df30d1587f0751bc5ac482349f
+Author: liqites <leechee89@gmail.com>
+Date:   Wed Feb 4 18:19:42 2015 +0800
+
+    log
+
+commit ea49d0b0210a684eed62a640902475c0ae9ae6b9
+Author: liqites <leechee89@gmail.com>
+Date:   Wed Feb 4 18:03:44 2015 +0800
+
+    log
+
+commit 06a76e1796ef45dde7e326d4a7b75dd9c422d3a1
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Feb 2 12:10:32 2015 +0800
+
+    fix
+
+commit 46fa72b2289678129415988714a211313339e0c4
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Feb 2 11:18:09 2015 +0800
+
+    fix bug
+
+commit 997b8064c66783b9c2d2a4afe01fa3aae9573ca4
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Feb 2 11:09:59 2015 +0800
+
+    fix edit delivery destination
+
+commit c5d9ddc4244cd9c9fca8961b3e33ab434c57c45a
+Author: Tesla <leechee89@gmail.com>
+Date:   Sat Jan 31 15:58:30 2015 +0800
+
+    fix
+
+commit 90f9b17ff3a96e50c3481be687fa089bcfddd2ee
+Author: Tesla <leechee89@gmail.com>
+Date:   Sat Jan 31 14:46:40 2015 +0800
+
+    fix
+
+commit d2621955eb941e6a4e3211eb07d9392549d24ccf
+Author: Tesla <leechee89@gmail.com>
+Date:   Fri Jan 30 16:47:43 2015 +0800
+
+    add destination to show package view
+
+commit af5f1b003d68f09ff50765ee4e7bf287f66dcde9
+Author: Tesla <leechee89@gmail.com>
+Date:   Fri Jan 30 16:42:16 2015 +0800
+
+    edit logistics form
+
+commit cc01c8db2ba2cbba1bfa798a5229ba3255403961
+Merge: 881c6f9 2cf1249
+Author: Tesla <leechee89@gmail.com>
+Date:   Fri Jan 30 13:35:51 2015 +0800
+
+    Merge branch 'release-2.0'
+
+commit 2cf12491c4aab1eacc6f6ddbda190ccab0f2f9a2
+Author: Tesla <leechee89@gmail.com>
+Date:   Fri Jan 30 11:21:48 2015 +0800
+
+    fix
+
+commit 7454ba44119d00aa28af97bfac033b12dfec5103
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Jan 29 12:08:19 2015 +0800
+
+    fix check state error message
+
+commit 5336cf477a496f3c5f28187d76cc932680b7e40f
+Author: Tesla <leechee89@gmail.com>
+Date:   Wed Jan 28 15:03:15 2015 +0800
+
+    fix report
+
+commit 4ec5129b720e9b1d04c73883dde4d9b6f86dda2d
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Jan 27 16:26:00 2015 +0800
+
+    fix
+
+commit 43bbe00d362af8f69552faafb0941970aac2096d
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Jan 27 15:13:03 2015 +0800
+
+    fix
+
+commit a7186d2f4a2b12c41d4fa9ba7b6557406a9eff5d
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Jan 27 15:00:30 2015 +0800
+
+    fix search
+
+commit 881c6f99015225d7dcfc74f6fa0bf69d4b64e761
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Jan 27 00:03:43 2015 +0800
+
+    fix
+
+commit c293877c43190fcb61110ff9f513ece590e8aeaa
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Jan 26 23:58:46 2015 +0800
+
+    fix conflict
+
+commit 2e37ad1bff3a85302cfbe7fbadad1183d31782a3
+Merge: 5ab8a1e 305d1ea
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Jan 26 23:54:41 2015 +0800
+
+    meger release-2.0
+
+commit 5da77a2773c86aab4e40ed385435ebfbd35b8e09
+Merge: 00a9cf9 305d1ea
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Jan 26 23:42:56 2015 +0800
+
+    merge release-2.0
+
+commit 305d1ea598e22d3876c2bc5c1706b4838b9a664f
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Jan 26 23:40:31 2015 +0800
+
+    print server
+
+commit e2433207d13af5e25780122fbbb73b3e2451671a
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Jan 26 19:15:36 2015 +0800
+
+    fix
+
+commit a9ad7d541a9fd966762799931698eee45361e5c3
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Jan 26 18:43:34 2015 +0800
+
+    fix
+
+commit 2ad1181504a0702cfb2300bdef3fe97719dcf6a1
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Jan 26 17:34:46 2015 +0800
+
+    fix
+
+commit 0115ca2fc7a0104b090ac2aecc1b13ecdd298922
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Jan 22 16:56:05 2015 +0800
+
+    fix
+
+commit ca6695c663af7457108ae978001144e5b8f7ac97
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Jan 22 16:48:51 2015 +0800
+
+    fix sync
+
+commit 6b3fa94efc57b931a064e6040fbf09b26ed5adbc
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Jan 22 16:14:09 2015 +0800
+
+    fix
+
+commit b35a9a4573d93318abc1cc6053b4288264f96c0d
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Jan 22 16:00:57 2015 +0800
+
+    fix
+
+commit d9ee8346401d3bf0a80aeddec81637a826288395
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Jan 22 15:28:23 2015 +0800
+
+    fix
+
+commit 3d45d5b9b5e7b88582691e3f505bfcf99e69d724
+Author: Tesla <leechee89@gmail.com>
+Date:   Wed Jan 21 17:23:32 2015 +0800
+
+    fix
+
+commit 0aeda238a35d967e8c5721f12bdeb5ae749e7d1c
+Author: Tesla <leechee89@gmail.com>
+Date:   Wed Jan 21 17:04:06 2015 +0800
+
+    fix
+
+commit 484279988fceb530ea037b37132861f6bffcffab
+Author: Tesla <leechee89@gmail.com>
+Date:   Wed Jan 21 17:00:51 2015 +0800
+
+    fix
+
+commit 41bc37153370612f2dd72a3282969629b15e71d2
+Author: Tesla <leechee89@gmail.com>
+Date:   Wed Jan 21 01:33:14 2015 +0800
+
+    fix
+
+commit 97b38ed23994b47106fb22e890e835ec3c881891
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Jan 20 17:00:53 2015 +0800
+
+    fix
+
+commit 2c3d45bcf42f17b308a430c2e8b14dcee0be1631
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Jan 20 16:04:44 2015 +0800
+
+    fix
+
+commit 1957a7f7b1c46295fb7b58c208c6f1ec1a6dbe03
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Jan 20 15:49:37 2015 +0800
+
+    fix
+
+commit e898b53e7c0ccb761df2ab78b9213cd12076bac0
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Jan 20 15:36:21 2015 +0800
+
+    fix
+
+commit 8ddfffa5a21fd3deded7d7ce37b2a2043f51ad7c
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Jan 20 15:31:00 2015 +0800
+
+    sync lock
+
+commit e581a716099377e15089da1924dee4a396d71186
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Jan 12 16:21:28 2015 +0800
+
+    order dis report
+
+commit aa9a9610d688a626cce0f6df33faef6725b42900
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Jan 12 11:28:58 2015 +0800
+
+    fix pick list print order
+
+commit 0c9c0f3405a2169b09b1671fd80a31696bca7a2f
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Jan 12 11:00:13 2015 +0800
+
+    user operation mode
+
+commit b00b6a8ffaab80400e415ca12405396fabf73b0e
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Jan 6 17:27:36 2015 +0800
+
+    new api
+
+commit 782369c190df854f09854ff8701e8a433fa559b7
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Jan 6 17:10:34 2015 +0800
+
+    fix
+
+commit 19720164f56e6cc81c170b99a526f2c878c63679
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Jan 6 13:33:49 2015 +0800
+
+    fix new api
+
+commit 43e3fad27417075612278aa2f33a5c7ae5e8c504
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Jan 5 21:52:32 2015 +0800
+
+    fix
+
+commit 3814ca34d7d07b3a345ce86946f38157c21bc548
+Author: Tesla <leechee89@gmail.com>
+Date:   Sun Jan 4 17:11:42 2015 +0800
+
+    fix
+
+commit ebb03fd924d6fa787d2bfb30041a77b092455daa
+Author: Tesla <leechee89@gmail.com>
+Date:   Sun Jan 4 11:09:39 2015 +0800
+
+    fix
+
+commit ac418b28237ede71439f5b2d72d2828ec40fe998
+Author: Tesla <leechee89@gmail.com>
+Date:   Wed Dec 31 16:29:35 2014 +0800
+
+    bug fix
+
+commit ca650c62597a37e875b31af9d6bd15627a98cee1
+Author: Tesla <leechee89@gmail.com>
+Date:   Wed Dec 31 16:19:00 2014 +0800
+
+    fix
+
+commit 24b8997c3d9da8782bdaac627e894b57b0d9cea4
+Author: Tesla <leechee89@gmail.com>
+Date:   Wed Dec 31 14:50:05 2014 +0800
+
+    fix synv
+
+commit c0ffcafd8944847e865be63f58a7ed3568fcd8dc
+Author: Tesla <leechee89@gmail.com>
+Date:   Wed Dec 31 14:27:39 2014 +0800
+
+    bug fix
+
+commit 178fba82ef8f64b7623a1638d5dcc0e1f03d02f8
+Author: Tesla <leechee89@gmail.com>
+Date:   Wed Dec 31 11:15:21 2014 +0800
+
+    fix
+
+commit 202607843e3136a0efff0a5b191b8e26230d63e0
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Dec 30 17:58:45 2014 +0800
+
+    grate route task and package presenter
+
+commit 68fa8257b881fbef50019c4c85ee30dead2a699f
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Dec 30 16:46:07 2014 +0800
+
+    api v2
+
+commit cafb7a754ec4c3eafaff4aad4f2bf94207401c61
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Dec 29 21:31:09 2014 +0800
+
+    test file
+
+commit aa634462ebd8201674b48a6cf55a274103fb4ebc
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Dec 29 21:24:24 2014 +0800
+
+    fix
+
+commit c99fa2c8e00685151d30dcc64e5de1ffa02a0d24
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Dec 29 21:22:06 2014 +0800
+
+    fix
+
+commit 926045a66886836a4aeb9899792eb1f83f89e1af
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Dec 29 21:17:44 2014 +0800
+
+    fix
+
+commit e648f611a853292372fa82bce467117a68f3a340
+Author: Tesla <leechee89@gmail.com>
+Date:   Fri Dec 26 17:25:21 2014 +0800
+
+    fix
+
+commit 5ce0965d42f6114372106809f04ce12a2a207ead
+Author: Tesla <leechee89@gmail.com>
+Date:   Fri Dec 26 15:59:13 2014 +0800
+
+    fix
+
+commit 8e634619562a7c7e61595133e7a7ce9a6270f902
+Author: Tesla <leechee89@gmail.com>
+Date:   Fri Dec 26 15:52:51 2014 +0800
+
+    fix print service
+
+commit 54d5bd4c07d5db859d524beb2002dc0ee672b9ae
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Dec 25 22:20:55 2014 +0800
+
+    pick list printer
+
+commit ec16689fa4674904444017f5cd0ec426794fe033
+Author: Tesla <leechee89@gmail.com>
+Date:   Wed Dec 24 18:35:35 2014 +0800
+
+    fix
+
+commit 13660f08d432c759ef08548f483c3e217e5f4270
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Dec 22 11:39:31 2014 +0800
+
+    fix
+
+commit c679f841a9e1d17e6f271ed53d3819590d8c2759
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Dec 22 11:30:23 2014 +0800
+
+    import and export for forklifts,packages
+
+commit c5091b638a736d5bac6df3501ea2a22d44a627ab
+Author: Tesla <leechee89@gmail.com>
+Date:   Sun Dec 21 22:45:42 2014 +0800
+
+    fix bug
+
+commit 643a9d8862e3f2f27ae1d8ea87dd7c94c0298758
+Author: Tesla <leechee89@gmail.com>
+Date:   Sun Dec 21 11:01:40 2014 +0800
+
+    fix bug
+
+commit 12c80a75b8ac5a8559c1d66a9922bd8ad274771e
+Author: Tesla <leechee89@gmail.com>
+Date:   Sun Dec 21 10:36:12 2014 +0800
+
+    fix bug
+
+commit 5fe0682a2115db145ffc338bbf74291b45cf28a4
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Dec 15 17:55:04 2014 +0800
+
+    fix
+
+commit 4b61f3c14e4d2ba3fe82a78acf5eed1014637a20
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Dec 15 15:22:38 2014 +0800
+
+    fix
+
+commit 285dfd3d7cc65ecf1556c15c1f97c78220d85488
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Dec 15 11:17:31 2014 +0800
+
+    fix
+
+commit 0c6e74f0e7de13d448aeb99a614d23bf7e97a92d
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Dec 15 11:04:51 2014 +0800
+
+    fix
+
+commit 76ca81dafd3dfe6d805ca73ff28fd9037035c6ab
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Dec 15 00:38:37 2014 +0800
+
+    fix part_position migration
+
+commit b2f125590ffedff6781c431a91246d4ddd890ac6
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Dec 15 00:15:21 2014 +0800
+
+    fix bug
+
+commit b2098df45d1290de648f3e37007a85af785f011c
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Dec 15 00:02:19 2014 +0800
+
+    fix
+
+commit 7acc3a2b73dda19555b48a8b20b0f8d70fd6ba08
+Author: Tesla <leechee89@gmail.com>
+Date:   Fri Dec 12 17:13:23 2014 +0800
+
+    fix
+
+commit 305d4a15729e9313a3fa3e0f3e631978dceae4f0
+Author: Tesla <leechee89@gmail.com>
+Date:   Fri Dec 12 15:50:58 2014 +0800
+
+    fix
+
+commit 707c83ca05baebde00939400477393d47a94f911
+Author: Tesla <leechee89@gmail.com>
+Date:   Fri Dec 12 15:46:19 2014 +0800
+
+    fix bug
+
+commit d1c3c70b478948f58787563ba90ce5006b0b5d3f
+Author: Tesla <leechee89@gmail.com>
+Date:   Fri Dec 12 12:16:07 2014 +0800
+
+    fix
+
+commit bbe68de0564cdf512eccfe6e439041d66c69b480
+Author: Tesla <leechee89@gmail.com>
+Date:   Fri Dec 12 12:00:43 2014 +0800
+
+    fix
+
+commit 77db4f5b824ec3725e67bae41ae82406ab38565a
+Author: Tesla <leechee89@gmail.com>
+Date:   Fri Dec 12 11:58:24 2014 +0800
+
+    fix
+
+commit dbaa751aad404ce14d1b66f3609f9dffb16d1179
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Dec 11 22:03:12 2014 +0800
+
+    fix
+
+commit 8950b0c4fd391f0005c136f1f0cd47b43386be2e
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Dec 11 21:39:52 2014 +0800
+
+    location destinatons sync
+
+commit ba379df9d025681f7dc5c0a79524a3b22c91ae93
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Dec 11 17:49:49 2014 +0800
+
+    fix
+
+commit 7e94839e5f71ca26964a1b3eea6059066955e9f0
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Dec 11 17:39:05 2014 +0800
+
+    fix sync bug!!!
+
+commit 0e8d16613cb68c3627789243d251a5b9110326df
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Dec 11 15:42:45 2014 +0800
+
+    remove sidekiq and redis
+
+commit 8eade03b9bde1c0131937c224fbc8def76e2a39f
+Merge: 413bf62 4b96ed7
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Dec 11 12:00:24 2014 +0800
+
+    Merge branch 'improve' of https://github.com/liqites/warehouse into improve
+
+commit 413bf62ada83beef7ea8066f082de8832e22a031
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Dec 11 11:58:55 2014 +0800
+
+    fix
+
+commit 4b96ed7ed9a31a2126811f4411c7f32c28fb3a7b
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Dec 11 05:33:27 2014 +0800
+
+    update add_package
+
+commit 8f900930770185dbe83486285fe6c34791343db2
+Author: Charlot <7wangsong@gmail.com>
+Date:   Thu Dec 11 05:21:42 2014 +0800
+
+    add param check_whouse
+
+commit bfc5540f84bbaac73588d0969544d4c0dcd09160
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Dec 11 00:08:07 2014 +0800
+
+    fix
+
+commit 96f1b121f4e199b1e96d846d35df95edca6ea70d
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Dec 11 00:07:19 2014 +0800
+
+    sync
+
+commit ac3d53b23a986483bd475de1a9c1e0e37ce7c6d0
+Author: Tesla <leechee89@gmail.com>
+Date:   Wed Dec 10 23:51:05 2014 +0800
+
+    fix
+
+commit c3fa7a0e1ec7764febc73a521daa8daa2e45a61b
+Author: Tesla <leechee89@gmail.com>
+Date:   Wed Dec 10 16:44:55 2014 +0800
+
+    del
+
+commit a21483534debee39d42c0e0b1d56bf1106056cb0
+Author: Tesla <leechee89@gmail.com>
+Date:   Wed Dec 10 16:37:37 2014 +0800
+
+    position migrate
+
+commit dd4b1850026465333d10bee47b55b44ecca5be44
+Author: Tesla <leechee89@gmail.com>
+Date:   Wed Dec 10 15:53:11 2014 +0800
+
+    fix user role
+
+commit a46c5ec1afb5ee149edc465d447e28779fc06d4c
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Dec 9 18:18:08 2014 +0800
+
+    fix
+
+commit 455a79d725b30d93f90604579d2b5fd90663e07a
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Dec 9 17:55:41 2014 +0800
+
+    fix
+
+commit 52cb941c01bfccdd621ad6902b966eaacce3097e
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Dec 9 16:50:58 2014 +0800
+
+    fix
+
+commit c4f71e6125115a2196b884191638e7ea2a629371
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Dec 9 16:09:40 2014 +0800
+
+    fix
+
+commit 7839b83b36a83802a3ae0c3f516948e6c1b6c57f
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Dec 9 14:27:46 2014 +0800
+
+    fix
+
+commit 8150487f6d110310580762a45b6b7f33291903f7
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Dec 9 12:13:11 2014 +0800
+
+    fix
+
+commit 7523d761e10d1445c203ebd72e37535995c402c0
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Dec 9 11:56:34 2014 +0800
+
+    fix forklift update
+
+commit 02423ee2179e4becbed9f90bd295691dea772cb1
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Dec 9 11:49:33 2014 +0800
+
+    fix
+
+commit cc4bd0ee3a5fdc5ee7b58b1d2951bd6bd7f8b3a5
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Dec 9 11:48:32 2014 +0800
+
+    fix
+
+commit b665989d586874985d601b45c2a148577b84b4e4
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Dec 9 11:36:01 2014 +0800
+
+    fix state displa
+
+commit 9b146c24607c88d7030ba7be957af97e29411564
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Dec 9 11:02:27 2014 +0800
+
+    fix
+
+commit f094679ca30c0e17f6c351ec2290e68db4e3dea0
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Dec 8 18:13:56 2014 +0800
+
+    fix
+
+commit 0181f29fd27950d16c1b2c7a8822d10c18b37af3
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Dec 8 18:13:20 2014 +0800
+
+    fix
+
+commit ea79b73fdb4424e7117d6e1c04709c9b8aef1506
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Dec 8 17:36:36 2014 +0800
+
+    fix
+
+commit 686af2328d63e69c170381c5bcd6bba1575293c8
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Dec 8 17:22:04 2014 +0800
+
+    fix migrate
+
+commit d5ece1fa9b2bded1e922bc15cffc1f498a82ab07
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Dec 8 15:55:17 2014 +0800
+
+    fix
+
+commit 211c54692f706c2d72946abb51775c25e6dd5c3c
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Dec 8 13:54:53 2014 +0800
+
+    fix
+
+commit eca7ecc006b15e00d8d84b26c6b6d447d0eb1812
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Dec 8 12:13:59 2014 +0800
+
+    fix
+
+commit b380a6341944e34127d2d3596958ca01b173625d
+Author: Tesla <leechee89@gmail.com>
+Date:   Mon Dec 8 11:21:02 2014 +0800
+
+    print 拖清单 API
+
+commit fbd255ba6fbb63fdca81afd91cf235a752f4bb19
+Author: Tesla <leechee89@gmail.com>
+Date:   Sun Dec 7 20:19:00 2014 +0800
+
+    fix some bugs
+
+commit 22c196db0cc4fa8a9494f08ca1568e179ca80039
+Author: Tesla <leechee89@gmail.com>
+Date:   Sun Dec 7 19:24:35 2014 +0800
+
+    fix PackagePresenter.position_nr, add check destinationable_type is Whouse
+
+commit 0a46a575943b3c0b8f0d30ba3b3ec3dc54421511
+Author: Tesla <leechee89@gmail.com>
+Date:   Sat Dec 6 17:42:46 2014 +0800
+
+    fix
+
+commit 3745ecf368bb5692c04335fd219e2e044ba5b823
+Author: Tesla <leechee89@gmail.com>
+Date:   Fri Dec 5 15:47:40 2014 +0800
+
+    print api
+
+commit 5aa5cbbc286f749e796b4cad1291f614f8aa9345
+Author: Tesla <leechee89@gmail.com>
+Date:   Fri Dec 5 12:05:34 2014 +0800
+
+    fix bug
+
+commit 9c54646c9c46a9aa492c2619b0866c3d79a7431e
+Author: Tesla <leechee89@gmail.com>
+Date:   Fri Dec 5 11:35:23 2014 +0800
+
+    fix
+
+commit 1b195ff7a4f98c2abf3894c5f8113790b912f804
+Author: Tesla <leechee89@gmail.com>
+Date:   Fri Dec 5 00:51:15 2014 +0800
+
+    fix
+
+commit 38931bef163842dd80c28b4a41aee3a8b6490860
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Dec 4 17:09:27 2014 +0800
+
+    fix
+
+commit e2388ae9c5a9a26d8255c8676f2dd437b0d16df6
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Dec 4 16:37:48 2014 +0800
+
+    fix
+
+commit b66aca16ba1f124fc44c0450b48c87c35fd88370
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Dec 4 15:21:10 2014 +0800
+
+    fix
+
+commit 7b2db00d9ec964ba9f74d57391fc849c118ee0a1
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Dec 4 15:09:40 2014 +0800
+
+    fix report
+
+commit 7730f5a23aca97fbb4b7139c247dc89f79708452
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Dec 4 15:02:32 2014 +0800
+
+    fix report
+
+commit 5f34f0bd5c8af7b53b23b1607c9c50a51c764fb8
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Dec 4 14:37:04 2014 +0800
+
+    fix
+
+commit e82c6b4be1b873f5995232f062b7b346840310b8
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Dec 4 11:43:18 2014 +0800
+
+    fix
+
+commit 83b381c963cc4d2cfd3acb73fd98b75dff8d663d
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Dec 4 11:16:42 2014 +0800
+
+    fix
+
+commit 87ec677977dd10dad194271e7be808ec13e7b755
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Dec 4 11:12:25 2014 +0800
+
+    fix bug
+
+commit 16baaf5d343440eb8464915021babdc014d47058
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Dec 4 11:08:10 2014 +0800
+
+    fix
+
+commit 228c9bce8bd9c35ad748e4c39a68a5db018050e7
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Dec 4 10:59:15 2014 +0800
+
+    fix search api
+
+commit 20f30e1cfe7101d1c902d3a96d19649cabe6fa57
+Author: Tesla <leechee89@gmail.com>
+Date:   Thu Dec 4 10:42:42 2014 +0800
+
+    fix bug
+
+commit 2bc1049ac71c8a13dde124ee7ea9172e09d92b62
+Author: Tesla <leechee89@gmail.com>
+Date:   Wed Dec 3 22:34:49 2014 +0800
+
+    fix bug
+
+commit fa3e52031dcd0e6c1a9b07eb2159031188cd52bf
+Author: Tesla <leechee89@gmail.com>
+Date:   Wed Dec 3 16:13:35 2014 +0800
+
+    fix
+
+commit a0ca88ba038620f9e91af6e55b9fa41caeb1006e
+Author: wayne <wayneup@163.com>
+Date:   Wed Dec 3 16:03:13 2014 +0800
+
+    require for ios
+
+commit 9d049e36da751f9bb74db8b20c34af1083f885a8
+Merge: 396c6f3 8772a42
+Author: wayne <wayneup@163.com>
+Date:   Wed Dec 3 15:56:23 2014 +0800
+
+    Merge branch 'improve' of https://github.com/liqites/warehouse into improve
+
+commit 396c6f37e4766ff4df16f7f7a47ac449044b26d6
+Author: wayne <wayneup@163.com>
+Date:   Wed Dec 3 15:56:07 2014 +0800
+
+    require
+
+commit 8772a428f29a8b46aabd62a6d1b1d07a0bcb281a
+Author: Tesla <leechee89@gmail.com>
+Date:   Wed Dec 3 15:36:11 2014 +0800
+
+    fix
+
+commit 0acd88b461811a36c0c13d745b4d9965631724f2
+Author: Tesla <leechee89@gmail.com>
+Date:   Wed Dec 3 15:03:42 2014 +0800
+
+    remove some puts
+
+commit fcd275f361fcc779017f0ad0247162e2f55247b1
+Author: Tesla <leechee89@gmail.com>
+Date:   Wed Dec 3 14:56:54 2014 +0800
+
+    fix bug
+
+commit 412160befd6a18ca5d2524dc4ac2f8ed7276002c
+Author: Tesla <leechee89@gmail.com>
+Date:   Wed Dec 3 14:48:57 2014 +0800
+
+    fix
+
+commit 975aa2b43a0a187e84d005c600eabecf37e545cd
+Merge: 3c6d1d8 a028760
+Author: Tesla <leechee89@gmail.com>
+Date:   Wed Dec 3 14:47:32 2014 +0800
+
+    Merge branch 'improve' of https://github.com/liqites/warehouse into improve
+
+commit 3c6d1d8baf6b367bf290c9ebbbdf4d92e0d04393
+Author: Tesla <leechee89@gmail.com>
+Date:   Wed Dec 3 14:47:26 2014 +0800
+
+    fix
+
+commit a028760e6d0f3fd8445af0378034da5fa62ff7aa
+Author: Charlot <7wangsong@gmail.com>
+Date:   Wed Dec 3 14:46:58 2014 +0800
+
+    update ancestry
+
+commit bb4d5c2caf5e591c32abab3d5cfa01b77ea3c632
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Dec 2 18:09:02 2014 +0800
+
+    fix
+
+commit 357a32850c0a54e13c7a9bd7a98a1bebe95772ea
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Dec 2 17:45:01 2014 +0800
+
+    fix search
+
+commit 08dee867c56dbbdee67037ef2a7cb07b01dee085
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Dec 2 17:23:47 2014 +0800
+
+    fix
+
+commit 348e44af92592ba8c13a5952ddb77ca3d370fb95
+Author: Tesla <leechee89@gmail.com>
+Date:   Tue Dec 2 17:20:09 2014 +0800
+
+    fix

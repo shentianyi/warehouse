@@ -1,7 +1,7 @@
 module FileHandler
   module Excel
     class OrderHandler<Base
-      HEADERS=['报缺日期', '报缺时间', '莱尼号码', '桶数']
+      HEADERS=['报缺日期', '报缺时间', '莱尼号码', '桶数', "是否补发"]
 
       def self.import(file, user)
         msg = Message.new
@@ -70,7 +70,8 @@ module FileHandler
                                                part_type_id: part.blank? ? '' : part.part_type_id,
                                                box_quantity:1,
                                                quantity: records[id.downcase][:qty],
-                                               remark: NStorageService.get_remark(part, user.location, records[id.downcase][:qty].to_i)
+                                               remark: NStorageService.get_remark(part, user.location, records[id.downcase][:qty].to_i),
+                                               is_supplement: row['是否补发']=='Y' ? true : false
                                            })
                   order_item.user=user
                   order_item.order = order
