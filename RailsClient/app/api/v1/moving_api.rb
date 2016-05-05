@@ -61,6 +61,7 @@ module V1
       post :rt_position do
         msg=Message.new
         begin
+          warehouse_id=Whouse.where(nr: params[:warehouse]).select("id")
           position_id= Position.where(nr: params[:position]).select("id")
 
           puts("sfaskfjsalfk")
@@ -71,15 +72,16 @@ module V1
           if position_id.to_a == " "
             return {result: 0, unfill: '库位不存在'}
           else
+            get_warehouse_id=(warehouse_id.to_a[0].id)
             get_position_id=(position_id.to_a[0].id)
 
             #max_position_count = SysConfig.where(code: 'CAPACITY_SERVER').select("value")
-            max_position_count = SysConfig.where(code: 'CAPACITY_SERVER').to_a[0].value.to_i
+            max_position_count = SysConfig.where(code: 'CAPACITY_NR').to_a[0].value.to_i
 
             puts("Get Position ID ========")
             puts(get_position_id)
 
-            if warehouse=NStorage.where(:ware_house_id => 'e1915e6e-141c-4480-abe2-e355c44a9bec', :position_id => get_position_id).count("ware_house_id")
+            if warehouse=NStorage.where(:ware_house_id => get_warehouse_id, :position_id => get_position_id).count("ware_house_id")
               if warehouse < max_position_count
                 return {result: 0, unfill: warehouse}
                 puts ('success  0==================')

@@ -54,7 +54,6 @@
       <div class="col-sm-3">
         创建员工号：
         <input type="text" name="delivery[user_id]" value="<%= @delivery_user_id %>"/>
-        <input type="hidden" name="delivery[user_id_fuzzy]"/>
       </div>
 
       <div class="col-sm-3">
@@ -88,7 +87,6 @@
       <div class="col-sm-3">
         员工号：
         <input type="text" name="records[impl_id]" value="<%= @records_impl_id %>"/>
-        <input type="hidden" name="records[impl_id_fuzzy]"/>
       </div>
       <div class="col-sm-3">
         操 作：
@@ -162,6 +160,7 @@
     <th>批次号</th>
     <th>状态</th>
     <th>目的地</th>
+    <th>创建员工号</th>
     <th>备注</th>
     <!--基础-->
     <!--包含-->
@@ -193,6 +192,7 @@
         <td><%=delivery.batch_nr%></td>
         <td><%= delivery.state_display %></td>
         <td><%= delivery.destination.name %></td>
+        <td><%= delivery.user.nr %></td>
         <td><%= delivery.remark %></td>
         <td>
           <%= link_to delivery_presenter.forklifts.count, forklifts_delivery_path(delivery), style: 'border-radius:10px;padding:5px 20px 5px 20px;background:steelblue;color:white;', :title => '托清单数' %>

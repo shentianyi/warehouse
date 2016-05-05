@@ -8,6 +8,11 @@ class LogisticsContainersController < ApplicationController
     puts params
     model = params[:model]
     @condition=params[model.to_sym]
+
+    if user=User.find_by_nr(@condition[:user_id])
+      @condition[:user_id]=user.id
+    end
+
     query = LogisticsContainer.uniq
 
     joins = ["location_containers"]
@@ -66,16 +71,36 @@ class LogisticsContainersController < ApplicationController
         end
       end
     end
+
+    instance_variable_set("@delivery_user_id", user.nr) if user
+
     # raise
-    #puts "=================="
-
+    puts "============================================================================================="
     puts hash_conditions
+    puts "============================================================================================="
 
-
+    containers={}
     if params[:containers].present? && params[:containers][:part_id].present?
-      hash_conditions[:containers]={part_id: Part.where("nr like ?", "%#{params[:containers][:part_id]}%").pluck(:id)}
+      containers[:part_id]=Part.where("nr like ?",  "%#{params[:containers][:part_id]}%").pluck(:id)
       instance_variable_set("@container_part_id", params[:containers][:part_id])
     end
+
+    unless containers.blank?
+      hash_conditions[:containers]=containers
+    end
+
+    records={}
+    if params[:records].present? && params[:records][:impl_id].present?
+      if record_user=User.find_by_nr(params[:records][:impl_id])
+        records[:impl_id]=record_user.id
+        instance_variable_set("@records_impl_id", params[:records][:impl_id])
+      end
+    end
+
+    unless records.blank?
+      hash_conditions[:records]=records
+    end
+
     # query.first
     query=query.where(hash_conditions)
 
