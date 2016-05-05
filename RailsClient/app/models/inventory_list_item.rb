@@ -203,6 +203,7 @@ class InventoryListItem < ActiveRecord::Base
       record[:fifo] = item.fifo.blank? ? '' : item.fifo.localtime.strftime('%Y-%m-%d')
       record[:position_id] = item.position
       record[:position_nr] = item.position_nr
+      record[:current_position_nr]=item.current_position_nr
       record[:whouse_id] = item.whouse_id
       record[:whouse_nr] = item.whouse.blank? ? '' : item.whouse.nr
       records[index] = record
@@ -226,7 +227,7 @@ class InventoryListItem < ActiveRecord::Base
 
     record = []
     items.each_with_index do |item, index|
-      record[index] = {position_nr: item.position_nr, position_id: item.position, count: item.count,current_position_nr:item.current_position_nr}
+      record[index] = {position_nr: item.position_nr, position_id: item.position, count: item.count}
     end
 
     msg.content = record
