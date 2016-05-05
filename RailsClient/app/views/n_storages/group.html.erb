@@ -18,7 +18,7 @@
         margin: -10px 0 -5px 0;
     }
 
-     a:hover, a:active {
+    a:hover, a:active {
         text-decoration: none;
         background-color: white;
         color: black;
@@ -63,30 +63,31 @@
         <input type="text" name="n_storage[packageId]" value="<%= @packageId %>"/>
         <input type="hidden" name="n_storage[packageId_fuzzy]"/>
       </div>
-      <div class="col-sm-4">
+      <div class="col-sm-8">
         更新日期：
-        <input type="text" name="n_storage[updated_at][start]" class="datepicker" value="<%= @updated_at_start %>"/>
-        ~ <input type="text" name="n_storage[updated_at][end]" class="datepicker" value="<%= @updated_at_end %>"/>
+        <input type="text" name="n_storage[updated_at][start]" class="datepicker" value="<%= @updated_at_start %>"/> ~ <input type="text" name="n_storage[updated_at][end]" class="datepicker" value="<%= @updated_at_end %>"/>
       </div>
-      <div class="col-sm-4">
+    </div>
+    <div class="col-sm-12">
+      <div class="col-sm-6">
         FIFO：
         <input type="text" name="n_storage[fifo][start]" class="datepicker" value="<%= @fifo_start %>"/>
         ~ <input type="text" name="n_storage[fifo][end]" class="datepicker" value="<%= @fifo_end %>"/>
       </div>
-    </div>
-    <div class="col-sm-12" style="margin-bottom: 10px;">
-      <div class="col-sm-4">
+      <div class="col-sm-6">
         数量：
         <input type="number" name="n_storage[qty][start]" value="<%= @qty_start %>" style="width: 150px;"/>
         ~ <input type="number" name="n_storage[qty][end]" value="<%= @qty_end %>" style="width: 150px;"/>
         </span>
       </div>
+    </div>
+    <div class="col-sm-12" style="margin-bottom: 10px;">
+
       <div class="col-sm-4">
         <span class="label label-info">显示方式:</span>
         <%= select_tag :format, options_for_select([["Web", "html"], ["Excel File(MS 07 or later)", "xlsx"]], "html") %>
       </div>
       <div class="col-sm-4">
-        <input type="submit" value="负库存" class="btn btn-primary" name="negative" style="width: 100px;margin-right: 20px;"/>
         <input type="submit" value="汇总" class="btn btn-primary" name="search" style="width: 100px;"/>
       </div>
     </div>
@@ -98,14 +99,14 @@
 </div>
 
 <% if @n_storages.present? %>
-  <div class="col-sm-12" style="margin-bottom: 20px;">
+    <div class="col-sm-12" style="margin-bottom: 20px;">
       <div class="digg_pagination">
         <div class="page_info">
           <%= page_entries_info @n_storages %>
         </div>
         <%= will_paginate @n_storages, :container => false %>
       </div>
-  </div>
+    </div>
 <% end %>
 
 <table class="table table-striped table-bordered table-hover">
