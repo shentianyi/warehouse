@@ -70,8 +70,8 @@ module FileHandler
                                                part_type_id: part.blank? ? '' : part.part_type_id,
                                                box_quantity:1,
                                                quantity: records[id.downcase][:qty],
-                                               remark: NStorageService.get_remark(part, user.location, records[id.downcase][:qty].to_i),
-                                               is_supplement: row['是否补发']=='Y' ? true : false
+                                               remark: NStorageService.get_remark(part, user.location, records[id.downcase][:qty].to_i)#,
+                                               # is_supplement: row['是否补发']=='Y' ? true : false
                                            })
                   order_item.user=user
                   order_item.order = order

@@ -73,7 +73,12 @@ class OrderItem < ActiveRecord::Base
     #   }
     # end
 
-    send_deliveries=LogisticsContainer.joins(:delivery).where(source_location_id: user.location.id, created_at: Time.parse(start_t).utc.to_s...Time.parse(end_t).utc.to_s)
+    if part_id
+      send_deliveries=LogisticsContainer.joins(:delivery).where(source_location_id: user.location.id, created_at: Time.parse(start_t).utc.to_s...Time.parse(end_t).utc.to_s)
+                          .where("containers.part_id=?", )
+    else
+      send_deliveries=LogisticsContainer.joins(:delivery).where(source_location_id: user.location.id, created_at: Time.parse(start_t).utc.to_s...Time.parse(end_t).utc.to_s)
+    end
     send_deliveries.each do |d|
       send_forklifts=LogisticsContainerService.get_forklifts(d)
       send_forklifts.each do |f|
