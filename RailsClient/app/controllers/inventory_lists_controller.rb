@@ -142,17 +142,19 @@ class InventoryListsController < ApplicationController
     p = Axlsx::Package.new
     wb = p.workbook
     wb.add_worksheet(:name => "Basic Sheet") do |sheet|
-      sheet.add_row ["No.", "零件号", "库存数量", "盘点数量", "差异数（库存数-盘点数）", "库存桶数", "盘点桶数", "差异数（库存桶数-盘点桶数）"]
+      # sheet.add_row ["No.", "零件号", "库存数量", "盘点数量", "差异数（库存数-盘点数）", "库存桶数", "盘点桶数", "差异数（库存桶数-盘点桶数）"]
+      sheet.add_row ["No.", "零件号", "库存数量", "盘点数量", "差异数（库存数-盘点数）"]
       results.each_with_index { |o, index|
+        part=Part.find(o[0])
         sheet.add_row [
                           index+1,
-                          o[0],
+                          part.blank? ? '' : part.nr,
                           o[1],
                           o[2],
-                          o[3],
-                          o[5],
-                          o[6],
-                          o[7]
+                          o[3]#,
+                          # o[5],
+                          # o[6],
+                          # o[7]
                       ], :types => [:string]
         # removal_packages["#{o.part_id}#{o.whouse_id}"] = nil
       }

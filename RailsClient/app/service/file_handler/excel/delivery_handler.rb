@@ -174,7 +174,11 @@ module FileHandler
         book = Roo::Excelx.new file.full_path
 
         book.default_sheet=book.sheets.first
-        return nil if book.cell(2, 1).nil?
+        if book.cell(2, 1).nil?
+          msg.result=false
+          msg.content= '模版没有数据'
+          return msg
+        end
 
         source = Location.find_by_nr(book.cell(2, 1))
         if source.blank?
@@ -197,7 +201,12 @@ module FileHandler
         end
 
         book.default_sheet=book.sheets[1]
-
+        if book.cell(2, 1).nil?
+          msg.result=false
+          msg.content= '模版没有数据'
+          return msg
+        end
+        
         p = Axlsx::Package.new
         p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
           sheet.add_row JXJX_SEND_ZH_HEADERS+['Error Msg']
@@ -433,7 +442,12 @@ module FileHandler
         book = Roo::Excelx.new file.full_path
 
         book.default_sheet=book.sheets.first
-        return nil if book.cell(2, 1).nil?
+
+        if book.cell(2, 1).nil?
+          msg.result=false
+          msg.content= '模版没有数据'
+          return msg
+        end
 
         source = Location.find_by_nr(book.cell(2, 1))
         if source.blank?
@@ -450,6 +464,11 @@ module FileHandler
         end
 
         book.default_sheet=book.sheets[1]
+        if book.cell(2, 1).nil?
+          msg.result=false
+          msg.content= '模版没有数据'
+          return msg
+        end
 
         p = Axlsx::Package.new
         p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
