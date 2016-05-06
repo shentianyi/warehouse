@@ -91,7 +91,6 @@ class NStoragesController < ApplicationController
         query=query.unscope(where: :ware_house_id).where(ware_house_id: whouse.id)
       end
 
-
       if params[:n_storage][:position_id].present?
         query=query.unscope(where: :position_id) #.where(position_id: position.id)
         query=query.joins("inner join positions on n_storages.position_id=positions.id").where("positions.nr like '%#{params[:n_storage][:position_id]}%'")

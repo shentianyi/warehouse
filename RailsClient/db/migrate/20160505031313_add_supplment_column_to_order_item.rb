@@ -10,7 +10,7 @@ class AddSupplmentColumnToOrderItem < ActiveRecord::Migration
 
   def down
     change_table :order_items do |t|
-      t.remove :is_supplment
+      t.remove :is_suppliment
     end
   end
 end
