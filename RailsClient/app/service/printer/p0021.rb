@@ -103,7 +103,7 @@ module Printer
                   total_qty: '',
                   unit: '',
                   num_bucket: qty,
-                  remark: item.remark
+                  remark: "缺货/尚未发运"#item.remark
               }
               BODY.each do |k|
                 bodies<<{Key: k, Value: body[k]}
