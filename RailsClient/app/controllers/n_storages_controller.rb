@@ -82,15 +82,19 @@ class NStoragesController < ApplicationController
 
   def search
     super { |query|
-      if part=Part.find_by_nr(params[:n_storage][:partNr])
-        query=query.unscope(where: :partNr).where(partNr: part.id)
+      if params[:n_storage][:partNr].present?
+        query=query.unscope(where: :partNr) #.where(partNr: part.id)
+        query=query.joins("inner join parts on n_storages.partNr=parts.id").where("parts.nr like '%#{params[:n_storage][:partNr]}%'")
       end
 
       if whouse=Whouse.find_by_nr(params[:n_storage][:ware_house_id])
         query=query.unscope(where: :ware_house_id).where(ware_house_id: whouse.id)
       end
-      if position=Position.find_by_nr(params[:n_storage][:position_id])
-        query=query.unscope(where: :position_id).where(position_id: position.id)
+
+
+      if params[:n_storage][:position_id].present?
+        query=query.unscope(where: :position_id) #.where(position_id: position.id)
+        query=query.joins("inner join positions on n_storages.position_id=positions.id").where("positions.nr like '%#{params[:n_storage][:position_id]}%'")
       end
 
       unless params[:part][:package_type].blank?
@@ -104,15 +108,9 @@ class NStoragesController < ApplicationController
 
   def exports
     @condition=params[@model]
-    puts @condition
-    if part=Part.find_by_nr(@condition[:partNr])
-      @condition[:partNr]=part.id
-    end
+
     if whouse=Whouse.find_by_nr(@condition[:ware_house_id])
       @condition[:ware_house_id]=whouse.id
-    end
-    if position=Position.find_by_nr(@condition[:position_id])
-      @condition[:position_id]=position.id
     end
     query=model.unscoped
     where_comdition = ""
@@ -134,10 +132,12 @@ class NStoragesController < ApplicationController
           end
         else
           query=query.where(Hash[k, v])
-          if where_comdition.empty?
-            where_comdition += "WHERE #{k} like '#{v}' "
-          else
-            where_comdition += "AND #{k} = '#{v}' "
+          if k!='partNr' && k!='position_id'
+            if where_comdition.empty?
+              where_comdition += "WHERE #{k} = '#{v}' "
+            else
+              where_comdition += "AND #{k} = '#{v}' "
+            end
           end
         end
         instance_variable_set("@#{k}", v)
@@ -158,17 +158,28 @@ class NStoragesController < ApplicationController
         end
       end
     end
-
-    instance_variable_set("@partNr", part.nr) if part
+    #
     instance_variable_set("@ware_house_id", whouse.name) if whouse
-    instance_variable_set("@position_id", position.nr) if position
+
+
+    query=query.unscope(where: :partNr) #.where(partNr: part.id)
+    query=query.joins("inner join parts on n_storages.partNr=parts.id").where("parts.nr like '%#{params[:n_storage][:partNr]}%'")
+    query=query.unscope(where: :position_id) #.where(position_id: position.id)
+    query=query.joins("inner join positions on n_storages.position_id=positions.id").where("positions.nr like '%#{params[:n_storage][:position_id]}%'")
+
 
     query = query.where(locked: false)
     if params.has_key? "negative"
       query = query.where("n_storages.qty < 0").select("n_storages.qty as total_qty, n_storages.*")
     else
       if params[:format] == 'xlsx'
-        query = query.select("SUM(n_storages.qty) as total_qty, n_storages.*").group("n_storages.partNr, n_storages.ware_house_id, n_storages.position_id")
+        # query=query.unscope(where: :partNr) #.where(partNr: part.id)
+        # query=query.joins("inner join parts on n_storages.partNr=parts.id").where("parts.nr like '%#{params[:n_storage][:partNr]}%'")
+        # query=query.unscope(where: :position_id) #.where(position_id: position.id)
+        # query=query.joins("inner join positions on n_storages.position_id=positions.id").where("positions.nr like '%#{params[:n_storage][:position_id]}%'")
+
+        query = query.select("SUM(n_storages.qty) as total_qty, n_storages.*").
+            group("n_storages.partNr, n_storages.ware_house_id, n_storages.position_id")
       else
         if where_comdition.empty?
           where_comdition += "WHERE locked = 0 "
@@ -179,6 +190,8 @@ class NStoragesController < ApplicationController
           query = NStorage.find_by_sql("select SUM(n_storages.qty) as total_qty, n_storages.* from n_storages INNER JOIN parts ON parts.id = n_storages.partNr #{where_comdition} And parts.package_type_id=#{params[:part][:package_type]} group by n_storages.partNr, n_storages.ware_house_id, n_storages.position_id")
           instance_variable_set("@package_type", params[:part][:package_type])
         else
+
+
           query = NStorage.find_by_sql("select SUM(n_storages.qty) as total_qty, n_storages.* from n_storages #{where_comdition} group by n_storages.partNr, n_storages.ware_house_id, n_storages.position_id")
         end
       end
