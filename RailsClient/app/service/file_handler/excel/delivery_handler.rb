@@ -206,7 +206,7 @@ module FileHandler
           msg.content= '模版没有数据'
           return msg
         end
-        
+
         p = Axlsx::Package.new
         p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
           sheet.add_row JXJX_SEND_ZH_HEADERS+['Error Msg']
