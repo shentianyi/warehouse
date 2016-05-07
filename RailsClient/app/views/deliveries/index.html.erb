@@ -218,7 +218,9 @@
               <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-pencil', :style => 'color:#4F94CD;'), {controller: 'deliveries', action: 'edit', id: delivery.id}, class: 'IconA', :title => '编辑运单' %>
           <% end %>
 
-          <!--<%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-log-out'), {controller: 'logistics_containers', action: 'export', id: delivery.id}, class: 'IconA', :title => '导出运单' %>-->
+          <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-trash', :style => 'color:darkred;'), {controller: 'deliveries', action: 'destroy', id: delivery.id}, method: :delete, data: {confirm: '确认删除?'}, :class => 'IconA', :title => '删除' %>
+
+          <!--<%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-log-out'), {controller: 'logistics_containers', action: 'destroy', id: delivery.id}, class: 'IconA', :title => '导出运单' %>-->
         </td>
       </tr>
   <% end %>

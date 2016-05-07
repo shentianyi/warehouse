@@ -20,6 +20,13 @@ class LogisticsContainer<LocationContainer
   has_many :records, :as => :recordable, dependent: :destroy
 
   #after_update :out_store
+  after_destroy :destroy_container
+
+  def destroy_container
+    if self.container.present?
+      self.container.destroy
+    end
+  end
 
   # def destroy
   #    self.package.destroy

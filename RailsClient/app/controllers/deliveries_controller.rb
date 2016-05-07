@@ -69,7 +69,7 @@ class DeliveriesController < ApplicationController
 
   # DELETE /deliveries/1
   # DELETE /deliveries/1.json
-=begin
+begin
   def destroy
     @delivery.destroy
     respond_to do |format|
@@ -77,7 +77,7 @@ class DeliveriesController < ApplicationController
       format.json { head :no_content }
     end
   end
-=end
+end
 
   # GET /deliveries/1/forklifts
   def forklifts
