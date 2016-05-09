@@ -108,6 +108,7 @@ module V1
       # params
       #=============
       post :enter_stock do
+        puts package_params
         m = PackageService.create package_params, current_user
         if m.result
           m.object.update_attributes(state: MovableState::CHECKED)

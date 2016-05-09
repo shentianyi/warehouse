@@ -167,20 +167,20 @@ class NStoragesController < ApplicationController
       #render :json => query.to_xlsx(query)
     else
       instance_variable_set("@#{@model.pluralize}", query.paginate(:page => params[:page]))
-      if params[:n_storage][:ware_house_id]=='WE87'
+      if params[:n_storage][:ware_house_id]==SysConfigCache.default_import_whouse_value
         render :by_whouse_we87
-      elsif params[:n_storage][:ware_house_id]=='PA87'
+      elsif params[:n_storage][:ware_house_id]==SysConfigCache.default_add_whouse_value
         render :by_whouse_pa
       end
     end
   end
 
   def by_whouse_we87
-    @n_storages= NStorage.where(ware_house_id: 'WE87').paginate(:page => params[:page])
+    @n_storages= NStorage.where(ware_house_id: SysConfigCache.default_import_whouse_value).paginate(:page => params[:page])
   end
 
   def by_whouse_pa
-    @n_storages= NStorage.where(ware_house_id: 'PA87').paginate(:page => params[:page])
+    @n_storages= NStorage.where(ware_house_id: SysConfigCache.default_add_whouse_value).paginate(:page => params[:page])
   end
 
   private

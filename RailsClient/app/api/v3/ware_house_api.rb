@@ -190,6 +190,16 @@ module V3
         end
         {result: 1, content: query}
       end
+
+      desc 'get enter stock info.'
+      get :enter_stock_info do
+        result=SysConfig.import_whouse_info
+        if result[:error].blank?
+          {result: 1, content: result}
+        else
+          {result: 0, content: result[:error]}
+        end
+      end
     end
   end
 end
