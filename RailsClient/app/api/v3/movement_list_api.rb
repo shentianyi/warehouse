@@ -67,11 +67,13 @@ module V3
         requires :movement_list_id, type: String, desc: 'movement list id'
         requires :toWh, type: String, desc: 'des whouse'
         requires :toPosition, type: String, desc: 'des position'
-        requires :fromWh, type: String, desc: 'src whouse'
+        optional :fromWh, type: String, desc: 'src whouse'
         optional :fromPosition, type: String, desc: 'src position'
         optional :packageId, type: String, desc: 'package ID'
         optional :partNr, type: String, desc: 'part NO.'
         optional :qty, type: String, desc: 'quantity'
+        optional :type, type: String, desc: 'type'
+        optional :fifo, type: String, desc: 'fifo time'
       end
       post :validate_movement do
         params[:toWh]=params[:toWh].sub(/LO/, '')
@@ -80,6 +82,7 @@ module V3
         params[:fromPosition]=params[:fromPosition].sub(/LO/, '') if params[:fromPosition].present?
         params[:partNr]=params[:partNr].sub(/P/, '') if params[:partNr].present?
         params[:user] = current_user
+        params[:type]= params[:type].blank? ? 'MOVE' : params[:type]
         puts "#{params.to_json}-----------"
 
         return {result: 0, content: "#{params[:movement_list_id]}移库单不存在！"} unless m=MovementList.find_by(id: params[:movement_list_id])
@@ -93,9 +96,13 @@ module V3
             raise '请填写数量' unless params[:qty].present?
           end
 
-          msg = FileHandler::Excel::NStorageHandler.validate_move_row params
+          if params[:type]=='ENTRY'
+            msg = FileHandler::Excel::NStorageHandler.validate_import_row params
+          else
+            msg = FileHandler::Excel::NStorageHandler.validate_move_row params
+          end
           if msg.result
-            mmsg = MovementSource.save_record(params)
+            mmsg = MovementSource.save_record(params, params[:type])
           else
             return {result: 0, content: msg.content}
           end
@@ -176,6 +183,49 @@ module V3
         {result: msg.result, content: msg.content}
       end
 
+      desc 'create package and enter stock'
+      params do
+        requires :movement_list_id, type: String, desc: 'movement list id'
+        requires :employee_id, type: String, desc: 'The operator id'
+        optional :remarks, type: String, desc: 'note info'
+      end
+      post :create_package_enter_stock do
+        args = {}
+        args[:movement_list_id] = params[:movement_list_id]
+        args[:employee_id] = params[:employee_id].sub(/\.0/, '') if params[:employee_id].present?
+        args[:remarks] = params[:remarks] if params[:remarks].present?
+        args[:user] = current_user
+
+        unless m=MovementList.where(id: params[:movement_list_id]).where("state != #{MovementListState::ENDING}").first
+          return {result: 0, content: "#{params[:movement_list_id]}入库单不存在或者已经成功入库！"}
+        end
+
+        NStorage.transaction do
+          m.movement_sources.each do |ms|
+            puts '----------------------------------------------------'
+            p ms
+            puts '----------------------------------------------------'
+            plc = PackageService.create({
+                                            id: ms.packageId,
+                                            part_id: ms.partNr,
+                                            part_id_display: '',
+                                            quantity: ms.qty,
+                                            quantity_display: '',
+                                            custom_fifo_time: ms.fifo,
+                                            fifo_time_display: ''
+                                        }, current_user)
+            if plc.result
+              plc.object.update_attributes(state: MovableState::CHECKED)
+            else
+              return {result: 0, content: plc.content}
+            end
+          end
+
+          m.update(state: MovementListState::ENDING)
+          {result: 1, content: '入库成功'}
+        end
+
+      end
 
     end
   end

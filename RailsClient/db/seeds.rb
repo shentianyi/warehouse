@@ -107,6 +107,18 @@ ActiveRecord::Base.transaction do
     SysConfig.create(code: 'PTL_JOB_PREFIX', value: 'C', name: 'PTL任务的数据开端，为了同步')
   end
 
+  unless SysConfig.find_by_code('DEFAULT_IMPORT_WHOUSE')
+    SysConfig.create(code: 'DEFAULT_IMPORT_WHOUSE', value: 'WE87', name: '默认入库仓库号')
+  end
+
+  unless SysConfig.find_by_code('DEFAULT_IMPORT_POSITION')
+    SysConfig.create(code: 'DEFAULT_IMPORT_POSITION', value: 'WE87-1', name: '默认入仓库位号')
+  end
+
+  unless SysConfig.find_by_code('DEFAULT_ADD_WHOUSE')
+    SysConfig.create(code: 'DEFAULT_ADD_WHOUSE', value: 'PA87', name: '默认上架仓库号')
+  end
+
   #LED STATE
   unless LedState.find_by_state(LedLightState::NORMAL)
     LedState.create({state: LedLightState::NORMAL, rgb: "0 255 0", led_code: 0})

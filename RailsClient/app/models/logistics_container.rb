@@ -163,11 +163,11 @@ class LogisticsContainer<LocationContainer
 
         #用于 leoni 收集数据
         p package
-        toWh='WE87'
+        toWh=SysConfigCache.default_import_whouse_value
         #判断唯一码是否存在？
         if package.logistics_containers.first.parent.blank?
           #绑定包装箱
-          to_position='WE87-1'
+          to_position=SysConfigCache.default_import_position_value
         else
           to_position='WE87-2'
         end

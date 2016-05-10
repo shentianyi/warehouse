@@ -16,4 +16,19 @@ class SysConfig < ActiveRecord::Base
   def re_init_methods
     SysConfigCache.initialize_methods
   end
+
+  def self.import_whouse_info
+    whouse=Whouse.find_by_id(SysConfigCache.default_import_whouse_value)
+    position=Position.find_by_detail(SysConfigCache.default_import_position_value)
+    if whouse && position
+      {
+          whouse_id: whouse.id,
+          position: position.detail
+      }
+    else
+      {
+          error: '请配置默认入库信息'
+      }
+    end
+  end
 end
