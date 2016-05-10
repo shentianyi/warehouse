@@ -211,7 +211,7 @@ module V3
                                             part_id_display: '',
                                             quantity: ms.qty,
                                             quantity_display: '',
-                                            custom_fifo_time: ms.fifo,
+                                            custom_fifo_time: ms.remarks,
                                             fifo_time_display: ''
                                         }, current_user)
             if plc.result

@@ -17,7 +17,7 @@ class MovementSource < ActiveRecord::Base
         qty: params[:qty],
         employee_id: params[:user].blank? ? '' : params[:user].id,
         fifo: params[:fifo],
-        remarks: params[:remarks],
+        remarks: params[:fifo],
         type: type
     }
 
