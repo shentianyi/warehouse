@@ -77,6 +77,6 @@ class WhousesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def whouse_params
       #params[:whouse]
-      params.require(:whouse).permit(:id,:name,:location_id)
+      params.require(:whouse).permit(:id,:name,:location_id,:is_mrp_whouse)
     end
 end
