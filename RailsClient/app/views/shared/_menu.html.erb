@@ -160,12 +160,6 @@
   <li>
     <a href="#">管理 &nbsp;<i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:black;"></i></a>
     <ul>
-      <% if current_user.permission?(:view_system_log) %>
-          <li>
-            <a href="<%= operation_logs_path %>">系统日志</a>
-          </li>
-      <% end %>
-
       <li>
         <a href="#">基础信息设置 &nbsp;<i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:white;transform: rotate(-90deg);"></i></a>
         <ul>
@@ -202,6 +196,12 @@
                   <!--<li><a href="<%= jiaxuan_extra_sys_configs_path %>">佳轩扩展配置</a></li>-->
               <!--<% end %>-->
             </ul>
+          </li>
+      <% end %>
+      
+      <% if current_user.permission?(:view_system_log) %>
+          <li>
+            <a href="<%= operation_logs_path %>">系统日志</a>
           </li>
       <% end %>
     </ul>
