@@ -170,7 +170,7 @@ module FileHandler
 
       def self.validate_send file
         tmp_file=full_tmp_path(file.oriName)
-        msg = Message.new(result: false)
+        msg = Message.new(result: true)
         book = Roo::Excelx.new file.full_path
 
         book.default_sheet=book.sheets.first
@@ -229,15 +229,15 @@ module FileHandler
             else
               if msg.result
                 msg.result = false
-                msg.content = "下载错误文件<a href='/files/#{Base64.urlsafe_encode64(tmp_file)}'>#{::File.basename(tmp_file)}</a>"
               end
+              msg.content = "下载错误文件<a href='/files/#{Base64.urlsafe_encode64(tmp_file)}'>#{::File.basename(tmp_file)}</a>"
               sheet.add_row row.values<<mssg.content
             end
           end
         end
         p.use_shared_strings = true
         p.serialize(tmp_file)
-        msg.result=true
+        # msg.result=true
         msg
       end
 
@@ -252,9 +252,14 @@ module FileHandler
           end
         end
 
+        positions = []
         part = Part.find_by_nr(row[:part_id])
         unless part
           msg.contents << "零件号:#{row[:part_id]} 不存在!"
+        else
+          part.positions.each do |position|
+            positions += ["#{position.nr}"]
+          end
         end
 
         wh = Whouse.find_by_nr(row[:from_wh])
@@ -276,6 +281,12 @@ module FileHandler
                 msg.contents << "发货库位:#{row[:from_position]}不属于发货仓库:#{wh.nr}"
               end
             end
+          end
+        end
+
+        if position && part
+          unless positions.include?(row[:from_position])
+            msg.contents << "零件号:#{row[:part_id]}不在源库位号:#{row[:from_position]}上!"
           end
         end
 

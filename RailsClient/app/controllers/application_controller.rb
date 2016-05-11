@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   before_filter :configure_permitted_parameters, if: :devise_controller?
   before_filter :authenticate_user_from_token!
   before_filter :authenticate_user!
-#  before_filter :inventory_lock!
+  before_filter :inventory_lock!
   # before_filter :set_current_user
   #============
   # fix cancan "ActiveModel::ForbiddenAttributesError" with Rails 4
@@ -54,9 +54,11 @@ class ApplicationController < ActionController::Base
 
   def inventory_lock!
     if current_user
-      if SysConfigCache.inventory_enable_value=='true' && (current_user.sender? || current_user.receiver? || current_user.stocker? || current_user.shifter? || current_user.buyer?)
-        signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))
-        redirect_to new_user_session_path, alert: '盘点中...登陆锁定!'
+      unless current_user.admin?
+        if SysConfigCache.inventory_enable_value=='true' && !current_user.permission?(:operate_inventory_create)
+          signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))
+          redirect_to new_user_session_path, alert: '盘点中...登陆锁定!'
+        end
       end
     end
   end
