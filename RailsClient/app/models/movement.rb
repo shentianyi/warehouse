@@ -18,20 +18,23 @@ class Movement < ActiveRecord::Base
       list.each_with_index { |movement, index|
         if movement.id
           employee=User.find_by_id(movement.employee_id)
+          partNr=Part.find_by_id(movement.partNr)
+          fromPosition=Position.find_by_id(movement.fromPosition)
+          toPosition=Position.find_by_id(movement.toPosition)
           sheet.add_row [
                             index+1,
-                            movement.partNr,
+                            partNr.blank? ? '' : partNr.nr,
                             movement.packageId,
                             movement.uniqueId,
                             movement.qty,
                             MoveType.find(movement.type_id).typeId,
                             movement.fifo.present? ? movement.fifo.localtime.strftime("%Y-%m-%d %H:%M") : '',
                             movement.created_at.present? ? movement.created_at.localtime.strftime("%Y-%m-%d %H:%M") : '',
-                            movement.from_id,
-                            movement.fromPosition,
-                            movement.to_id,
-                            movement.toPosition,
-                            employee.nr,
+                            movement.from.blank? ? '' : movement.from.nr,
+                            fromPosition.blank? ? '' : fromPosition.nr,
+                            movement.to.blank? ? '' : movement.to.nr,
+                            toPosition.blank? ? '' : toPosition.nr,
+                            employee.blank? ? '' : employee.nr,
                             movement.remarks
                         ]
         end
