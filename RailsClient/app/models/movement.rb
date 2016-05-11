@@ -31,7 +31,7 @@ class Movement < ActiveRecord::Base
                             movement.fromPosition,
                             movement.to_id,
                             movement.toPosition,
-                            employee.nr.blank? ? '' employee.nr,
+                            employee.nr.blank? ? '' : employee.nr,
                             movement.remarks
                         ]
         end
