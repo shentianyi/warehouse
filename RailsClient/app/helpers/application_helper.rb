@@ -106,7 +106,7 @@ module ApplicationHelper
       end
 
       path=File.join($TEMPLATEPATH, file_name)
-      send_file path, :type => 'application/csv', :filename => file_name
+      send_file path, :type => 'application/csv;charset=GB18030', :filename => file_name
     else
       file_name="#{@model}_excel_upload_template.excel"
       path=File.join($TEMPLATEPATH, file_name)
