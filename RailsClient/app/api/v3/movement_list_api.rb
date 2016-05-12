@@ -116,7 +116,7 @@ module V3
 
         if mmsg.result
           m.update(state: MovementListState::PROCESSING)
-          {result: 1, content: '数据验证通过.'}
+          {result: 1, content: '数据验证通过.',object: mmsg.object}
         else
           {result: 0, content: mmsg.content}
         end
