@@ -9,6 +9,7 @@
 #  pool: 5
 #  timeout: 5000
 
+#sh-leoni fenzhi
 default: &default
   adapter: mysql2
   pool: 5
@@ -23,6 +24,23 @@ default: &default
 development:
   <<: *default
   database: whousedb #db/development.sqlite3
+
+#  #vmi_jiaxuan fenzhi
+#default: &default
+#  adapter: mysql2
+#  pool: 5
+#  timeout: 5000
+#  socket: /tmp/mysql.sock
+#  username: vmi_jiaxuan
+#  password: vmi_jiaxuan@
+#  reconnect: false
+#  encoding: utf8
+#
+#
+#development:
+#  <<: *default
+#  database: vmi_jiaxuandb #db/development.sqlite3
+
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".

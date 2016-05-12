@@ -139,6 +139,21 @@ module V1
         end
       end
 
+      #get :n_storage do
+      #  msg = ApiMessage.new
+      #  unless p = LogisticsContainer.exists?(params[:id])
+      #    return msg.set_false(MovableMessage::TargetNotExist)
+      #  end
+      #
+      #  n_storage_value = NStorage.all
+      #  args = {}
+      #  args[:key] = p.id
+      #  args[:part_id] = "P#{p.part_id}"
+      #  args[:qty] = p.quantity
+      #  args[:fifo] =p.parsed_fifo# p.fifo_time_display.blank? ? '' : Date.strptime(p.fifo_time_display.sub(/W\s*/, ''), '%d.%m.%y')
+      #  {result: '1', content: args}
+      #end
+
 
       post :check do
         msg = ApiMessage.new

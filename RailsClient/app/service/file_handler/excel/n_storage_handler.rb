@@ -31,7 +31,7 @@ module FileHandler
                 end
 
                 row[:movement_list_id] = move_list.id
-                MovementSource.create(row)
+                MovementSource.save_record(params, 'ENTRY')
 
                 row[:employee_id] ||= current_user.id
                 WhouseService.new.enter_stock(row)
@@ -73,7 +73,7 @@ module FileHandler
                 end
 
                 row[:movement_list_id] = move_list.id
-                MovementSource.create(row)
+                MovementSource.save_record(params, 'MOVE')
 
                 row[:employee_id] ||= current_user.id
                 WhouseService.new.move(row)
@@ -112,7 +112,7 @@ module FileHandler
               row[k]=row[k].sub(/\.0/, '') if k== :partNr || k== :packageId
             end
 
-            mssg = validate_import_row(row, line)
+            mssg = validate_import_row(row)
             if mssg.result
               sheet.add_row row.values
             else
@@ -129,18 +129,21 @@ module FileHandler
         msg
       end
 
-      def self.validate_import_row(row, line)
+      def self.validate_import_row(row)
         msg = Message.new(contents: [])
         # StorageOperationRecord.save_record(row, 'ENTRY')
 
         if row[:packageId].present?
-          unless packageId = Container.exists?(row[:packageId])
-            msg.contents << "唯一码:#{row['packageId']} 不存在!"
+          package = Container.exists?(row[:packageId])
+          if row[:type]=='ENTRY'
+            msg.contents << "唯一码:#{row[:packageId]} 已入库!" if package
+          else
+            msg.contents << "唯一码:#{row[:packageId]} 不存在!" unless package
           end
         end
 
-        src_warehouse = Whouse.find_by_id(row[:toWh])
-        unless src_warehouse
+        des_warehouse = Whouse.find_by_id(row[:toWh])
+        unless des_warehouse
           msg.contents << "目的仓库号:#{row[:toWh]} 不存在!"
         end
 
@@ -162,7 +165,9 @@ module FileHandler
 
         if row[:fifo].present?
           begin
-            row[:fifo].to_time
+            if row[:fifo].to_time > Time.now
+              msg.contents << "FIFO: #{row[:fifo]} 错误!"
+            end
           rescue => e
             msg.contents << "FIFO: #{row[:fifo]} 错误!"
           end
@@ -176,8 +181,8 @@ module FileHandler
         end
 
         if row[:employee_id].present?
-          employee_id = User.find(row[:employee_id])
-          unless employee_id
+          employee = User.find_by_id(row[:employee_id])
+          unless employee
             msg.contents << "员工号:#{row[:employee_id].sub(/\.0/, '')} 不存在!"
           end
         end
@@ -265,17 +270,16 @@ module FileHandler
         end
 
         if row[:fromWh].present?
-          src_warehouse = Whouse.find_by_id(row[:fromWh])
-          unless src_warehouse
-            msg.contents << "源仓库号:#{row[:fromWh]} 不存在!"
-          end
+          msg.contents << "源仓库号不能为空!"
+        end
+        src_warehouse = Whouse.find_by_id(row[:fromWh])
+        unless src_warehouse
+          msg.contents << "源仓库号:#{row[:fromWh]} 不存在!"
         end
 
-        if row[:toWh].present?
-          dse_warehouse = Whouse.find_by_id(row[:toWh])
-          unless dse_warehouse
-            msg.contents << "目的仓库号:#{row[:toWh]} 不存在!"
-          end
+        dse_warehouse = Whouse.find_by_id(row[:toWh])
+        unless dse_warehouse
+          msg.contents << "目的仓库号:#{row[:toWh]} 不存在!"
         end
 
         positions = []
@@ -307,7 +311,7 @@ module FileHandler
         end
 
         if from_position && part_id
-          if src_warehouse && src_warehouse.id!='PA87'
+          if src_warehouse && src_warehouse.id!=SysConfigCache.default_add_whouse_value
             unless positions.include?(row[:fromPosition])
               msg.contents << "零件号:#{row[:partNr]} 不在源库位号:#{row[:fromPosition]}上!"
             end
@@ -322,7 +326,7 @@ module FileHandler
         end
 
         if to_position && part_id
-          if dse_warehouse && dse_warehouse.id!='PA87'
+          if dse_warehouse && dse_warehouse.id!=SysConfigCache.default_add_whouse_value
             unless positions.include?(row[:toPosition])
               msg.contents << "零件号:#{row[:partNr]}不在目的库位号:#{row[:toPosition]}上!"
             end
