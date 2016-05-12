@@ -5,20 +5,21 @@ module V4
 
       desc 'get parts stock by part nrs'
       params do
-        requires :part_nrs, type: Array, desc: 'part nrs'
+        requires :part_nrs, type: String, desc: 'part nrs'
       end
       get :parts_stock do
-        stocks= StorageService.get_mrp_part_stock_by_nrs(params[:part_nrs].uniq)
+        stocks= StorageService.get_mrp_part_stock_by_nrs(params[:part_nrs].split(';').uniq)
         data=[]
         stocks.each do |stock|
           data<<{
-              PartNr: stock.partNr,
-              Uom: stock.unit,
-              FIFO: stock.fifo,
+              PartId: stock.partNr,
+              Uom: stock.unit.blank? ? '' : stock.unit,
+              FIFO: stock.fifo.blank? ? Time.now.utc : stock.fifo.utc,
               ExpireDate: Time.now.years_since(10).utc,
               Qty: stock.qty
           }
         end
+        data
       end
     end
   end
