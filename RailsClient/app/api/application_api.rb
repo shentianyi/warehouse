@@ -8,4 +8,5 @@ class ApplicationAPI < Grape::API
   mount V1::Sync::SyncBase
   mount V2::Base
   mount V3::Base
+  mount V4::Base
 end

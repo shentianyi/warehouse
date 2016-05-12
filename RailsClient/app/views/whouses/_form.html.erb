@@ -22,6 +22,11 @@
     </p>
 
     <p>
+      <%= f.label :is_mrp_whouse,'MRP 仓库'%>
+      <%= f.check_box :is_mrp_whouse%>
+    </p>
+
+    <p>
       <%= f.label :location_id,'地 点'%>
       <%=  f.select(:location_id,Location.all.collect{|l| [l.name,l.id]},{include_blank: false})%>
     </p>

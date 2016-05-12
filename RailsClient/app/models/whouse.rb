@@ -3,7 +3,7 @@ class Whouse < ActiveRecord::Base
   include Import::WhouseCsv
 
   belongs_to :location
-  
+
   has_many :positions, :dependent => :destroy
   has_many :part_positions, :through => :positions
   has_many :parts, :through => :part_positions
@@ -14,8 +14,9 @@ class Whouse < ActiveRecord::Base
   has_many :storages, as: :storable
   has_many :inventory_lists
 
+  scope :mrp_whouses,->{where(is_mrp_whouse: true)}
 
   def self.nr_by_regex(nr)
-    nr.sub(/^LO/,'')
+    nr.sub(/^LO/, '')
   end
 end
