@@ -61,6 +61,9 @@ module FileHandler
             # box_count=0
             # nps_count=0
 
+            if book.cell(2, 3).blank?
+              raise '收发货日期不能为空'
+            end
             fifo=book.cell(2, 3).to_time
             fifo=Time.now if fifo.blank?
             raise "fifo:#{fifo} 无效" if fifo > Time.now
@@ -331,6 +334,9 @@ module FileHandler
             # box_count=0
             # nps_count=0
 
+            if book.cell(2, 3).blank?
+              raise '收发货日期不能为空'
+            end
             fifo=book.cell(2, 3).to_time
             raise "fifo:#{fifo} 无效" if fifo > Time.now
 
