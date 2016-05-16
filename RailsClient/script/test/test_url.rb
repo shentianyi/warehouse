@@ -50,10 +50,17 @@ http = Net::HTTP.new("portal.covisint.com")
 request = Net::HTTP::Get.new("/web/messaging/jiaxuan-supplyonline")
 response = http.request(request)
 p response
+puts 'Code = ' + response.code
+puts 'Message = ' + response.message
+response.each {|key, val| puts key + ' = ' + val}
 
 request = Net::HTTP::Get.new("/so-supplychain-portlet/fordScheduleExcelFile.ajax?headerId=9059&userSsoId=&siteLanguage=en")
 response = http.request(request)
 p response
 
-p response
+p response.body
+
+puts 'Code = ' + response.code
+puts 'Message = ' + response.message
+response.each {|key, val| puts key + ' = ' + val}
 
