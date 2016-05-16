@@ -138,13 +138,13 @@ sr.each{|s|
 # }
 #
 #
-# p '---------------product vendor----------'
-# sr=models.execute_kw(
-#     db, uid, password, 'product.supplierinfo', 'search_read',
-#     [])
-# sr.each{|s|
-#   p s
-# }
+p '---------------product vendor----------'
+sr=models.execute_kw(
+    db, uid, password, 'product.supplierinfo', 'search_read',
+    [])
+sr.each{|s|
+  p s
+}
 #
 #
 #
@@ -168,16 +168,16 @@ p '---------------create order----------'
 #
 # p order_id
 #
-order_id=9
+order_id=19
 lines_ids=models.execute_kw(db, uid, password, 'purchase.order.line', 'create', [{
                                                                                      order_id:order_id,
                                                                                # partner_id: 6,
                                                                                      date_planned:Time.now.utc.to_s,
                                                                                      product_id:1,
-                                                                                 product_uom:1,
+                                                                                 product_uom:4,#UNIT SHOULD SAME WITH PART
                                                                                product_qty:12,
-                                                                                     price_unit:0,
-                                                                                     name:''
+                                                                                     price_unit:10,#GET PRICE
+                                                                                     name:'P1' #CANNOT BE BLANK
                                                                                # date_order:(Time.now).utc.to_s
                                                                            }])
 
