@@ -12,14 +12,14 @@
 ActiveRecord::Base.transaction do
 
   # init location and admin
-  l = Location.create({id: 'Basic', name: 'Basic Location', is_base: true}) unless (l=Location.find_by_id('Basic'))
+  # l = Location.create({id: 'Basic', name: 'Basic Location', is_base: true}) unless (l=Location.find_by_id('Basic'))
 
-  whouse=Whouse.new(id: 'TransWhouse', name: '在途库')
-  whouse.location=Location.find_by_id('Basic')
-  whouse.save
-  unless user=User.find_by_id('admin')
-    user = User.create({id: 'admin',name: 'Admin', location_id: l.id, password: '123456@', password_confirmation: '123456@', role_id: 100, is_sys: true,user_name:'admin'})
-  end
+  # whouse=Whouse.new(id: 'TransWhouse', name: '在途库')
+  # whouse.location=Location.find_by_id('Basic')
+  # whouse.save
+  # unless user=User.find_by_id('admin')
+  #   user = User.create({id: 'admin',name: 'Admin', location_id: l.id, password: '123456@', password_confirmation: '123456@', role_id: 100, is_sys: true,user_name:'admin'})
+  # end
 
   # init package label regex
   unless Regex.where(code: 'UNIQ', type: RegexType::PACKAGE_LABEL).first
@@ -112,12 +112,12 @@ ActiveRecord::Base.transaction do
     LedState.create({state: LedLightState::RECEIVED, rgb: "0 255 0", led_code: 0})
   end
 
-  l = Location.create({id: 'FG', name: '成品仓库', is_base: false}) unless (l=Location.find_by_id('FG'))
-  unless Whouse.find_by_id('FW87')
-    whouse=Whouse.new(id: 'FW87', name: '成品在途库')
-    whouse.location=l
-    whouse.save
-  end
+  # l = Location.create({id: 'FG', name: '成品仓库', is_base: false}) unless (l=Location.find_by_id('FG'))
+  # unless Whouse.find_by_id('FW87')
+  #   whouse=Whouse.new(id: 'FW87', name: '成品在途库')
+  #   whouse.location=l
+  #   whouse.save
+  # end
   unless  User.find_by_id('PACK_SYS_USER')
     User.create({id: 'PACK_SYS_USER', name: 'PACK_SYS_USER',
                  location_id: l.id, password: '123456@',
