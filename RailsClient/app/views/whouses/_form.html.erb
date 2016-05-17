@@ -15,15 +15,19 @@
     <div class="panel panel-primary">
       <div class="panel-body">
         <div class="col-sm-12" style="height: 40px;border-bottom: 1px dashed #000;">
-          <div class="col-sm-4">
+          <div class="col-sm-3">
             <%= f.label :nr, '编 号' %>
             <%= f.text_field :nr %>
           </div>
-          <div class="col-sm-4">
+          <div class="col-sm-3">
             <%= f.label :name, '名 称' %>
             <%= f.text_field :name %>
           </div>
-          <div class="col-sm-4">
+          <div class="col-sm-3">
+            <%= f.label :is_mrp_whouse, 'MRP 仓库' %>
+            <%= f.check_box :is_mrp_whouse %>
+          </div>
+          <div class="col-sm-3">
             <%= f.label :location_id, '地 点' %>
             <%= f.select(:location_id, Location.all.collect { |l| [l.name, l.id] }, {include_blank: false}) %>
           </div>

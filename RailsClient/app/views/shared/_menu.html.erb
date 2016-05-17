@@ -10,25 +10,25 @@
   <li>
     <a href="#">运输管理 &nbsp;<i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:black;"></i></a>
     <ul>
-      <% if current_user.permission?(:view_pick) %>
-          <li><a href="<%= panel_orders_path %>">要货需求面板</a></li>
-      <% end %>
+      <!--<% if current_user.permission?(:view_pick) %>-->
+          <!--<li><a href="<%= panel_orders_path %>">要货需求面板</a></li>-->
+      <!--<% end %>-->
 
-      <% if current_user.permission?(:view_order) %>
-          <li><a href="<%= orders_path %>">需求单</a></li>
-      <% end %>
+      <!--<% if current_user.permission?(:view_order) %>-->
+          <!--<li><a href="<%= orders_path %>">需求单</a></li>-->
+      <!--<% end %>-->
 
-      <% if current_user.permission?(:view_order) %>
-          <li><a href="<%= import_orders_path %>">导入需求单</a></li>
-      <% end %>
+      <!--<% if current_user.permission?(:view_order) %>-->
+          <!--<li><a href="<%= import_orders_path %>">导入需求单</a></li>-->
+      <!--<% end %>-->
 
-      <% if current_user.permission?(:view_pick) %>
-          <li><a href="<%= pick_panel_orders_path %>">择货需求面板</a></li>
-      <% end %>
+      <!--<% if current_user.permission?(:view_pick) %>-->
+          <!--<li><a href="<%= pick_panel_orders_path %>">择货需求面板</a></li>-->
+      <!--<% end %>-->
 
-      <% if current_user.permission?(:view_pick) %>
-          <li><a href="<%= pick_lists_path %>">择货单</a></li>
-      <% end %>
+      <!--<% if current_user.permission?(:view_pick) %>-->
+          <!--<li><a href="<%= pick_lists_path %>">择货单</a></li>-->
+      <!--<% end %>-->
 
       <% if current_user.permission?(:view_delivery) %>
           <li><a href="">发运流程&nbsp;
@@ -40,7 +40,7 @@
               <li id='package_li'><a href="<%= packages_path %>">包装箱</a></li>
               <% if current_user.permission?(:view_extra) %>
                   <% if current_user.permission?(:jiaxuan_extra_export) %>
-                      <li><a href="<%= generate_jiaxuan_deliveries_path %>">导入常州发运佳轩数据</a></li>
+                      <li><a href="<%= generate_jiaxuan_deliveries_path %>">导入接收数据</a></li>
                   <% end %>
               <% end %>
             </ul>
@@ -63,16 +63,18 @@
           </li>
       <% end %>
 
-      <% if current_user.permission?(:view_scrap) %>
-          <li><a href="#">报废生成&nbsp;
-            <i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:white;transform: rotate(-90deg);"></i>
-          </a>
-            <ul>
-              <li><a href="<%= scrap_lists_path %>">报废单</a></li>
-              <li><a href="<%= scrap_list_items_path %>">报废项</a></li>
-            </ul>
-          </li>
-      <% end %>
+      <!--
+      <% if current_user.permission?(:view_scrap) %>-->
+          <!--<li><a href="#">报废生成&nbsp;-->
+          <!--<i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:white;transform: rotate(-90deg);"></i>-->
+          <!--</a>-->
+          <!--<ul>-->
+          <!--<li><a href="<%= scrap_lists_path %>">报废单</a></li>-->
+          <!--<li><a href="<%= scrap_list_items_path %>">报废项</a></li>-->
+          <!--</ul>-->
+          <!--</li>-->
+          <!--
+      <% end %>-->
 
       <li><a href="#">移库管理&nbsp;
         <i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:white;transform: rotate(-90deg);"></i>
@@ -88,18 +90,18 @@
               <li><a href="<%= movement_lists_path %>">移库单</a></li>
               <li><a href="<%= movement_sources_path %>">移库项列表</a></li>
           <% end %>
-
-          <% if current_user.permission?(:view_storage) %>
-              <li><a href="<%= movements_path %>">库存移动记录查询</a></li>
-          <% end %>
         </ul>
       </li>
 
-      <% if current_user.permission?(:view_storage) %>
-          <% if current_user.permission?(:operate_storage) %>
-              <li><a href="<%= import_n_storages_path %>">文件入库</a></li>
-          <% end %>
-      <% end %>
+      <!--
+      <% if current_user.permission?(:view_storage) %>-->
+          <!--
+          <% if current_user.permission?(:operate_storage) %>-->
+              <!--<li><a href="<%= import_n_storages_path %>">文件入库</a></li>-->
+              <!--
+          <% end %>-->
+          <!--
+      <% end %>-->
 
       <li><a href="#">库存查询&nbsp;
         <i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:white;transform: rotate(-90deg);"></i>
@@ -108,10 +110,15 @@
           <% if current_user.permission?(:view_storage) %>
               <li><a href="<%= n_storages_path %>">详细库存查询</a></li>
               <li><a href="<%= group_n_storages_path %>">库存汇总查询</a></li>
-              <li><a href="<%= storage_operation_records_path %>">库存操作记录</a></li>
+              <!--<li><a href="<%= storage_operation_records_path %>">库存操作记录</a></li>-->
           <% end %>
         </ul>
       </li>
+
+      <% if current_user.permission?(:view_storage) %>
+          <li><a href="<%= movements_path %>">库存移动记录查询</a></li>
+      <% end %>
+
     </ul>
   </li>
 
@@ -120,20 +127,22 @@
       <% if current_user.permission?(:view_report) %>
           <li><a href="<%= reports_reports_path %>">收发货报表</a></li>
           <!-- <li><a href="<%= reports_discrepancy_path %>">收发货差异报表</a></li> -->
-          <li><a href="<%= reports_orders_report_path %>">要货报表</a></li>
+          <!--<li><a href="<%= reports_orders_report_path %>">要货报表</a></li>-->
       <% end %>
     </ul>
   </li>
 
-  <li>
-    <a href="#">应急 &nbsp;<i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:black;"></i></a>
-    <ul>
-      <% if current_user.permission?(:view_emergency) %>
-          <li><a href="<%= generate_deliveries_path %>">导入发运数据</a></li>
-          <li><a href="<%= receive_deliveries_path %>">导入接收数据</a></li>
-      <% end %>
-    </ul>
-  </li>
+  <!--<li>-->
+  <!--<a href="#">应急 &nbsp;<i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:black;"></i></a>-->
+  <!--<ul>-->
+  <!--
+  <% if current_user.permission?(:view_emergency) %>-->
+      <!--<li><a href="<%= generate_deliveries_path %>">导入发运数据</a></li>-->
+      <!--<li><a href="<%= receive_deliveries_path %>">导入接收数据</a></li>-->
+      <!--
+  <% end %>-->
+  <!--</ul>-->
+  <!--</li>-->
 
   <!-- <li>
     <a href="#">消息 &nbsp;<i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:black;"></i></a>
@@ -182,9 +191,11 @@
                   <li id='regex_li'><a href="<%= regex_categories_path %>">正则规范配置</a></li>
                   <li id='sys_config_li'><a href="<%= sys_configs_path %>">系统配置</a></li>
               <% end %>
-              <% if current_user.permission?(:jiaxuan_extra_config) %>
-                  <li><a href="<%= jiaxuan_extra_sys_configs_path %>">佳轩扩展配置</a></li>
-              <% end %>
+              <!--
+              <% if current_user.permission?(:jiaxuan_extra_config) %>-->
+                  <!--<li><a href="<%= jiaxuan_extra_sys_configs_path %>">佳轩扩展配置</a></li>-->
+                  <!--
+              <% end %>-->
             </ul>
           </li>
       <% end %>
