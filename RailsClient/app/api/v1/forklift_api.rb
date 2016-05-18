@@ -69,6 +69,7 @@ module V1
       #if not,return
       # add package
       post :check_package do
+      p params
         m = ApiMessage.new
 
         unless f=LogisticsContainer.exists?(params[:id])

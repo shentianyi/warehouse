@@ -18,7 +18,10 @@ class MovementSource < ActiveRecord::Base
         employee_id: params[:user].blank? ? '' : params[:user].id,
         fifo: params[:fifo],
         remarks: params[:fifo],
-        type: type
+        type: type,
+        part_id_display: params[:part_display],
+        quantity_display: params[:qty_display],
+        fifo_time_display: params[:fifo_display]
     }
 
     m=nil
