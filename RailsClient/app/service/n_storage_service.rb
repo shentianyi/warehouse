@@ -57,31 +57,32 @@ class NStorageService
     msg=move_stock_check data
 
     if msg.result
-      data.each do |d|
-        p data
-        part=Part.find_by_nr(d[:part_id])
-        if KskResultState::FINISHED_ADD==d[:result_code]
-          w=Whouse.find_by_nr('Finished')
-          WhouseService.new.enter_stock({
-                                            partNr: part.id,
-                                            qty: 1,
-                                            fifo: Time.now(),
-                                            toWh: w.id,
-                                            toPosition: w.default_position.id,
-                                            packageId: d[:package_id]
-                                        })
-        elsif KskResultState::SEMIFINISHED_ADD==d[:result_code]
+      NStorage.transaction do
+        data.each do |d|
+          p data
+          part=Part.find_by_nr(d[:part_id])
+          if [MATERIAL_ADD, MATERIAL_MOVE, SEMIFINISHED_MOVE, FINISHED_MOVE, SCRAP_ADD, SCRAP_MOVE, REWORK_ADD, REWORK_MOVE].include?(d[:result_code])
+            if KskResultState::FINISHED_ADD==d[:result_code]
+              w=Whouse.find_by_nr('Finished')
+            elsif KskResultState::SEMIFINISHED_ADD==d[:result_code]
+              w=Whouse.find_by_nr('SemiFinished')
+            end
+            WhouseService.new.enter_stock({
+                                              partNr: part.id,
+                                              qty: 1,
+                                              fifo: Time.now(),
+                                              toWh: w.id,
+                                              toPosition: w.default_position.id,
+                                              packageId: d[:package_id]
+                                          })
+          elsif [MATERIAL_ADD, MATERIAL_MOVE, SEMIFINISHED_MOVE, FINISHED_MOVE, SCRAP_ADD, SCRAP_MOVE, REWORK_ADD, REWORK_MOVE].include?(d[:result_code])
 
-        elsif [MATERIAL_ADD, MATERIAL_MOVE, SEMIFINISHED_MOVE, FINISHED_MOVE, SCRAP_ADD, SCRAP_MOVE, REWORK_ADD, REWORK_MOVE].include?(d[:result_code])
-
-        else
+          else
+          end
         end
       end
     else
-      return {
-          result_code: 0,
-          messages: msg.content
-      }
+      return {result_code: 0, messages: msg.content}
     end
 
     {
