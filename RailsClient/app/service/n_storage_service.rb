@@ -61,12 +61,9 @@ class NStorageService
         data.each do |d|
           p data
           part=Part.find_by_nr(d[:part_id])
-          if [MATERIAL_ADD, MATERIAL_MOVE, SEMIFINISHED_MOVE, FINISHED_MOVE, SCRAP_ADD, SCRAP_MOVE, REWORK_ADD, REWORK_MOVE].include?(d[:result_code])
-            if KskResultState::FINISHED_ADD==d[:result_code]
-              w=Whouse.find_by_nr('Finished')
-            elsif KskResultState::SEMIFINISHED_ADD==d[:result_code]
-              w=Whouse.find_by_nr('SemiFinished')
-            end
+          storage=NStorage.find_by_packageId(d[:package_id])
+          w=Whouse.find_by_nr(KskResultState.display(d[:result_code]))
+          if [KskResultState::SEMIFINISHED_ADD, KskResultState::FINISHED_ADD].include?(d[:result_code])
             WhouseService.new.enter_stock({
                                               partNr: part.id,
                                               qty: 1,
@@ -75,9 +72,19 @@ class NStorageService
                                               toPosition: w.default_position.id,
                                               packageId: d[:package_id]
                                           })
-          elsif [MATERIAL_ADD, MATERIAL_MOVE, SEMIFINISHED_MOVE, FINISHED_MOVE, SCRAP_ADD, SCRAP_MOVE, REWORK_ADD, REWORK_MOVE].include?(d[:result_code])
-
+          elsif [KskResultState::MATERIAL_MOVE, KskResultState::SEMIFINISHED_MOVE, KskResultState::FINISHED_MOVE, KskResultState::SCRAP_MOVE, KskResultState::REWORK_MOVE].include?(d[:result_code])
+            WhouseService.new.move({
+                                       toWh: w.id,
+                                       toPosition: w.default_position.id,
+                                       fromWh: storage.ware_house_id,
+                                       fromPosition: storage.position_id,
+                                       partNr: part.id,
+                                       qty: storage.qty,
+                                       fifo: storage.fifo,
+                                       packageId: d[:package_id]
+                                   })
           else
+
           end
         end
       end
@@ -95,18 +102,25 @@ class NStorageService
     msg=Message.new(contents: [])
 
     data.each do |d|
+      if d[:package_id].blank?
+        msg.contents << "唯一码不能为空"
+      end
+      unless part=Part.find_by_nr(d[:part_id])
+        msg.contents << "零件号不存在"
+      end
       if [KskResultState::FINISHED_ADD, KskResultState::SEMIFINISHED_ADD].include?(d[:result_code])
-        if d[:package_id].blank?
-          msg.contents << "唯一码不能为空"
-        end
         if NStorage.exists_package?(d[:package_id])
           msg.contents << "唯一码已存在"
         end
-        unless Part.find_by_nr(d[:part_id])
-          msg.contents << "零件号不存在"
+      elsif [KskResultState::MATERIAL_MOVE, KskResultState::SEMIFINISHED_MOVE, KskResultState::FINISHED_MOVE, KskResultState::SCRAP_MOVE, KskResultState::REWORK_MOVE].include?(d[:result_code])
+        unless NStorage.exists_package?(d[:package_id])
+          msg.contents << "唯一码不存在"
         end
-      elsif [MATERIAL_ADD, MATERIAL_MOVE, SEMIFINISHED_MOVE, FINISHED_MOVE, SCRAP_ADD, SCRAP_MOVE, REWORK_ADD, REWORK_MOVE].include?(d[:result_code])
-
+        if part
+          unless NStorage.where(packageId: d[:package_id], partNr: part.id).first
+            msg.contents << "唯一码和零件号的对应关系不正确"
+          end
+        end
       else
         msg.contents << "result code 不正确"
       end

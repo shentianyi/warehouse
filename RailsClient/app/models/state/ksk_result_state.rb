@@ -16,5 +16,30 @@ class KskResultState
   REWORK_ADD = 90
   REWORK_MOVE = 100
 
-
+  def self.display(state)
+    case state
+      when MATERIAL_ADD
+        'Material'
+      when MATERIAL_MOVE
+        'Material'
+      when SEMIFINISHED_ADD
+        'SemiFinished'
+      when SEMIFINISHED_MOVE
+        'SemiFinished'
+      when FINISHED_ADD
+        'Finished'
+      when FINISHED_MOVE
+        'Finished'
+      when SCRAP_ADD
+        'Scrap'
+      when SCRAP_MOVE
+        'Scrap'
+      when REWORK_ADD
+        'Rework'
+      when REWORK_MOVE
+        'Rework'
+      else
+        '未知'
+    end
+  end
 end
