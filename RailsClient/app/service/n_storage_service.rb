@@ -62,26 +62,27 @@ class NStorageService
           p data
           part=Part.find_by_nr(d[:part_id])
           storage=NStorage.find_by_packageId(d[:package_id])
-          w=Whouse.find_by_nr(KskResultState.display(d[:result_code]))
-          if [KskResultState::SEMIFINISHED_ADD, KskResultState::FINISHED_ADD].include?(d[:result_code])
+          toWh=Whouse.find_by_nr(KskResultState.decode_destination(d[:result_code]))
+          if enter_code.include?(d[:result_code])
             WhouseService.new.enter_stock({
                                               partNr: part.id,
                                               qty: 1,
                                               fifo: Time.now(),
-                                              toWh: w.id,
-                                              toPosition: w.default_position.id,
+                                              toWh: toWh.id,
+                                              toPosition: toWh.default_position.id,
                                               packageId: d[:package_id]
                                           })
-          elsif [KskResultState::MATERIAL_MOVE, KskResultState::SEMIFINISHED_MOVE, KskResultState::FINISHED_MOVE, KskResultState::SCRAP_MOVE, KskResultState::REWORK_MOVE].include?(d[:result_code])
+          elsif move_code.include?(d[:result_code])
+            fromWh=Whouse.find_by_nr(KskResultState.decode_source(d[:result_code]))
             WhouseService.new.move({
-                                       toWh: w.id,
-                                       toPosition: w.default_position.id,
-                                       fromWh: storage.ware_house_id,
-                                       fromPosition: storage.position_id,
+                                       toWh: toWh.id,
+                                       toPosition: toWh.default_position.id,
+                                       fromWh: fromWh.id,
+                                       fromPosition: fromWh.default_position.id,
                                        partNr: part.id,
-                                       qty: storage.qty,
-                                       fifo: storage.fifo,
-                                       packageId: d[:package_id]
+                                       qty: d[:qty]
+                                       # fifo: storage.fifo,
+                                       # packageId: d[:package_id]
                                    })
           else
 
@@ -102,25 +103,29 @@ class NStorageService
     msg=Message.new(contents: [])
 
     data.each do |d|
-      if d[:package_id].blank?
-        msg.contents << "唯一码不能为空"
-      end
       unless part=Part.find_by_nr(d[:part_id])
         msg.contents << "零件号不存在"
       end
-      if [KskResultState::FINISHED_ADD, KskResultState::SEMIFINISHED_ADD].include?(d[:result_code])
-        if NStorage.exists_package?(d[:package_id])
-          msg.contents << "唯一码已存在"
-        end
-      elsif [KskResultState::MATERIAL_MOVE, KskResultState::SEMIFINISHED_MOVE, KskResultState::FINISHED_MOVE, KskResultState::SCRAP_MOVE, KskResultState::REWORK_MOVE].include?(d[:result_code])
-        unless NStorage.exists_package?(d[:package_id])
-          msg.contents << "唯一码不存在"
-        end
-        if part
-          unless NStorage.where(packageId: d[:package_id], partNr: part.id).first
-            msg.contents << "唯一码和零件号的对应关系不正确"
+      if enter_code.include?(d[:result_code])
+        if d[:package_id].blank?
+          msg.contents << "唯一码不能为空"
+        else
+          if NStorage.exists_package?(d[:package_id])
+            msg.contents << "唯一码已存在"
           end
         end
+      elsif move_code.include?(d[:result_code])
+        unless d[:package_id].blank?
+          msg.contents << "唯一码#{d[:package_id]}不应该存在"
+        end
+        if d[:qty].to_i <= 0
+          msg.contents << "数量：#{d[:qty]}不合法"
+        end
+        # if part
+        #   unless NStorage.where(packageId: d[:package_id], partNr: part.id).first
+        #     msg.contents << "唯一码和零件号的对应关系不正确"
+        #   end
+        # end
       else
         msg.contents << "result code 不正确"
       end
@@ -130,6 +135,17 @@ class NStorageService
       msg.content=msg.contents.join('/')
     end
     msg
+  end
+
+  def self.enter_code
+    [KskResultState::SEMIFINISHED_ADD, KskResultState::FINISHED_ADD]
+  end
+
+  def self.move_code
+    [KskResultState::MATERIAL_MOVE_FROM_RECEIVE, KskResultState::SEMIFINISHED_MOVE_FROM_RECEIVE, KskResultState::SEMIFINISHED_MOVE_FROM_MATERIAL,
+     KskResultState::FINISHED_MOVE_FROM_MATERIAL, KskResultState::FINISHED_MOVE_FROM_SEMI, KskResultState::SCRAP_ADD_FROM_MATERIAL, KskResultState::SCRAP_ADD_FROM_SEMI,
+     KskResultState::SCRAP_ADD_FINISHED, KskResultState::REWORK_ADD_FROM_RECEIVE, KskResultState::REWORK_ADD_FROM_MATERIAL, KskResultState::REWORK_ADD_FROM_SEMI,
+     KskResultState::REWORK_ADD_FROM_FINISHED]
   end
 
 

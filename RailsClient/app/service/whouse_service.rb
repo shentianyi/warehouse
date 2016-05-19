@@ -230,7 +230,9 @@ class WhouseService
 
             break if restqty <= 0
 
-            tostorage = NStorage.where(ware_house_id: toWh.id, partNr: params[:partNr], position_id: params[:toPosition]).order("n_storages.qty asc").first
+            # tostorage = NStorage.where(ware_house_id: toWh.id, partNr: params[:partNr], position_id: params[:toPosition]).order("n_storages.qty asc").first
+            #one record => one wi
+            tostorage=nil
             # update parameters of movement creation
             move_data.update({from_id: storage.ware_house_id, fromPosition: storage.position,
                               fifo: storage.fifo, partNr: storage.partNr})

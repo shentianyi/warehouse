@@ -22,7 +22,7 @@ ActiveRecord::Base.transaction do
     rw=Whouse.create(nr: 'WXReceive', name: '缓冲库')
   end
   unless mw=Whouse.find_by_nr('Material')
-    mw=Whouse.create(nr: 'WXSend', name: '原材料库')
+    mw=Whouse.create(nr: 'Material', name: '原材料库')
   end
   unless sfw=Whouse.find_by_nr('SemiFinished')
     sfw=Whouse.create(nr: 'SemiFinished', name: '半成品库')
