@@ -23,11 +23,14 @@ module V4
       end
 
       desc 'enter and move stock'
-      params do
-        optional :stock_list, type: Array, desc: 'stock data'
-      end
+      # params do
+      #   optional :stock_list, type: Array, desc: 'stock data'
+      # end
       post :move_stock do
-        NStorageService.move_stock params[:stock_list]
+        puts params[:stock_list]
+        puts '00000000000000000000000000000000000000000000000000000000000'
+        ret=NStorageService.move_stock params[:stock_list]
+        puts ret
       end
 
     end

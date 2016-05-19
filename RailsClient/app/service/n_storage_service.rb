@@ -54,33 +54,34 @@ class NStorageService
   end
 
   def self.move_stock data
-    msg=move_stock_check data
+    js_data=JSON.parse(data)
+    msg=move_stock_check js_data
+    p js_data
 
     if msg.result
       NStorage.transaction do
-        data.each do |d|
-          p data
-          part=Part.find_by_nr(d[:part_id])
-          storage=NStorage.find_by_packageId(d[:package_id])
-          toWh=Whouse.find_by_nr(KskResultState.decode_destination(d[:result_code]))
-          if enter_code.include?(d[:result_code])
+        js_data.each do |d|
+          part=Part.find_by_nr(d['part_id'])
+          storage=NStorage.find_by_packageId(d['package_id'])
+          toWh=Whouse.find_by_nr(KskResultState.decode_destination(d['result_code'].to_i))
+          if enter_code.include?(d['result_code'].to_i)
             WhouseService.new.enter_stock({
                                               partNr: part.id,
                                               qty: 1,
                                               fifo: Time.now(),
                                               toWh: toWh.id,
                                               toPosition: toWh.default_position.id,
-                                              packageId: d[:package_id]
+                                              packageId: d['package_id']
                                           })
-          elsif move_code.include?(d[:result_code])
-            fromWh=Whouse.find_by_nr(KskResultState.decode_source(d[:result_code]))
+          elsif move_code.include?(d['result_code'].to_i)
+            fromWh=Whouse.find_by_nr(KskResultState.decode_source(d['result_code'].to_i))
             WhouseService.new.move({
                                        toWh: toWh.id,
                                        toPosition: toWh.default_position.id,
                                        fromWh: fromWh.id,
                                        fromPosition: fromWh.default_position.id,
                                        partNr: part.id,
-                                       qty: d[:qty]
+                                       qty: d['qty']
                                        # fifo: storage.fifo,
                                        # packageId: d[:package_id]
                                    })
@@ -103,23 +104,25 @@ class NStorageService
     msg=Message.new(contents: [])
 
     data.each do |d|
-      unless part=Part.find_by_nr(d[:part_id])
+      unless part=Part.find_by_nr(d['part_id'])
         msg.contents << "零件号不存在"
       end
-      if enter_code.include?(d[:result_code])
-        if d[:package_id].blank?
+      if enter_code.include?(d['result_code'].to_i)
+        puts '99999999999999999999999999999999999999999999999999'
+        if d['package_id'].blank?
           msg.contents << "唯一码不能为空"
         else
-          if NStorage.exists_package?(d[:package_id])
+          if NStorage.exists_package?(d['package_id'])
             msg.contents << "唯一码已存在"
           end
         end
-      elsif move_code.include?(d[:result_code])
-        unless d[:package_id].blank?
-          msg.contents << "唯一码#{d[:package_id]}不应该存在"
+      elsif move_code.include?(d['result_code'].to_i)
+        puts '99999999999999999999999999999999999999999999999999'
+        unless d['package_id'].blank?
+          msg.contents << "唯一码#{d['package_id']}不应该存在"
         end
-        if d[:qty].to_i <= 0
-          msg.contents << "数量：#{d[:qty]}不合法"
+        if d['qty'].to_i <= 0
+          msg.contents << "数量：#{d['qty']}不合法"
         end
         # if part
         #   unless NStorage.where(packageId: d[:package_id], partNr: part.id).first
@@ -129,6 +132,7 @@ class NStorageService
       else
         msg.contents << "result code 不正确"
       end
+      puts '99999999999999999999999999999999999999999999999999'
     end
 
     unless msg.result=(msg.contents.size==0)
