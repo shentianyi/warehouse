@@ -71,7 +71,8 @@ class NStorageService
                                               fifo: Time.now(),
                                               toWh: toWh.id,
                                               toPosition: toWh.default_position.id,
-                                              packageId: d['package_id']
+                                              packageId: d['package_id'],
+                                              employee_id: 'KSK_CALL'
                                           })
           elsif move_code.include?(d['result_code'].to_i)
             fromWh=Whouse.find_by_nr(KskResultState.decode_source(d['result_code'].to_i))
@@ -81,7 +82,8 @@ class NStorageService
                                        fromWh: fromWh.id,
                                        fromPosition: fromWh.default_position.id,
                                        partNr: part.id,
-                                       qty: d['qty']
+                                       qty: d['qty'],
+                                       employee_id: 'KSK_CALL'
                                        # fifo: storage.fifo,
                                        # packageId: d[:package_id]
                                    })

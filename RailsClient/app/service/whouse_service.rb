@@ -91,6 +91,8 @@ class WhouseService
     if employee=User.find_by_nr(params[:employee_id])
       move_data[:employee_id]=employee.id
     end
+    move_data[:employee_id]||=params[:employee_id]
+
     move_data[:remarks] = params[:remarks] if params[:remarks].present?
     move_data[:movement_list_id] = params[:movement_list_id] if params[:movement_list_id].present?
 
@@ -236,6 +238,9 @@ class WhouseService
             # update parameters of movement creation
             move_data.update({from_id: storage.ware_house_id, fromPosition: storage.position,
                               fifo: storage.fifo, partNr: storage.partNr})
+            unless storage.packageId.blank?
+              move_data[:packageId] = storage.packageId
+            end
 
             if restqty.to_f >= storage.qty.to_f
 

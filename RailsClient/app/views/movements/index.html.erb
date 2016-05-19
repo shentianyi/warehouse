@@ -185,7 +185,7 @@
         <% if employee=User.find_by_id(movement.employee_id) %>
             <td><%=  employee.nr %></td>
         <% else %>
-            <td></td>
+            <td><%= movement.employee_id %></td>
         <% end %>
         <td><%= movement.remarks if movement.remarks %> </td>
         <td><%= movement.remark if movement.remark %> </td>
