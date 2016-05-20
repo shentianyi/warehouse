@@ -27,10 +27,7 @@ module V4
       #   optional :stock_list, type: Array, desc: 'stock data'
       # end
       post :move_stock do
-        puts params[:stock_list]
-        puts '00000000000000000000000000000000000000000000000000000000000'
-        ret=NStorageService.move_stock params[:stock_list]
-        puts ret
+        NStorageService.move_stock params[:stock_list]
       end
 
     end

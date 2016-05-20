@@ -238,6 +238,8 @@ class WhouseService
             # update parameters of movement creation
             move_data.update({from_id: storage.ware_house_id, fromPosition: storage.position,
                               fifo: storage.fifo, partNr: storage.partNr})
+
+            #稳信 一个零件对应一个唯一码 so add
             unless storage.packageId.blank?
               move_data[:packageId] = storage.packageId
             end

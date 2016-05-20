@@ -110,7 +110,6 @@ class NStorageService
         msg.contents << "零件号不存在"
       end
       if enter_code.include?(d['result_code'].to_i)
-        puts '99999999999999999999999999999999999999999999999999'
         if d['package_id'].blank?
           msg.contents << "唯一码不能为空"
         else
@@ -119,22 +118,15 @@ class NStorageService
           end
         end
       elsif move_code.include?(d['result_code'].to_i)
-        puts '99999999999999999999999999999999999999999999999999'
         unless d['package_id'].blank?
           msg.contents << "唯一码#{d['package_id']}不应该存在"
         end
         if d['qty'].to_i <= 0
           msg.contents << "数量：#{d['qty']}不合法"
         end
-        # if part
-        #   unless NStorage.where(packageId: d[:package_id], partNr: part.id).first
-        #     msg.contents << "唯一码和零件号的对应关系不正确"
-        #   end
-        # end
       else
         msg.contents << "result code 不正确"
       end
-      puts '99999999999999999999999999999999999999999999999999'
     end
 
     unless msg.result=(msg.contents.size==0)
