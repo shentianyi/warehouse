@@ -311,7 +311,7 @@ Rails.application.routes.draw do
   get 'reports/orders_report', to: 'reports#orders_report'
   get 'reports/reports', to: 'reports#reports'
   post 'reports/upload_file', to: 'reports#upload_file'
-
+  match 'reports/safe_stock_report', to: 'reports#safe_stock_report', via: [:get, :post]
 
   get 'notifications', to: 'notifications#index'
   get 'notifications/orderbus', to: 'notifications#orderbus'

@@ -1,0 +1,15 @@
+<script type="text/javascript">
+    $(function() {
+        data_upload("#item-data-uploader");
+    });
+</script>
+<h1>&nbsp;</h1>
+<p id="notice">
+  <%= notice %>
+</p>
+<h3>上传今日订单报表</h3>
+<div>
+  上传数据文件：
+  <input id="item-data-uploader" type="file" name="files[]" data-url="/reports/safe_stock_report" >
+  <div class="abstractblock" id="item-data-uploader-preview" style="display:none;"></div>
+</div>
