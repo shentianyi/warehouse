@@ -144,7 +144,14 @@ class WhouseService
         puts "############{storage.to_json}"
         raise "源仓库不存在该唯一码#{params[:packageId]}！" if storage.nil? || storage.qty < 0
 
-        unless (storage.ware_house_id==toWh.id && storage.position_id==params[:toPosition])
+        if (storage.ware_house_id==toWh.id && storage.position_id==params[:toPosition])
+          move_data[:packageId] = params[:packageId]
+          move_data[:partNr] = params[:partNr]
+          move_data[:qty] = params[:qty]
+          move_data[:from_id] = params[:fromWh]
+          move_data[:fromPosition] = params[:fromPosition]
+          Movement.create!(move_data)
+        else
           if params[:qty].blank?
             params[:qty]=storage.qty
           end
@@ -233,14 +240,19 @@ class WhouseService
           storages.reduce(params[:qty].to_f) do |restqty, storage|
 
             break if restqty <= 0
-            unless (storage.ware_house_id==toWh.id && storage.position_id==params[:toPosition])
+            # update parameters of movement creation
+            move_data.update({from_id: storage.ware_house_id, fromPosition: storage.position,
+                              fifo: storage.fifo, partNr: storage.partNr})
 
+            if (storage.ware_house_id==toWh.id && storage.position_id==params[:toPosition])
+              move_data[:qty] = (restqty.to_f >= storage.qty.to_f) ? storage.qty : restqty.to_f
+              unless storage.packageId.blank?
+                move_data[:remarks] = "#{Time.now.localtime}从包装箱#{storage.packageId}中移库#{move_data[:qty]}"
+              end
+            else
               # tostorage = NStorage.where(ware_house_id: toWh.id, partNr: params[:partNr], position_id: params[:toPosition]).order("n_storages.qty asc").first
               #one record => one wi
               tostorage=nil
-              # update parameters of movement creation
-              move_data.update({from_id: storage.ware_house_id, fromPosition: storage.position,
-                                fifo: storage.fifo, partNr: storage.partNr})
 
               #稳信 一个零件对应一个唯一码 so add
               unless storage.packageId.blank?
@@ -347,14 +359,13 @@ class WhouseService
               data = {partNr: params[:partNr], qty: lastqty, ware_house_id: toWh.id, position_id: params[:toPosition]}
               NStorage.create!(data)
             end
-
-            #movement
-            remark = "系统添加备注信息：#{Time.now} 负库存产生【操作员：#{user_id} -- 初始移库数量：#{params[:qty]}】"
-            move_data.update({from_id: params[:fromWh], fromPosition: params[:fromPosition], partNr: params[:partNr], qty: lastqty, remark: remark})
-            Movement.create!(move_data)
-
           end
+          #movement
+          remark = "系统添加备注信息：#{Time.now} 负库存产生【操作员：#{user_id} -- 初始移库数量：#{params[:qty]}】"
+          move_data.update({from_id: params[:fromWh], fromPosition: params[:fromPosition], partNr: params[:partNr], qty: lastqty, remark: remark})
+          Movement.create!(move_data)
         end
+
       end
     }
     {result: 1, content: 'move success'}
