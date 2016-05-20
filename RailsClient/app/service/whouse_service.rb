@@ -308,7 +308,7 @@ class WhouseService
         end
 
         if lastqty > 0
-          unless (storage.ware_house_id==toWh.id && storage.position_id==params[:toPosition])
+          unless ((params[:fromPosition].blank? ? default_position : params[:fromPosition])==params[:toPosition])
             #src
             # negatives_storages = NStorage.where(partNr: params[:partNr], ware_house_id: fromWh.id, position: params[:fromPosition])
 
