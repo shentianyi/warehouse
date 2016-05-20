@@ -129,7 +129,9 @@ module V3
         args[:remarks] = params[:remarks] if params[:remarks].present?
         args[:user] = current_user
 
-        return {result: 0, content: "#{params[:movement_list_id]}移库单不存在！"} unless m=MovementList.find_by(id: params[:movement_list_id])
+        unless m=MovementList.where(id: params[:movement_list_id]).where("state != #{MovementListState::ENDING}").first
+          return {result: 0, content: "#{params[:movement_list_id]}移库单不存在或者已经成功移库！"}
+        end
 
         if params[:movements].blank?
           {result: 0, content: '没有数据移库'}
