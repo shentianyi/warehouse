@@ -185,4 +185,31 @@ class LogisticsContainer<LocationContainer
       end
     end
   end
+
+  def enter_stock_without_state
+    if (package=self.package)
+
+      #用于 leoni 收集数据
+      p package
+      toWh=SysConfigCache.default_import_whouse_value
+      #判断唯一码是否存在？
+      if package.logistics_containers.first.parent.blank?
+        #绑定包装箱
+        to_position=SysConfigCache.default_import_position_value
+      else
+        to_position='WE87-2'
+      end
+      params={
+          partNr: package.part_id,
+          qty: package.quantity,
+          fifo: package.parsed_fifo,
+          packageId: package.id,
+          toWh: toWh,
+          toPosition: to_position,
+          uniq: true,
+          employee_id: package.user_id
+      }
+      WhouseService.new.enter_stock(params)
+    end
+  end
 end

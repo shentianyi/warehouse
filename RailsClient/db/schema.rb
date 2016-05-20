@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160425074111) do
+ActiveRecord::Schema.define(version: 20160518034747) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -329,6 +329,9 @@ ActiveRecord::Schema.define(version: 20160425074111) do
     t.string   "type"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "part_id_display"
+    t.string   "quantity_display"
+    t.string   "fifo_time_display"
   end
 
   add_index "movement_sources", ["movement_list_id"], name: "index_movement_sources_on_movement_list_id", using: :btree

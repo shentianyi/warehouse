@@ -74,6 +74,9 @@ module V3
         optional :qty, type: String, desc: 'quantity'
         optional :type, type: String, desc: 'type'
         optional :fifo, type: String, desc: 'fifo time'
+        optional :qty_display, type: String, desc: 'quantity'
+        optional :part_display, type: String, desc: 'part'
+        optional :fifo_display, type: String, desc: 'fifo time'
       end
       post :validate_movement do
         params[:toWh]=params[:toWh].sub(/LO/, '')
@@ -116,7 +119,7 @@ module V3
 
         if mmsg.result
           m.update(state: MovementListState::PROCESSING)
-          {result: 1, content: '数据验证通过.'}
+          {result: 1, content: '数据验证通过.',object: mmsg.object}
         else
           {result: 0, content: mmsg.content}
         end
@@ -208,14 +211,14 @@ module V3
             plc = PackageService.create({
                                             id: ms.packageId,
                                             part_id: ms.partNr,
-                                            part_id_display: '',
+                                            part_id_display: ms.part_id_display,
                                             quantity: ms.qty,
-                                            quantity_display: '',
-                                            custom_fifo_time: ms.fifo,
-                                            fifo_time_display: ''
+                                            quantity_display: ms.quantity_display,
+                                            custom_fifo_time: ms.remarks,
+                                            fifo_time_display: ms.fifo_time_display
                                         }, current_user)
             if plc.result
-              plc.object.update_attributes(state: MovableState::CHECKED)
+              plc.object.enter_stock_without_state
             else
               return {result: 0, content: plc.content}
             end

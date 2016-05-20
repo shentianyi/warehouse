@@ -125,6 +125,6 @@ class MovementSourcesController < ApplicationController
     end
 
     def movement_source_params
-      params.require(:movement_source).permit(:movement_list_id, :fromWh, :fromPosition, :packageId, :partNr, :qty, :fifo, :toWh, :toPosition, :employee_id, :remarks, :type)
+      params.require(:movement_source).permit(:movement_list_id, :fromWh, :fromPosition, :packageId, :partNr, :qty, :fifo, :toWh, :toPosition, :employee_id, :remarks, :type, :fifo_time_display, :quantity_display, :part_id_display)
     end
 end

@@ -62,6 +62,7 @@ module V3
       params do
         requires :movement_source_id, type: Integer, desc: 'ID of the movement_source'
       end
+
       delete do
         m = MovementSource.find_by(id: params[:movement_source_id])
         if m && m.movement_list

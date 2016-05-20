@@ -73,7 +73,7 @@ module FileHandler
                 end
 
                 row[:movement_list_id] = move_list.id
-                MovementSource.save_record(params, 'MOVE')
+                MovementSource.save_record(row, 'MOVE')
 
                 row[:employee_id] ||= current_user.id
                 WhouseService.new.move(row)
@@ -269,7 +269,7 @@ module FileHandler
           msg.contents << "目的库位号不能为空!"
         end
 
-        if row[:fromWh].present?
+        if row[:fromWh].blank?
           msg.contents << "源仓库号不能为空!"
         end
         src_warehouse = Whouse.find_by_id(row[:fromWh])
