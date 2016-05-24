@@ -156,8 +156,6 @@ class LogisticsContainersController < ApplicationController
   end
 
   def stock_move
-    puts '-iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii'
-    puts params
     msg=DeliveryService.stock_move(params[:id])
 
     redirect_to :back, notice: msg.content

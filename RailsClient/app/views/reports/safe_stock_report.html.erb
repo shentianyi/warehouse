@@ -1,15 +1,72 @@
-<script type="text/javascript">
-    $(function() {
-        data_upload("#item-data-uploader");
-    });
-</script>
-<h1>&nbsp;</h1>
-<p id="notice">
-  <%= notice %>
-</p>
-<h3>上传今日订单报表</h3>
-<div>
-  上传数据文件：
-  <input id="item-data-uploader" type="file" name="files[]" data-url="/reports/safe_stock_report" >
-  <div class="abstractblock" id="item-data-uploader-preview" style="display:none;"></div>
+
+<style>
+    .table > thead > tr > th, .table > tbody > tr > td {
+        text-align: center;
+    }
+</style>
+
+<div class="panel panel-warning">
+  <div class="panel-heading" style="display: flex;">
+    <h3>上传今日订单报表</h3>
+    <h5 style="margin-top: 25px;margin-left: 20px;">将从 Covisint 网站上下载下来的原始文件导入</h5>
+  </div>
+  <div class="panel-body">
+    <script type="text/javascript">
+        $(function () {
+            data_upload("#item-data-uploader", false, function (data) {
+                if (data.result) {
+                    $("#file").val(JSON.stringify(data.content));
+                    $("#item-data-uploader-preview > span[info]").html("文件上传成功");
+                } else {
+                    $("#file").val('');
+                }
+            });
+        });
+        function submitForm() {
+            if ($("#file").val().length > 0)
+                document.forms[0].submit();
+            else
+                alert('请上传文件');
+        }
+    </script>
+    <% if current_user.permission?(:operate_report_upload) %>
+        <div style="display: flex;">
+          <span style="margin-top: 5px;">上传报表：</span>
+          <input id="item-data-uploader" type="file" name="files[]" data-url="/reports/upload_file">
+
+          <div class="abstractblock" id="item-data-uploader-preview" style="<%= "display:none" if @file.nil? %>;">
+            <% if @file %>
+                <span>文件：<%= @file["data"]["original_filename"] %></span>
+                <br>
+                <span info>文件上传成功</span>
+            <% end %>
+          </div>
+        </div>
+    <% end %>
+
+    <form method="get" action="<%= reports_safe_stock_report_path %>">
+      <div class="col-sm-12" style="margin-top: 15px;margin-bottom: -5px;">
+        <div class="col-sm-4">
+          <input type="hidden" id="file" name="file" value="<%= @jsonfile %>">
+        </div>
+
+        <div class="col-sm-4">
+          <input type="button" style="width: 150px;" value="导出报表" class="btn btn-warning" name="commit" onclick="submitForm()"/>
+        </div>
+
+      </div>
+    </form>
+  </div>
 </div>
+
+
+<script>
+    $(function () {
+        $(".datepicker").datetimepicker({
+            lang: 'ch',
+            format: 'Y-m-d H:i'
+        });
+    });
+    init_check();
+</script>
+

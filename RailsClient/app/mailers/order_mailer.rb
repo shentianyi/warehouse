@@ -12,3 +12,4 @@ class OrderMailer < ActionMailer::Base
     end
   end
 end
+OrderMailer.notify

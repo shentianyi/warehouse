@@ -4,47 +4,49 @@ class Storage<ActiveRecord::Base
   belongs_to :location
   belongs_to :part
 
-  delegate :name,prefix: true,to: :location,allow_nil: true
-  delegate :name,prefix: true,to: :storable,allow_nil: true
+  delegate :name, prefix: true, to: :location, allow_nil: true
+  delegate :name, prefix: true, to: :storable, allow_nil: true
 
-  def self.build_safe_stock_report csv
+  def self.build_safe_stock_report file
+    jsfile = JSON.parse(file)
+    f = FileData.new(jsfile)
+
     msg=Message.new
-    begin
+    # begin
+      data={}
+      part_list=[]
       line_no=0
-      CSV.foreach(csv.file_path, headers: true, col_sep: csv.col_sep, encoding: csv.encoding) do |row|
-        row.strip
+      CSV.foreach(f.full_path, headers: false, col_sep: ',') do |row|
+        # row.strip
         line_no+=1
-        # if self.respond_to?(:csv_headers)
-        #   headers=self.csv_headers-row.headers
-        #   raise(ArgumentError, "#{headers.join(' /')} 为必须包含列!") unless headers.empty?
-        # # end
-        # data={}
-        # self.csv_cols.each do |col|
-        #   # p col
-        #   # p col.foreign.constantize
-        #   # raise(ArgumentError, "行:#{line_no} #{col.header} 值constantize不可为空") if !col.null && row[col.header].blank?
-        #   if !col.is_foreign || (col.is_foreign && (f=col.foreign.constantize.find_by_nr(row[col.header])))
-        #     data[col.field]=row[col.header] unless row[col.header].blank?
-        #     if f.present?
-        #       data[col.field]=f.id
-        #     end
-        #
-        #   end
-        # end
-        p row
-        puts 'ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss'
+        next if line_no<3
 
-        if line_no==3
-          raise '------------------------------------------------------------------------------'
+        # p row[11].gsub(/ /, '')
+        # puts row[26]
+        # puts row[29]
+
+        part_nr=row[11].gsub(/ /, '')
+        if data[part_nr].blank?
+          part_list<<part_nr
+          data[part_nr]={row[29].to_s => row[26]}
+        else
+          data[part_nr][row[29].to_s]=row[26]
         end
 
-        msg.result=true
-        msg.content='数据导入成功'
+
+        if line_no==800
+          break
+        end
       end
-    rescue => e
-      puts e.backtrace
-      msg.content =e.message
-    end
+
+      msg.result=true
+      msg.content='数据导入成功'
+      msg.object={data: data, part_list: part_list}
+      # p data
+    # rescue => e
+    #   puts e.backtrace
+    #   msg.content =e.message
+    # end
     return msg
   end
 end

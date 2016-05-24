@@ -19,17 +19,24 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
+  # config.action_mailer.smtp_settings = {
+  #     :address              => "smtp.163.com",
+  #     :port                 => 25,
+  #     :domain               => 'http://cz-tek.com.com',
+  #     :user_name            => 'igoschool@163.com',
+  #     :password             => 'igoschool@',
+  #     :authentication       => :plain,
+  #     :enable_starttls_auto => true  }
+
   config.action_mailer.smtp_settings = {
-      :address              => "smtp.163.com",
-      :port                 => 25,
-      :domain               => 'http://cz-tek.com.com',
-      :user_name            => 'igoschool@163.com',
-      :password             => 'igoschool@',
-      :authentication       => :plain,
-      :enable_starttls_auto => true  }
-
-
-
+      :address              => "smtp.exmail.qq.com",
+      :port                 => 587,
+      :user_name            => 'zhiding.li@cz-tek.com',
+      :password             =>  'lzd123456',
+      :authentication       => 'plain',
+      :enable_starttls_auto => true
+  }
+  # ActionMailer::Base.default :from => "zhiding.li@cz-tek.com"
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log

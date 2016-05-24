@@ -1,0 +1,34 @@
+<table style="border: grey medium 1px">
+  <thead>
+  <th>
+    零件号
+  </th>
+  <th>
+    当日交付后库存量
+  </th>
+  <th>
+    未来3天需求量
+  </th>
+  <th>
+    缺货数量
+  </th>
+  </thead>
+  <tbody>
+  <% @data.each do |part| %>
+      <tr>
+        <td>
+          <%= part[:nr] %>
+        </td>
+        <td>
+          <%= part[:left_stock] %>
+        </td>
+        <td>
+          <%= part[:right_stock] %>
+        </td>
+        <th>
+          <%= part[:left_stock] - part[:right_stock] %>
+        </th>
+      </tr>
+  <% end %>
+  </tbody>
+</table>

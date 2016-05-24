@@ -147,30 +147,101 @@ class ReportsController < ApplicationController
   end
 
   def safe_stock_report
-    puts '11111111111111111111111111111111111111111111111111111111111'
-    if request.post?
-      msg=Message.new
-      begin
-        if params[:files].size==1
-          file=params[:files][0]
-          data=FileData.new(data: file, oriName: file.original_filename, path: $UPDATAPATH, pathName: "#{Time.now.strftime('%Y%m%d%H%M%S')}-#{file.original_filename}")
-          data.saveFile
-          csv=Csv::CsvConfig.new(encoding: Csv::CsvConfig.csv_write_encode(request.user_agent), col_sep: ',', file_path: data.full_path)
-          msg=Storage.build_safe_stock_report(csv)
-        else
-          msg.content='未选择文件或只能上传一个文件'
-        end
-      rescue => e
-        puts e.backtrace
-        msg.content = e.message
+    if params.has_key?(:file)
+      @file = JSON.parse(params[:file])
+      case @file["extention"]
+        when '.csv'
+          result = Storage.build_safe_stock_report(params[:file])
+        when '.xlsx'
       end
-    else
 
+      send_data(generate_safe_stock_report(result.object[:data], result.object[:part_list], current_user.location),
+                :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+                :filename => "#{Time.now.strftime('%Y%m%d')}-安全预警表.xlsx")
     end
-    render json: msg
   end
 
   private
+
+  def generate_safe_stock_report data, part_list, location
+    lack_stock_parts=[]
+
+    p = Axlsx::Package.new
+    wb = p.workbook
+    time=Time.now.strftime('%Y%m%d')
+    wb.add_worksheet(:name => "Basic Sheet") do |sheet|
+      sheet.add_row ["序号", "货主", "供应商名称", "供应商代码", "供应链分析员", "零件代码", "零件名称", "统计日期", "适用车型", "最近一次到货日期", "最后一次到货数量",
+                     "当日交货前库存数量", "当日交付后库存数量", "CAF7天/3天需求量", "缺件数量", "缺件天数", "当日计划", "1", "2", "3", "4", "5", "6", "7", "与供应商联系情况"]
+      part_list.uniq.each_with_index do |nr, index|
+        part=Part.find_by_nr(nr)
+        part_order_list=data[nr]
+        date=[]
+        key=time.to_s
+        8.times do |i|
+          date<<part_order_list[key]
+          key=key.next
+        end
+
+        ret=nil
+        stock=nil
+        if part
+          ret=Package.joins('inner join location_containers ON containers.id=location_containers.container_id')
+                  .where(part_id: part.id, location_containers: {state: MovableState::CHECKED, des_location_id: location.id})
+                  .order(fifo_time: :desc).group(:fifo_time)
+                  .select('SUM(containers.quantity) as quantity, containers.part_id as part_id, containers.fifo_time as fifo_time').first
+          stock=NStorage.where(partNr: part.id, ware_house_id: location.whouses.pluck(:id).uniq).select('SUM(n_storages.qty) as qty').first
+        end
+        stock_left=stock.blank? ? (0-part_order_list[time.to_s].to_i) : (stock.qty.to_i-part_order_list[time.to_s].to_i)
+        order_three=date[1].to_i+date[2].to_i+date[3].to_i
+        lack_qty=stock_left-order_three
+        if (lack_qty<0) && location.is_open_safe_qty
+          lack_stock_parts<<{nr: nr, left_stock: stock_left, right_stock: order_three}
+        end
+        sheet.add_row [
+                          index,
+                          ' ',
+                          part.blank? ? '' : part.supplier,
+                          ' ',
+                          ' ',
+
+                          nr,
+                          part.blank? ? '' : part.description,
+                          Time.now.strftime('%Y-%m-%d'),
+                          ' ',
+                          ret.blank? ? '无' : ret.fifo_time.localtime.strftime('%Y-%m-%d %H:%M'),
+
+                          ret.blank? ? 0 : ret.quantity,
+                          stock.blank? ? 0 : stock.qty,
+                          stock_left,
+                          order_three,
+                          lack_qty,
+
+                          (lack_qty>0 ? 0 : 1),
+                          date[0],
+                          date[1],
+                          date[2],
+                          date[3],
+
+                          date[4],
+                          date[5],
+                          date[6],
+                          date[7],
+                          ' '
+                      ], :types => [:string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string,
+                                    :string, :string, :string, :string, :string, :string, :string, :string, :string, :string]
+      end
+    end
+
+    #send email
+    if location.is_open_safe_qty
+      emails=location.safe_qty_emails.split(',')
+      if lack_stock_parts.size>0 && emails.size>0
+        StorageMailer.safe_stock_notify_email(emails, lack_stock_parts).deliver
+      end
+    end
+
+    p.to_stream.read
+  end
 
   def order_report_xlsx order_items, removal_packages, all_orders
     p = Axlsx::Package.new
