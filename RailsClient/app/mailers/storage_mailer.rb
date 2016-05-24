@@ -1,5 +1,5 @@
 class StorageMailer < ActionMailer::Base
-  default from: "zhiding.li@cz-tek.com"
+  default from: "WMS<zhiding.li@cz-tek.com>"
 
   def safe_stock_notify_email(emails, data)
     @data=data
