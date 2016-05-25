@@ -329,6 +329,9 @@ class WhouseService
 
             if !negatives_storage.blank?
               negatives_storage.update!(qty: negatives_storage.qty - lastqty)
+              if negatives_storage.position.blank?
+                negatives_storage.update_attributes(position: default_position)
+              end
             else
               data = {partNr: params[:partNr], qty: -lastqty, ware_house_id: fromWh.id, position: (params[:fromPosition].blank? ? default_position : params[:fromPosition])}
               puts data

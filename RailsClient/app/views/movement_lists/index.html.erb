@@ -70,7 +70,7 @@
         <td><%= movement_list.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
         <td><%= movement_list.remarks %></td>
         <!--<td><%= link_to '详细', movement_list %></td>-->
-        <!--<td><%= link_to '编辑', edit_movement_list_path(movement_list) %></td>-->
+        <td><%= link_to '编辑', edit_movement_list_path(movement_list) %></td>
         <!--<td><%= link_to '删除', movement_list, method: :delete, data: { confirm: 'Are you sure?' } %></td>-->
       </tr>
   <% end %>
