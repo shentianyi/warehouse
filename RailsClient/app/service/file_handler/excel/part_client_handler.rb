@@ -8,7 +8,7 @@ module FileHandler
         book = Roo::Excelx.new file.full_path
         book.default_sheet = book.sheets.first
 
-        validate_msg=validate_import(file)
+        validate_msg=validate_import(file, tenant_id)
 
         if validate_msg.result
           begin
@@ -34,7 +34,7 @@ module FileHandler
                   end
                 elsif PartClient.where(
                     # part_id: part.id, client_part_nr: row['客户零件号'], client_tenant_id: tenant_id).first.blank?
-                    part_id: part.id, client_tenant_id: tenant_id).first.blank?
+                    client_part_nr: row['客户零件号'], client_tenant_id: tenant_id).first.blank?
 
                   PartClient.create(
                       part_id: part.id,
@@ -59,7 +59,7 @@ module FileHandler
       end
 
 
-      def self.validate_import file
+      def self.validate_import file, tenant_id
         tmp_file=full_tmp_path(file.oriName)
         msg = Message.new(result: true)
         book = Roo::Excelx.new file.full_path
@@ -76,7 +76,7 @@ module FileHandler
               row[k]=row[k].sub(/\.0/, '') if k=='零件号' || k=='客户零件号'
             end
 
-            mssg = validate_row(row)
+            mssg = validate_row(row, tenant_id)
             if mssg.result
               sheet.add_row row.values
             else
@@ -93,7 +93,7 @@ module FileHandler
         msg
       end
 
-      def self.validate_row(row)
+      def self.validate_row(row, tenant_id)
         msg = Message.new(contents: [])
 
         unless Part.find_by_nr(row['零件号'])
@@ -102,6 +102,10 @@ module FileHandler
 
         if row['客户零件号'].blank?
           msg.contents << "客户零件号不为空"
+        end
+
+        if pc=PartClient.where(client_part_nr: row['客户零件号'], client_tenant_id: tenant_id).first
+          msg.contents << "该客户零件#{row['客户零件号']}已有对应关系：#{pc.part.nr}"
         end
 
         unless msg.result=(msg.contents.size==0)
