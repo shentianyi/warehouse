@@ -180,7 +180,7 @@ module FileHandler
         end
 
         if row[:toPosition].present?
-          position = Position.find_by_id(row[:toPosition])
+          position = Position.find_by_detail(row[:toPosition])
           unless position
             msg.contents << "目的库位号:#{row[:toPosition]} 不存在!"
           end
