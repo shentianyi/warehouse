@@ -226,6 +226,7 @@ Rails.application.routes.draw do
     collection do
       get :search
       get :download_quantity
+      match :import, to: :import, via: [:get, :post]
     end
   end
 

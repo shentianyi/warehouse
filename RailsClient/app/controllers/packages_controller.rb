@@ -47,6 +47,21 @@ class PackagesController < ApplicationController
   #   }
   # end
 
+  def import
+    if request.post?
+      msg = Message.new
+      begin
+        file=params[:files][0]
+        fd = FileData.new(data: file, oriName: file.original_filename, path: $tmp_file_path, pathName: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
+        fd.save
+        msg = FileHandler::Excel::PackageHandler.import(fd, current_user)
+      rescue => e
+        msg.content = e.message
+      end
+      render json: msg
+    end
+  end
+
   def download_quantity
     file_name= 'packages_quantities_'+Time.now.strftime('%Y%m%d%H%M%S')+'.csv'
     path=File.join($DOWNLOADPATH, file_name)
