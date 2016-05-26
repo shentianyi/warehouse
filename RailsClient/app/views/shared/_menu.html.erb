@@ -41,6 +41,7 @@
               <% if current_user.permission?(:view_extra) %>
                   <% if current_user.permission?(:jiaxuan_extra_export) %>
                       <li><a href="<%= generate_jiaxuan_deliveries_path %>">导入常州发运佳轩数据</a></li>
+                      <li><a href="<%= import_packages_path %>">导入包装箱数据</a></li>
                   <% end %>
               <% end %>
             </ul>
