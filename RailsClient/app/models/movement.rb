@@ -18,7 +18,7 @@ class Movement < ActiveRecord::Base
       list.each_with_index { |movement, index|
         if movement.id
           employee=User.find_by_id(movement.employee_id)
-          part=Prt.find_by_id(movement.partNr)
+          part=Part.find_by_id(movement.partNr)
           fromWh=Whouse.find_by_id(movement.from_id)
           toWh=Whouse.find_by_id(movement.to_id)
           fromPosition=Position.find_by_id(movement.fromPosition)
