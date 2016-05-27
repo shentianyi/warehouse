@@ -28,14 +28,9 @@ class Storage<ActiveRecord::Base
         part_nr=row[11].gsub(/ /, '')
         if data[part_nr].blank?
           part_list<<part_nr
-          data[part_nr]={row[29].to_s => row[26]}
+          data[part_nr]={row[29].to_s => row[26].to_i}
         else
-          data[part_nr][row[29].to_s]=row[26]
-        end
-
-
-        if line_no==800
-          break
+          data[part_nr][row[29].to_s]=row[26].to_i
         end
       end
 

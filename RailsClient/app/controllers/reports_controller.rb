@@ -147,6 +147,7 @@ class ReportsController < ApplicationController
   end
 
   def safe_stock_report
+    puts params
     if params.has_key?(:file)
       @file = JSON.parse(params[:file])
       case @file["extention"]
@@ -155,7 +156,7 @@ class ReportsController < ApplicationController
         when '.xlsx'
       end
 
-      send_data(generate_safe_stock_report(result.object[:data], result.object[:part_list], current_user.location),
+      send_data(generate_safe_stock_report(result.object[:data], result.object[:part_list], current_user.location, params[:reports][:caf_days]),
                 :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
                 :filename => "#{Time.now.strftime('%Y%m%d')}-安全预警表.xlsx")
     end
@@ -163,23 +164,38 @@ class ReportsController < ApplicationController
 
   private
 
-  def generate_safe_stock_report data, part_list, location
+  def generate_safe_stock_report(data, part_list, location, caf_days)
     lack_stock_parts=[]
+    if caf_days.blank?
+      caf_days=3
+    else
+      caf_days=caf_days.to_i
+    end
 
     p = Axlsx::Package.new
     wb = p.workbook
     time=Time.now.strftime('%Y%m%d')
     wb.add_worksheet(:name => "Basic Sheet") do |sheet|
       sheet.add_row ["序号", "货主", "供应商名称", "供应商代码", "供应链分析员", "零件代码", "零件名称", "统计日期", "适用车型", "最近一次到货日期", "最后一次到货数量",
-                     "当日交货前库存数量", "当日交付后库存数量", "CAF7天/3天需求量", "缺件数量", "缺件天数", "当日计划", "1", "2", "3", "4", "5", "6", "7", "与供应商联系情况"]
+                     "当日交货前库存数量", "当日交付后库存数量", "CAF需求量", "缺件数量", "缺件天数", "当日计划", "1", "2", "3", "4", "5", "6", "7", "与供应商联系情况"]
       part_list.uniq.each_with_index do |nr, index|
         part=Part.find_by_nr(nr)
         part_order_list=data[nr]
+        puts '-------------------------------------------'
+        puts part_order_list
         date=[]
         key=time.to_s
-        8.times do |i|
-          date<<part_order_list[key]
+        14.times do |i|
+          if part_order_list[key].to_i <= 0
+            date<<0 if i==0
+            next
+          end
+
+          date<<part_order_list[key].to_i
           key=key.next
+        end
+        if date.size < 8
+          date.size.upto(7) { date<< 0 }
         end
 
         ret=nil
@@ -191,11 +207,20 @@ class ReportsController < ApplicationController
                   .select('SUM(containers.quantity) as quantity, containers.part_id as part_id, containers.fifo_time as fifo_time').first
           stock=NStorage.where(partNr: part.id, ware_house_id: location.whouses.pluck(:id).uniq).select('SUM(n_storages.qty) as qty').first
         end
-        stock_left=stock.blank? ? (0-part_order_list[time.to_s].to_i) : (stock.qty.to_i-part_order_list[time.to_s].to_i)
-        order_three=date[1].to_i+date[2].to_i+date[3].to_i
-        lack_qty=stock_left-order_three
+        stock_left=stock.blank? ? (0-date[0]) : (stock.qty.to_i-date[0])
+        caf_order_qty=0
+        1.upto(caf_days) do |i|
+          caf_order_qty+=date[i]
+        end
+        lack_qty=stock_left-caf_order_qty
+        lack_days=0
+        if lack_qty<0
+          lack_days=(stock_left >= (date[1]+date[2])) ? (1) : ((stock_left >= date[1]) ? 2 : 3)
+        end
+
+        date
         if (lack_qty<0) && location.is_open_safe_qty
-          lack_stock_parts<<{nr: nr, left_stock: stock_left, right_stock: order_three}
+          lack_stock_parts<<{nr: nr, left_stock: stock_left, right_stock: caf_order_qty}
         end
         sheet.add_row [
                           index,
@@ -208,15 +233,15 @@ class ReportsController < ApplicationController
                           part.blank? ? '' : part.description,
                           Time.now.strftime('%Y-%m-%d'),
                           ' ',
-                          ret.blank? ? '无' : ret.fifo_time.localtime.strftime('%Y-%m-%d %H:%M'),
+                          ret.blank? ? '系统无此零件' : ret.fifo_time.localtime.strftime('%Y-%m-%d %H:%M'),
 
                           ret.blank? ? 0 : ret.quantity,
                           stock.blank? ? 0 : stock.qty,
                           stock_left,
-                          order_three,
+                          caf_order_qty,
                           lack_qty,
 
-                          (lack_qty>0 ? 0 : 1),
+                          lack_days,
                           date[0],
                           date[1],
                           date[2],

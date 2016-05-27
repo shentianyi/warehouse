@@ -16,6 +16,7 @@ Rails.application.configure do
 
   # Don't care if the mailer can't send.
 
+
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
@@ -28,15 +29,36 @@ Rails.application.configure do
   #     :authentication       => :plain,
   #     :enable_starttls_auto => true  }
 
+
+  # config.action_mailer.smtp_settings = {
+  #     :address              => "smtp.exmail.qq.com",
+  #     :port                 => 587,
+  #     :user_name            => 'zhiding.li@cz-tek.com',
+  #     :password             =>  '123456@',
+  #     :authentication       => 'plain',
+  #     :enable_starttls_auto => true
+  # }
+  # ActionMailer::Base.default :from => "zhiding.li@cz-tek.com"
+
+
+  # config.action_mailer.smtp_settings = {
+  #     :address        => 'smtp.office365.com',
+  #     :port           => 25,
+  #     :authentication => :login,
+  #     :user_name      => 'zhuzhiming@jiaxuanwl.com',
+  #     :password       => 'zhu030035',
+  #     :domain         => 'congrueit.com',
+  #     :enable_starttls_auto => true
+  # }
   config.action_mailer.smtp_settings = {
-      :address              => "smtp.exmail.qq.com",
-      :port                 => 587,
-      :user_name            => 'zhiding.li@cz-tek.com',
-      :password             =>  'lzd123456',
-      :authentication       => 'plain',
+      :address        => 'mail.jiaxuanwl.com',
+      :port           => 25,
+      :authentication => :login,
+      :user_name      => 'zhuzhiming@jiaxuanwl.com',
+      :password       => 'zhu030035',
+      :domain         => 'mail.jiaxuanwl.com',
       :enable_starttls_auto => true
   }
-  # ActionMailer::Base.default :from => "zhiding.li@cz-tek.com"
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log

@@ -46,14 +46,18 @@
 
     <form method="get" action="<%= reports_safe_stock_report_path %>">
       <div class="col-sm-12" style="margin-top: 15px;margin-bottom: -5px;">
-        <div class="col-sm-4">
+        <div class="col-sm-2">
           <input type="hidden" id="file" name="file" value="<%= @jsonfile %>">
+        </div>
+
+        <div class="col-sm-2">
+          CAF天数：
+          <%= select 'reports', 'caf_days', CafDaysEnum.list_menu, selected: @reports_caf_days, include_blank: true %>
         </div>
 
         <div class="col-sm-4">
           <input type="button" style="width: 150px;" value="导出报表" class="btn btn-warning" name="commit" onclick="submitForm()"/>
         </div>
-
       </div>
     </form>
   </div>
