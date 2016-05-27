@@ -83,12 +83,15 @@ module V1
 
             if warehouse=NStorage.where(:ware_house_id => get_warehouse_id, :position_id => get_position_id).count("ware_house_id")
               if warehouse < max_position_count
-                count={
-                    warehouse:warehouse,
-                    max_position_count:max_position_count
 
-                }
-                return {result: 0, unfill: count}
+                #count={
+                #    warehouse:warehouse,
+                #    max_position_count:max_position_count
+                #
+                #}
+                #return {result: 0, unfill: count}
+                return {result: 0, unfill: warehouse}
+
                 puts ('success  0==================')
                 puts (warehouse)
               else
