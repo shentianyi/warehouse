@@ -1,24 +1,36 @@
-<h1><%= @part.id%></h1>
-<span class="label label-primary"><%= @part.id%></span>
+<h1><%= @part.id %></h1>
+<span class="label label-primary"><%= @part.id %></span>
 
-<h4>零件类型: <small><%= @part.part_type_id %></small></h4>
-<h4>零件单位: <small><%= @part.unit %></small></h4>
-<h4>单位包装量: <small><%= @part.unit_pack %></small></h4>
-<h4>描述: <small><%= @part.description %></small></h4>
-<h4>供应商: <small><%= @part.supplier %></small></h4>
+<h4>零件类型:
+  <small><%= @part.part_type_id %></small>
+</h4>
+<h4>零件单位:
+  <small><%= @part.unit %></small>
+</h4>
+<h4>单位包装量:
+  <small><%= @part.unit_pack %></small>
+</h4>
+<h4>描述:
+  <small><%= @part.description %></small>
+</h4>
+<h4>供应商:
+  <small><%= @part.supplier %></small>
+</h4>
 
-<p>
-  <string>库位:</string>
-<ul>
-  <% @part.part_positions.each do |pp| %>
-      <li>
-        <string><%= pp.position.whouse.name %></string>
-        <string><%= pp.position.detail %></string>
-        <string><<<%= pp.sourceable.name if pp.sourceable%></string>
-        <button type="button" class="btn btn-default" onclick="Manage.part.del_position('<%= pp.id.to_s %>',this)">Delete</button>
-      </li>
-  <% end %>
-</ul>
-</p>
-<%= link_to '编辑', edit_part_path(@part) ,:class=>'btn btn-default'%> |
-<%= link_to '返回', parts_path ,:class=>'btn btn-default'%>
+<% if SysConfigCache.stationary_position_value=="true" %>
+    <p>
+      <string>库位:</string>
+    <ul>
+      <% @part.part_positions.each do |pp| %>
+          <li>
+            <string><%= pp.position.whouse.name %></string>
+            <string><%= pp.position.detail %></string>
+            <string><<<%= pp.sourceable.name if pp.sourceable %></string>
+            <button type="button" class="btn btn-default" onclick="Manage.part.del_position('<%= pp.id.to_s %>',this)">Delete</button>
+          </li>
+      <% end %>
+    </ul>
+    </p>
+<% end %>
+<%= link_to '编辑', edit_part_path(@part), :class => 'btn btn-default' %> |
+<%= link_to '返回', parts_path, :class => 'btn btn-default' %>

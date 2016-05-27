@@ -16,19 +16,19 @@
         <input type="hidden" name="part[supplier_fuzzy]"/>
       </span>
       <span>  零件类型：
-           <%=  select_tag('part[part_type_id]',options_from_collection_for_select(@part_types,'id','name',@part_type_id), include_blank: true)%>
+        <%= select_tag('part[part_type_id]', options_from_collection_for_select(@part_types, 'id', 'name', @part_type_id), include_blank: true) %>
       </span>
       <input type="submit" value="查 找" class="btn btn-primary"/>
     </div>
-</form>
+  </form>
 </div>
 
-<%= link_to "新建零件", send("new_#{@model}_path") ,:class=>'btn btn-default'%>
-<%= link_to "上传/更新零件", send("import_#{@model.pluralize}_path") ,:class=>'btn btn-default'%>
-<%= link_to "下载零件", send("download_#{@model.pluralize}_path"),data: { confirm: 'Are you sure?' },:class=>'btn btn-default' %>
-<%= link_to "上传/更新零件位置", parts_import_positions_path ,:class=>'btn btn-default'%>
-<%= link_to "下载零件位置", download_part_positions_path , data: {confirm: 'Are you sure?'} ,:class=>'btn btn-default'%>
-<%= link_to "下载零件包装箱数量", download_quantity_packages_path, data:{confirm: 'Are you sure?'}, :class => 'btn btn-default'%>
+<%= link_to "新建零件", send("new_#{@model}_path"), :class => 'btn btn-default' %>
+<%= link_to "上传/更新零件", send("import_#{@model.pluralize}_path"), :class => 'btn btn-default' %>
+<%= link_to "下载零件", send("download_#{@model.pluralize}_path"), data: {confirm: 'Are you sure?'}, :class => 'btn btn-default' %>
+<%= link_to "上传/更新零件位置", parts_import_positions_path, :class => 'btn btn-default' %>
+<%= link_to "下载零件位置", download_part_positions_path, data: {confirm: 'Are you sure?'}, :class => 'btn btn-default' %>
+<%= link_to "下载零件包装箱数量", download_quantity_packages_path, data: {confirm: 'Are you sure?'}, :class => 'btn btn-default' %>
 <br>
 <div class="digg_pagination">
   <div class="page_info">
@@ -47,8 +47,10 @@
     <th>盘点单位转换标准</th>
     <th>描述</th>
     <th>供应商</th>
-    <th>所属库位</th>
-    <td>超市要货来源</td>
+    <% if SysConfigCache.stationary_position_value=="true" %>
+        <th>所属库位</th>
+        <td>超市要货来源</td>
+    <% end %>
     <th>是否已删除</th>
     <th colspan="3"></th>
   </tr>
@@ -62,33 +64,35 @@
         <td><%= part.part_type_id %></td>
         <td><%= part.unit %></td>
         <td><%= part.unit_pack %></td>
-        <td><%=part.convert_unit%></td>
-        <td><%=part.description%></td>
-        <td><%=part.supplier%></td>
-        <td>
-          <p>
-            <%part.positions.each do |p|%>
-            <%= link_to p do%>
-                    <span class="label label-info"><%= p.whouse.name + ' '+p.detail if p.whouse%></span>
+        <td><%= part.convert_unit %></td>
+        <td><%= part.description %></td>
+        <td><%= part.supplier %></td>
+        <% if SysConfigCache.stationary_position_value=="true" %>
+            <td>
+              <p>
+                <% part.positions.each do |p| %>
+                    <%= link_to p do %>
+                        <span class="label label-info"><%= p.whouse.name + ' '+p.detail if p.whouse %></span>
+                    <% end %>
                 <% end %>
-            <%end%>
-          </p>
-        </td>
-        <td>
-          <% part.part_positions.each do |pp|%>
-          <span class="label label-info"><%= "#{pp.position.detail}<< #{pp.sourceable.name}" if pp.sourceable && pp.position %></span>
-          <% end %>
-        </td>
+              </p>
+            </td>
+            <td>
+              <% part.part_positions.each do |pp| %>
+                  <span class="label label-info"><%= "#{pp.position.detail}<< #{pp.sourceable.name}" if pp.sourceable && pp.position %></span>
+              <% end %>
+            </td>
+        <% end %>
         <td>
           <% if part.is_delete %>
               <span class="label label-success">是</span>
-          <%else%>
+          <% else %>
               <span class="label label-warning">否</span>
-          <%end%>
+          <% end %>
         </td>
-        <td><%= link_to '详细', part ,:class=>'btn btn-default'%></td>
-        <td><%= link_to '编辑', edit_part_path(part) ,:class=>'btn btn-default'%></td>
-        <td><%= link_to '删除', part, method: :delete, data: {confirm: '确认删除?'} ,:class=>'btn btn-default'%></td>
+        <td><%= link_to '详细', part, :class => 'btn btn-default' %></td>
+        <td><%= link_to '编辑', edit_part_path(part), :class => 'btn btn-default' %></td>
+        <td><%= link_to '删除', part, method: :delete, data: {confirm: '确认删除?'}, :class => 'btn btn-default' %></td>
       </tr>
   <% end %>
   </tbody>

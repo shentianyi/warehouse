@@ -154,8 +154,12 @@ module FileHandler
           msg.contents << "目的仓库号:#{row[:toWh]} 不存在!"
         end
 
+        positions = []
         part = Part.find_by_id(row[:partNr])
         if part
+          part.positions.each do |position|
+            positions += ["#{position.detail}"]
+          end
           unless part.supplier.include?(row[:supplier])
             msg.contents << "零件号:#{row[:partNr]} 没有供应商是 #{row[:supplier]}!"
           end
@@ -183,6 +187,14 @@ module FileHandler
           position = Position.find_by_detail(row[:toPosition])
           unless position
             msg.contents << "目的库位号:#{row[:toPosition]} 不存在!"
+          end
+        end
+
+        if SysConfigCache.stationary_position_value=="true"
+          if position && part
+            unless positions.include?(row[:toPosition])
+              msg.contents << "零件号:#{row[:partNr]}不在目的库位号:#{row[:toPosition]}上!"
+            end
           end
         end
 
@@ -291,9 +303,14 @@ module FileHandler
           end
         end
 
+        positions = []
         unless row[:partNr].blank?
           part = Part.find_by_id(row[:partNr])
-          unless part
+          if part
+            part.positions.each do |position|
+              positions += ["#{position.detail}"]
+            end
+          else
             msg.contents << "零件号:#{row[:partNr]} 不存在!"
           end
         end
@@ -313,12 +330,6 @@ module FileHandler
           end
         end
 
-        # if from_position && part_id
-        #   unless positions.include?(row[:fromPosition])
-        #     msg.contents << "零件号:#{row[:partNr]} 不在源库位号:#{row[:fromPosition]}上!"
-        #   end
-        # end
-
         if row[:toPosition].present?
           to_position = Position.find_by(detail: row[:toPosition])
           unless to_position
@@ -326,11 +337,19 @@ module FileHandler
           end
         end
 
-        # if to_position && part_id
-        #   unless positions.include?(row[:toPosition])
-        #     msg.contents << "零件号:#{row[:partNr]}不在目的库位号:#{row[:toPosition]}上!"
-        #   end
-        # end
+        if SysConfigCache.stationary_position_value=="true"
+          if from_position && part_id
+            unless positions.include?(row[:fromPosition])
+              msg.contents << "零件号:#{row[:partNr]} 不在源库位号:#{row[:fromPosition]}上!"
+            end
+          end
+
+          if to_position && part_id
+            unless positions.include?(row[:toPosition])
+              msg.contents << "零件号:#{row[:partNr]}不在目的库位号:#{row[:toPosition]}上!"
+            end
+          end
+        end
 
         if row[:employee_id].present?
           employee_id = User.find(row[:employee_id])

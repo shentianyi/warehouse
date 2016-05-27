@@ -98,6 +98,10 @@ ActiveRecord::Base.transaction do
     SysConfig.create(code: 'HIDE_FINISHED_INVENTORY', value: 'true', name: '是否隐藏结束的盘点单')
   end
 
+  unless SysConfig.find_by_code('STATIONARY_POSITION')
+    SysConfig.create(code: 'STATIONARY_POSITION', value: 'false', name: '是否开启定址定位')
+  end
+
   #LED STATE
   unless LedState.find_by_state(LedLightState::NORMAL)
     LedState.create({state: LedLightState::NORMAL, rgb: "0 255 0", led_code: 0})
