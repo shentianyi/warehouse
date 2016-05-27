@@ -53,10 +53,10 @@ class Package<Container
 
   def storage_position_display
     @storage_position_display ||= if storage=NStorage.find_by_packageId(self.id)
-                                storage.position.present? ?  storage.position.nr : ''
-                              else
-                                ''
-                              end
+                                    storage.position.present? ? storage.position.nr : ''
+                                  else
+                                    ''
+                                  end
   end
 
   def self.generate_report_condition(type, start_t, end_t, location_id, part_id)
@@ -69,6 +69,7 @@ class Package<Container
 
     # 2015-2-11 李其：修改查询条件
     condition["location_containers.created_at"] = Time.parse(start_t).utc.to_s...Time.parse(end_t).utc.to_s
+    # condition["location_containers.ancestry"]= "IS NOT NULL"
     case type.to_i
       when ReportType::Entry
         #收货报表
@@ -90,11 +91,13 @@ class Package<Container
     if commit_value=="详细"
       a = LogisticsContainer.joins(:package)
               .where(condition)
+              .where("location_containers.ancestry is not null")
               .select("containers.id as containers_id,containers.part_id as part_id,SUM(containers.quantity) as count,COUNT(containers.id) as box,containers.fifo_time_display as FIFO,location_containers.destinationable_id as whouse,location_containers.state as state,location_containers.*")
               .group("state,containers_id").order('containers.id asc').order(state: :desc).order("containers.quantity desc")
     else
       a = LogisticsContainer.joins(:package)
               .where(condition)
+              .where("location_containers.ancestry is not null")
               .select("containers.part_id as part_id,SUM(containers.quantity) as count, COUNT(containers.id) as box,location_containers.destinationable_id as whouse,location_containers.state as state")
               .group("state,whouse,part_id").order('containers.part_id asc').order(state: :desc).order("containers.quantity desc")
     end
