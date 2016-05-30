@@ -93,13 +93,23 @@ module Printer
 
     def sort_by_position array, position
       if array.blank?
-        0
+        return 0
       else
-        array.each_with_index do |a, index|
-          if a[:position] > position
-            next
-          else
-            return index
+        if position.match(/^\w\s\d{2}\s\d{2}/)
+          array.each_with_index do |a, index|
+            if a[:position].match(/^\w\s\d{2}\s\d{2}/)
+              if a[:position].first > position.first
+                return index
+              elsif a[:position].first==position.first
+                if a[:position].split(' ').last > position.split(' ').last
+                  return index
+                else
+                  next
+                end
+              end
+            else
+              return index
+            end
           end
         end
         return -1

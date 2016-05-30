@@ -61,7 +61,8 @@ class OrderItem < ActiveRecord::Base
     items.each do |item|
       records[item.part_id]={
           order_count: item.qty,
-          send_count: 0
+          send_count: 0,
+          stock_count: NStorage.where(partNr: item.part_id, ware_house_id: user.location.whouses.pluck(:id)-[user.location.send_whouse.id, user.location.receive_whouse.id]).size
       }
     end
 
@@ -90,7 +91,8 @@ class OrderItem < ActiveRecord::Base
           else
             records[p.package.part_id]={
                 order_count: 0,
-                send_count: 1
+                send_count: 1,
+                stock_count: NStorage.where(partNr: p.package.part_id, ware_house_id: user.location.whouses.pluck(:id)-[user.location.send_whouse.id, user.location.receive_whouse.id]).size
             }
           end
         end

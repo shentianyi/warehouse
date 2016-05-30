@@ -108,36 +108,16 @@ class NStoragesController < ApplicationController
   def exports
     @condition=params[@model]
 
-    if whouse=Whouse.find_by_nr(@condition[:ware_house_id])
-      @condition[:ware_house_id]=whouse.id
-    end
+    whouse=Whouse.find_by_nr(@condition[:ware_house_id])
     query=model.unscoped
-    where_comdition = ""
-
-    unless params[:part][:package_type].blank?
-      query=query.joins(:part).where(parts: {package_type_id: params[:part][:package_type]})
-      instance_variable_set("@package_type", params[:part][:package_type])
-    end
 
     @condition.each do |k, v|
       if (v.is_a?(Fixnum) || v.is_a?(String)) && !v.blank?
         puts @condition.has_key?(k+'_fuzzy')
         if @condition.has_key?(k+'_fuzzy')
           query=query.where("#{k} like ?", "%#{v}%")
-          if where_comdition.empty?
-            where_comdition += "WHERE #{k} like '#{v}' "
-          else
-            where_comdition += "AND #{k} = '#{v}' "
-          end
         else
           query=query.where(Hash[k, v])
-          if k!='partNr' && k!='position_id'
-            if where_comdition.empty?
-              where_comdition += "WHERE #{k} = '#{v}' "
-            else
-              where_comdition += "AND #{k} = '#{v}' "
-            end
-          end
         end
         instance_variable_set("@#{k}", v)
       end
@@ -147,54 +127,36 @@ class NStoragesController < ApplicationController
         values[0]=Time.parse(values[0]).utc.to_s if values[0].is_date? & values[0].include?('-')
         values[1]=Time.parse(values[1]).utc.to_s if values[1].is_date? & values[1].include?('-')
         query=query.where(Hash[k, (values[0]..values[1])])
-        if where_comdition.empty?
-          where_comdition += "WHERE #{k} BETWEEN '#{values[0]}' AND '#{values[1]}' "
-        else
-          where_comdition += "AND #{k} BETWEEN '#{values[0]}' AND '#{values[1]}' "
-        end
         v.each do |kk, vv|
           instance_variable_set("@#{k}_#{kk}", vv)
         end
       end
     end
-    #
+
     instance_variable_set("@ware_house_id", whouse.name) if whouse
+    unless @condition[:position_id].blank?
+      query=query.unscope(where: :position_id) #.where(position_id: position.id)
+      query=query.joins("inner join positions on n_storages.position_id=positions.id").where("positions.nr like '%#{params[:n_storage][:position_id]}%'")
 
-
-    query=query.unscope(where: :partNr) #.where(partNr: part.id)
-    query=query.joins("inner join parts on n_storages.partNr=parts.id").where("parts.nr like '%#{params[:n_storage][:partNr]}%'")
-    query=query.unscope(where: :position_id) #.where(position_id: position.id)
-    query=query.joins("inner join positions on n_storages.position_id=positions.id").where("positions.nr like '%#{params[:n_storage][:position_id]}%'")
-
-
-    query = query.where(locked: false)
-    if params.has_key? "negative"
-      query = query.where("n_storages.qty < 0").select("n_storages.qty as total_qty, n_storages.*")
-    else
-      if params[:format] == 'xlsx'
-        # query=query.unscope(where: :partNr) #.where(partNr: part.id)
-        # query=query.joins("inner join parts on n_storages.partNr=parts.id").where("parts.nr like '%#{params[:n_storage][:partNr]}%'")
-        # query=query.unscope(where: :position_id) #.where(position_id: position.id)
-        # query=query.joins("inner join positions on n_storages.position_id=positions.id").where("positions.nr like '%#{params[:n_storage][:position_id]}%'")
-
-        query = query.select("SUM(n_storages.qty) as total_qty, n_storages.*").
-            group("n_storages.partNr, n_storages.ware_house_id, n_storages.position_id")
-      else
-        if where_comdition.empty?
-          where_comdition += "WHERE locked = 0 "
-        else
-          where_comdition += "AND locked = 0 "
-        end
-        unless params[:part][:package_type].blank?
-          query = NStorage.find_by_sql("select SUM(n_storages.qty) as total_qty, n_storages.* from n_storages INNER JOIN parts ON parts.id = n_storages.partNr #{where_comdition} And parts.package_type_id=#{params[:part][:package_type]} group by n_storages.partNr, n_storages.ware_house_id, n_storages.position_id")
-          instance_variable_set("@package_type", params[:part][:package_type])
-        else
-
-
-          query = NStorage.find_by_sql("select SUM(n_storages.qty) as total_qty, n_storages.* from n_storages #{where_comdition} group by n_storages.partNr, n_storages.ware_house_id, n_storages.position_id")
-        end
-      end
     end
+
+    if @condition[:partNr].present? && params[:part][:package_type].present?
+      query=query.unscope(where: :partNr)
+      query = query.joins(part: :package_type)
+                  .where("parts.nr like '%#{params[:n_storage][:partNr]}%'")
+                  .where("package_types.id=#{params[:part][:package_type]}")
+      instance_variable_set("@package_type", params[:part][:package_type])
+    elsif @condition[:partNr].present? && params[:part][:package_type].blank?
+      query=query.unscope(where: :partNr)
+      query = query.joins(part: :package_type).where("parts.nr like '%#{params[:n_storage][:partNr]}%'")
+    elsif @condition[:partNr].blank? && params[:part][:package_type].present?
+      query = query.joins(part: :package_type).where("package_types.id=#{params[:part][:package_type]}")
+      instance_variable_set("@package_type", params[:part][:package_type])
+    end
+
+    # query = query.where(locked: false)
+    query = query.select("SUM(n_storages.qty) as total_qty, n_storages.*")
+                .group("n_storages.partNr, n_storages.ware_house_id, n_storages.position_id")
 
     instance_variable_set("@#{@model.pluralize}", query.paginate(:page => params[:page]))
 
