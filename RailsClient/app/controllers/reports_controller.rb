@@ -181,22 +181,24 @@ class ReportsController < ApplicationController
       part_list.uniq.each_with_index do |nr, index|
         part=Part.find_by_nr(nr)
         part_order_list=data[nr]
-        puts '-------------------------------------------'
-        puts part_order_list
+        # puts '-------------------------------------------'
+        # puts part_order_list
         date=[]
         key=time.to_s
         14.times do |i|
           if part_order_list[key].to_i <= 0
             date<<0 if i==0
-            next
+          else
+            date<<part_order_list[key].to_i
           end
-
-          date<<part_order_list[key].to_i
-          key=key.next
+          key=key.to_date.next.to_s.gsub(/-/, '')
+          puts key
         end
         if date.size < 8
           date.size.upto(7) { date<< 0 }
         end
+        # puts date
+        # puts '-----------------------------------------------------------------------------'
 
         ret=nil
         stock=nil
@@ -218,7 +220,6 @@ class ReportsController < ApplicationController
           lack_days=(stock_left >= (date[1]+date[2])) ? (1) : ((stock_left >= date[1]) ? 2 : 3)
         end
 
-        date
         if (lack_qty<0) && location.is_open_safe_qty
           lack_stock_parts<<{nr: nr, left_stock: stock_left, right_stock: caf_order_qty}
         end
