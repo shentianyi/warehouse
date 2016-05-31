@@ -53,4 +53,12 @@ class MovementSource < ActiveRecord::Base
 
     msg
   end
+
+  def self.processing_count_by_position position
+    if position
+      MovementSource.joins(:movement_list).where(toPosition: position.id).where("movement_lists.state = ?", MovementListState::PROCESSING).size
+    else
+      0
+    end
+  end
 end

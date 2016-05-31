@@ -6,7 +6,7 @@ module FileHandler
           :toWh, :partNr, :fifo, :qty, :toPosition, :packageId, :employee_id, :remarks
       ]
 
-      #:fromWh, :fromPosition, :packageId, :partNr, :qty, :fifo, :toWh, :toPosition, :employee_id, :remarks
+      #after change do not forget change 'validate_move', too
       MOVE_HEADERS = [
           :fromWh, :fromPosition, :packageId, :partNr, :fifo, :toWh, :toPosition, :employee_id, :remarks
       ]
@@ -233,9 +233,22 @@ module FileHandler
         book = Roo::Excelx.new file.full_path
         book.default_sheet = book.sheets.first
 
+        ##########################################################################
+        #will store position stock
+        position_stock={}
+        2.upto(book.last_row) do |line|
+          if position_stock[book.cell(line, 7).to_s.strip].blank?
+            position_stock[book.cell(line, 7).to_s.strip] = 1
+          else
+            position_stock[book.cell(line, 7).to_s.strip] += 1
+          end
+        end
+        position_capacity=SysConfigCache.nomal_position_capacity_value
+        wooden_position_capacity=SysConfigCache.wooden_position_capacity_value
+
         p = Axlsx::Package.new
         p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
-          sheet.add_row MOVE_HEADERS+['Error Msg']
+          sheet.add_row MOVE_HEADERS+['Error Msg', 'Overload Msg']
           #validate file
           2.upto(book.last_row) do |line|
             row = {}
@@ -243,6 +256,9 @@ module FileHandler
               row[k] = book.cell(line, i+1).to_s.strip
               row[k]=row[k].sub(/\.0/, '') if k== :partNr || k== :packageId
             end
+            position=Position.find_by_nr(row[:toPosition])
+            movement_source_stock=MovementSource.processing_count_by_position(position)
+            nstorage_stock=position.blank? ? 0 : NStorage.where(position_id: position.id).size
 
             mssg = validate_move_row(row)
             if mssg.result
