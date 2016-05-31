@@ -329,15 +329,20 @@ class ReportsController < ApplicationController
     p = Axlsx::Package.new
     wb = p.workbook
     wb.add_worksheet(:name => "Basic Sheet") do |sheet|
-      sheet.add_row ["ID", "零件号", "需求数量", "发货数量"]
+      sheet.add_row ["ID", "零件号", "需求数量", "发货数量", "缺货数量", "现有库存数量"]
       items.keys.each_with_index do |key, i|
+        if items[key][:order_count].to_i<=items[key][:send_count].to_i
+          next
+        end
         part=Part.find_by_id(key)
         sheet.add_row [
                           i+1,
                           part.blank? ? key : part.nr,
                           items[key][:order_count].to_i,
-                          items[key][:send_count].to_i
-                      ], :types => [:string, :string, :string]
+                          items[key][:send_count].to_i,
+                          items[key][:order_count].to_i-items[key][:send_count].to_i,
+                          items[key][:stock_count].to_i
+                      ], :types => [:string, :string, :string, :string, :string]
       end
     end
     p.to_stream.read

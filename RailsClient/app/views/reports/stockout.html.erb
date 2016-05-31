@@ -37,12 +37,16 @@
     <th>零件号</th>
     <th>需求数量</th>
     <th>发货数量</th>
+    <th>缺货数量</th>
     <th>现有库存数量</th>
   </tr>
   </thead>
   <% if @items.present? %>
       <tbody>
       <% @items.keys.each_with_index do |key, i| %>
+          <% if @items[key][:order_count].to_i<=@items[key][:send_count].to_i %>
+          <% next %>
+          <% end %>
           <tr>
             <td><%= i+1 %></td>
             <td>
@@ -54,6 +58,7 @@
             </td>
             <td><%= @items[key][:order_count].to_i %></td>
             <td><%= @items[key][:send_count].to_i %></td>
+            <td><%= @items[key][:order_count].to_i-@items[key][:send_count].to_i %></td>
             <td><%= @items[key][:stock_count].to_i %></td>
           </tr>
       <% end %>
