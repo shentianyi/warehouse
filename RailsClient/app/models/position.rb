@@ -30,8 +30,6 @@ class Position < ActiveRecord::Base
   #     t.strftime("%m %d 01")
   #   end
   # end
-p=[]
-  p.inject
 
   def check_position_capacity move_count, position_capacity
     msg = Message.new()
