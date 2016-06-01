@@ -88,15 +88,20 @@ module V3
         begin
           params[:qty]=params[:qty].to_f if params[:qty].present?
           if params[:partNr].blank? && params[:packageId].blank?
-            raise '请填写零件号或者唯一码'
+            return {result: 0, content: '请填写零件号或者唯一码'}
           end
           if params[:partNr].present? && params[:packageId].blank?
-            raise '请填写数量' unless params[:qty].present?
+            return {result: 0, content: '请填写数量'} unless params[:qty].present?
           end
 
           msg = FileHandler::Excel::NStorageHandler.validate_move_row params
           if msg.result
-            mmsg = MovementSource.save_record(params)
+            check_msg=MovementSource.check_position_capacity(params[:toPosition])
+            if check_msg.result
+              mmsg = MovementSource.save_record(params)
+            else
+              return {result: 0, content: check_msg.content}
+            end
           else
             return {result: 0, content: msg.content}
           end

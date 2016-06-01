@@ -243,8 +243,9 @@ module FileHandler
             position_stock[book.cell(line, 7).to_s.strip] += 1
           end
         end
-        position_capacity=SysConfigCache.nomal_position_capacity_value
+        nomal_position_capacity=SysConfigCache.nomal_position_capacity_value
         wooden_position_capacity=SysConfigCache.wooden_position_capacity_value
+        wooden_position=SysConfigCache.wooden_position_config_value
 
         p = Axlsx::Package.new
         p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
@@ -256,20 +257,47 @@ module FileHandler
               row[k] = book.cell(line, i+1).to_s.strip
               row[k]=row[k].sub(/\.0/, '') if k== :partNr || k== :packageId
             end
-            position=Position.find_by_nr(row[:toPosition])
-            movement_source_stock=MovementSource.processing_count_by_position(position)
-            nstorage_stock=position.blank? ? 0 : NStorage.where(position_id: position.id).size
 
             mssg = validate_move_row(row)
+            # if mssg.result
+            #   sheet.add_row row.values
+            # else
+            #   if msg.result
+            #     msg.result = false
+            #     msg.content = "下载错误文件<a href='/files/#{Base64.urlsafe_encode64(tmp_file)}'>#{::File.basename(tmp_file)}</a>"
+            #   end
+            #   sheet.add_row row.values<<mssg.content
+            # end
+
+            ########################################################################
+            #check position capacity
+            tmp_file_row=row.values
             if mssg.result
-              sheet.add_row row.values
+              tmp_file_row<<' '
             else
               if msg.result
                 msg.result = false
                 msg.content = "下载错误文件<a href='/files/#{Base64.urlsafe_encode64(tmp_file)}'>#{::File.basename(tmp_file)}</a>"
               end
-              sheet.add_row row.values<<mssg.content
+              tmp_file_row<<mssg.content
             end
+
+            if position=Position.find_by_nr(row[:toPosition])
+              if position.nr==wooden_position
+                position_capacity=wooden_position_capacity
+              else
+                position_capacity=nomal_position_capacity
+              end
+              result=position.check_position_capacity(position_stock[row[:toPosition]], position_capacity.to_i)
+              if !result.result && msg.result
+                msg.result = false
+                msg.content = "下载错误文件<a href='/files/#{Base64.urlsafe_encode64(tmp_file)}'>#{::File.basename(tmp_file)}</a>"
+              end
+              tmp_file_row<<result.content
+            end
+
+            sheet.add_row tmp_file_row
+
           end
         end
         p.use_shared_strings = true
