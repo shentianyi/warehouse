@@ -99,10 +99,32 @@ class OrderItem < ActiveRecord::Base
       end
     end
 
+    records.keys.each do |key|
+      if records[key][:order_count].to_i<=records[key][:send_count].to_i
+        records.delete(key)
+      end
+    end
     records
+
     # if last_receive=LogisticsContainer.joins(:delivery).where(state: MovableState::CHECKED, des_location_id: user.location.id).order(created_at: :desc).first
     #
     # end
+  end
+
+  def self.generate_need_warning_data records
+    data=[]
+
+    records.keys.each do |key|
+      if (records[key][:order_count].to_i - records[key][:send_count].to_i) > records[key][:stock_count].to_i
+        data<<{
+            part_id: key,
+            lack_qty: records[key][:order_count].to_i - records[key][:send_count].to_i,
+            stock_qty: records[key][:stock_count].to_i
+        }
+      end
+    end
+
+    data
   end
 
 end

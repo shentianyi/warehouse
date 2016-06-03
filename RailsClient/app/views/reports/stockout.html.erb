@@ -22,8 +22,11 @@
         <span class="label label-info">显示方式:</span>
         <%= select_tag :format, options_for_select([["Web", "html"], ["Excel File(MS 07 or later)", "xlsx"]], "html") %>
       </div>
-      <div class="col-sm-2">
-        <input type="submit" style="width: 150px;" value="查找" class="btn btn-warning" name="commit" onclick="submitForm()"/>
+      <div class="col-sm-1">
+        <input type="submit" value="查找" class="btn btn-warning" name="commit" style="width: 150px;"/>
+      </div>
+      <div class="col-sm-1">
+        <input type="submit" value="发送预警邮件" class="btn btn-primary" name="send_emails" style="width: 200px;"/>
       </div>
     </div>
 
@@ -44,9 +47,6 @@
   <% if @items.present? %>
       <tbody>
       <% @items.keys.each_with_index do |key, i| %>
-          <% if @items[key][:order_count].to_i<=@items[key][:send_count].to_i %>
-          <% next %>
-          <% end %>
           <tr>
             <td><%= i+1 %></td>
             <td>

@@ -7,8 +7,16 @@ class ReportsController < ApplicationController
 
     part=Part.find_by_nr(params[:part_id])
     part_id = part.blank? ? nil : part.id
-
     @items=OrderItem.generate_stockout_data(@date_start, @date_end, part_id, current_user)
+
+    if (params.has_key? "send_emails") && current_user.location.is_open_safe_qty
+      emails=current_user.location.safe_qty_emails.split(',')
+      warning_data=OrderItem.generate_need_warning_data(@items)
+      if (warning_data.count > 0) && (emails.count > 0)
+        StockWarningMailer.stock_warning(emails, warning_data)
+      end
+    end
+
     respond_to do |format|
       format.xlsx do
         send_data(stockout_with_xlsx(@items),
@@ -217,10 +225,10 @@ class ReportsController < ApplicationController
         sheet.add_row entry_header_detials
         packages.each_with_index { |p, index|
 
-          f= p.parent.nil? ? nil:p.parent
-          d=(f.nil? || f.parent.nil?) ? nil:f.parent
-          s=p.records.where(impl_action:'dispatch').last
-          r=p.records.where(impl_action:'receive').last
+          f= p.parent.nil? ? nil : p.parent
+          d=(f.nil? || f.parent.nil?) ? nil : f.parent
+          s=p.records.where(impl_action: 'dispatch').last
+          r=p.records.where(impl_action: 'receive').last
 
           part=Part.find_by_id(p['part_id'])
           location=Location.find_by_id(p['whouse'])
@@ -231,7 +239,7 @@ class ReportsController < ApplicationController
                             d.nil? ? nil : d.container_id,
                             f.nil? ? nil : f.container_id,
                             p['containers_id'],
-                            part.nil? ? nil : part.nr  ,
+                            part.nil? ? nil : part.nr,
                             p['count'],
                             p['box'],
                             location.nil? ? nil : location.nr,
