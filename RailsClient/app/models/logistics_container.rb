@@ -18,6 +18,7 @@ class LogisticsContainer<LocationContainer
   belongs_to :forklift, foreign_key: :container_id
   belongs_to :delivery, foreign_key: :container_id
   has_many :records, :as => :recordable, dependent: :destroy
+  has_many :wrappage_movement_records, :as => :sourceable, dependent: :destroy
 
   #after_update :out_store
   after_destroy :destroy_container

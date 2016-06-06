@@ -1,0 +1,53 @@
+<%= form_for(@wrappage_movement_item) do |f| %>
+  <% if @wrappage_movement_item.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@wrappage_movement_item.errors.count, "error") %> prohibited this wrappage_movement_item from being saved:</h2>
+
+      <ul>
+      <% @wrappage_movement_item.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :src_location_id %><br>
+    <%= f.text_field :src_location_id %>
+  </div>
+  <div class="field">
+    <%= f.label :des_location_id %><br>
+    <%= f.text_field :des_location_id %>
+  </div>
+  <div class="field">
+    <%= f.label :qty %><br>
+    <%= f.text_field :qty %>
+  </div>
+  <div class="field">
+    <%= f.label :wrappage_move_type %><br>
+    <%= f.text_field :wrappage_move_type %>
+  </div>
+  <div class="field">
+    <%= f.label :user_id %><br>
+    <%= f.text_field :user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :sourceable_id %><br>
+    <%= f.text_field :sourceable_id %>
+  </div>
+  <div class="field">
+    <%= f.label :sourceable_type %><br>
+    <%= f.text_field :sourceable_type %>
+  </div>
+  <div class="field">
+    <%= f.label :extra_800_nos %><br>
+    <%= f.text_field :extra_800_nos %>
+  </div>
+  <div class="field">
+    <%= f.label :extra_leoni_out_no %><br>
+    <%= f.text_field :extra_leoni_out_no %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

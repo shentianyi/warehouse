@@ -112,6 +112,18 @@ unless Permission.find_by_name("operate_basic_info_delete")
   Permission.create(name: "operate_basic_info_delete", description: "基础信息删除权限")
 end
 
+unless Permission.find_by_name("operate_wrappage_movement_create")
+  Permission.create(name: "operate_wrappage_movement_create", description: "包装物流转记录新建权限")
+end
+
+unless Permission.find_by_name("operate_wrappage_movement_edit")
+  Permission.create(name: "operate_wrappage_movement_edit", description: "包装物流转记录编辑权限")
+end
+
+unless Permission.find_by_name("operate_wrappage_movement_delete")
+  Permission.create(name: "operate_wrappage_movement_delete", description: "包装物流转记录删除权限")
+end
+
 #########################################扩展权限########################################
 
 unless Permission.find_by_name("jiaxuan_extra_config")

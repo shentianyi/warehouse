@@ -1,5 +1,14 @@
 Rails.application.routes.draw do
 
+  resources :wrappage_movement_items
+
+  resources :wrappage_movements do
+    collection do
+      get :search
+      match :import, to: :import, via: [:get, :post]
+    end
+  end
+
   resources :location_container_orders
 
   resources :location_container_pick_lists

@@ -1,0 +1,29 @@
+<h1>Listing wrappage_movements</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Move date</th>
+      <th>Package type</th>
+      <th>User</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @wrappage_movements.each do |wrappage_movement| %>
+      <tr>
+        <td><%= wrappage_movement.move_date %></td>
+        <td><%= wrappage_movement.package_type %></td>
+        <td><%= wrappage_movement.user %></td>
+        <td><%= link_to 'Show', wrappage_movement %></td>
+        <td><%= link_to 'Edit', edit_wrappage_movement_path(wrappage_movement) %></td>
+        <td><%= link_to 'Destroy', wrappage_movement, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Wrappage movement', new_wrappage_movement_path %>

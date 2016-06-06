@@ -13,7 +13,7 @@ class ReportsController < ApplicationController
       emails=current_user.location.safe_qty_emails.split(',')
       warning_data=OrderItem.generate_need_warning_data(@items)
       if (warning_data.count > 0) && (emails.count > 0)
-        StockWarningMailer.stock_warning(emails, warning_data)
+        StockWarningMailer.stock_warning(emails, warning_data).deliver
       end
     end
 

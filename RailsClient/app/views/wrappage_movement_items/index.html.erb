@@ -1,0 +1,41 @@
+<h1>Listing wrappage_movement_items</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Src location</th>
+      <th>Des location</th>
+      <th>Qty</th>
+      <th>Wrappage move type</th>
+      <th>User</th>
+      <th>Sourceable</th>
+      <th>Sourceable type</th>
+      <th>Extra 800 nos</th>
+      <th>Extra leoni out no</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @wrappage_movement_items.each do |wrappage_movement_item| %>
+      <tr>
+        <td><%= wrappage_movement_item.src_location_id %></td>
+        <td><%= wrappage_movement_item.des_location_id %></td>
+        <td><%= wrappage_movement_item.qty %></td>
+        <td><%= wrappage_movement_item.wrappage_move_type %></td>
+        <td><%= wrappage_movement_item.user %></td>
+        <td><%= wrappage_movement_item.sourceable_id %></td>
+        <td><%= wrappage_movement_item.sourceable_type %></td>
+        <td><%= wrappage_movement_item.extra_800_nos %></td>
+        <td><%= wrappage_movement_item.extra_leoni_out_no %></td>
+        <td><%= link_to 'Show', wrappage_movement_item %></td>
+        <td><%= link_to 'Edit', edit_wrappage_movement_item_path(wrappage_movement_item) %></td>
+        <td><%= link_to 'Destroy', wrappage_movement_item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Wrappage movement item', new_wrappage_movement_item_path %>

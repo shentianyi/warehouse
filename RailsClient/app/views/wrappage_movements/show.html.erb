@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Move date:</strong>
+  <%= @wrappage_movement.move_date %>
+</p>
+
+<p>
+  <strong>Package type:</strong>
+  <%= @wrappage_movement.package_type %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @wrappage_movement.user %>
+</p>
+
+<%= link_to 'Edit', edit_wrappage_movement_path(@wrappage_movement) %> |
+<%= link_to 'Back', wrappage_movements_path %>
