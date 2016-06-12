@@ -1,6 +1,39 @@
-<h1>Listing wrappage_movement_items</h1>
+<style>
+    .IconA {
+        margin: 0 10px;
+        font-size: 1.2em;
+    }
 
-<table>
+    .IconA:hover {
+        text-decoration: none;
+        background-color: white;
+    }
+    .table > thead > tr > th, .table > tbody > tr > td {
+        text-align: center;
+    }
+
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+</style>
+
+
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">库存管理</li>
+    <li class="active">
+      包装物流转记录
+    </li>
+    <li class="active">
+      包装物流转记录详情
+    </li>
+  </ol>
+</div>
+
+<table class="table table-striped table-bordered table-hover">
   <thead>
     <tr>
       <th>Src location</th>
@@ -12,7 +45,7 @@
       <th>Sourceable type</th>
       <th>Extra 800 nos</th>
       <th>Extra leoni out no</th>
-      <th colspan="3"></th>
+      <th>Options</th>
     </tr>
   </thead>
 
@@ -28,9 +61,11 @@
         <td><%= wrappage_movement_item.sourceable_type %></td>
         <td><%= wrappage_movement_item.extra_800_nos %></td>
         <td><%= wrappage_movement_item.extra_leoni_out_no %></td>
-        <td><%= link_to 'Show', wrappage_movement_item %></td>
-        <td><%= link_to 'Edit', edit_wrappage_movement_item_path(wrappage_movement_item) %></td>
-        <td><%= link_to 'Destroy', wrappage_movement_item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td>
+          <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-eye-open', :style => 'color:green;'), wrappage_movement_item, :title => '详细', :class => 'IconA' %>
+          <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-pencil', :style => 'color:#4F94CD'), edit_wrappage_movement_item_path(wrappage_movement_item), :title => '编辑', :class => 'IconA' %>
+          <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-trash', :style => 'color:darkred;'), wrappage_movement_item, method: :delete, data: {confirm: 'Are you sure?'}, :title => '删除', :class => 'IconA' %>
+        </td>
       </tr>
     <% end %>
   </tbody>

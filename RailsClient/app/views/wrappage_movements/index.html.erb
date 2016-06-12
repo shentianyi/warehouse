@@ -1,29 +1,68 @@
-<h1>Listing wrappage_movements</h1>
+<style>
+    .IconA {
+        margin: 0 10px;
+        font-size: 1.2em;
+    }
 
-<table>
+    .IconA:hover {
+        text-decoration: none;
+        background-color: white;
+    }
+    .table > thead > tr > th, .table > tbody > tr > td {
+        text-align: center;
+    }
+
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+</style>
+
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">库存管理</li>
+    <li class="active">
+      包装物流转记录
+    </li>
+    <li class="active">
+      包装物流转记录列表
+    </li>
+  </ol>
+</div>
+
+<div class="col-sm-12" style="margin-bottom: 20px; text-align: center;">
+  <div class="col-sm-6">
+    <%= link_to '新建包装物流转记录', new_wrappage_movement_path, :class => 'btn btn-primary', :style=>'color:white;' %>
+  </div>
+  <div class="col-sm-6">
+    <%= link_to "导入包装物流转记录", send("import_#{@model.pluralize}_path"), :class => 'btn btn-primary', :style => 'width:150px;color:white;' %>
+  </div>
+</div>
+
+<table class="table table-striped table-bordered table-hover">
   <thead>
-    <tr>
-      <th>Move date</th>
-      <th>Package type</th>
-      <th>User</th>
-      <th colspan="3"></th>
-    </tr>
+  <tr>
+    <th>Move date</th>
+    <th>Package type</th>
+    <th>User</th>
+    <th>Options</th>
+  </tr>
   </thead>
 
   <tbody>
-    <% @wrappage_movements.each do |wrappage_movement| %>
+  <% @wrappage_movements.each do |wrappage_movement| %>
       <tr>
         <td><%= wrappage_movement.move_date %></td>
         <td><%= wrappage_movement.package_type %></td>
         <td><%= wrappage_movement.user %></td>
-        <td><%= link_to 'Show', wrappage_movement %></td>
-        <td><%= link_to 'Edit', edit_wrappage_movement_path(wrappage_movement) %></td>
-        <td><%= link_to 'Destroy', wrappage_movement, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td>
+          <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-eye-open', :style => 'color:green;'), wrappage_movement, :title => '详细', :class => 'IconA' %>
+          <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-pencil', :style => 'color:#4F94CD'), edit_wrappage_movement_path(wrappage_movement), :title => '编辑', :class => 'IconA' %>
+          <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-trash', :style => 'color:darkred;'), wrappage_movement, method: :delete, data: {confirm: 'Are you sure?'}, :title => '删除', :class => 'IconA' %>
+        </td>
       </tr>
-    <% end %>
+  <% end %>
   </tbody>
 </table>
-
-<br>
-
-<%= link_to 'New Wrappage movement', new_wrappage_movement_path %>

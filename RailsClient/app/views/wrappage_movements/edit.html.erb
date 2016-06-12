@@ -1,6 +1,15 @@
-<h1>Editing wrappage_movement</h1>
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">库存管理</li>
+    <li>
+      <%= link_to '包装物流转记录列表', wrappage_movements_path %>
+    </li>
+    <li class="active">
+      包装物流转记录列表详情
+      <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-eye-open', :style => 'color:green;'), @wrappage_movement %>
+    </li>
+  </ol>
+</div>
 
 <%= render 'form' %>
 
-<%= link_to 'Show', @wrappage_movement %> |
-<%= link_to 'Back', wrappage_movements_path %>

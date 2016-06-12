@@ -116,6 +116,13 @@ ActiveRecord::Schema.define(version: 20160606083505) do
   add_index "deliveries", ["user_id"], name: "index_deliveries_on_user_id", using: :btree
   add_index "deliveries", ["uuid"], name: "index_deliveries_on_uuid", using: :btree
 
+  create_table "delivery_pick_lists", force: true do |t|
+    t.string   "delivery_id"
+    t.string   "pick_list_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "forklifts", force: true do |t|
     t.string   "uuid",        limit: 36,                 null: false
     t.integer  "state",                  default: 0,     null: false
@@ -971,6 +978,7 @@ ActiveRecord::Schema.define(version: 20160606083505) do
     t.string   "sourceable_type"
     t.string   "extra_800_nos"
     t.string   "extra_leoni_out_no"
+    t.integer  "wrappage_movement_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -981,6 +989,7 @@ ActiveRecord::Schema.define(version: 20160606083505) do
   add_index "wrappage_movement_items", ["src_location_id"], name: "index_wrappage_movement_items_on_src_location_id", using: :btree
   add_index "wrappage_movement_items", ["user_id"], name: "index_wrappage_movement_items_on_user_id", using: :btree
   add_index "wrappage_movement_items", ["wrappage_move_type_id"], name: "index_wrappage_movement_items_on_wrappage_move_type_id", using: :btree
+  add_index "wrappage_movement_items", ["wrappage_movement_id"], name: "index_wrappage_movement_items_on_wrappage_movement_id", using: :btree
 
   create_table "wrappage_movements", force: true do |t|
     t.date     "move_date"

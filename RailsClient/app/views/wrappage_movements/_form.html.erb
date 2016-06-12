@@ -1,3 +1,16 @@
+<style>
+    .col-sm-12 {
+        height: 40px;
+    }
+
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+</style>
+
 <%= form_for(@wrappage_movement) do |f| %>
   <% if @wrappage_movement.errors.any? %>
     <div id="error_explanation">
@@ -11,19 +24,38 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :move_date %><br>
-    <%= f.text_field :move_date %>
-  </div>
-  <div class="field">
-    <%= f.label :package_type_id %><br>
-    <%= f.text_field :package_type_id %>
-  </div>
-  <div class="field">
-    <%= f.label :user_id %><br>
-    <%= f.text_field :user_id %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+    <div class="panel panel-primary">
+      <div class="panel-body">
+        <div class="col-sm-12" style="border-bottom: 1px dashed #000;">
+          <div class="col-sm-4">
+            <%= f.label :move_date %>
+            <%= f.text_field :move_date, :class=>'datepicker', :readyonly=>true %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.label :package_type_id %>
+            <%= f.text_field :package_type_id %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.label :user_id %>
+            <%= f.text_field :user_id %>
+          </div>
+        </div>
+
+        <div class="col-sm-12">
+          <div class="actions">
+            <input type="submit" class="btn btn-primary" value="完成" name="commit" style="margin-top: 10px;width: 150px;color: white;">
+          </div>
+        </div>
+      </div>
+    </div>
 <% end %>
+
+<script>
+    $(function () {
+        $(".datepicker").datetimepicker({
+            lang: 'ch',
+            format: 'Y-m-d',
+            timepicker:false,    //关闭时间选项
+        });
+    });
+</script>
