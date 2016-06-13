@@ -3,6 +3,9 @@ Rails.application.routes.draw do
   resources :wrappage_movement_items
 
   resources :wrappage_movements do
+    member do
+      get 'wrappage_movement_items'
+    end
     collection do
       get :search
       match :import, to: :import, via: [:get, :post]

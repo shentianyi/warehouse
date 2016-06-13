@@ -1,0 +1,74 @@
+<style>
+    .btn {
+        margin: 0 0 10px 0;
+        width: 200px;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > td {
+        text-align: center;
+    }
+
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+</style>
+
+<p id="notice"><%= notice %></p>
+
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">库存管理</li>
+    <li class="active">包装物流转记录</li>
+    <li class="active">
+      包装物流转记录列表
+    </li>
+  </ol>
+</div>
+
+<div class="col-sm-12" style="margin-top: 20px;margin-bottom:20px;">
+  <div class="digg_pagination">
+    <div class="page_info">
+      <%= page_entries_info @wrappage_movement_items %>
+    </div>
+    <%= will_paginate @wrappage_movement_items, :container => false %>
+  </div>
+</div>
+
+<table class="table table-bordered table-striped">
+  <thead>
+  <tr>
+    <th>NO.</th>
+    <th>发出地</th>
+    <th>接收地</th>
+    <th>数量</th>
+    <th>流转方式</th>
+    <th>记录员</th>
+    <th>运单号</th>
+    <th>装箱单号</th>
+    <th>上海莱尼出门证号</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @wrappage_movement_items.each_with_index do |wrappage_movement_item, i| %>
+      <tr>
+        <td><%= i+@wrappage_movement_items.offset+1 %></td>
+        <td><%= wrappage_movement_item.src_location.nr %></td>
+        <td><%= wrappage_movement_item.des_location.nr %></td>
+        <td><%= wrappage_movement_item.qty %></td>
+        <td><%= WrappageMoveType.display(wrappage_movement_item.wrappage_move_type_id) %></td>
+        <td><%= wrappage_movement_item.user.blank? ? '' : wrappage_movement_item.user.nr %></td>
+        <td><%= wrappage_movement_item.sourceable.blank? ? '' : wrappage_movement_item.sourceable.container_id %></td>
+        <td><%= wrappage_movement_item.extra_800_nos %></td>
+        <td><%= wrappage_movement_item.extra_leoni_out_no %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<div class="digg_pagination">
+  <%= will_paginate @wrappage_movement_items, :container => false %>
+</div>

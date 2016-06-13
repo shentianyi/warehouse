@@ -121,7 +121,7 @@
           <% if current_user.permission?(:view_storage) %>
               <li><a href="<%= wrappage_movements_path %>">包装物流转记录列表</a></li>
 
-              <li><a href="#">包装物流转记录详情</a></li>
+              <li><a href="<%= wrappage_movement_items_path %>">包装物流转记录详情</a></li>
           <% end %>
         </ul>
       </li>

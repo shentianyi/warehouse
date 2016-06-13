@@ -36,19 +36,19 @@
   <div class="panel-body">
     <div class="col-sm-12" style="border-bottom: 1px dashed #000;">
       <div class="col-sm-6">
-        <strong>Move date:</strong>
+        <strong>流转日期:</strong>
         <%= @wrappage_movement.move_date %>
       </div>
       <div class="col-sm-6">
-        <strong>Package type:</strong>
-        <%= @wrappage_movement.package_type %>
+        <strong>包装物类型:</strong>
+        <%= @wrappage_movement.package_type.name %>
       </div>
     </div>
 
     <div class="col-sm-12">
       <div class="col-sm-6">
-        <strong>User:</strong>
-        <%= @wrappage_movement.user %>
+        <strong>记录员工号:</strong>
+        <%= @wrappage_movement.user.blank? ? '' : @wrappage_movement.user.nr %>
       </div>
     </div>
   </div>

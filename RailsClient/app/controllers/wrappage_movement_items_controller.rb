@@ -4,7 +4,7 @@ class WrappageMovementItemsController < ApplicationController
   respond_to :html
 
   def index
-    @wrappage_movement_items = WrappageMovementItem.all
+    @wrappage_movement_items = WrappageMovementItem.all.paginate(:page => params[:page])
     respond_with(@wrappage_movement_items)
   end
 

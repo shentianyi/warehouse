@@ -74,16 +74,14 @@ class OrderItem < ActiveRecord::Base
     #   }
     # end
 
-    if part_id
-      send_deliveries=LogisticsContainer.joins(:delivery).where(source_location_id: user.location.id, created_at: Time.parse(start_t).utc.to_s...Time.parse(end_t).utc.to_s)
-                          .where("containers.part_id=?", part_id)
-    else
-      send_deliveries=LogisticsContainer.joins(:delivery).where(source_location_id: user.location.id, created_at: Time.parse(start_t).utc.to_s...Time.parse(end_t).utc.to_s)
-    end
+    send_deliveries=LogisticsContainer.joins(:delivery).where(source_location_id: user.location.id, created_at: Time.parse(start_t).utc.to_s...Time.parse(end_t).utc.to_s)
     send_deliveries.each do |d|
       send_forklifts=LogisticsContainerService.get_forklifts(d)
       send_forklifts.each do |f|
         send_packages=LogisticsContainerService.get_packages(f)
+        if part_id
+          send_packages=send_packages.where("containers.part_id=?", part_id)
+        end
         # part=Part.find_by_id(p.package.part_id)
         send_packages.each do |p|
           if records[p.package.part_id]
@@ -100,10 +98,13 @@ class OrderItem < ActiveRecord::Base
     end
 
     records.keys.each do |key|
+      p key
       if records[key][:order_count].to_i<=records[key][:send_count].to_i
         records.delete(key)
       end
     end
+
+    p records
     records
 
     # if last_receive=LogisticsContainer.joins(:delivery).where(state: MovableState::CHECKED, des_location_id: user.location.id).order(created_at: :desc).first

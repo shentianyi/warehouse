@@ -147,7 +147,7 @@
     <th>所属托盘</th>
     <th>所属运单</th>
     <th>最新记录</th>
-    <th colspan="4">操作</th>
+    <th colspan="3">操作</th>
   </tr>
   </thead>
 
@@ -184,7 +184,7 @@
 
               <% end %>
 
-              <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-log-out'), {controller: 'logistics_containers', action: 'export', id: package.id}, class: 'IconA', :title => '导出包装箱数据' %>
+              <!--<%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-log-out'), {controller: 'logistics_containers', action: 'export', id: package.id}, class: 'IconA', :title => '导出包装箱数据' %>-->
             </td>
 
           </tr>

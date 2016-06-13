@@ -8,11 +8,11 @@ class WrappageMoveType<BaseType
   def self.display v
     case v
       when ENTER_FROM_SH
-        '上海莱尼入库数'
+        '上海莱尼入库数量'
       when ENTER_FROM_CZ
-        '常州莱尼入库数'
+        '常州莱尼入库数量'
       when SEND_TO_SH
-        '发上海莱尼数'
+        '发上海莱尼数量'
       when BACK_FROM_SH
         '上海莱尼返回数量'
       when BACK_TO_CZ

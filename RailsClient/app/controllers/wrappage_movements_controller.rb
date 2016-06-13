@@ -1,10 +1,10 @@
 class WrappageMovementsController < ApplicationController
-  before_action :set_wrappage_movement, only: [:show, :edit, :update, :destroy]
+  before_action :set_wrappage_movement, only: [:show, :edit, :update, :destroy, :wrappage_movement_items]
 
   respond_to :html
 
   def index
-    @wrappage_movements = WrappageMovement.all
+    @wrappage_movements = WrappageMovement.paginate(:page => params[:page])
     respond_with(@wrappage_movements)
   end
 
@@ -49,6 +49,11 @@ class WrappageMovementsController < ApplicationController
       end
       render json: msg
     end
+  end
+
+  def wrappage_movement_items
+    @wrappage_movement_items = @wrappage_movement.wrappage_movement_items.paginate(:page => params[:page])
+    @page_start=(params[:page].nil? ? 0 : (params[:page].to_i-1))*20
   end
 
   private

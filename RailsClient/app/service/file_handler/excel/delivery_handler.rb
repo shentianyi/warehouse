@@ -17,142 +17,158 @@ module FileHandler
         validate_msg = validate_import(file)
         if validate_msg.result
           # begin
-            ActiveRecord::Base.transaction do
-              book=Roo::Excelx.new file.full_path
+          ActiveRecord::Base.transaction do
+            book=Roo::Excelx.new file.full_path
 
-              # generate delivery
-              # generate delivery container
-              source = Location.find_by_nr(SysConfigCache.jiaxuan_extra_source_value)
+            # generate delivery
+            # generate delivery container
+            source = Location.find_by_nr(SysConfigCache.jiaxuan_extra_source_value)
 
-              if source.blank?
-                raise '没有正确配置常州发运地址'
+            if source.blank?
+              raise '没有正确配置常州发运地址'
+            end
+
+            if (destination=source.default_destination).blank?
+              raise '常州莱尼没有配置默认发运地点'
+            end
+
+            if (cz_send_warehouse=source.send_whouse).blank?
+              raise '常州莱尼没有配置默认在途仓库'
+            end
+
+            #calc wooden box nps count
+            wooden_count=0
+            box_count=0
+            nps_count=0
+
+            delivery = Delivery.create({
+                                           remark: '常州莱尼发运数据',
+                                           user_id: user.id,
+                                           location_id: source.id
+                                       })
+
+            # generate delivery location_container
+            # destination =source.default_location_destination #Location.find_by_nr(SysConfigCache.jiaxuan_extra_destination_value)
+
+            dlc = delivery.logistics_containers.build(source_location_id: source.id, des_location_id: destination.id, user_id: user.id, remark: '常州莱尼发运数据', state: MovableState::WAY)
+            dlc.destinationable = destination
+            dlc.save
+            # send dlc,create record for dlc
+            impl_time = Time.now
+            Record.create({recordable: dlc, impl_id: user.id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
+
+
+            # generate forklifts containers
+            forklifts={}
+            forklift_ids=[]
+
+            book.default_sheet=book.sheets.first
+            return nil if book.cell(2, 1).nil?
+            2.upto(book.last_row) do |line|
+              if book.cell(line, 2).blank?
+                next
               end
+              forklift_ids<<book.cell(line, 2).to_s.sub(/\.0/, '')
+            end
 
-              if (destination=source.default_destination).blank?
-                raise '常州莱尼没有配置默认发运地点'
-              end
-
-              if (cz_send_warehouse=source.send_whouse).blank?
-                raise '常州莱尼没有配置默认在途仓库'
-              end
-
-              #calc wooden box nps count
-              wooden_count=0
-              box_count=0
-              nps_count=0
-
-              delivery = Delivery.create({
-                                             remark: '常州莱尼发运数据',
+            forklift_ids.uniq.each do |forklift_id|
+              forklift = Forklift.create({
+                                             id: forklift_id,
                                              user_id: user.id,
                                              location_id: source.id
                                          })
-
-              # generate delivery location_container
-              # destination =source.default_location_destination #Location.find_by_nr(SysConfigCache.jiaxuan_extra_destination_value)
-
-              dlc = delivery.logistics_containers.build(source_location_id: source.id, des_location_id: destination.id, user_id: user.id, remark: '常州莱尼发运数据', state: MovableState::WAY)
-              dlc.destinationable = destination
-              dlc.save
-              # send dlc,create record for dlc
-              impl_time = Time.now
-              Record.create({recordable: dlc, impl_id: user.id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
-
-
-              # generate forklifts containers
-              forklifts={}
-              forklift_ids=[]
-
-              book.default_sheet=book.sheets.first
-              return nil if book.cell(2, 1).nil?
-              2.upto(book.last_row) do |line|
-                if book.cell(line, 2).blank?
-                  next
-                end
-                forklift_ids<<book.cell(line, 2).to_s.sub(/\.0/, '')
-              end
-
-              forklift_ids.uniq.each do |forklift_id|
-                forklift = Forklift.create({
-                                               id: forklift_id,
-                                               user_id: user.id,
-                                               location_id: source.id
-                                           })
-                #create forklift lc
-                flc = forklift.logistics_containers.build({source_location_id: source.id, des_location_id: destination.id, user_id: user.id, state: MovableState::WAY})
-                flc.destinationable = destination
-                flc.save
-                Record.create({recordable: flc, impl_id: user.id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
-                dlc.add(flc)
-                forklifts[forklift_id]=flc
-              end
-
-              # generate packages
-              2.upto(book.last_row) do |line|
-                if book.cell(line, 2).blank?
-                  next
-                end
-                row = {}
-                JIAXUAN_HEADERS.each_with_index do |k, i|
-                  row[k] = book.cell(line, i+1).to_s.strip
-                  if ['forklift_id', 'package_id', 'no800', 'cz_part_id', 'sh_part_id', 'batch'].include?(k.to_s)
-                    row[k]=row[k].sub(/\.0/, '')
-                  end
-                end
-
-                if plc = LogisticsContainer.find_latest_by_container_id(row[:package_id])
-                  #if found and can copy
-                  forklifts[row[:forklift_id]].add(plc)
-                else
-
-                  sh_custom=Tenant.find_by_code(SysConfigCache.jiaxuan_extra_sh_custom_value)
-                  sh_pc=PartClient.where(client_tenant_id: sh_custom.id, client_part_nr: row[:sh_part_id]).first
-
-                  if sh_pc.part.package_type_is_wooden?
-                    wooden_count+=1
-                  elsif sh_pc.part.package_type_is_box?
-                    box_count+=1
-                  else
-                    nps_count+=1
-                  end
-
-                  #create container
-                  package = Package.create({
-                                               id: row[:package_id],
-                                               location_id: source.id,
-                                               part_id: sh_pc.part_id,
-                                               user_id: user.id,
-                                               quantity: row[:qty],
-                                               state: PackageState::WAY,
-                                               extra_800_no: row[:no800],
-                                               extra_cz_part_id: row[:cz_part_id],
-                                               extra_sh_part_id: row[:sh_part_id],
-                                               extra_unit: row[:unit],
-                                               extra_batch: row[:batch]
-                                           })
-                  #create lc
-                  plc = package.logistics_containers.build({
-                                                               source_location_id: source.id,
-                                                               des_location_id: destination.id,
-                                                               user_id: user.id,
-                                                               state: MovableState::WAY
-                                                           })
-                  plc.destinationable = destination
-                  plc.save
-
-                  plc.enter_stock(cz_send_warehouse, cz_send_warehouse.default_position, Time.now)
-
-                  Record.create({recordable: plc, impl_id: user.id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
-                  forklifts[row[:forklift_id]].add(plc)
-                end
-              end
-
-              delivery.update_attributes(extra_wooden_count: wooden_count,
-                                         extra_box_count: box_count,
-                                         extra_nps_count: nps_count)
+              #create forklift lc
+              flc = forklift.logistics_containers.build({source_location_id: source.id, des_location_id: destination.id, user_id: user.id, state: MovableState::WAY})
+              flc.destinationable = destination
+              flc.save
+              Record.create({recordable: flc, impl_id: user.id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
+              dlc.add(flc)
+              forklifts[forklift_id]=flc
             end
 
-            msg.content ='处理成功'
-            msg.result =true
+            # generate packages
+            2.upto(book.last_row) do |line|
+              if book.cell(line, 2).blank?
+                next
+              end
+              row = {}
+              JIAXUAN_HEADERS.each_with_index do |k, i|
+                row[k] = book.cell(line, i+1).to_s.strip
+                if ['forklift_id', 'package_id', 'no800', 'cz_part_id', 'sh_part_id', 'batch'].include?(k.to_s)
+                  row[k]=row[k].sub(/\.0/, '')
+                end
+              end
+
+              if plc = LogisticsContainer.find_latest_by_container_id(row[:package_id])
+                #if found and can copy
+                forklifts[row[:forklift_id]].add(plc)
+              else
+
+                sh_custom=Tenant.find_by_code(SysConfigCache.jiaxuan_extra_sh_custom_value)
+                sh_pc=PartClient.where(client_tenant_id: sh_custom.id, client_part_nr: row[:sh_part_id]).first
+
+                if sh_pc.part.package_type_is_wooden?
+                  wooden_count+=1
+                elsif sh_pc.part.package_type_is_box?
+                  box_count+=1
+                else
+                  nps_count+=1
+                end
+
+                #create container
+                package = Package.create({
+                                             id: row[:package_id],
+                                             location_id: source.id,
+                                             part_id: sh_pc.part_id,
+                                             user_id: user.id,
+                                             quantity: row[:qty],
+                                             state: PackageState::WAY,
+                                             extra_800_no: row[:no800],
+                                             extra_cz_part_id: row[:cz_part_id],
+                                             extra_sh_part_id: row[:sh_part_id],
+                                             extra_unit: row[:unit],
+                                             extra_batch: row[:batch]
+                                         })
+                #create lc
+                plc = package.logistics_containers.build({
+                                                             source_location_id: source.id,
+                                                             des_location_id: destination.id,
+                                                             user_id: user.id,
+                                                             state: MovableState::WAY
+                                                         })
+                plc.destinationable = destination
+                plc.save
+
+                plc.enter_stock(cz_send_warehouse, cz_send_warehouse.default_position, Time.now)
+
+                Record.create({recordable: plc, impl_id: user.id, impl_user_type: ImplUserType::SENDER, impl_action: 'dispatch', impl_time: impl_time})
+                forklifts[row[:forklift_id]].add(plc)
+              end
+            end
+
+            delivery.update_attributes(extra_wooden_count: wooden_count,
+                                       extra_box_count: box_count,
+                                       extra_nps_count: nps_count)
+
+            pallet=LogisticsContainerService.get_forklifts(dlc).count
+            result=WrappageMovement.auto_create({
+                                             move_date: Date.today.to_s,
+                                             src_id: source.id,
+                                             des_id: destination.id,
+                                             pallet: pallet>0 ? pallet : nil,
+                                             nps: nps_count>0 ? nps_count : nil,
+                                             box: box_count>0 ? box_count : nil,
+                                             wooden: wooden_count>0 ? wooden_count : nil,
+                                             type: WrappageMoveType::ENTER_FROM_CZ,
+                                             user_id: user.id
+                                         }, dlc)
+            if result.result
+              raise "自动统计包装物流转记录失败:#{result.content}"
+            end
+          end
+
+          msg.content ='处理成功'
+          msg.result =true
           # rescue => e
           #   msg.result=false
           #   msg.content = e.message
