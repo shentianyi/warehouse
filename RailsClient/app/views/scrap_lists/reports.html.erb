@@ -1,8 +1,8 @@
 <style type="text/css">
-   .table > thead > tr > th, .table > tbody > tr > td {
+    .table > thead > tr > th, .table > tbody > tr > td {
         text-align: center;
     }
-    
+
     a:hover, a:active {
         text-decoration: none;
         background-color: white;
@@ -13,25 +13,25 @@
 
 <div class="panel panel-warning">
   <div class="panel-heading" style="display: flex;">
-     <h3>实际使用量报表</h3>
+    <h3>实际使用量报表</h3>
     <h5 style="margin-top: 25px;margin-left: 20px;">实际使用量的统计报表.</h5>
   </div>
 </div>
 <div class="panel-body">
   <!--Form-->
-  <form method="get" path="<%= scrap_lists_reports_path%>">
+  <form method="get" path="<%= scrap_lists_reports_path %>">
     <span class="label label-info">创建时间:</span>
     <input id="date-start" type="text" name="date_start" class="datepicker" value="<%= @date_start %>"/>
     ~ <input id="date-end" type="text" name="date_end" class="datepicker" value="<%= @date_end %>"/>
     <span class="label label-info">显示方式:</span>
-    <%= select_tag :format, options_for_select([["Web", "html"],["Excel File(MS 07 or later)", "xlsx"]], "html") %>
+    <%= select_tag :format, options_for_select([["Web", "html"], ["Excel File(MS 07 or later)", "xlsx"]], "html") %>
     <input type="submit" value="汇总" class="btn btn-warning" name="commit" onclick="submitForm()"/>
   </form>
 </div>
 
 <!--Form-->
 <div class="alert alert-success" role="alert">
-  <p><%= @title%></p>
+  <p><%= @title %></p>
 </div>
 <div id="result">
   <%= render "result" %>
@@ -43,7 +43,7 @@
 <% end %>
 
 <script>
-    $(document).ready(function(){
+    $(document).ready(function () {
         $(".datepicker").datetimepicker({
             lang: 'ch',
             format: 'Y-m-d H:i'
@@ -51,7 +51,6 @@
 
         $('.selectpicker').selectpicker();
         $('.selectpicker').selectpicker('val', 'Mustard');
-     <h3>收发货报表</h3>
-    <h5 style="margin-top: 25px;margin-left: 20px;">收货与发货的统计报表.</h5>    $('.selectpicker').selectpicker('render');
+        $('.selectpicker').selectpicker('render');
     });
 </script>
