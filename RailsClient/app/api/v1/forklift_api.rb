@@ -85,6 +85,12 @@ module V1
           return {result: 0, result_code: ResultCodeEnum::Failed, content: PackageMessage::NotExit}
         end
 
+        #check order
+        msg=Order.check(f, pc)
+        unless msg[:result]
+          return {result: 0, result_code: ResultCodeEnum::Failed, content: msg[:content]}
+        end
+
         unless p=LogisticsContainer.build(params[:package_id], current_user.id, current_user.location_id)
           p=pc.logistics_containers.build(source_location_id: current_user.location_id, user_id: current_user.id)
           p.destinationable = f.destinationable

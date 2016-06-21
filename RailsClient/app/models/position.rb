@@ -30,4 +30,19 @@ class Position < ActiveRecord::Base
   #     t.strftime("%m %d 01")
   #   end
   # end
+
+  def check_position_capacity move_count, position_capacity
+    msg = Message.new()
+
+    movement_source_stock=MovementSource.processing_count_by_position(self.id)
+    nstorage_stock=NStorage.where(position_id: self.id).size
+
+    if position_capacity < (movement_source_stock + nstorage_stock + move_count)
+      msg.result = false
+      msg.content = "该库位：#{self.nr}已有库存：#{nstorage_stock}件, 未完成移库单中：#{movement_source_stock}件, 本次将移入：#{move_count}件, 超过最大容量"
+    else
+      msg.result = true
+    end
+    msg
+  end
 end

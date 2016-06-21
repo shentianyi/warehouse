@@ -1,7 +1,7 @@
 # print delivery, jx to sh leoni
 module Printer
   class P0021<Base
-    HEAD=[:delivery_nr, :delivery_date, :from_addr, :to_addr, :totalnr_forklift, :totalnr_mupan, :num_paperbox, :totalnr_nps]
+    HEAD=[:delivery_nr, :delivery_date, :from_addr, :to_addr, :totalnr_forklift, :totalnr_mupan, :num_paperbox, :totalnr_nps, :delivery_remark]
     BODY=[:forklift_nr, :batch_nr, :part_nr, :czleoni_partnr, :total_qty, :unit, :num_bucket, :remark,:nr]
 
 
@@ -24,7 +24,8 @@ module Printer
           totalnr_forklift: LogisticsContainerService.count_all_forklifts(d).to_s,
           totalnr_mupan: count[:wooden], #d.delivery.extra_wooden_count.to_s,
           num_paperbox: count[:box], #d.delivery.extra_box_count.to_s,
-          totalnr_nps: count[:nps] #d.delivery.extra_nps_count.to_s
+          totalnr_nps: count[:nps], #d.delivery.extra_nps_count.to_s
+          delivery_remark: d.remark
       }
       heads=[]
       HEAD.each do |k|

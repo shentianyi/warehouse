@@ -74,4 +74,35 @@ class Order < ActiveRecord::Base
 
     p.to_stream.read
   end
+
+  def self.check forklift, package
+    order_count=0
+    pick_count=0
+
+    if dlc=LogisticsContainer.find_by_id(forklift.ancestry)
+      if order=dlc.order
+        order_items=order.order_items.where(part_id: package.part_id).select("*, SUM(order_items.quantity) as total_quantity").first
+        unless order_items.total_quantity.blank?
+          order_count=order_items.total_quantity.to_i
+        else
+          return {result: false, content: "需求单中不存在该零件号"}
+        end
+
+        order.location_containers.each do |lc|
+          pick_count+=LogisticsContainerService.get_all_packages(lc.becomes(LogisticsContainer)).where("containers.part_id = ?", package.part_id).size
+        end
+      else
+        return {result: false, content: "未找到需求单"}
+      end
+    else
+      return {result: false, content: "未找到运单"}
+    end
+
+    if pick_count+1 <= order_count
+      return {result: true, content: "ok"}
+    else
+      return {result: false, content: "该零件的背货量已达到需求量"}
+    end
+
+  end
 end

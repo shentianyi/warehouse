@@ -1,0 +1,2 @@
+module WrappageMovementItemsHelper
+end

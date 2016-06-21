@@ -67,7 +67,7 @@
           <% end %></td>
         <td><%= '是' if pick_item.is_emergency %></td>
         <td><%= pick_item.remark %></td>
-        <td><%= pick_item.created_at.localtime.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_item.created_at %></td>
+        <td><%= pick_item.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') if pick_item.created_at %></td>
         <% if current_user.can_edit_inventory? %>
             <td><%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-pencil', :style => 'color:#4F94CD;'), edit_pick_item_path(pick_item) %></td>
         <% end %>

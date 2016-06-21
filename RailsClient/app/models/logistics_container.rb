@@ -18,13 +18,21 @@ class LogisticsContainer<LocationContainer
   belongs_to :forklift, foreign_key: :container_id
   belongs_to :delivery, foreign_key: :container_id
   has_many :records, :as => :recordable, dependent: :destroy
+  has_many :wrappage_movement_items, :as => :sourceable
 
   #after_update :out_store
   after_destroy :destroy_container
+  after_destroy :destroy_wrappage_movement_items
 
   def destroy_container
     if self.container.present?
       self.container.destroy
+    end
+  end
+
+  def destroy_wrappage_movement_items
+    self.wrappage_movement_items.each do |r|
+      r.destroy
     end
   end
 
@@ -271,5 +279,22 @@ class LogisticsContainer<LocationContainer
       @part_type_count[t.nr.to_sym] =LogisticsContainerService.get_packages(self).joins(package: :part).where(parts: {package_type_id: t.id}).count
     end
     @part_type_count
+  end
+
+  def auto_create_wrappage_movement
+    pallet=LogisticsContainerService.get_forklifts(self).count
+    msg=WrappageMovement.auto_create({
+                                     move_date: Date.today.to_s,
+                                     src_id: self.source_location_id,
+                                     des_id: self.des_location_id,
+                                     pallet: pallet>0 ? pallet : nil,
+                                     nps: self.delivery.extra_nps_count>0 ? self.delivery.extra_nps_count : nil,
+                                     box: self.delivery.extra_box_count>0 ? self.delivery.extra_box_count : nil,
+                                     wooden: self.delivery.extra_wooden_count>0 ? self.delivery.extra_wooden_count : nil,
+                                     type: WrappageMoveType::SEND_TO_SH,
+                                     user_id: self.user_id
+                                 }, self)
+
+    msg
   end
 end

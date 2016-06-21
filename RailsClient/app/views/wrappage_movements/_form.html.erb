@@ -1,0 +1,61 @@
+<style>
+    .col-sm-12 {
+        height: 40px;
+    }
+
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+</style>
+
+<%= form_for(@wrappage_movement) do |f| %>
+  <% if @wrappage_movement.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@wrappage_movement.errors.count, "error") %> prohibited this wrappage_movement from being saved:</h2>
+
+      <ul>
+      <% @wrappage_movement.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+    <div class="panel panel-primary">
+      <div class="panel-body">
+        <div class="col-sm-12" style="border-bottom: 1px dashed #000;">
+          <div class="col-sm-4">
+            <%= f.label :move_date, '流转日期' %>
+            <%= f.text_field :move_date, :class=>'datepicker', :readyonly=>true %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.label :package_type_id, '包装物类型' %>
+            <%= f.text_field :package_type_id %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.label :user_id, '记录员工号' %>
+            <%= f.text_field :user_id %>
+          </div>
+        </div>
+
+        <div class="col-sm-12">
+          <div class="actions">
+            <input type="submit" class="btn btn-primary" value="完成" name="commit" style="margin-top: 10px;width: 150px;color: white;">
+          </div>
+        </div>
+      </div>
+    </div>
+<% end %>
+
+<script>
+    $(function () {
+        $(".datepicker").datetimepicker({
+            lang: 'ch',
+            format: 'Y-m-d',
+            timepicker:false,    //关闭时间选项
+        });
+    });
+</script>

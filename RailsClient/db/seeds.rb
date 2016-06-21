@@ -66,8 +66,17 @@ ActiveRecord::Base.transaction do
   end
 
   #库位容量配置
-  unless SysConfig.find_by_code('CAPACITY_NR')
-    SysConfig.create(code: 'CAPACITY_NR', category: '库位容量配置', index: 900, value: '6', name: '填写库位最大容量')
+  unless SysConfig.find_by_code('WOODEN_POSITION_CAPACITY')
+    SysConfig.create(code: 'WOODEN_POSITION_CAPACITY', category: '库位容量配置', index: 900, value: '150', name: '木盘库位容量')
+  end
+
+  unless SysConfig.find_by_code('NOMAL_POSITION_CAPACITY')
+    SysConfig.create(code: 'NOMAL_POSITION_CAPACITY', category: '库位容量配置', index: 900, value: '6', name: '标准库位容量')
+  end
+
+  #物料堆放库位配置
+  unless SysConfig.find_by_code('WOODEN_POSITION_CONFIG')
+    SysConfig.create(code: 'WOODEN_POSITION_CONFIG', category: '物料堆放库位配置', index: 900, value: 'NO POSITION', name: '木盘物料堆放库位配置')
   end
 
   # 打印服务配置

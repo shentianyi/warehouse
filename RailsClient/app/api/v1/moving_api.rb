@@ -58,57 +58,93 @@ module V1
         }
       end
 
-      post :rt_position do
-        msg=Message.new
+      desc 'position capacity'
+      params do
+        requires :warehouse, type: String, desc: 'whouse nr'
+        requires :position, type: String, desc: 'position nr'
+      end
+      post :check_position_capacity do
         begin
-          warehouse_id=Whouse.where(nr: params[:warehouse]).select("id")
-          position_id= Position.where(nr: params[:position]).select("id")
-
-          puts("sfaskfjsalfk")
-          puts(position_id.to_a)
-          puts(position_id.to_a[0])
-          puts(position_id.to_a[0].id)
-
-          if position_id.to_a == " "
-            return {result: 0, unfill: '库位不存在'}
-          else
-            get_warehouse_id=(warehouse_id.to_a[0].id)
-            get_position_id=(position_id.to_a[0].id)
-
-            #max_position_count = SysConfig.where(code: 'CAPACITY_SERVER').select("value")
-            max_position_count = SysConfig.where(code: 'CAPACITY_NR').to_a[0].value.to_i
-
-            puts("Get Position ID ========")
-            puts(get_position_id)
-
-            if warehouse=NStorage.where(:ware_house_id => get_warehouse_id, :position_id => get_position_id).count("ware_house_id")
-              if warehouse < max_position_count
-
-                #count={
-                #    warehouse:warehouse,
-                #    max_position_count:max_position_count
-                #
-                #}
-                #return {result: 0, unfill: count}
-                return {result: 0, unfill: warehouse}
-
-                puts ('success  0==================')
-                puts (warehouse)
+          if wh=Whouse.find_by_nr(params[:warehouse])
+            if position=wh.positions.find_by_nr(params[:position])
+              if params[:position]==SysConfigCache.wooden_position_config_value
+                position_capacity=SysConfigCache.wooden_position_capacity_value
               else
-                return {result: 1, unfill: '库位已满'}
+                position_capacity=SysConfigCache.nomal_position_capacity_value
+              end
+              position_stock_count=NStorage.where(ware_house_id: wh.id, position_id: position.id).size
+
+              if position_stock_count < position_capacity.to_i
+                content = {
+                    position_capacity: position_capacity,
+                    position_stock_count: position_stock_count
+                }
+              else
+                return {result: 1, content: '库位已满'}
               end
             else
-              return {result: 0, unfill: '数据库查询失败'}
+              return {result: 1, content: "库位:#{params[:position]}不在仓库:#{params[:warehouse]}中！"}
             end
+          else
+            return {result: 1, content: "仓库:#{params[:warehouse]}不存在！"}
           end
         rescue => e
-          msg.content=e.message
-          puts ('e.message==================')
-          puts (msg.content)
+          return {result: 1, content: e.message}
         end
 
-        puts(msg.content)
+        return {result: 0, content: content}
       end
+
+      # post :rt_position do
+      #   msg=Message.new
+      #   begin
+      #     warehouse_id=Whouse.where(nr: params[:warehouse]).select("id")
+      #     position_id= Position.where(nr: params[:position]).select("id")
+      #
+      #     puts("sfaskfjsalfk")
+      #     puts(position_id.to_a)
+      #     puts(position_id.to_a[0])
+      #     puts(position_id.to_a[0].id)
+      #
+      #     if position_id.to_a == " "
+      #       return {result: 0, unfill: '库位不存在'}
+      #     else
+      #       get_warehouse_id=(warehouse_id.to_a[0].id)
+      #       get_position_id=(position_id.to_a[0].id)
+      #
+      #       #max_position_count = SysConfig.where(code: 'CAPACITY_SERVER').select("value")
+      #       max_position_count = SysConfig.where(code: 'CAPACITY_NR').to_a[0].value.to_i
+      #
+      #       puts("Get Position ID ========")
+      #       puts(get_position_id)
+      #
+      #       if warehouse=NStorage.where(:ware_house_id => get_warehouse_id, :position_id => get_position_id).count("ware_house_id")
+      #         if warehouse < max_position_count
+      #
+      #           count={
+      #               warehouse:warehouse,
+      #               max_position_count:max_position_count
+      #
+      #           }
+      #           return {result: 0, unfill: count}
+      #
+      #           puts ('success  0==================')
+      #           puts (warehouse)
+      #         else
+      #           return {result: 1, unfill: '库位已满'}
+      #         end
+      #       else
+      #         return {result: 0, unfill: '数据库查询失败'}
+      #       end
+      #     end
+      #   rescue => e
+      #     msg.content=e.message
+      #     puts ('e.message==================')
+      #     puts (msg.content)
+      #   end
+      #
+      #   puts(msg.content)
+      # end
 
 
       post :enter do

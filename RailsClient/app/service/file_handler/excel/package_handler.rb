@@ -42,7 +42,7 @@ module FileHandler
                   package.location_id=user.location_id
 
                   if package.save
-                    lc=package.logistics_containers.build(source_location_id: package.location_id, user_id: package.user_id)
+                    lc=package.logistics_containers.build(source_location_id: package.location_id, user_id: package.user_id, remark: row['备注'])
                     lc.save
                     lc.package=package
                   end

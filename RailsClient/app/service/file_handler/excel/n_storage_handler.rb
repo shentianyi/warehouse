@@ -6,7 +6,7 @@ module FileHandler
           :toWh, :partNr, :fifo, :qty, :toPosition, :packageId, :employee_id, :remarks
       ]
 
-      #:fromWh, :fromPosition, :packageId, :partNr, :qty, :fifo, :toWh, :toPosition, :employee_id, :remarks
+      #after change do not forget change 'validate_move', too
       MOVE_HEADERS = [
           :fromWh, :fromPosition, :packageId, :partNr, :fifo, :toWh, :toPosition, :employee_id, :remarks
       ]
@@ -233,9 +233,23 @@ module FileHandler
         book = Roo::Excelx.new file.full_path
         book.default_sheet = book.sheets.first
 
+        ##########################################################################
+        #will store position stock
+        position_stock={}
+        2.upto(book.last_row) do |line|
+          if position_stock[book.cell(line, 7).to_s.strip].blank?
+            position_stock[book.cell(line, 7).to_s.strip] = 1
+          else
+            position_stock[book.cell(line, 7).to_s.strip] += 1
+          end
+        end
+        nomal_position_capacity=SysConfigCache.nomal_position_capacity_value
+        wooden_position_capacity=SysConfigCache.wooden_position_capacity_value
+        wooden_position=SysConfigCache.wooden_position_config_value
+
         p = Axlsx::Package.new
         p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
-          sheet.add_row MOVE_HEADERS+['Error Msg']
+          sheet.add_row MOVE_HEADERS+['Error Msg', 'Overload Msg']
           #validate file
           2.upto(book.last_row) do |line|
             row = {}
@@ -245,15 +259,45 @@ module FileHandler
             end
 
             mssg = validate_move_row(row)
+            # if mssg.result
+            #   sheet.add_row row.values
+            # else
+            #   if msg.result
+            #     msg.result = false
+            #     msg.content = "下载错误文件<a href='/files/#{Base64.urlsafe_encode64(tmp_file)}'>#{::File.basename(tmp_file)}</a>"
+            #   end
+            #   sheet.add_row row.values<<mssg.content
+            # end
+
+            ########################################################################
+            #check position capacity
+            tmp_file_row=row.values
             if mssg.result
-              sheet.add_row row.values
+              tmp_file_row<<' '
             else
               if msg.result
                 msg.result = false
                 msg.content = "下载错误文件<a href='/files/#{Base64.urlsafe_encode64(tmp_file)}'>#{::File.basename(tmp_file)}</a>"
               end
-              sheet.add_row row.values<<mssg.content
+              tmp_file_row<<mssg.content
             end
+
+            if position=Position.find_by_nr(row[:toPosition])
+              if position.nr==wooden_position
+                position_capacity=wooden_position_capacity
+              else
+                position_capacity=nomal_position_capacity
+              end
+              result=position.check_position_capacity(position_stock[row[:toPosition]], position_capacity.to_i)
+              if !result.result && msg.result
+                msg.result = false
+                msg.content = "下载错误文件<a href='/files/#{Base64.urlsafe_encode64(tmp_file)}'>#{::File.basename(tmp_file)}</a>"
+              end
+              tmp_file_row<<result.content
+            end
+
+            sheet.add_row tmp_file_row
+
           end
         end
         p.use_shared_strings = true

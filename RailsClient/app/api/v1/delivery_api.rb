@@ -181,6 +181,10 @@ module V1
           return msg.set_false(r.content)
         end
 
+        unless (msg=lc.auto_create_wrappage_movement).result
+          return msg.set_false(msg.content)
+        end
+
         return msg.set_true(DeliveryMessage::SendSuccess)
       end
 

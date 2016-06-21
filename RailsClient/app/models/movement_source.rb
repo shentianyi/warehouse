@@ -53,4 +53,31 @@ class MovementSource < ActiveRecord::Base
 
     msg
   end
+
+  def self.processing_count_by_position position_id
+    MovementSource.joins(:movement_list).where(toPosition: position_id).where("movement_lists.state = ?", MovementListState::PROCESSING).size
+  end
+
+  def self.check_position_capacity position_nr
+    msg = Message.new()
+
+    if position=Position.find_by_nr(position_nr)
+      nomal_position_capacity=SysConfigCache.nomal_position_capacity_value
+      wooden_position_capacity=SysConfigCache.wooden_position_capacity_value
+      wooden_position=SysConfigCache.wooden_position_config_value
+
+      if position.nr==wooden_position
+        position_capacity=wooden_position_capacity
+      else
+        position_capacity=nomal_position_capacity
+      end
+
+      msg=position.check_position_capacity(1, position_capacity.to_i)
+    else
+      msg.result=false
+      msg.content="库位:#{position_nr}不存在"
+    end
+
+    msg
+  end
 end
