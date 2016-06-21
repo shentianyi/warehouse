@@ -4,7 +4,7 @@ class WrappageMovementsController < ApplicationController
   respond_to :html
 
   def index
-    @wrappage_movements = WrappageMovement.paginate(:page => params[:page])
+    @wrappage_movements = WrappageMovement.order(move_date: :desc).paginate(:page => params[:page])
     respond_with(@wrappage_movements)
   end
 
@@ -52,8 +52,19 @@ class WrappageMovementsController < ApplicationController
   end
 
   def wrappage_movement_items
-    @wrappage_movement_items = @wrappage_movement.wrappage_movement_items.paginate(:page => params[:page])
+    @wrappage_movement_items = @wrappage_movement.wrappage_movement_items.order(wrappage_move_type_id: :desc).paginate(:page => params[:page])
     @page_start=(params[:page].nil? ? 0 : (params[:page].to_i-1))*20
+  end
+
+  def search
+    super { |query|
+      unless params[:wrappage_movement][:package_type_id].blank?
+        query=query.unscope(where: :package_type_id).joins(:package_type).where(package_types: {nr: params[:wrappage_movement][:package_type_id]})
+      end
+
+      query=query.order(move_date: :desc)
+      query
+    }
   end
 
   private

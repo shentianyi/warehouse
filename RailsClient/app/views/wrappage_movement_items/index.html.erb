@@ -68,7 +68,7 @@
         <td><%= wrappage_movement_item.qty %></td>
         <td><%= WrappageMoveType.display(wrappage_movement_item.wrappage_move_type_id) %></td>
         <td><%= wrappage_movement_item.user.blank? ? '' : wrappage_movement_item.user.nr %></td>
-        <td><%= wrappage_movement_item.sourceable_id %></td>
+        <td><%= wrappage_movement_item.sourceable.blank? ? '' : wrappage_movement_item.sourceable.container_id %></td>
         <td><%= wrappage_movement_item.extra_800_nos %></td>
         <td><%= wrappage_movement_item.extra_leoni_out_no %></td>
         <td>

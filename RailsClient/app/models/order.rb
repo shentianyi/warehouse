@@ -81,8 +81,9 @@ class Order < ActiveRecord::Base
 
     if dlc=LogisticsContainer.find_by_id(forklift.ancestry)
       if order=dlc.order
-        if order_items=order.order_items.where(part_id: package.part_id).select("*, SUM(order_items.quantity) as total_quantity").first
-          order_count=order_items.total_quantity
+        order_items=order.order_items.where(part_id: package.part_id).select("*, SUM(order_items.quantity) as total_quantity").first
+        unless order_items.total_quantity.blank?
+          order_count=order_items.total_quantity.to_i
         else
           return {result: false, content: "需求单中不存在该零件号"}
         end

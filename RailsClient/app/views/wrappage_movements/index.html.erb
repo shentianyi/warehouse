@@ -33,14 +33,39 @@
   </ol>
 </div>
 
-<div class="col-sm-12" style="margin-bottom: 20px; text-align: center;">
-  <!--<div class="col-sm-6">-->
-  <!--<%= link_to '新建包装物流转记录', new_wrappage_movement_path, :class => 'btn btn-primary', :style => 'color:white;' %>-->
-  <!--</div>-->
-  <div class="col-sm-6">
-    <%= link_to "导入包装物流转记录", send("import_#{@model.pluralize}_path"), :class => 'btn btn-primary', :style => 'color:white;' %>
+<form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+  <div class="panel panel-primary">
+    <div class="panel-body">
+      <div class="col-sm-12" style="border-bottom: 1px dashed #000;">
+        <div class="col-sm-3">
+          包装物类型：
+          <%= select_tag('wrappage_movement[package_type_id]', options_from_collection_for_select(PackageType.all, 'nr', 'name', @package_type_id), include_blank: true) %>
+        </div>
+
+        <div class="col-sm-6">
+          流转日期：
+          <input type="text" name="wrappage_movement[move_date][start]" class="datepicker" value="<%= @move_date_start %>"/>
+          ~ <input type="text" name="wrappage_movement[move_date][end]" class="datepicker" value="<%= @move_date_end %>"/>
+        </div>
+
+        <div class="col-sm-3">
+          <input type="submit" value="查 找" class="btn btn-primary" style="width:150px;"/>
+        </div>
+      </div>
+
+      <div class="col-sm-12" style="margin-top: 20px;">
+        <!--<div class="col-sm-6">-->
+        <!--<%= link_to '新建包装物流转记录', new_wrappage_movement_path, :class => 'btn btn-primary', :style => 'color:white;' %>-->
+        <!--</div>-->
+        <div class="col-sm-6">
+          <%= link_to "导入包装物流转记录", send("import_#{@model.pluralize}_path"), :class => 'btn btn-primary', :style => 'color:white;' %>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
+</form>
+
+
 
 <div class="col-sm-12" style="margin-top: -10px;margin-bottom: 20px;">
   <div class="digg_pagination">
@@ -57,7 +82,7 @@
     <th>NO.</th>
     <th>流转日期</th>
     <th>包装物类型</th>
-    <th>记录员工号</th>
+    <!--<th>记录员工号</th>-->
     <th>列表</th>
     <th>操作</th>
   </tr>
@@ -69,7 +94,7 @@
         <td><%= i+@wrappage_movements.offset+1 %></td>
         <td><%= wrappage_movement.move_date %></td>
         <td><%= wrappage_movement.package_type.name %></td>
-        <td><%= wrappage_movement.user.blank? ? '' : wrappage_movement.user.nr %></td>
+        <!--<td><%= wrappage_movement.user.blank? ? '' : wrappage_movement.user.nr %></td>-->
         <td>
           <%= link_to content_tag(:span, '详细列表', :class => 'label label-primary'), wrappage_movement_items_wrappage_movement_path(wrappage_movement) %>
           <span class="badge"><%= wrappage_movement.wrappage_movement_items.count %></span>
@@ -88,3 +113,13 @@
 <div class="digg_pagination">
   <%= will_paginate @wrappage_movements, :container => false %>
 </div>
+
+<script>
+    $(function () {
+        $(".datepicker").datetimepicker({
+            lang: 'ch',
+            format: 'Y-m-d',
+            timepicker: false
+        });
+    });
+</script>

@@ -21,9 +21,9 @@
 <div class="panel panel-default">
   <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
     <li class="active">库存管理</li>
-    <li class="active">包装物流转记录</li>
+    <li class="active"><a href="/wrappage_movements">包装物流转记录列表</a></li>
     <li class="active">
-      包装物流转记录列表
+      包装物流转记录详细
     </li>
   </ol>
 </div>
@@ -49,6 +49,7 @@
     <th>运单号</th>
     <th>装箱单号</th>
     <th>上海莱尼出门证号</th>
+    <th>创建时间</th>
   </tr>
   </thead>
 
@@ -56,14 +57,15 @@
   <% @wrappage_movement_items.each_with_index do |wrappage_movement_item, i| %>
       <tr>
         <td><%= i+@wrappage_movement_items.offset+1 %></td>
-        <td><%= wrappage_movement_item.src_location.nr %></td>
-        <td><%= wrappage_movement_item.des_location.nr %></td>
+        <td><%= wrappage_movement_item.src_location.name %></td>
+        <td><%= wrappage_movement_item.des_location.name %></td>
         <td><%= wrappage_movement_item.qty %></td>
         <td><%= WrappageMoveType.display(wrappage_movement_item.wrappage_move_type_id) %></td>
         <td><%= wrappage_movement_item.user.blank? ? '' : wrappage_movement_item.user.nr %></td>
         <td><%= wrappage_movement_item.sourceable.blank? ? '' : wrappage_movement_item.sourceable.container_id %></td>
         <td><%= wrappage_movement_item.extra_800_nos %></td>
         <td><%= wrappage_movement_item.extra_leoni_out_no %></td>
+        <td><%= wrappage_movement_item.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
       </tr>
   <% end %>
   </tbody>
