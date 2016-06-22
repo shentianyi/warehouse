@@ -32,12 +32,13 @@ class Part < ActiveRecord::Base
   end
 
   def sh_part_nr
-    pc= self.part_clients.where(client_tenant_id: Tenant.find_by_code('SHL')).first
-    if pc
-      pc.client_part_nr
-    else
-      ''
-    end
+    self.part_clients.where(client_tenant_id: Tenant.find_by_code('SHL')).pluck(:client_part_nr).join(' ')
+    # pc= self.part_clients.where(client_tenant_id: Tenant.find_by_code('SHL')).pluck
+    # if pc
+    #   pc.client_part_nr
+    # else
+    #   ''
+    # end
   end
 
   def package_name

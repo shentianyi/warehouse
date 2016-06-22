@@ -16,7 +16,7 @@ module FileHandler
 
         validate_msg = validate_import(file)
         if validate_msg.result
-          # begin
+          begin
           ActiveRecord::Base.transaction do
             book=Roo::Excelx.new file.full_path
 
@@ -162,17 +162,17 @@ module FileHandler
                                              type: WrappageMoveType::ENTER_FROM_CZ,
                                              user_id: user.id
                                          }, dlc)
-            if result.result
+            unless result.result
               raise "自动统计包装物流转记录失败:#{result.content}"
             end
           end
 
           msg.content ='处理成功'
           msg.result =true
-          # rescue => e
-          #   msg.result=false
-          #   msg.content = e.message
-          # end
+          rescue => e
+            msg.result=false
+            msg.content = e.message
+          end
         else
           msg.result = false
           msg.content = validate_msg.content
