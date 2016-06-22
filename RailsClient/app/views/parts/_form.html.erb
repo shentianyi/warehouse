@@ -5,6 +5,10 @@
         line-height: 60px;
     }
 
+    .col-sm-4>label {
+        min-width: 80px;
+    }
+
     a:hover, a:active {
         text-decoration: none;
         background-color: white;
@@ -13,7 +17,7 @@
     }
 
     select {
-        min-width: 150px;
+        width: 150px;
     }
 </style>
 <%= form_for(@part) do |f| %>
@@ -32,49 +36,53 @@
     <div class="panel panel-primary">
       <div class="panel-body">
         <div class="col-sm-12">
-          <div class="col-sm-3">
+          <div class="col-sm-4">
             <%= f.label :nr, '零件号' %>
             <%= f.text_field :nr %>
           </div>
-          <div class="col-sm-3">
+          <div class="col-sm-4">
             <%= f.label :part_type_id, '零件类型' %>
             <%= f.select(:part_type_id, @part_types.collect { |p| [p.name, p.id] }, {include_blank: true}) %>
           </div>
-          <div class="col-sm-3">
+          <div class="col-sm-4">
             <%= f.label :unit, '零件单位' %>
             <%= f.text_field :unit %>
           </div>
-          <div class="col-sm-3">
+        </div>
+
+        <div class="col-sm-12">
+          <div class="col-sm-4">
             <%= f.label :unit_pack, '单位包装量' %>
             <%= f.text_field :unit_pack %>
           </div>
-        </div>
 
-        <div class="col-sm-12">
-          <div class="col-sm-3">
+          <div class="col-sm-4">
             <%= f.label :package_type_id, '包装类型' %>
             <%= f.select(:package_type_id, PackageType.all.collect { |p| [p.name, p.id] }, {include_blank: true}) %>
           </div>
-          <div class="col-sm-3">
+          <div class="col-sm-4">
             <%= f.label :convert_unit, '盘点单位转换标准' %>
             <%= f.text_field :convert_unit %>
-          </div>
-          <div class="col-sm-3">
-            <%= f.label :safe_qty, '安全库存量' %>
-            <%= f.text_field :safe_qty %>
-          </div>
-          <div class="col-sm-3">
-            <%= f.label :description, '产品描述' %>
-            <%= f.text_field :description %>
           </div>
         </div>
 
         <div class="col-sm-12">
-          <div class="col-sm-3">
+          <div class="col-sm-4">
+            <%= f.label :safe_qty, '安全库存量' %>
+            <%= f.text_field :safe_qty %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.label :description, '产品描述' %>
+            <%= f.text_field :description %>
+          </div>
+          <div class="col-sm-4">
             <%= f.label :supplier, '供应商' %>
             <%= f.text_field :supplier %>
           </div>
-          <div class="col-sm-3">
+        </div>
+
+        <div class="col-sm-12">
+          <div class="col-sm-4">
             <%= f.label :is_delete, '是否已删除' %>
             <%= f.check_box :is_delete %>
           </div>
