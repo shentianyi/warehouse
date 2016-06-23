@@ -41,7 +41,7 @@ module FileHandler
                 params={inventory_list_id: inventory_list_id,
                         whouse_id: row['仓库号'],
                         part_id: row['零件号'],
-                        fifo: row['FIFO'].present? ? Date.strptime(row['FIFO'], '%d.%m.%y').to_time.utc : Time.now.utc,
+                        fifo: row['FIFO'].present? ? Date.strptime(row['FIFO'], '%d.%m.%Y').to_time.utc : Time.now.utc,
                         origin_qty: row['数量'].to_f,
                         qty: row['数量'].to_f,
                         position: row['库位号'],
