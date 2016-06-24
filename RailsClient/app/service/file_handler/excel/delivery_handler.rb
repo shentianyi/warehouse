@@ -114,7 +114,7 @@ module FileHandler
               row = {}
               JXJX_SEND_HEADERS.each_with_index do |k, i|
                 row[k] = book.cell(line, i+1).to_s.strip
-                if ['package_id', 'part_id'].include?(k.to_s)
+                if ['package_id', 'part_id','from_position', 'from_wh'].include?(k.to_s)
                   row[k]=row[k].sub(/\.0/, '')
                 end
               end
@@ -221,7 +221,7 @@ module FileHandler
             row = {}
             JXJX_SEND_HEADERS.each_with_index do |k, i|
               row[k] = book.cell(line, i+1).to_s.strip
-              if ['package_id', 'part_id'].include?(k.to_s)
+              if ['package_id', 'part_id', 'from_position', 'from_wh'].include?(k.to_s)
                 row[k]=row[k].sub(/\.0/, '')
               end
             end
@@ -386,7 +386,7 @@ module FileHandler
               row = {}
               JXJX_HEADERS.each_with_index do |k, i|
                 row[k] = book.cell(line, i+1).to_s.strip
-                if ['package_id', 'part_id'].include?(k.to_s)
+                if ['package_id', 'part_id','from_position', 'from_wh'].include?(k.to_s)
                   row[k]=row[k].sub(/\.0/, '')
                 end
               end
@@ -498,7 +498,7 @@ module FileHandler
             row = {}
             JXJX_HEADERS.each_with_index do |k, i|
               row[k] = book.cell(line, i+1).to_s.strip
-              if ['package_id', 'part_id'].include?(k.to_s)
+              if ['package_id', 'part_id','from_position', 'from_wh'].include?(k.to_s)
                 row[k]=row[k].sub(/\.0/, '')
               end
             end
