@@ -306,7 +306,7 @@ module FileHandler
 
         validate_msg = validate_receive(file)
         if validate_msg.result
-          # begin
+          begin
           ActiveRecord::Base.transaction do
             book=Roo::Excelx.new file.full_path
 
@@ -325,9 +325,9 @@ module FileHandler
               raise '没有正确配置收货地址'
             end
 
-            if book.cell(2, 5).blank?
-              raise '装箱单号不能为空'
-            end
+            # if book.cell(2, 5).blank?
+            #   raise '装箱单号不能为空'
+            # end
 
             #calc wooden box nps count
             # wooden_count=0
@@ -441,10 +441,10 @@ module FileHandler
 
           msg.content ='处理成功'
           msg.result =true
-          # rescue => e
-          #   msg.result=false
-          #   msg.content = e.message
-          # end
+          rescue => e
+            msg.result=false
+            msg.content = e.message
+          end
         else
           msg.result = false
           msg.content = validate_msg.content
