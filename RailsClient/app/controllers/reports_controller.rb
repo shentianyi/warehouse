@@ -155,7 +155,8 @@ class ReportsController < ApplicationController
           result = Storage.build_safe_stock_report(params[:file])
         when '.xlsx'
       end
-
+      p current_user
+      p current_user.location
       send_data(generate_safe_stock_report(result.object[:data], result.object[:part_list], current_user.location, params[:reports][:caf_days]),
                 :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
                 :filename => "#{Time.now.strftime('%Y%m%d')}-安全预警表.xlsx")
@@ -198,13 +199,14 @@ class ReportsController < ApplicationController
           date.size.upto(7) { date<< 0 }
         end
         # puts date
-        # puts '-----------------------------------------------------------------------------'
+        puts '-----------------------------------------------------------------------------'
+        p location
 
         ret=nil
         stock=nil
         if part
           ret=Package.joins('inner join location_containers ON containers.id=location_containers.container_id')
-                  .where(part_id: part.id, location_containers: {state: MovableState::CHECKED, des_location_id: location.id})
+                  .where(part_id: part.id, location_containers: {state: MovableState::ARRIVED, source_location_id: location.id})
                   .order(fifo_time: :desc).group(:fifo_time)
                   .select('SUM(containers.quantity) as quantity, containers.part_id as part_id, containers.fifo_time as fifo_time').first
           stock=NStorage.where(partNr: part.id, ware_house_id: location.whouses.pluck(:id).uniq).select('SUM(n_storages.qty) as qty').first

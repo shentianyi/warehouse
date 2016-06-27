@@ -172,7 +172,7 @@
             <td><%= package.package.quantity_str if package.package %></td>
             <td><%= (package.package.part.part_type.blank? ? '' : package.package.part.part_type.name) if package.package %></td>
             <!--<td><%= package.package.fifo_time_display if package.package %></td>-->
-            <td><%= package.remark %></td>
+            <td><%= package.package.blank? ? '' : package.package.remark %></td>
             <!--<td><%= package.state_display %></td>-->
             <!--<td><%= ppresenter.position_nr %></td>-->
             <td>
