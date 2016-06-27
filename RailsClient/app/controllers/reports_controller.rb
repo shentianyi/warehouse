@@ -191,7 +191,7 @@ class ReportsController < ApplicationController
             date<<part_order_list[key].to_i
           end
           key=key.to_date.next.to_s.gsub(/-/, '')
-          puts key
+          # puts key
         end
         if date.size < 8
           date.size.upto(7) { date<< 0 }
@@ -216,7 +216,14 @@ class ReportsController < ApplicationController
         lack_qty=stock_left-caf_order_qty
         lack_days=0
         if lack_qty<0
-          lack_days=(stock_left >= (date[1]+date[2])) ? (1) : ((stock_left >= date[1]) ? 2 : 3)
+          (1..caf_days).reduce(stock_left) do |sum, i|
+            if (sum-date[i])<0
+              lack_days=caf_days-i+1
+              break
+            end
+            sum-date[i]
+          end
+          # lack_days=(stock_left >= (date[1]+date[2])) ? (1) : ((stock_left >= date[1]) ? 2 : 3)
         end
 
         if (lack_qty<0) && location.is_open_safe_qty
