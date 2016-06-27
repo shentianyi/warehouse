@@ -155,8 +155,6 @@ class ReportsController < ApplicationController
           result = Storage.build_safe_stock_report(params[:file])
         when '.xlsx'
       end
-      p current_user
-      p current_user.location
       send_data(generate_safe_stock_report(result.object[:data], result.object[:part_list], current_user.location, params[:reports][:caf_days]),
                 :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
                 :filename => "#{Time.now.strftime('%Y%m%d')}-安全预警表.xlsx")
@@ -199,8 +197,7 @@ class ReportsController < ApplicationController
           date.size.upto(7) { date<< 0 }
         end
         # puts date
-        puts '-----------------------------------------------------------------------------'
-        p location
+        # puts '-----------------------------------------------------------------------------'
 
         ret=nil
         stock=nil
@@ -236,7 +233,7 @@ class ReportsController < ApplicationController
                           part.blank? ? '' : part.description,
                           Time.now.strftime('%Y-%m-%d'),
                           ' ',
-                          ret.blank? ? '系统无此零件' : ret.fifo_time.localtime.strftime('%Y-%m-%d %H:%M'),
+                          ret.blank? ? '' : ret.fifo_time.localtime.strftime('%Y-%m-%d %H:%M'),
 
                           ret.blank? ? 0 : ret.quantity,
                           stock.blank? ? 0 : stock.qty,
