@@ -203,7 +203,7 @@ class ReportsController < ApplicationController
         stock=nil
         if part
           ret=Package.joins('inner join location_containers ON containers.id=location_containers.container_id')
-                  .where(part_id: part.id, location_containers: {state: MovableState::ARRIVED, source_location_id: location.id})
+                  .where(part_id: part.id, location_containers: {state: MovableState::CHECKED, source_location_id: location.id})
                   .order(fifo_time: :desc).group(:fifo_time)
                   .select('SUM(containers.quantity) as quantity, containers.part_id as part_id, containers.fifo_time as fifo_time').first
           stock=NStorage.where(partNr: part.id, ware_house_id: location.whouses.pluck(:id).uniq).select('SUM(n_storages.qty) as qty').first
@@ -242,7 +242,7 @@ class ReportsController < ApplicationController
                           ' ',
                           ret.blank? ? '' : ret.fifo_time.localtime.strftime('%Y-%m-%d %H:%M'),
 
-                          ret.blank? ? 0 : ret.quantity,
+                          ret.blank? ? '' : ret.quantity,
                           stock.blank? ? 0 : stock.qty,
                           stock_left,
                           caf_order_qty,
