@@ -1,0 +1,29 @@
+<%= form_for(@part_wrappage) do |f| %>
+  <% if @part_wrappage.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@part_wrappage.errors.count, "error") %> prohibited this part_wrappage from being saved:</h2>
+
+      <ul>
+      <% @part_wrappage.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :part_id %><br>
+    <%= f.text_field :part_id %>
+  </div>
+  <div class="field">
+    <%= f.label :wrappage_id %><br>
+    <%= f.number_field :wrappage_id %>
+  </div>
+  <div class="field">
+    <%= f.label :capacity %><br>
+    <%= f.number_field :capacity %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

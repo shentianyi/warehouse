@@ -1,5 +1,19 @@
 Rails.application.routes.draw do
 
+  resources :part_wrappages
+
+  resources :wrappages do
+    member do
+      get 'part_wrappages'
+    end
+
+    collection do
+      get :search
+      match :import, to: :import, via: [:get, :post]
+      match :import_parts, to: :import_parts, via: [:get, :post]
+    end
+  end
+
   resources :back_part_items do
     collection do
       get :search

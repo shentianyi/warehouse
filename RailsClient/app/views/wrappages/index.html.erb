@@ -1,0 +1,132 @@
+
+<style>
+    .table > thead > tr > th, .table > tbody > tr > td {
+        text-align: center;
+    }
+
+    a:hover, a:active {
+        text-decoration: none;
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+
+    .label {
+        font-size: 1em;
+    }
+
+    .IconA {
+        margin: 0 10px;
+        font-size: 1.2em;
+    }
+
+    .IconA:hover {
+        text-decoration: none;
+        background-color: white;
+    }
+</style>
+
+<div class="panel panel-default">
+  <ol class="breadcrumb" style="background: transparent;padding: 20px 0 0 20px;font-size: 1.2em;">
+    <li class="active">管理</li>
+    <li class="active">
+      基础信息设置
+    </li>
+    <li class="active">
+      容器列表
+    </li>
+  </ol>
+</div>
+
+<form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+  <div class="panel panel-primary">
+    <div class="panel-body">
+      <div class="col-sm-12" >
+        <div class="col-sm-3">
+          容器编码：
+          <input type="text" name="wrappage[nr]" value="<%= @nr %>"/>
+        </div>
+        <div class="col-sm-4">
+          <input type="submit" value="查找" class="btn btn-primary" name="search" style="width: 200px;"/>
+        </div>
+      </div>
+
+      <div class="col-sm-12" style="margin-top: 20px;">
+        <% if current_user.permission?(:operate_basic_info_create) %>
+            <div class="col-sm-4">
+              <%= link_to "新建容器", new_wrappage_path, :class => 'btn btn-primary', :style => 'width:150px;color:white;' %>
+            </div>
+
+            <div class="col-sm-4">
+              <%= link_to "上传容器", import_wrappages_path, :class => 'btn btn-primary', :style => 'width:200px;color:white;' %>
+            </div>
+
+            <div class="col-sm-4">
+              <%= link_to "上传容器零件对应关系", import_parts_wrappages_path, :class => 'btn btn-primary', :style => 'width:200px;color:white;' %>
+            </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</form>
+
+
+<br>
+<div class="digg_pagination" style="margin-bottom: 0;">
+  <div class="page_info">
+    <%= page_entries_info @wrappages %>
+  </div>
+  <%= will_paginate @wrappages, :container => false %>
+</div>
+<table class="table table-bordered table-hover">
+  <thead>
+  <tr>
+    <th>序号</th>
+    <th>容器编码</th>
+    <th>容器名称</th>
+    <th>容器描述</th>
+    <th>清单列表</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @wrappages.each_with_index do |wrappage, index| %>
+      <tr>
+        <td><%= index +@wrappages.offset+1 %>
+        <td><%= wrappage.nr %></td>
+        <td><%= wrappage.name %></td>
+        <td><%= wrappage.desc %></td>
+        <td>
+          <%= link_to content_tag(:span, '清单列表', :class => 'label label-primary'), part_wrappages_wrappage_path(wrappage) %>
+          <span class="badge"><%= wrappage.part_wrappages.count %></span>
+        </td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+<div class="digg_pagination">
+  <%= will_paginate @wrappages, :container => false %>
+</div>
+
+<script>
+    $(function () {
+        $(".datepicker").datetimepicker({
+            lang: 'ch',
+            format: 'Y-m-d H:i'
+        });
+    });
+    init_check();
+
+    $('.up_search').click(function () {
+        var this_arrow = $(this);
+        $('.all-search').slideToggle(300, function () {
+            if (this_arrow.children('i').hasClass('glyphicon-chevron-up')) {
+                this_arrow.children('i').attr('class', 'glyphicon glyphicon-chevron-down');
+                this_arrow.children('i').attr('title', '展开搜索条件');
+            } else {
+                this_arrow.children('i').attr('class', 'glyphicon glyphicon-chevron-up');
+                this_arrow.children('i').attr('title', '收起搜索条件');
+            }
+        });
+    })
+</script>

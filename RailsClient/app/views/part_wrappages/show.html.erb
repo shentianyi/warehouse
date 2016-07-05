@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Part:</strong>
+  <%= @part_wrappage.part_id %>
+</p>
+
+<p>
+  <strong>Wrappage:</strong>
+  <%= @part_wrappage.wrappage_id %>
+</p>
+
+<p>
+  <strong>Capacity:</strong>
+  <%= @part_wrappage.capacity %>
+</p>
+
+<%= link_to 'Edit', edit_part_wrappage_path(@part_wrappage) %> |
+<%= link_to 'Back', part_wrappages_path %>

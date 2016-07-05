@@ -1,0 +1,29 @@
+<h1>Listing part_wrappages</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Part</th>
+      <th>Wrappage</th>
+      <th>Capacity</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @part_wrappages.each do |part_wrappage| %>
+      <tr>
+        <td><%= part_wrappage.part_id %></td>
+        <td><%= part_wrappage.wrappage_id %></td>
+        <td><%= part_wrappage.capacity %></td>
+        <td><%= link_to 'Show', part_wrappage %></td>
+        <td><%= link_to 'Edit', edit_part_wrappage_path(part_wrappage) %></td>
+        <td><%= link_to 'Destroy', part_wrappage, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Part wrappage', new_part_wrappage_path %>

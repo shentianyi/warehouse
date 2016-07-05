@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160428070646) do
+ActiveRecord::Schema.define(version: 20160705070605) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -85,6 +85,7 @@ ActiveRecord::Schema.define(version: 20160428070646) do
   add_index "back_parts", ["des_location_id"], name: "index_back_parts_on_des_location_id", using: :btree
   add_index "back_parts", ["id"], name: "index_back_parts_on_id", using: :btree
   add_index "back_parts", ["src_location_id"], name: "index_back_parts_on_src_location_id", using: :btree
+  add_index "back_parts", ["user_id"], name: "index_back_parts_on_user_id", using: :btree
 
   create_table "containers", force: true do |t|
     t.string   "custom_id",                 limit: 36
@@ -586,6 +587,14 @@ ActiveRecord::Schema.define(version: 20160428070646) do
   add_index "part_types", ["id"], name: "index_part_types_on_id", using: :btree
   add_index "part_types", ["nr"], name: "index_part_types_on_nr", using: :btree
 
+  create_table "part_wrappages", force: true do |t|
+    t.string   "part_id"
+    t.integer  "wrappage_id"
+    t.integer  "capacity"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "parts", force: true do |t|
     t.string   "uuid",            limit: 36,                                           null: false
     t.string   "customernum"
@@ -975,5 +984,14 @@ ActiveRecord::Schema.define(version: 20160428070646) do
   add_index "whouses", ["location_id"], name: "index_whouses_on_location_id", using: :btree
   add_index "whouses", ["nr"], name: "index_whouses_on_nr", using: :btree
   add_index "whouses", ["uuid"], name: "index_whouses_on_uuid", using: :btree
+
+  create_table "wrappages", force: true do |t|
+    t.string   "nr"
+    t.string   "name"
+    t.string   "desc"
+    t.string   "mirror_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
 end

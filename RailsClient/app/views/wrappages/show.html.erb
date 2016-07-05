@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nr:</strong>
+  <%= @wrappage.nr %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @wrappage.name %>
+</p>
+
+<p>
+  <strong>Desc:</strong>
+  <%= @wrappage.desc %>
+</p>
+
+<%= link_to 'Edit', edit_wrappage_path(@wrappage) %> |
+<%= link_to 'Back', wrappages_path %>
