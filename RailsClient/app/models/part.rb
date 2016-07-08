@@ -12,6 +12,8 @@ class Part < ActiveRecord::Base
   has_many :packages
   has_many :storages
   belongs_to :package_type
+  has_one :part_wrappage
+  has_one :wrappage, :through => :part_wrappage
 
   has_many :part_clients
 

@@ -125,6 +125,7 @@
       </li>
 
       <% if current_user.permission?(:view_storage) %>
+          <li><a href="<%= container_n_storages_path %>">容器统计信息查询</a></li>
           <li><a href="<%= movements_path %>">库存移动记录查询</a></li>
       <% end %>
     </ul>

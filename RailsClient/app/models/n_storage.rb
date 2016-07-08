@@ -156,5 +156,22 @@ class NStorage < ActiveRecord::Base
     p.to_stream.read
   end
 
+  def self.to_container_view_xlsx n_storages
+    p = Axlsx::Package.new
+
+    wb = p.workbook
+    wb.add_worksheet(:name => "sheet1") do |sheet|
+      sheet.add_row ["序号", "容器编码", "库存量"]
+      n_storages.each_with_index { |n_storage, index|
+        part=Part.find_by_id(n_storage.partNr)
+        sheet.add_row [
+                          index+1,
+                          part.present? ? part.nr : '',
+                          n_storage.qty
+                      ], types: [:string, :string, :string]
+      }
+    end
+    p.to_stream.read
+  end
 
 end

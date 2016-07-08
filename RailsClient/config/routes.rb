@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       get :search
       match :import, to: :import, via: [:get, :post]
       match :import_parts, to: :import_parts, via: [:get, :post]
+      match :import_stock, to: :import_stock, via: [:get, :post]
     end
   end
 
@@ -280,6 +281,7 @@ Rails.application.routes.draw do
       match :move, to: :move, via: [:get, :post]
       match :group, to: :group, via: [:get, :post]
       get :total
+      get :container
       # get :panel
       # get :search_storage
       get :summary

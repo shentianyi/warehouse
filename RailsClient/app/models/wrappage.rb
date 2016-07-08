@@ -13,6 +13,7 @@ class Wrappage < ActiveRecord::Base
     if (pt=PartType.find_by_nr('Container')) && Part.find_by_nr(self.nr).blank?
       part=Part.create(nr: self.nr, part_type_id: pt.id)
       self.mirror=part
+      self.save
 
       Location.all.each do |l|
         if l.default_whouse

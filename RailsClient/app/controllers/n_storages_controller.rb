@@ -258,6 +258,48 @@ class NStoragesController < ApplicationController
     end
   end
 
+  def container
+    puts params
+    puts '----------------------------------------'
+    @condition=params[@model]
+    if @condition.blank?
+      return nil
+    end
+    if part=Part.find_by_nr(@condition[:partNr])
+      @condition[:partNr]=part.id
+    end
+    query=model.unscoped
+
+    @condition.each do |k, v|
+      if (v.is_a?(Fixnum) || v.is_a?(String)) && !v.blank?
+        puts @condition.has_key?(k+'_fuzzy')
+        if @condition.has_key?(k+'_fuzzy')
+          query=query.where("#{k} like ?", "%#{v}%")
+        else
+          query=query.where(Hash[k, v])
+        end
+        instance_variable_set("@#{k}", v)
+      end
+    end
+
+    query=query.unscope(where: :location_id)
+    if location=Location.find_by_id(@condition[:location_id])
+      query=query.where(ware_house_id: location.whouses.pluck(:id))
+    end
+
+    query = query.joins(:part).where(parts: {part_type_id: PartType.find_by_nr('Container').id})
+    if params.has_key? "download"
+      send_data(query.to_container_view_xlsx(query),
+                :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+                :filename => @model.pluralize+"容器统计信息.xlsx")
+    else
+      instance_variable_set("@partNr", part.nr) if part
+      instance_variable_set("@location_id", location.name) if location
+
+      instance_variable_set("@#{@model.pluralize}", query.paginate(:page => params[:page]).all)
+      render :container
+    end
+  end
 
   private
 # Use callbacks to share common setup or constraints between actions.

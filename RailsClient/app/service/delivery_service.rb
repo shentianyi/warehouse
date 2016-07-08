@@ -376,40 +376,54 @@ class DeliveryService
   def self.stock_move id
     msg=Message.new
 
-    dlc=LogisticsContainer.find_by_id(id)
-    if dlc && (dlc.state == MovableState::ARRIVED)
-      d=dlc.delivery
-      d.update_attributes(state: DeliveryState::RECEIVED)
-      dlc.update_attributes(state: MovableState::CHECKED)
+    begin
+      LogisticsContainer.transaction do
+        dlc=LogisticsContainer.find_by_id(id)
+        if dlc && (dlc.state == MovableState::ARRIVED)
+          d=dlc.delivery
+          d.update_attributes(state: DeliveryState::RECEIVED)
+          dlc.update_attributes(state: MovableState::CHECKED)
 
-      fs=LogisticsContainerService.get_forklifts(dlc)
-      fs.each do |f|
-        f.update_attributes(state: MovableState::CHECKED)
-        f.forklift.update_attributes(state: ForkliftState::RECEIVED)
+          fs=LogisticsContainerService.get_forklifts(dlc)
+          fs.each do |f|
+            f.update_attributes(state: MovableState::CHECKED)
+            f.forklift.update_attributes(state: ForkliftState::RECEIVED)
 
-        ps=LogisticsContainerService.get_packages(f)
-        ps.each do |p|
-          p.update_attributes(state: MovableState::CHECKED)
-          p.package.update_attributes(state: PackageState::RECEIVED)
+            ps=LogisticsContainerService.get_packages(f)
+            ps.each do |p|
+              p.update_attributes(state: MovableState::CHECKED)
+              p.package.update_attributes(state: PackageState::RECEIVED)
 
-          whouse=Whouse.find_by_id(p.package.extra_whouse_id)
-          position=Position.find_by_id(p.package.extra_position_id)
+              whouse=Whouse.find_by_id(p.package.extra_whouse_id)
+              position=Position.find_by_id(p.package.extra_position_id)
 
-          if dlc.source_location.id==(Location.find_by_nr('JXJX').id)
-            #stock move
-            p.move_stock(dlc.des_location, whouse, position, p.package.extra_fifo, d.movement_list_id, false)
-            msg.content = "运单出库成功"
-          else
-            #stock enter
-            p.enter_stock(whouse, position, p.package.extra_fifo, d.movement_list_id, false)
-            msg.content = "运单入库成功"
+              if dlc.source_location.id==(Location.find_by_nr('JXJX').id)
+                #stock move
+                p.move_stock(dlc.des_location, whouse, position, p.package.extra_fifo, d.movement_list_id, false)
+                #Container move
+                mmsg=WrappageService.move_wrappage(p, dlc.source_location, dlc.des_location)
+                # unless mmsg.result
+                #   raise mmsg.content
+                #   # msg.content = mmsg.content
+                #   # return msg
+                # end
+                msg.content = "运单出库成功"
+              else
+                #stock enter
+                p.enter_stock(whouse, position, p.package.extra_fifo, d.movement_list_id, false)
+                msg.content = "运单入库成功"
+              end
+
+            end
           end
-
+          msg.result=true
+        else
+          msg.content = "未找到该运单号或者该运单已出入库"
         end
       end
-      msg.result=true
-    else
-      msg.content = "未找到该运单号或者该运单已出入库"
+    rescue => e
+      msg.result=false
+      msg.content = e.message
     end
 
     msg

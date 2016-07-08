@@ -53,16 +53,20 @@
 
       <div class="col-sm-12" style="margin-top: 20px;">
         <% if current_user.permission?(:operate_basic_info_create) %>
-            <div class="col-sm-4">
+            <div class="col-sm-3">
               <%= link_to "新建容器", new_wrappage_path, :class => 'btn btn-primary', :style => 'width:150px;color:white;' %>
             </div>
 
-            <div class="col-sm-4">
-              <%= link_to "上传容器", import_wrappages_path, :class => 'btn btn-primary', :style => 'width:200px;color:white;' %>
+            <div class="col-sm-3">
+              <%= link_to "上传容器", import_wrappages_path, :class => 'btn btn-primary', :style => 'width:150px;color:white;' %>
             </div>
 
-            <div class="col-sm-4">
+            <div class="col-sm-3">
               <%= link_to "上传容器零件对应关系", import_parts_wrappages_path, :class => 'btn btn-primary', :style => 'width:200px;color:white;' %>
+            </div>
+
+            <div class="col-sm-3">
+              <%= link_to "导入容器库存量", import_stock_wrappages_path, :class => 'btn btn-primary', :style => 'width:150px;color:white;' %>
             </div>
         <% end %>
       </div>

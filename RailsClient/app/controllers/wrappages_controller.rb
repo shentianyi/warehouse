@@ -77,6 +77,24 @@ class WrappagesController < ApplicationController
     end
   end
 
+  def import_stock
+    if request.get?
+      # @back_part=BackPart.find_by_id(params[:id])
+      # session[:back_part_id]=params[:id]
+    else
+      msg = Message.new
+      begin
+        file=params[:files][0]
+        fd = FileData.new(data: file, oriName: file.original_filename, path: $tmp_file_path, pathName: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
+        fd.save
+        msg = FileHandler::Excel::WrappageHandler.import_stock(fd, current_user)
+      rescue => e
+        msg.content = e.message
+      end
+      render json: msg
+    end
+  end
+
   private
     def set_wrappage
       @wrappage = Wrappage.find(params[:id])
