@@ -11,3 +11,9 @@ Whouse.transaction do
     end
   end
 end
+
+PartType.transaction do
+  unless pt=PartType.find_by_nr('Container')
+    pt=PartType.create(nr: 'Container', name: '容器')
+  end
+end
