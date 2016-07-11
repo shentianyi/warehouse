@@ -265,12 +265,12 @@ class ReportsController < ApplicationController
     end
 
     #send email
-    if location.is_open_safe_qty
-      emails=location.safe_qty_emails.split(',')
-      if lack_stock_parts.size>0 && emails.size>0
-        StorageMailer.safe_stock_notify_email(emails, lack_stock_parts).deliver
-      end
-    end
+    # if location.is_open_safe_qty
+    #   emails=location.safe_qty_emails.split(',')
+    #   if lack_stock_parts.size>0 && emails.size>0
+    #     StorageMailer.safe_stock_notify_email(emails, lack_stock_parts).deliver
+    #   end
+    # end
 
     p.to_stream.read
   end
