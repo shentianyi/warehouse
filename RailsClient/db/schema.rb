@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160511055046) do
+ActiveRecord::Schema.define(version: 20160715084122) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -517,20 +517,27 @@ ActiveRecord::Schema.define(version: 20160511055046) do
   add_index "part_types", ["id"], name: "index_part_types_on_id", using: :btree
 
   create_table "parts", force: true do |t|
-    t.string   "uuid",         limit: 36,                                           null: false
+    t.string   "uuid",           limit: 36,                                           null: false
     t.string   "customernum"
     t.string   "user_id"
-    t.boolean  "is_delete",                                         default: false
-    t.boolean  "is_dirty",                                          default: true
-    t.boolean  "is_new",                                            default: true
+    t.boolean  "is_delete",                                           default: false
+    t.boolean  "is_dirty",                                            default: true
+    t.boolean  "is_new",                                              default: true
     t.datetime "created_at"
     t.datetime "updated_at"
     t.float    "unit_pack"
     t.string   "part_type_id"
-    t.decimal  "convert_unit",            precision: 20, scale: 10, default: 1.0
+    t.decimal  "convert_unit",              precision: 20, scale: 10, default: 1.0
     t.string   "unit"
     t.string   "description"
     t.string   "supplier"
+    t.boolean  "mustCheck",                                           default: false
+    t.boolean  "checkpattem",                                         default: false
+    t.boolean  "isProducable",                                        default: false
+    t.boolean  "isFinalProduct",                                      default: false
+    t.boolean  "isWipProduct",                                        default: false
+    t.boolean  "isPurchasable",                                       default: false
+    t.boolean  "isSalable",                                           default: false
   end
 
   add_index "parts", ["id"], name: "index_parts_on_id", using: :btree
