@@ -47,6 +47,13 @@
     <th>盘点单位转换标准</th>
     <th>描述</th>
     <th>供应商</th>
+
+    <th>是否可生产</th>
+    <th>是否为成品</th>
+    <th>是否为半成品</th>
+    <th>是否可采购</th>
+    <th>是否可销售</th>
+
     <% if SysConfigCache.stationary_position_value=="true" %>
         <th>所属库位</th>
         <td>超市要货来源</td>
@@ -67,6 +74,47 @@
         <td><%= part.convert_unit %></td>
         <td><%= part.description %></td>
         <td><%= part.supplier %></td>
+
+        <td>
+          <% if part.isProducable %>
+              <span class="label label-success">是</span>
+          <% else %>
+              <span class="label label-warning">否</span>
+          <% end %>
+        </td>
+
+        <td>
+          <% if part.isFinalProduct %>
+              <span class="label label-success">是</span>
+          <% else %>
+              <span class="label label-warning">否</span>
+          <% end %>
+        </td>
+
+        <td>
+          <% if part.isWipProduct %>
+              <span class="label label-success">是</span>
+          <% else %>
+              <span class="label label-warning">否</span>
+          <% end %>
+        </td>
+
+        <td>
+          <% if part.isPurchasable %>
+              <span class="label label-success">是</span>
+          <% else %>
+              <span class="label label-warning">否</span>
+          <% end %>
+        </td>
+
+        <td>
+          <% if part.isSalable %>
+              <span class="label label-success">是</span>
+          <% else %>
+              <span class="label label-warning">否</span>
+          <% end %>
+        </td>
+
         <% if SysConfigCache.stationary_position_value=="true" %>
             <td>
               <p>

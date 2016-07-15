@@ -17,6 +17,22 @@
   <small><%= @part.supplier %></small>
 </h4>
 
+<h4>是否可生产:
+  <small><%= @part.isProducable %></small>
+</h4>
+<h4>是否为成品:
+  <small><%= @part.isFinalProduct %></small>
+</h4>
+<h4>是否为半成品:
+  <small><%= @part.isWipProduct %></small>
+</h4>
+<h4>是否可采购:
+  <small><%= @part.isPurchasable %></small>
+</h4>
+<h4>是否可销售:
+  <small><%= @part.isSalable %></small>
+</h4>
+
 <% if SysConfigCache.stationary_position_value=="true" %>
     <p>
       <string>库位:</string>

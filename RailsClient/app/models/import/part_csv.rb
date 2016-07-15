@@ -28,6 +28,13 @@ module Import
         line<<item.convert_unit
         line<<item.description
         line<<item.supplier
+        line<<item.mustCheck
+        line<<item.checkpattem
+        line<<item.isProducable
+        line<< item.isFinalProduct
+        line<<item.isWipProduct
+        line<<item.isPurchasable
+        line<<item.isSalable
       }
     end
 
@@ -40,6 +47,13 @@ module Import
       csv_cols<< Csv::CsvCol.new(field: 'convert_unit', header: 'ConvertUnit',null:true)
       csv_cols<< Csv::CsvCol.new(field: 'description', header: 'Description',null:true)
       csv_cols<< Csv::CsvCol.new(field: 'supplier', header: 'Supplier',null:true)
+      csv_cols<< Csv::CsvCol.new(field: 'mustCheck', header: 'mustCheck',null:true)
+      csv_cols<< Csv::CsvCol.new(field: 'checkpattem', header: 'checkpattem',null:true)
+      csv_cols<< Csv::CsvCol.new(field: 'isProducable', header: 'isProducable',null:true)
+      csv_cols<< Csv::CsvCol.new(field: 'isFinalProduct', header: 'isFinalProduct',null:true)
+      csv_cols<< Csv::CsvCol.new(field: 'isWipProduct', header: 'isWipProduct',null:true)
+      csv_cols<< Csv::CsvCol.new(field: 'isPurchasable', header: 'isPurchasable',null:true)
+      csv_cols<< Csv::CsvCol.new(field: 'isSalable', header: 'isSalable',null:true)
       csv_cols<< Csv::CsvCol.new(field: $UPMARKER, header: $UPMARKER)
       class_variable_set(:@@csv_cols, csv_cols)
     end
