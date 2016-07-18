@@ -46,8 +46,8 @@
     <th>单位包装量</th>
     <th>盘点单位转换标准</th>
     <th>描述</th>
+    <th>客户号</th>
     <th>供应商</th>
-
     <th>是否可生产</th>
     <th>是否为成品</th>
     <th>是否为半成品</th>
@@ -73,8 +73,8 @@
         <td><%= part.unit_pack %></td>
         <td><%= part.convert_unit %></td>
         <td><%= part.description %></td>
+        <td><%= part.customernum %></td>
         <td><%= part.supplier %></td>
-
         <td>
           <% if part.isProducable %>
               <span class="label label-success">是</span>

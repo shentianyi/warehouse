@@ -27,6 +27,7 @@ module Import
         line<< item.part_type_id
         line<<item.convert_unit
         line<<item.description
+        line<<item.customernum
         line<<item.supplier
         line<<item.mustCheck
         line<<item.checkpattem
@@ -46,6 +47,7 @@ module Import
       csv_cols<< Csv::CsvCol.new(field: 'part_type_id', header: 'PartType', is_foreign: true, foreign: 'PartType',null:true)
       csv_cols<< Csv::CsvCol.new(field: 'convert_unit', header: 'ConvertUnit',null:true)
       csv_cols<< Csv::CsvCol.new(field: 'description', header: 'Description',null:true)
+      csv_cols<< Csv::CsvCol.new(field: 'customernum', header: 'CustomNum',null:true)
       csv_cols<< Csv::CsvCol.new(field: 'supplier', header: 'Supplier',null:true)
       csv_cols<< Csv::CsvCol.new(field: 'mustCheck', header: 'mustCheck',null:true)
       csv_cols<< Csv::CsvCol.new(field: 'checkpattem', header: 'checkpattem',null:true)
