@@ -4,7 +4,7 @@ class NStorage < ActiveRecord::Base
 
   # before_validation :validate
 
-  # has_paper_trail
+  has_paper_trail
 
   def self.exists_package?(id)
     self.find_by_packageId(id)

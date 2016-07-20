@@ -5,7 +5,7 @@
 #A=B+C-D
 
 condition={}
-condition[:created_at]=Time.parse('2015-12-12 00:00:00').utc.to_s...Time.parse('2016-03-29 11:38:44').utc.to_s
+condition[:created_at]=Time.parse('2015-12-12 00:00:00').utc.to_s...Time.parse('2016-04-29 11:38:44').utc.to_s
 
 NStorage.transaction do
   storages=NStorage.where(ware_house_id: ["3EX", "SR01"])

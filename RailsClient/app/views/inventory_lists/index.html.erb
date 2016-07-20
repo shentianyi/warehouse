@@ -12,6 +12,7 @@
 <%= link_to "导出 仓库 汇总", export_by_whouse_inventory_lists_path, class: "btn btn-info", data: {confirm: "数据量较大，确定导出?"} %>
 
 
+
 <table class="table table-bordered table-striped globle-table">
   <thead>
   <tr>
@@ -20,7 +21,6 @@
     <th>状态</th>
     <th>仓库</th>
     <th>清单
-    </td>
     <th>创建人</th>
     <th>创建时间</th>
     <th>导入盘点</th>
@@ -55,4 +55,9 @@
 <br>
 <div class="digg_pagination">
   <%= will_paginate @inventory_lists, :container => false %>
+</div>
+<div>
+  <%= link_to "盘点重置库存", disable_enable_storage_inventory_lists_path({do: 'disable'}), class: "btn btn-danger", data: {confirm: "确定盘点重置库存?"} %>
+  <%= link_to "盘点取消重置库存", disable_enable_storage_inventory_lists_path({do: 'enable'}), class: "btn btn-warning", data: {confirm: "确定盘点取消重置库存?"} %>
+
 </div>

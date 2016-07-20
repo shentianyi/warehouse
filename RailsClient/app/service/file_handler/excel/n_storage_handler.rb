@@ -35,8 +35,8 @@ module FileHandler
 
                 row[:user] = current_user
                 WhouseService.new.enter_stock(row)
-                move_list.update(state: MovementListState::ENDING)
               end
+              move_list.update(state: MovementListState::ENDING)
             end
             msg.result = true
             msg.content = "导入库存数据成功"
@@ -77,8 +77,8 @@ module FileHandler
 
                 row[:user] = current_user
                 WhouseService.new.move(row)
-                move_list.update(state: MovementListState::ENDING)
               end
+              move_list.update(state: MovementListState::ENDING)
             end
             msg.result = true
             msg.content = "导入移库数据成功"
