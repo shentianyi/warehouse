@@ -310,7 +310,7 @@ class WhouseService
         default_position = ""
         if params[:fromPosition].blank?
           if storages.blank?
-            default_position = Part.find_by_id(params[:partNr]).default_position(fromWh.id)
+            default_position = Part.find_by_id(params[:partNr]).default_position(fromWh)
           else
             default_position = storages.last.position
           end
