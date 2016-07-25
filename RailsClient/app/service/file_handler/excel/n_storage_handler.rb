@@ -160,9 +160,9 @@ module FileHandler
           part.positions.each do |position|
             positions += ["#{position.detail}"]
           end
-          if part.supplier.blank? || !(part.supplier.include?(row[:supplier]))
-            msg.contents << "零件号:#{row[:partNr]} 没有供应商是 #{row[:supplier]}!"
-          end
+          # if part.supplier.blank? || !(part.supplier.include?(row[:supplier]))
+          #   msg.contents << "零件号:#{row[:partNr]} 没有供应商是 #{row[:supplier]}!"
+          # end
         else
           msg.contents << "零件号:#{row[:partNr]} 不存在!"
         end
