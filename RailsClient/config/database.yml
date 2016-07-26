@@ -8,7 +8,6 @@
 #  adapter: sqlite3
 #  pool: 5
 #  timeout: 5000
-
 default: &default
   adapter: mysql2
   pool: 30
@@ -36,7 +35,7 @@ production:
   database: whousedb_leoni
 
 server:
-  <<: *DEFAULT
+  <<: *default
 
 sync1:
   <<: *default

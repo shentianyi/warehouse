@@ -311,7 +311,7 @@ module FileHandler
         end
 
         if from_position && part_id
-          if src_warehouse && src_warehouse.id!=SysConfigCache.default_add_whouse_value
+          if src_warehouse && (src_warehouse.id!=SysConfigCache.default_add_whouse_value) && (src_warehouse.id!=SysConfigCache.default_import_whouse_value)
             unless positions.include?(row[:fromPosition])
               msg.contents << "零件号:#{row[:partNr]} 不在源库位号:#{row[:fromPosition]}上!"
             end
@@ -326,7 +326,7 @@ module FileHandler
         end
 
         if to_position && part_id
-          if dse_warehouse && dse_warehouse.id!=SysConfigCache.default_add_whouse_value
+          if dse_warehouse && (src_warehouse.id!=SysConfigCache.default_add_whouse_value) && (src_warehouse.id!=SysConfigCache.default_import_whouse_value)
             unless positions.include?(row[:toPosition])
               msg.contents << "零件号:#{row[:partNr]}不在目的库位号:#{row[:toPosition]}上!"
             end

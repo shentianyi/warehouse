@@ -24,7 +24,7 @@ module V3
             record[:toWh] = movement_source.toWh
             record[:toPosition] = movement_source.toPosition
             record[:partNr] = movement_source.partNr
-            record[:fifo] = movement_source.fifo
+            record[:fifo] = movement_source.fifo_time_display
             record[:fromWh] = movement_source.fromWh
             record[:fromPosition] = movement_source.fromPosition
             record[:packageId] = movement_source.packageId
