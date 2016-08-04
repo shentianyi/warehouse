@@ -139,9 +139,9 @@ module FileHandler
           msg.contents << "唯一码不能为空!"
         end
 
-        if row[:supplier].blank?
-          msg.contents << "供应商不能为空!"
-        end
+        # if row[:supplier].blank?
+        #   msg.contents << "供应商不能为空!"
+        # end
 
         if row[:packageId].present?
           if package = Container.exists?(row[:packageId])
