@@ -71,7 +71,7 @@
         <td><%= order_box.whouse.blank? ? '' : order_box.whouse.id %></td>
         <td><%= order_box.source_whouse.blank? ? '' : order_box.source_whouse.id %></td>
         <td><%= order_box.order_box_type.blank? ? '' : order_box.order_box_type.name %></td>
-        <td><%= order_box.position.blank? ? '' : order_box.position.id %></td>
+        <td><%= order_box.position.blank? ? '' : order_box.position.detail %></td>
         <td>
           <%= link_to '[详情]', order_box %>
           <%= link_to '[编辑]', edit_order_box_path(order_box) %>

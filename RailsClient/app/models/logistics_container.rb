@@ -121,6 +121,18 @@ class LogisticsContainer<LocationContainer
     begin
       if self.state==MovableState::WAY && self.container.is_package?
         StoreContainer.out_store_by_container(container, self.source_location_id)
+      elsif self.state==MovableState::CHECKED && self.des_location.id=='QP'
+        if package=NStorage.find_by_packageId(self.container.id)
+          params={
+              partNr: package.partNr,
+              qty: package.qty,
+              fifo: package.fifo,
+              packageId: package.packageId,
+              toWh: self.des_location.whouses.first.id,
+              toPosition: des_location.whouses.first.positions.first.detail
+          }
+          WhouseService.new.move(params)
+        end
       end
       # rescue Exception=>e
       #   puts e.message

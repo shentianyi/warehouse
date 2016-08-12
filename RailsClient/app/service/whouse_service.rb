@@ -14,7 +14,7 @@ class WhouseService
                                          qty: order_box.quantity,
                                          fromWh: order_box.source_whouse_id,
                                          toWh: order_box.whouse_id,
-                                         toPosition: order_box.position_id,
+                                         toPosition: order_box.position.detail,
                                          remarks: "RFID MOVE:#{order_box.nr}"
                                      })
               order_box.update_attributes(status: OrderBoxStatus::INIT)
@@ -31,7 +31,7 @@ class WhouseService
                       qty: qty,
                       fromWh: order_box.source_whouse_id,
                       toWh: order_box.whouse_id,
-                      toPosition: order_box.position_id,
+                      toPosition: order_box.position.detail,
                       remarks: "RFID MOVE:#{order_box.nr}"
                   }
                 WhouseService.new.move({
@@ -40,7 +40,7 @@ class WhouseService
                                            qty: qty,
                                            fromWh: order_box.source_whouse_id,
                                            toWh: order_box.whouse_id,
-                                           toPosition: order_box.position_id,
+                                           toPosition: order_box.position.detail,
                                            remarks: "RFID MOVE:#{order_box.nr}"
                                        })
                 order_box.update_attributes(status: OrderBoxStatus::INIT)
@@ -187,7 +187,10 @@ class WhouseService
           storage = NStorage.find_by(packageId: params[:packageId], partNr: params[:partNr], ware_house_id: params[:fromWh])
         else
           storage = NStorage.find_by(packageId: params[:packageId], partNr: params[:partNr])
-          params[:fromWh] = storage.ware_house_id if storage
+          if storage
+            params[:fromWh] = storage.ware_house_id
+            params[:fromPosition] = storage.position
+          end
         end
       end
 

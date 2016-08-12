@@ -46,7 +46,7 @@ class OrderBoxPresenter<Presenter
         part: PartPresenter.new(Part.find_by_id(@order_box.part_id)).as_basic_info,
         quantity: @order_box.quantity,
         stock: NStorageService.stock(@order_box.source_whouse_id, @order_box.part_id),
-        positions: NStorageService.positions(@order_box.source_whouse_id, @order_box.part_id).uniq.pluck(:id)
+        positions: NStorageService.positions(@order_box.source_whouse_id, @order_box.part_id).uniq.pluck(:detail)
     }
   end
 
@@ -57,7 +57,7 @@ class OrderBoxPresenter<Presenter
         nr: @order_box.nr,
         quantity: @order_box.quantity,
         status:@order_box.status,
-        positions: NStorageService.positions(@order_box.source_whouse_id, @order_box.part_id).uniq.pluck(:id),
+        positions: NStorageService.positions(@order_box.source_whouse_id, @order_box.part_id).uniq.pluck(:detail),
         weight: @order_box.order_box_type.weight || 0,
         order_box_type: with_type ? OrderBoxTypePresenter.new(@order_box.order_box_type).as_basic_info : nil
     }
