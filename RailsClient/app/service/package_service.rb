@@ -125,7 +125,8 @@ class PackageService
                                  user_id: user.id,
                                  quantity: row[:qty],
                                  state: PackageState::RECEIVED,
-                                 supplier: row[:supplier]
+                                 supplier: row[:supplier],
+                                 batch_nr: row[:batch_nr]
                              })
     #create lc
     plc = package.logistics_containers.build({

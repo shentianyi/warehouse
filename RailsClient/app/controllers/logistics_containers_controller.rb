@@ -53,17 +53,42 @@ class LogisticsContainersController < ApplicationController
         end
       end
     end
-    #puts "=================="
-    #puts hash_conditions
 
+    puts "============================================================================================="
+    puts hash_conditions
+    puts "============================================================================================="
+
+    containers={}
+    if params[:containers].present?
+      if params[:containers][:part_id].present?
+        containers[:part_id]=Part.where("id like ?",  "%#{params[:containers][:part_id]}%").pluck(:id)
+        instance_variable_set("@container_part_id", params[:containers][:part_id])
+      end
+
+      if params[:containers][:supplier].present?
+        containers[:supplier] = params[:containers][:supplier]
+        instance_variable_set("@supplier", params[:containers][:supplier])
+      end
+
+      if params[:containers][:batch_nr].present?
+        containers[:batch_nr] = params[:containers][:batch_nr]
+        instance_variable_set("@batch_nr", params[:containers][:batch_nr])
+      end
+    end
+    
+    unless containers.blank?
+      hash_conditions[:containers]=containers
+    end
+
+    # raise 'tttttt'
     query=query.where(hash_conditions)
 
-    query.first
-
+    # query.first
     instance_variable_set("@#{model.pluralize}", query.paginate(:page => params[:page]).all.order(created_at: :desc))
 
-    puts "---------------------"
-    puts query.paginate(:page => params[:page]).all.order(created_at: :desc).to_json
+    # puts "---------------------"
+    # puts query.paginate(:page => params[:page]).all.order(created_at: :desc).to_json
+
     render "#{model.pluralize}/index"
     #render :json => 1
   end

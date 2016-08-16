@@ -99,7 +99,7 @@ class PackagesController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def package_params
     #params[:package]
-    params.require(:logistics_container).permit(:state, :remark, :supplier)
+    params.require(:logistics_container).permit(:state, :remark, :supplier, :batch_nr)
   end
 
 =begin

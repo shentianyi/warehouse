@@ -56,6 +56,7 @@ class WhouseService
       data[:packageId] = params[:packageId] if params[:packageId].present?
       data[:locked]=true if params[:locked].present?
       data[:supplier]=params[:supplier] if params[:supplier].present?
+      data[:batch_nr]=params[:batch_nr] if params[:batch_nr].present?
       if params[:packageId].present?
         NStorage.create!(data)
       else
@@ -76,6 +77,7 @@ class WhouseService
     data[:employee_id] = params[:employee_id] if params[:employee_id].present?
     data[:remarks] = params[:remarks] if params[:remarks].present?
     data[:supplier]= params[:supplier] if params[:supplier].present?
+    # data[:batch_nr]= params[:batch_nr] if params[:batch_nr].present?
     Movement.create!(data)
   end
 

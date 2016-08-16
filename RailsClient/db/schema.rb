@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160715084122) do
+ActiveRecord::Schema.define(version: 20160816021729) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -74,6 +74,7 @@ ActiveRecord::Schema.define(version: 20160715084122) do
     t.string   "quantity_display"
     t.string   "fifo_time_display"
     t.string   "supplier"
+    t.string   "batch_nr"
   end
 
   add_index "containers", ["current_positionable_id"], name: "index_containers_on_current_positionable_id", using: :btree
@@ -375,6 +376,7 @@ ActiveRecord::Schema.define(version: 20160715084122) do
     t.string   "lock_remark"
     t.datetime "lock_at"
     t.string   "supplier"
+    t.string   "batch_nr"
   end
 
   add_index "n_storages", ["locked"], name: "index_n_storages_on_locked", using: :btree
@@ -544,6 +546,54 @@ ActiveRecord::Schema.define(version: 20160715084122) do
   add_index "parts", ["part_type_id"], name: "index_parts_on_part_type_id", using: :btree
   add_index "parts", ["user_id"], name: "index_parts_on_user_id", using: :btree
   add_index "parts", ["uuid"], name: "index_parts_on_uuid", using: :btree
+
+  create_table "parts_backup", force: true do |t|
+    t.string   "uuid",           limit: 36,                                           null: false
+    t.string   "customernum"
+    t.string   "user_id"
+    t.boolean  "is_delete",                                           default: false
+    t.boolean  "is_dirty",                                            default: true
+    t.boolean  "is_new",                                              default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.float    "unit_pack"
+    t.string   "part_type_id"
+    t.decimal  "convert_unit",              precision: 20, scale: 10, default: 1.0
+    t.string   "unit"
+    t.string   "description"
+    t.string   "supplier"
+    t.boolean  "mustCheck",                                           default: false
+    t.boolean  "checkpattem",                                         default: false
+    t.boolean  "isProducable",                                        default: false
+    t.boolean  "isFinalProduct",                                      default: false
+    t.boolean  "isWipProduct",                                        default: false
+    t.boolean  "isPurchasable",                                       default: false
+    t.boolean  "isSalable",                                           default: false
+  end
+
+  create_table "parts_update_backup", force: true do |t|
+    t.string   "uuid",           limit: 36,                                           null: false
+    t.string   "customernum"
+    t.string   "user_id"
+    t.boolean  "is_delete",                                           default: false
+    t.boolean  "is_dirty",                                            default: true
+    t.boolean  "is_new",                                              default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.float    "unit_pack"
+    t.string   "part_type_id"
+    t.decimal  "convert_unit",              precision: 20, scale: 10, default: 1.0
+    t.string   "unit"
+    t.string   "description"
+    t.string   "supplier"
+    t.boolean  "mustCheck",                                           default: false
+    t.boolean  "checkpattem",                                         default: false
+    t.boolean  "isProducable",                                        default: false
+    t.boolean  "isFinalProduct",                                      default: false
+    t.boolean  "isWipProduct",                                        default: false
+    t.boolean  "isPurchasable",                                       default: false
+    t.boolean  "isSalable",                                           default: false
+  end
 
   create_table "pick_item_filters", force: true do |t|
     t.string   "user_id"
@@ -747,6 +797,25 @@ ActiveRecord::Schema.define(version: 20160715084122) do
   add_index "storages", ["part_id"], name: "index_storages_on_part_id", using: :btree
   add_index "storages", ["storable_id"], name: "index_storages_on_storable_id", using: :btree
   add_index "storages", ["storable_type"], name: "index_storages_on_storable_type", using: :btree
+
+  create_table "storages_backup", force: true do |t|
+    t.string   "storageId"
+    t.string   "partNr"
+    t.datetime "fifo"
+    t.decimal  "qty",           precision: 20, scale: 10
+    t.string   "position"
+    t.string   "packageId"
+    t.string   "uniqueId"
+    t.string   "ware_house_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "locked",                                  default: false
+    t.text     "remarks"
+    t.string   "lock_user_id"
+    t.string   "lock_remark"
+    t.datetime "lock_at"
+    t.string   "supplier"
+  end
 
   create_table "sync_logs", force: true do |t|
     t.string   "table_name"

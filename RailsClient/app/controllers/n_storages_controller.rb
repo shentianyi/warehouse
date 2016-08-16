@@ -163,6 +163,6 @@ class NStoragesController < ApplicationController
 
   def storage_params
     #params[:order_item]
-    params.require(:n_storage).permit(:partNr, :packageId, :ware_house_id, :position, :qty, :supplier)
+    params.require(:n_storage).permit(:partNr, :packageId, :ware_house_id, :position, :qty, :supplier, :batch_nr)
   end
 end

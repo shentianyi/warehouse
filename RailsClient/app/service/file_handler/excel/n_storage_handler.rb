@@ -3,7 +3,7 @@ module FileHandler
     class NStorageHandler<Base
 
       IMPORT_HEADERS=[
-          :toWh, :partNr, :fifo, :qty, :toPosition, :packageId, :employee_id, :remarks, :supplier
+          :toWh, :partNr, :fifo, :qty, :toPosition, :packageId, :employee_id, :remarks, :supplier, :batch_nr
       ]
 
       MOVE_HEADERS = [
@@ -33,7 +33,7 @@ module FileHandler
                 PackageService.generate_package(row, current_user)
 
                 row[:movement_list_id] = move_list.id
-                MovementSource.create(row.except(:supplier))
+                MovementSource.create(row.except(:supplier, :batch_nr))
 
                 row[:user] = current_user
                 WhouseService.new.enter_stock(row)
