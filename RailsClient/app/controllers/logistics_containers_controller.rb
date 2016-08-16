@@ -75,7 +75,7 @@ class LogisticsContainersController < ApplicationController
         instance_variable_set("@batch_nr", params[:containers][:batch_nr])
       end
     end
-    
+
     unless containers.blank?
       hash_conditions[:containers]=containers
     end
