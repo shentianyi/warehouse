@@ -26,11 +26,11 @@ class Part < ActiveRecord::Base
   end
 
   def default_position wh
-    position = self.positions.where(whouse_id: wh).first
+    position = self.positions.where(whouse_id: wh.id).first
     if position
       default_position = position.detail
     else
-      " "
+      wh.positions.first.blank? ? '' : wh.positions.first.detail
     end
   end
 end
