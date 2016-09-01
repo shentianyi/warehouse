@@ -7,6 +7,8 @@ module Import
       begin
         line_no=0
         CSV.foreach(csv.file_path, headers: true, col_sep: csv.col_sep, encoding: csv.encoding) do |row|
+          puts row.class
+          puts '----------------------------------------------------------------------------------'
           row.strip
           line_no+=1
           if self.respond_to?(:csv_headers)
@@ -19,6 +21,11 @@ module Import
             # p col.foreign.constantize
            # raise(ArgumentError, "行:#{line_no} #{col.header} 值constantize不可为空") if !col.null && row[col.header].blank?
             if !col.is_foreign || (col.is_foreign && (f=col.foreign.constantize.find_by_nr(row[col.header])))
+              p row
+              p row.class
+              p row[col.header]
+              p col.header
+              puts '----------------------------------------------------------------------------------'
               data[col.field]=row[col.header] unless row[col.header].blank?
               if f.present?
                 data[col.field]=f.id
