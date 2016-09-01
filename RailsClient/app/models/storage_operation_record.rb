@@ -43,7 +43,7 @@ class StorageOperationRecord < ActiveRecord::Base
                           record.qty,
                           record.fifo,
                           record.move_type.blank? ? '' : record.move_type.typeId,
-                          record.remark,
+                          record.remarks,
                           record.employee_id,
                           record.created_at.present? ? record.created_at.localtime.strftime("%Y-%m-%d %H:%M") : ''
                       ]
