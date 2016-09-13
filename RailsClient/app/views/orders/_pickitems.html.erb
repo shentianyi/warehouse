@@ -21,6 +21,7 @@
       <!--<input id="finish-all-pickitems" type="checkbox">-->
       <!--是否已完成备货-->
     <!--</th>-->
+    <th>是否补发</th>
     <th>备注</th>
     <th>择货位置</th>
   </tr>
@@ -67,6 +68,7 @@
                   <!--<input type="checkbox" class="finishpick-checkbox" value="<%= pi.order_item_id %>" <%= 'checked' if pi.is_finished %> />-->
               <!--<% end %>-->
             <!--</td>-->
+            <td><%= pi.is_supplement==true ? '是' : '否' %></td>
             <td><%= pi.remark %></td>
             <td><%= NStorageService.get_positions(pi.part_id, current_user.location)%></td>
           </tr>

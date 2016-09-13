@@ -2,7 +2,7 @@
 module Printer
   class P006<Base
     HEAD=[:pl_nr, :create_date]
-    BODY=[:czleoni_nr, :pro_desc, :qty, :uniq_id, :position, :remark]
+    BODY=[:czleoni_nr, :pro_desc, :qty, :uniq_id, :position, :remark, :is_supplement]
 
     def generate_data
       p=PickList.find_by_id(self.id)
@@ -24,20 +24,21 @@ module Printer
       # end
 
       records=[]
+      zero=[]
       pick_items.each do |i|
 
         jx_part=Part.find_by_id(i.part_id)
 
         unless jx_part
-          records.insert(sort_by_position(records, ' '),
-                         {
-                             czleoni_nr: i.part_id,
-                             pro_desc: " ",
-                             qty: i.quantity.to_i,
-                             uniq_id: " ",
-                             position: " ",
-                             remark: "仓库无此型号"
-                         })
+          zero.insert((i.is_supplement==true ? 0 : -1), {
+              czleoni_nr: i.part_id,
+              pro_desc: " ",
+              qty: i.quantity.to_i,
+              uniq_id: " ",
+              position: " ",
+              is_supplement: (i.is_supplement==true ? '是' : '否'),
+              remark: "仓库无此型号"
+          })
           i.update(state: PickItemState::PRINTED)
           next
         end
@@ -53,35 +54,36 @@ module Printer
           if pick_count==0
             break
           end
-          records.insert(sort_by_position(records, (storage.position.blank? ? ' ' : storage.position.nr)),
+          records.insert(sort_by_position(records, (storage.position.blank? ? ' ' : storage.position.nr), i.is_supplement),
                          {
                              czleoni_nr: jx_part.blank? ? i.part_id : jx_part.nr,
                              pro_desc: jx_part.blank? ? "" : jx_part.description,
                              qty: 1,
                              uniq_id: storage.packageId,
                              position: storage.position.blank? ? ' ' : storage.position.nr,
+                             is_supplement: (i.is_supplement==true ? '是' : '否'),
                              remark: ' '
                          })
           pick_count-=1
         end
 
         if pick_count>0
-          records.insert(sort_by_position(records, ' '),
-                         {
-                             czleoni_nr: jx_part.blank? ? i.part_id : jx_part.nr,
-                             pro_desc: jx_part.blank? ? "" : jx_part.description,
-                             qty: pick_count.to_i,
-                             uniq_id: " ",
-                             position: " ",
-                             remark: "零库存"
-                         })
+          zero.insert((i.is_supplement==true ? 0 : -1), {
+              czleoni_nr: jx_part.blank? ? i.part_id : jx_part.nr,
+              pro_desc: jx_part.blank? ? "" : jx_part.description,
+              qty: pick_count.to_i,
+              uniq_id: " ",
+              position: " ",
+              is_supplement: (i.is_supplement==true ? '是' : '否'),
+              remark: "零库存"
+          })
         end
 
         i.update(state: PickItemState::PRINTED)
       end
 
       # p records
-
+      records +=zero
       records.each do |record|
         bodies=[]
         BODY.each do |k|
@@ -91,11 +93,11 @@ module Printer
       end
     end
 
-    def sort_by_position array, position
+    def sort_by_position array, position, is_supplement
       if array.blank?
         return 0
       else
-        if position.match(/^\w\s\d{2}\s\d{2}/)
+        if !is_supplement && position.match(/^\w\s\d{2}\s\d{2}/)
           array.each_with_index do |a, index|
             if a[:position].match(/^\w\s\d{2}\s\d{2}/)
               if a[:position].first > position.first

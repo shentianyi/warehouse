@@ -17,6 +17,7 @@
     <!--<th>是否加急</th>-->
     <!--<th>是否缺货</th>-->
     <th>是否已完成备货</th>
+    <th>是否补发</th>
     <th>备注</th>
   </tr>
   </thead>
@@ -39,6 +40,7 @@
         <td>
           <input type="checkbox" disabled value="<%= order_item.id %>" <%= 'checked' if order_item.is_finished %> class="itemfinished-checkbox"/>
         </td>
+        <td><%= order_item.is_supplement==true ? '是' : '否' %></td>
         <td><%= order_item.remark %></td>
       </tr>
   <% end %>

@@ -11,7 +11,7 @@ module FileHandler
         validate_msg=validate_import(file)
 
         if validate_msg.result
-          begin
+          # begin
             Order.transaction do
               order = Order.new()
               order.source_id=user.location.id
@@ -86,7 +86,8 @@ module FileHandler
                         part_id: part.blank? ? id : part.id,
                         quantity: records[id.downcase][:qty],
                         state: PickStatus::INIT,
-                        remark: NStorageService.get_remark(part, user.location, records[id.downcase][:qty].to_i)
+                        remark: NStorageService.get_remark(part, user.location, records[id.downcase][:qty].to_i),
+                        is_supplement: records[id.downcase][:is_supplement]
                     )
                     pick_item.order_item=order_item
                     pick.pick_items<<pick_item
@@ -100,11 +101,11 @@ module FileHandler
             end
             msg.result = true
             msg.content = "导入数据成功"
-          rescue => e
-            puts e.backtrace
-            msg.result = false
-            msg.content = e.message
-          end
+          # rescue => e
+          #   puts e.backtrace
+          #   msg.result = false
+          #   msg.content = e.message
+          # end
         else
           msg.result = false
           msg.content = validate_msg.content
