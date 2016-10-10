@@ -972,9 +972,9 @@ ActiveRecord::Schema.define(version: 20160913031844) do
     t.string   "sourceable_type"
     t.string   "extra_800_nos"
     t.string   "extra_leoni_out_no"
+    t.integer  "wrappage_movement_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "wrappage_movement_id"
   end
 
   add_index "wrappage_movement_items", ["des_location_id"], name: "index_wrappage_movement_items_on_des_location_id", using: :btree
@@ -983,6 +983,7 @@ ActiveRecord::Schema.define(version: 20160913031844) do
   add_index "wrappage_movement_items", ["src_location_id"], name: "index_wrappage_movement_items_on_src_location_id", using: :btree
   add_index "wrappage_movement_items", ["user_id"], name: "index_wrappage_movement_items_on_user_id", using: :btree
   add_index "wrappage_movement_items", ["wrappage_move_type_id"], name: "index_wrappage_movement_items_on_wrappage_move_type_id", using: :btree
+  add_index "wrappage_movement_items", ["wrappage_movement_id"], name: "index_wrappage_movement_items_on_wrappage_movement_id", using: :btree
 
   create_table "wrappage_movements", force: true do |t|
     t.date     "move_date"

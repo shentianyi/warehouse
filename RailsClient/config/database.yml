@@ -23,18 +23,18 @@ default: &default
 
 development:
   <<: *default
-  database: vmi_jiaxuandb #db/development.sqlite3
+  database: vmi_sanhedb #db/development.sqlite3
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: vmi_jiaxuandb_test
+  database: vmi_sanhedb_test
 
 production:
   <<: *default
-  database: vmi_jiaxuandb
+  database: vmi_sanhedb
 
 server:
   <<: *default
@@ -50,6 +50,6 @@ sync2:
 
 development_test:
   <<: *default
-  database: vmi_jiaxuandb_test #db/development.sqlite3
+  database: vmi_sanhedb_test #db/development.sqlite3
 
 
