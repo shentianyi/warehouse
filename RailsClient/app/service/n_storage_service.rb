@@ -26,17 +26,13 @@ class NStorageService
   end
 
   def self.get_remark part, location, qty
-    if part
-      count=NStorage.where(partNr: part.id,  ware_house_id: location.whouse_ids).count
-      if count==0
-        "零库存"
-      elsif count<qty
-        "库存不足"
-      else
-        ""
-      end
+    count=NStorage.where(partNr: part.id,  ware_house_id: location.whouse_ids).select('SUM(n_storages.qty) as total').first.total.to_i
+    if count==0
+      "零库存"
+    elsif count<qty
+      "库存不足"
     else
-      "仓库无此型号"
+      ""
     end
   end
 

@@ -63,12 +63,13 @@
       <!--</th>-->
       <th>NO.</th>
       <th>零件号</th>
+      <th>箱数</th>
       <th>数量</th>
       <th>批次号</th>
-      <th>要货员工号</th>
-      <th>要货地点</th>
-      <th>是否加急</th>
-      <th>是否补发</th>
+      <!--<th>要货员工号</th>-->
+      <!--<th>要货地点</th>-->
+      <!--<th>是否加急</th>-->
+      <!--<th>是否补发</th>-->
       <th>备注</th>
     </tr>
     </thead>
@@ -89,13 +90,14 @@
           <!--</td>-->
           <td><%= index+1 %></td>
           <td><%= pick_item.part.blank? ? pick_item.part_id : pick_item.part.nr %></td>
+          <td><%= pick_item.box_quantity %></td>
           <td><%= pick_item.quantity %></td>
           <td><%= pick_item.batch_nr %></td>
-          <td><%= pick_item.order_user.nr %></td>
-          <td><%= pick_item.source_location.name if pick_item.source_location %></td>
-          <td><%= '是' if pick_item.is_emergency %></td>
-          <td><%= pick_item.is_supplement==true ? '是' : '否' %></td>
-          <td><%= pick_item.remark %></td>
+          <!--<td><%#= pick_item.order_user.nr %></td>-->
+          <!--<td><%#= #pick_item.source_location.name if pick_item.source_location %></td>-->
+          <!--<td><%#= #'是' if pick_item.is_emergency %></td>-->
+          <!--<td><%#= #pick_item.is_supplement==true ? '是' : '否' %></td>-->
+          <td><%#= pick_item.remark %></td>
         </tr>
     <% end %>
     </tbody>

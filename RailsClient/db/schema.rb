@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160913031844) do
+ActiveRecord::Schema.define(version: 20161011040727) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -81,6 +81,11 @@ ActiveRecord::Schema.define(version: 20160913031844) do
     t.integer  "extra_wooden_count",                   default: 0
     t.integer  "extra_box_count",                      default: 0
     t.integer  "extra_nps_count",                      default: 0
+    t.string   "extra_carrier"
+    t.string   "extra_custom_name"
+    t.string   "extra_destination_address"
+    t.datetime "extra_delivery_date"
+    t.datetime "extra_arrive_date"
   end
 
   add_index "containers", ["current_positionable_id"], name: "index_containers_on_current_positionable_id", using: :btree
@@ -409,6 +414,7 @@ ActiveRecord::Schema.define(version: 20160913031844) do
     t.string   "lock_remark"
     t.datetime "lock_at"
     t.integer  "lock_batch",                              default: 0
+    t.string   "extra_batch"
   end
 
   add_index "n_storages", ["locked"], name: "index_n_storages_on_locked", using: :btree
@@ -972,9 +978,9 @@ ActiveRecord::Schema.define(version: 20160913031844) do
     t.string   "sourceable_type"
     t.string   "extra_800_nos"
     t.string   "extra_leoni_out_no"
-    t.integer  "wrappage_movement_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "wrappage_movement_id"
   end
 
   add_index "wrappage_movement_items", ["des_location_id"], name: "index_wrappage_movement_items_on_des_location_id", using: :btree
@@ -983,7 +989,6 @@ ActiveRecord::Schema.define(version: 20160913031844) do
   add_index "wrappage_movement_items", ["src_location_id"], name: "index_wrappage_movement_items_on_src_location_id", using: :btree
   add_index "wrappage_movement_items", ["user_id"], name: "index_wrappage_movement_items_on_user_id", using: :btree
   add_index "wrappage_movement_items", ["wrappage_move_type_id"], name: "index_wrappage_movement_items_on_wrappage_move_type_id", using: :btree
-  add_index "wrappage_movement_items", ["wrappage_movement_id"], name: "index_wrappage_movement_items_on_wrappage_movement_id", using: :btree
 
   create_table "wrappage_movements", force: true do |t|
     t.date     "move_date"

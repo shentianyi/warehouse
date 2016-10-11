@@ -42,7 +42,7 @@ module Import
       csv_cols<< Csv::CsvCol.new(field: 'convert_unit', header: 'ConvertUnit', null: true)
       # csv_cols<< Csv::CsvCol.new(field: 'safe_qty', header: 'SafeQty', null: false)
       csv_cols<< Csv::CsvCol.new(field: 'description', header: 'Description', null: true)
-      csv_cols<< Csv::CsvCol.new(field: 'package_type_id', header: '包装类型', is_foreign: true, foreign: 'PackageType', null: true)
+      csv_cols<< Csv::CsvCol.new(field: 'package_type_id', header: 'PackageType', is_foreign: true, foreign: 'PackageType', null: true)
       csv_cols<< Csv::CsvCol.new(field: 'supplier', header: 'Supplier', null: true)
       csv_cols<< Csv::CsvCol.new(field: $UPMARKER, header: $UPMARKER)
       class_variable_set(:@@csv_cols, csv_cols)

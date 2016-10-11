@@ -1,7 +1,8 @@
 module FileHandler
   module Excel
     class OrderHandler<Base
-      HEADERS=['报缺日期', '报缺时间', '莱尼号码', '桶数', "是否补发"]
+
+      HEADERS=['LEONI号', '供应商号', '零件单位', '批次号', '每箱数量', '箱数', '总数量']
 
       def self.import(file, user)
         msg = Message.new
@@ -20,59 +21,29 @@ module FileHandler
               last_row={}
               HEADERS.each_with_index do |k, i|
                 last_row[k] = book.cell(book.last_row, i+1).to_s.strip
-                last_row[k]=last_row[k].sub(/\.0/, '') if k=='莱尼号码'
+                last_row[k]=last_row[k].sub(/\.0/, '') if k=='LEONI号'
               end
               p last_row
-              p "#{last_row['报缺日期'].gsub(/,/, '.')} #{last_row['报缺时间']}"
-              p Time.parse("#{last_row['报缺日期'].gsub(/,/, '.')} #{last_row['报缺时间']}")
-              p Time.parse("#{last_row['报缺日期'].gsub(/,/, '.')} #{last_row['报缺时间']}").utc
-              order.required_at=Time.parse("#{last_row['报缺日期'].gsub(/,/, '.')} #{last_row['报缺时间']}").utc
-              p '***************************************'
 
               if order.save
                 pick=PickList.new(state: PickStatus::INIT)
                 pick.user=user
                 pick.remark="AUTO CREATE BY ORDER"
 
-                part_ids=[]
-                records={}
                 2.upto(book.last_row) do |line|
                   row = {}
                   HEADERS.each_with_index do |k, i|
                     row[k] = book.cell(line, i+1).to_s.strip
-                    row[k]=row[k].sub(/\.0/, '') if k=='莱尼号码'
-                  end
-                  #batch_nr=row['报缺日期'].gsub(/,/, '') + row['报缺时间'].slice(0...2)
-
-                  part_ids<<row['莱尼号码'].downcase
-                  if records[row['莱尼号码'].downcase]
-                    records[row['莱尼号码'].downcase][:qty]=records[row['莱尼号码'].downcase][:qty].to_i + row['桶数'].to_i
-                  else
-                    records[row['莱尼号码'].downcase]={
-                        part_id: row['莱尼号码'],
-                        qty: row['桶数'],
-                        batch_nr: order.batch_nr,
-                        is_supplement: row['是否补发']=='Y' ? true : false
-                    }
-                  end
-                end
-
-
-                part_ids.uniq.each do |id|
-                  part=nil
-                  if part_client=PartClient.where(client_tenant_id: Tenant.find_by_code('SHL').id, client_part_nr: id).first
-                    part = part_client.part
-                    # else
-                    #   part=Part.new()
+                    row[k]=row[k].sub(/\.0/, '') if k=='LEONI号'
                   end
 
+                  part = Part.find_by_supplier(row['供应商号'])
                   order_item=OrderItem.new({
-                                               part_id: part.blank? ? id : part.id,
-                                               part_type_id: part.blank? ? '' : part.part_type_id,
-                                               box_quantity:1,
-                                               quantity: records[id.downcase][:qty],
-                                               remark: NStorageService.get_remark(part, user.location, records[id.downcase][:qty].to_i),
-                                               is_supplement: records[id.downcase][:is_supplement]
+                                               part_id: part.id,
+                                               part_type_id: part.part_type_id,
+                                               box_quantity: row['箱数'],
+                                               quantity: row['总数量'],
+                                               remark: NStorageService.get_remark(part, user.location, row['总数量'].to_i)
                                            })
                   order_item.user=user
                   order_item.order = order
@@ -81,18 +52,56 @@ module FileHandler
 
                   if order_item.save
                     pick_item=PickItem.new(
-                        batch_nr: records[id.downcase][:batch_nr],
+                        batch_nr: row['批次号'],
                         user_id: user.id,
-                        part_id: part.blank? ? id : part.id,
-                        quantity: records[id.downcase][:qty],
+                        part_id: part.id,
+                        box_quantity: row['箱数'],
+                        quantity: row['总数量'],
                         state: PickStatus::INIT,
-                        remark: NStorageService.get_remark(part, user.location, records[id.downcase][:qty].to_i),
-                        is_supplement: records[id.downcase][:is_supplement]
+                        remark: NStorageService.get_remark(part, user.location, row['总数量'].to_i)
                     )
                     pick_item.order_item=order_item
                     pick.pick_items<<pick_item
                   end
+
                 end
+
+
+                # part_ids.uniq.each do |id|
+                #   part=nil
+                #   if part_client=PartClient.where(client_tenant_id: Tenant.find_by_code('SHL').id, client_part_nr: id).first
+                #     part = part_client.part
+                #     # else
+                #     #   part=Part.new()
+                #   end
+                #
+                #   order_item=OrderItem.new({
+                #                                part_id: part.blank? ? id : part.id,
+                #                                part_type_id: part.blank? ? '' : part.part_type_id,
+                #                                box_quantity:1,
+                #                                quantity: records[id.downcase][:qty],
+                #                                remark: NStorageService.get_remark(part, user.location, records[id.downcase][:qty].to_i),
+                #                                is_supplement: records[id.downcase][:is_supplement]
+                #                            })
+                #   order_item.user=user
+                #   order_item.order = order
+                #   order_item.location_id=user.location.id
+                #   order_item.handled=true
+                #
+                #   if order_item.save
+                #     pick_item=PickItem.new(
+                #         batch_nr: records[id.downcase][:batch_nr],
+                #         user_id: user.id,
+                #         part_id: part.blank? ? id : part.id,
+                #         quantity: records[id.downcase][:qty],
+                #         state: PickStatus::INIT,
+                #         remark: NStorageService.get_remark(part, user.location, records[id.downcase][:qty].to_i),
+                #         is_supplement: records[id.downcase][:is_supplement]
+                #     )
+                #     pick_item.order_item=order_item
+                #     pick.pick_items<<pick_item
+                #   end
+                # end
 
                 pick.order_ids=order.order_items.pluck(:id).join(";")
                 pick.save
@@ -134,7 +143,7 @@ module FileHandler
             row = {}
             HEADERS.each_with_index do |k, i|
               row[k] = book.cell(line, i+1).to_s.strip
-              row[k]=row[k].sub(/\.0/, '') if k=='莱尼号码'
+              row[k]=row[k].sub(/\.0/, '') if k=='LEONI号'
             end
 
             mssg = validate_row(row)
@@ -157,26 +166,30 @@ module FileHandler
       def self.validate_row(row)
         msg = Message.new(contents: [])
 
-        if row['莱尼号码'].blank?
-          msg.contents << "零件号不能为空"
+        if row['供应商号'].blank?
+          msg.contents << "供应商号不能为空"
+        else
+          part = Part.find_by_supplier(row['供应商号'])
+          if part.blank?
+            msg.contents << "供应商号不存在"
+          end
         end
 
-        unless PartClient.where(client_tenant_id: Tenant.find_by_code('SHL').id, client_part_nr: row['莱尼号码']).first
-          msg.contents << "零件号不存在"
-        end
-
-        if row['报缺日期'].blank?
-          msg.contents << "报缺日期不可空"
-        end
-        if row['报缺时间'].blank?
-          msg.contents << "报缺时间不可空"
-        end
-        if row['莱尼号码'].blank?
+        if row['LEONI号'].blank?
           msg.contents << "莱尼号码不可空"
+        else
+          unless PartClient.where(client_tenant_id: Tenant.find_by_code('LEONI').id, client_part_nr: row['LEONI号']).first
+            msg.contents << "LEONI号: #{row['LEONI号']} 和 供应商号：#{row['供应商号']} 对应关系不正确"
+          end
         end
-        if row['桶数'].blank?
-          msg.contents << "桶数不可空"
+
+        if row['零件单位'].blank?
+          msg.contents << "零件单位不能为空"
         end
+
+        # if row['桶数'].blank?
+        #   msg.contents << "桶数不可空"
+        # end
 
 
         unless msg.result=(msg.contents.size==0)

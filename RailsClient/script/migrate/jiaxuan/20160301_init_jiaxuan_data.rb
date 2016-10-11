@@ -49,9 +49,9 @@ ActiveRecord::Base.transaction do
   end
 
   unless (hemlo=Location.find_by_nr('HEMLO'))
-    hemlo = Location.create(nr: 'HEMLO', name: '常州莱尼', is_base: true,
-                            tenant_id: czl.id,
-                            address: '常州莱尼线束有限公司的地址')
+    hemlo = Location.create(nr: 'HEMLO', name: '海尔曼', is_base: true,
+                            tenant_id: hem.id,
+                            address: '海尔曼公司的地址')
   end
 
   # set as destination
@@ -77,16 +77,16 @@ ActiveRecord::Base.transaction do
   jxlo.send_whouse=sw
   jxlo.save
 
-  # cz send warehouse
-  unless czsw=Whouse.find_by_nr('CZSend')
-    czsw=hemlo.whouses.create(nr: 'CZSend', name: '常州莱尼在途仓库')
+  # 海尔曼 send warehouse
+  unless czsw=Whouse.find_by_nr('HEMSend')
+    czsw=hemlo.whouses.create(nr: 'HEMSend', name: '海尔曼在途仓库')
   end
   hemlo.send_whouse=czsw
   hemlo.save
 
   # sh receive warehouse
-  unless shrw=Whouse.find_by_nr('SHReceive')
-    shrw=shllo.whouses.create(nr: 'SHReceive', name: '上海莱尼接收仓库')
+  unless shrw=Whouse.find_by_nr('LEONIReceive')
+    shrw=shllo.whouses.create(nr: 'LEONIReceive', name: '三河莱尼接收仓库')
   end
 
   shllo.receive_whouse=shrw
@@ -99,12 +99,12 @@ ActiveRecord::Base.transaction do
     SysConfig.create(code: 'JIAXUAN_EXTRA_SOURCE', value: hemlo.nr, category: '佳轩扩展配置', index: 1200, name: '发运地址')
   end
 
-  unless SysConfig.find_by_code('JIAXUAN_EXTRA_SH_CUSTOM')
-    SysConfig.create(code: 'JIAXUAN_EXTRA_SH_CUSTOM', value: hem.code,category: '佳轩扩展配置', index: 1300, name: '上海客户编码')
+  unless SysConfig.find_by_code('JIAXUAN_EXTRA_HEM')
+    SysConfig.create(code: 'JIAXUAN_EXTRA_HEM', value: hem.code,category: '佳轩扩展配置', index: 1300, name: '海尔曼编码')
   end
 
-  unless SysConfig.find_by_code('JIAXUAN_EXTRA_CZ_CUSTOM')
-    SysConfig.create(code: 'JIAXUAN_EXTRA_CZ_CUSTOM', value: leoni.code, category: '佳轩扩展配置', index: 1300, name: '常州客户编码')
+  unless SysConfig.find_by_code('JIAXUAN_EXTRA_LEONI')
+    SysConfig.create(code: 'JIAXUAN_EXTRA_LEONI', value: leoni.code, category: '佳轩扩展配置', index: 1300, name: '三河莱尼编码')
   end
 
 

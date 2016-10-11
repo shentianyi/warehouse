@@ -2,7 +2,7 @@
 module Printer
   class P006<Base
     HEAD=[:pl_nr, :create_date]
-    BODY=[:czleoni_nr, :pro_desc, :qty, :uniq_id, :position, :remark, :is_supplement]
+    BODY=[:czleoni_nr, :pro_desc, :qty, :uniq_id, :position, :remark]
 
     def generate_data
       p=PickList.find_by_id(self.id)
@@ -36,7 +36,7 @@ module Printer
               qty: i.quantity.to_i,
               uniq_id: " ",
               position: " ",
-              is_supplement: (i.is_supplement==true ? '是' : '否'),
+              # is_supplement: (i.is_supplement==true ? '是' : '否'),
               remark: "仓库无此型号"
           })
           i.update(state: PickItemState::PRINTED)
@@ -51,20 +51,20 @@ module Printer
         location=Location.find_by_nr('SHJXLO')
         storages=NStorage.where(partNr: i.part_id, ware_house_id: (location.whouses.pluck(:id)-[location.send_whouse.id])).order(ware_house_id: :desc).order(fifo: :asc)
         storages.each do |storage|
-          if pick_count==0
+          if pick_count <= 0
             break
           end
           records.insert(sort_by_position(records, (storage.position.blank? ? ' ' : storage.position.nr), i.is_supplement),
                          {
                              czleoni_nr: jx_part.blank? ? i.part_id : jx_part.nr,
                              pro_desc: jx_part.blank? ? "" : jx_part.description,
-                             qty: 1,
+                             qty: storage.qty,
                              uniq_id: storage.packageId,
                              position: storage.position.blank? ? ' ' : storage.position.nr,
-                             is_supplement: (i.is_supplement==true ? '是' : '否'),
+                             # is_supplement: (i.is_supplement==true ? '是' : '否'),
                              remark: ' '
                          })
-          pick_count-=1
+          pick_count-=storage.qty
         end
 
         if pick_count>0
@@ -74,7 +74,7 @@ module Printer
               qty: pick_count.to_i,
               uniq_id: " ",
               position: " ",
-              is_supplement: (i.is_supplement==true ? '是' : '否'),
+              # is_supplement: (i.is_supplement==true ? '是' : '否'),
               remark: "零库存"
           })
         end
@@ -97,13 +97,13 @@ module Printer
       if array.blank?
         return 0
       else
-        if !is_supplement && position.match(/^\w\s\d{2}\s\d{2}/)
+        if !is_supplement && position.match(/^\d{2}-\d{2}/)
           array.each_with_index do |a, index|
-            if a[:position].match(/^\w\s\d{2}\s\d{2}/)
-              if a[:position].first > position.first
+            if a[:position].match(/^\d{2}-\d{2}/)
+              if a[:position].split('-').first > position.split('-').first
                 return index
-              elsif a[:position].first==position.first
-                if a[:position].split(' ').last > position.split(' ').last
+              elsif a[:position].split('-').first==position.split('-').first
+                if a[:position].split('-').last > position.split('-').last
                   return index
                 else
                   next
@@ -117,6 +117,31 @@ module Printer
         return -1
       end
     end
+
+    # def sort_by_position array, position, is_supplement
+    #   if array.blank?
+    #     return 0
+    #   else
+    #     if !is_supplement && position.match(/^\w\s\d{2}\s\d{2}/)
+    #       array.each_with_index do |a, index|
+    #         if a[:position].match(/^\w\s\d{2}\s\d{2}/)
+    #           if a[:position].first > position.first
+    #             return index
+    #           elsif a[:position].first==position.first
+    #             if a[:position].split(' ').last > position.split(' ').last
+    #               return index
+    #             else
+    #               next
+    #             end
+    #           end
+    #         else
+    #           return index
+    #         end
+    #       end
+    #     end
+    #     return -1
+    #   end
+    # end
 
   end
 end

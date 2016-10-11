@@ -91,7 +91,7 @@
   <tr>
     <th>NO.</th>
     <th>订单号</th>
-    <th>报缺时间</th>
+    <!--<th>报缺时间</th>-->
     <th>要货员</th>
     <th>要货地</th>
     <th>备货地</th>
@@ -108,9 +108,7 @@
       <tr>
         <td><%= index+@orders.offset+1 %></td>
         <td><%= order.id %></td>
-        <td>
-          <%= order.required_at_display %>
-        </td>
+
         <td><%= order.user.blank? ? '' : order.user.nr %></td>
         <td><%= order.source_location.blank? ? '' : order.source_location.name %></td>
         <td><%= order.source.name if order.source %></td>
