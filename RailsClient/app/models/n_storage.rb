@@ -31,27 +31,28 @@ class NStorage < ActiveRecord::Base
   #   whouse and whouse.id or nil
   # end
 
+  def self.calc_qty qty, unit
+    qty / (unit=='KPC' ? 1000.0 : 1)
+  end
 
-
-  def self.to_total_xlsx n_storages, package_type_id
+  def self.to_total_xlsx n_storages
     p = Axlsx::Package.new
     wb = p.workbook
     wb.add_worksheet(:name => "sheet1") do |sheet|
-      sheet.add_row ["序号", "零件号", "包装类型", "仓库号", "库位号", "数量", "FIFO", "创建时间", "唯一码"]
+      # sheet.add_row ["序号", "零件号", "包装类型", "仓库号", "库位号", "数量", "FIFO", "创建时间", "唯一码"]
+      sheet.add_row ["序号", "客户品名", "产品", "UNS", "产品名称", "销售单位", "库存清单"]
       n_storages.each_with_index { |n_storage, index|
         if n_storage.id && n_storage.id != ""
-          package_type=PackageType.find_by_id(package_type_id)
+          leoni_client = n_storage.part.part_clients.where(client_tenant_id: Tenant.find_by_code('LEONI').id).first
           sheet.add_row [
                             index+1,
+                            leoni_client.blank? ? '' : leoni_client.client_part_nr,
                             n_storage.part.present? ? n_storage.part.nr : '',
-                            package_type.blank? ? (n_storage.part.present? ? n_storage.part.package_name : '') : package_type.name,
-                            n_storage.whouse.present? ? n_storage.whouse.nr : '',
-                            n_storage.position.present? ? n_storage.position.nr : '',
-                            n_storage.total_qty,
-                            n_storage.fifo.present? ? n_storage.fifo.localtime.strftime("%Y-%m-%d %H:%M") : '',
-                            n_storage.created_at.present? ? n_storage.created_at.localtime.strftime("%Y-%m-%d %H:%M") : '',
-                            n_storage.packageId
-                        ], types: [:string, :string, :string, :string, :string, :string, :string, :string]
+                            n_storage.part.present? ? n_storage.part.supplier : '',
+                            n_storage.part.present? ? n_storage.part.description : '',
+                            n_storage.part.present? ? n_storage.part.unit : '',
+                            calc_qty(n_storage.total_qty, (n_storage.part.present? ? n_storage.part.unit : ''))
+                        ], types: [:string, :string, :string, :string, :string, :string, :string]
         end
       }
     end

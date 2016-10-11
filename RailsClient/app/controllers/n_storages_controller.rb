@@ -140,29 +140,33 @@ class NStoragesController < ApplicationController
 
     end
 
-    if @condition[:partNr].present? && params[:part][:package_type].present?
-      query=query.unscope(where: :partNr)
-      query = query.joins(part: :package_type)
-                  .where("parts.nr like '%#{params[:n_storage][:partNr]}%'")
-                  .where("package_types.id=#{params[:part][:package_type]}")
-      instance_variable_set("@package_type", params[:part][:package_type])
-    elsif @condition[:partNr].present? && params[:part][:package_type].blank?
-      query=query.unscope(where: :partNr)
-      query = query.joins(part: :package_type).where("parts.nr like '%#{params[:n_storage][:partNr]}%'")
-    elsif @condition[:partNr].blank? && params[:part][:package_type].present?
-      query = query.joins(part: :package_type).where("package_types.id=#{params[:part][:package_type]}")
-      instance_variable_set("@package_type", params[:part][:package_type])
-    end
+    query=query.unscope(where: :partNr)
+    query = query.joins(:part).where("parts.nr like '%#{params[:n_storage][:partNr]}%'")
+
+    # if @condition[:partNr].present? && params[:part][:package_type].present?
+    #   query=query.unscope(where: :partNr)
+    #   query = query.joins(part: :package_type)
+    #               .where("parts.nr like '%#{params[:n_storage][:partNr]}%'")
+    #               .where("package_types.id=#{params[:part][:package_type]}")
+    #   instance_variable_set("@package_type", params[:part][:package_type])
+    # elsif @condition[:partNr].present? && params[:part][:package_type].blank?
+    #   query=query.unscope(where: :partNr)
+    #   query = query.joins(part: :package_type).where("parts.nr like '%#{params[:n_storage][:partNr]}%'")
+    # elsif @condition[:partNr].blank? && params[:part][:package_type].present?
+    #   query = query.joins(part: :package_type).where("package_types.id=#{params[:part][:package_type]}")
+    #   instance_variable_set("@package_type", params[:part][:package_type])
+    # end
 
     # query = query.where(locked: false)
     query = query.select("SUM(n_storages.qty) as total_qty, n_storages.*")
-                .group("n_storages.partNr, n_storages.ware_house_id, n_storages.position_id")
+                .group("n_storages.partNr")
+                # .group("n_storages.partNr, n_storages.ware_house_id, n_storages.position_id")
 
     instance_variable_set("@#{@model.pluralize}", query.paginate(:page => params[:page]))
 
     respond_to do |format|
       format.xlsx do
-        send_data(query.to_total_xlsx(query, params[:part][:package_type]),
+        send_data(query.to_total_xlsx(query),
                   :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
                   :filename => "库存查询导出.xlsx")
       end

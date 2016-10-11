@@ -40,8 +40,8 @@
               <li id='package_li'><a href="<%= packages_path %>">包装箱</a></li>
               <% if current_user.permission?(:view_extra) %>
                   <% if current_user.permission?(:jiaxuan_extra_export) %>
-                      <li><a href="<%= generate_jiaxuan_deliveries_path %>">导入常州发运佳轩数据</a></li>
-                      <li><a href="<%= import_packages_path %>">导入包装箱数据</a></li>
+                      <li><a href="<%= generate_jiaxuan_deliveries_path %>">导入佳轩收货数据</a></li>
+                      <!--<li><a href="<%= import_packages_path %>">导入包装箱数据</a></li>-->
                   <% end %>
               <% end %>
             </ul>
@@ -64,16 +64,16 @@
           </li>
       <% end %>
 
-      <% if current_user.permission?(:view_scrap) %>
-          <li><a href="#">报废生成&nbsp;
-            <i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:white;transform: rotate(-90deg);"></i>
-          </a>
-            <ul>
-              <li><a href="<%= scrap_lists_path %>">报废单</a></li>
-              <li><a href="<%= scrap_list_items_path %>">报废项</a></li>
-            </ul>
-          </li>
-      <% end %>
+      <!--<% if current_user.permission?(:view_scrap) %>-->
+          <!--<li><a href="#">报废生成&nbsp;-->
+            <!--<i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:white;transform: rotate(-90deg);"></i>-->
+          <!--</a>-->
+            <!--<ul>-->
+              <!--<li><a href="<%#= scrap_lists_path %>">报废单</a></li>-->
+              <!--<li><a href="<%#= scrap_list_items_path %>">报废项</a></li>-->
+            <!--</ul>-->
+          <!--</li>-->
+      <!--<% end %>-->
 
       <li><a href="#">移库管理&nbsp;
         <i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:white;transform: rotate(-90deg);"></i>
@@ -109,22 +109,22 @@
           <% if current_user.permission?(:view_storage) %>
               <li><a href="<%= n_storages_path %>">详细库存查询</a></li>
               <li><a href="<%= group_n_storages_path %>">库存汇总查询</a></li>
-              <li><a href="<%= storage_operation_records_path %>">库存操作记录</a></li>
+              <!--<li><a href="<%= storage_operation_records_path %>">库存操作记录</a></li>-->
           <% end %>
         </ul>
       </li>
 
-      <li><a href="#">包装物流转记录&nbsp;
-        <i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:white;transform: rotate(-90deg);"></i>
-      </a>
-        <ul>
-          <% if current_user.permission?(:view_storage) %>
-              <li><a href="<%= wrappage_movements_path %>">包装物流转记录列表</a></li>
+      <!--<li><a href="#">包装物流转记录&nbsp;-->
+        <!--<i class="glyphicon glyphicon-chevron-down" style="font-size: .8em;color:white;transform: rotate(-90deg);"></i>-->
+      <!--</a>-->
+        <!--<ul>-->
+          <!--<% if current_user.permission?(:view_storage) %>-->
+              <!--<li><a href="<%#= wrappage_movements_path %>">包装物流转记录列表</a></li>-->
 
-              <!--<li><a href="<%= wrappage_movement_items_path %>">包装物流转记录详情</a></li>-->
-          <% end %>
-        </ul>
-      </li>
+              <!--&lt;!&ndash;<li><a href="<%#= wrappage_movement_items_path %>">包装物流转记录详情</a></li>&ndash;&gt;-->
+          <!--<% end %>-->
+        <!--</ul>-->
+      <!--</li>-->
 
     </ul>
   </li>
@@ -135,7 +135,7 @@
           <li><a href="<%= reports_reports_path %>">收发货报表</a></li>
           <!-- <li><a href="<%= reports_discrepancy_path %>">收发货差异报表</a></li> -->
           <li><a href="<%= reports_orders_report_path %>">要货报表</a></li>
-          <li><a href="<%= reports_stockout_path %>">缺货报表</a></li>
+          <!--<li><a href="<%= reports_stockout_path %>">缺货报表</a></li>-->
       <% end %>
     </ul>
   </li>

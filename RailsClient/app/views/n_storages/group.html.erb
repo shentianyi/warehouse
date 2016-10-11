@@ -44,10 +44,10 @@
         零件号：
         <input type="text" name="n_storage[partNr]" value="<%= @partNr %>"/>
       </div>
-      <div class="col-sm-3">
-        包装类型：
-        <%= select_tag('part[package_type]', options_from_collection_for_select(PackageType.all, :id, :name, @package_type), include_blank: true) %>
-      </div>
+      <!--<div class="col-sm-3">-->
+        <!--包装类型：-->
+        <!--<%#= select_tag('part[package_type]', options_from_collection_for_select(PackageType.all, :id, :name, @package_type), include_blank: true) %>-->
+      <!--</div>-->
       <div class="col-sm-3">
         仓库号：
         <%= select_tag('n_storage[ware_house_id]', options_from_collection_for_select(Whouse.all, :id, :name, @ware_house_id), include_blank: true) %>
@@ -57,32 +57,32 @@
         <input type="text" name="n_storage[position_id]" value="<%= @position_id %>"/>
       </div>
     </div>
-    <div class="col-sm-12">
+    <!--<div class="col-sm-12">-->
+      <!--<div class="col-sm-4">-->
+        <!--唯一码：-->
+        <!--<input type="text" name="n_storage[packageId]" value="<%#= @packageId %>"/>-->
+        <!--<input type="hidden" name="n_storage[packageId_fuzzy]"/>-->
+      <!--</div>-->
+      <!--<div class="col-sm-8">-->
+        <!--更新日期：-->
+        <!--<input type="text" name="n_storage[updated_at][start]" class="datepicker" value="<%#= @updated_at_start %>"/> ~ <input type="text" name="n_storage[updated_at][end]" class="datepicker" value="<%#= @updated_at_end %>"/>-->
+      <!--</div>-->
+    <!--</div>-->
+    <!--<div class="col-sm-12">-->
+
+      <!--<div class="col-sm-6">-->
+        <!--数量：-->
+        <!--<input type="number" name="n_storage[qty][start]" value="<%#= @qty_start %>" style="width: 150px;"/>-->
+        <!--~ <input type="number" name="n_storage[qty][end]" value="<%#= @qty_end %>" style="width: 150px;"/>-->
+        <!--</span>-->
+      <!--</div>-->
+    <!--</div>-->
+    <div class="col-sm-12" style="margin-bottom: 10px;">
       <div class="col-sm-4">
-        唯一码：
-        <input type="text" name="n_storage[packageId]" value="<%= @packageId %>"/>
-        <input type="hidden" name="n_storage[packageId_fuzzy]"/>
-      </div>
-      <div class="col-sm-8">
-        更新日期：
-        <input type="text" name="n_storage[updated_at][start]" class="datepicker" value="<%= @updated_at_start %>"/> ~ <input type="text" name="n_storage[updated_at][end]" class="datepicker" value="<%= @updated_at_end %>"/>
-      </div>
-    </div>
-    <div class="col-sm-12">
-      <div class="col-sm-6">
         FIFO：
         <input type="text" name="n_storage[fifo][start]" class="datepicker" value="<%= @fifo_start %>"/>
         ~ <input type="text" name="n_storage[fifo][end]" class="datepicker" value="<%= @fifo_end %>"/>
       </div>
-      <div class="col-sm-6">
-        数量：
-        <input type="number" name="n_storage[qty][start]" value="<%= @qty_start %>" style="width: 150px;"/>
-        ~ <input type="number" name="n_storage[qty][end]" value="<%= @qty_end %>" style="width: 150px;"/>
-        </span>
-      </div>
-    </div>
-    <div class="col-sm-12" style="margin-bottom: 10px;">
-
       <div class="col-sm-4">
         <span class="label label-info">显示方式:</span>
         <%= select_tag :format, options_for_select([["Web", "html"], ["Excel File(MS 07 or later)", "xlsx"]], "html") %>
@@ -113,8 +113,8 @@
   <thead>
   <tr>
     <th>零件号</th>
-    <th>包装类型</th>
-    <th>唯一码</th>
+    <!--<th>包装类型</th>-->
+    <!--<th>唯一码</th>-->
     <th>库存总量</th>
     <th>FIFO</th>
     <th>更新日期</th>
@@ -128,8 +128,8 @@
       <% @n_storages.each do |storage| %>
           <tr>
             <td><%= storage.part.nr if storage.part.present? %></td>
-            <td><%= storage.part.package_name if storage.part.present? %></td>
-            <td><%= storage.packageId %></td>
+            <!--<td><%= storage.part.package_name if storage.part.present? %></td>-->
+            <!--<td><%= storage.packageId %></td>-->
             <td><%= storage.total_qty %></td>
             <td><%= storage.fifo.localtime if storage.fifo %> </td>
             <td><%= storage.updated_at.localtime if storage.updated_at %> </td>
