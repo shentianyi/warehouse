@@ -114,7 +114,7 @@ module FileHandler
               row[k]=row[k].sub(/\.0/, '') if k== :partNr || k== :packageId
             end
 
-            mssg = validate_import_row(row, line)
+            mssg = validate_import_row(row)
             if mssg.result
               sheet.add_row row.values
             else
@@ -131,7 +131,7 @@ module FileHandler
         msg
       end
 
-      def self.validate_import_row(row, line)
+      def self.validate_import_row(row)
         msg = Message.new(contents: [])
         StorageOperationRecord.save_record(row, 'ENTRY')
 
@@ -208,6 +208,8 @@ module FileHandler
         unless msg.result=(msg.contents.size==0)
           msg.content=msg.contents.join('/')
         end
+
+        puts msg.content
         msg
       end
 
@@ -259,9 +261,16 @@ module FileHandler
           end
 
           if row[:fromWh].present?
-            storage = NStorage.find_by(packageId: row[:packageId], ware_house_id: row[:fromWh])
+            storage = NStorage.where(packageId: row[:packageId], ware_house_id: row[:fromWh]).first
             unless storage
               msg.contents << "源仓库#{row[:fromWh]}不存在该唯一码#{row[:packageId]}！"
+            end
+          end
+
+          if row[:partNr].present?
+            storage = NStorage.where(packageId: row[:packageId], partNr: row[:partNr]).first
+            unless storage
+              msg.contents << "唯一码#{row[:packageId]}对应的物料号不是#{row[:partNr]}！"
             end
           end
 

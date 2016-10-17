@@ -39,6 +39,13 @@ module V3
       post :enter_stock do
         puts params.to_json
         params[:employee_id] = 'PMS API CALL'
+
+        # msg = FileHandler::Excel::NStorageHandler.validate_import_row params
+        # unless msg.result
+        #   puts msg.content
+        #   return {result: 0, content: msg.content}
+        # end
+
         StorageOperationRecord.save_record(params, 'ENTRY')
         s=WhouseService.new.enter_stock(params)
         {result: 1, content: s}
