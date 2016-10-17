@@ -20,10 +20,14 @@ set :output, {:error => 'log/cron_error_log.log', :standard => 'log/cron_log.log
 
 # Learn more: http://github.com/javan/whenever
 
-every 2.minute do
-  rake 'sync:execute'
-end
+# every 2.minute do
+#   rake 'sync:execute'
+# end
 
 #every 1.minute do
 #  runner 'script/test/test_delivery.rb'
 #end
+
+every 1.minute do
+  rake 'sync:generate_stock_file'
+end
