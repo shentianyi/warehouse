@@ -49,7 +49,8 @@ module Printer
 
         pick_count=i.quantity
         location=Location.find_by_nr('SHJXLO')
-        storages=NStorage.where(partNr: i.part_id, ware_house_id: (location.whouses.pluck(:id)-[location.send_whouse.id])).order(ware_house_id: :desc).order(fifo: :asc)
+        storages=NStorage.where(partNr: i.part_id, ware_house_id: (location.whouses.pluck(:id)-[location.send_whouse.id, location.receive_whouse.id]))
+                     .order(ware_house_id: :desc).order(fifo: :asc)
         storages.each do |storage|
           if pick_count <= 0
             break
@@ -97,13 +98,13 @@ module Printer
       if array.blank?
         return 0
       else
-        if !is_supplement && position.match(/^\d{2}-\d{2}/)
+        if !is_supplement && position.match(/^\w\s\d{2}/)
           array.each_with_index do |a, index|
-            if a[:position].match(/^\d{2}-\d{2}/)
-              if a[:position].split('-').first > position.split('-').first
+            if a[:position].match(/^\w\s-\d{2}/)
+              if a[:position].first > position.first
                 return index
-              elsif a[:position].split('-').first==position.split('-').first
-                if a[:position].split('-').last > position.split('-').last
+              elsif a[:position].first==position.first
+                if a[:position].split(' ').last > position.split(' ').last
                   return index
                 else
                   next

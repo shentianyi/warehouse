@@ -35,8 +35,7 @@
   <form method="get" action="<%= send("search_inventory_list_items_path") %>">
     <div class="col-sm-3">
       零件号：
-      <input type="text" name="inventory_list_item[part_id]" value="<%= @id %>"/>
-      <input type="hidden" name="inventory_list_item[part_id_fuzzy]"/>
+      <input type="text" name="part[part_id]" value="<%= @part_id %>"/>
     </div>
     <div class="col-sm-3">
       <input type="submit" value="查 找" class="btn btn-primary"/>

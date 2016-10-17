@@ -144,6 +144,11 @@ class InventoryListItemsController < ApplicationController
       end
     end
 
+    unless params[:part][:part_id].blank?
+      query=query.joins(:part).where({parts: {nr: params[:part][:part_id]}})
+      @part_id = params[:part][:part_id]
+    end if params[:part].present?
+
     unless params[:inventory_list][:state].blank?
       query=query.joins(:inventory_list).where({inventory_lists: {state: params[:inventory_list][:state]}})
       @inventory_list_state=params[:inventory_list][:state]

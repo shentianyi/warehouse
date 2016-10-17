@@ -89,7 +89,10 @@ class Order < ActiveRecord::Base
         end
 
         order.location_containers.each do |lc|
-          pick_count+=LogisticsContainerService.get_all_packages(lc.becomes(LogisticsContainer)).where("containers.part_id = ?", package.part_id).size
+          p_ids=LogisticsContainerService.get_all_packages(lc.becomes(LogisticsContainer))
+                        .where("containers.part_id = ?", package.part_id).pluck(:container_id)
+          tmp_count = Package.where(id: p_ids).select('SUM(quantity) as total_qty').first.total_qty.to_i
+          pick_count+=tmp_count
         end
       else
         return {result: false, content: "未找到需求单"}
@@ -98,7 +101,7 @@ class Order < ActiveRecord::Base
       return {result: false, content: "未找到运单"}
     end
 
-    if pick_count+1 <= order_count
+    if pick_count < order_count
       return {result: true, content: "ok"}
     else
       return {result: false, content: "该零件的背货量已达到需求量"}
