@@ -22,7 +22,7 @@ class LogisticsContainer<LocationContainer
 
   #after_update :out_store
   after_destroy :destroy_container
-  after_destroy :destroy_wrappage_movement_items
+  # after_destroy :destroy_wrappage_movement_items
 
   def destroy_container
     if self.container.present?
