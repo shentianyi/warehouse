@@ -20,7 +20,7 @@
     select {
         min-width: 150px;
     }
-    
+
     a:hover, a:active {
         text-decoration: none;
         background-color: white;
@@ -100,7 +100,7 @@
     <th>创建时间</th>
     <th>备注</th>
     <!--<th colspan="4"></th>-->
-    <th colspan="3"></th>    
+    <th colspan="3"></th>
   </tr>
   </thead>
 
@@ -127,7 +127,9 @@
         <td><%= movement_list.remarks %></td>
         <!--<td><%= link_to '详细', movement_list %></td>-->
         <!--<td><%= link_to '编辑', edit_movement_list_path(movement_list) %></td>-->
-        <td><%= link_to '删除', movement_list, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        <% if current_user.permission?(:operate_movement_list_delete) && (movement_list.state.to_i != MovementListState::ENDING) %>
+            <td><%= link_to '删除', movement_list, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        <% end %>
       </tr>
   <% end %>
   </tbody>

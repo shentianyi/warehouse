@@ -60,6 +60,10 @@ end
 
 ############################操作权限#########################
 
+unless Permission.find_by_name("operate_movement_list_delete")
+  Permission.create(name: "operate_movement_list_delete", description: "移库单删除权限")
+end
+
 unless Permission.find_by_name("operate_order_create")
   Permission.create(name: "operate_order_create", description: "要货新建权限")
 end
