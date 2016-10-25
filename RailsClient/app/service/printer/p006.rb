@@ -24,6 +24,7 @@ module Printer
       # end
 
       records=[]
+      supplement_records=[]
       zero=[]
       pick_items.each do |i|
 
@@ -54,16 +55,31 @@ module Printer
           if pick_count==0
             break
           end
-          records.insert(sort_by_position(records, (storage.position.blank? ? ' ' : storage.position.nr), i.is_supplement),
-                         {
-                             czleoni_nr: jx_part.blank? ? i.part_id : jx_part.nr,
-                             pro_desc: jx_part.blank? ? "" : jx_part.description,
-                             qty: 1,
-                             uniq_id: storage.packageId,
-                             position: storage.position.blank? ? ' ' : storage.position.nr,
-                             is_supplement: (i.is_supplement==true ? '是' : '否'),
-                             remark: ' '
-                         })
+
+          if i.is_supplement
+            supplement_records.insert(sort_by_position(supplement_records, (storage.position.blank? ? ' ' : storage.position.nr), i.is_supplement),
+                           {
+                               czleoni_nr: jx_part.blank? ? i.part_id : jx_part.nr,
+                               pro_desc: jx_part.blank? ? "" : jx_part.description,
+                               qty: 1,
+                               uniq_id: storage.packageId,
+                               position: storage.position.blank? ? ' ' : storage.position.nr,
+                               is_supplement: (i.is_supplement==true ? '是' : '否'),
+                               remark: ' '
+                           })
+          else
+            records.insert(sort_by_position(records, (storage.position.blank? ? ' ' : storage.position.nr), i.is_supplement),
+                           {
+                               czleoni_nr: jx_part.blank? ? i.part_id : jx_part.nr,
+                               pro_desc: jx_part.blank? ? "" : jx_part.description,
+                               qty: 1,
+                               uniq_id: storage.packageId,
+                               position: storage.position.blank? ? ' ' : storage.position.nr,
+                               is_supplement: (i.is_supplement==true ? '是' : '否'),
+                               remark: ' '
+                           })
+          end
+
           pick_count-=1
         end
 
@@ -83,8 +99,9 @@ module Printer
       end
 
       # p records
-      records +=zero
-      records.each do |record|
+      total = records + supplement_records + zero
+      # records +=zero
+      total.each do |record|
         bodies=[]
         BODY.each do |k|
           bodies<<{Key: k, Value: record[k]}
@@ -97,7 +114,7 @@ module Printer
       if array.blank?
         return 0
       else
-        if !is_supplement && position.match(/^\w\s\d{2}\s\d{2}/)
+        if position.match(/^\w\s\d{2}\s\d{2}/)
           array.each_with_index do |a, index|
             if a[:position].match(/^\w\s\d{2}\s\d{2}/)
               if a[:position].first > position.first
