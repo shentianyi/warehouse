@@ -157,7 +157,7 @@ class NStoragesController < ApplicationController
     #   instance_variable_set("@package_type", params[:part][:package_type])
     # end
 
-    # query = query.where(locked: false)
+    query = query.where(locked: false)
     query = query.select("SUM(n_storages.qty) as total_qty, n_storages.*")
                 .group("n_storages.partNr")
                 # .group("n_storages.partNr, n_storages.ware_house_id, n_storages.position_id")
