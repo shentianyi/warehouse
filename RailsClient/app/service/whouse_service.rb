@@ -152,7 +152,7 @@ class WhouseService
           if params[:qty].blank?
             params[:qty]=storage.qty
           end
-          raise '移库数量为 0 ！' if params[:qty].to_i <= 0
+          raise '移库数量为 0 ！' if params[:qty].to_f <= 0
 
           puts "#{storage.qty}:#{params[:qty]}"
 
