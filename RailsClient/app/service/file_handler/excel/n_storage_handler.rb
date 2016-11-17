@@ -278,7 +278,7 @@ module FileHandler
 
         else
 
-          msg.contents << "唯一码不能为空!"
+          # msg.contents << "唯一码不能为空!"
 
           # if row[:partNr].blank?
           #   msg.contents << "零件号不能为空!"
