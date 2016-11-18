@@ -67,6 +67,7 @@
   <tr>
     <th>NO.</th>
     <th>零件号</th>
+    <th>描述</th>
     <th>唯一码</th>
     <th>库存量</th>
     <th>FIFO</th>
@@ -84,6 +85,7 @@
       <tr>
         <td><%= i+@n_storages.offset+1 %></td>
         <td><%= storage.partNr %></td>
+        <td><%= storage.part.blank? ? '' : storage.part.description %></td>
         <td><%= storage.packageId %></td>
         <td><%= storage.qty %></td>
         <td><%= storage.fifo.localtime if storage.fifo %> </td>

@@ -1,5 +1,6 @@
 class NStorage < ActiveRecord::Base
   belongs_to :ware_house, class_name: 'Whouse'
+  belongs_to :part, class_name: "Part", foreign_key: :partNr
   default_scope { where(locked: false) }
 
   before_validation :validate

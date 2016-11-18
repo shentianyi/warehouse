@@ -233,6 +233,7 @@ Rails.application.routes.draw do
   get 'reports/orders_report', to: 'reports#orders_report'
   get 'reports/reports', to: 'reports#reports'
   post 'reports/upload_file', to: 'reports#upload_file'
+  get 'reports/stock_reports', to: 'reports#stock_reports'
 
 
   get 'notifications', to: 'notifications#index'
