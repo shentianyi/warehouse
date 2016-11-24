@@ -56,6 +56,11 @@ function print_pick_list_with_id(id){
     printer.id=function(){return id};
     printer.print('P006');
 }
+
+function print_movement_list(id){
+    printer.print('P010');
+}
+
 function init_check() {
     $('body').on('change', '.print-check', function () {
         $(this).prop('checked', $(this).is(':checked'));

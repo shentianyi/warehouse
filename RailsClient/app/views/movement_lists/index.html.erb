@@ -32,6 +32,7 @@
   </form>
 </div>
 
+<input type="button" value="打印移库单" class='btn btn-warning' onclick="print_movement_list();"/>
 
 <div class="digg_pagination">
   <div class="page_info">
@@ -43,6 +44,7 @@
 <table class="table table-bordered table-striped globle-table">
   <thead>
   <tr>
+    <th></th>
     <th>No.</th>
     <th>移库单名称</th>
     <th>移库单号</th>
@@ -60,6 +62,9 @@
   <tbody>
   <% @movement_lists.each_with_index do |movement_list,i| %>
       <tr>
+        <td>
+          <input name="movement-list-check[<%= movement_list.id %>]" type="checkbox" id="<%= movement_list.id %>" class='print-check'>
+        </td>
         <td><%= i+1%></td>
         <td><%= movement_list.name %></td>
         <td><%= movement_list.id %></td>
@@ -82,6 +87,7 @@
   <%= will_paginate @movement_lists, :container => false %>
 </div>
 
+
 <script>
     $(function () {
         $(".datepicker").datetimepicker({
@@ -89,4 +95,5 @@
             format: 'Y-m-d H:i'
         });
     });
+    init_check();
 </script>
