@@ -93,6 +93,38 @@ class InventoryListsController < ApplicationController
     msg = FileHandler::Excel::InventoryListItemHandler.export_total_by_whouse
     send_file msg.content
   end
+
+  def disable_enable_storage
+    # if request.post?=
+    last_batch=0
+    if storage=NStorage.unscoped.order(lock_batch: :desc).first
+      last_batch=storage.lock_batch
+    end
+    if params[:do]=='disable'
+      NStorage.transaction do
+        lock_remark='盘点覆盖锁定'+"-"+Time.now.strftime("%Y%m%d")
+        NStorage.where(locked: false)
+            .update_all(locked: true,
+                        lock_user_id: 'admin',
+                        lock_remark: lock_remark,
+                        lock_batch: last_batch+1,
+                        lock_at: Time.now.utc)
+      end
+
+    else
+
+      NStorage.transaction do
+        NStorage.unscoped.where(locked: true, lock_batch: last_batch)
+            .update_all(locked: false,
+                        lock_user_id: nil,
+                        lock_remark: nil,
+                        lock_at: nil)
+      end
+    end
+    # end
+
+    redirect_to action: :index
+  end
     
   private
     def set_inventory_list

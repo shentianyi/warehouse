@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160816021729) do
+ActiveRecord::Schema.define(version: 20161124030946) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -377,6 +377,7 @@ ActiveRecord::Schema.define(version: 20160816021729) do
     t.datetime "lock_at"
     t.string   "supplier"
     t.string   "batch_nr"
+    t.integer  "lock_batch",                              default: 0
   end
 
   add_index "n_storages", ["locked"], name: "index_n_storages_on_locked", using: :btree
@@ -920,5 +921,10 @@ ActiveRecord::Schema.define(version: 20160816021729) do
   add_index "whouses", ["id"], name: "index_whouses_on_id", using: :btree
   add_index "whouses", ["location_id"], name: "index_whouses_on_location_id", using: :btree
   add_index "whouses", ["uuid"], name: "index_whouses_on_uuid", using: :btree
+
+  create_table "ycl_entry_backup", force: true do |t|
+    t.string "packageId"
+    t.string "partNr"
+  end
 
 end

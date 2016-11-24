@@ -56,3 +56,8 @@
 <div class="digg_pagination">
   <%= will_paginate @inventory_lists, :container => false %>
 </div>
+
+<div>
+  <%= link_to "盘点重置库存", disable_enable_storage_inventory_lists_path({do: 'disable'}), class: "btn btn-danger", data: {confirm: "确定盘点重置库存?"} %>
+  <%= link_to "盘点取消重置库存", disable_enable_storage_inventory_lists_path({do: 'enable'}), class: "btn btn-warning", data: {confirm: "确定盘点取消重置库存?"} %>
+</div>
