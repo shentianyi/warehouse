@@ -36,6 +36,7 @@ module FileHandler
                 HEADERS.each_with_index do |k, i|
                   row[k] = book.cell(line, i+1).to_s.strip
                   row[k]=row[k].sub(/\.0/, '') if k=='零件号'
+                  row[k]=row[k].sub(/\.0/, '') if k=='唯一码'
                 end
                 # if row['数量'].to_f > 0
                 params={inventory_list_id: inventory_list_id,
@@ -200,6 +201,7 @@ module FileHandler
             HEADERS.each_with_index do |k, i|
               row[k] = book.cell(line, i+1).to_s.strip
               row[k]=row[k].sub(/\.0/, '') if k=='零件号'
+              row[k]=row[k].sub(/\.0/, '') if k=='唯一码'
             end
 
             mssg = validate_row(row)
@@ -233,7 +235,7 @@ module FileHandler
           msg.contents << "库位号:#{row['库位号']} 不存在!"
         end
 
-        src_warehouse = Whouse.find_by_name(row['仓库号'])
+        src_warehouse = Whouse.find_by_id(row['仓库号'])
         unless src_warehouse
           msg.contents << "仓库号:#{row['仓库号']} 不存在!"
         end
@@ -275,7 +277,7 @@ module FileHandler
         end
 
         if row[:whouse_id].present?
-          unless src_warehouse = Whouse.find_by_name(row[:whouse_id])
+          unless src_warehouse = Whouse.find_by_id(row[:whouse_id])
             msg.contents << "仓库号:#{row[:whouse_id]} 不存在!"
           end
         end
