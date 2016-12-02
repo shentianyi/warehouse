@@ -1,5 +1,6 @@
 class MovementSource < ActiveRecord::Base
   belongs_to :movement_list
+  belongs_to :part, class_name: 'Part', foreign_key: :partNr
 
   def self.save_record(params)
     msg = Message.new()
