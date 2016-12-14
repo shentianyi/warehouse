@@ -38,7 +38,7 @@ class Position < ActiveRecord::Base
   end
 
   def self.options
-    self.all.map { |r| [r.id, r.id] }
+    self.all.map { |r| [r.detail, r.id] }
   end
 
   def self.to_xlsx positions

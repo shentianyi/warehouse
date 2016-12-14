@@ -121,6 +121,18 @@ class LogisticsContainer<LocationContainer
     begin
       if self.state==MovableState::WAY && self.container.is_package?
         StoreContainer.out_store_by_container(container, self.source_location_id)
+      elsif self.state==MovableState::CHECKED && self.des_location.id=='QP'
+        if package=NStorage.find_by_packageId(self.container.id)
+          params={
+              partNr: package.partNr,
+              qty: package.qty,
+              fifo: package.fifo,
+              packageId: package.packageId,
+              toWh: self.des_location.whouses.first.id,
+              toPosition: des_location.whouses.first.positions.first.detail
+          }
+          WhouseService.new.move(params)
+        end
       end
       # rescue Exception=>e
       #   puts e.message
@@ -183,6 +195,33 @@ class LogisticsContainer<LocationContainer
         }
         WhouseService.new.enter_stock(params)
       end
+    end
+  end
+
+  def enter_stock_without_state
+    if (package=self.package)
+
+      #用于 leoni 收集数据
+      p package
+      toWh=SysConfigCache.default_import_whouse_value
+      #判断唯一码是否存在？
+      if package.logistics_containers.first.parent.blank?
+        #绑定包装箱
+        to_position=SysConfigCache.default_import_position_value
+      else
+        to_position='WE87-2'
+      end
+      params={
+          partNr: package.part_id,
+          qty: package.quantity,
+          fifo: package.parsed_fifo,
+          packageId: package.id,
+          toWh: toWh,
+          toPosition: to_position,
+          uniq: true,
+          employee_id: package.user_id
+      }
+      WhouseService.new.enter_stock(params)
     end
   end
 end

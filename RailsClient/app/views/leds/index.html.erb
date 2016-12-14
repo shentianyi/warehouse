@@ -29,7 +29,10 @@
   <thead>
   <tr>
     <th>编号</th>
+    <th>名称</th>
+    <th>控制器IP</th>
     <th>库位</th>
+    <th>料盒动态绑定</th>
     <th>当前状态</th>
     <th>当前显示</th>
     <th>是否有效</th>
@@ -41,7 +44,10 @@
   <% @leds.each_with_index do |led,i| %>
       <tr>
         <td><%= led.id %></td>
+        <td><%= led.name %></td>
+        <td><%= led.modem.ip if led.modem %></td>
         <td><%= led.position.detail if led.position %></td>
+        <td><%= led.order_box.nr if led.order_box %></td>
         <td><%= LedLightState.display(led.current_state) %></td>
         <td><%= led.led_display %></td>
         <td>

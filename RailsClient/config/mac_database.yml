@@ -23,7 +23,7 @@ default: &default
 
 development:
   <<: *default
-  database: whousedb #db/development.sqlite3
+  database: whouse_leoni #db/development.sqlite3
 
 #  #vmi_jiaxuan fenzhi
 #default: &default

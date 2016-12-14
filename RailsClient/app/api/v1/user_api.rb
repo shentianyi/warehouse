@@ -13,10 +13,10 @@ module V1
             warden.set_user user
             {result: 1, content: {role_id: current_user.role_id, location_id: current_user.location_id, location_name: current_user.location.name, operation_mode: current_user.operation_mode}}
           else
-            error!({result: 0, content: '密码错误'}, 401)
+            error!({result: 0, content: '密码错误'}, 200)
           end
         else
-          error!({result: 0, content: '员工号错误'}, 401)
+          error!({result: 0, content: '员工号错误'}, 200)
         end
       end
 

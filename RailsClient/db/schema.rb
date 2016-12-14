@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160425074111) do
+ActiveRecord::Schema.define(version: 20161209083444) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -196,6 +196,7 @@ ActiveRecord::Schema.define(version: 20160425074111) do
     t.string   "mac"
     t.string   "led_display"
     t.boolean  "is_valid",      default: true
+    t.integer  "order_box_id"
   end
 
   add_index "leds", ["id"], name: "index_leds_on_id", using: :btree
@@ -329,6 +330,9 @@ ActiveRecord::Schema.define(version: 20160425074111) do
     t.string   "type"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "part_id_display"
+    t.string   "quantity_display"
+    t.string   "fifo_time_display"
   end
 
   add_index "movement_sources", ["movement_list_id"], name: "index_movement_sources_on_movement_list_id", using: :btree
@@ -443,12 +447,12 @@ ActiveRecord::Schema.define(version: 20160425074111) do
   create_table "order_boxes", force: true do |t|
     t.string   "nr"
     t.string   "rfid_nr"
-    t.integer  "status",              default: 100
+    t.integer  "status",            default: 100
     t.string   "part_id"
     t.float    "quantity"
     t.integer  "order_box_type_id"
-    t.string   "warehouse_id"
-    t.string   "source_warehouse_id"
+    t.string   "whouse_id"
+    t.string   "source_whouse_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "position_id"
@@ -457,8 +461,8 @@ ActiveRecord::Schema.define(version: 20160425074111) do
   add_index "order_boxes", ["order_box_type_id"], name: "index_order_boxes_on_order_box_type_id", using: :btree
   add_index "order_boxes", ["part_id"], name: "index_order_boxes_on_part_id", using: :btree
   add_index "order_boxes", ["position_id"], name: "index_order_boxes_on_position_id", using: :btree
-  add_index "order_boxes", ["source_warehouse_id"], name: "index_order_boxes_on_source_warehouse_id", using: :btree
-  add_index "order_boxes", ["warehouse_id"], name: "index_order_boxes_on_warehouse_id", using: :btree
+  add_index "order_boxes", ["source_whouse_id"], name: "index_order_boxes_on_source_whouse_id", using: :btree
+  add_index "order_boxes", ["whouse_id"], name: "index_order_boxes_on_whouse_id", using: :btree
 
   create_table "order_cars", force: true do |t|
     t.string   "nr"

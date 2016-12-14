@@ -16,11 +16,28 @@
       <%= f.text_field :id %>
     </div>
 
+    <div class="field">
+      <%= f.label :name, '名称' %>
+      <br>
+      <%= f.text_field :name %>
+    </div>
+
+    <div class="field">
+      <%= f.label :modem_id, '控制器' %>
+      <br>
+      <%= f.select(:modem_id, Modem.all.collect{|m| [m.ip, m.id]}, {include_blank: :true}) %>
+    </div>
 
     <div class="field">
       <%= f.label :position_id, '库位' %>
       <br>
-      <%= f.text_field :position_id %>
+      <%= f.select(:position_id, Position.all.collect{|p| [p.detail, p.id]}, {include_blank: :true}) %>
+    </div>
+
+    <div class="field">
+      <%= f.label :order_box_id, '料盒动态绑定' %>
+      <br>
+      <%= f.select(:order_box_id, OrderBox.all.collect{|p| [p.nr, p.id]}, {include_blank: :true}) %>
     </div>
 
     <div class="field">

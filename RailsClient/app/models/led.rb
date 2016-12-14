@@ -3,6 +3,7 @@ class Led < ActiveRecord::Base
   include Import::LedCsv
   belongs_to :modem
   belongs_to :position
+  belongs_to :order_box, class_name: 'OrderBox'
 
   validate :validate_save
 

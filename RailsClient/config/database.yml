@@ -8,7 +8,6 @@
 #  adapter: sqlite3
 #  pool: 5
 #  timeout: 5000
-
 default: &default
   adapter: mysql2
   pool: 30
@@ -22,7 +21,7 @@ default: &default
 
 development:
   <<: *default
-  database: whousedb_for_test #db/development.sqlite3
+  database: whousedb_ptl #db/development.sqlite3
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -33,7 +32,7 @@ test:
 
 production:
   <<: *default
-  database: whousedb_leoni
+  database: whousedb_ptl
 
 server:
   <<: *default
