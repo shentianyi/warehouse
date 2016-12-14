@@ -83,7 +83,7 @@ module V3
         params[:toPosition]=params[:toPosition].sub(/LO/, '')
         params[:fromWh]=params[:fromWh].sub(/LO/, '') if params[:fromWh].present?
         params[:fromPosition]=params[:fromPosition].sub(/LO/, '') if params[:fromPosition].present?
-        params[:partNr]=params[:partNr].sub(/P/, '') if params[:partNr].present?
+        #params[:partNr]=params[:partNr].sub(/P/, '') if params[:partNr].present?
         params[:user] = current_user
         params[:type]= params[:type].blank? ? 'MOVE' : params[:type]
         puts "#{params.to_json}-----------"
