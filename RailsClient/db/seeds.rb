@@ -118,6 +118,14 @@ ActiveRecord::Base.transaction do
   unless SysConfig.find_by_code('DEFAULT_ADD_WHOUSE')
     SysConfig.create(code: 'DEFAULT_ADD_WHOUSE', value: 'PA87', name: '默认上架仓库号')
   end
+  
+  unless SysConfig.find_by_code('DEFAULT_SEND_QP_LOCATION')
+    SysConfig.create(code: 'DEFAULT_SEND_QP_LOCATION', value: 'QINGPU', name: '发运青浦地点')
+  end
+  
+  unless SysConfig.find_by_code('DEFAULT_SEND_CUTTING_LOCATION')
+    SysConfig.create(code: 'DEFAULT_SEND_CUTTING_LOCATION', value: 'CUTTING', name: '发运CUTTING地点')
+  end
 
   #LED STATE
   unless LedState.find_by_state(LedLightState::NORMAL)
