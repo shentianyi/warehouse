@@ -121,8 +121,7 @@ class LogisticsContainer<LocationContainer
     begin
       if self.state==MovableState::WAY && self.container.is_package?
         StoreContainer.out_store_by_container(container, self.source_location_id)
-      elsif self.state==MovableState::CHECKED
-        && [SysConfigCache.default_send_qp_location_value, SysConfigCache.default_send_cutting_location_value].include?(self.des_location.id)
+      elsif self.state==MovableState::CHECKED && [SysConfigCache.default_send_qp_location_value, SysConfigCache.default_send_cutting_location_value].include?(self.des_location.id)
         if package=NStorage.find_by_packageId(self.container.id)
           params={
               partNr: package.partNr,
