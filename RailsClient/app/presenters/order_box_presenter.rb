@@ -59,7 +59,9 @@ class OrderBoxPresenter<Presenter
         status:@order_box.status,
         positions: NStorageService.positions(@order_box.source_whouse_id, @order_box.part_id).uniq.pluck(:detail),
         weight: @order_box.order_box_type.weight || 0,
-        order_box_type: with_type ? OrderBoxTypePresenter.new(@order_box.order_box_type).as_basic_info : nil
+        order_box_type: with_type ? OrderBoxTypePresenter.new(@order_box.order_box_type).as_basic_info : nil,
+        box_led: @order_box.led.blank? ? '' : LedPresenter.new(@order_box.led).as_basic_info,
+        position_leds: PositionPresenter.as_agv_infos(NStorageService.positions(@order_box.source_whouse_id, @order_box.part_id))
     }
   end
 end
