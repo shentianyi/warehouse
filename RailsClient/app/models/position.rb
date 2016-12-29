@@ -5,6 +5,7 @@ class Position < ActiveRecord::Base
   has_many :part_positions, :dependent => :destroy
   has_many :parts, :through => :part_positions
   has_one :led, -> {where is_valid: true}
+  belongs_to :dock_point
 
   include Import::PositionCsv
 

@@ -2,6 +2,13 @@
 
 Rails.application.routes.draw do
 
+  resources :dock_points do
+    collection do
+      get :search
+      match :import, action: :import, via: [:get, :post]
+    end
+  end
+
   resources :movement_sources do
     collection do
       get :search
@@ -20,6 +27,14 @@ Rails.application.routes.draw do
 
   use_doorkeeper
   resources :pick_orders
+
+
+  resources :leds do
+    collection do
+      get :search
+      match :import, action: :import, via: [:get, :post]
+    end
+  end
 
   resources :order_cars do
     collection do
@@ -261,7 +276,7 @@ Rails.application.routes.draw do
   get 'orders/search', to: 'orders#search'
 
   [:locations, :whouses, :parts, :positions, :users, :deliveries, :forklifts,
-   :packages, :part_types, :pick_item_filters, :orders, :modems, :leds].each do |model|
+   :packages, :part_types, :pick_item_filters, :orders, :modems].each do |model|
     resources model do
       collection do
         post :do_import

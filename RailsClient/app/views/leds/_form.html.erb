@@ -41,6 +41,12 @@
     </div>
 
     <div class="field">
+      <%= f.label :order_car_id, '所属料车' %>
+      <br>
+      <%= f.select(:order_car_id, OrderCar.all.collect{|p| [p.nr, p.id]}, {include_blank: :true}) %>
+    </div>
+
+    <div class="field">
       <%= f.label :current_state, '当前状态' %>
       <br>
       <%= f.select(:current_state, LedLightState.list, {include_blank: false}) %>

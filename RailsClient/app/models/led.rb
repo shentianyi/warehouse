@@ -4,8 +4,11 @@ class Led < ActiveRecord::Base
   belongs_to :modem
   belongs_to :position
   belongs_to :order_box, class_name: 'OrderBox'
+  belongs_to :order_car, class_name: 'OrderCar'
 
+  validates_uniqueness_of :id
   validate :validate_save
+
 
   before_create :init_led_display
 

@@ -10,6 +10,15 @@ module V4
         OrderCarService.details(params[:nr])
       end
 
+      params do
+        requires :nr, type: String, desc: 'order car nr'
+        requires :led_id, type: String, desc: 'led id'
+        requires :order_box_nr, type: String, desc: 'order box nr'
+      end
+      post :bind_led_box do
+        OrderCarService.bind_led_box(params)
+      end
+
 
     end
   end

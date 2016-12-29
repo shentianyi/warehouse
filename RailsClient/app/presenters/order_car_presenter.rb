@@ -37,10 +37,24 @@ class OrderCarPresenter<Presenter
               nr: @order_car.nr,
               rfid_nr: @order_car.rfid_nr,
               warehouse_id: @order_car.whouse_id,
-              status: @order_car.status
+              status: @order_car.status,
+              leds: self.leds
           }
       }
     end
+  end
+
+  def leds
+    data = []
+
+    @order_car.leds.each do |led|
+      data<<{
+          modem_ip: led.modem.blank? ? '' : led.modem.ip,
+          led_id: led.id
+      }
+    end
+
+    data
   end
 
 end
