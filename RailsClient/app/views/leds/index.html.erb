@@ -14,8 +14,7 @@
   </form>
 </div>
 <%= link_to "新建LED", send("new_#{@model}_path"), :class => 'btn btn-default' %>
-<%= link_to "上传/更新LED", send("import_#{@model.pluralize}_path"), :class => 'btn btn-default' %>
-<%= link_to "下载", send("download_#{@model.pluralize}_path"), data: {confirm: '确定下载?'}, :class => 'btn btn-default' %>
+<%= link_to "上传/更新LED", import_leds_path, :class => 'btn btn-default' %>
 
 
 <div class="digg_pagination">
@@ -33,6 +32,7 @@
     <th>控制器IP</th>
     <th>库位</th>
     <th>料盒动态绑定</th>
+    <th>所属料车</th>
     <th>当前状态</th>
     <th>当前显示</th>
     <th>是否有效</th>
@@ -48,6 +48,7 @@
         <td><%= led.modem.ip if led.modem %></td>
         <td><%= led.position.detail if led.position %></td>
         <td><%= led.order_box.nr if led.order_box %></td>
+        <td><%= led.order_car.nr if led.order_car %></td>
         <td><%= LedLightState.display(led.current_state) %></td>
         <td><%= led.led_display %></td>
         <td>

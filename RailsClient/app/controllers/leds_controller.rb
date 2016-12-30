@@ -65,6 +65,21 @@ class LedsController < ApplicationController
     end
   end
 
+  def import
+    if request.post?
+      msg = Message.new
+      begin
+        file=params[:files][0]
+        fd = FileData.new(data: file, oriName: file.original_filename, path: $tmp_file_path, pathName: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
+        fd.save
+        msg = FileHandler::Excel::LedHandler.import(fd)
+      rescue => e
+        msg.content = e.message
+      end
+      render json: msg
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_led
@@ -73,6 +88,6 @@ class LedsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def led_params
-      params.require(:led).permit( :id, :name, :modem_id, :position_id,:current_state,:led_display,:mac, :order_box_id)
+      params.require(:led).permit( :id, :name, :modem_id, :position_id,:current_state,:led_display,:mac, :order_box_id, :order_car_id)
     end
 end

@@ -4,6 +4,7 @@ class OrderBox < ActiveRecord::Base
   belongs_to :whouse
   belongs_to :source_whouse, class_name: 'Whouse'
   belongs_to :position
+  has_one :led
 
   has_many :order_items, :as => :orderable, :dependent => :destroy
 

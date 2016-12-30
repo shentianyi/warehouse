@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161209083444) do
+ActiveRecord::Schema.define(version: 20161229073045) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -117,6 +117,13 @@ ActiveRecord::Schema.define(version: 20161209083444) do
   add_index "deliveries", ["user_id"], name: "index_deliveries_on_user_id", using: :btree
   add_index "deliveries", ["uuid"], name: "index_deliveries_on_uuid", using: :btree
 
+  create_table "dock_points", force: true do |t|
+    t.string   "nr"
+    t.string   "desc"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "forklifts", force: true do |t|
     t.string   "uuid",        limit: 36,                 null: false
     t.integer  "state",                  default: 0,     null: false
@@ -197,6 +204,7 @@ ActiveRecord::Schema.define(version: 20161209083444) do
     t.string   "led_display"
     t.boolean  "is_valid",      default: true
     t.integer  "order_box_id"
+    t.integer  "order_car_id"
   end
 
   add_index "leds", ["id"], name: "index_leds_on_id", using: :btree
@@ -705,14 +713,15 @@ ActiveRecord::Schema.define(version: 20161209083444) do
   add_index "pick_orders", ["pick_list_id"], name: "index_pick_orders_on_pick_list_id", using: :btree
 
   create_table "positions", force: true do |t|
-    t.string   "uuid",       limit: 36,                 null: false
+    t.string   "uuid",          limit: 36,                 null: false
     t.string   "whouse_id"
     t.string   "detail"
-    t.boolean  "is_delete",             default: false
-    t.boolean  "is_dirty",              default: true
-    t.boolean  "is_new",                default: true
+    t.boolean  "is_delete",                default: false
+    t.boolean  "is_dirty",                 default: true
+    t.boolean  "is_new",                   default: true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "dock_point_id"
   end
 
   add_index "positions", ["id"], name: "index_positions_on_id", using: :btree

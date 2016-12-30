@@ -1,0 +1,45 @@
+<h1>停靠点列表</h1>
+<div>
+  <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+    <div>
+      <span>停靠点编号：
+        <input type="text" name="dock_point[id]" value="<%= @id %>"/>
+      </span>
+      <input type="submit" value="查 找" class="btn btn-primary"/>
+    </div>
+  </form>
+</div>
+<%= link_to "新建停靠点", send("new_#{@model}_path"), :class => 'btn btn-default' %>
+<%= link_to "上传/更新停靠点", import_dock_points_path, :class => 'btn btn-default' %>
+
+
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @dock_points %>
+  </div>
+  <%= will_paginate @dock_points, :container => false %>
+</div>
+<table class="table table-bordered table-striped table-hover">
+  <!--<table class="table table-bordered table-striped globle-table">-->
+  <thead>
+  <tr>
+    <th>编号</th>
+    <th>描述</th>
+    <th colspan="2"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @dock_points.each_with_index do |dock_point,i| %>
+      <tr>
+        <td><%= dock_point.id %></td>
+        <td><%= dock_point.desc %></td>
+        <td><%= link_to '编辑', edit_dock_point_path(dock_point) %></td>
+        <td><%= link_to '删除', dock_point, method: :delete, data: {confirm: '确认删除?'} %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<br>
+

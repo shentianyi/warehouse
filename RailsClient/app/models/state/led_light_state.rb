@@ -32,6 +32,8 @@ class LedLightState
         '要货'
       when URGENT_ORDERED
         '紧急要货'
+      when PICKED
+        '择货'
       when DELIVERED
         '发运'
       when RECEIVED

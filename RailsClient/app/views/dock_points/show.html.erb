@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nr:</strong>
+  <%= @dock_point.nr %>
+</p>
+
+<p>
+  <strong>Desc:</strong>
+  <%= @dock_point.desc %>
+</p>
+
+<%= link_to 'Edit', edit_dock_point_path(@dock_point) %> |
+<%= link_to 'Back', dock_points_path %>

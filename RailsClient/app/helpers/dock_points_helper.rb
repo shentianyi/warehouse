@@ -1,0 +1,2 @@
+module DockPointsHelper
+end
