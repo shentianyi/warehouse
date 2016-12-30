@@ -26,14 +26,15 @@ class MovementSource < ActiveRecord::Base
 
     m=nil
     if params[:packageId].present?
-      m=MovementSource.where(
-          toWh: params[:toWh],
-          toPosition: params[:toPosition],
-          fromWh: params[:fromWh],
-          fromPosition: params[:fromPosition],
-          packageId: params[:packageId],
-          type: type
-      ).first
+#       m=MovementSource.where(
+#           toWh: params[:toWh],
+#           toPosition: params[:toPosition],
+#           fromWh: params[:fromWh],
+#           fromPosition: params[:fromPosition],
+#           packageId: params[:packageId],
+#           type: type
+#       ).first
+      m=MovementSource.joins(:movement_list).where(packageId: params[:packageId]).where.not(movement_lists: {state: MovementListState::ENDING}).first
     end
     if m.blank?
       msg.result=true
