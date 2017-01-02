@@ -25,7 +25,7 @@ class PositionPresenter<Presenter
   def as_agv_info
     {
         id: @position.id,
-        detail: @position.detail,
+        nr: @position.detail,
         led: @position.led.blank? ? '' : LedPresenter.new(@position.led).as_basic_info,
         dock_point: @position.dock_point.blank? ? '' : DockPointPresenter.new(@position.dock_point).as_basic_info
     }
