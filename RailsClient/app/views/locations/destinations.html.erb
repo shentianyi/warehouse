@@ -20,7 +20,7 @@
   <tbody>
   <% @location.location_destinations.each do |ld| %>
   <tr>
-    <td><%= ld.destination.name%></td>
+    <td><%= ld.destination.blank? ? '' : ld.destination.name%></td>
     <td><%= ld.is_default %></td>
     <td><%= link_to '删除',remove_destination_location_path(@location,ld.destination),method: :delete, data:{confirm: '确认删除？'},:class=> 'btn btn-default' %></td>
     <td><%= link_to '设为默认',set_default_destination_location_path(@location,ld.destination),method: :post,:class=> 'btn btn-default' %></td>
