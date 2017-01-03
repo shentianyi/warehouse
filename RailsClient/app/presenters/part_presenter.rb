@@ -16,6 +16,7 @@ class PartPresenter<Presenter
     else
       {
           id: @part.id,
+          nr: @part.id,
           weight:@part.weight||1,
           weight_range:@part.weight_range
       }
