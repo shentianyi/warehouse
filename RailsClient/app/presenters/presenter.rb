@@ -13,11 +13,16 @@ class Presenter
 =end
 
   def self.init_presenters params
-    params.map{|param| self.new(param)}
+
+    p '-----------------------'
+    puts(params)
+    p '-----------------------'
+
+    params.map { |param| self.new(param) }
   end
 
   def self.init_json_presenters params
-    params.map{|param| self.new(param).to_json}
+    params.map { |param| self.new(param).to_json }
   end
 
   def to_json

@@ -53,6 +53,17 @@ class LogisticsContainerService
   end
 
   def self.get_all_packages_with_detail(lc,orders=nil)
+    p 'cccccccccccccccccc'
+
+    puts(lc.id.to_s)
+
+    puts(lc.source_location_id.to_s)
+    puts(lc.user_id.to_s)
+    puts(lc.container_id.to_s)
+    puts(lc.type.to_s)
+
+    p 'cccccccccccccccccc'
+
     query=get_all_packages(lc).select("location_containers.*,'#{lc.destinationable_id}' as whouse_id")
     query=query.order(orders) if orders
     #query.collect.each { |p| p.becomes(Package) }

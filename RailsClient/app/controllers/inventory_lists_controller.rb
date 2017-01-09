@@ -8,7 +8,7 @@ class InventoryListsController < ApplicationController
     @inventory_lists = InventoryList.paginate(:page => params[:page])
 
     if SysConfigCache.hide_finished_inventory_value=='true'
-      @inventory_lists=@inventory_lists.where('state!=?', InventoryListState::ENDING)
+      @inventory_lists=@inventory_lists.where('state!=?', InventoryListState::ENDING).order(created_at: :desc)
     end
     respond_with(@inventory_lists)
   end
