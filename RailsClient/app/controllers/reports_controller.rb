@@ -1,19 +1,66 @@
 # encoding: utf-8
 class ReportsController < ApplicationController
+  def stock_entry_with_xlsx packages, commit_value
+    p = Axlsx::Package.new
+    wb = p.workbook
+    wb.add_worksheet(:name => "Basic Sheet") do |sheet|
+      if commit_value == "详细"
+        sheet.add_row ["编号", "唯一码", "零件号", "描述", "数量", "仓库"]
+        packages.each_with_index { |p, index|
+          wh = Whouse.find_by_id(p.wh_id)
+          sheet.add_row [
+                            index+1,
+                            p.packageId,
+                            p.partNr,
+                            p.part.blank? ? '' : p.part.description,
+                            p.total_qty,
+                            wh.blank? ? '' : wh.name
+                        ], :types => [:string]
+        }
+      else
+        sheet.add_row ["编号", "零件号", "描述", "总数", "仓库"]
+        packages.each_with_index { |p, index|
+          wh = Whouse.find_by_id(p.wh_id)
+          sheet.add_row [
+                            index+1,
+                            p.partNr,
+                            p.part.blank? ? '' : p.part.description,
+                            p.total_qty,
+                            wh.blank? ? '' : wh.name
+                        ], :types => [:string]
+        }
+      end
+    end
+    p.to_stream.read
+  end
+
   def movements_report
-    @type = params[:type].nil? ? ReportType::Entry : params[:type]
+    @part_id = params[:part_id]
+    @type = params[:type].nil? ? MovementType::ENTRY : params[:type]
     @date_start = params[:date_start].nil? ? 1.day.ago.strftime("%Y-%m-%d 7:00") : params[:date_start]
     @date_end = params[:date_end].nil? ? Time.now.strftime("%Y-%m-%d 7:00") : params[:date_end]
-    @location_id = params[:location_id].nil? ? current_user.location_id : params[:location_id]
+    @whouse_id = params[:whouse_id]
     @title = ''
     @commit_value = params[:commit]
+    whouse = Whouse.find_by_id(@whouse_id)
 
-    @packages = Package.generate_report_data(@type,@date_start,@date_end,@location_id,@commit_value)
-    #render :json=> @packages
-    @title = ReportsHelper.gen_title(@type,@date_start,@date_end,@location_id)
+    to_params = {
+        type: @type,
+        date_start: @date_start,
+        date_end: @date_end,
+        whouse_id: @whouse_id,
+        partNr: @part_id,
+        commit_value: @commit_value
+    }
+    p params
+    p to_params
+
+    @movements = Movement.generate_movement_data to_params
+    @title = "#{Time.parse(@date_start).strftime("%Y-%m-%d")}~#{Time.parse(@date_end).strftime("%Y-%m-%d")} #{whouse.blank? ? '' : whouse.name} #{MovementType.display(@type.to_i)}报表"
+
     respond_to do |format|
       format.xlsx do
-        send_data(entry_with_xlsx(@packages, @commit_value),
+        send_data(stock_entry_with_xlsx(@movements, @commit_value),
                   :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
                   :filename => "#{@title}.xlsx")
       end
