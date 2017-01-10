@@ -1,5 +1,26 @@
 # encoding: utf-8
 class ReportsController < ApplicationController
+  def movements_report
+    @type = params[:type].nil? ? ReportType::Entry : params[:type]
+    @date_start = params[:date_start].nil? ? 1.day.ago.strftime("%Y-%m-%d 7:00") : params[:date_start]
+    @date_end = params[:date_end].nil? ? Time.now.strftime("%Y-%m-%d 7:00") : params[:date_end]
+    @location_id = params[:location_id].nil? ? current_user.location_id : params[:location_id]
+    @title = ''
+    @commit_value = params[:commit]
+
+    @packages = Package.generate_report_data(@type,@date_start,@date_end,@location_id,@commit_value)
+    #render :json=> @packages
+    @title = ReportsHelper.gen_title(@type,@date_start,@date_end,@location_id)
+    respond_to do |format|
+      format.xlsx do
+        send_data(entry_with_xlsx(@packages, @commit_value),
+                  :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+                  :filename => "#{@title}.xlsx")
+      end
+      format.html
+    end
+  end
+
   def reports
     @type = params[:type].nil? ? ReportType::Entry : params[:type]
     @date_start = params[:date_start].nil? ? 1.day.ago.strftime("%Y-%m-%d 7:00") : params[:date_start]

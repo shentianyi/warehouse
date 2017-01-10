@@ -1,6 +1,7 @@
 #encoding: utf-8
 class OrderBoxPresenter<Presenter
-  Delegators=[:id, :nr, :rfid_nr, :status, :part_id, :quantity, :warehouse_id, :source_warehouse_id, :order_box_type_id]
+  Delegators=[:id, :nr, :rfid_nr, :status, :part_id, :quantity, :warehouse_id,
+              :source_warehouse_id, :order_box_type_id, :led_id]
   def_delegators :@order_box, *Delegators
 
   def initialize(order_box)
@@ -60,8 +61,9 @@ class OrderBoxPresenter<Presenter
         positions: NStorageService.positions(@order_box.source_whouse_id, @order_box.part_id).uniq.pluck(:detail),
         weight: @order_box.order_box_type.weight || 0,
         order_box_type: with_type ? OrderBoxTypePresenter.new(@order_box.order_box_type).as_basic_info : nil,
-        box_led: @order_box.led.blank? ? '' : LedPresenter.new(@order_box.led).as_basic_info,
-        position_leds: PositionPresenter.as_agv_infos(NStorageService.positions(@order_box.source_whouse_id, @order_box.part_id))
+        #box_led: @order_box.led.blank? ? '' : LedPresenter.new(@order_box.led).as_basic_info,
+        position_leds: PositionPresenter.as_agv_infos(NStorageService.positions(@order_box.source_whouse_id, @order_box.part_id)),
+        led_id: @order_box.led_id
     }
   end
 end

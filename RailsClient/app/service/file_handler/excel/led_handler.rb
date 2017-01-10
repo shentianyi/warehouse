@@ -2,7 +2,7 @@ module FileHandler
   module Excel
     class LedHandler<Base
       HEADERS=[
-          :id, :name, :modem_id, :position_id, :order_box_id, :order_car_id, :current_state, :led_display, :is_valid, :operator
+          :nr, :name, :modem_id, :position_id, :order_box_id, :order_car_id, :current_state, :led_display, :is_valid, :operator
       ]
 
       def self.import(file)
@@ -27,7 +27,7 @@ module FileHandler
               row[:order_car_id] = OrderCar.find_by_nr(row[:order_car_id]).id unless row[:order_car_id].blank?
               row[:is_valid] = row[:is_valid]=='Y' ? true : false
 
-              led=Led.find_by_id(row[:id])
+              led=Led.joins(:modem).where(nr: row[:nr]).where(modems: {ip: row[:modem_id]}).first
               if ['update', 'UPDATE'].include?(row[:operator])
                 led.update(row.except(:operator))
               elsif ['delete', 'DELETE'].include?(row[:operator])
@@ -70,7 +70,7 @@ module FileHandler
             row = {}
             HEADERS.each_with_index do |k, i|
               row[k] = book.cell(line, i+1).to_s.strip
-              row[k]=row[k].sub(/\.0/, '') if [:id].include?(k)
+              row[k]=row[k].sub(/\.0/, '') if [:nr, :name].include?(k)
             end
 
             mssg = validate_row(row, line)
@@ -93,16 +93,17 @@ module FileHandler
       def self.validate_row(row, line)
         msg = Message.new(contents: [])
 
-        if row[:id].blank?
-          msg.contents<<"LED编号不可为空"
+        if row[:nr].blank? || row[:modem_id].blank?
+          msg.contents<<"LED编号和控制器IP不可为空"
         else
+          led = Led.joins(:modem).where(nr: row[:nr]).where(modems: {ip: row[:modem_id]}).first
           if ['update', 'UPDATE', 'DELETE', 'delete'].include?(row[:operator])
-            if Led.find_by_id(row[:id]).blank?
-              msg.contents<<"LED编号:#{row[:id]}不存在"
+            if led.blank?
+              msg.contents<<"LED->编号:#{row[:nr]}/控制器IP:#{row[:modem_id]}不存在"
             end
           else
-            if Led.find_by_id(row[:id])
-              msg.contents<<"LED编号:#{row[:id]}已存在"
+            if led.present?
+              msg.contents<<"LED->编号:#{row[:nr]}/控制器IP:#{row[:modem_id]}已存在"
             end
           end
         end

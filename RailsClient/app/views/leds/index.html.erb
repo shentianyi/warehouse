@@ -43,7 +43,7 @@
   <tbody>
   <% @leds.each_with_index do |led,i| %>
       <tr>
-        <td><%= led.id %></td>
+        <td><%= led.nr %></td>
         <td><%= led.name %></td>
         <td><%= led.modem.ip if led.modem %></td>
         <td><%= led.position.detail if led.position %></td>

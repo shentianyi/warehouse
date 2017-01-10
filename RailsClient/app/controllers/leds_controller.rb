@@ -88,6 +88,7 @@ class LedsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def led_params
-      params.require(:led).permit( :id, :name, :modem_id, :position_id,:current_state,:led_display,:mac, :order_box_id, :order_car_id)
+      params.require(:led).permit( :id, :name, :modem_id, :position_id,:current_state,
+                                   :led_display,:mac, :order_box_id, :order_car_id, :nr)
     end
 end
