@@ -2,7 +2,7 @@ module FileHandler
   module Excel
     class LedHandler<Base
       HEADERS=[
-          :nr, :name, :modem_id, :new_modem_id :position_id, :order_box_id, :order_car_id, :current_state, :led_display, :is_valid, :operator
+          :nr, :name, :modem_id, :new_modem_id, :position_id, :order_box_id, :order_car_id, :current_state, :led_display, :is_valid, :operator
       ]
 
       def self.import(file)
