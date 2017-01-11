@@ -14,9 +14,9 @@
 <table class="table table-bordered table-striped globle-table">
   <thead>
     <tr>
-      <th>ID</th>
       <th>名称</th>
       <th>IP</th>
+      <th>总线编号</th>
       <th colspan="2"></th>
     </tr>
   </thead>
@@ -24,9 +24,9 @@
   <tbody>
     <% @modems.each do |modem| %>
       <tr>
-        <td><%= modem.id %></td>
         <td><%= modem.name %></td>
         <td><%= modem.ip %></td>
+        <td><%= modem.nr %></td>
         <td><%= link_to '编辑', edit_modem_path(modem) %></td>
         <td><%= link_to '删除', modem, method: :delete, data: { confirm: '确定删除?' } %></td>
       </tr>

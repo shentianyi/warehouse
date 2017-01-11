@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170110045438) do
+ActiveRecord::Schema.define(version: 20170111110102) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -299,6 +299,7 @@ ActiveRecord::Schema.define(version: 20170110045438) do
     t.boolean  "is_new",     default: true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "nr"
   end
 
   add_index "modems", ["id"], name: "index_modems_on_id", using: :btree
