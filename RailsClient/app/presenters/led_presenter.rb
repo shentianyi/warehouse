@@ -12,7 +12,7 @@ class LedPresenter<Presenter
   def as_basic_info
     {
         id: @led.id,
-        modem: @led.modem.blank? ? '' : {id: @led.modem.id, ip: @led.modem.ip}
+        modem: @led.modem.blank? ? '' : {id: @led.modem.id, ip: @led.modem.ip, nr: @led.modem.nr}
     }
   end
 
@@ -28,7 +28,7 @@ class LedPresenter<Presenter
     {
         id: @led.id,
         name: @led.name,
-        modem: @led.modem.blank? ? '' : {id: @led.modem.id, ip: @led.modem.ip},
+        modem: @led.modem.blank? ? '' : {id: @led.modem.id, ip: @led.modem.ip, nr: @led.modem.nr},
         position: @led.position.blank? ? '' : {id: @led.position.id, detail: @led.position.detail},
         order_box: @led.order_box.blank? ? '' : {id: @led.order_box.id, nr: @led.order_box.nr},
         order_car: @led.order_car.blank? ? '' : {id: @led.order_car.id, nr: @led.order_car.nr},
