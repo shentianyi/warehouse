@@ -19,7 +19,7 @@ module FileHandler
               row = {}
               HEADERS.each_with_index do |k, i|
                 row[k] = book.cell(line, i+1).to_s.strip
-                row[k]=row[k].sub(/\.0/, '') if [:id].include?(k)
+                row[k]=row[k].sub(/\.0/, '') if [:id, :nr].include?(k)
               end
               row[:modem_id] = Modem.find_by_ip(row[:modem_id]).id unless row[:modem_id].blank?
               row[:position_id] = Position.find_by_detail(row[:position_id]).id unless row[:position_id].blank?
@@ -27,7 +27,7 @@ module FileHandler
               row[:order_car_id] = OrderCar.find_by_nr(row[:order_car_id]).id unless row[:order_car_id].blank?
               row[:is_valid] = row[:is_valid]=='Y' ? true : false
 
-              led=Led.joins(:modem).where(nr: row[:nr]).where(modems: {ip: row[:modem_id]}).first
+              led=Led.where(nr: row[:nr], modem_id: row[:modem_id]).first
               if ['update', 'UPDATE'].include?(row[:operator])
                 led.update(row.except(:operator))
               elsif ['delete', 'DELETE'].include?(row[:operator])

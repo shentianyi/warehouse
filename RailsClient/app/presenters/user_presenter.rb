@@ -14,7 +14,7 @@ class UserPresenter<Presenter
     else
       {
           id: @user.id,
-          nr: @user.nr
+          nr: @user.id
       }
     end
   end

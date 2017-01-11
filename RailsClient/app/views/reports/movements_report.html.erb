@@ -1,93 +1,79 @@
 <div class="panel panel-warning">
   <div class="panel-heading">
     <h2>出入库报表</h2>
-  </div>
-  <div class="panel-body">
-    <br/>
-
-    <div>
-      <form method="get" action="<%= reports_movements_report_path %>">
-        <div>
-          <div>
-            <span class="label label-info">仓库:</span>
-            <%= select_tag(:whouse_id, options_from_collection_for_select(Whouse.all, :name, :id, @whouse_id), include_blank: true) %>
-
-            <span class="label label-info">出入库时间:</span>
-            <input type="text" name="date_start" class="datepicker" value="<%= @date_start %>"/>
-            ~ <input type="text" name="date_end" class="datepicker" value="<%= @date_end %>"/>
-
-            <span class="label label-info">显示方式:</span>
-            <%= select_tag :format, options_for_select([["Web", "html"], ["Excel File(MS 07 or later)", "xlsx"]], "html") %>
-            <input type="submit" value="生成" class="btn btn-warning" name="commit"/>
-          </div>
-        </div>
-
-      </form>
-    </div>
-    <br/>
-    <table class="table table-striped table-condensed table-hover">
-      <thead>
-      <tr>
-        <th>No.</th>
-        <th>零件号</th>
-        <th>总数</th>
-        <th>箱数</th>
-        <th>部门</th>
-        <th>要货人</th>
-        <th>状态</th>
-        <th>已发货总数</th>
-        <th>已发运箱数</th>
-        <th>差异数（要货总数-已发运总数）</th>
-      </tr>
-      </thead>
-      <tbody>
-      <% @order_items.each_with_index do |o, index| %>
-          <tr>
-            <td><%= index+1 %></td>
-            <td><%= o.part_id %></td>
-            <td><%= o.total %></td>
-            <td><%= o.box_count %></td>
-            <td><%= o.whouse_id %></td>
-            <td><%= o.user_id %></td>
-            <% case o.state %>
-            <% when OrderItemState::INIT %>
-                <td><span class="label label-warning">未处理</span></td>
-            <% when OrderItemState::OUT_OF_STOCK %>
-                <td><span class="label label-danger">缺货</span></td>
-            <% when OrderItemState::FINISHED %>
-                <td><span class="label label-info">完成备货</span></td>
-            <% end %>
-            <% unless @removal_packages["#{o.part_id}#{o.whouse_id}"].nil? %>
-                <td>
-                  <span class="label label-info"><%= @removal_packages["#{o.part_id}#{o.whouse_id}"]['count'] %></span>
-                </td>
-                <td>
-                  <span class="label label-info"><%= @removal_packages["#{o.part_id}#{o.whouse_id}"]['box'] %></span>
-                </td>
-                <td>
-              <span class="label label-warning">
-                <%= @all_orders["#{o.part_id}#{o.whouse_id}"] - @removal_packages["#{o.part_id}#{o.whouse_id}"]['count'] %>
-              </span>
-                </td>
-            <% else %>
-                <td></td>
-                <td></td>
-                <td></td>
-            <% end %>
-            <% @removal_packages["#{o.part_id}#{o.whouse_id}"] = nil %>
-          </tr>
-      <% end %>
-      </tbody>
-    </table>
+    入库与出库的统计报表.
   </div>
 </div>
+<div class="panel-body">
+  <br/>
+  <!--Form-->
+  <form method="get" path="<%= reports_reports_path%>">
+  <span>零件号：
+              <input type="text" name="part_id" value="<%= @part_id %>"/>
+            </span>
+    <span class="label label-info">报表类型:</span>
+    <%= select_tag(:type,options_for_select(MovementType.list,@type),include_blank: false)%>
+    <span class="label label-info">仓库:</span>
+    <%= select_tag(:whouse_id, options_for_select(Whouse.all.collect{|w| [w.name, w.id]}, @whouse_id), include_blank: false) %>
+    <span class="label label-info">创建时间:</span>
+    <input id="date-start" type="text" name="date_start" class="datepicker" value="<%= @date_start %>"/>
+    ~ <input id="date-end" type="text" name="date_end" class="datepicker" value="<%= @date_end %>"/>
+    <span class="label label-info">显示方式:</span>
+    <%= select_tag :format, options_for_select([["Web", "html"],["Excel File(MS 07 or later)", "xlsx"]], "html") %>
+    <input type="submit" value="汇总" class="btn btn-warning" name="commit" onclick="submitForm()"/>
+    <input type="submit" value="详细" class="btn btn-warning" name="commit" onclick="submitForm()"/>
+  </form>
+</div>
+<!--Form-->
+<div class="alert alert-success" role="alert">
+  <p><%= @title%></p>
+</div>
+
+
+<table class="table table-striped table-condensed table-hover">
+  <thead>
+  <tr>
+    <th>No.</th>
+    <th>唯一码</th>
+    <th>零件号</th>
+    <th>数量</th>
+    <th>仓库</th>
+
+  </tr>
+  </thead>
+  <tbody>
+  <% @movements.each_with_index do |p, index| %>
+      <tr>
+        <td><%= index+1 %></td>
+        <td>
+          <% if @commit_value == "详细" %>
+              <%= p.packageId %>
+          <% else %>
+              <%= %>
+          <% end %>
+        </td>
+        <td><%= p.partNr %></td>
+        <td><%= p.total_qty %></td>
+        <td><%= p.wh_id %></td>
+
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<% content_for :javascript_includes do %>
+    <%= javascript_include_tag "bootstrap-select" %>
+    <%= javascript_include_tag "treport" %>
+<% end %>
 
 <script>
-    $(function () {
+    $(document).ready(function(){
         $(".datepicker").datetimepicker({
             lang: 'ch',
             format: 'Y-m-d H:i'
         });
+        $('.selectpicker').selectpicker();
+        $('.selectpicker').selectpicker('val', 'Mustard');
+        $('.selectpicker').selectpicker('render');
     });
-    init_check();
 </script>

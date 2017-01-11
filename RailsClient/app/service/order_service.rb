@@ -174,6 +174,34 @@ class OrderService
         .group("order_items.whouse_id").all
   end
 
+  def self.create_by_led user, params
+    validable_led_and_modem(params) do |part|
+      order=Order.new(status: OrderStatus::INIT)
+      order.user=user
+
+      order_item=OrderItem.new({
+                                   state: OrderStatus::INIT,
+                                   quantity: params[:qty],
+                                   part_id: part.id,
+                                   is_emergency: 0
+                               })
+      order_item.user=user
+      order_item.order=order
+
+      if order.save
+        {
+            meta: {
+                code: 200,
+                message: 'Signed Success'
+            },
+            data: OrderPresenter.new(order).as_basic_info
+        }
+      else
+        ApiMessage.new({meta: {code: 400, error_message: '生成需求单失败'}})
+      end
+    end
+  end
+
   # require
   #  nr:string
   def self.create_by_car user, params
@@ -277,6 +305,32 @@ class OrderService
   end
 
   private
+  def self.validable_led_and_modem params
+    err_infos=[]
+    if modem = Modem.find_by_ip(params[:ip])
+      if (led = Led.where(nr: params[:led_id], modem_id: modem.id).first).blank?
+        err_infos<<"LED灯:#{params[:led_id]}没有找到!"
+      else
+        if led.position && (part=led.position.parts.first)
+        else
+          err_infos<<"LED灯:#{params[:led_id]}不属于任何库位或者没有对应的零件!"
+        end
+      end
+    else
+      err_infos<<"控制器IP:#{params[:ip]}没有找到!"
+    end
+
+    if err_infos.size==0
+      if block_given?
+        yield(part)
+      else
+        ApiMessage.new({meta: {code: 200, message: '数据验证通过'}})
+      end
+    else
+      ApiMessage.new({meta: {code: 400, message: err_infos.join(',')}})
+    end
+  end
+
   def self.validable_car_and_box params
     if car=OrderCar.find_by_id(params[:order_car_id])
       err_infos=[]

@@ -12,7 +12,14 @@ class OrderAPI < Base
         OrderService.create_by_car(current_user, params)
       end
 
-
+      params do
+        requires :ip, type: String, desc: 'modem ip'
+        requires :led_id, type: String, desc: 'led id'
+        requires :qty, type: Integer, desc: 'order qty'
+      end
+      post :create_by_led do
+        OrderService.create_by_led(current_user, params)
+      end
     end
   end
 end
