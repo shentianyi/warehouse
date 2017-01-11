@@ -2,7 +2,7 @@ module FileHandler
   module Excel
     class LedHandler<Base
       HEADERS=[
-          :nr, :name, :modem_id, :position_id, :order_box_id, :order_car_id, :current_state, :led_display, :is_valid, :operator
+          :nr, :name, :modem_id, :new_modem_id :position_id, :order_box_id, :order_car_id, :current_state, :led_display, :is_valid, :operator
       ]
 
       def self.import(file)
@@ -29,11 +29,12 @@ module FileHandler
 
               led=Led.where(nr: row[:nr], modem_id: row[:modem_id]).first
               if ['update', 'UPDATE'].include?(row[:operator])
-                led.update(row.except(:operator))
+                row[:modem_id] = Modem.find_by_ip(row[:new_modem_id]).id
+                led.update(row.except(:operator, :new_modem_id))
               elsif ['delete', 'DELETE'].include?(row[:operator])
                 led.destroy
               else
-                led = Led.new(row.except(:operator))
+                led = Led.new(row.except(:operator, :new_modem_id))
                 unless led.save
                   puts led.errors.to_json
                   raise led.errors.to_json
@@ -111,6 +112,14 @@ module FileHandler
         unless row[:modem_id].blank?
           unless Modem.find_by_ip(row[:modem_id])
             msg.contents<<"控制器IP:#{row[:modem_id]}不存在"
+          end
+        end
+        
+        unless row[:new_modem_id].blank?
+          if ['update', 'UPDATE'].include?(row[:operator])
+            unless Modem.find_by_ip(row[:new_modem_id])
+              msg.contents<<"控制器IP:#{row[:new_modem_id]}不存在"
+            end
           end
         end
 
