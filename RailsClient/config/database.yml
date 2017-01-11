@@ -52,7 +52,7 @@ development_test:
 
 leoni:
   <<: *default
-  database: whousedb_leoni #db/development.sqlite3
+  database: whousedb_ptl #db/development.sqlite3
 
 
 
