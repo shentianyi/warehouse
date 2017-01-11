@@ -93,12 +93,13 @@ module FileHandler
       def self.validate_row(row, line)
         msg = Message.new(contents: [])
 
+        led=nil
         if row[:nr].blank? || row[:modem_id].blank?
           msg.contents<<"LED编号和控制器IP不可为空"
         else
           led = Led.joins(:modem).where(nr: row[:nr]).where(modems: {ip: row[:modem_id]}).first
           if ['update', 'UPDATE', 'DELETE', 'delete'].include?(row[:operator])
-            if led.blank?
+            if (led = Led.joins(:modem).where(nr: row[:nr]).where(modems: {ip: row[:modem_id]}).first).blank?
               msg.contents<<"LED->编号:#{row[:nr]}/控制器IP:#{row[:modem_id]}不存在"
             end
           else
