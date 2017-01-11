@@ -70,8 +70,9 @@ module Import
           data[col[:field]]=row[col[:header]]
         end
 
-        update_marker=(data.delete($UPMARKER).to_i==1)
+        update_marker=((operate=data.delete($UPMARKER).to_i)==1)
         p = Position.find_by_detail(data['detail'])
+
         if update_marker
           if p
             #update
@@ -103,7 +104,10 @@ module Import
         else
           #new
           if p
-            next
+
+       p.destroy if operate==2
+       next
+        
           end
           data.delete('detail_new')
           Position.create(data)
