@@ -29,7 +29,7 @@ module FileHandler
 
               led=Led.where(nr: row[:nr], modem_id: row[:modem_id]).first
               if ['update', 'UPDATE'].include?(row[:operator])
-                row[:modem_id] = Modem.find_by_ip(row[:new_modem_id]).id
+                row[:modem_id] = Modem.find_by_ip(row[:new_modem_id]).id unless row[:new_modem_id].blank?
                 led.update(row.except(:operator, :new_modem_id))
               elsif ['delete', 'DELETE'].include?(row[:operator])
                 led.destroy
