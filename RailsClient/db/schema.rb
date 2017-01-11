@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161229073045) do
+ActiveRecord::Schema.define(version: 20170110045438) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -205,6 +205,7 @@ ActiveRecord::Schema.define(version: 20161229073045) do
     t.boolean  "is_valid",      default: true
     t.integer  "order_box_id"
     t.integer  "order_car_id"
+    t.string   "nr"
   end
 
   add_index "leds", ["id"], name: "index_leds_on_id", using: :btree
@@ -464,6 +465,7 @@ ActiveRecord::Schema.define(version: 20161229073045) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "position_id"
+    t.string   "led_id"
   end
 
   add_index "order_boxes", ["order_box_type_id"], name: "index_order_boxes_on_order_box_type_id", using: :btree

@@ -33,6 +33,16 @@ module V4
         OrderBoxService.weight_box(params)
       end
 
+      params do
+        requires :id, type: String, desc: 'order box id'
+        requires :led_id, type: String, desc: 'bind led id'
+      end
+      post :bind_led do
+        p params
+        p '0-------------------------------'
+        OrderBoxService.bind_led(params)
+      end
+
     end
   end
 end

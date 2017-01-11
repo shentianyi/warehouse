@@ -52,4 +52,33 @@ p '---------------------------------------------'
         }
     }
   end
+
+  def self.bind_led(params)
+    p params
+    p '---------------------------------------------'
+    if box=OrderBox.find_by_nr(params[:id])
+      unless box.update_attributes(led_id: params[:led_id])
+        {
+            meta: {
+                code: 400,
+                message: '绑定失败'
+            }
+        }
+      end
+    else
+      return     {
+          meta: {
+              code: 400,
+              message: '未找到该料盒'
+          }
+      }
+    end
+
+    {
+        meta: {
+            code: 200,
+            message: '绑定成功'
+        }
+    }
+  end
 end

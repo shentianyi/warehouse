@@ -291,6 +291,7 @@ Rails.application.routes.draw do
 
   delete '/parts/delete_position/:id', to: 'parts#delete_position'
 
+  get 'reports/movements_report', to: 'reports#movements_report'
   get 'reports/discrepancy', to: 'reports#discrepancy'
   get 'reports/orders_report', to: 'reports#orders_report'
   get 'reports/reports', to: 'reports#reports'

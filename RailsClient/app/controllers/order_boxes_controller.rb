@@ -62,6 +62,7 @@ class OrderBoxesController < ApplicationController
     end
 
     def order_box_params
-      params.require(:order_box).permit(:nr, :rfid_nr, :status, :part_id, :quantity, :order_box_type_id, :whouse_id, :source_whouse_id, :position_id)
+      params.require(:order_box).permit(:nr, :rfid_nr, :status, :part_id, :quantity, :order_box_type_id,
+                                        :whouse_id, :source_whouse_id, :position_id, :led_id)
     end
 end

@@ -4,7 +4,7 @@ class LedsController < ApplicationController
   # GET /leds
   # GET /leds.json
   def index
-    @leds = Led.paginate(:page=> params[:page]).order(:signal_id,:modem_id)
+    @leds = Led.paginate(:page=> params[:page]).order(:nr,:modem_id)
   end
 
   # GET /leds/1
@@ -88,6 +88,7 @@ class LedsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def led_params
-      params.require(:led).permit( :id, :name, :modem_id, :position_id,:current_state,:led_display,:mac, :order_box_id, :order_car_id)
+      params.require(:led).permit( :id, :name, :modem_id, :position_id,:current_state,
+                                   :led_display,:mac, :order_box_id, :order_car_id, :nr)
     end
 end

@@ -9,13 +9,17 @@ class OrderCarPresenter<Presenter
   end
 
   def as_basic_info
-    {
-        id: @order_car.id,
-        nr: @order_car.nr,
-        rfid_nr: @order_car.rfid_nr,
-        whouse_id: @order_car.whouse_id,
-        status: @order_car.status
-    }
+    if @order_car.nil?
+      {}
+    else
+      {
+          id: @order_car.id,
+          nr: @order_car.nr,
+          rfid_nr: @order_car.rfid_nr,
+          whouse_id: @order_car.whouse_id,
+          status: @order_car.status
+      }
+    end
   end
 
   def as_basic_feedback(messages=nil, result_code=nil)
