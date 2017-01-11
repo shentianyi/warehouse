@@ -69,6 +69,6 @@ class ModemsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def modem_params
-      params.require(:modem).permit(:id, :name, :ip)
+      params.require(:modem).permit(:id, :name, :ip, :nr)
     end
 end

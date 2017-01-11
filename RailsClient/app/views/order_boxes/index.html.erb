@@ -55,7 +55,6 @@
     <th>出货仓库</th>
     <th>料盒类型</th>
     <th>料盒所属库位号</th>
-    <th>LED</th>
     <th con="3"></th>
   </tr>
   </thead>
@@ -73,7 +72,6 @@
         <td><%= order_box.source_whouse.blank? ? '' : order_box.source_whouse.id %></td>
         <td><%= order_box.order_box_type.blank? ? '' : order_box.order_box_type.name %></td>
         <td><%= order_box.position.blank? ? '' : order_box.position.detail %></td>
-        <td><%= order_box.led_id %></td>I
         <td>
           <%= link_to '[详情]', order_box %>
           <%= link_to '[编辑]', edit_order_box_path(order_box) %>

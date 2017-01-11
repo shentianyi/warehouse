@@ -1,6 +1,6 @@
 ---
 sync:
-  host: http://121.199.34.191:8000
+  host: http://127.0.0.1:4000
   token: 3dcba17f596969a676bfdd90b5425c703f983acf7306760e1057c95afe9f17b1d
   sync_lock: false
   enabled: true

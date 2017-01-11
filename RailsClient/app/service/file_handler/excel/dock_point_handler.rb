@@ -19,7 +19,7 @@ module FileHandler
               row = {}
               HEADERS.each_with_index do |k, i|
                 row[k] = book.cell(line, i+1).to_s.strip
-                row[k]=row[k].sub(/\.0/, '') if [:nr, :desc].include?(k)
+                row[k]=row[k].sub(/\.0/, '') if [:nr].include?(k)
               end
 
               dock_point=DockPoint.find_by_nr(row[:nr])
@@ -65,7 +65,7 @@ module FileHandler
             row = {}
             HEADERS.each_with_index do |k, i|
               row[k] = book.cell(line, i+1).to_s.strip
-              row[k]=row[k].sub(/\.0/, '') if [:nr, :desc].include?(k)
+              row[k]=row[k].sub(/\.0/, '') if [:nr].include?(k)
             end
 
             mssg = validate_row(row, line)

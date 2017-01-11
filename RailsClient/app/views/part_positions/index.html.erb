@@ -53,7 +53,7 @@
         <td><%= i+@part_positions.offset+1 %></td>
         <td><%= part_position.part.blank? ? '' : part_position.part.id %></td>
         <td><%= part_position.position.blank? ? '' : part_position.position.detail %></td>
-        <td><%= part_position.position.blank? ? '' : (part_position.position.whouse.blank? ? '' : part_position.position.whouse.name) %></td>
+        <td><%= part_position.position.blank? ? '' : part_position.position.whouse.name %></td>
         <td><%= part_position.safe_stock %></td>
         <td><%= part_position.from_warehouse.blank? ? '' : part_position.from_warehouse.name %></td>
         <td><%= part_position.from_position.blank? ? '' : part_position.from_position.detail %></td>
