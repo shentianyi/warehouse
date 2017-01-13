@@ -4,7 +4,7 @@ class LedsController < ApplicationController
   # GET /leds
   # GET /leds.json
   def index
-    @leds = Led.paginate(:page=> params[:page]).order(:nr,:modem_id)
+    @leds = Led.paginate(:page=> params[:page]).order(:position_id)
   end
 
   # GET /leds/1
