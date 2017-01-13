@@ -19,7 +19,7 @@ module FileHandler
               row = {}
               HEADERS.each_with_index do |k, i|
                 row[k] = book.cell(line, i+1).to_s.strip
-                row[k]=row[k].sub(/\.0/, '') if [:id, :nr].include?(k)
+                row[k]=row[k].sub(/\.0/, '') if [:name, :id, :nr].include?(k)
               end
               row[:modem_id] = Modem.find_by_ip(row[:modem_id]).id unless row[:modem_id].blank?
               row[:position_id] = Position.find_by_detail(row[:position_id]).id unless row[:position_id].blank?
