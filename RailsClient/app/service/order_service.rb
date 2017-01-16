@@ -175,7 +175,7 @@ class OrderService
   end
 
   def self.create_by_led user, params
-    validable_led_and_modem(params) do |part|
+    validable_led_and_modem(params) do |part, led|
       order=Order.new(status: OrderStatus::INIT)
       order.user=user
       order.source_location_id = user.location_id
@@ -185,7 +185,7 @@ class OrderService
                                    box_quantity: params[:qty],
                                    part_id: part.id,
                                    is_emergency: 0,
-                                   whouse_id: 'PA87'
+                                   whouse_id: led.position.whouse.id
                                })
       order_item.user=user
       order_item.order=order
@@ -325,7 +325,7 @@ class OrderService
 
     if err_infos.size==0
       if block_given?
-        yield(part)
+        yield(part, led)
       else
         ApiMessage.new({meta: {code: 200, message: '数据验证通过'}})
       end
