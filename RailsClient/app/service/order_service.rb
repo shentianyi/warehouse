@@ -188,11 +188,11 @@ class OrderService
       order_item.user=user
       order_item.order=order
 
-      if order.save
+      if order_item.save && order.save
         {
             meta: {
                 code: 200,
-                message: 'Signed Success'
+                message: 'Create Order Success'
             },
             data: OrderPresenter.new(order).as_basic_info
         }
@@ -307,6 +307,7 @@ class OrderService
   private
   def self.validable_led_and_modem params
     err_infos=[]
+    part = nil
     if modem = Modem.find_by_ip(params[:ip])
       if (led = Led.where(nr: params[:led_id], modem_id: modem.id).first).blank?
         err_infos<<"LED灯:#{params[:led_id]}没有找到!"
