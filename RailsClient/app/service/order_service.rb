@@ -178,12 +178,14 @@ class OrderService
     validable_led_and_modem(params) do |part|
       order=Order.new(status: OrderStatus::INIT)
       order.user=user
+      order.source_location_id = user.location_id
 
       order_item=OrderItem.new({
                                    state: OrderStatus::INIT,
-                                   quantity: params[:qty],
+                                   box_quantity: params[:qty],
                                    part_id: part.id,
-                                   is_emergency: 0
+                                   is_emergency: 0,
+                                   whouse_id: 'PA87'
                                })
       order_item.user=user
       order_item.order=order

@@ -80,7 +80,8 @@ class OrdersController < ApplicationController
   end
 
   def panel_list
-    @orders=OrderService.get_orders_by_days(current_user.location_destination_ids).where.not(id:params[:orders]).order(created_at: :asc).all
+    #@orders=OrderService.get_orders_by_days(current_user.location_destination_ids).where.not(id:params[:orders]).order(created_at: :asc).all
+    @orders=OrderService.get_orders_by_days(current_user.location.id).where.not(id:params[:orders]).order(created_at: :asc).all
     #@orders = OrderService.get_orders_by_user(current_user.id).where.not(id:params[:orders]).order(created_at: :asc).all
     render partial:'list'
   end
