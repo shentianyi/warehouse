@@ -30,21 +30,26 @@ class PickItemPresenter<Presenter
     {
         id: @pick_item.id,
         status: @pick_item.state,
-        quantity:@pick_item.quantity,
-        order_box: o.nil? ? nil :  OrderBoxPresenter.new(o).as_basic_info(true),
+        quantity: @pick_item.quantity,
+        box_quantity: @pick_item.box_quantity,
+        order_box: o.nil? ? nil : OrderBoxPresenter.new(o).as_basic_info(true),
         part: PartPresenter.new(@pick_item.part).as_basic_info,
         weight: @pick_item.weight.blank? ? 0 : @pick_item.weight,
-        weight_qty:  @pick_item.weight_qty.blank? ? 0 : @pick_item.weight_qty,
-        weight_valid:  @pick_item.weight_valid.blank? ? 0 : @pick_item.weight_valid
+        weight_qty: @pick_item.weight_qty.blank? ? 0 : @pick_item.weight_qty,
+        weight_valid: @pick_item.weight_valid.blank? ? 0 : @pick_item.weight_valid
     }
   end
 
   def self.as_details(pick_items)
     json=[]
     pick_items.each do |pick_item|
-      json<<PickItemPresenter.new(pick_item).as_detail
+      json<<PickItemPresenter.new(pick_item).as_detail()
     end
     json
+  end
+
+  def pick_info pick_user
+    @pick_item.pick_info pick_user
   end
 
 end
