@@ -230,7 +230,7 @@ class PickListService
         result.contents << e.message
       end
 
-      if result.result
+      if result.result=(result.contents.size==0)
         ApiMessage.new({meta: {code: 200, error_message: '择货成功'}})
       else
         ApiMessage.new({meta: {code: 400, error_message: result.contents}})
