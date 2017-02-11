@@ -21,7 +21,7 @@ class PickItemStatus<BaseStatus
         '择货中'
       when PICKED
         '已择货'
-      else
+      when ABORTED
         '放弃'
     end
   end

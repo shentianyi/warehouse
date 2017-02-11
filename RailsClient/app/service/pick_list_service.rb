@@ -154,56 +154,86 @@ class PickListService
   end
 
   def self.do_pick params, user
+    result = Message.new(contents: [])
+
     pick_list = PickList.find_by_id(params[:id])
     if pick_list
-      #create movement list
-      movement_list = MovementList.create(builder: user.id, name: "#{user.id}_#{DateTime.now.strftime("%H.%d.%m.%Y")}", remarks: 'AUTO CREATE BY PICK')
+      begin
+        PickList.transaction do
+          #create movement list
+          movement_list = MovementList.create(builder: user.id, name: "#{user.id}_#{DateTime.now.strftime("%H.%d.%m.%Y")}", remarks: 'AUTO CREATE BY PICK')
 
-      params[:items].each do |item|
-        args={}
-        pick_item = PickItem.find_by_id(item[:id])
-        if pick_item
-          pick_count = 0
+          params[:items].each do |item|
+            args={}
+            pick_item = PickItem.find_by_id(item[:id])
+            if pick_item
+              pick_count = 0
 
-          #check destination
-          des_whouse = pick_item.destination_whouse
-          des_position = des_whouse.blank? ? nil : OrderItemService.verify_department(des_whouse.id, pick_item.part_id)
-          next if des_position.blank? || des_whouse.blank?
+              #check destination
+              des_whouse = pick_item.destination_whouse
+              des_pp = des_whouse.blank? ? nil : OrderItemService.verify_department(des_whouse.id, pick_item.part_id)
+              next if des_pp.blank? || des_whouse.blank?
 
-          args[:toWh]=des_whouse.id
-          args[:toPosition]=des_position.id
-          args[:type]= 'MOVE'
-          args[:user] = user
-          args[:movement_list_id] = movement_list.id
+              args[:toWh]=des_whouse.id
+              args[:toPosition]=des_pp.position_id
+              args[:type]= 'MOVE'
+              args[:user] = user
+              args[:movement_list_id] = movement_list.id
 
-          #source info
-          item[:packageIds].each do |packageId|
-            storage = NStorage.where(packageId: packageId)
-            if storage
-              args[:fromWh]=storage.ware_house_id
-              args[:fromPosition]=storage.position
-              args[:partNr]=storage.partNr
-              args[:packageId] = packageId
-              args[:qty]=storage.qty
+              err_msg=''
+              #source info
+              item[:packageIds].each do |packageId|
+                storage = NStorage.where(packageId: packageId).first
+                if storage
+                  args[:fromWh]=storage.ware_house_id
+                  args[:fromPosition]=storage.position
+                  args[:partNr]=storage.partNr
+                  args[:packageId] = packageId
+                  args[:qty]=storage.qty
 
-              #check data
-              msg = FileHandler::Excel::NStorageHandler.validate_move_row params
-              if msg.result
-                mmsg = MovementSource.save_record(params, params[:type])
+                  #check data
+                  msg = FileHandler::Excel::NStorageHandler.validate_move_row args
+                  if msg.result
+                    mmsg = MovementSource.save_record(args, args[:type])
 
-                if mmsg.result
-                  # m.update(state: MovementListState::PROCESSING)
-                  pick_count += 1
+                    WhouseService.new.move(args)
+
+                    if mmsg.result
+                      # m.update(state: MovementListState::PROCESSING)
+                      pick_count += 1
+                    else
+                      err_msg += mmsg.content unless mmsg.content.blank?
+                    end
+                  else
+                    err_msg += msg.content unless msg.content.blank?
+                  end
                 end
               end
+
+              #update item status
+              if pick_item.box_quantity<=(pick_count+pick_item.picked_count)
+                pick_item.update_attributes({state: PickItemStatus::PICKED, remark: err_msg, picked_count: pick_count+pick_item.picked_count})
+              else
+                pick_item.update_attributes({state: PickItemStatus::PICKING, remark: err_msg, picked_count: pick_count+pick_item.picked_count})
+              end
+
             end
           end
 
-          if pick_item.box_quantity<=pick_count
-
+          #update list status
+          if pick_list.pick_items.where(state: [PickStatus::INIT, PickStatus::PICKED, PickStatus::ABORTED]).size == 0
+            pick_list.update_attributes({state: PickStatus::PICKING})
           end
-
         end
+      rescue => e
+        puts e.message
+        result.contents << e.message
+      end
+
+      if result.result
+        ApiMessage.new({meta: {code: 200, error_message: '择货成功'}})
+      else
+        ApiMessage.new({meta: {code: 400, error_message: result.contents}})
       end
     else
       ApiMessage.new({meta: {code: 400, error_message: '择货单没有找到'}})

@@ -30,6 +30,7 @@
           <th>要货项目</th>
           <th>要货库位</th>
           <th>是否加急</th>
+          <th>状态</th>
           <th>备注</th>
           <th>择货位置</th>
         </tr>
@@ -60,6 +61,7 @@
                     <%= pp.position.detail %>
                 <% end %></td>
               <td><%= '是' if pick_item.is_emergency %></td>
+              <td><%= PickItemStatus.display(pick_item.state) %></td>
               <td><%= pick_item.remark %></td>
               <td><%= pick_item.pick_position %></td>
             </tr>

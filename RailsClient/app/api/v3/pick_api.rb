@@ -18,7 +18,7 @@ module V3
         requires :id, type: String, desc: 'Pick List ID'
         requires :items, type: Array, desc: 'Pick Item infos'
       end
-      get :do_pick do
+      post :do_pick do
         PickListService.do_pick(params, current_user)
       end
 
