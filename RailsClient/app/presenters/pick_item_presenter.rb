@@ -48,6 +48,14 @@ class PickItemPresenter<Presenter
     json
   end
 
+  def self.as_pick_infos(pick_items, user)
+    json=[]
+    pick_items.each do |pick_item|
+      json += PickItemPresenter.new(pick_item).pick_info(user)
+    end
+    json
+  end
+
   def pick_info pick_user
     @pick_item.pick_info pick_user
   end

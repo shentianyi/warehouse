@@ -144,10 +144,10 @@ class PickListService
     PickListPresenter.as_details(PickList.where(state: status).all)
   end
 
-  def self.pick_items id
+  def self.pick_items id, user
     pick_list = PickList.find_by_id(id)
     if pick_list
-      PickItemPresenter.as_details(pick_list.pick_items)
+      PickItemPresenter.as_pick_infos(pick_list.pick_items, user)
     else
       ApiMessage.new({meta: {code: 400, error_message: '择货单没有找到'}})
     end
