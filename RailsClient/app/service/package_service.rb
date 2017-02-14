@@ -56,7 +56,7 @@ class PackageService
 
     #fifo
     unless args[:fifo_time].blank?
-      args[:fifo_time] = Date.strptime(args[:fifo_time].sub(/W /, ''), '%d.%m.%y')
+      args[:fifo_time] = Date.strptime(args[:fifo_time].sub(/W  /, ''), '%d.%m.%y')
     end
 
     #create

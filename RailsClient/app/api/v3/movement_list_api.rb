@@ -215,7 +215,7 @@ module V3
                                             part_id_display: ms.part_id_display,
                                             quantity: ms.qty,
                                             quantity_display: ms.quantity_display,
-                                            fifo_time: ms.fifo,
+                                            fifo_time: ms.fifo_time_display,
                                             fifo_time_display: ms.fifo_time_display
                                         }, current_user)
             if plc.result
