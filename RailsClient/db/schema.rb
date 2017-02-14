@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170111110102) do
+ActiveRecord::Schema.define(version: 20170211042538) do
 
   create_table "api_logs", force: true do |t|
     t.string   "user_id"
@@ -680,6 +680,7 @@ ActiveRecord::Schema.define(version: 20170111110102) do
     t.float    "weight"
     t.float    "weight_qty"
     t.boolean  "weight_valid"
+    t.integer  "picked_count",          default: 0
   end
 
   add_index "pick_items", ["destination_whouse_id"], name: "index_pick_items_on_destination_whouse_id", using: :btree

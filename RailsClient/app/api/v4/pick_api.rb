@@ -19,7 +19,18 @@ module V4
         requires :status, type: Integer, desc: 'Pick Status'
       end
       get :by_status do
-        PickService.by_status(status)
+        PickListService.by_status(status)
+      end
+
+      get :undone_list do
+        PickListService.by_status([PickStatus::INIT, PickStatus::PICKING])
+      end
+
+      params do
+        requires :id, type: String, desc: 'Pick List ID'
+      end
+      get :pick_items do
+        PickListService.pick_items(params[:id])
       end
 
     end

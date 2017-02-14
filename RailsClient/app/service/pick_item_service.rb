@@ -48,4 +48,13 @@ class PickItemService
       ApiMessage.new({meta: {code: 400, error_message: 'Order Car not found'}})
     end
   end
+
+  def self.pick_info id, pick_user
+    pick_item = PickItem.find_by_id(id)
+    if pick_item
+      PickItemPresenter.new(pick_item).pick_info(pick_user)
+    else
+      ApiMessage.new({meta: {code: 400, error_message: '择货项没有找到'}})
+    end
+  end
 end
