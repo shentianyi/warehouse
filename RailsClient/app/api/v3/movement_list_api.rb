@@ -84,6 +84,7 @@ module V3
         params[:fromWh]=params[:fromWh].sub(/LO/, '') if params[:fromWh].present?
         params[:fromPosition]=params[:fromPosition].sub(/LO/, '') if params[:fromPosition].present?
         params[:partNr]=params[:partNr].sub(/P/, '') if params[:partNr].present?
+        params[:fifo]=params[:fifo] if params[:fifo].present?
         params[:user] = current_user
         params[:type]= params[:type].blank? ? 'MOVE' : params[:type]
         puts "#{params.to_json}-----------"
@@ -214,7 +215,7 @@ module V3
                                             part_id_display: ms.part_id_display,
                                             quantity: ms.qty,
                                             quantity_display: ms.quantity_display,
-                                            custom_fifo_time: ms.remarks,
+                                            custom_fifo_time: ms.fifo,
                                             fifo_time_display: ms.fifo_time_display
                                         }, current_user)
             if plc.result

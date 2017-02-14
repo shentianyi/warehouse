@@ -12,6 +12,12 @@ module V4
         PickItemService.by_car_nr(params[:car_nr])
       end
 
+      params do
+        requires :id, type: String, desc: 'Pick Item ID'
+      end
+      get :pick_info do
+        PickItemService.pick_info(params[:id], current_user)
+      end
 
     end
   end

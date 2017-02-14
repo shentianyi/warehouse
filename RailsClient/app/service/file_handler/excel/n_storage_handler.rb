@@ -227,7 +227,7 @@ module FileHandler
         msg
       end
 
-      def self.validate_move_row(row)
+      def self.validate_move_row(row, is_check_pp=false)
         msg = Message.new(contents: [])
         # StorageOperationRecord.save_record(row, 'MOVE')
 

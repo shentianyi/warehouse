@@ -23,12 +23,12 @@ module FileHandler
                     row[k]=row[k].sub(/\.0/, '')
                   end
                 end
-                # row[:part_id] = Part.find_by_id(row[:part_id]).id unless row[:part_id].blank?
-                row[:position_id] = Position.find_by_id(row[:position_id]).id unless row[:position_id].blank?
+                 row[:part_id] = Part.find_by_id(row[:part_id]).id unless row[:part_id].blank?
+                row[:position_id] = Position.find_by_detail(row[:position_id]).id unless row[:position_id].blank?
                 row[:old_part_id] = Part.find_by_id(row[:old_part_id]).id unless row[:old_part_id].blank?
-                row[:old_position_id] = Position.find_by_id(row[:old_position_id]).id unless row[:old_position_id].blank?
+                row[:old_position_id] = Position.find_by_detail(row[:old_position_id]).id unless row[:old_position_id].blank?
                 row[:from_warehouse_id] = Whouse.find_by_id(row[:from_warehouse_id]).id unless row[:from_warehouse_id].blank?
-                row[:from_position_id] = Position.find_by_id(row[:from_position_id]).id unless row[:from_position_id].blank?
+                row[:from_position_id] = Position.find_by_detail(row[:from_position_id]).id unless row[:from_position_id].blank?
 
                 if (!row[:old_part_id].blank? && !row[:old_position_id].blank?) && pp=PartPosition.where(part_id: row[:old_part_id], position_id: row[:old_position_id]).first
                   if row[:operator].blank? || row[:operator]=='update'
@@ -108,7 +108,7 @@ module FileHandler
         end
 
         unless row[:position_id].blank?
-          if Position.find_by_id(row[:position_id]).blank?
+          if Position.find_by_detail(row[:position_id]).blank?
             msg.contents<<"库位号:#{row[:position_id]}不存在"
           end
         end
@@ -120,7 +120,7 @@ module FileHandler
         end
 
         unless row[:old_position_id].blank?
-          if Position.find_by_id(row[:old_position_id]).blank?
+          if Position.find_by_detail(row[:old_position_id]).blank?
             msg.contents<<"旧库位号:#{row[:old_position_id]}不存在"
           end
         end
@@ -132,7 +132,7 @@ module FileHandler
         end
 
         unless row[:from_position_id].blank?
-          if Position.find_by_id(row[:from_position_id]).blank?
+          if Position.find_by_detail(row[:from_position_id]).blank?
             msg.contents<<"默认源库位:#{row[:from_position_id]}不存在"
           end
         end

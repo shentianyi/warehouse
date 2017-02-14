@@ -28,7 +28,7 @@ module FileHandler
 
               row.delete(:status) if row[:status].blank?
               position=nil
-              position=Position.find_by_id(row[:position_id]) unless row[:position_id].blank?
+              position=Position.find_by_detail(row[:position_id]) unless row[:position_id].blank?
 
               if ob=OrderBox.find_by_nr(row[:nr])
                 if row[:operator].blank? || row[:operator]=='update'

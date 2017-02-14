@@ -13,7 +13,7 @@ class PickListPresenter<Presenter
     {
         id: @pick.id,
         status: @pick.state,
-        remark: @pick.remark
+        remark: @pick.remark.blank? ? '' : @pick.remark
     }
   end
 
@@ -38,7 +38,7 @@ class PickListPresenter<Presenter
   def self.as_details(picks)
     json=[]
     picks.each do |pick|
-      json<<PickListPresenter.new(pick)
+      json<<PickListPresenter.new(pick).as_basic_info
     end
     json
   end

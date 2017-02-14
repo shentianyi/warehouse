@@ -3,7 +3,7 @@
   <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
     <div>
       <span>LED号：
-        <input type="text" name="led[id]" value="<%= @id %>"/>
+        <input type="text" name="led[nr]" value="<%= @nr %>"/>
       </span>
       <span>库位：
         <input type="text" name="led[position]" value="<%= @position %>"/>

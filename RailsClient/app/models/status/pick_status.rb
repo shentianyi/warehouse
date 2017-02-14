@@ -12,7 +12,7 @@ class PickStatus<BaseStatus
         '进行中'
       when PICKED
         '完成'
-      else
+      when ABORTED
         '放弃'
     end
   end

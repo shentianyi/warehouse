@@ -2,7 +2,7 @@ module FileHandler
   module Excel
     class LedHandler<Base
       HEADERS=[
-          :nr, :name, :modem_id, :position_id, :order_box_id, :order_car_id, :current_state, :led_display, :is_valid, :operator
+          :nr, :name, :modem_id, :new_modem_id, :position_id, :order_box_id, :order_car_id, :current_state, :led_display, :is_valid, :operator
       ]
 
       def self.import(file)
@@ -19,7 +19,7 @@ module FileHandler
               row = {}
               HEADERS.each_with_index do |k, i|
                 row[k] = book.cell(line, i+1).to_s.strip
-                row[k]=row[k].sub(/\.0/, '') if [:id, :nr].include?(k)
+                row[k]=row[k].sub(/\.0/, '') if [:name, :id, :nr].include?(k)
               end
               row[:modem_id] = Modem.find_by_ip(row[:modem_id]).id unless row[:modem_id].blank?
               row[:position_id] = Position.find_by_detail(row[:position_id]).id unless row[:position_id].blank?
@@ -29,11 +29,12 @@ module FileHandler
 
               led=Led.where(nr: row[:nr], modem_id: row[:modem_id]).first
               if ['update', 'UPDATE'].include?(row[:operator])
-                led.update(row.except(:operator))
+                row[:modem_id] = Modem.find_by_ip(row[:new_modem_id]).id unless row[:new_modem_id].blank?
+                led.update(row.except(:operator, :new_modem_id))
               elsif ['delete', 'DELETE'].include?(row[:operator])
                 led.destroy
               else
-                led = Led.new(row.except(:operator))
+                led = Led.new(row.except(:operator, :new_modem_id))
                 unless led.save
                   puts led.errors.to_json
                   raise led.errors.to_json
@@ -93,12 +94,13 @@ module FileHandler
       def self.validate_row(row, line)
         msg = Message.new(contents: [])
 
+        led=nil
         if row[:nr].blank? || row[:modem_id].blank?
           msg.contents<<"LED编号和控制器IP不可为空"
         else
           led = Led.joins(:modem).where(nr: row[:nr]).where(modems: {ip: row[:modem_id]}).first
           if ['update', 'UPDATE', 'DELETE', 'delete'].include?(row[:operator])
-            if led.blank?
+            if (led = Led.joins(:modem).where(nr: row[:nr]).where(modems: {ip: row[:modem_id]}).first).blank?
               msg.contents<<"LED->编号:#{row[:nr]}/控制器IP:#{row[:modem_id]}不存在"
             end
           else
@@ -111,6 +113,14 @@ module FileHandler
         unless row[:modem_id].blank?
           unless Modem.find_by_ip(row[:modem_id])
             msg.contents<<"控制器IP:#{row[:modem_id]}不存在"
+          end
+        end
+        
+        unless row[:new_modem_id].blank?
+          if ['update', 'UPDATE'].include?(row[:operator])
+            unless Modem.find_by_ip(row[:new_modem_id])
+              msg.contents<<"控制器IP:#{row[:new_modem_id]}不存在"
+            end
           end
         end
 

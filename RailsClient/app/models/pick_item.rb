@@ -67,4 +67,34 @@ class PickItem < ActiveRecord::Base
 
     pick_storages.join("-----")
   end
+
+  def pick_info pick_user
+    pick_storages=[]
+
+    pick_item_wh_ids=[]
+    pick_user_wh_ids=[]
+
+    if pick_user
+      pick_user_wh_ids=pick_user.location.whouses.pluck(:id)
+    end
+    if self.destination_whouse && self.destination_whouse.location
+      LocationDestination.where(destination_id: self.destination_whouse.location.id).each do |ld|
+        pick_item_wh_ids+=ld.location.whouses.pluck(:id)
+      end
+    end
+
+    if (pick_item_wh_ids&pick_user_wh_ids).size>0
+      storages=NStorage.where(partNr: self.part_id, ware_house_id: pick_item_wh_ids&pick_user_wh_ids)
+      storages.each do |storage|
+        #pick_storages<<"(#{storage.packageId}/#{storage.position})"
+        pick_storages<<{
+            part_id: storage.partNr,
+            package_id: storage.packageId.blank? ? '' : storage.packageId,
+            position: storage.position.blank? ? '' : storage.position
+        }
+      end
+    end
+
+    pick_storages
+  end
 end

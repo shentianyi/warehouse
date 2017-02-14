@@ -175,24 +175,26 @@ class OrderService
   end
 
   def self.create_by_led user, params
-    validable_led_and_modem(params) do |part|
+    validable_led_and_modem(params) do |part, led|
       order=Order.new(status: OrderStatus::INIT)
       order.user=user
+      order.source_location_id = user.location_id
 
       order_item=OrderItem.new({
                                    state: OrderStatus::INIT,
-                                   quantity: params[:qty],
+                                   box_quantity: params[:qty],
                                    part_id: part.id,
-                                   is_emergency: 0
+                                   is_emergency: 0,
+                                   whouse_id: led.position.whouse.id
                                })
       order_item.user=user
       order_item.order=order
 
-      if order.save
+      if order_item.save && order.save
         {
             meta: {
                 code: 200,
-                message: 'Signed Success'
+                message: 'Create Order Success'
             },
             data: OrderPresenter.new(order).as_basic_info
         }
@@ -307,6 +309,7 @@ class OrderService
   private
   def self.validable_led_and_modem params
     err_infos=[]
+    part = nil
     if modem = Modem.find_by_ip(params[:ip])
       if (led = Led.where(nr: params[:led_id], modem_id: modem.id).first).blank?
         err_infos<<"LED灯:#{params[:led_id]}没有找到!"
@@ -322,7 +325,7 @@ class OrderService
 
     if err_infos.size==0
       if block_given?
-        yield(part)
+        yield(part, led)
       else
         ApiMessage.new({meta: {code: 200, message: '数据验证通过'}})
       end
