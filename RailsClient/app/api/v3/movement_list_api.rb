@@ -161,6 +161,7 @@ module V3
                 args[:partNr] = movement[:partNr].present? ? movement[:partNr] : nil
                 args[:qty] = movement[:qty].present? ? movement[:qty].to_f : nil
                 args[:packageId] = movement[:packageId].present? ? movement[:packageId] : nil
+                args[:fifo] = movement[:fifo] if movement[:fifo].present?
 
                 if movement[:partNr].present? && movement[:packageId].blank?
                   raise '请填写数量' unless movement[:qty].present?
