@@ -190,15 +190,15 @@ class PickListService
                   args[:partNr]=storage.partNr
                   args[:packageId] = packageId
                   args[:qty]=storage.qty
+                  args[:fifo]=storage.fifo
 
                   #check data
                   msg = FileHandler::Excel::NStorageHandler.validate_move_row args
                   if msg.result
                     mmsg = MovementSource.save_record(args, args[:type])
-
-                    WhouseService.new.move(args)
-
+                    
                     if mmsg.result
+                      WhouseService.new.move(args)
                       # m.update(state: MovementListState::PROCESSING)
                       pick_count += 1
                     else

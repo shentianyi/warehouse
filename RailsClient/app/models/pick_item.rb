@@ -90,8 +90,7 @@ class PickItem < ActiveRecord::Base
         pick_storages<<{
             part_id: storage.partNr,
             package_id: storage.packageId.blank? ? '' : storage.packageId,
-            position: storage.position.blank? ? '' : storage.position,
-            pick_item_id: self.id
+            position: storage.position.blank? ? '' : storage.position
         }
       end
     end

@@ -224,6 +224,7 @@ class WhouseService
           move_data[:partNr] = storage.partNr
           move_data[:fromPosition] = params[:fromPosition]
           move_data[:packageId] = params[:packageId]
+          move_data[:fifo] = params[:fifo]
           Movement.create!(move_data)
         else
           tostorage = NStorage.where(ware_house_id: toWh.id, partNr: params[:partNr], position: params[:toPosition], packageId: params[:packageId]).order("n_storages.qty asc").first
@@ -248,6 +249,7 @@ class WhouseService
           move_data[:partNr] = storage.partNr
           move_data[:fromPosition] = params[:fromPosition]
           move_data[:packageId] = params[:packageId]
+          move_data[:fifo] = params[:fifo]
           Movement.create!(move_data)
         end
       end
