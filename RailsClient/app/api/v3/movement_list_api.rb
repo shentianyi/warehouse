@@ -153,7 +153,9 @@ module V3
 
             NStorage.transaction do
               params[:movements].each_with_index do |movement, index|
+                puts '------------------------------------'
                 puts movement
+                puts '------------------------------------'
                 args[:toWh] = movement[:toWh]
                 args[:toPosition] = movement[:toPosition]
                 args[:fromWh] = movement[:fromWh].present? ? movement[:fromWh] : nil

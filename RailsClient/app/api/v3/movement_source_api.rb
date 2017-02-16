@@ -48,7 +48,7 @@ module V3
           args[:id] = movement_source.id
           args[:fromWh] = movement_source.fromWh
           args[:fromPosition] = movement_source.fromPosition
-          args[:fifo] = movement_source.fifo
+          args[:fifo] = movement_source.fifo.blank? ? '' : movement_source.fifo
           args[:toWh] = movement_source.toWh
           args[:toPosition] = movement_source.toPosition
           args[:packageId] = movement_source.packageId
