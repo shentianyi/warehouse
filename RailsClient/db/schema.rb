@@ -680,7 +680,7 @@ ActiveRecord::Schema.define(version: 20170211042538) do
     t.float    "weight"
     t.float    "weight_qty"
     t.boolean  "weight_valid"
-    t.integer  "picked_count"
+    t.integer  "picked_count",          default: 0
   end
 
   add_index "pick_items", ["destination_whouse_id"], name: "index_pick_items_on_destination_whouse_id", using: :btree

@@ -84,6 +84,7 @@ module V3
         params[:fromWh]=params[:fromWh].sub(/LO/, '') if params[:fromWh].present?
         params[:fromPosition]=params[:fromPosition].sub(/LO/, '') if params[:fromPosition].present?
         params[:partNr]=params[:partNr].sub(/P/, '') if params[:partNr].present?
+        params[:fifo]=params[:fifo] if params[:fifo].present?
         params[:user] = current_user
         params[:type]= params[:type].blank? ? 'MOVE' : params[:type]
         puts "#{params.to_json}-----------"
@@ -160,6 +161,7 @@ module V3
                 args[:partNr] = movement[:partNr].present? ? movement[:partNr] : nil
                 args[:qty] = movement[:qty].present? ? movement[:qty].to_f : nil
                 args[:packageId] = movement[:packageId].present? ? movement[:packageId] : nil
+                args[:fifo] = movement[:fifo] if movement[:fifo].present?
 
                 if movement[:partNr].present? && movement[:packageId].blank?
                   raise '请填写数量' unless movement[:qty].present?
@@ -214,7 +216,7 @@ module V3
                                             part_id_display: ms.part_id_display,
                                             quantity: ms.qty,
                                             quantity_display: ms.quantity_display,
-                                            custom_fifo_time: ms.remarks,
+                                            fifo_time: ms.fifo_time_display,
                                             fifo_time_display: ms.fifo_time_display
                                         }, current_user)
             if plc.result

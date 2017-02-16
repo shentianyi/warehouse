@@ -11,7 +11,7 @@ module V3
         requires :id, type: String, desc: 'Pick List ID'
       end
       get :pick_items do
-        PickListService.pick_items(params[:id])
+        PickListService.pick_items(params[:id], current_user)
       end
 
       params do

@@ -144,10 +144,10 @@ class PickListService
     PickListPresenter.as_details(PickList.where(state: status).all)
   end
 
-  def self.pick_items id
+  def self.pick_items id, user
     pick_list = PickList.find_by_id(id)
     if pick_list
-      PickItemPresenter.as_details(pick_list.pick_items)
+      PickItemPresenter.as_pick_infos(pick_list.pick_items, user)
     else
       ApiMessage.new({meta: {code: 400, error_message: '择货单没有找到'}})
     end
@@ -190,15 +190,15 @@ class PickListService
                   args[:partNr]=storage.partNr
                   args[:packageId] = packageId
                   args[:qty]=storage.qty
+                  args[:fifo]=storage.fifo
 
                   #check data
                   msg = FileHandler::Excel::NStorageHandler.validate_move_row args
                   if msg.result
                     mmsg = MovementSource.save_record(args, args[:type])
-
-                    WhouseService.new.move(args)
-
+                    
                     if mmsg.result
+                      WhouseService.new.move(args)
                       # m.update(state: MovementListState::PROCESSING)
                       pick_count += 1
                     else
