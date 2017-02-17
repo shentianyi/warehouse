@@ -24,7 +24,7 @@ module V3
             record[:toWh] = movement_source.toWh
             record[:toPosition] = movement_source.toPosition
             record[:partNr] = movement_source.partNr
-            record[:fifo] = movement_source.fifo_time_display
+            record[:fifo] = movement_source.fifo.blank? ? '' : movement_source.fifo
             record[:fromWh] = movement_source.fromWh
             record[:fromPosition] = movement_source.fromPosition
             record[:packageId] = movement_source.packageId
@@ -48,7 +48,7 @@ module V3
           args[:id] = movement_source.id
           args[:fromWh] = movement_source.fromWh
           args[:fromPosition] = movement_source.fromPosition
-          args[:fifo] = movement_source.fifo
+          args[:fifo] = movement_source.fifo.blank? ? '' : movement_source.fifo
           args[:toWh] = movement_source.toWh
           args[:toPosition] = movement_source.toPosition
           args[:packageId] = movement_source.packageId

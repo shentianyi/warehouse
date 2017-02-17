@@ -51,7 +51,10 @@ class PickItemPresenter<Presenter
   def self.as_pick_infos(pick_items, user)
     json=[]
     pick_items.each do |pick_item|
-      json += PickItemPresenter.new(pick_item).pick_info(user)
+      json<<{
+          pick_item_id: pick_item.id,
+          packageIds: PickItemPresenter.new(pick_item).pick_info(user)
+      }
     end
     json
   end
