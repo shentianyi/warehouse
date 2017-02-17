@@ -2,9 +2,7 @@
 module Printer
   class P010<Base
     HEAD=[:transfernote_Nr, :transfer_quantity, :date]
-    #BODY=[:Nr, :part_Nr, :unique_code, :quantity, :originalW, :target_W, :remark]
-    #BODY=[:Nr, :part_Nr, :unique_code, :quantity, :originalW, :target_W, :target_P]
-    BODY=[:Nr, :part_Nr, :unique_code, :quantity, :originalP, :target_W, :target_P]
+    BODY=[:Nr, :part_Nr, :unique_code, :quantity, :originalP, :target_W, :target_p]
 
     def generate_data
       m = MovementList.find_by_id(self.id)
@@ -22,10 +20,8 @@ module Printer
             part_Nr: i.partNr,
             unique_code: i.packageId,
             quantity:i.qty,
-            #originalW: i.fromWh,
             originalP: i.fromPosition,
             target_W: i.toWh,
-            #remark: i.remarks||' '
             target_P: i.toPosition
         }
 
