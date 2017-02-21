@@ -66,6 +66,10 @@ ActiveRecord::Base.transaction do
   end
 
   #库位容量配置
+  unless SysConfig.find_by_code('POSITION_CAPACITY_SWITCH')
+    SysConfig.create(code: 'POSITION_CAPACITY_SWITCH', category: '库位容量配置', index: 900, value: 'true', name: '库位容量检查开关')
+  end
+
   unless SysConfig.find_by_code('WOODEN_POSITION_CAPACITY')
     SysConfig.create(code: 'WOODEN_POSITION_CAPACITY', category: '库位容量配置', index: 900, value: '150', name: '木盘库位容量')
   end

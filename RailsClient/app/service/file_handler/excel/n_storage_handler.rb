@@ -288,7 +288,13 @@ module FileHandler
               else
                 position_capacity=nomal_position_capacity
               end
-              result=position.check_position_capacity(position_stock[row[:toPosition]], position_capacity.to_i)
+
+              if SysConfigCache.position_capacity_switch_value=='true'
+                result=position.check_position_capacity(position_stock[row[:toPosition]], position_capacity.to_i)
+              else
+                result = true
+              end
+
               if !result.result && msg.result
                 msg.result = false
                 msg.content = "下载错误文件<a href='/files/#{Base64.urlsafe_encode64(tmp_file)}'>#{::File.basename(tmp_file)}</a>"
