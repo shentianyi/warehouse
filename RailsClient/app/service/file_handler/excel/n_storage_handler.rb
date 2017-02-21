@@ -292,7 +292,7 @@ module FileHandler
               if SysConfigCache.position_capacity_switch_value=='true'
                 result=position.check_position_capacity(position_stock[row[:toPosition]], position_capacity.to_i)
               else
-                result = true
+                result = Message.new(result: true)
               end
 
               if !result.result && msg.result
