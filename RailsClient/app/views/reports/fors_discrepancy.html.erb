@@ -1,0 +1,107 @@
+<div class="panel panel-warning">
+  <div class="panel-heading">
+    <h2>差异报表</h2>
+    导入Force报表,系统根据报表自动计算差异,可以选择在网页或者直接导出xlsx格式的文档进行查看
+  </div>
+  <div class="panel-body">
+    <br/>
+    <div>
+      <script type="text/javascript">
+          $(function () {
+              data_upload("#item-data-uploader", false, function (data) {
+                  if (data.result) {
+                      $("#file").val(JSON.stringify(data.content));
+                      $("#item-data-uploader-preview > span[info]").html("文件上传成功");
+                  } else {
+                      $("#file").val('');
+                  }
+              });
+          });
+          function submitForm() {
+              if ($("#file").val().length > 0)
+                  document.forms[0].submit();
+              else
+                  alert('请上传文件');
+          }
+      </script>
+      <div>
+        <span>上传报表：</span>
+        <input id="item-data-uploader" type="file" name="files[]" data-url="/reports/upload_file">
+        <div class="abstractblock" id="item-data-uploader-preview" style="<%= "display:none" if @file.nil? %>;">
+          <% if @file %>
+              <span>文件：<%= @file["data"]["original_filename"] %></span>
+              <br>
+              <span info>文件上传成功</span>
+          <% end%>
+        </div>
+      </div>
+
+      <div><a href="/files/download?folder=template&file=ForsTemplate.xlsx">下载模板</a></div>
+    </div>
+    <div>
+      <form method="get" action="<%= reports_fors_discrepancy_path %>">
+        <div>
+          <span class="label label-info">显示方式:</span>
+          <%= select_tag :format, options_for_select([["Web", "html"],["Excel File(MS 07 or later)", "xlsx"]], "html") %>
+          <input type="hidden" id="file" name="file" value="<%= @jsonfile%>">
+          <input type="button" value="确定" class="btn btn-warning" name="commit" onclick="submitForm()"/>
+        </div>
+      </form>
+    </div>
+  </div>
+  <br/>
+  <div class="alert alert-success" role="alert">
+    <p><%= @title%></p>
+  </div>
+  <table class="table table-striped table-condensed table-hover">
+    <thead>
+    <tr>
+      <th>编号</th>
+      <th>零件号</th>
+      <th>仓库</th>
+      <th>库位</th>
+      <th>FIFO</th>
+
+      <th>系统数量</th>
+      <th>报表数量</th>
+      <th>差异值</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% i = 0%>
+    <% @results.each do |key,value| %>
+        <tr>
+          <td><%= i+1 %><% i=i+1%></td>
+          <td><span class="label label-info"><%= value["Partnumber"]%></span></td>
+          <td><%= value["Whouse"]%></td>
+          <td><span class="badge"><%= value["Location"]%></span></td>
+          <td><span class="badge"><%= value["FIFO-Date"]%></span></td>
+          <td><span class="badge"><%= value["WMS-Stock"]%></span></td>
+          <td><span class="badge"><%= value["Stock"]%></span></td>
+          <td>
+            <% d =  value["WMS-Stock"] - value["Stock"]%>
+            <% if d > 0%>
+                <span class="label label-danger"><%= d %></span>
+            <% elsif d < 0%>
+                <span class="label label-warning"><%= d %></span>
+            <% else%>
+                <span class="label label-primary"><%= d %></span>
+            <% end %>
+          </td>
+        </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%%>
+
+<script>
+    $(function () {
+        $(".datepicker").datetimepicker({
+            lang: 'ch',
+            format: 'Y-m-d H:i'
+        });
+    });
+    init_check();
+</script>

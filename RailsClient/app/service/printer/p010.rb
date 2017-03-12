@@ -12,7 +12,7 @@ module Printer
         heads<<{Key: k, Value: head[k]}
       end
 
-      movement_sources = m.movement_sources
+      movement_sources = m.movement_sources.order(:partNr)
 
       movement_sources.each_with_index do |i, index|
         body= {

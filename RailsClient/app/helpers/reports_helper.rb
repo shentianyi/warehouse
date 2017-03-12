@@ -69,6 +69,7 @@ module ReportsHelper
       }
       fors_data << _params
     end
+    puts fors_data
 
     fors_data.each {|fd|
       if res_hash[fd["PartNr."]+fd["Warehouse"]].nil?
@@ -79,7 +80,71 @@ module ReportsHelper
     return res_hash.sort_by {|key,value| value["Warehouse"]}
   end
 
+  def self.fors_xlsx_filter file
+    res_hash = {}
+    jsfile = JSON.parse(file)
+    f = FileData.new(jsfile)
+    book = Roo::Excelx.new f.full_path
+
+    book.default_sheet = book.sheets.first
+    headers = []
+    book.row(1).each {|header|
+      headers << header
+    }
+
+    fors_data = []
+
+    2.upto(book.last_row) do |line|
+      params = {}
+      headers.each_with_index{|key,i|
+        params[key] = book.cell(line,i+1).to_s
+      }
+
+      insert = true
+      _params = {}
+      fors_pa87_keys.each {|key|
+        if insert && (params[key].nil? || params[key].to_s.blank?)
+          insert = false
+          break
+        end
+
+        if params[key].is_number?
+          _params[key] = params[key].to_i.to_s
+        else
+          _params[key] = params[key]
+        end
+      }
+      fors_data << _params unless _params.blank?
+    end
+
+    puts '-----------------------------'
+    puts fors_data
+
+    fors_data.each {|fd|
+      if res_hash[fd["Partnumber"]+fd["Location"]+fd["FIFO-Date"]].nil?
+        res_hash[fd["Partnumber"]+fd["Location"]+fd["FIFO-Date"]] = {
+            "Partnumber" => fd["Partnumber"],
+            "Whouse" => fd["Whouse"],
+            "Location" => fd["Location"],
+            "FIFO-Date" => fd["FIFO-Date"],
+            "Stock" => fd["Stock"].to_f,
+            "WMS-Stock" => NStorage.stock_by_part_position_fifo(fd["Partnumber"], fd["Whouse"],fd["Location"],fd["FIFO-Date"])
+        }
+      else
+        res_hash[fd["Partnumber"]+fd["Location"]+fd["FIFO-Date"]]["Stock"] = res_hash[fd["Partnumber"]+fd["Location"]+fd["FIFO-Date"]]["Stock"].to_f + fd["Stock"].to_f
+      end
+    }
+
+    p res_hash
+    return res_hash.sort_by {|key,value| value["FIFO-Date"]}
+  end
+
   private
+
+  def self.fors_pa87_keys
+    ["Partnumber", "Whouse", "Location", "FIFO-Date", "Stock"]
+  end
+
   def self.fors_sys_keys
     ["PartNr.","Warehouse","Quantity"]
   end

@@ -160,6 +160,27 @@ class ReportsController < ApplicationController
     end
   end
 
+  def fors_discrepancy
+    @results = {}
+    if params.has_key?(:file)
+      @file = JSON.parse(params[:file])
+      case @file["extention"]
+        when '.xlsx'
+          @results = ReportsHelper.fors_xlsx_filter(params[:file])
+      end
+    end
+
+    respond_to do |format|
+      format.html
+      format.xlsx do
+        send_data(entry_fors_discrepancy_xlsx(@results),
+                  :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+                  :filename => "Fors差异.xlsx"
+        )
+      end
+    end
+  end
+
   def orders_report
     @date_start = params[:date_start].nil? ? 1.day.ago.strftime("%Y-%m-%d 7:00") : params[:date_start]
     @date_end = params[:date_end].nil? ? Time.now.strftime("%Y-%m-%d 7:00") : params[:date_end]
@@ -230,6 +251,26 @@ class ReportsController < ApplicationController
                           removal_packages["#{o.part_id}#{o.whouse_id}"].nil? ? "" : all_orders["#{o.part_id}#{o.whouse_id}"] - removal_packages["#{o.part_id}#{o.whouse_id}"]['count']
                          ], :types => [:string]
         removal_packages["#{o.part_id}#{o.whouse_id}"] = nil
+      }
+    end
+    p.to_stream.read
+  end
+
+  def entry_fors_discrepancy_xlsx results
+    p = Axlsx::Package.new
+    wb = p.workbook
+    wb.add_worksheet(:name => "Basic Sheet") do |sheet|
+      sheet.add_row ["零件号", "仓库", "库位", "FIFO", "系统数量", "报表数量", "差异值"]
+      results.each { |k, v|
+        sheet.add_row [
+                          v["Partnumber"],
+                          v["Whouse"],
+                          v["Location"],
+                          v["FIFO-Date"],
+                          v["WMS-Stock"],
+                          v["Stock"],
+                          v["WMS-Stock"] - v["Stock"]
+                      ], :types => [:string]
       }
     end
     p.to_stream.read

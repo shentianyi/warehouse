@@ -59,6 +59,9 @@ class NStorage < ActiveRecord::Base
     return results
   end
 
+  def self.stock_by_part_position_fifo partNr, whouse, position, fifo
+    NStorage.where(partNr: partNr, ware_house_id: whouse, position: position, fifo: fifo).pluck(:qty).sum
+  end
 
   def self.to_total_xlsx n_storages
     p = Axlsx::Package.new
