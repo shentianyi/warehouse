@@ -1,26 +1,14 @@
 ActiveRecord::Base.transaction do
 
-  unless t=Tenant.find_by_code('SHJX')
-    t=Tenant.create(name: '上海佳轩物流有限公司', code: 'SHJX', short_name: '上海佳轩简称', type: TenantType::SELF)
+  unless t=Tenant.find_by_code('CQJX')
+    t=Tenant.create(name: '重庆佳轩物流有限公司', code: 'CQJX', short_name: '上海佳轩简称', type: TenantType::SELF)
   end
-
-  unless t2=Tenant.find_by_code('XSJX')
-    t2=Tenant.create(name: '萧山佳轩物流有限公司', code: 'XSJX', short_name: '萧山佳轩简称', type: TenantType::SELF)
-  end
-
   
   # init location and admin
-  unless (jxlo=Location.find_by_nr('SHJXLO'))
-    jxlo = Location.create(nr: 'SHJXLO', name: '上海佳轩物流', is_base: true,
+  unless (jxlo=Location.find_by_nr('SHCQJXLO'))
+    jxlo = Location.create(nr: 'SHCQJXLO', name: '重庆佳轩物流', is_base: true,
                            tenant_id: t.id,
-                           address: '上海佳轩物流有限公司的地址',
-                           receive_mode: DeliveryReceiveMode::PACKAGE)
-  end
-
-  unless (jxlo2=Location.find_by_nr('XSJXLO'))
-    jxlo2 = Location.create(nr: 'XSJXLO', name: '萧山佳轩简称', is_base: true,
-                           tenant_id: t2.id,
-                           address: '萧山佳轩物流有限公司的地址',
+                           address: '重庆市北碚区同源路53号',
                            receive_mode: DeliveryReceiveMode::PACKAGE)
   end
 
@@ -31,8 +19,8 @@ ActiveRecord::Base.transaction do
   end
 
   # init client
-  unless shl=Tenant.find_by_code('SHL')
-    shl=Tenant.create(name: '上海莱尼电器有限公司', code: 'SHL', short_name: '上海莱尼')
+  unless cqle=Tenant.find_by_code('CQLE')
+    cqle=Tenant.create(name: '重庆李尔', code: 'CQLE', short_name: '重庆李尔')
   end
 
   unless czl=Tenant.find_by_code('CZL')
@@ -40,10 +28,10 @@ ActiveRecord::Base.transaction do
   end
 
   # init location
-  unless (shllo=Location.find_by_nr('SHLLO'))
-    shllo = Location.create(nr: 'SHLLO', name: '上海莱尼', is_base: true,
-                            tenant_id: shl.id,
-                            address: '上海莱尼电器有限公司的地址',
+  unless (cqlelo=Location.find_by_nr('CQLELO'))
+    cqlelo = Location.create(nr: 'CQLELO', name: '重庆李尔', is_base: true,
+                            tenant_id: cqle.id,
+                            address: '重庆李尔有限公司的地址',
                             receive_mode: DeliveryReceiveMode::FORKLIFT,
                             order_source_location_id:jxlo.id)
   end
@@ -55,8 +43,8 @@ ActiveRecord::Base.transaction do
   end
 
   # set as destination
-  unless ps= jxlo.location_destinations.where(destination_id: shllo.id).first
-    jxlo.add_destination(shllo)
+  unless ps= jxlo.location_destinations.where(destination_id: cqlelo.id).first
+    jxlo.add_destination(cqlelo)
   end
   unless czllo.location_destinations.where(destination_id: jxlo.id).first
     czllo.add_destination(jxlo)
@@ -85,12 +73,12 @@ ActiveRecord::Base.transaction do
   czllo.save
 
   # sh receive warehouse
-  unless shrw=Whouse.find_by_nr('SHReceive')
-    shrw=shllo.whouses.create(nr: 'SHReceive', name: '上海莱尼接收仓库')
+  unless shrw=Whouse.find_by_nr('CQLEReceive')
+    shrw=cqlelo.whouses.create(nr: 'CQLEReceive', name: '重庆李耳接收仓库')
   end
 
-  shllo.receive_whouse=shrw
-  shllo.save
+  cqlelo.receive_whouse=shrw
+  cqlelo.save
 
 
 
@@ -100,7 +88,7 @@ ActiveRecord::Base.transaction do
   end
 
   unless SysConfig.find_by_code('JIAXUAN_EXTRA_SH_CUSTOM')
-    SysConfig.create(code: 'JIAXUAN_EXTRA_SH_CUSTOM', value: shl.code,category: '佳轩扩展配置', index: 1300, name: '上海客户编码')
+    SysConfig.create(code: 'JIAXUAN_EXTRA_SH_CUSTOM', value: cqle.code,category: '佳轩扩展配置', index: 1300, name: '重庆客户编码')
   end
 
   unless SysConfig.find_by_code('JIAXUAN_EXTRA_CZ_CUSTOM')
