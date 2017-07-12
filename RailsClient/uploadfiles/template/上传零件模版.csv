@@ -1,1 +1,5 @@
-PartNr;Unit;UnitPack;PartType;ConvertUnit;Description;包装类型;Supplier;Operator
+;
+wooden;木盘
+box;纸箱
+nps;NPS
+pallet;托盘
