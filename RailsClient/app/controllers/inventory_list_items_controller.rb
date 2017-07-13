@@ -5,7 +5,7 @@ class InventoryListItemsController < ApplicationController
   respond_to :html
 
   def index
-    @inventory_list_items = InventoryListItem.paginate(:page => params[:page], :per_page => 50).order(:created_at)
+    @inventory_list_items = InventoryListItem.paginate(:page => params[:page], :per_page => 50).order(created_at: :desc)
     respond_with(@inventory_list_items)
   end
 
@@ -110,6 +110,7 @@ class InventoryListItemsController < ApplicationController
     @inventory_list_items=@inventory_list.inventory_list_items.paginate(:page => params[:page])
     @page_start=(params[:page].nil? ? 0 : (params[:page].to_i-1))*20
 
+    flash[:notice] = "盘点入库成功"
     render 'inventory_lists/inventory_list_items'
   end
 
@@ -143,6 +144,7 @@ class InventoryListItemsController < ApplicationController
       @inventory_list_state=params[:inventory_list][:state]
     end if params[:inventory_list].present?
 
+    query = query.order(created_at: :desc)
     if params.has_key? "download"
       send_data(query.to_xlsx(query),
                 :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",

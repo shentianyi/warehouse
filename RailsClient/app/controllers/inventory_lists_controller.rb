@@ -5,7 +5,7 @@ class InventoryListsController < ApplicationController
 
   def index
 
-    @inventory_lists = InventoryList.paginate(:page => params[:page])
+    @inventory_lists = InventoryList.order(created_at: :desc).paginate(:page => params[:page])
 
     if SysConfigCache.hide_finished_inventory_value=='true'
       @inventory_lists=@inventory_lists.where('state!=?', InventoryListState::ENDING).order(created_at: :desc)
