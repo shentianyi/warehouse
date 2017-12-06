@@ -58,11 +58,11 @@
       </div>
     </div>
     <div class="col-sm-12">
-      <div class="col-sm-4">
-        唯一码：
-        <input type="text" name="n_storage[packageId]" value="<%= @packageId %>"/>
-        <input type="hidden" name="n_storage[packageId_fuzzy]"/>
-      </div>
+      <!--<div class="col-sm-4">-->
+        <!--唯一码：-->
+        <!--<input type="text" name="n_storage[packageId]" value="<#%= @packageId %>"/>-->
+        <!--<input type="hidden" name="n_storage[packageId_fuzzy]"/>-->
+      <!--</div>-->
       <div class="col-sm-8">
         更新日期：
         <input type="text" name="n_storage[updated_at][start]" class="datepicker" value="<%= @updated_at_start %>"/> ~ <input type="text" name="n_storage[updated_at][end]" class="datepicker" value="<%= @updated_at_end %>"/>
@@ -114,7 +114,7 @@
   <tr>
     <th>零件号</th>
     <th>包装类型</th>
-    <th>唯一码</th>
+    <!--<th>唯一码</th>-->
     <th>库存总量</th>
     <th>FIFO</th>
     <th>更新日期</th>
@@ -129,7 +129,7 @@
           <tr>
             <td><%= storage.part.nr if storage.part.present? %></td>
             <td><%= storage.part.package_name if storage.part.present? %></td>
-            <td><%= storage.packageId %></td>
+            <!--<td><#%= storage.packageId %></td>-->
             <td><%= storage.total_qty %></td>
             <td><%= storage.fifo.localtime if storage.fifo %> </td>
             <td><%= storage.updated_at.localtime if storage.updated_at %> </td>

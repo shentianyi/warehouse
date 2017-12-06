@@ -48,7 +48,7 @@
   <tr>
     <th>NO.</th>
     <th>零件号</th>
-    <th>唯一码</th>
+    <!--<th>唯一码</th>-->
     <th>数量</th>
     <th>FIFO</th>
     <th>创建时间</th>
@@ -73,7 +73,7 @@
         <% else %>
             <td></td>
         <% end %>
-        <td><%= movement.packageId if movement.packageId %></td>
+        <!--<td><#%= movement.packageId if movement.packageId %></td>-->
         <td><%= movement.qty %></td>
         <td><%= movement.fifo.localtime if movement.fifo %> </td>
         <td><%= movement.created_at.localtime if movement.created_at %></td>

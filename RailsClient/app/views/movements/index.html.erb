@@ -47,10 +47,10 @@
         零件号：
         <input type="text" name="movement[partNr]" value="<%= @partNr %>"/>
       </div>
-      <div class="col-sm-3">
-        唯一码：
-        <input type="text" name="movement[packageId]" value="<%= @packageId %>"/>
-      </div>
+      <!--<div class="col-sm-3">-->
+        <!--唯一码：-->
+        <!--<input type="text" name="movement[packageId]" value="<#%= @packageId %>"/>-->
+      <!--</div>-->
       <div class="col-sm-3">
         类型：
         <%= select_tag('movement[type_id]', options_from_collection_for_select(MoveType.all, :id, :typeId, @type_id), include_blank: true) %>
@@ -132,7 +132,7 @@
   <tr>
     <th>NO.</th>
     <th>零件号</th>
-    <th>唯一码</th>
+    <!--<th>唯一码</th>-->
     <th>移动量</th>
     <th>类型</th>
     <th>FIFO</th>
@@ -156,7 +156,7 @@
         <% else %>
             <td></td>
         <% end %>
-        <td><%= movement.packageId if movement.packageId %></td>
+        <!--<td><#%= movement.packageId if movement.packageId %></td>-->
         <td><%= movement.qty %></td>
         <td><%= MoveType.find(movement.type_id).typeId if movement.type_id %> </td>
         <td><%= movement.fifo.localtime if movement.fifo %> </td>

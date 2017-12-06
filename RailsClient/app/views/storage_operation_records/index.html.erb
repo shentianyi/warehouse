@@ -45,11 +45,11 @@
         <input type="text" name="storage_operation_record[partNr]" value="<%= @partNr %>"/>
         <input type="hidden" name="storage_operation_record[partNr_fuzzy]"/>
       </div>
-      <div class="col-sm-4">
-        唯一码：
-        <input type="text" name="storage_operation_record[packageId]" value="<%= @packageId %>"/>
-        <input type="hidden" name="storage_operation_record[packageId_fuzzy]"/>
-      </div>
+      <!--<div class="col-sm-4">-->
+        <!--唯一码：-->
+        <!--<input type="text" name="storage_operation_record[packageId]" value="<#%= @packageId %>"/>-->
+        <!--<input type="hidden" name="storage_operation_record[packageId_fuzzy]"/>-->
+      <!--</div>-->
       <div class="col-sm-4">
         源仓库号：
         <%= select_tag('storage_operation_record[fromWh]', options_from_collection_for_select(Whouse.all, :nr, :name, @fromWh), include_blank: true) %>
@@ -115,7 +115,7 @@
     <th>源库位</th>
     <th>目的仓库</th>
     <th>目的库位</th>
-    <th>唯一码</th>
+    <!--<th>唯一码</th>-->
     <th>类型</th>
     <th>备注</th>
     <th>员工号</th>
@@ -133,7 +133,7 @@
         <td><%= storage_operation_record.fromPosition %></td>
         <td><%= storage_operation_record.toWh %></td>
         <td><%= storage_operation_record.toPosition %></td>
-        <td><%= storage_operation_record.packageId %></td>
+        <!--<td><#%= storage_operation_record.packageId %></td>-->
         <td><%= MoveType.find(storage_operation_record.type_id).typeId if storage_operation_record.type_id %></td>
         <td><%= storage_operation_record.remarks %></td>
         <td><%= storage_operation_record.user.blank? ? '': storage_operation_record.user.nr%></td>

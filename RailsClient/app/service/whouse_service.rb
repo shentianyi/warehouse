@@ -54,17 +54,20 @@ class WhouseService
       data[:uniqueId] = params[:uniqueId] if params[:uniqueId].present?
       data[:packageId] = params[:packageId] if params[:packageId].present?
       data[:locked]=true if params[:locked].present?
-      if params[:packageId].present?
-        NStorage.create!(data)
-      else
-        storage = NStorage.where(partNr: params[:partNr], ware_house_id: wh.id, position_id: params[:toPosition], packageId: nil).order("n_storages.qty asc").first
 
-        if storage
-          storage.update!(qty: storage.qty + params[:qty].to_f)
-        else
-          NStorage.create!(data)
-        end
-      end
+      #入库新建库存记录
+      NStorage.create!(data)
+      # if params[:packageId].present?
+      #   NStorage.create!(data)
+      # else
+      #   storage = NStorage.where(partNr: params[:partNr], ware_house_id: wh.id, position_id: params[:toPosition], packageId: nil).order("n_storages.qty asc").first
+      #
+      #   if storage
+      #     storage.update!(qty: storage.qty + params[:qty].to_f)
+      #   else
+      #     NStorage.create!(data)
+      #   end
+      # end
     end
     type = MoveType.find_by!(typeId: 'ENTRY')
     data = {fifo: fifo, partNr: params[:partNr], qty: params[:qty], to_id: wh.id, toPosition: params[:toPosition],
@@ -216,11 +219,6 @@ class WhouseService
         else
           storages = NStorage.where(partNr: params[:partNr], ware_house_id: fromWh.id).where("n_storages.qty > ?", 0).order(fifo: :asc)
         end
-        #   if params[:fromPosition].present?
-        #   negatives_storages = NStorage.where(partNr: params[:partNr], ware_house_id: fromWh.id, position: params[:fromPosition]).where("n_storages.qty < ?", 0)
-        #   else
-        #   negatives_storages = NStorage.where(partNr: params[:partNr], ware_house_id: fromWh.id).where("n_storages.qty < ?", 0)
-        # end
 
         # add fifo condition if fifo param exists
         if params[:fifo]

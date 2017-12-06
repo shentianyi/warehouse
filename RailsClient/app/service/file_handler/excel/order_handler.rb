@@ -1,7 +1,7 @@
 module FileHandler
   module Excel
     class OrderHandler<Base
-      HEADERS=['报缺日期', '报缺时间', '莱尼号码', '桶数', "是否补发"]
+      HEADERS=['报缺日期', '报缺时间', '广汽号码', '数量', "是否补发"]
 
       def self.import(file, user)
         msg = Message.new
@@ -20,7 +20,7 @@ module FileHandler
               last_row={}
               HEADERS.each_with_index do |k, i|
                 last_row[k] = book.cell(book.last_row, i+1).to_s.strip
-                last_row[k]=last_row[k].sub(/\.0/, '') if k=='莱尼号码'
+                last_row[k]=last_row[k].sub(/\.0/, '') if k=='广汽号码'
               end
               p last_row
               p "#{last_row['报缺日期'].gsub(/,/, '.')} #{last_row['报缺时间']}"
@@ -40,17 +40,17 @@ module FileHandler
                   row = {}
                   HEADERS.each_with_index do |k, i|
                     row[k] = book.cell(line, i+1).to_s.strip
-                    row[k]=row[k].sub(/\.0/, '') if k=='莱尼号码'
+                    row[k]=row[k].sub(/\.0/, '') if k=='广汽号码'
                   end
                   #batch_nr=row['报缺日期'].gsub(/,/, '') + row['报缺时间'].slice(0...2)
 
-                  part_ids<<row['莱尼号码'].downcase
-                  if records[row['莱尼号码'].downcase]
-                    records[row['莱尼号码'].downcase][:qty]=records[row['莱尼号码'].downcase][:qty].to_i + row['桶数'].to_i
+                  part_ids<<row['广汽号码'].downcase
+                  if records[row['广汽号码'].downcase]
+                    records[row['广汽号码'].downcase][:qty]=records[row['广汽号码'].downcase][:qty].to_i + row['数量'].to_i
                   else
-                    records[row['莱尼号码'].downcase]={
-                        part_id: row['莱尼号码'],
-                        qty: row['桶数'],
+                    records[row['广汽号码'].downcase]={
+                        part_id: row['广汽号码'],
+                        qty: row['数量'],
                         batch_nr: order.batch_nr,
                         is_supplement: row['是否补发']=='Y' ? true : false
                     }
@@ -60,7 +60,7 @@ module FileHandler
 
                 part_ids.uniq.each do |id|
                   part=nil
-                  if part_client=PartClient.where(client_tenant_id: Tenant.find_by_code('SHL').id, client_part_nr: id).first
+                  if part_client=PartClient.where(client_tenant_id: Tenant.find_by_code('GQ').id, client_part_nr: id).first
                     part = part_client.part
                     # else
                     #   part=Part.new()
@@ -134,7 +134,7 @@ module FileHandler
             row = {}
             HEADERS.each_with_index do |k, i|
               row[k] = book.cell(line, i+1).to_s.strip
-              row[k]=row[k].sub(/\.0/, '') if k=='莱尼号码'
+              row[k]=row[k].sub(/\.0/, '') if k=='广汽号码'
             end
 
             mssg = validate_row(row)
@@ -157,11 +157,11 @@ module FileHandler
       def self.validate_row(row)
         msg = Message.new(contents: [])
 
-        if row['莱尼号码'].blank?
+        if row['广汽号码'].blank?
           msg.contents << "零件号不能为空"
         end
 
-        unless PartClient.where(client_tenant_id: Tenant.find_by_code('SHL').id, client_part_nr: row['莱尼号码']).first
+        unless PartClient.where(client_tenant_id: Tenant.find_by_code('GQ').id, client_part_nr: row['广汽号码']).first
           msg.contents << "零件号不存在"
         end
 
@@ -171,11 +171,11 @@ module FileHandler
         if row['报缺时间'].blank?
           msg.contents << "报缺时间不可空"
         end
-        if row['莱尼号码'].blank?
-          msg.contents << "莱尼号码不可空"
+        if row['广汽号码'].blank?
+          msg.contents << "广汽号码不可空"
         end
-        if row['桶数'].blank?
-          msg.contents << "桶数不可空"
+        if row['数量'].blank?
+          msg.contents << "数量不可空"
         end
 
 

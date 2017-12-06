@@ -56,7 +56,7 @@ class InventoryList < ActiveRecord::Base
 
     storages.each do |storage|
       # puts "#{storage.partNr}"
-      # 零件号:0,库存数量:1,盘点数量:2,数量差异值:3,库存桶数:4,盘点桶数:5,桶数差异:6
+      # 零件号:0,库存数量:1,盘点数量:2,数量差异值:3,库存数量:4,盘点数量:5,数量差异:6
       results.push([storage.nr, storage.qty, 0, storage.qty, storage.num, 0, storage.num])
     end
 

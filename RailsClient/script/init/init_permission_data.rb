@@ -131,9 +131,9 @@ end
 #########################################扩展权限########################################
 
 unless Permission.find_by_name("jiaxuan_extra_config")
-  Permission.create(name: "jiaxuan_extra_config", description: "佳轩扩展配置修改权限")
+  Permission.create(name: "jiaxuan_extra_config", description: "萧山佳轩扩展配置修改权限")
 end
 
 unless Permission.find_by_name("jiaxuan_extra_export")
-  Permission.create(name: "jiaxuan_extra_export", description: "佳轩扩展导入发运数据")
+  Permission.create(name: "jiaxuan_extra_export", description: "萧山佳轩扩展导入发运数据")
 end

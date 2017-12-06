@@ -2,7 +2,8 @@
 module Printer
   class P006<Base
     HEAD=[:pl_nr, :create_date]
-    BODY=[:czleoni_nr, :pro_desc, :qty, :uniq_id, :position, :remark, :is_supplement]
+    # BODY=[:czleoni_nr, :pro_desc, :qty, :uniq_id, :position, :remark, :is_supplement]
+    BODY=[:czleoni_nr, :pro_desc, :qty, :position, :remark, :is_supplement]
 
     def generate_data
       p=PickList.find_by_id(self.id)
@@ -35,7 +36,7 @@ module Printer
               czleoni_nr: i.part_id,
               pro_desc: " ",
               qty: i.quantity.to_i,
-              uniq_id: " ",
+              # uniq_id: " ",
               position: " ",
               is_supplement: (i.is_supplement==true ? '是' : '否'),
               remark: "仓库无此型号"
@@ -49,8 +50,8 @@ module Printer
         # end
 
         pick_count=i.quantity
-        location=Location.find_by_nr('SHJXLO')
-        storages=NStorage.where(partNr: i.part_id, ware_house_id: (location.whouses.pluck(:id)-[location.send_whouse.id])).order(ware_house_id: :desc).order(fifo: :asc)
+        location=Location.find_by_nr('XSJXLO')
+        storages=NStorage.where(partNr: i.part_id, ware_house_id: (location.whouses.pluck(:id)-[location.send_whouse.id])).where("n_storages.qty > ?", 0).order(ware_house_id: :desc).order(fifo: :asc)
         storages.each do |storage|
           if pick_count==0
             break
@@ -62,7 +63,7 @@ module Printer
                                czleoni_nr: jx_part.blank? ? i.part_id : jx_part.nr,
                                pro_desc: jx_part.blank? ? "" : jx_part.description,
                                qty: 1,
-                               uniq_id: storage.packageId,
+                               # uniq_id: storage.packageId,
                                position: storage.position.blank? ? ' ' : storage.position.nr,
                                is_supplement: (i.is_supplement==true ? '是' : '否'),
                                remark: ' '
@@ -73,7 +74,7 @@ module Printer
                                czleoni_nr: jx_part.blank? ? i.part_id : jx_part.nr,
                                pro_desc: jx_part.blank? ? "" : jx_part.description,
                                qty: 1,
-                               uniq_id: storage.packageId,
+                               # uniq_id: storage.packageId,
                                position: storage.position.blank? ? ' ' : storage.position.nr,
                                is_supplement: (i.is_supplement==true ? '是' : '否'),
                                remark: ' '
@@ -88,7 +89,7 @@ module Printer
               czleoni_nr: jx_part.blank? ? i.part_id : jx_part.nr,
               pro_desc: jx_part.blank? ? "" : jx_part.description,
               qty: pick_count.to_i,
-              uniq_id: " ",
+              # uniq_id: " ",
               position: " ",
               is_supplement: (i.is_supplement==true ? '是' : '否'),
               remark: "零库存"

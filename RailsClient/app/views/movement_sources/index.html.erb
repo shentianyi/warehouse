@@ -57,11 +57,11 @@
         零件号：
         <input type="text" name="movement_source[partNr]" value="<%= @partNr %>"/>
       </div>
-      <div class="col-sm-3">
-        唯一码：
-        <input type="text" name="movement_source[packageId]" value="<%= @packageId %>"/>
-        <input type="hidden" name="movement_source[packageId_fuzzy]"/>
-      </div>
+      <!--<div class="col-sm-3">-->
+        <!--唯一码：-->
+        <!--<input type="text" name="movement_source[packageId]" value="<#%= @packageId %>"/>-->
+        <!--<input type="hidden" name="movement_source[packageId_fuzzy]"/>-->
+      <!--</div>-->
       <div class="col-sm-3">
         员工号：
         <input type="text" name="movement_source[employee_id]" value="<%= @employee_id %>"/>
@@ -141,7 +141,7 @@
     <th>移库单ID</th>
     <th>源仓库</th>
     <th>源库位</th>
-    <th>唯一码</th>
+    <!--<th>唯一码</th>-->
     <th>零件号</th>
     <th>数量</th>
     <th>FIFO</th>
@@ -171,7 +171,7 @@
             <td></td>
         <% end %>
 
-        <td><%= movement_source.packageId %></td>
+        <!--<td><#%= movement_source.packageId %></td>-->
         <% if partNr=Part.find_by_id(movement_source.partNr) %>
             <td><%=  partNr.nr %></td>
         <% else %>

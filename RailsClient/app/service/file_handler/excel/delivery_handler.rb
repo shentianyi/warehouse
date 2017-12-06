@@ -104,7 +104,7 @@ module FileHandler
                 forklifts[row[:forklift_id]].add(plc)
               else
 
-                sh_custom=Tenant.find_by_code(SysConfigCache.jiaxuan_extra_sh_custom_value)
+                sh_custom=Tenant.find_by_code(SysConfigCache.jiaxuan_extra_gq_custom_value)
                 sh_pc=PartClient.where(client_tenant_id: sh_custom.id, client_part_nr: row[:sh_part_id]).first
 
                 if sh_pc.part.package_type_is_wooden?
@@ -250,8 +250,8 @@ module FileHandler
         if row[:sh_part_id].blank? || row[:cz_part_id].blank?
           msg.contents<<"上海客户零件或者常州客户零件不能为空"
         else
-          sh_custom=Tenant.find_by_code(SysConfigCache.jiaxuan_extra_sh_custom_value)
-          cz_custom=Tenant.find_by_code(SysConfigCache.jiaxuan_extra_cz_custom_value)
+          sh_custom=Tenant.find_by_code(SysConfigCache.jiaxuan_extra_gq_custom_value)
+          cz_custom=Tenant.find_by_code(SysConfigCache.jiaxuan_extra_spl_custom_value)
 
           unless sh_pc=PartClient.where(client_tenant_id: sh_custom.id, client_part_nr: row[:sh_part_id]).first
             msg.contents<<"没有找到对应的上海客户零件"

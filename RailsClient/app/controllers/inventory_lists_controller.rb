@@ -151,7 +151,7 @@ class InventoryListsController < ApplicationController
     p = Axlsx::Package.new
     wb = p.workbook
     wb.add_worksheet(:name => "Basic Sheet") do |sheet|
-      sheet.add_row ["No.", "零件号", "库存数量", "盘点数量", "数量差异值（库存数量-盘点数量）", "库存桶数", "盘点桶数", "桶数差异值(库存桶数-盘点桶数)"]
+      sheet.add_row ["No.", "零件号", "库存数量", "盘点数量", "数量差异值（库存数量-盘点数量）", "库存数量", "盘点数量", "数量差异值(库存数量-盘点数量)"]
       results.each_with_index { |o, index|
         sheet.add_row [
                           index+1,

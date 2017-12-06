@@ -28,11 +28,11 @@ module FileHandler
       ]
 
       TOTAL_HEADERS=[
-          '仓库号', '零件号', 'FIFO', '数量','桶数'
+          '仓库号', '零件号', 'FIFO', '数量','数量'
       ]
 
       TOTAL_ALL_HEADERS=[
-          '零件号', '数量','桶数'
+          '零件号', '数量','数量'
       ]
 
       TOTAL_ALL_WHOUSE_HEADERS=[
