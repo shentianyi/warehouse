@@ -57,12 +57,13 @@ module Printer
             break
           end
 
+          move_qty = storage.qty>=pick_count ? pick_count : storage.qty
           if i.is_supplement
             supplement_records.insert(sort_by_position(supplement_records, (storage.position.blank? ? ' ' : storage.position.nr), i.is_supplement),
                            {
                                czleoni_nr: jx_part.blank? ? i.part_id : jx_part.nr,
                                pro_desc: jx_part.blank? ? "" : jx_part.description,
-                               qty: 1,
+                               qty: move_qty,
                                # uniq_id: storage.packageId,
                                position: storage.position.blank? ? ' ' : storage.position.nr,
                                is_supplement: (i.is_supplement==true ? '是' : '否'),
@@ -73,7 +74,7 @@ module Printer
                            {
                                czleoni_nr: jx_part.blank? ? i.part_id : jx_part.nr,
                                pro_desc: jx_part.blank? ? "" : jx_part.description,
-                               qty: 1,
+                               qty: move_qty,
                                # uniq_id: storage.packageId,
                                position: storage.position.blank? ? ' ' : storage.position.nr,
                                is_supplement: (i.is_supplement==true ? '是' : '否'),
@@ -81,7 +82,7 @@ module Printer
                            })
           end
 
-          pick_count-=1
+          pick_count-=move_qty
         end
 
         if pick_count>0
