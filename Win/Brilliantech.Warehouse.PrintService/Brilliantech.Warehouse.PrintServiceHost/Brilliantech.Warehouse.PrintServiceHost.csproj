@@ -132,6 +132,12 @@
     <Content Include="log4.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Ini\api - 复制.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Ini\printers - 复制.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -164,6 +170,7 @@
     <Content Include="Template\TransferForkliftList.tff">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Template\SmallLable.tff" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Brilliantech.Framwork\Brilliantech.Framwork.csproj">

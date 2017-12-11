@@ -1,13 +1,13 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brilliantech.Warehouse.PrintServiceLib", "Brilliantech.Warehouse.PrintServiceLib\Brilliantech.Warehouse.PrintServiceLib.csproj", "{6BBF4174-5A04-4155-A68C-E1660F917B71}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brilliantech.Framwork", "Brilliantech.Framwork\Brilliantech.Framwork.csproj", "{9B5F850A-5136-4095-8955-6C4F7747C48A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brilliantech.Warehouse.PrintServiceHost", "Brilliantech.Warehouse.PrintServiceHost\Brilliantech.Warehouse.PrintServiceHost.csproj", "{7E6C9F8A-5F3C-45BE-A119-81A93DE16EAE}"
-EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Brillinatech.Warehouse.PrintService.Setup", "Brillinatech.Warehouse.PrintService.Setup\Brillinatech.Warehouse.PrintService.Setup.vdproj", "{8328C9E1-BA4D-4E8F-A8CC-89F005596889}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,12 +49,6 @@ Global
 		{7E6C9F8A-5F3C-45BE-A119-81A93DE16EAE}.Release|Mixed Platforms.Build.0 = Release|x86
 		{7E6C9F8A-5F3C-45BE-A119-81A93DE16EAE}.Release|x86.ActiveCfg = Release|x86
 		{7E6C9F8A-5F3C-45BE-A119-81A93DE16EAE}.Release|x86.Build.0 = Release|x86
-		{8328C9E1-BA4D-4E8F-A8CC-89F005596889}.Debug|Any CPU.ActiveCfg = Debug
-		{8328C9E1-BA4D-4E8F-A8CC-89F005596889}.Debug|Mixed Platforms.ActiveCfg = Debug
-		{8328C9E1-BA4D-4E8F-A8CC-89F005596889}.Debug|x86.ActiveCfg = Debug
-		{8328C9E1-BA4D-4E8F-A8CC-89F005596889}.Release|Any CPU.ActiveCfg = Release
-		{8328C9E1-BA4D-4E8F-A8CC-89F005596889}.Release|Mixed Platforms.ActiveCfg = Release
-		{8328C9E1-BA4D-4E8F-A8CC-89F005596889}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
