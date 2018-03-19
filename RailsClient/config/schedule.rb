@@ -20,8 +20,12 @@ set :output, {:error => 'log/cron_error_log.log', :standard => 'log/cron_log.log
 
 # Learn more: http://github.com/javan/whenever
 
-every 2.minute do
-  rake 'sync:execute'
+#every 2.minute do
+#  rake 'sync:execute'
+#end
+
+every 1.month,:at=>['7:00'] do
+  rake "log:clear"
 end
 
 #every 1.minute do
